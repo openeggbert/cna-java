@@ -1,0 +1,22 @@
+# Java and Maven output
+/target/
+*.class
+*.jar
+*.war
+*.log
+
+# Native CNA binaries are packaged artifacts, not source
+/runtimes/
+*.dll
+*.dylib
+*.so
+
+# Editors and operating systems
+.classpath
+.project
+.settings/
+.idea/
+.vscode/
+*.iml
+.DS_Store
+Thumbs.db
