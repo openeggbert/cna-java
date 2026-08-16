@@ -1,6 +1,6 @@
 package Microsoft.Xna.Framework;
 
-import CNA.Framework.CnaException;
+import org.openeggbert.cna.internal.NativeBindings;
 
 /** XNA 4.0-compatible game lifecycle facade over the native CNA engine. */
 public abstract class Game implements AutoCloseable {
@@ -10,7 +10,7 @@ public abstract class Game implements AutoCloseable {
     /** Runs the CNA-backed XNA game loop. */
     public final void Run() {
         ensureOpen();
-        throw new CnaException("CNA native C ABI is not available yet");
+        NativeBindings.requireAvailable();
     }
 
     /** Requests normal game-loop termination. */

@@ -1,32 +1,30 @@
 # CNA-Java implementation plan
 
-**Status:** corrected namespace scaffold in place
+**Status:** XNA namespace scaffold in place
 
 **Date:** 2026-08-16
 
-## Phase 0 — namespace scaffold
+## Phase 0 — repository scaffold
 
-- [x] Establish `CNA.Framework` and `Microsoft.Xna.Framework` package roots.
-- [x] Reserve matching `Graphics`, `Input`, and `Content` packages.
-- [x] Reserve `CNA.Interop` for the native ABI mapping.
-- [x] Add initial `Game`, `GameTime`, `Vector2`, and `Color` facade shapes.
+- [x] Establish `Microsoft.Xna.Framework` plus `Graphics`, `Input`, and
+      `Content` compatibility packages.
+- [x] Keep ABI implementation under `org.openeggbert.cna.internal`.
+- [x] Add initial `Game`, `GameTime`, `Vector2`, and `Color` shapes.
+- [x] Remove the invalid invented `CNA.Framework` package tree.
 
 ## Phase 1 — canonical ABI
 
-- [ ] Select FFM or JNI after the supported JDK and CNA headers are fixed.
-- [ ] Add ABI-version checks, UTF-8, structured errors, opaque handles,
-      callback rooting/thread attachment, ownership, and shutdown rules.
+- [ ] Select FFM or JNI after canonical CNA headers and supported JDKs settle.
+- [ ] Add version checks, errors, UTF-8, opaque handles, callbacks, ownership,
+      threading, and shutdown.
 
-## Phase 2 — first playable XNA-style loop
+## Phase 2 — playable compatibility slice
 
-- [ ] Add graphics device, texture, sprite batch, content, and keyboard types
-      under both public package trees.
-- [ ] Run a CNA-backed game that clears, loads/draws a texture, reads Escape,
-      and shuts down cleanly.
+- [ ] Add graphics device, texture, sprite batch, content, and keyboard types.
+- [ ] Run a CNA-backed XNA-style game loop.
 
 ## Invariants
 
-1. Public package hierarchy follows CNA and `Microsoft.Xna.Framework`.
-2. CNA C++ remains the only engine implementation.
-3. Only the stable CNA C ABI crosses into the JVM.
-4. Sharp Runtime and C++ ABI details remain native implementation details.
+1. XNA types follow the `Microsoft.Xna.Framework` hierarchy.
+2. No public namespace/package is invented without a native counterpart.
+3. CNA C++ remains canonical and only its stable C ABI crosses the boundary.

@@ -1,23 +1,19 @@
 # Architecture
 
 ```text
-Microsoft.Xna.Framework[.Graphics|.Input|.Content]
-                         ↓
-CNA.Framework[.Graphics|.Input|.Content]
-                         ↓
-CNA.Interop
-                         ↓
+Microsoft.Xna.Framework compatibility packages
+                       ↓
+org.openeggbert.cna.internal (private FFM/JNI bridge)
+                       ↓
 CNA stable C ABI
-                         ↓
-CNA C++ core
+                       ↓
+CNA C++: Microsoft::Xna::Framework
 ```
 
-The `Microsoft.Xna.Framework` tree owns XNA 4.0 compatibility. `CNA.Framework`
-owns the CNA-native Java surface. Compatibility values may convert to their CNA
-counterparts; native-backed objects ultimately share the same CNA handles.
+The only framework-facing public package tree mirrors XNA 4.0. The internal
+bridge owns ABI loading, UTF-8, result conversion, opaque handles, callback
+rooting, JVM thread attachment, ownership, and shutdown.
 
-Only `CNA.Interop` may use FFM, JNI, or native declarations. Public packages
-must never expose addresses, C result codes, C++ exceptions, or Sharp Runtime
-types. Owned GPU/audio resources will implement `AutoCloseable`; callback
-rooting, JVM thread attachment, ABI versioning, UTF-8, and shutdown are part of
-the binding boundary.
+There is deliberately no `CNA.Framework` layer. A future Java package rooted
+at `CNA` is valid only for concrete extensions that mirror types actually
+declared under native `CNA::...` namespaces.

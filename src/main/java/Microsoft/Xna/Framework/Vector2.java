@@ -16,8 +16,4 @@ public final class Vector2 {
         Y = y;
     }
 
-    /** Converts this compatibility value to the CNA-native value. */
-    public CNA.Framework.Vector2 toCna() {
-        return new CNA.Framework.Vector2(X, Y);
-    }
 }

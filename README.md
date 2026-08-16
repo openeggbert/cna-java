@@ -1,36 +1,24 @@
 # CNA-Java
 
-CNA-Java exposes [CNA](https://github.com/openeggbert/cna) to the JVM with
-public packages matching CNA and XNA 4.0 namespaces.
+CNA-Java exposes [CNA](https://github.com/openeggbert/cna) to the JVM through
+packages matching XNA 4.0 namespaces.
 
 ```text
 Java/Kotlin game
       ↓
-Microsoft.Xna.Framework compatibility packages
+Microsoft.Xna.Framework[.Graphics|.Input|.Content]
       ↓
-CNA.Framework packages
+org.openeggbert.cna.internal
       ↓
-CNA.Interop → stable CNA C ABI → CNA C++
+CNA stable C ABI
+      ↓
+CNA C++ Microsoft::Xna::Framework implementation
 ```
 
 ## Status
 
-**Early scaffold.** The corrected package hierarchy and first lifecycle/value
-types are present. Native execution waits for the canonical CNA C ABI.
-
-## Public package roots
-
-- `CNA.Framework`
-- `CNA.Framework.Graphics`
-- `CNA.Framework.Input`
-- `CNA.Framework.Content`
-- `Microsoft.Xna.Framework`
-- `Microsoft.Xna.Framework.Graphics`
-- `Microsoft.Xna.Framework.Input`
-- `Microsoft.Xna.Framework.Content`
-
-`CNA.Interop` is reserved for the private FFM/JNI implementation and must not
-be used by applications.
+**Early scaffold.** The compatibility packages and first value/lifecycle types
+exist. Native execution waits for CNA's canonical C ABI.
 
 ```java
 import Microsoft.Xna.Framework.Color;
@@ -38,8 +26,10 @@ import Microsoft.Xna.Framework.Game;
 import Microsoft.Xna.Framework.Vector2;
 ```
 
-The capitalized package segments are intentional: this compatibility surface
-mirrors the established namespaces rather than normal Java package conventions.
+The capitalized package segments intentionally mirror the established XNA
+namespace. There is no `CNA.Framework` Java package because CNA C++ has no
+`CNA::Framework` namespace. Binding internals live under
+`org.openeggbert.cna.internal` and are not application API.
 
 See [architecture](docs/architecture.md) and [plan](plan.md).
 

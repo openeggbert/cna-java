@@ -13,14 +13,16 @@ public final class Color {
 
     /** Creates an RGBA color. */
     public Color(int red, int green, int blue, int alpha) {
-        R = red;
-        G = green;
-        B = blue;
-        A = alpha;
+        R = requireChannel(red, "red");
+        G = requireChannel(green, "green");
+        B = requireChannel(blue, "blue");
+        A = requireChannel(alpha, "alpha");
     }
 
-    /** Converts this compatibility value to the CNA-native value. */
-    public CNA.Framework.Color toCna() {
-        return new CNA.Framework.Color(R, G, B, A);
+    private static int requireChannel(int value, String name) {
+        if (value < 0 || value > 255) {
+            throw new IllegalArgumentException(name + " must be between 0 and 255");
+        }
+        return value;
     }
 }
