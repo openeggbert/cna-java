@@ -1,5 +1,8 @@
 # CNA-Java
 
+> **Status: In progress - ZATÍM NEFUNKČNÍ**
+
+
 CNA-Java exposes [CNA](https://github.com/openeggbert/cna) to the JVM through
 packages matching XNA 4.0 namespaces.
 
