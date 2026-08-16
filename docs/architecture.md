@@ -1,31 +1,23 @@
 # Architecture
 
 ```text
-Java/Kotlin game
-      ↓
-org.openeggbert.cna.framework (Java-native public API)
-      ↓
-org.openeggbert.cna.internal (private FFM/JNI layer)
-      ↓
+Microsoft.Xna.Framework[.Graphics|.Input|.Content]
+                         ↓
+CNA.Framework[.Graphics|.Input|.Content]
+                         ↓
+CNA.Interop
+                         ↓
 CNA stable C ABI
-      ↓
-CNA C++ core → Sharp Runtime, subsystems, renderers
+                         ↓
+CNA C++ core
 ```
 
-The public API preserves CNA/XNA object-oriented concepts while following JVM
-conventions: Java records and `java.time` model values, failures become Java
-exceptions, and expensive native resources implement `AutoCloseable` for
-deterministic `try`-with-resources cleanup. `Cleaner` may become a fallback,
-never the main GPU-resource lifetime mechanism.
+The `Microsoft.Xna.Framework` tree owns XNA 4.0 compatibility. `CNA.Framework`
+owns the CNA-native Java surface. Compatibility values may convert to their CNA
+counterparts; native-backed objects ultimately share the same CNA handles.
 
-The interop implementation will be selected only after CNA's C headers and the
-minimum supported JDK are settled. Whether it uses the Foreign Function and
-Memory API, JNI, or a small generated bridge is an implementation detail kept
-out of the public packages.
-
-Opaque native handles, fixed-width primitives, UTF-8, ABI-version checks,
-structured native errors, callback rooting/thread attachment, snapshot input,
-and batched transfers are required boundary properties.
-
-Sharp Runtime remains an internal C++ dependency of CNA. It is not a Java
-runtime requirement and none of its objects or layouts may cross this binding.
+Only `CNA.Interop` may use FFM, JNI, or native declarations. Public packages
+must never expose addresses, C result codes, C++ exceptions, or Sharp Runtime
+types. Owned GPU/audio resources will implement `AutoCloseable`; callback
+rooting, JVM thread attachment, ABI versioning, UTF-8, and shutdown are part of
+the binding boundary.

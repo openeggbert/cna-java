@@ -1,46 +1,48 @@
 # CNA-Java
 
-CNA-Java is the Java/JVM language binding for
-[CNA](https://github.com/openeggbert/cna), the native C++ XNA-inspired game
-framework. It aims to offer familiar `Game`, `GraphicsDevice`, `Texture2D`,
-`SpriteBatch`, content, and input concepts through an idiomatic Java API while
-the actual engine and all renderers continue to run in CNA.
+CNA-Java exposes [CNA](https://github.com/openeggbert/cna) to the JVM with
+public packages matching CNA and XNA 4.0 namespaces.
 
 ```text
-Java or Kotlin game → CNA-Java → CNA stable C ABI → CNA C++ → native renderer
+Java/Kotlin game
+      ↓
+Microsoft.Xna.Framework compatibility packages
+      ↓
+CNA.Framework packages
+      ↓
+CNA.Interop → stable CNA C ABI → CNA C++
 ```
 
 ## Status
 
-**Early scaffold.** This first commit contains project metadata, documentation,
-the initial local value types, the `Game` lifecycle shape, and a reserved
-private native layer. It cannot run a game yet because `openeggbert/cna` has not
-implemented the stable C ABI. `Game.run()` reports that limitation explicitly.
+**Early scaffold.** The corrected package hierarchy and first lifecycle/value
+types are present. Native execution waits for the canonical CNA C ABI.
 
-## Design direction
+## Public package roots
 
-- Preserve CNA/XNA concepts, with Java naming and standard-library types.
-- Keep pure math and geometry in Java.
-- Map native failures to `CnaException` subclasses.
-- Use `AutoCloseable` and `try`-with-resources for owned native resources.
-- Keep opaque handles and all FFM/JNI details in internal packages.
-- Keep Sharp Runtime completely private to CNA's C++ implementation.
+- `CNA.Framework`
+- `CNA.Framework.Graphics`
+- `CNA.Framework.Input`
+- `CNA.Framework.Content`
+- `Microsoft.Xna.Framework`
+- `Microsoft.Xna.Framework.Graphics`
+- `Microsoft.Xna.Framework.Input`
+- `Microsoft.Xna.Framework.Content`
 
-See [the architecture](docs/architecture.md) and [implementation plan](plan.md).
+`CNA.Interop` is reserved for the private FFM/JNI implementation and must not
+be used by applications.
 
-## Development
-
-The scaffold targets Java 17 and has no third-party dependencies:
-
-```bash
-mvn test
+```java
+import Microsoft.Xna.Framework.Color;
+import Microsoft.Xna.Framework.Game;
+import Microsoft.Xna.Framework.Vector2;
 ```
 
-A native toolchain and CNA shared library become requirements only after the
-interop layer exists. Kotlin and other JVM languages will reuse the same Java
-artifact rather than receive separate native bindings.
+The capitalized package segments are intentional: this compatibility surface
+mirrors the established namespaces rather than normal Java package conventions.
+
+See [architecture](docs/architecture.md) and [plan](plan.md).
 
 ## License
 
-CNA-Java is licensed under the [Microsoft Public License](LICENSE), matching
-CNA. See [NOTICE.md](NOTICE.md) for compatibility and attribution notices.
+CNA-Java is licensed under the [Microsoft Public License](LICENSE), matching CNA.

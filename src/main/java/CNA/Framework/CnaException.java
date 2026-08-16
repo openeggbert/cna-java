@@ -1,4 +1,4 @@
-package org.openeggbert.cna.framework;
+package CNA.Framework;
 
 /** Represents a failure reported by CNA's native result/error model. */
 public final class CnaException extends RuntimeException {
