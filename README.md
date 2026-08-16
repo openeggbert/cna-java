@@ -1,6 +1,6 @@
 # CNA-Java
 
-> **Status: In progress - ZATÍM NEFUNKČNÍ**
+> **Status: In progress - NOT YET FUNCTIONAL**
 
 
 CNA-Java exposes [CNA](https://github.com/openeggbert/cna) to the JVM through
