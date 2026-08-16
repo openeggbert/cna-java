@@ -33,6 +33,11 @@ public abstract class Game implements AutoCloseable {
     protected void UnloadContent() {
     }
 
+    // XNA-compatible PascalCase accessors
+    public Microsoft.Xna.Framework.Content.ContentManager Content() { return null; }
+    public Microsoft.Xna.Framework.Graphics.GraphicsDevice GraphicsDevice() { return null; }
+    public void SetIsMouseVisible(boolean visible) { }
+
     /** Releases the future native game handle; repeated calls are harmless. */
     @Override
     public final void close() {
