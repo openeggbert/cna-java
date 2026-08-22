@@ -85,6 +85,11 @@
     routes with explicit owned-resource teardown;
   - exercised raw PNG decode/encode, Color snapshot transfer, and two-frame
     SpriteBatch drawing while recording the honest 604-diagnostic baseline.
+- `ee1e53c feat: complete XNA named color projection`
+  - uniformly mapped all 141 named XNA color properties to same-cased frozen
+    Java fields and added default/vector constructors plus typed equality;
+  - reduced the strict measurement to 462 diagnostics with 51 managed tests,
+    15 verifier tests, zero leaks, and no allowlist.
 
 ### `cna-java-template`
 
