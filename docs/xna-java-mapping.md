@@ -50,9 +50,12 @@ IsMouseVisible     -> getIsMouseVisible(), setIsMouseVisible(value)
 
 Accessor visibility is mapped independently. Internal/private accessors do not become public.
 Indexer properties become `get(index...)` and, when settable, `set(index..., value)`. A get-only
-static value property may additionally have a same-cased named field only when the mapped value is
-immutable; this is an explicit rule, never inferred ad hoc. The strict verifier treats any such
-field not declared in `mapping-rules.json` as unexpected.
+static value property may instead have a same-cased named field when its declaring value type is
+explicitly listed in `mapping-rules.json`. All XNA named `Color` properties use this rule uniformly,
+so they project as `Color.AliceBlue`, `Color.Red`, and `Color.White`, not a mixture of fields and
+getters. The shared Java instances are frozen because mutating a public static object would corrupt
+future reads; callers use `new Color(Color.Red)` when they need the mutable copy that CLR property
+value semantics would have supplied. The verifier never infers this transformation ad hoc.
 
 ## Methods, operators, overloads, and defaults
 

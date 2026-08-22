@@ -318,8 +318,11 @@ def mapped_members(type_contract: dict[str, Any], rules: dict[str, Any], mapping
         elif kind == "property":
             indexes = map_member_parameters(type_name, member, rules)
             property_type = map_type(member["type"]) or "java.lang.Object"
-            full_name = type_name + "." + member["name"]
-            if full_name in rules["namedImmutableValueFields"]:
+            named_value_type = (type_name in rules.get("namedImmutableValuePropertyTypes", [])
+                                and member.get("static", False)
+                                and visible(member.get("getterAccess"))
+                                and not visible(member.get("setterAccess")))
+            if named_value_type:
                 expected.append({"kind": "field", "name": member["name"], "access": "public",
                                  "type": property_type, "static": True, "final": True, "constant": None})
             elif visible(member.get("getterAccess")):

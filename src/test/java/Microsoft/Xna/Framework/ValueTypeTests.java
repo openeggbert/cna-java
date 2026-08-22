@@ -4,7 +4,9 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
 
+import java.lang.reflect.Modifier;
 import java.time.Duration;
+import java.util.Arrays;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -56,6 +58,33 @@ final class ValueTypeTests {
     }
 
     @Test
+    void Color_ProjectsTheCompleteNamedPaletteAsFrozenXnaCasedValues() {
+        assertEquals(141, Arrays.stream(Color.class.getFields())
+                .filter(field -> field.getType() == Color.class)
+                .filter(field -> Modifier.isStatic(field.getModifiers()))
+                .filter(field -> Modifier.isFinal(field.getModifiers()))
+                .count());
+        assertEquals(new Color(240, 248, 255), Color.AliceBlue);
+        assertEquals(new Color(0, 0, 0), Color.Black);
+        assertEquals(new Color(154, 205, 50), Color.YellowGreen);
+        assertEquals(new Color(255, 255, 255, 0), Color.Transparent);
+        assertThrows(UnsupportedOperationException.class, () -> Color.Red.setG(1));
+    }
+
+    @Test
+    void Color_DefaultAndVectorConstructorsSnapshotValues() {
+        assertEquals(new Color(0, 0, 0, 0), new Color());
+        Vector3 vector3 = new Vector3(1.0f, 0.5f, 0.0f);
+        Color fromVector3 = new Color(vector3);
+        vector3.X = 0.0f;
+        assertEquals(new Color(255, 128, 0), fromVector3);
+        assertEquals(new Color(255, 128, 0, 64),
+                new Color(new Vector4(1.0f, 0.5f, 0.0f, 0.25f)));
+        assertTrue(fromVector3.equals(new Color(fromVector3)));
+        assertFalse(fromVector3.equals((Color)null));
+    }
+
+    @Test
     void PointAndRectangle_UseXnaHalfOpenContainment() {
         Rectangle rectangle = new Rectangle(10, 20, 30, 40);
         assertTrue(rectangle.Contains(new Point(10, 20)));
@@ -102,4 +131,3 @@ final class ValueTypeTests {
         assertThrows(NullPointerException.class, () -> new GameTime(null, Duration.ZERO));
     }
 }
-

@@ -128,16 +128,16 @@ REFERENCE_MEMBERS=2964
 EXPECTED_JAVA_TYPES=261
 EXPECTED_JAVA_MEMBERS=3086
 TARGET_TYPES=51
-TARGET_MEMBERS=770
-TOTAL_DIAGNOSTICS=604
+TARGET_MEMBERS=912
+TOTAL_DIAGNOSTICS=462
 ALLOWLIST_ENTRIES=0
 INTERFACE_MISMATCH=2
-MISSING_MEMBER=392
+MISSING_MEMBER=250
 MISSING_TYPE=210
 ```
 
-This is a 126-diagnostic reduction from the immutable initial baseline, with 30
-additional strict target types and 419 additional target members.
+This is a 268-diagnostic reduction from the immutable initial baseline, with 30
+additional strict target types and 561 additional target members.
 `apiCompatCheck` still exits 1 as designed. Leak-only inspection reports
 `CNA_INTERNAL_LEAK=0` (total leak diagnostics 0).
 
@@ -146,6 +146,13 @@ formerly missing types are now present, but their compiled metadata exposes ten
 additional missing members that one-per-type diagnostics previously hid. All
 implemented graphics members match their mapped signatures; no parameter,
 return, modifier, unexpected-member, or parameter-name finding was introduced.
+
+The subsequent `Color` group projects every one of the 141 XNA named-color
+properties as a same-cased frozen Java field, adds the mapped default/vector
+constructors and typed equality, and removes exactly 142 missing-member
+findings. Its source names and RGBA values were checked exhaustively against the
+normalized sibling reference list; managed tests pin the count, representative
+edge values, immutability, and vector snapshot behavior.
 
 The latest contract audit fixed overload matching so exact overloads cannot be
 reused as mismatch candidates, maps unsigned CLR `System.Byte` to Java `int`,
@@ -201,18 +208,18 @@ XNA_REFERENCE_DIR=/rv/data/development/github.com/openeggbert/xna4-decomp/refere
 ./gradlew --no-daemon clean check apiCompatReport javadoc sourcesJar --warning-mode all
 ```
 
-Result: `BUILD SUCCESSFUL in 19s`, 12 actionable tasks executed, no
+Result: `BUILD SUCCESSFUL in 21s`, 12 actionable tasks executed, no
 compiler/deprecation warnings.
 
-- JUnit: 49 tests, 0 failures, 0 errors, 0 skipped.
-- Verifier regression suite: 14 tests, all passing.
-- Suites: 12 value/math, 4 lifecycle/content, 10 component/service/window,
+- JUnit: 51 tests, 0 failures, 0 errors, 0 skipped.
+- Verifier regression suite: 15 tests, all passing.
+- Suites: 14 value/math, 4 lifecycle/content, 10 component/service/window,
   3 graphics-resource, 4 keyboard-state, 4 mouse-state, 4 ownership,
   8 native integration.
 - Native stress: one ordered three-frame lifecycle plus ten repeated
   create/run/destroy lifecycles, and one-frame/tick/suppressed-draw timing.
 - Compile probe: passed.
-- Strict leak guard: 51 target types / 770 members, 0 findings.
+- Strict leak guard: 51 target types / 912 members, 0 findings.
 - ABI: header 0.7.0, 53 bound functions, manifest/JNI identity and C
   width/layout/function-signature probes passed, native library ABI 0.7.0,
   symbols 53/53.
@@ -279,7 +286,7 @@ claimed.
 
 1. Consume an upstream CNA fix for both HEAD C API build failures and repeat all
    native evidence against current HEAD.
-2. Implement the 392 measured missing members in coherent dependency groups;
+2. Implement the 250 measured missing members in coherent dependency groups;
    the only non-missing diagnostics are two known missing public interfaces.
 3. Connect native window events and supported-orientation behavior, then add
    normalized XNA differential fixtures for the math/geometry contract.

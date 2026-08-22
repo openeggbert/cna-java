@@ -88,11 +88,11 @@ reference members:               2964
 expected mapped Java types:        261
 expected mapped Java members:     3086
 mapped Java target types:           51
-mapped Java target members:        770
-unreviewed projection differences: 604
+mapped Java target members:        912
+unreviewed projection differences: 462
 
 INTERFACE_MISMATCH                   2
-MISSING_MEMBER                     392
+MISSING_MEMBER                     250
 MISSING_TYPE                       210
 
 CNA_INTERNAL_LEAK                    0
@@ -101,7 +101,7 @@ allowlist entries                    0
 
 The initial 730-diagnostic JSON evidence remains
 `tools/api-compat/baselines/xna40-windows-runtime-initial.json`; the current
-texture/SpriteBatch checkpoint is recorded here and in `NEXT.md`. Report-only mode
+named-color checkpoint is recorded here and in `NEXT.md`. Report-only mode
 is green for measurement. `apiCompatCheck` is deliberately red until the count
 reaches zero; it is not weakened or attached to the ordinary partial-build gate.
 The profile SHA-256-pins every reference assembly and the verifier rejects a
@@ -124,7 +124,9 @@ rules map `Texture2D.FromStream` to `InputStream` and PNG/JPEG save operations
 to `OutputStream`. Adding the first graphics-resource hierarchy removed seven
 missing-type findings but exposed ten previously hidden missing-member findings,
 so the honest total rose by three. A present but incomplete type is never
-misreported as progress.
+misreported as progress. The type-level named-value rule projects all 141 XNA
+`Color` properties uniformly as frozen same-cased fields; completing that real
+palette and the mapped constructors/equality removed 142 missing-member findings.
 
 Next verifier work:
 
@@ -230,6 +232,10 @@ Implemented behavior/tests currently cover `Game`, `GameTime`, `IGameComponent`,
 `GraphicsDeviceManager`, `ContentManager` validation/cache boundary,
 `MathHelper`, `Vector2/3/4`, `Matrix`, `Quaternion`, `Color`, `Point`,
 `Rectangle`, `Plane`, `Ray`, `BoundingBox`, and `BoundingSphere`.
+
+`Color` includes all 141 named XNA values with verified identities and RGBA
+values. These public Java fields are frozen shared snapshots; construct a copy
+before mutation, as required by the documented CLR-value/property adaptation.
 
 The new lifecycle/window types and `Game` match their mapped contract without
 local diagnostics. CNA backs window title, resize permission, client bounds,
@@ -348,14 +354,14 @@ Green now:
 1. Java/JNI build with strict warnings;
 2. JUnit managed tests (native tests conditional on a supplied library);
 3. strict internal/native-leak guard;
-4. fourteen verifier/mapping regression tests and a graphics-aware compile probe;
+4. fifteen verifier/mapping regression tests and a graphics-aware compile probe;
 5. C header width/layout/signature checks;
 6. optional native symbol/version/integration tests;
 7. template build/tests;
 8. fresh generated-project build;
 9. optional 60-frame smoke and 600-frame stability runs.
 
-Intentionally red: strict XNA completeness (`apiCompatCheck`, 604 differences).
+Intentionally red: strict XNA completeness (`apiCompatCheck`, 462 differences).
 Future platform CI must record evidence separately per OS/architecture.
 
 ## Upstream CNA blockers

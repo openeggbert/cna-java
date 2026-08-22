@@ -76,6 +76,26 @@ class VerifyTests(unittest.TestCase):
         unnamed = VERIFY.map_parameters([{"name": "", "type": "System.Boolean"}])
         self.assertEqual("arg0", unnamed[0]["name"])
 
+    def test_named_color_properties_map_uniformly_to_same_cased_fields(self) -> None:
+        contract = {
+            "name": "Microsoft.Xna.Framework.Color", "kind": "struct",
+            "interfaces": [],
+            "members": [
+                {"kind": "property", "name": "AliceBlue",
+                 "type": "Microsoft.Xna.Framework.Color", "static": True,
+                 "getterAccess": "public", "setterAccess": "none", "parameters": []},
+                {"kind": "property", "name": "R", "type": "System.Byte", "static": False,
+                 "getterAccess": "public", "setterAccess": "public", "parameters": []},
+            ],
+        }
+        members = VERIFY.mapped_members(contract, self.rules, [])
+        alice_blue = next(value for value in members if value["name"] == "AliceBlue")
+        self.assertEqual("field", alice_blue["kind"])
+        self.assertTrue(alice_blue["static"])
+        self.assertTrue(alice_blue["final"])
+        self.assertTrue(any(value["name"] == "getR" for value in members))
+        self.assertTrue(any(value["name"] == "setR" for value in members))
+
     def test_explicit_disposable_implementation_still_projects_close(self) -> None:
         contract = {
             "name": "Microsoft.Xna.Framework.DisposableProbe",

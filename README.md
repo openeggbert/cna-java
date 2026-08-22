@@ -26,8 +26,8 @@ The first strict Windows-runtime measurement is intentionally red:
 ```text
 XNA reference:        257 types / 2,964 members
 Mapped Java contract: 261 types / 3,086 members
-Java target:           51 strict types / 770 members
-Differences:          604 unreviewed diagnostics
+Java target:           51 strict types / 912 members
+Differences:          462 unreviewed diagnostics
 Allowlist:              0
 Strict leaks:           0
 ```
@@ -50,6 +50,8 @@ Implemented now:
   `SpriteSortMode`, composable `SpriteEffects`, native `Texture2D` lifecycle,
   Color data transfer, PNG/JPEG streams, and all texture-based SpriteBatch Draw
   overloads (stateful Begin overloads and DrawString remain missing);
+- the complete 141-value same-cased XNA named color palette, including
+  `Color.Transparent`, `Color.CornflowerBlue`, and `Color.YellowGreen`;
 - Java 17 JNI adapter for 53 CNA game/error/window/input/texture/SpriteBatch
   functions;
 - explicit native ownership modes and idempotent cleanup;
