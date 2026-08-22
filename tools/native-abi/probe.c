@@ -24,6 +24,14 @@ _Static_assert(offsetof(CNA_MouseState, x) == 8U, "CNA_MouseState.x offset");
 _Static_assert(offsetof(CNA_MouseState, y) == 12U, "CNA_MouseState.y offset");
 _Static_assert(offsetof(CNA_MouseState, scroll_wheel) == 16U, "CNA_MouseState.wheel offset");
 _Static_assert(offsetof(CNA_MouseState, pressed_buttons) == 24U, "CNA_MouseState.buttons offset");
+_Static_assert(sizeof(CNA_Texture2DCreateInfo) == 24U, "CNA_Texture2DCreateInfo layout changed");
+_Static_assert(offsetof(CNA_Texture2DCreateInfo, width) == 8U, "CNA_Texture2DCreateInfo.width offset");
+_Static_assert(offsetof(CNA_Texture2DCreateInfo, format) == 20U, "CNA_Texture2DCreateInfo.format offset");
+_Static_assert(sizeof(CNA_Texture2DInfo) == 24U, "CNA_Texture2DInfo layout changed");
+_Static_assert(sizeof(CNA_Texture2DDecodeInfo) == 24U, "CNA_Texture2DDecodeInfo layout changed");
+_Static_assert(sizeof(CNA_SpriteBatchBeginInfo) == 16U, "CNA_SpriteBatchBeginInfo layout changed");
+_Static_assert(offsetof(CNA_SpriteCommand, texture) == 8U, "CNA_SpriteCommand.texture offset");
+_Static_assert(offsetof(CNA_SpriteScaledCommand, texture) == 8U, "CNA_SpriteScaledCommand.texture offset");
 _Static_assert(sizeof(CNA_GameTime) == 24U, "CNA_GameTime layout changed");
 _Static_assert(offsetof(CNA_GameTime, total_game_time_ticks) == 0U, "CNA_GameTime.total offset");
 _Static_assert(offsetof(CNA_GameTime, elapsed_game_time_ticks) == 8U, "CNA_GameTime.elapsed offset");
@@ -90,6 +98,36 @@ static CNA_Result (*const mouse_get_window_handle_function)(CNA_Handle, uint64_t
     cna_mouse_get_window_handle;
 static CNA_Result (*const mouse_set_window_handle_function)(CNA_Handle, uint64_t) =
     cna_mouse_set_window_handle;
+static CNA_Result (*const game_get_graphics_device_function)(CNA_Handle, CNA_Handle*) =
+    cna_game_get_graphics_device;
+static CNA_Result (*const texture_create_function)(
+    CNA_Handle, const CNA_Texture2DCreateInfo*, CNA_Handle*) = cna_texture2d_create;
+static CNA_Result (*const texture_decode_function)(
+    CNA_Handle, const uint8_t*, uint64_t, const CNA_Texture2DDecodeInfo*, CNA_Handle*) =
+    cna_texture2d_create_from_encoded_memory;
+static CNA_Result (*const texture_info_function)(CNA_Handle, CNA_Texture2DInfo*) =
+    cna_texture2d_get_info;
+static CNA_Result (*const texture_set_function)(CNA_Handle, const CNA_Color*, uint64_t) =
+    cna_texture2d_set_data_rgba8;
+static CNA_Result (*const texture_get_function)(CNA_Handle, CNA_Color*, uint64_t, uint64_t*) =
+    cna_texture2d_get_data_rgba8;
+static CNA_Result (*const texture_encoded_size_function)(
+    CNA_Handle, CNA_TextureImageFormat, uint32_t, uint32_t, uint64_t*) =
+    cna_texture2d_get_encoded_byte_count;
+static CNA_Result (*const texture_copy_encoded_function)(
+    CNA_Handle, CNA_TextureImageFormat, uint32_t, uint32_t, uint8_t*, uint64_t, uint64_t*) =
+    cna_texture2d_copy_encoded;
+static CNA_Result (*const texture_destroy_function)(CNA_Handle) = cna_texture2d_destroy;
+static CNA_Result (*const sprite_batch_create_function)(CNA_Handle, CNA_Handle*) =
+    cna_sprite_batch_create;
+static CNA_Result (*const sprite_batch_begin_function)(
+    CNA_Handle, const CNA_SpriteBatchBeginInfo*) = cna_sprite_batch_begin;
+static CNA_Result (*const sprite_batch_submit_function)(
+    CNA_Handle, const CNA_SpriteCommand*, uint64_t) = cna_sprite_batch_submit_many;
+static CNA_Result (*const sprite_batch_submit_scaled_function)(
+    CNA_Handle, const CNA_SpriteScaledCommand*, uint64_t) = cna_sprite_batch_submit_scaled_many;
+static CNA_Result (*const sprite_batch_end_function)(CNA_Handle) = cna_sprite_batch_end;
+static CNA_Result (*const sprite_batch_destroy_function)(CNA_Handle) = cna_sprite_batch_destroy;
 
 int cna_java_abi_probe(void)
 {
@@ -110,5 +148,12 @@ int cna_java_abi_probe(void)
         window_end_change_function != NULL && keyboard_get_state_function != NULL &&
         keyboard_get_state_for_player_function != NULL && mouse_get_state_function != NULL &&
         mouse_set_position_function != NULL && mouse_get_window_handle_function != NULL &&
-        mouse_set_window_handle_function != NULL ? 0 : 1;
+        mouse_set_window_handle_function != NULL && game_get_graphics_device_function != NULL &&
+        texture_create_function != NULL && texture_decode_function != NULL &&
+        texture_info_function != NULL && texture_set_function != NULL &&
+        texture_get_function != NULL && texture_encoded_size_function != NULL &&
+        texture_copy_encoded_function != NULL && texture_destroy_function != NULL &&
+        sprite_batch_create_function != NULL && sprite_batch_begin_function != NULL &&
+        sprite_batch_submit_function != NULL && sprite_batch_submit_scaled_function != NULL &&
+        sprite_batch_end_function != NULL && sprite_batch_destroy_function != NULL ? 0 : 1;
 }

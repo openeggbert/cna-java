@@ -15,7 +15,7 @@ The audited starting snapshot had eight Java source files (three were
 used a different Maven group, mixed XNA and Java casing, faked renderer
 capabilities, had no wrapper, and advertised unsupported Android/iOS/Web paths.
 
-The current repository has a reproducible Gradle 8.12/JDK 17 build, 54
+The current repository has a reproducible Gradle 8.12/JDK 17 build, 62
 production Java sources, managed and conditional native tests, a real JNI
 backend, class-metadata verification, and a functional desktop/headless
 template canary. Gradle is the single canonical build; the stale Maven build
@@ -87,13 +87,13 @@ reference types:                   257
 reference members:               2964
 expected mapped Java types:        261
 expected mapped Java members:     3086
-mapped Java target types:           44
-mapped Java target members:        696
-unreviewed projection differences: 601
+mapped Java target types:           51
+mapped Java target members:        770
+unreviewed projection differences: 604
 
 INTERFACE_MISMATCH                   2
-MISSING_MEMBER                     382
-MISSING_TYPE                       217
+MISSING_MEMBER                     392
+MISSING_TYPE                       210
 
 CNA_INTERNAL_LEAK                    0
 allowlist entries                    0
@@ -118,6 +118,13 @@ for every implemented member. `ContentLoadException`'s CLR-serialization-only
 constructor is an explicit mapping exclusion, while direct `IDisposable`
 implementations project a final public `close()` even when CLR `Dispose` is an
 explicit interface method.
+Missing CLR parameter names map to stable `argN` names; inaccessible CLR
+interfaces are omitted from the public Java projection. Full-signature stream
+rules map `Texture2D.FromStream` to `InputStream` and PNG/JPEG save operations
+to `OutputStream`. Adding the first graphics-resource hierarchy removed seven
+missing-type findings but exposed ten previously hidden missing-member findings,
+so the honest total rose by three. A present but incomplete type is never
+misreported as progress.
 
 Next verifier work:
 
@@ -130,7 +137,7 @@ Next verifier work:
 
 JNI is selected because Java 17 and future Android compatibility are retained;
 stable FFM is unavailable on Java 17. The adapter dynamically resolves only the
-stable C ABI and binds 38 functions:
+stable C ABI and binds 53 functions:
 
 ```text
 cna_get_abi_version
@@ -171,6 +178,21 @@ cna_mouse_get_state
 cna_mouse_set_position
 cna_mouse_get_window_handle
 cna_mouse_set_window_handle
+cna_game_get_graphics_device
+cna_texture2d_create
+cna_texture2d_create_from_encoded_memory
+cna_texture2d_get_info
+cna_texture2d_set_data_rgba8
+cna_texture2d_get_data_rgba8
+cna_texture2d_get_encoded_byte_count
+cna_texture2d_copy_encoded
+cna_texture2d_destroy
+cna_sprite_batch_create
+cna_sprite_batch_begin
+cna_sprite_batch_submit_many
+cna_sprite_batch_submit_scaled_many
+cna_sprite_batch_end
+cna_sprite_batch_destroy
 ```
 
 It provides ABI-version rejection, UTF-8 conversion, callback rooting,
@@ -178,18 +200,20 @@ JVM-thread attachment, exception/result conversion, and portable configuration
 through Java properties plus `CNA_JNI_LIBRARY`, `CNA_NATIVE_LIBRARY`,
 `CNA_NATIVE_DIR`, and `CNA_ROOT`.
 
-Linux x86-64 evidence: header ABI 0.7.0, all 38 symbols present, manifest/JNI
+Linux x86-64 evidence: header ABI 0.7.0, all 53 symbols present, manifest/JNI
 identity and layout/signature probes passing, runtime ABI 0.7.0, three-frame and
 one-frame/tick callback lifecycles passing, and ten repeated create/run/destroy
-cycles passing. This is not Windows/macOS ABI evidence.
+cycles passing. Texture encode/decode/readback and two-frame SpriteBatch drawing
+also pass against HEADLESS. This is not Windows/macOS ABI evidence.
 
 ## Ownership
 
 Internal wrappers distinguish owned, borrowed, parent-owned, and adopted
 handles. Owned/adopted values release exactly once; borrowed/parent-owned values
 never destroy their target. Failed release leaves the handle live for explicit
-retry. `Game.close()` unloads content before destroying the native parent and
-then invalidates child facades. No raw handles appear in strict public APIs and
+retry. `Game.close()` unloads content and
+closes registered texture/SpriteBatch children in reverse creation order before
+destroying the native parent. No raw handles appear in strict public APIs and
 deprecated finalization is not used.
 
 Remaining lifetime work includes callback-failure teardown, JVM shutdown hooks,
@@ -218,11 +242,20 @@ differential fixtures, driven by metadata rather than ad-hoc generation.
 
 ## Graphics
 
-Only the `GraphicsDevice.Clear(Color)` lifecycle slice is native-backed.
-GraphicsDeviceManager does not yet expose the full XNA contract. Texture,
-render-target, buffer/state, SpriteBatch, effect, vertex, resize, and device
-reset behavior remain Java binding work. Empty facade generation is not a
-substitute for behavior.
+`GraphicsResource`, `Texture`, `Texture2D`, `SpriteBatch`, `SurfaceFormat`,
+`SpriteSortMode`, and composable `SpriteEffects` now preserve their mapped
+hierarchy without local verifier mismatches. CNA-backed behavior includes
+resource metadata/events/disposal, texture creation, mutable-Color snapshot
+upload and readback, raw encoded-image `FromStream`, PNG/JPEG output, all seven
+texture-based Draw overloads, and Begin/End state validation. Only `Color[]`
+generic transfers and full mip-level-zero regions work in this slice; other
+mapped generic transfers fail explicitly. SpriteBatch state overloads and
+DrawString await the coherent state/effect/font types.
+
+`GraphicsDeviceManager` still lacks most of its contract. Render targets,
+buffers/states, effects, vertices, resize/device reset, and broad draw APIs
+remain Java binding work. Empty facade generation is not a substitute for
+behavior.
 
 ## Input
 
@@ -275,11 +308,12 @@ normative names, exact `org.openeggbert:cna-java:0.1.0-SNAPSHOT` coordinate,
 temporary Maven repositories, a pinned wrapper, and deterministic 60/600-frame
 modes. Linux HEADLESS runtime has executed both counts with clean shutdown.
 
-It intentionally demonstrates only lifecycle, `GameTime`, graphics manager,
+It intentionally demonstrates lifecycle, `GameTime`, graphics manager,
 pre-run `GameWindow` title configuration, CNA-backed keyboard/mouse snapshots
-with Escape/left-click exit, mouse-visibility property, and `Clear`. The fake renderer
-name/capability banner, unimplemented
-cube/SpriteBatch/content path, and non-running Android/GWT/TeaVM launchers were
+with Escape/left-click exit, mouse visibility, `Clear`, real raw-PNG decoding,
+and moving SpriteBatch drawing. The Base64 file is only text-safe transport for
+valid PNG bytes and is not called XNB. The fake renderer name/capability banner,
+unimplemented cube/XNB path, and non-running Android/GWT/TeaVM launchers were
 removed. A configurable generator creates a standalone project and its fresh
 build is verified.
 
@@ -314,14 +348,14 @@ Green now:
 1. Java/JNI build with strict warnings;
 2. JUnit managed tests (native tests conditional on a supplied library);
 3. strict internal/native-leak guard;
-4. twelve verifier/mapping regression tests and a foundational compile probe;
+4. fourteen verifier/mapping regression tests and a graphics-aware compile probe;
 5. C header width/layout/signature checks;
 6. optional native symbol/version/integration tests;
 7. template build/tests;
 8. fresh generated-project build;
 9. optional 60-frame smoke and 600-frame stability runs.
 
-Intentionally red: strict XNA completeness (`apiCompatCheck`, 601 differences).
+Intentionally red: strict XNA completeness (`apiCompatCheck`, 604 differences).
 Future platform CI must record evidence separately per OS/architecture.
 
 ## Upstream CNA blockers
@@ -345,9 +379,9 @@ task to patch the upstream repository.
 2. Complete native `GameWindow` event/orientation behavior and math members
    against the strict diagnostics; add XNA differential fixtures.
 3. Bind gamepad/touch and native device/window resize lifecycle.
-4. Add Texture2D FromStream and SpriteBatch as the first real 2D slice; then
-   upgrade the template from clear-only to movement/input/raw-PNG behavior.
-5. Expand content/XNB, graphics resources/effects/models, audio/XACT, and
+4. Add graphics states/effects/fonts for the remaining SpriteBatch overloads,
+   then renderer-backed resize/device lifecycle behavior.
+5. Expand content/XNB, remaining graphics resources/models, audio/XACT, and
    media/storage in dependency-coherent groups, recording baseline deltas after
    every group.
 6. Package/test native runtime artifacts and add platform-specific CI before

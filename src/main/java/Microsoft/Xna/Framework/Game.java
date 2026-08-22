@@ -316,6 +316,11 @@ public class Game implements AutoCloseable {
             failure = appendFailure(failure, exception);
         }
         failure = closeResource(content, failure);
+        try {
+            NativeBindings.closeGraphicsResources(this);
+        } catch (RuntimeException exception) {
+            failure = appendFailure(failure, exception);
+        }
         if (nativeGame != null) {
             failure = closeResource(nativeGame, failure);
         }

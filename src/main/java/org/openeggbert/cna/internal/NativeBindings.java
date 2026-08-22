@@ -1,10 +1,22 @@
 package org.openeggbert.cna.internal;
 
 import Microsoft.Xna.Framework.Game;
+import Microsoft.Xna.Framework.Color;
+import Microsoft.Xna.Framework.Rectangle;
+import Microsoft.Xna.Framework.Vector2;
 import Microsoft.Xna.Framework.WindowHandle;
+import Microsoft.Xna.Framework.Graphics.GraphicsDevice;
+import Microsoft.Xna.Framework.Graphics.GraphicsResource;
+import Microsoft.Xna.Framework.Graphics.SpriteBatch;
+import Microsoft.Xna.Framework.Graphics.SpriteEffects;
+import Microsoft.Xna.Framework.Graphics.SpriteSortMode;
+import Microsoft.Xna.Framework.Graphics.Texture2D;
 
 import java.nio.file.Path;
 import java.nio.charset.StandardCharsets;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.Objects;
@@ -19,6 +31,11 @@ public final class NativeBindings {
     private static boolean bridgeLoaded;
     private static int runtimeAbiVersion;
     private static final Map<Game, NativeGameHandle> GAMES = new WeakHashMap<>();
+    private static final Map<GraphicsDevice, Game> DEVICES = new WeakHashMap<>();
+    private static final Map<GraphicsResource, NativeResourceHandle> RESOURCES =
+            new WeakHashMap<>();
+    private static final Map<GraphicsResource, Game> RESOURCE_OWNERS = new WeakHashMap<>();
+    private static final Map<Game, List<GraphicsResource>> GAME_RESOURCES = new WeakHashMap<>();
     private static final Map<WindowHandle, Long> WINDOW_HANDLES = new WeakHashMap<>();
     private static Game currentGame;
 
@@ -291,6 +308,185 @@ public final class NativeBindings {
         }
     }
 
+    public static void registerGraphicsDevice(GraphicsDevice device, Game game) {
+        synchronized (GAMES) {
+            DEVICES.put(Objects.requireNonNull(device, "device"),
+                    Objects.requireNonNull(game, "game"));
+        }
+    }
+
+    public static int[] createTexture2D(
+            Texture2D texture,
+            GraphicsDevice graphicsDevice,
+            int width,
+            int height,
+            boolean mipMap,
+            int format) {
+        Game game = deviceGame(graphicsDevice);
+        long[] output = new long[1];
+        check("cna_texture2d_create", nativeCreateTexture2D(
+                gameHandle(game, "Texture2D").requireValue(), width, height, mipMap, format, output));
+        registerResource(game, texture, output[0], NativeBindings::destroyTexture2D);
+        return textureInfoOrClose(texture);
+    }
+
+    public static int[] createTexture2DFromEncoded(
+            Texture2D texture,
+            GraphicsDevice graphicsDevice,
+            byte[] encoded,
+            int width,
+            int height,
+            boolean zoom,
+            boolean resize) {
+        Game game = deviceGame(graphicsDevice);
+        long[] output = new long[1];
+        check("cna_texture2d_create_from_encoded_memory", nativeCreateTexture2DFromEncoded(
+                gameHandle(game, "Texture2D.FromStream").requireValue(),
+                Objects.requireNonNull(encoded, "encoded"), width, height, zoom, resize, output));
+        registerResource(game, texture, output[0], NativeBindings::destroyTexture2D);
+        return textureInfoOrClose(texture);
+    }
+
+    public static void setTexture2DData(Texture2D texture, Color[] data) {
+        Objects.requireNonNull(data, "data");
+        int[] packed = new int[data.length];
+        for (int index = 0; index < data.length; index++) {
+            packed[index] = (int)Objects.requireNonNull(data[index], "data[" + index + "]")
+                    .getPackedValue();
+        }
+        check("cna_texture2d_set_data_rgba8",
+                nativeSetTexture2DData(resourceValue(texture), packed));
+    }
+
+    public static Color[] getTexture2DData(Texture2D texture, int pixelCount) {
+        int[] packed = new int[pixelCount];
+        check("cna_texture2d_get_data_rgba8",
+                nativeGetTexture2DData(resourceValue(texture), packed));
+        Color[] result = new Color[pixelCount];
+        for (int index = 0; index < packed.length; index++) {
+            Color color = new Color(0, 0, 0, 0);
+            color.setPackedValue(Integer.toUnsignedLong(packed[index]));
+            result[index] = color;
+        }
+        return result;
+    }
+
+    public static byte[] encodeTexture2D(Texture2D texture, int format, int width, int height) {
+        long handle = resourceValue(texture);
+        int size = Math.toIntExact(longResult("cna_texture2d_get_encoded_byte_count",
+                nativeGetTexture2DEncodedSize(handle, format, width, height)));
+        byte[] output = new byte[size];
+        check("cna_texture2d_copy_encoded",
+                nativeCopyTexture2DEncoded(handle, format, width, height, output));
+        return output;
+    }
+
+    public static void createSpriteBatch(SpriteBatch spriteBatch, GraphicsDevice graphicsDevice) {
+        Game game = deviceGame(graphicsDevice);
+        long[] output = new long[1];
+        check("cna_sprite_batch_create", nativeCreateSpriteBatch(
+                gameHandle(game, "SpriteBatch").requireValue(), output));
+        registerResource(game, spriteBatch, output[0], NativeBindings::destroySpriteBatch);
+    }
+
+    public static void beginSpriteBatch(SpriteBatch spriteBatch, SpriteSortMode sortMode) {
+        check("cna_sprite_batch_begin", nativeBeginSpriteBatch(
+                resourceValue(spriteBatch), Objects.requireNonNull(sortMode, "sortMode").ordinal()));
+    }
+
+    public static void drawSpriteRectangle(
+            SpriteBatch spriteBatch,
+            Texture2D texture,
+            Rectangle destination,
+            Rectangle source,
+            Color color,
+            float rotation,
+            Vector2 origin,
+            SpriteEffects effects,
+            float layerDepth) {
+        Rectangle destinationValue = new Rectangle(Objects.requireNonNull(destination, "destination"));
+        Rectangle sourceValue = source == null ? new Rectangle() : new Rectangle(source);
+        Color colorValue = new Color(Objects.requireNonNull(color, "color"));
+        Vector2 originValue = new Vector2(Objects.requireNonNull(origin, "origin"));
+        check("cna_sprite_batch_submit_many", nativeDrawSpriteRectangle(
+                resourceValue(spriteBatch), resourceValue(texture),
+                destinationValue.X, destinationValue.Y, destinationValue.Width, destinationValue.Height,
+                sourceValue.X, sourceValue.Y, sourceValue.Width, sourceValue.Height,
+                (int)colorValue.getPackedValue(), rotation, originValue.X, originValue.Y,
+                Objects.requireNonNull(effects, "effects").getValue(), layerDepth));
+    }
+
+    public static void drawSpriteScaled(
+            SpriteBatch spriteBatch,
+            Texture2D texture,
+            Vector2 position,
+            Rectangle source,
+            Color color,
+            float rotation,
+            Vector2 origin,
+            Vector2 scale,
+            SpriteEffects effects,
+            float layerDepth) {
+        Vector2 positionValue = new Vector2(Objects.requireNonNull(position, "position"));
+        Rectangle sourceValue = source == null ? new Rectangle() : new Rectangle(source);
+        Color colorValue = new Color(Objects.requireNonNull(color, "color"));
+        Vector2 originValue = new Vector2(Objects.requireNonNull(origin, "origin"));
+        Vector2 scaleValue = new Vector2(Objects.requireNonNull(scale, "scale"));
+        check("cna_sprite_batch_submit_scaled_many", nativeDrawSpriteScaled(
+                resourceValue(spriteBatch), resourceValue(texture), positionValue.X, positionValue.Y,
+                sourceValue.X, sourceValue.Y, sourceValue.Width, sourceValue.Height,
+                (int)colorValue.getPackedValue(), rotation, originValue.X, originValue.Y,
+                scaleValue.X, scaleValue.Y, Objects.requireNonNull(effects, "effects").getValue(),
+                layerDepth));
+    }
+
+    public static void endSpriteBatch(SpriteBatch spriteBatch) {
+        check("cna_sprite_batch_end", nativeEndSpriteBatch(resourceValue(spriteBatch)));
+    }
+
+    public static void closeGraphicsResource(GraphicsResource resource) {
+        NativeResourceHandle handle;
+        synchronized (GAMES) {
+            handle = RESOURCES.get(resource);
+        }
+        if (handle == null) {
+            return;
+        }
+        handle.close();
+        synchronized (GAMES) {
+            RESOURCES.remove(resource);
+            Game owner = RESOURCE_OWNERS.remove(resource);
+            List<GraphicsResource> children = GAME_RESOURCES.get(owner);
+            if (children != null) {
+                children.remove(resource);
+            }
+        }
+    }
+
+    public static void closeGraphicsResources(Game game) {
+        List<GraphicsResource> snapshot;
+        synchronized (GAMES) {
+            List<GraphicsResource> resources = GAME_RESOURCES.get(game);
+            snapshot = resources == null ? List.of() : new ArrayList<>(resources);
+        }
+        Collections.reverse(snapshot);
+        RuntimeException failure = null;
+        for (GraphicsResource resource : snapshot) {
+            try {
+                resource.close();
+            } catch (RuntimeException exception) {
+                if (failure == null) {
+                    failure = exception;
+                } else {
+                    failure.addSuppressed(exception);
+                }
+            }
+        }
+        if (failure != null) {
+            throw failure;
+        }
+    }
+
     static void destroyGame(Game game, long handle) {
         int result = nativeDestroyGame(handle);
         // CNA documents CALLBACK as released: shutdown completed but a callback reported failure.
@@ -299,6 +495,8 @@ public final class NativeBindings {
         }
         synchronized (GAMES) {
             GAMES.remove(game);
+            GAME_RESOURCES.remove(game);
+            DEVICES.values().removeIf(value -> value == game);
             if (currentGame == game) {
                 currentGame = null;
             }
@@ -332,6 +530,65 @@ public final class NativeBindings {
                     owner + " requires a live CNA Game on the current process");
         }
         return handle;
+    }
+
+    private static Game deviceGame(GraphicsDevice device) {
+        Game game;
+        synchronized (GAMES) {
+            game = DEVICES.get(Objects.requireNonNull(device, "graphicsDevice"));
+        }
+        if (game == null) {
+            throw new IllegalArgumentException("GraphicsDevice was not created by CNA-Java");
+        }
+        return game;
+    }
+
+    private static void registerResource(
+            Game game,
+            GraphicsResource resource,
+            long value,
+            java.util.function.LongConsumer releaser) {
+        NativeResourceHandle handle = new NativeResourceHandle(value, releaser);
+        synchronized (GAMES) {
+            RESOURCES.put(resource, handle);
+            RESOURCE_OWNERS.put(resource, game);
+            GAME_RESOURCES.computeIfAbsent(game, ignored -> new ArrayList<>()).add(resource);
+        }
+    }
+
+    private static int[] textureInfoOrClose(Texture2D texture) {
+        int[] info = new int[4];
+        try {
+            check("cna_texture2d_get_info", nativeGetTexture2DInfo(resourceValue(texture), info));
+            return info;
+        } catch (RuntimeException failure) {
+            try {
+                closeGraphicsResource(texture);
+            } catch (RuntimeException closeFailure) {
+                failure.addSuppressed(closeFailure);
+            }
+            throw failure;
+        }
+    }
+
+    private static long resourceValue(GraphicsResource resource) {
+        NativeResourceHandle handle;
+        synchronized (GAMES) {
+            handle = RESOURCES.get(Objects.requireNonNull(resource, "resource"));
+        }
+        if (handle == null) {
+            throw new IllegalStateException(
+                    resource.getClass().getSimpleName() + " has no live CNA resource");
+        }
+        return handle.requireValue();
+    }
+
+    private static void destroyTexture2D(long handle) {
+        check("cna_texture2d_destroy", nativeDestroyTexture2D(handle));
+    }
+
+    private static void destroySpriteBatch(long handle) {
+        check("cna_sprite_batch_destroy", nativeDestroySpriteBatch(handle));
     }
 
     private static WindowHandle findWindowHandle(long value) {
@@ -494,6 +751,48 @@ public final class NativeBindings {
     private static native int nativeGetMouseWindowHandle(long game, long[] window);
 
     private static native int nativeSetMouseWindowHandle(long game, long window);
+
+    private static native int nativeCreateTexture2D(
+            long game, int width, int height, boolean mipMap, int format, long[] output);
+
+    private static native int nativeCreateTexture2DFromEncoded(
+            long game, byte[] encoded, int width, int height, boolean zoom, boolean resize,
+            long[] output);
+
+    private static native int nativeGetTexture2DInfo(long texture, int[] output);
+
+    private static native int nativeSetTexture2DData(long texture, int[] packedColors);
+
+    private static native int nativeGetTexture2DData(long texture, int[] packedColors);
+
+    private static native long nativeGetTexture2DEncodedSize(
+            long texture, int format, int width, int height);
+
+    private static native int nativeCopyTexture2DEncoded(
+            long texture, int format, int width, int height, byte[] output);
+
+    private static native int nativeDestroyTexture2D(long texture);
+
+    private static native int nativeCreateSpriteBatch(long game, long[] output);
+
+    private static native int nativeBeginSpriteBatch(long spriteBatch, int sortMode);
+
+    private static native int nativeDrawSpriteRectangle(
+            long spriteBatch, long texture,
+            int destinationX, int destinationY, int destinationWidth, int destinationHeight,
+            int sourceX, int sourceY, int sourceWidth, int sourceHeight,
+            int packedColor, float rotation, float originX, float originY,
+            int effects, float layerDepth);
+
+    private static native int nativeDrawSpriteScaled(
+            long spriteBatch, long texture, float positionX, float positionY,
+            int sourceX, int sourceY, int sourceWidth, int sourceHeight,
+            int packedColor, float rotation, float originX, float originY,
+            float scaleX, float scaleY, int effects, float layerDepth);
+
+    private static native int nativeEndSpriteBatch(long spriteBatch);
+
+    private static native int nativeDestroySpriteBatch(long spriteBatch);
 
     private static native int nativeDestroyGame(long game);
 

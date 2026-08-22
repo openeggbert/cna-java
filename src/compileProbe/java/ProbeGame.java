@@ -12,11 +12,17 @@ import Microsoft.Xna.Framework.Input.Keys;
 import Microsoft.Xna.Framework.Input.ButtonState;
 import Microsoft.Xna.Framework.Input.Mouse;
 import Microsoft.Xna.Framework.Input.MouseState;
+import Microsoft.Xna.Framework.Graphics.SpriteBatch;
+import Microsoft.Xna.Framework.Graphics.Texture2D;
+
+import java.io.InputStream;
 
 public final class ProbeGame extends Game {
     private final GraphicsDeviceManager graphics;
     private final DisplayOrientation supportedOrientations;
     private final WindowHandle initialWindowHandle;
+    private SpriteBatch spriteBatch;
+    private Texture2D texture;
 
     public ProbeGame() {
         graphics = new GraphicsDeviceManager(this);
@@ -35,6 +41,13 @@ public final class ProbeGame extends Game {
     }
 
     @Override
+    protected void LoadContent() {
+        texture = new Texture2D(getGraphicsDevice(), 1, 1);
+        texture.SetData(new Color[] {Color.White});
+        spriteBatch = new SpriteBatch(getGraphicsDevice());
+    }
+
+    @Override
     protected void Update(GameTime gameTime) {
         KeyboardState keyboard = Keyboard.GetState(PlayerIndex.One);
         MouseState mouse = Mouse.GetState();
@@ -48,5 +61,18 @@ public final class ProbeGame extends Game {
     @Override
     protected void Draw(GameTime gameTime) {
         getGraphicsDevice().Clear(Color.CornflowerBlue);
+        spriteBatch.Begin();
+        spriteBatch.Draw(texture, new Microsoft.Xna.Framework.Vector2(16.0f), Color.White);
+        spriteBatch.End();
+    }
+
+    @Override
+    protected void UnloadContent() {
+        spriteBatch.close();
+        texture.close();
+    }
+
+    private Texture2D loadPng(InputStream stream) {
+        return Texture2D.FromStream(getGraphicsDevice(), stream);
     }
 }

@@ -62,6 +62,20 @@ class VerifyTests(unittest.TestCase):
         self.assertEqual("int", VERIFY.map_type("System.Byte"))
         self.assertEqual("byte", VERIFY.map_type("System.SByte"))
 
+    def test_stream_direction_and_missing_parameter_names_are_explicit(self) -> None:
+        member = {
+            "name": "FromStream",
+            "parameters": [
+                {"name": "graphicsDevice", "type": "Microsoft.Xna.Framework.Graphics.GraphicsDevice"},
+                {"name": "stream", "type": "System.IO.Stream"},
+            ],
+        }
+        parameters = VERIFY.map_member_parameters(
+            "Microsoft.Xna.Framework.Graphics.Texture2D", member, self.rules)
+        self.assertEqual("java.io.InputStream", parameters[1]["type"])
+        unnamed = VERIFY.map_parameters([{"name": "", "type": "System.Boolean"}])
+        self.assertEqual("arg0", unnamed[0]["name"])
+
     def test_explicit_disposable_implementation_still_projects_close(self) -> None:
         contract = {
             "name": "Microsoft.Xna.Framework.DisposableProbe",
@@ -166,6 +180,21 @@ class VerifyTests(unittest.TestCase):
         self.assertEqual(1, len(findings))
         self.assertEqual("MISSING_MEMBER", findings[0]["code"])
         self.assertIn("Probe.Value", findings[0]["subject"])
+
+    def test_inaccessible_clr_interface_is_not_projected(self) -> None:
+        reference = {"types": [{
+            "name": "Probe.Value", "kind": "class", "access": "public",
+            "abstract": False, "sealed": False, "baseType": "System.Object",
+            "interfaces": ["Probe.InternalMarker"], "genericArity": 0,
+            "members": [],
+        }]}
+        target = {"types": [{
+            "name": "Probe.Value", "kind": "class", "access": "public",
+            "abstract": False, "sealed": False, "baseType": "java.lang.Object",
+            "interfaces": [], "genericArity": 0, "members": [],
+        }]}
+        findings = VERIFY.compare(reference, target, self.rules)
+        self.assertFalse(any(value["code"] == "INTERFACE_MISMATCH" for value in findings))
 
     def test_leak_guard_finds_internal_types_and_raw_long_handles(self) -> None:
         target = {"types": [{

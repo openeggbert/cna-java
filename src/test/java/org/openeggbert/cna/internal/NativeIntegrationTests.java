@@ -1,6 +1,7 @@
 package org.openeggbert.cna.internal;
 
 import Microsoft.Xna.Framework.DisplayOrientation;
+import Microsoft.Xna.Framework.Color;
 import Microsoft.Xna.Framework.Game;
 import Microsoft.Xna.Framework.GameComponent;
 import Microsoft.Xna.Framework.GameTime;
@@ -11,10 +12,15 @@ import Microsoft.Xna.Framework.Input.Keys;
 import Microsoft.Xna.Framework.Input.ButtonState;
 import Microsoft.Xna.Framework.Input.Mouse;
 import Microsoft.Xna.Framework.Input.MouseState;
+import Microsoft.Xna.Framework.Graphics.SpriteBatch;
+import Microsoft.Xna.Framework.Graphics.SurfaceFormat;
+import Microsoft.Xna.Framework.Graphics.Texture2D;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.condition.EnabledIfEnvironmentVariable;
 
 import java.time.Duration;
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -119,6 +125,28 @@ final class NativeIntegrationTests {
         assertThrows(IllegalStateException.class, Mouse::GetState);
     }
 
+    @Test
+    void NativeTextureStreamAndSpriteBatchRoundTripAndReleaseBeforeGame() {
+        GraphicsGame game = new GraphicsGame();
+        game.Run();
+
+        assertEquals(2, game.decodedWidth);
+        assertEquals(2, game.decodedHeight);
+        assertEquals(SurfaceFormat.Color, game.decodedFormat);
+        assertArrayEquals(new Color[] {
+                new Color(255, 0, 0), new Color(0, 255, 0),
+                new Color(0, 0, 255), new Color(255, 255, 255)
+        }, game.readBack);
+        assertTrue(game.encodedPngBytes > 0);
+        assertEquals(2, game.frames);
+        assertFalse(game.texture.getIsDisposed());
+
+        game.close();
+        assertTrue(game.texture.getIsDisposed());
+        assertTrue(game.decoded.getIsDisposed());
+        assertTrue(game.spriteBatch.getIsDisposed());
+    }
+
     private static final class ProbeGame extends Game {
         private final List<String> events = new ArrayList<>();
         private final int frameLimit;
@@ -190,6 +218,52 @@ final class NativeIntegrationTests {
         @Override
         protected void Update(GameTime gameTime) {
             state = Mouse.GetState();
+        }
+    }
+
+    private static final class GraphicsGame extends Game {
+        private final Color[] original = {
+                new Color(255, 0, 0), new Color(0, 255, 0),
+                new Color(0, 0, 255), new Color(255, 255, 255)
+        };
+        private Color[] readBack;
+        private Texture2D texture;
+        private Texture2D decoded;
+        private SpriteBatch spriteBatch;
+        private int decodedWidth;
+        private int decodedHeight;
+        private SurfaceFormat decodedFormat;
+        private int encodedPngBytes;
+        private int frames;
+
+        @Override
+        protected void LoadContent() {
+            texture = new Texture2D(getGraphicsDevice(), 2, 2);
+            texture.SetData(original);
+            original[0].setG(99);
+            readBack = new Color[4];
+            texture.GetData(readBack);
+
+            ByteArrayOutputStream encoded = new ByteArrayOutputStream();
+            texture.SaveAsPng(encoded, 2, 2);
+            encodedPngBytes = encoded.size();
+            decoded = Texture2D.FromStream(
+                    getGraphicsDevice(), new ByteArrayInputStream(encoded.toByteArray()));
+            decodedWidth = decoded.getWidth();
+            decodedHeight = decoded.getHeight();
+            decodedFormat = decoded.getFormat();
+            spriteBatch = new SpriteBatch(getGraphicsDevice());
+        }
+
+        @Override
+        protected void Draw(GameTime gameTime) {
+            getGraphicsDevice().Clear(Color.CornflowerBlue);
+            spriteBatch.Begin();
+            spriteBatch.Draw(decoded, new Rectangle(0, 0, 32, 32), Color.White);
+            spriteBatch.End();
+            if (++frames == 2) {
+                Exit();
+            }
         }
     }
 }

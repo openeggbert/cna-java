@@ -99,6 +99,7 @@ System.Byte                                              -> int (validated 0 thr
 System.String                                            -> java.lang.String
 System.Object                                            -> java.lang.Object
 System.Exception                                         -> java.lang.RuntimeException
+System.Text.StringBuilder                                -> java.lang.StringBuilder
 System.Type                                              -> java.lang.Class<?>
 System.IntPtr                                            -> Microsoft.Xna.Framework.WindowHandle
 System.TimeSpan                                          -> java.time.Duration (100 ns precision)
@@ -127,6 +128,12 @@ source or serialization-protocol equivalent and is explicitly excluded by its fu
 Java exception serialization instead uses `RuntimeException`'s serial form and `serialVersionUID`;
 the three ordinary public constructors remain part of the strict mapped contract. This is a
 mapping rule, not an allowlist entry.
+CLR parameter metadata without a name deterministically maps to `argN`, where `N` is its zero-based
+position. An inaccessible CLR interface implemented by a public XNA type is omitted unless the
+interface itself belongs to the selected reference profile. CLR `Stream` is direction-sensitive
+rather than forced onto one misleading Java type: `Texture2D.FromStream` maps its input to
+`InputStream`, while `SaveAsPng` and `SaveAsJpeg` map their output to `OutputStream`. These
+full-signature transformations are recorded in `mapping-rules.json`.
 `WindowHandle` is an opaque value that supports equality and a zero test but intentionally has no
 numeric/address accessor. It preserves the XNA window-token round trip without exposing a raw
 native address to game code; CNA-specific native-window interop belongs in the extensions layer.

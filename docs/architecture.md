@@ -64,9 +64,14 @@ adopted/transferred. Only owned/adopted wrappers destroy native objects. Close i
 explicit, deterministic, retryable after a failed native release, and
 idempotent after success. Raw handle values never reach application code.
 
-`Game` owns its content/device facades and native CNA game. Content is unloaded
-while the native parent is still live, the CNA game is then destroyed, and
-borrowed Java facades are invalidated. Deprecated finalization is not used.
+`Game` owns its content/device facades and native CNA game. Textures and
+SpriteBatches are owned child handles registered against that game; explicit
+resource close removes them from the registry, while game teardown closes any
+remaining children in reverse creation order before destroying the parent.
+Texture and draw inputs are copied from mutable Java value objects at each JNI
+boundary. Content is unloaded while the native parent is still live, and
+borrowed Java facades are invalidated afterward. Deprecated finalization is not
+used.
 
 ## Contract layers
 

@@ -17,7 +17,22 @@
     "System.IServiceProvider": "Microsoft.Xna.Framework.ServiceProvider",
     "System.IntPtr": "Microsoft.Xna.Framework.WindowHandle",
     "System.Collections.ObjectModel.Collection`1": "java.util.AbstractList",
-    "System.Collections.Generic.Dictionary`2": "java.util.LinkedHashMap"
+    "System.Collections.Generic.Dictionary`2": "java.util.LinkedHashMap",
+    "System.Text.StringBuilder": "java.lang.StringBuilder"
+  },
+  "memberParameterTypeMappings": {
+    "Microsoft.Xna.Framework.Graphics.Texture2D.FromStream(Microsoft.Xna.Framework.Graphics.GraphicsDevice,System.IO.Stream)": {
+      "stream": "java.io.InputStream"
+    },
+    "Microsoft.Xna.Framework.Graphics.Texture2D.FromStream(Microsoft.Xna.Framework.Graphics.GraphicsDevice,System.IO.Stream,System.Int32,System.Int32,System.Boolean)": {
+      "stream": "java.io.InputStream"
+    },
+    "Microsoft.Xna.Framework.Graphics.Texture2D.SaveAsJpeg(System.IO.Stream,System.Int32,System.Int32)": {
+      "stream": "java.io.OutputStream"
+    },
+    "Microsoft.Xna.Framework.Graphics.Texture2D.SaveAsPng(System.IO.Stream,System.Int32,System.Int32)": {
+      "stream": "java.io.OutputStream"
+    }
   },
   "mutableStaticValueProperties": "fresh-getter",
   "excludedClrMethods": [

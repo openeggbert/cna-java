@@ -17,17 +17,17 @@ CNA C++
 
 ## Honest status
 
-The project is functional for a small Linux/headless lifecycle, clear, keyboard,
-and mouse slice; it is not XNA-complete and does not yet provide a playable
-SpriteBatch/texture/content path.
+The project is functional for a small Linux/headless lifecycle, texture,
+SpriteBatch, keyboard, and mouse slice; it is not XNA-complete and does not yet
+provide XNB content or the broad graphics surface.
 
 The first strict Windows-runtime measurement is intentionally red:
 
 ```text
 XNA reference:        257 types / 2,964 members
 Mapped Java contract: 261 types / 3,086 members
-Java target:           44 strict types / 696 members
-Differences:          601 unreviewed diagnostics
+Java target:           51 strict types / 770 members
+Differences:          604 unreviewed diagnostics
 Allowlist:              0
 Strict leaks:           0
 ```
@@ -46,15 +46,21 @@ Implemented now:
   `Keyboard.GetState` overloads;
 - exact `ButtonState`, immutable `MouseState`, and native-backed `Mouse`
   state/position/opaque-window operations;
-- Java 17 JNI adapter for 38 CNA game/error/window/keyboard/mouse functions;
+- exact graphics-resource/texture hierarchy plus `SurfaceFormat`,
+  `SpriteSortMode`, composable `SpriteEffects`, native `Texture2D` lifecycle,
+  Color data transfer, PNG/JPEG streams, and all texture-based SpriteBatch Draw
+  overloads (stateful Begin overloads and DrawString remain missing);
+- Java 17 JNI adapter for 53 CNA game/error/window/input/texture/SpriteBatch
+  functions;
 - explicit native ownership modes and idempotent cleanup;
 - class-metadata XNA contract verifier and strict implementation-leak guard;
 - header/signature/layout/native-symbol ABI verifier;
 - managed numerical, validation, lifecycle, content, and ownership tests;
 - desktop template canary with 60-frame smoke and 600-frame stability modes.
 
-Not implemented yet includes SpriteBatch, textures, gamepad/touch, XNB
-loading, models, audio/XACT, media/storage, and most of the selected XNA profile.
+Not implemented yet includes graphics states/effects, SpriteFont, gamepad/touch,
+XNB loading, models, audio/XACT, media/storage, and most of the selected XNA
+profile.
 
 ## Build and verify
 

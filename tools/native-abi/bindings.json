@@ -39,6 +39,21 @@
     {"name": "cna_mouse_get_state", "header": "input.h", "ownership": "borrows game; copies versioned mouse state"},
     {"name": "cna_mouse_set_position", "header": "input_mouse.h", "ownership": "borrows game"},
     {"name": "cna_mouse_get_window_handle", "header": "input_mouse.h", "ownership": "borrows game; returns opaque round-trip token"},
-    {"name": "cna_mouse_set_window_handle", "header": "input_mouse.h", "ownership": "borrows game and opaque round-trip token"}
+    {"name": "cna_mouse_set_window_handle", "header": "input_mouse.h", "ownership": "borrows game and opaque round-trip token"},
+    {"name": "cna_game_get_graphics_device", "header": "graphics.h", "ownership": "returns callback-scoped borrowed device"},
+    {"name": "cna_texture2d_create", "header": "graphics.h", "ownership": "returns owned game-child texture"},
+    {"name": "cna_texture2d_create_from_encoded_memory", "header": "texture.h", "ownership": "copies encoded bytes; returns owned game-child texture"},
+    {"name": "cna_texture2d_get_info", "header": "graphics.h", "ownership": "borrows texture; caller output"},
+    {"name": "cna_texture2d_set_data_rgba8", "header": "graphics.h", "ownership": "borrows texture and copies pixels"},
+    {"name": "cna_texture2d_get_data_rgba8", "header": "graphics.h", "ownership": "borrows texture; caller pixel buffer"},
+    {"name": "cna_texture2d_get_encoded_byte_count", "header": "texture.h", "ownership": "borrows texture; caller output"},
+    {"name": "cna_texture2d_copy_encoded", "header": "texture.h", "ownership": "borrows texture; caller byte buffer"},
+    {"name": "cna_texture2d_destroy", "header": "graphics.h", "ownership": "consumes owned texture on success"},
+    {"name": "cna_sprite_batch_create", "header": "graphics.h", "ownership": "returns owned game-child batch"},
+    {"name": "cna_sprite_batch_begin", "header": "graphics.h", "ownership": "borrows batch and copies begin info"},
+    {"name": "cna_sprite_batch_submit_many", "header": "graphics.h", "ownership": "borrows batch; copies commands and retains textures until End"},
+    {"name": "cna_sprite_batch_submit_scaled_many", "header": "graphics.h", "ownership": "borrows batch; copies commands and retains textures until End"},
+    {"name": "cna_sprite_batch_end", "header": "graphics.h", "ownership": "borrows batch and releases retained textures"},
+    {"name": "cna_sprite_batch_destroy", "header": "graphics.h", "ownership": "consumes owned batch and cancels active interval"}
   ]
 }

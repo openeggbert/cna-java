@@ -236,8 +236,27 @@ def callable_member(kind: str, name: str, source: dict[str, Any], parameters: li
     }
 
 
-def map_parameters(values: list[dict[str, Any]]) -> list[dict[str, Any]]:
-    return [parameter(value["name"], map_type(value["type"]) or "java.lang.Object") for value in values]
+def clr_member_signature(type_name: str, member: dict[str, Any]) -> str:
+    return type_name + "." + member["name"] + "(" \
+        + ",".join(value["type"] for value in member.get("parameters", [])) + ")"
+
+
+def map_parameters(
+        values: list[dict[str, Any]],
+        overrides: dict[str, str] | None = None) -> list[dict[str, Any]]:
+    selected = overrides or {}
+    return [parameter(value["name"] or f"arg{index}",
+                      selected.get(value["name"], map_type(value["type"]) or "java.lang.Object"))
+            for index, value in enumerate(values)]
+
+
+def map_member_parameters(
+        type_name: str,
+        member: dict[str, Any],
+        rules: dict[str, Any]) -> list[dict[str, Any]]:
+    overrides = rules.get("memberParameterTypeMappings", {}).get(
+        clr_member_signature(type_name, member), {})
+    return map_parameters(member.get("parameters", []), overrides)
 
 
 def mapped_enum_members(type_contract: dict[str, Any]) -> list[dict[str, Any]]:
@@ -288,17 +307,16 @@ def mapped_members(type_contract: dict[str, Any], rules: dict[str, Any], mapping
 
     for member in type_contract["members"]:
         kind = member["kind"]
-        clr_signature = type_name + "." + member["name"] + "(" \
-            + ",".join(value["type"] for value in member.get("parameters", [])) + ")"
+        clr_signature = clr_member_signature(type_name, member)
         if clr_signature in rules.get("excludedClrMembers", []):
             continue
         if kind == "field":
             expected.append({**member, "type": map_type(member["type"])})
         elif kind == "constructor":
             expected.append(callable_member("constructor", ".ctor", member,
-                                            map_parameters(member["parameters"]), None))
+                                            map_member_parameters(type_name, member, rules), None))
         elif kind == "property":
-            indexes = map_parameters(member.get("parameters", []))
+            indexes = map_member_parameters(type_name, member, rules)
             property_type = map_type(member["type"]) or "java.lang.Object"
             full_name = type_name + "." + member["name"]
             if full_name in rules["namedImmutableValueFields"]:
@@ -356,7 +374,7 @@ def mapped_members(type_contract: dict[str, Any], rules: dict[str, Any], mapping
                 source["genericArity"] = 1
                 expected.append(callable_member("method", "Load", source,
                                                 [parameter("assetType", "java.lang.Class<T>"),
-                                                 *map_parameters(member["parameters"])], "T"))
+                                                 *map_member_parameters(type_name, member, rules)], "T"))
                 continue
             by_reference = any(value["type"].endswith("&") for value in member["parameters"])
             if by_reference:
@@ -374,7 +392,7 @@ def mapped_members(type_contract: dict[str, Any], rules: dict[str, Any], mapping
                         continue
                 if not out_values:
                     expected.append(callable_member("method", name, member,
-                                                    map_parameters(member["parameters"]),
+                                                    map_member_parameters(type_name, member, rules),
                                                     map_type(member["returnType"])))
                     continue
                 if type_name == "Microsoft.Xna.Framework.Matrix" and member["name"] == "Decompose":
@@ -386,7 +404,8 @@ def mapped_members(type_contract: dict[str, Any], rules: dict[str, Any], mapping
                                                    type_name + "." + member["name"] + "(" + signature + ")",
                                                    expected="reviewed ref/out transformation", actual="unclassified ref/out overload"))
                 continue
-            expected.append(callable_member("method", name, member, map_parameters(member["parameters"]),
+            expected.append(callable_member("method", name, member,
+                                            map_member_parameters(type_name, member, rules),
                                             map_type(member["returnType"])))
 
     if "System.IDisposable" in type_contract.get("interfaces", []) \
@@ -481,6 +500,10 @@ def compare(reference: dict[str, Any], target: dict[str, Any], rules: dict[str, 
             else set(filter(None, (map_type(value) for value in expected_type.get("interfaces", []))))
         expected_interfaces.discard("System.IEquatable<T0>")
         expected_interfaces = {value for value in expected_interfaces if not value.startswith("System.IEquatable")}
+        expected_interfaces = {
+            value for value in expected_interfaces
+            if value.startswith("java.") or value.split("<", 1)[0] in expected_types
+        }
         actual_interfaces = set(actual_type.get("interfaces", []))
         if expected_interfaces != actual_interfaces:
             findings.append(diagnostic("INTERFACE_MISMATCH", name, sorted(expected_interfaces), sorted(actual_interfaces)))

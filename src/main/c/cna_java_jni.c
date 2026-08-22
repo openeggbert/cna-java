@@ -62,6 +62,23 @@ typedef CNA_Result (*KeyboardGetStateForPlayerFunction)(
 typedef CNA_Result (*MouseGetStateFunction)(CNA_Handle, CNA_MouseState*);
 typedef CNA_Result (*MouseSetPositionFunction)(CNA_Handle, int32_t, int32_t);
 typedef CNA_Result (*GameSetUint64Function)(CNA_Handle, uint64_t);
+typedef CNA_Result (*GameGetHandleFunction)(CNA_Handle, CNA_Handle*);
+typedef CNA_Result (*TextureCreateFunction)(
+    CNA_Handle, const CNA_Texture2DCreateInfo*, CNA_Handle*);
+typedef CNA_Result (*TextureCreateEncodedFunction)(
+    CNA_Handle, const uint8_t*, uint64_t, const CNA_Texture2DDecodeInfo*, CNA_Handle*);
+typedef CNA_Result (*TextureGetInfoFunction)(CNA_Handle, CNA_Texture2DInfo*);
+typedef CNA_Result (*TextureSetColorsFunction)(CNA_Handle, const CNA_Color*, uint64_t);
+typedef CNA_Result (*TextureGetColorsFunction)(CNA_Handle, CNA_Color*, uint64_t, uint64_t*);
+typedef CNA_Result (*TextureEncodedSizeFunction)(
+    CNA_Handle, CNA_TextureImageFormat, uint32_t, uint32_t, uint64_t*);
+typedef CNA_Result (*TextureCopyEncodedFunction)(
+    CNA_Handle, CNA_TextureImageFormat, uint32_t, uint32_t, uint8_t*, uint64_t, uint64_t*);
+typedef CNA_Result (*SpriteBatchCreateFunction)(CNA_Handle, CNA_Handle*);
+typedef CNA_Result (*SpriteBatchBeginFunction)(CNA_Handle, const CNA_SpriteBatchBeginInfo*);
+typedef CNA_Result (*SpriteBatchSubmitFunction)(CNA_Handle, const CNA_SpriteCommand*, uint64_t);
+typedef CNA_Result (*SpriteBatchSubmitScaledFunction)(
+    CNA_Handle, const CNA_SpriteScaledCommand*, uint64_t);
 
 typedef struct CnaFunctions {
     DynamicLibrary library;
@@ -103,6 +120,21 @@ typedef struct CnaFunctions {
     MouseSetPositionFunction mouse_set_position;
     GameGetUint64Function mouse_get_window_handle;
     GameSetUint64Function mouse_set_window_handle;
+    GameGetHandleFunction game_get_graphics_device;
+    TextureCreateFunction texture2d_create;
+    TextureCreateEncodedFunction texture2d_create_from_encoded_memory;
+    TextureGetInfoFunction texture2d_get_info;
+    TextureSetColorsFunction texture2d_set_data_rgba8;
+    TextureGetColorsFunction texture2d_get_data_rgba8;
+    TextureEncodedSizeFunction texture2d_get_encoded_byte_count;
+    TextureCopyEncodedFunction texture2d_copy_encoded;
+    GameUnaryFunction texture2d_destroy;
+    SpriteBatchCreateFunction sprite_batch_create;
+    SpriteBatchBeginFunction sprite_batch_begin;
+    SpriteBatchSubmitFunction sprite_batch_submit_many;
+    SpriteBatchSubmitScaledFunction sprite_batch_submit_scaled_many;
+    GameUnaryFunction sprite_batch_end;
+    GameUnaryFunction sprite_batch_destroy;
 } CnaFunctions;
 
 typedef struct JavaGameContext {
@@ -338,6 +370,38 @@ static JavaGame* java_game(jlong value)
     return (JavaGame*)(uintptr_t)value;
 }
 
+static CNA_Result set_handle_output(JNIEnv* environment, jlongArray output, CNA_Handle value)
+{
+    if (output == NULL || (*environment)->GetArrayLength(environment, output) < 1) {
+        return CNA_RESULT_INVALID_ARGUMENT;
+    }
+    jlong projected;
+    (void)memcpy(&projected, &value, sizeof(projected));
+    (*environment)->SetLongArrayRegion(environment, output, 0, 1, &projected);
+    return (*environment)->ExceptionCheck(environment)
+        ? CNA_RESULT_INVALID_STATE : CNA_RESULT_SUCCESS;
+}
+
+static CNA_Color color_from_packed(jint packed)
+{
+    const uint32_t value = (uint32_t)packed;
+    CNA_Color color;
+    color.r = (uint8_t)(value & UINT32_C(0xff));
+    color.g = (uint8_t)((value >> 8U) & UINT32_C(0xff));
+    color.b = (uint8_t)((value >> 16U) & UINT32_C(0xff));
+    color.a = (uint8_t)((value >> 24U) & UINT32_C(0xff));
+    return color;
+}
+
+static jint packed_from_color(CNA_Color color)
+{
+    const uint32_t value = (uint32_t)color.r
+        | ((uint32_t)color.g << 8U)
+        | ((uint32_t)color.b << 16U)
+        | ((uint32_t)color.a << 24U);
+    return (jint)value;
+}
+
 JNIEXPORT jint JNICALL JNI_OnLoad(JavaVM* virtual_machine, void* reserved)
 {
     (void)reserved;
@@ -418,6 +482,21 @@ JNIEXPORT jint JNICALL Java_org_openeggbert_cna_internal_NativeBindings_nativeLo
     LOAD(mouse_set_position, "cna_mouse_set_position");
     LOAD(mouse_get_window_handle, "cna_mouse_get_window_handle");
     LOAD(mouse_set_window_handle, "cna_mouse_set_window_handle");
+    LOAD(game_get_graphics_device, "cna_game_get_graphics_device");
+    LOAD(texture2d_create, "cna_texture2d_create");
+    LOAD(texture2d_create_from_encoded_memory, "cna_texture2d_create_from_encoded_memory");
+    LOAD(texture2d_get_info, "cna_texture2d_get_info");
+    LOAD(texture2d_set_data_rgba8, "cna_texture2d_set_data_rgba8");
+    LOAD(texture2d_get_data_rgba8, "cna_texture2d_get_data_rgba8");
+    LOAD(texture2d_get_encoded_byte_count, "cna_texture2d_get_encoded_byte_count");
+    LOAD(texture2d_copy_encoded, "cna_texture2d_copy_encoded");
+    LOAD(texture2d_destroy, "cna_texture2d_destroy");
+    LOAD(sprite_batch_create, "cna_sprite_batch_create");
+    LOAD(sprite_batch_begin, "cna_sprite_batch_begin");
+    LOAD(sprite_batch_submit_many, "cna_sprite_batch_submit_many");
+    LOAD(sprite_batch_submit_scaled_many, "cna_sprite_batch_submit_scaled_many");
+    LOAD(sprite_batch_end, "cna_sprite_batch_end");
+    LOAD(sprite_batch_destroy, "cna_sprite_batch_destroy");
 #undef LOAD
 
     return (jint)cna.get_abi_version();
@@ -925,6 +1004,370 @@ JNIEXPORT jint JNICALL Java_org_openeggbert_cna_internal_NativeBindings_nativeSe
     uint64_t value;
     (void)memcpy(&value, &window, sizeof(value));
     return (jint)cna.mouse_set_window_handle(java_game(game)->cna_handle, value);
+}
+
+JNIEXPORT jint JNICALL Java_org_openeggbert_cna_internal_NativeBindings_nativeCreateTexture2D(
+    JNIEnv* environment,
+    jclass type,
+    jlong game,
+    jint width,
+    jint height,
+    jboolean mip_map,
+    jint format,
+    jlongArray output)
+{
+    (void)type;
+    CNA_Handle device = CNA_INVALID_HANDLE;
+    CNA_Result result = cna.game_get_graphics_device(java_game(game)->cna_handle, &device);
+    if (result != CNA_RESULT_SUCCESS) {
+        return (jint)result;
+    }
+    CNA_Texture2DCreateInfo info;
+    (void)memset(&info, 0, sizeof(info));
+    info.struct_size = (uint32_t)sizeof(info);
+    info.struct_version = UINT32_C(1);
+    info.width = (uint32_t)width;
+    info.height = (uint32_t)height;
+    info.mip_map = mip_map == JNI_TRUE ? CNA_TRUE : CNA_FALSE;
+    info.format = (CNA_SurfaceFormat)format;
+    CNA_Handle texture = CNA_INVALID_HANDLE;
+    result = cna.texture2d_create(device, &info, &texture);
+    if (result != CNA_RESULT_SUCCESS) {
+        return (jint)result;
+    }
+    result = set_handle_output(environment, output, texture);
+    if (result != CNA_RESULT_SUCCESS) {
+        (void)cna.texture2d_destroy(texture);
+    }
+    return (jint)result;
+}
+
+JNIEXPORT jint JNICALL Java_org_openeggbert_cna_internal_NativeBindings_nativeCreateTexture2DFromEncoded(
+    JNIEnv* environment,
+    jclass type,
+    jlong game,
+    jbyteArray encoded,
+    jint width,
+    jint height,
+    jboolean zoom,
+    jboolean resize,
+    jlongArray output)
+{
+    (void)type;
+    if (encoded == NULL) {
+        return (jint)CNA_RESULT_INVALID_ARGUMENT;
+    }
+    CNA_Handle device = CNA_INVALID_HANDLE;
+    CNA_Result result = cna.game_get_graphics_device(java_game(game)->cna_handle, &device);
+    if (result != CNA_RESULT_SUCCESS) {
+        return (jint)result;
+    }
+    const jsize count = (*environment)->GetArrayLength(environment, encoded);
+    jbyte* bytes = (*environment)->GetByteArrayElements(environment, encoded, NULL);
+    if (bytes == NULL) {
+        return (jint)CNA_RESULT_INVALID_STATE;
+    }
+    CNA_Texture2DDecodeInfo info;
+    const CNA_Texture2DDecodeInfo* selected = NULL;
+    if (resize == JNI_TRUE) {
+        (void)memset(&info, 0, sizeof(info));
+        info.struct_size = (uint32_t)sizeof(info);
+        info.struct_version = UINT32_C(1);
+        info.width = (uint32_t)width;
+        info.height = (uint32_t)height;
+        info.zoom = zoom == JNI_TRUE ? CNA_TRUE : CNA_FALSE;
+        selected = &info;
+    }
+    CNA_Handle texture = CNA_INVALID_HANDLE;
+    result = cna.texture2d_create_from_encoded_memory(
+        device, (const uint8_t*)bytes, (uint64_t)count, selected, &texture);
+    (*environment)->ReleaseByteArrayElements(environment, encoded, bytes, JNI_ABORT);
+    if (result != CNA_RESULT_SUCCESS) {
+        return (jint)result;
+    }
+    result = set_handle_output(environment, output, texture);
+    if (result != CNA_RESULT_SUCCESS) {
+        (void)cna.texture2d_destroy(texture);
+    }
+    return (jint)result;
+}
+
+JNIEXPORT jint JNICALL Java_org_openeggbert_cna_internal_NativeBindings_nativeGetTexture2DInfo(
+    JNIEnv* environment, jclass type, jlong texture, jintArray output)
+{
+    (void)type;
+    if (output == NULL || (*environment)->GetArrayLength(environment, output) < 4) {
+        return (jint)CNA_RESULT_INVALID_ARGUMENT;
+    }
+    CNA_Texture2DInfo info;
+    (void)memset(&info, 0, sizeof(info));
+    info.struct_size = (uint32_t)sizeof(info);
+    info.struct_version = UINT32_C(1);
+    CNA_Result result = cna.texture2d_get_info((CNA_Handle)texture, &info);
+    if (result != CNA_RESULT_SUCCESS) {
+        return (jint)result;
+    }
+    if (info.width > (uint32_t)INT32_MAX || info.height > (uint32_t)INT32_MAX
+        || info.level_count > (uint32_t)INT32_MAX || info.format > (uint32_t)INT32_MAX) {
+        return (jint)CNA_RESULT_INVALID_STATE;
+    }
+    const jint values[4] = {
+        (jint)info.width, (jint)info.height, (jint)info.level_count, (jint)info.format
+    };
+    (*environment)->SetIntArrayRegion(environment, output, 0, 4, values);
+    return (*environment)->ExceptionCheck(environment) ? (jint)CNA_RESULT_INVALID_STATE : 0;
+}
+
+JNIEXPORT jint JNICALL Java_org_openeggbert_cna_internal_NativeBindings_nativeSetTexture2DData(
+    JNIEnv* environment, jclass type, jlong texture, jintArray packed_colors)
+{
+    (void)type;
+    if (packed_colors == NULL) {
+        return (jint)CNA_RESULT_INVALID_ARGUMENT;
+    }
+    const jsize count = (*environment)->GetArrayLength(environment, packed_colors);
+    jint* packed = (*environment)->GetIntArrayElements(environment, packed_colors, NULL);
+    if (packed == NULL) {
+        return (jint)CNA_RESULT_INVALID_STATE;
+    }
+    CNA_Color* colors = count == 0 ? NULL : (CNA_Color*)malloc((size_t)count * sizeof(CNA_Color));
+    if (count != 0 && colors == NULL) {
+        (*environment)->ReleaseIntArrayElements(environment, packed_colors, packed, JNI_ABORT);
+        return (jint)CNA_RESULT_OUT_OF_MEMORY;
+    }
+    for (jsize index = 0; index < count; ++index) {
+        colors[index] = color_from_packed(packed[index]);
+    }
+    CNA_Result result = cna.texture2d_set_data_rgba8(
+        (CNA_Handle)texture, colors, (uint64_t)count);
+    free(colors);
+    (*environment)->ReleaseIntArrayElements(environment, packed_colors, packed, JNI_ABORT);
+    return (jint)result;
+}
+
+JNIEXPORT jint JNICALL Java_org_openeggbert_cna_internal_NativeBindings_nativeGetTexture2DData(
+    JNIEnv* environment, jclass type, jlong texture, jintArray packed_colors)
+{
+    (void)type;
+    if (packed_colors == NULL) {
+        return (jint)CNA_RESULT_INVALID_ARGUMENT;
+    }
+    const jsize capacity = (*environment)->GetArrayLength(environment, packed_colors);
+    CNA_Color* colors = capacity == 0
+        ? NULL : (CNA_Color*)malloc((size_t)capacity * sizeof(CNA_Color));
+    if (capacity != 0 && colors == NULL) {
+        return (jint)CNA_RESULT_OUT_OF_MEMORY;
+    }
+    uint64_t written = 0U;
+    CNA_Result result = cna.texture2d_get_data_rgba8(
+        (CNA_Handle)texture, colors, (uint64_t)capacity, &written);
+    if (result == CNA_RESULT_SUCCESS && written == (uint64_t)capacity) {
+        jint* packed = capacity == 0 ? NULL : (jint*)malloc((size_t)capacity * sizeof(jint));
+        if (capacity != 0 && packed == NULL) {
+            result = CNA_RESULT_OUT_OF_MEMORY;
+        } else {
+            for (jsize index = 0; index < capacity; ++index) {
+                packed[index] = packed_from_color(colors[index]);
+            }
+            if (capacity != 0) {
+                (*environment)->SetIntArrayRegion(environment, packed_colors, 0, capacity, packed);
+            }
+            if ((*environment)->ExceptionCheck(environment)) {
+                result = CNA_RESULT_INVALID_STATE;
+            }
+            free(packed);
+        }
+    } else if (result == CNA_RESULT_SUCCESS) {
+        result = CNA_RESULT_INVALID_STATE;
+    }
+    free(colors);
+    return (jint)result;
+}
+
+JNIEXPORT jlong JNICALL Java_org_openeggbert_cna_internal_NativeBindings_nativeGetTexture2DEncodedSize(
+    JNIEnv* environment, jclass type, jlong texture, jint format, jint width, jint height)
+{
+    (void)environment;
+    (void)type;
+    uint64_t size = 0U;
+    CNA_Result result = cna.texture2d_get_encoded_byte_count(
+        (CNA_Handle)texture, (CNA_TextureImageFormat)format,
+        (uint32_t)width, (uint32_t)height, &size);
+    if (result != CNA_RESULT_SUCCESS) {
+        return -(jlong)result;
+    }
+    return size > (uint64_t)INT64_MAX ? -(jlong)CNA_RESULT_INVALID_STATE : (jlong)size;
+}
+
+JNIEXPORT jint JNICALL Java_org_openeggbert_cna_internal_NativeBindings_nativeCopyTexture2DEncoded(
+    JNIEnv* environment,
+    jclass type,
+    jlong texture,
+    jint format,
+    jint width,
+    jint height,
+    jbyteArray output)
+{
+    (void)type;
+    if (output == NULL) {
+        return (jint)CNA_RESULT_INVALID_ARGUMENT;
+    }
+    const jsize capacity = (*environment)->GetArrayLength(environment, output);
+    jbyte* bytes = (*environment)->GetByteArrayElements(environment, output, NULL);
+    if (bytes == NULL) {
+        return (jint)CNA_RESULT_INVALID_STATE;
+    }
+    uint64_t written = 0U;
+    CNA_Result result = cna.texture2d_copy_encoded(
+        (CNA_Handle)texture, (CNA_TextureImageFormat)format,
+        (uint32_t)width, (uint32_t)height, (uint8_t*)bytes,
+        (uint64_t)capacity, &written);
+    (*environment)->ReleaseByteArrayElements(environment, output, bytes, 0);
+    if (result == CNA_RESULT_SUCCESS && written != (uint64_t)capacity) {
+        return (jint)CNA_RESULT_INVALID_STATE;
+    }
+    return (jint)result;
+}
+
+JNIEXPORT jint JNICALL Java_org_openeggbert_cna_internal_NativeBindings_nativeDestroyTexture2D(
+    JNIEnv* environment, jclass type, jlong texture)
+{
+    (void)environment;
+    (void)type;
+    return (jint)cna.texture2d_destroy((CNA_Handle)texture);
+}
+
+JNIEXPORT jint JNICALL Java_org_openeggbert_cna_internal_NativeBindings_nativeCreateSpriteBatch(
+    JNIEnv* environment, jclass type, jlong game, jlongArray output)
+{
+    (void)type;
+    CNA_Handle device = CNA_INVALID_HANDLE;
+    CNA_Result result = cna.game_get_graphics_device(java_game(game)->cna_handle, &device);
+    if (result != CNA_RESULT_SUCCESS) {
+        return (jint)result;
+    }
+    CNA_Handle sprite_batch = CNA_INVALID_HANDLE;
+    result = cna.sprite_batch_create(device, &sprite_batch);
+    if (result != CNA_RESULT_SUCCESS) {
+        return (jint)result;
+    }
+    result = set_handle_output(environment, output, sprite_batch);
+    if (result != CNA_RESULT_SUCCESS) {
+        (void)cna.sprite_batch_destroy(sprite_batch);
+    }
+    return (jint)result;
+}
+
+JNIEXPORT jint JNICALL Java_org_openeggbert_cna_internal_NativeBindings_nativeBeginSpriteBatch(
+    JNIEnv* environment, jclass type, jlong sprite_batch, jint sort_mode)
+{
+    (void)environment;
+    (void)type;
+    CNA_SpriteBatchBeginInfo info;
+    (void)memset(&info, 0, sizeof(info));
+    info.struct_size = (uint32_t)sizeof(info);
+    info.struct_version = UINT32_C(1);
+    info.sort_mode = (CNA_SpriteSortMode)sort_mode;
+    return (jint)cna.sprite_batch_begin((CNA_Handle)sprite_batch, &info);
+}
+
+JNIEXPORT jint JNICALL Java_org_openeggbert_cna_internal_NativeBindings_nativeDrawSpriteRectangle(
+    JNIEnv* environment,
+    jclass type,
+    jlong sprite_batch,
+    jlong texture,
+    jint destination_x,
+    jint destination_y,
+    jint destination_width,
+    jint destination_height,
+    jint source_x,
+    jint source_y,
+    jint source_width,
+    jint source_height,
+    jint packed_color,
+    jfloat rotation,
+    jfloat origin_x,
+    jfloat origin_y,
+    jint effects,
+    jfloat layer_depth)
+{
+    (void)environment;
+    (void)type;
+    CNA_SpriteCommand command;
+    (void)memset(&command, 0, sizeof(command));
+    command.struct_size = (uint32_t)sizeof(command);
+    command.struct_version = UINT32_C(1);
+    command.texture = (CNA_Handle)texture;
+    command.destination = (CNA_Rectangle){
+        (int32_t)destination_x, (int32_t)destination_y,
+        (int32_t)destination_width, (int32_t)destination_height
+    };
+    command.source = (CNA_Rectangle){
+        (int32_t)source_x, (int32_t)source_y, (int32_t)source_width, (int32_t)source_height
+    };
+    command.color = color_from_packed(packed_color);
+    command.rotation = (float)rotation;
+    command.origin = (CNA_Vector2){(float)origin_x, (float)origin_y};
+    command.effects = (CNA_SpriteEffects)effects;
+    command.layer_depth = (float)layer_depth;
+    return (jint)cna.sprite_batch_submit_many((CNA_Handle)sprite_batch, &command, UINT64_C(1));
+}
+
+JNIEXPORT jint JNICALL Java_org_openeggbert_cna_internal_NativeBindings_nativeDrawSpriteScaled(
+    JNIEnv* environment,
+    jclass type,
+    jlong sprite_batch,
+    jlong texture,
+    jfloat position_x,
+    jfloat position_y,
+    jint source_x,
+    jint source_y,
+    jint source_width,
+    jint source_height,
+    jint packed_color,
+    jfloat rotation,
+    jfloat origin_x,
+    jfloat origin_y,
+    jfloat scale_x,
+    jfloat scale_y,
+    jint effects,
+    jfloat layer_depth)
+{
+    (void)environment;
+    (void)type;
+    CNA_SpriteScaledCommand command;
+    (void)memset(&command, 0, sizeof(command));
+    command.struct_size = (uint32_t)sizeof(command);
+    command.struct_version = UINT32_C(1);
+    command.texture = (CNA_Handle)texture;
+    command.position = (CNA_Vector2){(float)position_x, (float)position_y};
+    command.source = (CNA_Rectangle){
+        (int32_t)source_x, (int32_t)source_y, (int32_t)source_width, (int32_t)source_height
+    };
+    command.color = color_from_packed(packed_color);
+    command.rotation = (float)rotation;
+    command.origin = (CNA_Vector2){(float)origin_x, (float)origin_y};
+    command.scale = (CNA_Vector2){(float)scale_x, (float)scale_y};
+    command.effects = (CNA_SpriteEffects)effects;
+    command.layer_depth = (float)layer_depth;
+    return (jint)cna.sprite_batch_submit_scaled_many(
+        (CNA_Handle)sprite_batch, &command, UINT64_C(1));
+}
+
+JNIEXPORT jint JNICALL Java_org_openeggbert_cna_internal_NativeBindings_nativeEndSpriteBatch(
+    JNIEnv* environment, jclass type, jlong sprite_batch)
+{
+    (void)environment;
+    (void)type;
+    return (jint)cna.sprite_batch_end((CNA_Handle)sprite_batch);
+}
+
+JNIEXPORT jint JNICALL Java_org_openeggbert_cna_internal_NativeBindings_nativeDestroySpriteBatch(
+    JNIEnv* environment, jclass type, jlong sprite_batch)
+{
+    (void)environment;
+    (void)type;
+    return (jint)cna.sprite_batch_destroy((CNA_Handle)sprite_batch);
 }
 
 JNIEXPORT jint JNICALL Java_org_openeggbert_cna_internal_NativeBindings_nativeDestroyGame(

@@ -16,7 +16,9 @@ public final class FacadeFactory {
 
     public static GraphicsDevice createGraphicsDevice(Game game) {
         try {
-            return GRAPHICS_DEVICE.newInstance(game);
+            GraphicsDevice device = GRAPHICS_DEVICE.newInstance(game);
+            NativeBindings.registerGraphicsDevice(device, game);
+            return device;
         } catch (InstantiationException | IllegalAccessException exception) {
             throw new IllegalStateException("Cannot construct the GraphicsDevice facade", exception);
         } catch (InvocationTargetException exception) {

@@ -75,6 +75,11 @@
     behavior evidence, and opaque strict window tokens;
   - reduced the then-current measured contract to 677 diagnostics with 38/38
     ABI symbols.
+- `b235862 fix: eliminate mapped member drift`
+  - corrected overload pairing and unsigned-byte mapping, made ContentManager
+    and disposal shapes exact, hid a non-XNA constructor, and eliminated every
+    implemented parameter/return/unexpected-member mismatch;
+  - reduced the measured contract to 601 diagnostics with zero leaks.
 
 ### `cna-java-template`
 
@@ -98,7 +103,7 @@ reference types / 2,964 members versus 21 target types / 351 members, with 730
 diagnostics, zero leaks, and an empty allowlist. Its full JSON remains at
 `tools/api-compat/baselines/xna40-windows-runtime-initial.json`.
 
-After the coherent window and input groups, the current measurement is:
+After the first coherent texture/SpriteBatch group, the current measurement is:
 
 Command:
 
@@ -114,19 +119,25 @@ REFERENCE_TYPES=257
 REFERENCE_MEMBERS=2964
 EXPECTED_JAVA_TYPES=261
 EXPECTED_JAVA_MEMBERS=3086
-TARGET_TYPES=44
-TARGET_MEMBERS=696
-TOTAL_DIAGNOSTICS=601
+TARGET_TYPES=51
+TARGET_MEMBERS=770
+TOTAL_DIAGNOSTICS=604
 ALLOWLIST_ENTRIES=0
 INTERFACE_MISMATCH=2
-MISSING_MEMBER=382
-MISSING_TYPE=217
+MISSING_MEMBER=392
+MISSING_TYPE=210
 ```
 
-This is a 129-diagnostic reduction from the immutable initial baseline, with 23
-additional strict target types and 345 additional target members.
+This is a 126-diagnostic reduction from the immutable initial baseline, with 30
+additional strict target types and 419 additional target members.
 `apiCompatCheck` still exits 1 as designed. Leak-only inspection reports
 `CNA_INTERNAL_LEAK=0` (total leak diagnostics 0).
+
+The graphics group intentionally raised the total from 601 to 604: seven
+formerly missing types are now present, but their compiled metadata exposes ten
+additional missing members that one-per-type diagnostics previously hid. All
+implemented graphics members match their mapped signatures; no parameter,
+return, modifier, unexpected-member, or parameter-name finding was introduced.
 
 The latest contract audit fixed overload matching so exact overloads cannot be
 reused as mismatch candidates, maps unsigned CLR `System.Byte` to Java `int`,
@@ -163,6 +174,15 @@ signature; internally registered CNA-issued tokens are the only accepted
 nonzero setter values. Its diagnostic delta is exactly three removed
 `MISSING_TYPE` findings.
 
+The graphics group adds the exact `GraphicsResource` / `Texture` / `Texture2D`
+hierarchy, `SpriteBatch`, `SurfaceFormat`, `SpriteSortMode`, and composable
+`SpriteEffects`. Fifteen new C ABI routes provide callback-scoped device access,
+owned texture/batch creation and destruction, RGBA snapshot transfer,
+PNG/JPEG decode/encode, and both rectangle/scaled sprite commands. The native
+test uploads mutable colors, mutates the Java source afterward, reads back the
+original snapshot, round-trips a PNG through `FromStream`, draws two frames, and
+verifies reverse child-before-game cleanup.
+
 ## Managed/native binding gate
 
 Command:
@@ -173,23 +193,25 @@ XNA_REFERENCE_DIR=/rv/data/development/github.com/openeggbert/xna4-decomp/refere
 ./gradlew --no-daemon clean check apiCompatReport --warning-mode all
 ```
 
-Result: `BUILD SUCCESSFUL`, 10 tasks executed, no compiler/deprecation warnings.
+Result: `BUILD SUCCESSFUL in 19s`, 12 actionable tasks executed, no
+compiler/deprecation warnings.
 
-- JUnit: 45 tests, 0 failures, 0 errors, 0 skipped.
-- Verifier regression suite: 12 tests, all passing.
+- JUnit: 49 tests, 0 failures, 0 errors, 0 skipped.
+- Verifier regression suite: 14 tests, all passing.
 - Suites: 12 value/math, 4 lifecycle/content, 10 component/service/window,
-  4 keyboard-state, 4 mouse-state, 4 ownership, 7 native integration.
+  3 graphics-resource, 4 keyboard-state, 4 mouse-state, 4 ownership,
+  8 native integration.
 - Native stress: one ordered three-frame lifecycle plus ten repeated
   create/run/destroy lifecycles, and one-frame/tick/suppressed-draw timing.
 - Compile probe: passed.
-- Strict leak guard: 44 target types / 696 members, 0 findings.
-- ABI: header 0.7.0, 38 bound functions, manifest/JNI identity and C
+- Strict leak guard: 51 target types / 770 members, 0 findings.
+- ABI: header 0.7.0, 53 bound functions, manifest/JNI identity and C
   width/layout/function-signature probes passed, native library ABI 0.7.0,
-  symbols 38/38.
+  symbols 53/53.
 - JNI compiled with `-std=c11 -Wall -Wextra -Werror -fPIC`.
 
 Without `CNA_NATIVE_LIBRARY`, the same `check` passes and conditionally skips the
-seven native integration tests plus native symbol/runtime-version inspection.
+eight native integration tests plus native symbol/runtime-version inspection.
 
 ## CNA native build evidence and blocker
 
@@ -230,7 +252,7 @@ Result: passed end-to-end without using the global Maven repository.
 1. Binding clean/check/Javadoc/sources and publication to a unique temporary
    Maven repository: passed.
 2. Sibling template clean/test/installDist against that exact artifact: passed
-   (3 tests, no warnings).
+   (4 tests, no warnings).
 3. Generated standalone project with custom project name, package, application
    ID, game class, group, and artifact ID: clean/test/installDist passed outside
    both repositories.
@@ -240,20 +262,21 @@ Result: passed end-to-end without using the global Maven repository.
 The demonstrated runtime feature set is lifecycle callbacks, `GameTime`,
 GraphicsDeviceManager attachment, pre-run mapped `GameWindow` title,
 CNA-backed `KeyboardState`/Escape and `MouseState`/left-click input, mouse
-visibility, `GraphicsDevice.Clear`, frame-limited exit, and deterministic cleanup.
-SpriteBatch, texture/raw PNG, gamepad/touch state, resize events, and 3D
-are not claimed.
+visibility, `GraphicsDevice.Clear`, a real Base64-transported raw PNG decoded by
+`Texture2D.FromStream`, moving SpriteBatch drawing, frame-limited exit, and
+deterministic cleanup. XNB, gamepad/touch state, resize events, and 3D are not
+claimed.
 
 ## Immediate next work
 
 1. Consume an upstream CNA fix for both HEAD C API build failures and repeat all
    native evidence against current HEAD.
-2. Review the 2 interface, 21 parameter, 58 parameter-name, 4 return-type, and 3
-   unexpected-member diagnostics before adding more surface.
+2. Implement the 392 measured missing members in coherent dependency groups;
+   the only non-missing diagnostics are two known missing public interfaces.
 3. Connect native window events and supported-orientation behavior, then add
    normalized XNA differential fixtures for the math/geometry contract.
 4. Bind gamepad/touch plus native device resize.
-5. Implement Texture2D FromStream and SpriteBatch, then upgrade the clear-only
-   template to the requested moving raw-PNG playable slice.
+5. Continue the graphics state/effect/font types needed by the remaining
+   SpriteBatch Begin and DrawString overloads.
 6. Add platform-specific native packaging and CI; do not promote Windows,
    macOS, Android, iOS, or Web status without runtime evidence.
