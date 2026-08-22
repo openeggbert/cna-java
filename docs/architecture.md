@@ -43,6 +43,13 @@ The adapter owns callback global references, attaches/detaches callback threads,
 copies UTF-8 at the boundary, converts fixed-width ABI types, and turns CNA
 results into Java exceptions.
 
+XNA's input and media entry points are static, while every corresponding CNA C
+ABI route requires a game handle. CNA-Java therefore records the most recently
+created live `Game` as the process-current game and clears it on successful
+destruction, matching XNA's one-game-per-process model. Static `Keyboard` calls
+without a live current game fail deterministically. Keyboard state crosses JNI
+as a copied four-word POD snapshot; no state retains the native parent.
+
 ## Ownership
 
 Internal handles record one of four modes: owned, borrowed, parent-owned, or

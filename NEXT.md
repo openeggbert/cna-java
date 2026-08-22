@@ -63,6 +63,9 @@
     `WindowHandle` projections plus ten CNA window ABI bindings;
   - made verifier modifier checks rigorous and reduced the measured contract to
     685 diagnostics with zero leaks and no allowlist.
+- `e28dd6d fix: defer native window title until startup`
+  - kept pre-run title configuration managed and passed it into native creation;
+  - reran binding/template/generated-project plus 60/600-frame verification.
 
 ### `cna-java-template`
 
@@ -96,21 +99,21 @@ REFERENCE_TYPES=257
 REFERENCE_MEMBERS=2964
 EXPECTED_JAVA_TYPES=261
 EXPECTED_JAVA_MEMBERS=3086
-TARGET_TYPES=36
-TARGET_MEMBERS=495
-TOTAL_DIAGNOSTICS=685
+TARGET_TYPES=41
+TARGET_MEMBERS=673
+TOTAL_DIAGNOSTICS=680
 ALLOWLIST_ENTRIES=0
 INTERFACE_MISMATCH=2
 MISSING_MEMBER=372
-MISSING_TYPE=225
+MISSING_TYPE=220
 PARAMETER_MISMATCH=21
 PARAMETER_NAME_MISMATCH=58
 RETURN_TYPE_MISMATCH=4
 UNEXPECTED_MEMBER=3
 ```
 
-This is a 45-diagnostic reduction from the immutable initial baseline, with 15
-additional strict target types and 144 additional target members.
+This is a 50-diagnostic reduction from the immutable initial baseline, with 20
+additional strict target types and 322 additional target members.
 `apiCompatCheck` still exits 1 as designed. Leak-only inspection reports
 `CNA_INTERNAL_LEAK=0` (total leak diagnostics 0).
 
@@ -125,6 +128,12 @@ explicit behavior work. The verifier now extracts CLR virtual/final state and
 compares effective Java overridability; it exposed nine real mismatches, all of
 which were corrected without an allowlist.
 
+The input group adds exact `PlayerIndex`, `KeyState`, all 160 metadata-derived
+`Keys` constants and numbers, immutable `KeyboardState`, and both static
+`Keyboard.GetState` overloads. Its five types have no local verifier findings;
+the diagnostic delta is exactly five removed `MISSING_TYPE` findings. Two new
+C ABI routes copy versioned keyboard snapshots, including the per-player route.
+
 ## Managed/native binding gate
 
 Command:
@@ -137,15 +146,15 @@ XNA_REFERENCE_DIR=/rv/data/development/github.com/openeggbert/xna4-decomp/refere
 
 Result: `BUILD SUCCESSFUL`, 10 tasks executed, no compiler/deprecation warnings.
 
-- JUnit: 34 tests, 0 failures, 0 errors, 0 skipped.
+- JUnit: 39 tests, 0 failures, 0 errors, 0 skipped.
 - Verifier regression suite: 8 tests, all passing.
-- Suites: 12 value/math, 3 lifecycle/content, 9 component/service/window,
-  4 ownership, 5 native integration.
+- Suites: 12 value/math, 3 lifecycle/content, 10 component/service/window,
+  4 keyboard-state, 4 ownership, 6 native integration.
 - Native stress: one ordered three-frame lifecycle plus ten repeated
   create/run/destroy lifecycles, and one-frame/tick/suppressed-draw timing.
 - Compile probe: passed.
-- Strict leak guard: 36 target types / 495 members, 0 findings.
-- ABI: header 0.7.0, 32 bound functions, manifest/JNI identity and C
+- Strict leak guard: 41 target types / 673 members, 0 findings.
+- ABI: header 0.7.0, 34 bound functions, manifest/JNI identity and C
   width/layout/function-signature probes passed, native library ABI 0.7.0,
   symbols 22/22.
 - JNI compiled with `-std=c11 -Wall -Wextra -Werror -fPIC`.
@@ -201,9 +210,10 @@ Result: passed end-to-end without using the global Maven repository.
 
 The demonstrated runtime feature set is lifecycle callbacks, `GameTime`,
 GraphicsDeviceManager attachment, pre-run mapped `GameWindow` title,
-mouse visibility, `GraphicsDevice.Clear`, frame-limited exit, and deterministic
-cleanup. SpriteBatch, texture/raw PNG, keyboard/mouse state, resize events, and
-3D are not claimed.
+CNA-backed `KeyboardState`/Escape input, mouse visibility,
+`GraphicsDevice.Clear`, frame-limited exit, and deterministic cleanup.
+SpriteBatch, texture/raw PNG, mouse/gamepad/touch state, resize events, and 3D
+are not claimed.
 
 ## Immediate next work
 

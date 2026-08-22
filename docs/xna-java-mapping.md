@@ -31,6 +31,13 @@ underlying bit set. Thus `SpriteEffects.None` remains recognizable while a combi
 representable without an invalid pseudo-enum constant. The CLR extractor records `FlagsAttribute`
 directly; this transformation is not inferred from names.
 
+An ordinary CLR enum remains a Java enum. Java cannot reproduce C# casts that manufacture an
+unnamed numeric enum value. Numeric values of all declared constants are preserved and verified;
+an API that can observe undeclared native values must specify its deterministic adaptation. For
+`KeyboardState`, all 256 native bits remain part of snapshot equality and hashing, while
+`GetPressedKeys()` can return only the 160 declared `Keys` constants. This is a recorded Java
+language limitation, not permission to renumber or invent enum members.
+
 ## Properties and indexers
 
 Instance and static properties use one rule:

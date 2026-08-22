@@ -3,8 +3,12 @@ import Microsoft.Xna.Framework.DisplayOrientation;
 import Microsoft.Xna.Framework.Game;
 import Microsoft.Xna.Framework.GameComponent;
 import Microsoft.Xna.Framework.GameTime;
+import Microsoft.Xna.Framework.PlayerIndex;
 import Microsoft.Xna.Framework.WindowHandle;
 import Microsoft.Xna.Framework.GraphicsDeviceManager;
+import Microsoft.Xna.Framework.Input.Keyboard;
+import Microsoft.Xna.Framework.Input.KeyboardState;
+import Microsoft.Xna.Framework.Input.Keys;
 
 public final class ProbeGame extends Game {
     private final GraphicsDeviceManager graphics;
@@ -29,7 +33,8 @@ public final class ProbeGame extends Game {
 
     @Override
     protected void Update(GameTime gameTime) {
-        if (gameTime.getElapsedGameTime().isNegative()) {
+        KeyboardState keyboard = Keyboard.GetState(PlayerIndex.One);
+        if (keyboard.IsKeyDown(Keys.Escape) || gameTime.getElapsedGameTime().isNegative()) {
             Exit();
         }
     }

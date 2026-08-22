@@ -56,6 +56,9 @@ typedef CNA_Result (*GameGetSizeFunction)(CNA_Handle, uint64_t*);
 typedef CNA_Result (*GameCopyStringFunction)(CNA_Handle, char*, uint64_t, uint64_t*);
 typedef CNA_Result (*GameSetStringFunction)(CNA_Handle, CNA_StringView);
 typedef CNA_Result (*GameEndScreenChangeFunction)(CNA_Handle, CNA_StringView, int32_t, int32_t);
+typedef CNA_Result (*KeyboardGetStateFunction)(CNA_Handle, CNA_KeyboardState*);
+typedef CNA_Result (*KeyboardGetStateForPlayerFunction)(
+    CNA_Handle, CNA_PlayerIndex, CNA_KeyboardState*);
 
 typedef struct CnaFunctions {
     DynamicLibrary library;
@@ -91,6 +94,8 @@ typedef struct CnaFunctions {
     GameSetStringFunction game_set_window_title;
     GameSetBoolFunction game_window_begin_screen_device_change;
     GameEndScreenChangeFunction game_window_end_screen_device_change;
+    KeyboardGetStateFunction keyboard_get_state;
+    KeyboardGetStateForPlayerFunction keyboard_get_state_for_player;
 } CnaFunctions;
 
 typedef struct JavaGameContext {
@@ -400,6 +405,8 @@ JNIEXPORT jint JNICALL Java_org_openeggbert_cna_internal_NativeBindings_nativeLo
     LOAD(game_set_window_title, "cna_game_set_window_title");
     LOAD(game_window_begin_screen_device_change, "cna_game_window_begin_screen_device_change");
     LOAD(game_window_end_screen_device_change, "cna_game_window_end_screen_device_change");
+    LOAD(keyboard_get_state, "cna_keyboard_get_state");
+    LOAD(keyboard_get_state_for_player, "cna_keyboard_get_state_for_player");
 #undef LOAD
 
     return (jint)cna.get_abi_version();
@@ -813,6 +820,38 @@ JNIEXPORT jint JNICALL Java_org_openeggbert_cna_internal_NativeBindings_nativeEn
     (*environment)->ReleaseByteArrayElements(
         environment, screen_device_name, bytes, JNI_ABORT);
     return (jint)result;
+}
+
+JNIEXPORT jint JNICALL Java_org_openeggbert_cna_internal_NativeBindings_nativeGetKeyboardState(
+    JNIEnv* environment,
+    jclass type,
+    jlong game,
+    jint player_index,
+    jlongArray output)
+{
+    (void)type;
+    if (output == NULL || (*environment)->GetArrayLength(environment, output) < 4) {
+        return (jint)CNA_RESULT_INVALID_ARGUMENT;
+    }
+
+    CNA_KeyboardState state;
+    (void)memset(&state, 0, sizeof(state));
+    state.struct_size = (uint32_t)sizeof(state);
+    state.struct_version = UINT32_C(1);
+    CNA_Result result = player_index < 0
+        ? cna.keyboard_get_state(java_game(game)->cna_handle, &state)
+        : cna.keyboard_get_state_for_player(
+            java_game(game)->cna_handle, (CNA_PlayerIndex)player_index, &state);
+    if (result != CNA_RESULT_SUCCESS) {
+        return (jint)result;
+    }
+
+    jlong words[4];
+    for (size_t index = 0U; index < 4U; ++index) {
+        (void)memcpy(&words[index], &state.pressed_key_words[index], sizeof(words[index]));
+    }
+    (*environment)->SetLongArrayRegion(environment, output, 0, 4, words);
+    return (*environment)->ExceptionCheck(environment) ? (jint)CNA_RESULT_INVALID_STATE : 0;
 }
 
 JNIEXPORT jint JNICALL Java_org_openeggbert_cna_internal_NativeBindings_nativeDestroyGame(

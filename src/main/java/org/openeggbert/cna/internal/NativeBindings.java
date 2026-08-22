@@ -18,6 +18,7 @@ public final class NativeBindings {
     private static boolean bridgeLoaded;
     private static int runtimeAbiVersion;
     private static final Map<Game, NativeGameHandle> GAMES = new WeakHashMap<>();
+    private static Game currentGame;
 
     private NativeBindings() {
     }
@@ -68,6 +69,7 @@ public final class NativeBindings {
         NativeGameHandle nativeGame = new NativeGameHandle(handle, game);
         synchronized (GAMES) {
             GAMES.put(game, nativeGame);
+            currentGame = game;
         }
         return nativeGame;
     }
@@ -216,6 +218,22 @@ public final class NativeBindings {
                         clientWidth, clientHeight));
     }
 
+    /** Captures a copy of the current XNA keyboard bit set. A negative player selects no slot. */
+    public static long[] getKeyboardState(int playerIndex) {
+        NativeGameHandle game;
+        synchronized (GAMES) {
+            game = currentGame == null ? null : GAMES.get(currentGame);
+        }
+        if (game == null || game.isClosed()) {
+            throw new IllegalStateException(
+                    "Keyboard.GetState requires a live CNA Game on the current process");
+        }
+        long[] words = new long[4];
+        check(playerIndex < 0 ? "cna_keyboard_get_state" : "cna_keyboard_get_state_for_player",
+                nativeGetKeyboardState(game.requireValue(), playerIndex, words));
+        return words;
+    }
+
     static void destroyGame(Game game, long handle) {
         int result = nativeDestroyGame(handle);
         // CNA documents CALLBACK as released: shutdown completed but a callback reported failure.
@@ -224,6 +242,9 @@ public final class NativeBindings {
         }
         synchronized (GAMES) {
             GAMES.remove(game);
+            if (currentGame == game) {
+                currentGame = null;
+            }
         }
     }
 
@@ -384,6 +405,9 @@ public final class NativeBindings {
 
     private static native int nativeEndWindowScreenDeviceChange(
             long game, byte[] screenDeviceNameUtf8, int clientWidth, int clientHeight);
+
+    private static native int nativeGetKeyboardState(
+            long game, int playerIndex, long[] words);
 
     private static native int nativeDestroyGame(long game);
 

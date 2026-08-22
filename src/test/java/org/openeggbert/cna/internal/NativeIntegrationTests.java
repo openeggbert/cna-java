@@ -5,6 +5,9 @@ import Microsoft.Xna.Framework.Game;
 import Microsoft.Xna.Framework.GameComponent;
 import Microsoft.Xna.Framework.GameTime;
 import Microsoft.Xna.Framework.Rectangle;
+import Microsoft.Xna.Framework.Input.Keyboard;
+import Microsoft.Xna.Framework.Input.KeyboardState;
+import Microsoft.Xna.Framework.Input.Keys;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.condition.EnabledIfEnvironmentVariable;
 
@@ -85,6 +88,20 @@ final class NativeIntegrationTests {
         }
     }
 
+    @Test
+    void NativeKeyboardCapturesIndependentHeadlessSnapshots() {
+        try (KeyboardGame game = new KeyboardGame()) {
+            assertThrows(IllegalStateException.class, Keyboard::GetState);
+            game.RunOneFrame();
+            assertNotNull(game.first);
+            assertNotSame(game.first, game.second);
+            assertEquals(game.first, game.second);
+            assertTrue(game.first.IsKeyUp(Keys.Escape));
+            assertArrayEquals(new Keys[0], game.first.GetPressedKeys());
+        }
+        assertThrows(IllegalStateException.class, Keyboard::GetState);
+    }
+
     private static final class ProbeGame extends Game {
         private final List<String> events = new ArrayList<>();
         private final int frameLimit;
@@ -136,6 +153,17 @@ final class NativeIntegrationTests {
         @Override
         public void Initialize() {
             initialized = true;
+        }
+    }
+
+    private static final class KeyboardGame extends Game {
+        private KeyboardState first;
+        private KeyboardState second;
+
+        @Override
+        protected void Update(GameTime gameTime) {
+            first = Keyboard.GetState();
+            second = Keyboard.GetState(Microsoft.Xna.Framework.PlayerIndex.One);
         }
     }
 }
