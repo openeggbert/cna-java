@@ -80,6 +80,11 @@
     and disposal shapes exact, hid a non-XNA constructor, and eliminated every
     implemented parameter/return/unexpected-member mismatch;
   - reduced the measured contract to 601 diagnostics with zero leaks.
+- `7b882d1 feat: bind Texture2D and SpriteBatch through CNA`
+  - added the exact first graphics-resource hierarchy and 15 CNA texture/batch
+    routes with explicit owned-resource teardown;
+  - exercised raw PNG decode/encode, Color snapshot transfer, and two-frame
+    SpriteBatch drawing while recording the honest 604-diagnostic baseline.
 
 ### `cna-java-template`
 
@@ -95,6 +100,9 @@
   - captures native keyboard state per update and exits on Escape.
 - `e12039f feat: exercise CNA mouse input`
   - captures native mouse state per update and exits on left click.
+- `172f1b5 feat: draw a real raw PNG with SpriteBatch`
+  - loads valid PNG bytes through `Texture2D.FromStream`, draws a moving texture,
+    and closes graphics resources deterministically in `UnloadContent`.
 
 ## API measurements
 
@@ -190,7 +198,7 @@ Command:
 ```bash
 CNA_NATIVE_LIBRARY=/tmp/cna-java-native-working-070/modules/c-api/libcna_c_api.so \
 XNA_REFERENCE_DIR=/rv/data/development/github.com/openeggbert/xna4-decomp/reference/xna4/original/windows \
-./gradlew --no-daemon clean check apiCompatReport --warning-mode all
+./gradlew --no-daemon clean check apiCompatReport javadoc sourcesJar --warning-mode all
 ```
 
 Result: `BUILD SUCCESSFUL in 19s`, 12 actionable tasks executed, no

@@ -101,7 +101,7 @@ allowlist entries                    0
 
 The initial 730-diagnostic JSON evidence remains
 `tools/api-compat/baselines/xna40-windows-runtime-initial.json`; the current
-window/orientation checkpoint is recorded here and in `NEXT.md`. Report-only mode
+texture/SpriteBatch checkpoint is recorded here and in `NEXT.md`. Report-only mode
 is green for measurement. `apiCompatCheck` is deliberately red until the count
 reaches zero; it is not weakened or attached to the ordinary partial-build gate.
 The profile SHA-256-pins every reference assembly and the verifier rejects a
