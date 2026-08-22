@@ -2,7 +2,6 @@
   "allowlistEntries": 0,
   "diagnosticCounts": {
     "INTERFACE_MISMATCH": 2,
-    "MEMBER_MODIFIER_MISMATCH": 1,
     "MISSING_MEMBER": 405,
     "MISSING_TYPE": 236,
     "PARAMETER_MISMATCH": 21,
@@ -30,22 +29,6 @@
         "java.lang.AutoCloseable"
       ],
       "subject": "Microsoft.Xna.Framework.GraphicsDeviceManager"
-    },
-    {
-      "actual": {
-        "abstract": false,
-        "access": "protected",
-        "genericArity": 0,
-        "static": false
-      },
-      "code": "MEMBER_MODIFIER_MISMATCH",
-      "expected": {
-        "abstract": false,
-        "access": "public",
-        "genericArity": 0,
-        "static": false
-      },
-      "subject": "Microsoft.Xna.Framework.Game.constructor:.ctor()"
     },
     {
       "code": "MISSING_MEMBER",
@@ -3980,5 +3963,5 @@
   "schemaVersion": 1,
   "targetMembers": 351,
   "targetTypes": 21,
-  "totalDiagnostics": 731
+  "totalDiagnostics": 730
 }

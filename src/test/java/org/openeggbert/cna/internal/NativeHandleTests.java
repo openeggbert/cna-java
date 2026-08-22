@@ -9,6 +9,12 @@ import static org.junit.jupiter.api.Assertions.*;
 final class NativeHandleTests {
 
     @Test
+    void ZeroHandleIsRejectedBeforeOwnershipBegins() {
+        assertThrows(IllegalArgumentException.class,
+                () -> new NativeHandle(0, NativeHandle.Ownership.OWNED, ignored -> { }));
+    }
+
+    @Test
     void OwnedAndAdoptedReleaseExactlyOnce() {
         for (NativeHandle.Ownership ownership : new NativeHandle.Ownership[] {
                 NativeHandle.Ownership.OWNED, NativeHandle.Ownership.ADOPTED}) {
@@ -47,4 +53,3 @@ final class NativeHandleTests {
         assertEquals(2, attempts.get());
     }
 }
-

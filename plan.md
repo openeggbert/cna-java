@@ -1,30 +1,296 @@
-# CNA-Java implementation plan
+# CNA-Java measured engineering plan
 
-**Status:** XNA namespace scaffold in place
+**Status:** functional foundational slice; strict XNA projection measured incomplete
 
-**Date:** 2026-08-16
+**Updated:** 2026-08-22
 
-## Phase 0 — repository scaffold
+**Primary target:** XNA 4.0 Windows runtime projected to Java 17
 
-- [x] Establish `Microsoft.Xna.Framework` plus `Graphics`, `Input`, and
-      `Content` compatibility packages.
-- [x] Keep ABI implementation under `org.openeggbert.cna.internal`.
-- [x] Add initial `Game`, `GameTime`, `Vector2`, and `Color` shapes.
-- [x] Remove the invalid invented `CNA.Framework` package tree.
+## Current verified state
 
-## Phase 1 — canonical ABI
+The audited starting snapshot had eight Java source files (three were
+`package-info.java`), no tests, no wrapper, and no native implementation. Direct
+`javac --release 17` failed with two unresolved types: `ContentManager` and
+`GraphicsDevice`. The sibling template did not compile against the binding,
+used a different Maven group, mixed XNA and Java casing, faked renderer
+capabilities, had no wrapper, and advertised unsupported Android/iOS/Web paths.
 
-- [ ] Select FFM or JNI after canonical CNA headers and supported JDKs settle.
-- [ ] Add version checks, errors, UTF-8, opaque handles, callbacks, ownership,
-      threading, and shutdown.
+The current repository has a reproducible Gradle 8.12/JDK 17 build, 29
+production Java sources, managed and conditional native tests, a real JNI
+backend, class-metadata verification, and a functional desktop/headless
+template canary. Gradle is the single canonical build; the stale Maven build
+was removed instead of maintaining two divergent lifecycles. This is not an
+XNA-completeness claim.
 
-## Phase 2 — playable compatibility slice
+## Compatibility definition
 
-- [ ] Add graphics device, texture, sprite batch, content, and keyboard types.
-- [ ] Run a CNA-backed XNA-style game loop.
+Three independent contracts are tracked:
 
-## Invariants
+1. **XNA CLR reference** — actual legally available XNA 4.0 assembly metadata.
+2. **XNA Java projection** — the deterministic transformation specified by
+   `docs/xna-java-mapping.md` and `tools/api-compat/mapping-rules.json`.
+3. **CNA implementation coverage** — whether a mapped API has verified behavior
+   through the CNA C ABI.
 
-1. XNA types follow the `Microsoft.Xna.Framework` hierarchy.
-2. No public namespace/package is invented without a native counterpart.
-3. CNA C++ remains canonical and only its stable C ABI crosses the boundary.
+Coverage statuses are: mapped and implemented, mapped but temporarily
+unsupported, mapped with Java adaptation, native CNA blocker, and outside the
+selected profile. API shape never implies behavioral support.
+
+## XNA-to-Java mapping definition
+
+The normative mapping is versioned in `docs/xna-java-mapping.md`.
+
+- XNA packages, types, methods, fields, enum members, and casing are preserved
+  where Java syntax permits (`Run`, `Clear`, `Vector2.X`, `Color.White`).
+- property `Foo` maps to `getFoo()` and, when writable, `setFoo(...)`; boolean
+  `IsFoo` maps to `getIsFoo()` / `setIsFoo(...)`.
+- generic `Load<T>(name)` maps to `Load(Class<T>, name)`.
+- named XNA methods project operators; exceptional operator-only cases require
+  explicit mapping rules.
+- mutable CLR structs become value-oriented Java classes with copy constructors,
+  equality/hash semantics, and snapshots across API/native boundaries. Java
+  reference assignment cannot reproduce CLR struct assignment.
+- `TimeSpan` maps to `Duration`, `IDisposable` to `AutoCloseable`, and enumerable
+  contracts to carefully selected Java collection interfaces.
+- delegates map to dedicated functional interfaces; events map to ordered
+  add/remove listener methods.
+- `ref`/`out` uses documented result/holder transformations; overload collisions
+  are explicit verifier rules, not blanket exceptions.
+
+## Definition of done
+
+For the selected Windows runtime profile, completion requires zero unreviewed
+mapped-contract differences, zero implementation leaks, a passing compile-probe
+corpus, differential value/math behavior, meaningful lifecycle/content/
+graphics/input/audio/media tests, verified ABI use and lifetime stress,
+real-rendering template evidence, independently generated project builds,
+reproducible publication, and runtime evidence for every claimed platform.
+
+The README must not use “XNA complete” before all of these gates pass.
+
+## Strict API verifier baseline
+
+Profile assemblies:
+
+- Microsoft.Xna.Framework.dll
+- Microsoft.Xna.Framework.Game.dll
+- Microsoft.Xna.Framework.Graphics.dll
+- Microsoft.Xna.Framework.GamerServices.dll
+- Microsoft.Xna.Framework.Net.dll
+- Microsoft.Xna.Framework.Storage.dll
+- Microsoft.Xna.Framework.Video.dll
+
+Measured 2026-08-22 from compiled metadata:
+
+```text
+reference types:                   257
+reference members:               2964
+mapped Java target types:          21
+mapped Java target members:       351
+unreviewed projection differences: 730
+
+INTERFACE_MISMATCH                   2
+MISSING_MEMBER                     405
+MISSING_TYPE                       236
+PARAMETER_MISMATCH                  21
+PARAMETER_NAME_MISMATCH             59
+RETURN_TYPE_MISMATCH                 4
+UNEXPECTED_MEMBER                    3
+
+CNA_INTERNAL_LEAK                    0
+allowlist entries                    0
+```
+
+The JSON evidence is
+`tools/api-compat/baselines/xna40-windows-runtime-initial.json`. Report-only mode
+is green for measurement. `apiCompatCheck` is deliberately red until the count
+reaches zero; it is not weakened or attached to the ordinary partial-build gate.
+
+Next verifier work:
+
+- add relevant annotation and nested generic-bound comparisons;
+- expand compile probes by coherent API group;
+- retain exact reference assembly hashes in portable profile evidence;
+- review every non-missing diagnostic against actual metadata before changing
+  either code or mapping.
+
+## Native bridge
+
+JNI is selected because Java 17 and future Android compatibility are retained;
+stable FFM is unavailable on Java 17. The adapter dynamically resolves only the
+stable C ABI and binds 11 functions:
+
+```text
+cna_get_abi_version
+cna_error_get_last_message_size
+cna_error_copy_last_message
+cna_game_create
+cna_game_set_frame_hooks_ext
+cna_game_run
+cna_game_request_exit
+cna_game_destroy
+cna_game_clear
+cna_game_set_is_mouse_visible
+cna_game_get_is_mouse_visible
+```
+
+It provides ABI-version rejection, UTF-8 conversion, callback rooting,
+JVM-thread attachment, exception/result conversion, and portable configuration
+through Java properties plus `CNA_JNI_LIBRARY`, `CNA_NATIVE_LIBRARY`,
+`CNA_NATIVE_DIR`, and `CNA_ROOT`.
+
+Linux x86-64 evidence: header ABI 0.7.0, all 11 symbols present, layout/signature
+probe passing, runtime ABI 0.7.0, three-frame callback lifecycle passing, and ten
+repeated create/run/destroy cycles passing. This is not Windows/macOS ABI
+evidence.
+
+## Ownership
+
+Internal wrappers distinguish owned, borrowed, parent-owned, and adopted
+handles. Owned/adopted values release exactly once; borrowed/parent-owned values
+never destroy their target. Failed release leaves the handle live for explicit
+retry. `Game.close()` unloads content before destroying the native parent and
+then invalidates child facades. No raw handles appear in strict public APIs and
+deprecated finalization is not used.
+
+Remaining lifetime work includes callback-failure teardown, JVM shutdown hooks,
+resource graphs below Game, cross-thread misuse, long stress runs, and sanitizer
+evidence.
+
+## Core and value API
+
+Implemented behavior/tests currently cover `Game`, `GameTime`,
+`GraphicsDeviceManager`, `ContentManager` validation/cache boundary,
+`MathHelper`, `Vector2/3/4`, `Matrix`, `Quaternion`, `Color`, `Point`,
+`Rectangle`, `Plane`, `Ray`, `BoundingBox`, and `BoundingSphere`.
+
+The verifier shows that these types remain member-incomplete. Next work is
+coherent completion of foundational lifecycle types (`GameComponent`,
+collections, services, window) and then missing math/geometry members, driven by
+metadata and differential fixtures rather than ad-hoc generation.
+
+## Graphics
+
+Only the `GraphicsDevice.Clear(Color)` lifecycle slice is native-backed.
+GraphicsDeviceManager does not yet expose the full XNA contract. Texture,
+render-target, buffer/state, SpriteBatch, effect, vertex, resize, and device
+reset behavior remain Java binding work. Empty facade generation is not a
+substitute for behavior.
+
+## Input
+
+No strict Java input API is implemented. Keyboard/mouse/gamepad/touch must be
+added as coherent groups against the existing CNA C ABI and XNA metadata.
+
+## Content
+
+`ContentManager` currently supplies RootDirectory, validation, deterministic
+unload, and the normative class-token `Load` signature. XNB parsing and custom
+readers are not implemented. The future architecture must include reader tables,
+versioning, shared resources, caching, streams, built-in readers, and user
+readers. Raw PNG must use a projected `Texture2D.FromStream`; it must never be
+reported as XNB.
+
+## Models, audio/XACT, media, storage, and GamerServices
+
+These selected-profile groups are not implemented in Java. Extinct services may
+eventually expose deterministic unsupported behavior after their compile-time
+contract is projected; namespaces must not be silently excluded.
+
+## XNA profile inventory
+
+The first strict target is the seven-assembly Windows runtime profile above.
+Core graphics/input/touch/storage/video/XACT/GamerServices/net surfaces are
+measured within that declared profile. Xbox-only, Windows Phone, and the
+build-time Content Pipeline are separate future profiles and cannot inherit the
+Windows-runtime completion status.
+
+## CNA extensions
+
+No public CNA-specific extension API is shipped yet. Future renderer identity,
+capability, diagnostics, and modern-format access belongs under
+`org.openeggbert.cna.extensions.*` and must query CNA rather than return guessed
+values. The strict XNA package tree stays clean.
+
+## Template
+
+`../cna-java-template` is now a desktop-only functional canary. It uses the
+normative names, exact `org.openeggbert:cna-java:0.1.0-SNAPSHOT` coordinate,
+temporary Maven repositories, a pinned wrapper, and deterministic 60/600-frame
+modes. Linux HEADLESS runtime has executed both counts with clean shutdown.
+
+It intentionally demonstrates only lifecycle, `GameTime`, graphics manager,
+mouse-visibility property, and `Clear`. The fake renderer name/capability banner,
+unimplemented cube/SpriteBatch/content path, and non-running Android/GWT/TeaVM
+launchers were removed. A configurable generator creates a standalone project
+and its fresh build is verified.
+
+## Packaging
+
+The canonical coordinate is `org.openeggbert:cna-java:0.1.0-SNAPSHOT` during
+development. Gradle publishes binary, sources, Javadoc, metadata, and POM. Native
+libraries are not yet packaged in the artifact; consumers currently configure
+the JNI adapter and CNA library explicitly.
+
+Before release: settle repository/version policy, sign publications, include
+license/notice data, define classifier or runtime artifacts per OS/architecture,
+verify reproducibility, and add consumer installation tests. Do not split core,
+native, and extensions until independent release/lifecycle needs justify it.
+
+## Platform matrix
+
+| Platform | Build | Runtime | Status |
+| --- | --- | --- | --- |
+| Linux x86-64 HEADLESS | verified | 60/600 frames | implemented foundational slice |
+| Linux windowed renderer | not verified | not verified | planned |
+| Windows x64 | not verified | not verified | planned |
+| macOS x64/arm64 | not verified | not verified | planned |
+| Android | no module/backend package | not verified | planned |
+| iOS | no module | not verified | unsupported |
+| Browser/WASM | desktop JNI inapplicable | not verified | unsupported |
+
+## CI and local quality gates
+
+Green now:
+
+1. Java/JNI build with strict warnings;
+2. JUnit managed tests (native tests conditional on a supplied library);
+3. strict internal/native-leak guard;
+4. foundational compile probe;
+5. C header width/layout/signature checks;
+6. optional native symbol/version/integration tests;
+7. template build/tests;
+8. fresh generated-project build;
+9. optional 60-frame smoke and 600-frame stability runs.
+
+Intentionally red: strict XNA completeness (`apiCompatCheck`, 730 differences).
+Future platform CI must record evidence separately per OS/architecture.
+
+## Upstream CNA blockers
+
+At CNA HEAD `1bb2145d9` (2026-08-20), a HEADLESS C API build currently fails:
+
+- with `CNA_ENABLE_NET=OFF`, C API detail headers still unconditionally require a
+  GamerServices header;
+- with networking enabled, `CnaCApiCoreExt.cpp` asserts that 50 native renderer
+  identities exist while the C table contains 49 after NanoVG was added.
+
+No upstream file was modified. Runtime evidence used the immediately preceding
+working ABI-0.7.0 commit `a09196a64` in an isolated `/tmp` checkout. Repairing
+current CNA HEAD is a **native CNA blocker**, not authorization for this binding
+task to patch the upstream repository.
+
+## Ordered next priorities
+
+1. Resolve/consume the upstream C API HEAD build blockers and rerun Linux native
+   evidence against HEAD.
+2. Complete foundational lifecycle hierarchy and math members against the
+   strict diagnostics; add XNA differential fixtures.
+3. Bind keyboard/mouse and device/window/resize lifecycle.
+4. Add Texture2D FromStream and SpriteBatch as the first real 2D slice; then
+   upgrade the template from clear-only to movement/input/raw-PNG behavior.
+5. Expand content/XNB, graphics resources/effects/models, audio/XACT, and
+   media/storage in dependency-coherent groups, recording baseline deltas after
+   every group.
+6. Package/test native runtime artifacts and add platform-specific CI before
+   promoting any platform claim.

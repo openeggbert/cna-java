@@ -22,7 +22,7 @@ public class Game implements AutoCloseable {
     private boolean mouseVisible;
 
     @SuppressWarnings("this-escape")
-    protected Game() {
+    public Game() {
         content = new ContentManager();
         graphicsDevice = new GraphicsDevice(this);
     }
@@ -102,19 +102,36 @@ public class Game implements AutoCloseable {
     protected void UnloadContent() {
     }
 
-    /** Releases content before the owned native game. Repeated calls are harmless. */
+    /** Releases children before the owned native game. Repeated calls are harmless. */
     @Override
     public final void close() {
         if (closed) {
             return;
         }
         closed = true;
-        if (nativeGame != null) {
-            nativeGame.close();
+        RuntimeException failure = null;
+        try {
+            content.close();
+        } catch (RuntimeException exception) {
+            failure = exception;
         }
-        content.close();
+        try {
+            if (nativeGame != null) {
+                nativeGame.close();
+            }
+        } catch (RuntimeException exception) {
+            if (failure == null) {
+                failure = exception;
+            } else {
+                failure.addSuppressed(exception);
+            }
+        }
+        graphicsDevice.close();
         if (graphicsManager != null) {
             graphicsManager.closeFromGame();
+        }
+        if (failure != null) {
+            throw failure;
         }
     }
 

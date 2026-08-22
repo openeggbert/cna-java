@@ -484,8 +484,12 @@ def main() -> int:
             findings = compare(reference, target, rules)
             report = make_report(profile, reference, target, findings)
 
-    rendered = json.dumps(report, indent=2, sort_keys=True) if arguments.format == "json" \
-        else render_text(report, include_diagnostics=not arguments.summary_only)
+    if arguments.summary_only:
+        rendered = render_text(report, include_diagnostics=False)
+    elif arguments.format == "json":
+        rendered = json.dumps(report, indent=2, sort_keys=True)
+    else:
+        rendered = render_text(report, include_diagnostics=True)
     print(rendered)
     if arguments.output:
         output = Path(arguments.output)

@@ -22,7 +22,7 @@ final class NativeIntegrationTests {
 
     @Test
     void NativeGameRunsThreeFramesAndShutsDownInOrder() {
-        ProbeGame game = new ProbeGame();
+        ProbeGame game = new ProbeGame(3);
         game.Run();
         game.close();
         assertEquals(3, game.frames);
@@ -31,9 +31,24 @@ final class NativeIntegrationTests {
         assertTrue(game.events.indexOf("UnloadContent") > game.events.indexOf("EndRun"));
     }
 
+    @Test
+    void RepeatedNativeCreateRunDestroyDoesNotRetainParentHandles() {
+        for (int iteration = 0; iteration < 10; iteration++) {
+            try (ProbeGame game = new ProbeGame(1)) {
+                game.Run();
+                assertEquals(1, game.frames);
+            }
+        }
+    }
+
     private static final class ProbeGame extends Game {
         private final List<String> events = new ArrayList<>();
+        private final int frameLimit;
         private int frames;
+
+        private ProbeGame(int frameLimit) {
+            this.frameLimit = frameLimit;
+        }
 
         @Override protected void Initialize() { events.add("Initialize"); }
         @Override protected void LoadContent() { events.add("LoadContent"); }
@@ -41,10 +56,9 @@ final class NativeIntegrationTests {
         @Override protected void Update(GameTime gameTime) { events.add("Update"); }
         @Override protected void Draw(GameTime gameTime) {
             events.add("Draw");
-            if (++frames == 3) Exit();
+            if (++frames == frameLimit) Exit();
         }
         @Override protected void EndRun() { events.add("EndRun"); }
         @Override protected void UnloadContent() { events.add("UnloadContent"); }
     }
 }
-

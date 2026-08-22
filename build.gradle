@@ -20,6 +20,7 @@ java {
 dependencies {
     testImplementation platform('org.junit:junit-bom:5.11.4')
     testImplementation 'org.junit.jupiter:junit-jupiter'
+    testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
 }
 
 tasks.withType(JavaCompile).configureEach {
@@ -96,6 +97,38 @@ tasks.register('leakGuard', Exec) {
     dependsOn tasks.named('classes')
     commandLine 'python3', 'tools/api-compat/verify.py', '--leak-only',
             '--target', sourceSets.main.output.classesDirs.asPath
+}
+
+def xnaReferenceDirectory = providers.environmentVariable('XNA_REFERENCE_DIR')
+
+tasks.register('apiCompatReport', Exec) {
+    group = 'verification'
+    description = 'Reports strict XNA 4.0 Windows-runtime Java projection differences.'
+    dependsOn tasks.named('classes')
+    doFirst {
+        if (!xnaReferenceDirectory.isPresent()) {
+            throw new GradleException('Set XNA_REFERENCE_DIR to the seven XNA 4.0 reference assemblies.')
+        }
+        commandLine 'python3', 'tools/api-compat/verify.py',
+                '--reference-dir', xnaReferenceDirectory.get(),
+                '--target', sourceSets.main.output.classesDirs.asPath,
+                '--report-only', '--summary-only'
+    }
+}
+
+tasks.register('apiCompatCheck', Exec) {
+    group = 'verification'
+    description = 'Strict XNA completeness gate; expected to fail while differences remain.'
+    dependsOn tasks.named('classes')
+    doFirst {
+        if (!xnaReferenceDirectory.isPresent()) {
+            throw new GradleException('Set XNA_REFERENCE_DIR to the seven XNA 4.0 reference assemblies.')
+        }
+        commandLine 'python3', 'tools/api-compat/verify.py',
+                '--reference-dir', xnaReferenceDirectory.get(),
+                '--target', sourceSets.main.output.classesDirs.asPath,
+                '--summary-only'
+    }
 }
 
 tasks.register('nativeAbiCheck', Exec) {

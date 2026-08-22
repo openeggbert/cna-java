@@ -86,7 +86,7 @@ public final class NativeBindings {
     /** Internal adapter used by strict facades without exposing a native handle. */
     public static void clear(Game game, int red, int green, int blue, int alpha) {
         NativeGameHandle handle;
-        synchronized (NativeBindings.class) {
+        synchronized (GAMES) {
             handle = GAMES.get(game);
         }
         if (handle == null || handle.isClosed()) {
@@ -113,7 +113,7 @@ public final class NativeBindings {
         if (result != 0 && result != 9) {
             throw failure("cna_game_destroy", result);
         }
-        synchronized (NativeBindings.class) {
+        synchronized (GAMES) {
             GAMES.remove(game);
         }
     }

@@ -55,7 +55,14 @@ def main() -> int:
         return 2
     symbols = subprocess.run(["nm", "-D", "--defined-only", str(library_path)], check=True,
                              text=True, stdout=subprocess.PIPE).stdout
-    exported = {line.split()[-1] for line in symbols.splitlines() if line.split()}
+    # GNU ld appends the ELF version namespace (for example
+    # ``cna_game_run@@CNA_C_API_0.1``) to nm's display name.  dlsym and JNI use
+    # the unversioned public symbol, so compare that identity here as well.
+    exported = {
+        line.split()[-1].split("@", 1)[0]
+        for line in symbols.splitlines()
+        if line.split()
+    }
     missing = sorted(set(functions) - exported)
     if missing:
         for name in missing:
