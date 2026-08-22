@@ -24,15 +24,15 @@ public class GameTime {
         runningSlowly = isRunningSlowly;
     }
 
-    public Duration getTotalGameTime() {
+    public final Duration getTotalGameTime() {
         return totalGameTime;
     }
 
-    public Duration getElapsedGameTime() {
+    public final Duration getElapsedGameTime() {
         return elapsedGameTime;
     }
 
-    public boolean getIsRunningSlowly() {
+    public final boolean getIsRunningSlowly() {
         return runningSlowly;
     }
 

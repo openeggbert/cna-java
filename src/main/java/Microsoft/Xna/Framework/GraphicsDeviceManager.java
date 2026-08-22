@@ -16,7 +16,7 @@ public class GraphicsDeviceManager implements AutoCloseable {
         game.attachGraphicsManager(this);
     }
 
-    public GraphicsDevice getGraphicsDevice() {
+    public final GraphicsDevice getGraphicsDevice() {
         ensureOpen();
         return game.getGraphicsDevice();
     }

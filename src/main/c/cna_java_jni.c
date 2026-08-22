@@ -49,6 +49,13 @@ typedef CNA_Result (*GameSetBoolFunction)(CNA_Handle, CNA_Bool);
 typedef CNA_Result (*GameGetBoolFunction)(CNA_Handle, CNA_Bool*);
 typedef CNA_Result (*GameSetInt64Function)(CNA_Handle, int64_t);
 typedef CNA_Result (*GameGetInt64Function)(CNA_Handle, int64_t*);
+typedef CNA_Result (*GameGetRectangleFunction)(CNA_Handle, CNA_Rectangle*);
+typedef CNA_Result (*GameGetUint32Function)(CNA_Handle, uint32_t*);
+typedef CNA_Result (*GameGetUint64Function)(CNA_Handle, uint64_t*);
+typedef CNA_Result (*GameGetSizeFunction)(CNA_Handle, uint64_t*);
+typedef CNA_Result (*GameCopyStringFunction)(CNA_Handle, char*, uint64_t, uint64_t*);
+typedef CNA_Result (*GameSetStringFunction)(CNA_Handle, CNA_StringView);
+typedef CNA_Result (*GameEndScreenChangeFunction)(CNA_Handle, CNA_StringView, int32_t, int32_t);
 
 typedef struct CnaFunctions {
     DynamicLibrary library;
@@ -74,6 +81,16 @@ typedef struct CnaFunctions {
     GameGetInt64Function game_get_target_elapsed_time;
     GameSetInt64Function game_set_inactive_sleep_time;
     GameGetInt64Function game_get_inactive_sleep_time;
+    GameGetBoolFunction game_window_get_allow_user_resizing;
+    GameSetBoolFunction game_window_set_allow_user_resizing;
+    GameGetRectangleFunction game_window_get_client_bounds;
+    GameGetUint32Function game_window_get_current_orientation;
+    GameGetUint64Function game_window_get_native_handle;
+    GameGetSizeFunction game_window_get_screen_device_name_size;
+    GameCopyStringFunction game_window_copy_screen_device_name;
+    GameSetStringFunction game_set_window_title;
+    GameSetBoolFunction game_window_begin_screen_device_change;
+    GameEndScreenChangeFunction game_window_end_screen_device_change;
 } CnaFunctions;
 
 typedef struct JavaGameContext {
@@ -373,6 +390,16 @@ JNIEXPORT jint JNICALL Java_org_openeggbert_cna_internal_NativeBindings_nativeLo
     LOAD(game_get_target_elapsed_time, "cna_game_get_target_elapsed_time_ticks");
     LOAD(game_set_inactive_sleep_time, "cna_game_set_inactive_sleep_time_ticks");
     LOAD(game_get_inactive_sleep_time, "cna_game_get_inactive_sleep_time_ticks");
+    LOAD(game_window_get_allow_user_resizing, "cna_game_window_get_allow_user_resizing");
+    LOAD(game_window_set_allow_user_resizing, "cna_game_window_set_allow_user_resizing");
+    LOAD(game_window_get_client_bounds, "cna_game_window_get_client_bounds");
+    LOAD(game_window_get_current_orientation, "cna_game_window_get_current_orientation");
+    LOAD(game_window_get_native_handle, "cna_game_window_get_native_handle_ext");
+    LOAD(game_window_get_screen_device_name_size, "cna_game_window_get_screen_device_name_size");
+    LOAD(game_window_copy_screen_device_name, "cna_game_window_copy_screen_device_name");
+    LOAD(game_set_window_title, "cna_game_set_window_title");
+    LOAD(game_window_begin_screen_device_change, "cna_game_window_begin_screen_device_change");
+    LOAD(game_window_end_screen_device_change, "cna_game_window_end_screen_device_change");
 #undef LOAD
 
     return (jint)cna.get_abi_version();
@@ -635,6 +662,157 @@ JNIEXPORT jlong JNICALL Java_org_openeggbert_cna_internal_NativeBindings_nativeG
     int64_t ticks = 0;
     CNA_Result result = cna.game_get_inactive_sleep_time(java_game(game)->cna_handle, &ticks);
     return result == CNA_RESULT_SUCCESS ? (jlong)ticks : -(jlong)result;
+}
+
+JNIEXPORT jint JNICALL Java_org_openeggbert_cna_internal_NativeBindings_nativeGetWindowAllowUserResizing(
+    JNIEnv* environment, jclass type, jlong game)
+{
+    (void)environment;
+    (void)type;
+    CNA_Bool value = CNA_FALSE;
+    CNA_Result result = cna.game_window_get_allow_user_resizing(java_game(game)->cna_handle, &value);
+    return result == CNA_RESULT_SUCCESS ? (value == CNA_TRUE ? 1 : 0) : -(jint)result;
+}
+
+JNIEXPORT jint JNICALL Java_org_openeggbert_cna_internal_NativeBindings_nativeSetWindowAllowUserResizing(
+    JNIEnv* environment, jclass type, jlong game, jboolean value)
+{
+    (void)environment;
+    (void)type;
+    return (jint)cna.game_window_set_allow_user_resizing(
+        java_game(game)->cna_handle, value == JNI_TRUE ? CNA_TRUE : CNA_FALSE);
+}
+
+JNIEXPORT jint JNICALL Java_org_openeggbert_cna_internal_NativeBindings_nativeGetWindowClientBounds(
+    JNIEnv* environment, jclass type, jlong game, jintArray output)
+{
+    (void)type;
+    if (output == NULL || (*environment)->GetArrayLength(environment, output) < 4) {
+        return (jint)CNA_RESULT_INVALID_ARGUMENT;
+    }
+    CNA_Rectangle value;
+    CNA_Result result = cna.game_window_get_client_bounds(java_game(game)->cna_handle, &value);
+    if (result != CNA_RESULT_SUCCESS) {
+        return (jint)result;
+    }
+    const jint fields[4] = {(jint)value.x, (jint)value.y, (jint)value.width, (jint)value.height};
+    (*environment)->SetIntArrayRegion(environment, output, 0, 4, fields);
+    return (*environment)->ExceptionCheck(environment) ? (jint)CNA_RESULT_INVALID_STATE : 0;
+}
+
+JNIEXPORT jlong JNICALL Java_org_openeggbert_cna_internal_NativeBindings_nativeGetWindowCurrentOrientation(
+    JNIEnv* environment, jclass type, jlong game)
+{
+    (void)environment;
+    (void)type;
+    CNA_DisplayOrientation value = CNA_DISPLAY_ORIENTATION_DEFAULT;
+    CNA_Result result = cna.game_window_get_current_orientation(java_game(game)->cna_handle, &value);
+    return result == CNA_RESULT_SUCCESS ? (jlong)value : -(jlong)result;
+}
+
+JNIEXPORT jint JNICALL Java_org_openeggbert_cna_internal_NativeBindings_nativeGetWindowHandle(
+    JNIEnv* environment, jclass type, jlong game, jlongArray output)
+{
+    (void)type;
+    if (output == NULL || (*environment)->GetArrayLength(environment, output) < 1) {
+        return (jint)CNA_RESULT_INVALID_ARGUMENT;
+    }
+    uint64_t value = 0U;
+    CNA_Result result = cna.game_window_get_native_handle(java_game(game)->cna_handle, &value);
+    if (result != CNA_RESULT_SUCCESS) {
+        return (jint)result;
+    }
+    const jlong projected = (jlong)value;
+    (*environment)->SetLongArrayRegion(environment, output, 0, 1, &projected);
+    return (*environment)->ExceptionCheck(environment) ? (jint)CNA_RESULT_INVALID_STATE : 0;
+}
+
+JNIEXPORT jlong JNICALL Java_org_openeggbert_cna_internal_NativeBindings_nativeGetWindowScreenDeviceNameSize(
+    JNIEnv* environment, jclass type, jlong game)
+{
+    (void)environment;
+    (void)type;
+    uint64_t size = 0U;
+    CNA_Result result = cna.game_window_get_screen_device_name_size(java_game(game)->cna_handle, &size);
+    if (result != CNA_RESULT_SUCCESS) {
+        return -(jlong)result;
+    }
+    return size > (uint64_t)INT64_MAX ? -(jlong)CNA_RESULT_INVALID_STATE : (jlong)size;
+}
+
+JNIEXPORT jint JNICALL Java_org_openeggbert_cna_internal_NativeBindings_nativeCopyWindowScreenDeviceName(
+    JNIEnv* environment, jclass type, jlong game, jbyteArray destination)
+{
+    (void)type;
+    if (destination == NULL) {
+        return (jint)CNA_RESULT_INVALID_ARGUMENT;
+    }
+    jsize capacity = (*environment)->GetArrayLength(environment, destination);
+    jbyte* bytes = (*environment)->GetByteArrayElements(environment, destination, NULL);
+    if (bytes == NULL) {
+        return (jint)CNA_RESULT_INVALID_STATE;
+    }
+    uint64_t written = 0U;
+    CNA_Result result = cna.game_window_copy_screen_device_name(
+        java_game(game)->cna_handle, (char*)bytes, (uint64_t)capacity, &written);
+    (*environment)->ReleaseByteArrayElements(environment, destination, bytes, 0);
+    if (result == CNA_RESULT_SUCCESS && written != (uint64_t)capacity) {
+        return (jint)CNA_RESULT_INVALID_STATE;
+    }
+    return (jint)result;
+}
+
+JNIEXPORT jint JNICALL Java_org_openeggbert_cna_internal_NativeBindings_nativeSetWindowTitle(
+    JNIEnv* environment, jclass type, jlong game, jbyteArray title)
+{
+    (void)type;
+    if (title == NULL) {
+        return (jint)CNA_RESULT_INVALID_ARGUMENT;
+    }
+    jsize size = (*environment)->GetArrayLength(environment, title);
+    jbyte* bytes = (*environment)->GetByteArrayElements(environment, title, NULL);
+    if (bytes == NULL) {
+        return (jint)CNA_RESULT_INVALID_STATE;
+    }
+    CNA_StringView view = {(const char*)bytes, (uint64_t)size};
+    CNA_Result result = cna.game_set_window_title(java_game(game)->cna_handle, view);
+    (*environment)->ReleaseByteArrayElements(environment, title, bytes, JNI_ABORT);
+    return (jint)result;
+}
+
+JNIEXPORT jint JNICALL Java_org_openeggbert_cna_internal_NativeBindings_nativeBeginWindowScreenDeviceChange(
+    JNIEnv* environment, jclass type, jlong game, jboolean will_be_full_screen)
+{
+    (void)environment;
+    (void)type;
+    return (jint)cna.game_window_begin_screen_device_change(
+        java_game(game)->cna_handle,
+        will_be_full_screen == JNI_TRUE ? CNA_TRUE : CNA_FALSE);
+}
+
+JNIEXPORT jint JNICALL Java_org_openeggbert_cna_internal_NativeBindings_nativeEndWindowScreenDeviceChange(
+    JNIEnv* environment,
+    jclass type,
+    jlong game,
+    jbyteArray screen_device_name,
+    jint client_width,
+    jint client_height)
+{
+    (void)type;
+    if (screen_device_name == NULL) {
+        return (jint)CNA_RESULT_INVALID_ARGUMENT;
+    }
+    jsize size = (*environment)->GetArrayLength(environment, screen_device_name);
+    jbyte* bytes = (*environment)->GetByteArrayElements(environment, screen_device_name, NULL);
+    if (bytes == NULL) {
+        return (jint)CNA_RESULT_INVALID_STATE;
+    }
+    CNA_StringView view = {(const char*)bytes, (uint64_t)size};
+    CNA_Result result = cna.game_window_end_screen_device_change(
+        java_game(game)->cna_handle, view, (int32_t)client_width, (int32_t)client_height);
+    (*environment)->ReleaseByteArrayElements(
+        environment, screen_device_name, bytes, JNI_ABORT);
+    return (jint)result;
 }
 
 JNIEXPORT jint JNICALL Java_org_openeggbert_cna_internal_NativeBindings_nativeDestroyGame(

@@ -54,6 +54,10 @@
   - strengthened native lifetime/error handling and template verification;
   - recorded complete build, ABI, runtime, template, and CNA-HEAD blocker evidence;
   - removed the stale Maven build so Gradle is the single source of build truth.
+- `0e7293c feat: implement foundational game components`
+  - added the mapped component hierarchy, collection/events, services, launch
+    parameters, ordered update/draw, and resilient teardown;
+  - reduced the measured contract from 730 to 691 diagnostics.
 
 ### `cna-java-template`
 
@@ -71,7 +75,7 @@ reference types / 2,964 members versus 21 target types / 351 members, with 730
 diagnostics, zero leaks, and an empty allowlist. Its full JSON remains at
 `tools/api-compat/baselines/xna40-windows-runtime-initial.json`.
 
-After the coherent foundational lifecycle group, the current measurement is:
+After the coherent window/orientation group, the current measurement is:
 
 Command:
 
@@ -85,35 +89,36 @@ Result (`exit 0`, report-only):
 ```text
 REFERENCE_TYPES=257
 REFERENCE_MEMBERS=2964
-EXPECTED_JAVA_TYPES=260
-EXPECTED_JAVA_MEMBERS=3079
-TARGET_TYPES=33
-TARGET_MEMBERS=454
-TOTAL_DIAGNOSTICS=691
+EXPECTED_JAVA_TYPES=261
+EXPECTED_JAVA_MEMBERS=3086
+TARGET_TYPES=36
+TARGET_MEMBERS=495
+TOTAL_DIAGNOSTICS=685
 ALLOWLIST_ENTRIES=0
 INTERFACE_MISMATCH=2
-MISSING_MEMBER=376
-MISSING_TYPE=227
+MISSING_MEMBER=372
+MISSING_TYPE=225
 PARAMETER_MISMATCH=21
 PARAMETER_NAME_MISMATCH=58
 RETURN_TYPE_MISMATCH=4
 UNEXPECTED_MEMBER=3
 ```
 
-This is a 39-diagnostic reduction with 12 additional strict target types and
-103 additional target members. `apiCompatCheck` still exits 1 as designed.
-Leak-only inspection reports `CNA_INTERNAL_LEAK=0` (total leak diagnostics 0).
+This is a 45-diagnostic reduction from the immutable initial baseline, with 15
+additional strict target types and 144 additional target members.
+`apiCompatCheck` still exits 1 as designed. Leak-only inspection reports
+`CNA_INTERNAL_LEAK=0` (total leak diagnostics 0).
 
-The group added `EventArgs`, generic `EventHandler`, `ServiceProvider`,
-`IGameComponent`, `IUpdateable`, `IDrawable`, `GameComponent`,
-`DrawableGameComponent`, `GameComponentCollection` and its event args,
-`GameServiceContainer`, and `LaunchParameters`. Their mapped contracts have no
-local verifier findings. `Game` now exposes components/services/the mapped
-launch-parameter container, ordered listener APIs, `Duration` timing properties, one-frame,
-tick, suppress-draw, reset-time, active/fixed-step state, ordered component
-update/draw, and resilient deterministic teardown. `GameWindow` and
-`ShowMissingRequirementMessage` remain explicitly missing; native launch
-parameter population and activation/deactivation subscriptions remain behavior work.
+The newest group added exact `GameWindow`, `[Flags]`-aware
+`DisplayOrientation`, and opaque `WindowHandle` projections. `Game` now has all
+currently mapped local members, including `getWindow()` and deterministic
+`ShowMissingRequirementMessage`. The JNI path queries or updates resize
+permission, client bounds, orientation, opaque handle identity, screen-device
+name, title, and begin/end screen-device changes. Managed window listeners are
+ordered, but CNA event delivery and supported-orientation mutation remain
+explicit behavior work. The verifier now extracts CLR virtual/final state and
+compares effective Java overridability; it exposed nine real mismatches, all of
+which were corrected without an allowlist.
 
 ## Managed/native binding gate
 
@@ -127,15 +132,15 @@ XNA_REFERENCE_DIR=/rv/data/development/github.com/openeggbert/xna4-decomp/refere
 
 Result: `BUILD SUCCESSFUL`, 10 tasks executed, no compiler/deprecation warnings.
 
-- JUnit: 30 tests, 0 failures, 0 errors, 0 skipped.
-- Verifier regression suite: 5 tests, all passing.
-- Suites: 12 value/math, 3 lifecycle/content, 7 component/service/lifetime,
-  4 ownership, 4 native integration.
+- JUnit: 33 tests, 0 failures, 0 errors, 0 skipped.
+- Verifier regression suite: 8 tests, all passing.
+- Suites: 12 value/math, 3 lifecycle/content, 9 component/service/window,
+  4 ownership, 5 native integration.
 - Native stress: one ordered three-frame lifecycle plus ten repeated
   create/run/destroy lifecycles, and one-frame/tick/suppressed-draw timing.
 - Compile probe: passed.
-- Strict leak guard: 33 target types / 454 members, 0 findings.
-- ABI: header 0.7.0, 22 bound functions, manifest/JNI identity and C
+- Strict leak guard: 36 target types / 495 members, 0 findings.
+- ABI: header 0.7.0, 32 bound functions, manifest/JNI identity and C
   width/layout/function-signature probes passed, native library ABI 0.7.0,
   symbols 22/22.
 - JNI compiled with `-std=c11 -Wall -Wextra -Werror -fPIC`.
@@ -200,10 +205,9 @@ keyboard/mouse state, resize, and 3D are not claimed.
    native evidence against current HEAD.
 2. Review the 2 interface, 21 parameter, 58 parameter-name, 4 return-type, and 3
    unexpected-member diagnostics before adding more surface.
-3. Design the safe Java `IntPtr` mapping needed by `GameWindow`, implement the
-   remaining window/orientation lifecycle, and add normalized XNA differential
-   fixtures for the math/geometry contract.
-4. Bind keyboard/mouse plus native window/device resize.
+3. Connect native window events and supported-orientation behavior, then add
+   normalized XNA differential fixtures for the math/geometry contract.
+4. Bind keyboard/mouse plus native device resize.
 5. Implement Texture2D FromStream and SpriteBatch, then upgrade the clear-only
    template to the requested moving raw-PNG playable slice.
 6. Add platform-specific native packaging and CI; do not promote Windows,

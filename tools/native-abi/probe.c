@@ -9,6 +9,12 @@ _Static_assert(sizeof(CNA_Result) == 4U, "CNA_Result must be uint32_t");
 _Static_assert(sizeof(CNA_Bool) == 1U, "CNA_Bool must be uint8_t");
 _Static_assert(sizeof(CNA_Handle) == 8U, "CNA_Handle must be uint64_t");
 _Static_assert(sizeof(CNA_Color) == 4U, "CNA_Color must be four bytes");
+_Static_assert(sizeof(CNA_DisplayOrientation) == 4U, "CNA_DisplayOrientation must be uint32_t");
+_Static_assert(sizeof(CNA_Rectangle) == 16U, "CNA_Rectangle must be four int32 values");
+_Static_assert(offsetof(CNA_Rectangle, x) == 0U, "CNA_Rectangle.x offset");
+_Static_assert(offsetof(CNA_Rectangle, y) == 4U, "CNA_Rectangle.y offset");
+_Static_assert(offsetof(CNA_Rectangle, width) == 8U, "CNA_Rectangle.width offset");
+_Static_assert(offsetof(CNA_Rectangle, height) == 12U, "CNA_Rectangle.height offset");
 _Static_assert(sizeof(CNA_GameTime) == 24U, "CNA_GameTime layout changed");
 _Static_assert(offsetof(CNA_GameTime, total_game_time_ticks) == 0U, "CNA_GameTime.total offset");
 _Static_assert(offsetof(CNA_GameTime, elapsed_game_time_ticks) == 8U, "CNA_GameTime.elapsed offset");
@@ -43,6 +49,26 @@ static CNA_Result (*const game_set_inactive_time_function)(CNA_Handle, int64_t) 
     cna_game_set_inactive_sleep_time_ticks;
 static CNA_Result (*const game_get_inactive_time_function)(CNA_Handle, int64_t*) =
     cna_game_get_inactive_sleep_time_ticks;
+static CNA_Result (*const window_get_resizing_function)(CNA_Handle, CNA_Bool*) =
+    cna_game_window_get_allow_user_resizing;
+static CNA_Result (*const window_set_resizing_function)(CNA_Handle, CNA_Bool) =
+    cna_game_window_set_allow_user_resizing;
+static CNA_Result (*const window_get_bounds_function)(CNA_Handle, CNA_Rectangle*) =
+    cna_game_window_get_client_bounds;
+static CNA_Result (*const window_get_orientation_function)(CNA_Handle, CNA_DisplayOrientation*) =
+    cna_game_window_get_current_orientation;
+static CNA_Result (*const window_get_handle_function)(CNA_Handle, uint64_t*) =
+    cna_game_window_get_native_handle_ext;
+static CNA_Result (*const window_get_screen_size_function)(CNA_Handle, uint64_t*) =
+    cna_game_window_get_screen_device_name_size;
+static CNA_Result (*const window_copy_screen_function)(CNA_Handle, char*, uint64_t, uint64_t*) =
+    cna_game_window_copy_screen_device_name;
+static CNA_Result (*const window_set_title_function)(CNA_Handle, CNA_StringView) =
+    cna_game_set_window_title;
+static CNA_Result (*const window_begin_change_function)(CNA_Handle, CNA_Bool) =
+    cna_game_window_begin_screen_device_change;
+static CNA_Result (*const window_end_change_function)(CNA_Handle, CNA_StringView, int32_t, int32_t) =
+    cna_game_window_end_screen_device_change;
 
 int cna_java_abi_probe(void)
 {
@@ -55,5 +81,10 @@ int cna_java_abi_probe(void)
         game_get_active_function != NULL && game_set_fixed_function != NULL &&
         game_get_fixed_function != NULL && game_set_target_time_function != NULL &&
         game_get_target_time_function != NULL && game_set_inactive_time_function != NULL &&
-        game_get_inactive_time_function != NULL ? 0 : 1;
+        game_get_inactive_time_function != NULL && window_get_resizing_function != NULL &&
+        window_set_resizing_function != NULL && window_get_bounds_function != NULL &&
+        window_get_orientation_function != NULL && window_get_handle_function != NULL &&
+        window_get_screen_size_function != NULL && window_copy_screen_function != NULL &&
+        window_set_title_function != NULL && window_begin_change_function != NULL &&
+        window_end_change_function != NULL ? 0 : 1;
 }

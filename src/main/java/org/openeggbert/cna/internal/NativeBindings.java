@@ -6,6 +6,7 @@ import java.nio.file.Path;
 import java.nio.charset.StandardCharsets;
 import java.util.Locale;
 import java.util.Map;
+import java.util.Objects;
 import java.util.WeakHashMap;
 
 /** JNI entry point for CNA's stable C ABI. This class is not application API. */
@@ -101,14 +102,7 @@ public final class NativeBindings {
 
     /** Internal adapter used by strict facades without exposing a native handle. */
     public static void clear(Game game, int red, int green, int blue, int alpha) {
-        NativeGameHandle handle;
-        synchronized (GAMES) {
-            handle = GAMES.get(game);
-        }
-        if (handle == null || handle.isClosed()) {
-            throw new IllegalStateException("GraphicsDevice is unavailable before Game.Run");
-        }
-        clear(handle, red, green, blue, alpha);
+        clear(gameHandle(game, "GraphicsDevice"), red, green, blue, alpha);
     }
 
     public static void setMouseVisible(NativeGameHandle game, boolean visible) {
@@ -153,6 +147,75 @@ public final class NativeBindings {
                 nativeGetInactiveSleepTime(game.requireValue()));
     }
 
+    public static boolean getWindowAllowUserResizing(Game game) {
+        return booleanResult("cna_game_window_get_allow_user_resizing",
+                nativeGetWindowAllowUserResizing(gameHandle(game, "GameWindow").requireValue()));
+    }
+
+    public static void setWindowAllowUserResizing(Game game, boolean value) {
+        check("cna_game_window_set_allow_user_resizing",
+                nativeSetWindowAllowUserResizing(
+                        gameHandle(game, "GameWindow").requireValue(), value));
+    }
+
+    public static int[] getWindowClientBounds(Game game) {
+        int[] value = new int[4];
+        check("cna_game_window_get_client_bounds",
+                nativeGetWindowClientBounds(gameHandle(game, "GameWindow").requireValue(), value));
+        return value;
+    }
+
+    public static int getWindowCurrentOrientation(Game game) {
+        long value = longResult("cna_game_window_get_current_orientation",
+                nativeGetWindowCurrentOrientation(gameHandle(game, "GameWindow").requireValue()));
+        return Math.toIntExact(value);
+    }
+
+    public static long getWindowHandle(Game game) {
+        long[] value = new long[1];
+        check("cna_game_window_get_native_handle_ext",
+                nativeGetWindowHandle(gameHandle(game, "GameWindow").requireValue(), value));
+        return value[0];
+    }
+
+    public static String getWindowScreenDeviceName(Game game) {
+        long gameValue = gameHandle(game, "GameWindow").requireValue();
+        int size = Math.toIntExact(longResult("cna_game_window_get_screen_device_name_size",
+                nativeGetWindowScreenDeviceNameSize(gameValue)));
+        if (size == 0) {
+            return "";
+        }
+        byte[] utf8 = new byte[size];
+        check("cna_game_window_copy_screen_device_name",
+                nativeCopyWindowScreenDeviceName(gameValue, utf8));
+        return new String(utf8, StandardCharsets.UTF_8);
+    }
+
+    public static void setWindowTitle(Game game, String title) {
+        check("cna_game_set_window_title",
+                nativeSetWindowTitle(gameHandle(game, "GameWindow").requireValue(),
+                        Objects.requireNonNull(title, "title").getBytes(StandardCharsets.UTF_8)));
+    }
+
+    public static void beginWindowScreenDeviceChange(Game game, boolean willBeFullScreen) {
+        check("cna_game_window_begin_screen_device_change",
+                nativeBeginWindowScreenDeviceChange(
+                        gameHandle(game, "GameWindow").requireValue(), willBeFullScreen));
+    }
+
+    public static void endWindowScreenDeviceChange(
+            Game game,
+            String screenDeviceName,
+            int clientWidth,
+            int clientHeight) {
+        check("cna_game_window_end_screen_device_change",
+                nativeEndWindowScreenDeviceChange(
+                        gameHandle(game, "GameWindow").requireValue(),
+                        Objects.requireNonNull(screenDeviceName, "screenDeviceName")
+                                .getBytes(StandardCharsets.UTF_8),
+                        clientWidth, clientHeight));
+    }
+
     static void destroyGame(Game game, long handle) {
         int result = nativeDestroyGame(handle);
         // CNA documents CALLBACK as released: shutdown completed but a callback reported failure.
@@ -168,6 +231,17 @@ public final class NativeBindings {
         if (result != 0) {
             throw failure(operation, result);
         }
+    }
+
+    private static NativeGameHandle gameHandle(Game game, String owner) {
+        NativeGameHandle handle;
+        synchronized (GAMES) {
+            handle = GAMES.get(Objects.requireNonNull(game, "game"));
+        }
+        if (handle == null || handle.isClosed()) {
+            throw new IllegalStateException(owner + " is unavailable before native Game creation");
+        }
+        return handle;
     }
 
     private static boolean booleanResult(String operation, int result) {
@@ -288,6 +362,28 @@ public final class NativeBindings {
     private static native int nativeSetInactiveSleepTime(long game, long ticks);
 
     private static native long nativeGetInactiveSleepTime(long game);
+
+    private static native int nativeGetWindowAllowUserResizing(long game);
+
+    private static native int nativeSetWindowAllowUserResizing(long game, boolean value);
+
+    private static native int nativeGetWindowClientBounds(long game, int[] value);
+
+    private static native long nativeGetWindowCurrentOrientation(long game);
+
+    private static native int nativeGetWindowHandle(long game, long[] value);
+
+    private static native long nativeGetWindowScreenDeviceNameSize(long game);
+
+    private static native int nativeCopyWindowScreenDeviceName(long game, byte[] destination);
+
+    private static native int nativeSetWindowTitle(long game, byte[] titleUtf8);
+
+    private static native int nativeBeginWindowScreenDeviceChange(
+            long game, boolean willBeFullScreen);
+
+    private static native int nativeEndWindowScreenDeviceChange(
+            long game, byte[] screenDeviceNameUtf8, int clientWidth, int clientHeight);
 
     private static native int nativeDestroyGame(long game);
 

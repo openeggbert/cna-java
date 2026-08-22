@@ -1,8 +1,10 @@
 package org.openeggbert.cna.internal;
 
+import Microsoft.Xna.Framework.DisplayOrientation;
 import Microsoft.Xna.Framework.Game;
 import Microsoft.Xna.Framework.GameComponent;
 import Microsoft.Xna.Framework.GameTime;
+import Microsoft.Xna.Framework.Rectangle;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.condition.EnabledIfEnvironmentVariable;
 
@@ -64,6 +66,23 @@ final class NativeIntegrationTests {
         assertEquals(2, game.updates);
         assertEquals(1, game.draws);
         game.close();
+    }
+
+    @Test
+    void NativeGameWindowQueriesHeadlessStateAndUsesOpaqueHandle() {
+        try (Game game = new Game()) {
+            var window = game.getWindow();
+            assertSame(window, game.getWindow());
+            window.setTitle("CNA Java window probe");
+            assertEquals("CNA Java window probe", window.getTitle());
+            assertEquals(new Rectangle(), window.getClientBounds());
+            assertEquals(DisplayOrientation.Default, window.getCurrentOrientation());
+            assertTrue(window.getHandle().getIsZero());
+            assertNotNull(window.getScreenDeviceName());
+            window.getAllowUserResizing();
+            window.BeginScreenDeviceChange(false);
+            game.RunOneFrame();
+        }
     }
 
     private static final class ProbeGame extends Game {

@@ -219,13 +219,17 @@ def parameter(name: str, type_name: str) -> dict[str, Any]:
 
 
 def callable_member(kind: str, name: str, source: dict[str, Any], parameters: list[dict[str, Any]], return_type: str | None) -> dict[str, Any]:
+    java_final = source.get("final", False)
+    if kind != "constructor" and not source.get("static", False) \
+            and not source.get("abstract", False) and source.get("virtual") is False:
+        java_final = True
     return {
         "kind": kind,
         "name": name,
         "access": source.get("access", "public"),
         "static": source.get("static", False),
         "abstract": source.get("abstract", False),
-        "final": source.get("final", False),
+        "final": java_final,
         "genericArity": source.get("genericArity", 0),
         "returnType": return_type,
         "parameters": parameters,
@@ -236,9 +240,41 @@ def map_parameters(values: list[dict[str, Any]]) -> list[dict[str, Any]]:
     return [parameter(value["name"], map_type(value["type"]) or "java.lang.Object") for value in values]
 
 
+def mapped_enum_members(type_contract: dict[str, Any]) -> list[dict[str, Any]]:
+    fields = [value for value in type_contract["members"]
+              if value["kind"] == "field" and value["name"] != "value__"]
+    expected = [{**value, "type": map_type(value["type"])} for value in fields]
+    underlying_member = next((value for value in type_contract["members"]
+                              if value["kind"] == "field" and value["name"] == "value__"), None)
+    underlying = map_type(underlying_member["type"] if underlying_member else "System.Int32") or "int"
+    values = [int(value["constant"]) for value in fields]
+    sequential = sorted(values) == list(range(len(values)))
+    source = {"access": "public", "static": False, "abstract": False,
+              "final": False, "genericArity": 0}
+    if type_contract.get("flags"):
+        type_name = map_type(type_contract["name"], identity=True) or type_contract["name"]
+        expected.extend([
+            callable_member("method", "getValue", source, [], underlying),
+            callable_member("method", "FromValue", {**source, "static": True},
+                            [parameter("value", underlying)], type_name),
+            callable_member("method", "Or", source,
+                            [parameter("other", type_name)], type_name),
+            callable_member("method", "Contains", source,
+                            [parameter("value", type_name)], "boolean"),
+            callable_member("method", "equals", source,
+                            [parameter("obj", "java.lang.Object")], "boolean"),
+            callable_member("method", "hashCode", source, [], "int"),
+        ])
+    elif not sequential:
+        expected.append(callable_member("method", "getValue", source, [], underlying))
+    return expected
+
+
 def mapped_members(type_contract: dict[str, Any], rules: dict[str, Any], mapping_findings: list[dict[str, Any]]) -> list[dict[str, Any]]:
     expected: list[dict[str, Any]] = []
     type_name = type_contract["name"]
+    if type_contract["kind"] == "enum":
+        return mapped_enum_members(type_contract)
     if type_contract["kind"] == "struct":
         empty = {"access": "public", "static": False, "abstract": False, "final": False, "genericArity": 0}
         expected.append(callable_member("constructor", ".ctor", empty, [], None))
@@ -267,24 +303,32 @@ def mapped_members(type_contract: dict[str, Any], rules: dict[str, Any], mapping
             elif visible(member.get("getterAccess")):
                 getter_name = "get" if indexes else "get" + member["name"]
                 source = {"access": member["getterAccess"], "static": member["static"],
-                          "abstract": type_contract["kind"] == "interface"}
+                          "abstract": member.get("getterAbstract", type_contract["kind"] == "interface"),
+                          "final": member.get("getterFinal", False),
+                          "virtual": member.get("getterVirtual")}
                 expected.append(callable_member("method", getter_name, source, indexes, property_type))
             if visible(member.get("setterAccess")):
                 setter_name = "set" if indexes else "set" + member["name"]
                 source = {"access": member["setterAccess"], "static": member["static"],
-                          "abstract": type_contract["kind"] == "interface"}
+                          "abstract": member.get("setterAbstract", type_contract["kind"] == "interface"),
+                          "final": member.get("setterFinal", False),
+                          "virtual": member.get("setterVirtual")}
                 expected.append(callable_member("method", setter_name, source,
                                                 [*indexes, parameter("value", property_type)], "void"))
         elif kind == "event":
             listener = map_type(member["type"]) or "java.lang.Object"
             if visible(member.get("addAccess")):
                 source = {"access": member["addAccess"], "static": member["static"],
-                          "abstract": type_contract["kind"] == "interface"}
+                          "abstract": member.get("addAbstract", type_contract["kind"] == "interface"),
+                          "final": member.get("addFinal", False),
+                          "virtual": member.get("addVirtual")}
                 expected.append(callable_member("method", "add" + member["name"] + "Listener", source,
                                                 [parameter("listener", listener)], "void"))
             if visible(member.get("removeAccess")):
                 source = {"access": member["removeAccess"], "static": member["static"],
-                          "abstract": type_contract["kind"] == "interface"}
+                          "abstract": member.get("removeAbstract", type_contract["kind"] == "interface"),
+                          "final": member.get("removeFinal", False),
+                          "virtual": member.get("removeVirtual")}
                 expected.append(callable_member("method", "remove" + member["name"] + "Listener", source,
                                                 [parameter("listener", listener)], "void"))
         elif kind == "method":
@@ -371,6 +415,19 @@ def member_key(member: dict[str, Any], *, include_return: bool) -> str:
     return key
 
 
+def effective_member_final(member: dict[str, Any], declaring_type_final: bool) -> bool:
+    """Return whether a Java member is observably non-overridable.
+
+    A method in a final class is just as non-overridable as a method carrying
+    ACC_FINAL. Fields and constructors retain their literal metadata state.
+    """
+    return bool(member.get("final")) or (
+        member.get("kind") == "method"
+        and not member.get("static", False)
+        and declaring_type_final
+    )
+
+
 def compare(reference: dict[str, Any], target: dict[str, Any], rules: dict[str, Any]) -> list[dict[str, Any]]:
     findings: list[dict[str, Any]] = []
     expected_types = {map_type(value["name"], identity=True): value for value in reference["types"]}
@@ -386,7 +443,10 @@ def compare(reference: dict[str, Any], target: dict[str, Any], rules: dict[str, 
     for name in sorted(expected_types.keys() & actual_types.keys()):
         expected_type = expected_types[name]
         actual_type = actual_types[name]
-        expected_kind = {"struct": "class", "delegate": "interface"}.get(expected_type["kind"], expected_type["kind"])
+        expected_kind = {"struct": "class", "delegate": "interface"}.get(
+            expected_type["kind"], expected_type["kind"])
+        if expected_type.get("flags"):
+            expected_kind = "class"
         if actual_type["kind"] != expected_kind:
             findings.append(diagnostic("TYPE_KIND_MISMATCH", name, expected_kind, actual_type["kind"]))
         if expected_type.get("access") != actual_type.get("access"):
@@ -401,7 +461,8 @@ def compare(reference: dict[str, Any], target: dict[str, Any], rules: dict[str, 
         expected_base = expected_type.get("baseType") if expected_type.get("javaSynthetic") \
             else map_type(expected_type.get("baseType"))
         if expected_type["kind"] in ("struct", "enum"):
-            expected_base = "java.lang.Object" if expected_type["kind"] == "struct" else actual_type.get("baseType")
+            expected_base = "java.lang.Object" if expected_type["kind"] == "struct" \
+                or expected_type.get("flags") else actual_type.get("baseType")
         if expected_base != actual_type.get("baseType"):
             findings.append(diagnostic("BASE_TYPE_MISMATCH", name, expected_base, actual_type.get("baseType")))
         expected_interfaces = set(expected_type.get("interfaces", [])) if expected_type.get("javaSynthetic") \
@@ -468,8 +529,13 @@ def compare(reference: dict[str, Any], target: dict[str, Any], rules: dict[str, 
             actual_names = [value["name"] for value in actual_member.get("parameters", [])]
             if expected_names != actual_names:
                 findings.append(diagnostic("PARAMETER_NAME_MISMATCH", name + "." + shape, expected_names, actual_names))
-            expected_modifiers = {key: expected_member.get(key) for key in ("access", "static", "abstract", "genericArity")}
-            actual_modifiers = {key: actual_member.get(key) for key in ("access", "static", "abstract", "genericArity")}
+            expected_modifiers = {key: expected_member.get(key) for key in
+                                  ("access", "static", "abstract", "genericArity")}
+            actual_modifiers = {key: actual_member.get(key) for key in
+                                ("access", "static", "abstract", "genericArity")}
+            expected_modifiers["final"] = effective_member_final(expected_member, expected_sealed)
+            actual_modifiers["final"] = effective_member_final(
+                actual_member, bool(actual_type.get("sealed")))
             if expected_modifiers != actual_modifiers:
                 findings.append(diagnostic("MEMBER_MODIFIER_MISMATCH", name + "." + shape,
                                            expected_modifiers, actual_modifiers))

@@ -12,7 +12,7 @@ public class GameServiceContainer implements ServiceProvider {
     public GameServiceContainer() {
     }
 
-    public void AddService(Class<?> type, Object provider) {
+    public final void AddService(Class<?> type, Object provider) {
         Class<?> serviceType = Objects.requireNonNull(type, "type");
         Object service = Objects.requireNonNull(provider, "provider");
         if (!serviceType.isInstance(service)) {
@@ -29,7 +29,7 @@ public class GameServiceContainer implements ServiceProvider {
         return services.get(Objects.requireNonNull(type, "type"));
     }
 
-    public void RemoveService(Class<?> type) {
+    public final void RemoveService(Class<?> type) {
         services.remove(Objects.requireNonNull(type, "type"));
     }
 }

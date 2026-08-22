@@ -118,6 +118,7 @@ internal static class XnaContractExtractor
             ["access"] = TypeAccess(type),
             ["abstract"] = type.IsAbstract,
             ["sealed"] = type.IsSealed,
+            ["flags"] = type.IsEnum && type.IsDefined(typeof(FlagsAttribute), false),
             ["genericArity"] = type.IsGenericTypeDefinition ? type.GetGenericArguments().Length : 0,
             ["baseType"] = TypeName(type.BaseType),
             ["interfaces"] = DirectInterfaces(type).Select(TypeName).OrderBy(name => name, StringComparer.Ordinal).ToList(),
@@ -135,6 +136,7 @@ internal static class XnaContractExtractor
             ["static"] = callable.IsStatic,
             ["abstract"] = callable.IsAbstract,
             ["final"] = callable.IsFinal,
+            ["virtual"] = callable.IsVirtual,
             ["genericArity"] = callable.IsGenericMethodDefinition ? callable.GetGenericArguments().Length : 0,
             ["returnType"] = TypeName(returnType),
             ["parameters"] = callable.GetParameters().Select(ReadParameter).ToList()
@@ -162,6 +164,12 @@ internal static class XnaContractExtractor
             ["static"] = (getter ?? setter).IsStatic,
             ["getterAccess"] = getter == null ? "none" : Access(getter),
             ["setterAccess"] = setter == null ? "none" : Access(setter),
+            ["getterAbstract"] = getter != null && getter.IsAbstract,
+            ["setterAbstract"] = setter != null && setter.IsAbstract,
+            ["getterFinal"] = getter != null && getter.IsFinal,
+            ["setterFinal"] = setter != null && setter.IsFinal,
+            ["getterVirtual"] = getter != null && getter.IsVirtual,
+            ["setterVirtual"] = setter != null && setter.IsVirtual,
             ["parameters"] = property.GetIndexParameters().Select(ReadParameter).ToList()
         };
     }
@@ -175,7 +183,13 @@ internal static class XnaContractExtractor
             ["type"] = TypeName(eventInfo.EventHandlerType),
             ["static"] = (adder ?? remover).IsStatic,
             ["addAccess"] = adder == null ? "none" : Access(adder),
-            ["removeAccess"] = remover == null ? "none" : Access(remover)
+            ["removeAccess"] = remover == null ? "none" : Access(remover),
+            ["addAbstract"] = adder != null && adder.IsAbstract,
+            ["removeAbstract"] = remover != null && remover.IsAbstract,
+            ["addFinal"] = adder != null && adder.IsFinal,
+            ["removeFinal"] = remover != null && remover.IsFinal,
+            ["addVirtual"] = adder != null && adder.IsVirtual,
+            ["removeVirtual"] = remover != null && remover.IsVirtual
         };
     }
 

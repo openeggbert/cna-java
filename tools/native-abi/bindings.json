@@ -23,6 +23,16 @@
     {"name": "cna_game_set_target_elapsed_time_ticks", "header": "runtime.h", "ownership": "borrows game"},
     {"name": "cna_game_get_target_elapsed_time_ticks", "header": "runtime.h", "ownership": "borrows game; caller output"},
     {"name": "cna_game_set_inactive_sleep_time_ticks", "header": "runtime.h", "ownership": "borrows game"},
-    {"name": "cna_game_get_inactive_sleep_time_ticks", "header": "runtime.h", "ownership": "borrows game; caller output"}
+    {"name": "cna_game_get_inactive_sleep_time_ticks", "header": "runtime.h", "ownership": "borrows game; caller output"},
+    {"name": "cna_game_window_get_allow_user_resizing", "header": "runtime_window.h", "ownership": "borrows game; caller output"},
+    {"name": "cna_game_window_set_allow_user_resizing", "header": "runtime_window.h", "ownership": "borrows game"},
+    {"name": "cna_game_window_get_client_bounds", "header": "runtime_window.h", "ownership": "borrows game; copies rectangle"},
+    {"name": "cna_game_window_get_current_orientation", "header": "runtime_window.h", "ownership": "borrows game; caller output"},
+    {"name": "cna_game_window_get_native_handle_ext", "header": "runtime_window.h", "ownership": "borrows game; returns opaque round-trip token"},
+    {"name": "cna_game_window_get_screen_device_name_size", "header": "runtime_window.h", "ownership": "borrows game; caller output"},
+    {"name": "cna_game_window_copy_screen_device_name", "header": "runtime_window.h", "ownership": "borrows game; caller buffer"},
+    {"name": "cna_game_set_window_title", "header": "runtime.h", "ownership": "borrows game and UTF-8 bytes"},
+    {"name": "cna_game_window_begin_screen_device_change", "header": "runtime_window.h", "ownership": "borrows game"},
+    {"name": "cna_game_window_end_screen_device_change", "header": "runtime_window.h", "ownership": "borrows game and UTF-8 bytes"}
   ]
 }

@@ -19,22 +19,22 @@ public final class GameComponentCollection extends AbstractList<IGameComponent> 
     public GameComponentCollection() {
     }
 
-    public void addComponentAddedListener(
+    public final void addComponentAddedListener(
             EventHandler<GameComponentCollectionEventArgs> listener) {
         addedListeners.add(Objects.requireNonNull(listener, "listener"));
     }
 
-    public void removeComponentAddedListener(
+    public final void removeComponentAddedListener(
             EventHandler<GameComponentCollectionEventArgs> listener) {
         addedListeners.remove(listener);
     }
 
-    public void addComponentRemovedListener(
+    public final void addComponentRemovedListener(
             EventHandler<GameComponentCollectionEventArgs> listener) {
         removedListeners.add(Objects.requireNonNull(listener, "listener"));
     }
 
-    public void removeComponentRemovedListener(
+    public final void removeComponentRemovedListener(
             EventHandler<GameComponentCollectionEventArgs> listener) {
         removedListeners.remove(listener);
     }

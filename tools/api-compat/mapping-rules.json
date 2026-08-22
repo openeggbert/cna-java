@@ -10,10 +10,12 @@
   "eventSuffix": "Listener",
   "timeSpan": "java.time.Duration",
   "disposable": "java.lang.AutoCloseable",
+  "flagsEnumProjection": "immutable-value-class",
   "frameworkTypeMappings": {
     "System.EventArgs": "Microsoft.Xna.Framework.EventArgs",
     "System.EventHandler`1": "Microsoft.Xna.Framework.EventHandler",
     "System.IServiceProvider": "Microsoft.Xna.Framework.ServiceProvider",
+    "System.IntPtr": "Microsoft.Xna.Framework.WindowHandle",
     "System.Collections.ObjectModel.Collection`1": "java.util.AbstractList",
     "System.Collections.Generic.Dictionary`2": "java.util.LinkedHashMap"
   },
@@ -69,6 +71,22 @@
       "interfaces": [],
       "members": [
         {"kind": "method", "name": "GetService", "access": "public", "static": false, "abstract": true, "final": false, "genericArity": 0, "returnType": "java.lang.Object", "parameters": [{"name": "type", "type": "java.lang.Class<?>", "out": false, "optional": false}]}
+      ]
+    },
+    {
+      "name": "Microsoft.Xna.Framework.WindowHandle",
+      "kind": "class",
+      "access": "public",
+      "abstract": false,
+      "sealed": true,
+      "genericArity": 0,
+      "baseType": "java.lang.Object",
+      "interfaces": [],
+      "members": [
+        {"kind": "field", "name": "Zero", "access": "public", "type": "Microsoft.Xna.Framework.WindowHandle", "static": true, "final": true, "constant": null},
+        {"kind": "method", "name": "getIsZero", "access": "public", "static": false, "abstract": false, "final": false, "genericArity": 0, "returnType": "boolean", "parameters": []},
+        {"kind": "method", "name": "equals", "access": "public", "static": false, "abstract": false, "final": false, "genericArity": 0, "returnType": "boolean", "parameters": [{"name": "obj", "type": "java.lang.Object", "out": false, "optional": false}]},
+        {"kind": "method", "name": "hashCode", "access": "public", "static": false, "abstract": false, "final": false, "genericArity": 0, "returnType": "int", "parameters": []}
       ]
     }
   ],

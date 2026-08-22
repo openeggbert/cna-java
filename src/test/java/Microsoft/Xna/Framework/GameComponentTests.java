@@ -137,6 +137,7 @@ final class GameComponentTests {
         assertEquals(Duration.ofMillis(20), game.getInactiveSleepTime());
         assertFalse(game.getIsFixedTimeStep());
         assertFalse(game.getIsActive());
+        assertFalse(game.callShowMissingRequirementMessage(new IllegalStateException("missing")));
         assertThrows(IllegalArgumentException.class, () -> game.setTargetElapsedTime(Duration.ZERO));
         assertThrows(IllegalArgumentException.class,
                 () -> game.setTargetElapsedTime(Duration.ofSeconds(Long.MAX_VALUE)));
@@ -157,6 +158,47 @@ final class GameComponentTests {
         parameters.put("second", "2");
         parameters.put("first", "1");
         assertEquals(List.of("second", "first"), new ArrayList<>(parameters.keySet()));
+    }
+
+    @Test
+    void DisplayOrientation_ComposesFlagsWithoutPretendingJavaEnumSemantics() {
+        DisplayOrientation landscape =
+                DisplayOrientation.LandscapeLeft.Or(DisplayOrientation.LandscapeRight);
+        assertEquals(3, landscape.getValue());
+        assertTrue(landscape.Contains(DisplayOrientation.LandscapeLeft));
+        assertTrue(landscape.Contains(DisplayOrientation.Default));
+        assertEquals(landscape, DisplayOrientation.FromValue(3));
+        assertTrue(WindowHandle.Zero.getIsZero());
+        assertEquals(WindowHandle.Zero, WindowHandle.Zero);
+    }
+
+    @Test
+    void GameWindow_MapsPropertiesOverloadsAndStableEvents() {
+        TestGame game = new TestGame();
+        ProbeWindow window = new ProbeWindow(game);
+        List<String> events = new ArrayList<>();
+        EventHandler<EventArgs> client = (sender, args) -> events.add("client");
+        window.addClientSizeChangedListener(client);
+        window.addOrientationChangedListener((sender, args) -> events.add("orientation"));
+        window.addScreenDeviceNameChangedListener((sender, args) -> events.add("screen"));
+
+        assertEquals("Initial", window.getTitle());
+        window.setTitle("Changed");
+        assertEquals("Changed", window.getTitle());
+        assertEquals("Changed", window.appliedTitle);
+        window.BeginScreenDeviceChange(true);
+        window.EndScreenDeviceChange("display");
+        assertTrue(window.fullScreen);
+        assertEquals(List.of("display", "0", "0"), window.endedChange);
+
+        window.fireClientSizeChanged();
+        window.fireOrientationChanged();
+        window.fireScreenDeviceNameChanged();
+        assertEquals(List.of("client", "orientation", "screen"), events);
+        window.removeClientSizeChangedListener(client);
+        window.fireClientSizeChanged();
+        assertEquals(3, events.size());
+        game.close();
     }
 
     @Test
@@ -187,6 +229,10 @@ final class GameComponentTests {
 
         void callDraw(GameTime gameTime) {
             super.Draw(gameTime);
+        }
+
+        boolean callShowMissingRequirementMessage(RuntimeException exception) {
+            return super.ShowMissingRequirementMessage(exception);
         }
     }
 
@@ -239,5 +285,37 @@ final class GameComponentTests {
         protected void UnloadContent() {
             log.add("unload:" + name);
         }
+    }
+
+    private static final class ProbeWindow extends GameWindow {
+        private boolean allowUserResizing;
+        private boolean fullScreen;
+        private String appliedTitle;
+        private List<String> endedChange = List.of();
+
+        ProbeWindow(Game game) {
+            super(game, "Initial");
+        }
+
+        @Override public boolean getAllowUserResizing() { return allowUserResizing; }
+        @Override public void setAllowUserResizing(boolean value) { allowUserResizing = value; }
+        @Override public Rectangle getClientBounds() { return new Rectangle(0, 0, 640, 480); }
+        @Override public DisplayOrientation getCurrentOrientation() { return DisplayOrientation.Default; }
+        @Override public WindowHandle getHandle() { return WindowHandle.Zero; }
+        @Override public String getScreenDeviceName() { return "display"; }
+        @Override public void BeginScreenDeviceChange(boolean willBeFullScreen) {
+            fullScreen = willBeFullScreen;
+        }
+        @Override public void EndScreenDeviceChange(
+                String screenDeviceName, int clientWidth, int clientHeight) {
+            endedChange = List.of(screenDeviceName, Integer.toString(clientWidth),
+                    Integer.toString(clientHeight));
+        }
+        @Override protected void SetSupportedOrientations(DisplayOrientation orientations) { }
+        @Override protected void SetTitle(String title) { appliedTitle = title; }
+
+        void fireClientSizeChanged() { OnClientSizeChanged(); }
+        void fireOrientationChanged() { OnOrientationChanged(); }
+        void fireScreenDeviceNameChanged() { OnScreenDeviceNameChanged(); }
     }
 }

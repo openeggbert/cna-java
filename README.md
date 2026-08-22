@@ -25,9 +25,9 @@ The first strict Windows-runtime measurement is intentionally red:
 
 ```text
 XNA reference:        257 types / 2,964 members
-Mapped Java contract: 260 types / 3,079 members
-Java target:           33 strict types / 454 members
-Differences:          691 unreviewed diagnostics
+Mapped Java contract: 261 types / 3,086 members
+Java target:           36 strict types / 495 members
+Differences:          685 unreviewed diagnostics
 Allowlist:              0
 Strict leaks:           0
 ```
@@ -40,8 +40,9 @@ Implemented now:
 - normative CLR-to-Java mapping, including naming and language adaptations;
 - foundational value types plus `Game`, component hierarchy/collection,
   services, a launch-parameter container (native population pending), events,
-  and `GameTime` lifecycle behavior;
-- Java 17 JNI adapter for 22 CNA game/error functions;
+  `GameTime`, `GameWindow`, composable display orientation, and an opaque window
+  handle (native window event delivery remains pending);
+- Java 17 JNI adapter for 32 CNA game/error/window functions;
 - explicit native ownership modes and idempotent cleanup;
 - class-metadata XNA contract verifier and strict implementation-leak guard;
 - header/signature/layout/native-symbol ABI verifier;

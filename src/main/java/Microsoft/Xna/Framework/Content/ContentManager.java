@@ -11,12 +11,12 @@ public class ContentManager implements AutoCloseable {
     private String rootDirectory = "";
     private boolean closed;
 
-    public String getRootDirectory() {
+    public final String getRootDirectory() {
         ensureOpen();
         return rootDirectory;
     }
 
-    public void setRootDirectory(String value) {
+    public final void setRootDirectory(String value) {
         ensureOpen();
         rootDirectory = Objects.requireNonNull(value, "value");
     }
@@ -53,7 +53,7 @@ public class ContentManager implements AutoCloseable {
     }
 
     @Override
-    public void close() {
+    public final void close() {
         if (closed) {
             return;
         }
@@ -67,4 +67,3 @@ public class ContentManager implements AutoCloseable {
         }
     }
 }
-

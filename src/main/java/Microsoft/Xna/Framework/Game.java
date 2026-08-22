@@ -23,6 +23,7 @@ public class Game implements AutoCloseable {
     private final GameComponentCollection components = new GameComponentCollection();
     private final GameServiceContainer services = new GameServiceContainer();
     private final LaunchParameters launchParameters = new LaunchParameters();
+    private final GameWindow window;
     private final GraphicsDevice graphicsDevice;
     private final CopyOnWriteArrayList<EventHandler<EventArgs>> activatedListeners =
             new CopyOnWriteArrayList<>();
@@ -49,11 +50,12 @@ public class Game implements AutoCloseable {
     public Game() {
         content = new ContentManager();
         graphicsDevice = new GraphicsDevice(this);
+        window = new CnaGameWindow(this, getClass().getSimpleName());
         components.addComponentAddedListener(this::initializeAddedComponent);
     }
 
     /** Runs the native CNA loop until {@link #Exit()} is requested. */
-    public void Run() {
+    public final void Run() {
         ensureOpen();
         if (hasRun) {
             throw new IllegalStateException("Game.Run may only be called once");
@@ -63,13 +65,13 @@ public class Game implements AutoCloseable {
     }
 
     /** Initializes if needed, advances exactly one CNA frame, and returns. */
-    public void RunOneFrame() {
+    public final void RunOneFrame() {
         ensureOpen();
         NativeBindings.runOneFrame(ensureNativeGame());
     }
 
     /** Requests normal game-loop termination at CNA's next safe point. */
-    public void Exit() {
+    public final void Exit() {
         ensureOpen();
         exitRequested = true;
         if (nativeGame != null && !nativeGame.isClosed()) {
@@ -77,17 +79,17 @@ public class Game implements AutoCloseable {
         }
     }
 
-    public void ResetElapsedTime() {
+    public final void ResetElapsedTime() {
         ensureOpen();
         NativeBindings.resetElapsedTime(ensureNativeGame());
     }
 
-    public void SuppressDraw() {
+    public final void SuppressDraw() {
         ensureOpen();
         NativeBindings.suppressDraw(ensureNativeGame());
     }
 
-    public void Tick() {
+    public final void Tick() {
         ensureOpen();
         NativeBindings.tick(ensureNativeGame());
     }
@@ -175,6 +177,10 @@ public class Game implements AutoCloseable {
             targetElapsedTime = durationFromTicks(NativeBindings.getTargetElapsedTime(nativeGame));
         }
         return targetElapsedTime;
+    }
+
+    public final GameWindow getWindow() {
+        return window;
     }
 
     public final void setTargetElapsedTime(Duration value) {
@@ -286,6 +292,10 @@ public class Game implements AutoCloseable {
         invoke(exitingListeners, sender, args);
     }
 
+    protected boolean ShowMissingRequirementMessage(RuntimeException exception) {
+        return false;
+    }
+
     /** Releases component and facade state before the owned native game. */
     protected void Dispose(boolean disposing) {
         if (!disposing) {
@@ -353,6 +363,11 @@ public class Game implements AutoCloseable {
         graphicsManager = manager;
     }
 
+    final void prepareNativeWindow() {
+        ensureOpen();
+        ensureNativeGame();
+    }
+
     @SuppressWarnings("unused")
     private void nativeInitialize() {
         initializing = true;
@@ -413,7 +428,7 @@ public class Game implements AutoCloseable {
     private NativeGameHandle ensureNativeGame() {
         if (!hasNativeGame()) {
             nativeGame = NativeBindings.createGame(
-                    this, getClass().getSimpleName(), fixedTimeStep, durationTicks(targetElapsedTime));
+                    this, window.getTitle(), fixedTimeStep, durationTicks(targetElapsedTime));
             NativeBindings.setInactiveSleepTime(nativeGame, durationTicks(inactiveSleepTime));
             NativeBindings.setMouseVisible(nativeGame, mouseVisible);
             if (exitRequested) {

@@ -58,6 +58,52 @@ class VerifyTests(unittest.TestCase):
         self.assertEqual(sum(len(value["members"]) for value in self.rules["syntheticTypes"]),
                          expected_members)
 
+    def test_flags_enum_maps_to_composable_value_contract(self) -> None:
+        contract = {
+            "name": "Microsoft.Xna.Framework.ProbeFlags",
+            "kind": "enum",
+            "flags": True,
+            "members": [
+                {"kind": "field", "name": "None", "type": "Microsoft.Xna.Framework.ProbeFlags",
+                 "static": True, "final": True, "constant": "0", "access": "public"},
+                {"kind": "field", "name": "First", "type": "Microsoft.Xna.Framework.ProbeFlags",
+                 "static": True, "final": True, "constant": "1", "access": "public"},
+                {"kind": "field", "name": "value__", "type": "System.Int32",
+                 "static": False, "final": False, "constant": None, "access": "public"},
+            ],
+        }
+
+        members = VERIFY.mapped_enum_members(contract)
+        self.assertNotIn("value__", [member["name"] for member in members])
+        self.assertEqual(
+            {"getValue", "FromValue", "Or", "Contains", "equals", "hashCode"},
+            {member["name"] for member in members if member["kind"] == "method"})
+
+    def test_sequential_enum_detection_is_independent_of_metadata_sort_order(self) -> None:
+        contract = {
+            "name": "Microsoft.Xna.Framework.ProbeEnum",
+            "kind": "enum",
+            "flags": False,
+            "members": [
+                {"kind": "field", "name": "Second", "type": "Microsoft.Xna.Framework.ProbeEnum",
+                 "static": True, "final": True, "constant": "1", "access": "public"},
+                {"kind": "field", "name": "First", "type": "Microsoft.Xna.Framework.ProbeEnum",
+                 "static": True, "final": True, "constant": "0", "access": "public"},
+                {"kind": "field", "name": "value__", "type": "System.Int32",
+                 "static": False, "final": False, "constant": None, "access": "public"},
+            ],
+        }
+        self.assertFalse(any(member["kind"] == "method"
+                             for member in VERIFY.mapped_enum_members(contract)))
+
+    def test_instance_method_in_final_class_is_effectively_final(self) -> None:
+        method = {"kind": "method", "static": False, "final": False}
+        self.assertTrue(VERIFY.effective_member_final(method, True))
+        self.assertFalse(VERIFY.effective_member_final(method, False))
+        self.assertFalse(VERIFY.effective_member_final({**method, "static": True}, True))
+        self.assertFalse(VERIFY.effective_member_final(
+            {"kind": "field", "static": False, "final": False}, True))
+
     def test_leak_guard_finds_internal_types_and_raw_long_handles(self) -> None:
         target = {"types": [{
             "name": "Microsoft.Xna.Framework.BadFacade",

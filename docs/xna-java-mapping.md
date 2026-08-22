@@ -19,9 +19,17 @@ non-generic type keeps the XNA name and the colliding generic type deterministic
 `OfT` suffix (currently `ContentTypeReaderOfT<T>` and `IPackedVectorOfT<T>`). Every collision and
 rename is explicit in `mapping-rules.json`; silently collapsing two CLR types is forbidden.
 
-Public XNA fields remain public Java fields with the same names. Enum types become Java enums and
-their members keep XNA spelling (`Keys.Escape`, `SpriteEffects.None`). CLR numeric enum values are
-retained through an explicit `getValue()` contract when they are not the Java ordinal sequence.
+Public XNA fields remain public Java fields with the same names. Ordinary enum types become Java
+enums and their members keep XNA spelling (`Keys.Escape`). CLR numeric values use Java ordinals
+when they are exactly sequential; otherwise the enum receives `getValue()` and compiled-metadata
+inspection verifies every named number.
+
+CLR `[Flags]` enums cannot be Java enums because Java enum instances cannot represent unnamed bit
+combinations. They therefore become final immutable value classes with same-cased named constants,
+`getValue()`, `FromValue(value)`, `Or(other)`, and `Contains(value)`. Equality and hashing use the
+underlying bit set. Thus `SpriteEffects.None` remains recognizable while a combined flags value is
+representable without an invalid pseudo-enum constant. The CLR extractor records `FlagsAttribute`
+directly; this transformation is not inferred from names.
 
 ## Properties and indexers
 
@@ -41,10 +49,14 @@ field not declared in `mapping-rules.json` as unexpected.
 
 ## Methods, operators, overloads, and defaults
 
-Methods preserve XNA spelling, overloads, generic arity, static/abstract/final state, parameter
-order, and mapped types. Java has no optional-parameter metadata equivalent, so each callable XNA
-arity becomes an overload. Default values are recorded in the neutral contract even when they do
-not change the Java descriptor.
+Methods preserve XNA spelling, overloads, generic arity, static/abstract state, overridability,
+parameter order, and mapped types. A CLR non-virtual instance method is a Java `final` method when
+its declaring class remains extensible. In a Java `final` class, the class modifier already makes
+every instance method non-overridable, so a redundant method-level `final` flag is not required and
+the verifier compares effective overridability. Static methods and fields retain their literal
+modifier state. Java has no optional-parameter metadata equivalent, so each callable XNA arity
+becomes an overload. Default values are recorded in the neutral contract even when they do not
+change the Java descriptor.
 
 An operator is mapped to the identically purposed named XNA method (`op_Addition` to `Add`,
 `op_Multiply` to `Multiply`, and so on) and is deduplicated when that method already exists.
@@ -77,6 +89,7 @@ System.String                                            -> java.lang.String
 System.Object                                            -> java.lang.Object
 System.Exception                                         -> java.lang.RuntimeException
 System.Type                                              -> java.lang.Class<?>
+System.IntPtr                                            -> Microsoft.Xna.Framework.WindowHandle
 System.TimeSpan                                          -> java.time.Duration (100 ns precision)
 System.IDisposable                                       -> java.lang.AutoCloseable
 System.Collections.Generic.IEnumerable<T>                -> java.lang.Iterable<T>
@@ -94,6 +107,9 @@ At a `TimeSpan` API boundary, `Duration` is normalized downward to the nearest
 Individual XNA properties retain their own range rules (for example, positive target elapsed time
 and non-negative inactive sleep time). `RuntimeException` is used for CLR `Exception` because a
 checked Java base exception would introduce call-site obligations absent from the CLR contract.
+`WindowHandle` is an opaque value that supports equality and a zero test but intentionally has no
+numeric/address accessor. It preserves the XNA window-token round trip without exposing a raw
+native address to game code; CNA-specific native-window interop belongs in the extensions layer.
 
 XNA collections that are fixed-size or read-only use dedicated facade types or unmodifiable Java
 views; mapping to `List<T>` does not grant mutation that XNA refused. Generic bounds are preserved

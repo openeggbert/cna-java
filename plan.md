@@ -15,7 +15,7 @@ The audited starting snapshot had eight Java source files (three were
 used a different Maven group, mixed XNA and Java casing, faked renderer
 capabilities, had no wrapper, and advertised unsupported Android/iOS/Web paths.
 
-The current repository has a reproducible Gradle 8.12/JDK 17 build, 41
+The current repository has a reproducible Gradle 8.12/JDK 17 build, 45
 production Java sources, managed and conditional native tests, a real JNI
 backend, class-metadata verification, and a functional desktop/headless
 template canary. Gradle is the single canonical build; the stale Maven build
@@ -85,15 +85,15 @@ Measured 2026-08-22 from compiled metadata:
 ```text
 reference types:                   257
 reference members:               2964
-expected mapped Java types:        260
-expected mapped Java members:     3079
-mapped Java target types:           33
-mapped Java target members:        454
-unreviewed projection differences: 691
+expected mapped Java types:        261
+expected mapped Java members:     3086
+mapped Java target types:           36
+mapped Java target members:        495
+unreviewed projection differences: 685
 
 INTERFACE_MISMATCH                   2
-MISSING_MEMBER                     376
-MISSING_TYPE                       227
+MISSING_MEMBER                     372
+MISSING_TYPE                       225
 PARAMETER_MISMATCH                  21
 PARAMETER_NAME_MISMATCH             58
 RETURN_TYPE_MISMATCH                 4
@@ -105,11 +105,15 @@ allowlist entries                    0
 
 The initial 730-diagnostic JSON evidence remains
 `tools/api-compat/baselines/xna40-windows-runtime-initial.json`; the current
-Group-1 checkpoint is recorded here and in `NEXT.md`. Report-only mode
+window/orientation checkpoint is recorded here and in `NEXT.md`. Report-only mode
 is green for measurement. `apiCompatCheck` is deliberately red until the count
 reaches zero; it is not weakened or attached to the ordinary partial-build gate.
 The profile SHA-256-pins every reference assembly and the verifier rejects a
-different byte identity before metadata extraction.
+different byte identity before metadata extraction. CLR flags enums are now
+detected from metadata and projected as composable immutable value classes.
+CLR non-virtual methods are checked for effective Java non-overridability: an
+instance method in a final class need not redundantly carry method-level
+`final`; all nine genuine modifier mismatches in extensible classes were fixed.
 
 Next verifier work:
 
@@ -122,7 +126,7 @@ Next verifier work:
 
 JNI is selected because Java 17 and future Android compatibility are retained;
 stable FFM is unavailable on Java 17. The adapter dynamically resolves only the
-stable C ABI and binds 22 functions:
+stable C ABI and binds 32 functions:
 
 ```text
 cna_get_abi_version
@@ -147,6 +151,16 @@ cna_game_set_target_elapsed_time_ticks
 cna_game_get_target_elapsed_time_ticks
 cna_game_set_inactive_sleep_time_ticks
 cna_game_get_inactive_sleep_time_ticks
+cna_game_window_get_allow_user_resizing
+cna_game_window_set_allow_user_resizing
+cna_game_window_get_client_bounds
+cna_game_window_get_current_orientation
+cna_game_window_get_native_handle_ext
+cna_game_window_get_screen_device_name_size
+cna_game_window_copy_screen_device_name
+cna_game_set_window_title
+cna_game_window_begin_screen_device_change
+cna_game_window_end_screen_device_change
 ```
 
 It provides ABI-version rejection, UTF-8 conversion, callback rooting,
@@ -154,7 +168,7 @@ JVM-thread attachment, exception/result conversion, and portable configuration
 through Java properties plus `CNA_JNI_LIBRARY`, `CNA_NATIVE_LIBRARY`,
 `CNA_NATIVE_DIR`, and `CNA_ROOT`.
 
-Linux x86-64 evidence: header ABI 0.7.0, all 22 symbols present, manifest/JNI
+Linux x86-64 evidence: header ABI 0.7.0, all 32 symbols present, manifest/JNI
 identity and layout/signature probes passing, runtime ABI 0.7.0, three-frame and
 one-frame/tick callback lifecycles passing, and ten repeated create/run/destroy
 cycles passing. This is not Windows/macOS ABI evidence.
@@ -178,15 +192,19 @@ Implemented behavior/tests currently cover `Game`, `GameTime`, `IGameComponent`,
 `IUpdateable`, `IDrawable`, `GameComponent`, `DrawableGameComponent`,
 `GameComponentCollection`, `GameServiceContainer`, the managed
 `LaunchParameters` map container (native population pending),
+`GameWindow`, composable `DisplayOrientation`, opaque `WindowHandle`,
 `GraphicsDeviceManager`, `ContentManager` validation/cache boundary,
 `MathHelper`, `Vector2/3/4`, `Matrix`, `Quaternion`, `Color`, `Point`,
 `Rectangle`, `Plane`, `Ray`, `BoundingBox`, and `BoundingSphere`.
 
-The new lifecycle types match their mapped contract without local diagnostics;
-`Game` now lacks only `GameWindow` and `ShowMissingRequirementMessage` members.
-Activation/deactivation/window behavior still needs native support. Next work is
-the `GameWindow`/display-orientation design and missing math/geometry members,
-driven by metadata and differential fixtures rather than ad-hoc generation.
+The new lifecycle/window types and `Game` match their mapped contract without
+local diagnostics. CNA backs window title, resize permission, client bounds,
+orientation, opaque handle, screen-device name, and screen-device-change calls.
+The public native address is deliberately represented only as opaque
+`WindowHandle`; no raw address leaks. Window listener ordering is implemented
+on the managed facade, but native event delivery and supported-orientation
+mutation remain binding work. Next work is missing math/geometry members and
+differential fixtures, driven by metadata rather than ad-hoc generation.
 
 ## Graphics
 
@@ -278,14 +296,14 @@ Green now:
 1. Java/JNI build with strict warnings;
 2. JUnit managed tests (native tests conditional on a supplied library);
 3. strict internal/native-leak guard;
-4. five verifier/mapping regression tests and a foundational compile probe;
+4. eight verifier/mapping regression tests and a foundational compile probe;
 5. C header width/layout/signature checks;
 6. optional native symbol/version/integration tests;
 7. template build/tests;
 8. fresh generated-project build;
 9. optional 60-frame smoke and 600-frame stability runs.
 
-Intentionally red: strict XNA completeness (`apiCompatCheck`, 691 differences).
+Intentionally red: strict XNA completeness (`apiCompatCheck`, 685 differences).
 Future platform CI must record evidence separately per OS/architecture.
 
 ## Upstream CNA blockers
@@ -306,9 +324,9 @@ task to patch the upstream repository.
 
 1. Resolve/consume the upstream C API HEAD build blockers and rerun Linux native
    evidence against HEAD.
-2. Complete `GameWindow`/orientation and math members against the strict
-   diagnostics; add XNA differential fixtures.
-3. Bind keyboard/mouse and native device/window/resize lifecycle.
+2. Complete native `GameWindow` event/orientation behavior and math members
+   against the strict diagnostics; add XNA differential fixtures.
+3. Bind keyboard/mouse and native device/window resize lifecycle.
 4. Add Texture2D FromStream and SpriteBatch as the first real 2D slice; then
    upgrade the template from clear-only to movement/input/raw-PNG behavior.
 5. Expand content/XNB, graphics resources/effects/models, audio/XACT, and

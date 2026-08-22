@@ -147,8 +147,10 @@ public final class ClassContractReader {
         result.put("static", Modifier.isStatic(field.getModifiers()));
         result.put("final", Modifier.isFinal(field.getModifiers()));
         Object constant = null;
-        if (field.isEnumConstant()) {
-            constant = Integer.toString(((Enum<?>)readStatic(field)).ordinal());
+        if (field.isEnumConstant()
+                || Modifier.isStatic(field.getModifiers()) && Modifier.isFinal(field.getModifiers())
+                && field.getType() == field.getDeclaringClass()) {
+            constant = readNamedValue(field);
         } else if (Modifier.isStatic(field.getModifiers()) && Modifier.isFinal(field.getModifiers())
                 && (field.getType().isPrimitive() || field.getType() == String.class)) {
             Object value = readStatic(field);
@@ -156,6 +158,22 @@ public final class ClassContractReader {
         }
         result.put("constant", constant);
         return result;
+    }
+
+    private static Object readNamedValue(Field field) {
+        Object value = readStatic(field);
+        try {
+            Method getValue = field.getType().getDeclaredMethod("getValue");
+            if (Modifier.isPublic(getValue.getModifiers()) && getValue.getParameterCount() == 0) {
+                Object projected = getValue.invoke(value);
+                return projected == null ? null : projected.toString();
+            }
+        } catch (NoSuchMethodException ignored) {
+            // Sequential Java enums need no explicit numeric accessor.
+        } catch (ReflectiveOperationException error) {
+            throw new IllegalStateException("Cannot read projected named value " + field, error);
+        }
+        return field.isEnumConstant() ? Integer.toString(((Enum<?>)value).ordinal()) : null;
     }
 
     private static Object readStatic(Field field) {

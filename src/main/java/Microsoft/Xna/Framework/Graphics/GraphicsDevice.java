@@ -17,14 +17,14 @@ public class GraphicsDevice implements AutoCloseable {
     }
 
     /** Clears the current CNA render target, snapshotting the mutable color value. */
-    public void Clear(Color color) {
+    public final void Clear(Color color) {
         ensureOpen();
         Color snapshot = new Color(Objects.requireNonNull(color, "color"));
         NativeBindings.clear(game, snapshot.getR(), snapshot.getG(), snapshot.getB(), snapshot.getA());
     }
 
     @Override
-    public void close() {
+    public final void close() {
         closed = true;
     }
 
