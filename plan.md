@@ -15,7 +15,7 @@ The audited starting snapshot had eight Java source files (three were
 used a different Maven group, mixed XNA and Java casing, faked renderer
 capabilities, had no wrapper, and advertised unsupported Android/iOS/Web paths.
 
-The current repository has a reproducible Gradle 8.12/JDK 17 build, 29
+The current repository has a reproducible Gradle 8.12/JDK 17 build, 41
 production Java sources, managed and conditional native tests, a real JNI
 backend, class-metadata verification, and a functional desktop/headless
 template canary. Gradle is the single canonical build; the stale Maven build
@@ -75,25 +75,27 @@ Profile assemblies:
 - Microsoft.Xna.Framework.dll
 - Microsoft.Xna.Framework.Game.dll
 - Microsoft.Xna.Framework.Graphics.dll
-- Microsoft.Xna.Framework.GamerServices.dll
-- Microsoft.Xna.Framework.Net.dll
 - Microsoft.Xna.Framework.Storage.dll
 - Microsoft.Xna.Framework.Video.dll
+- Microsoft.Xna.Framework.Input.Touch.dll
+- Microsoft.Xna.Framework.Xact.dll
 
 Measured 2026-08-22 from compiled metadata:
 
 ```text
 reference types:                   257
 reference members:               2964
-mapped Java target types:          21
-mapped Java target members:       351
-unreviewed projection differences: 730
+expected mapped Java types:        260
+expected mapped Java members:     3079
+mapped Java target types:           33
+mapped Java target members:        454
+unreviewed projection differences: 691
 
 INTERFACE_MISMATCH                   2
-MISSING_MEMBER                     405
-MISSING_TYPE                       236
+MISSING_MEMBER                     376
+MISSING_TYPE                       227
 PARAMETER_MISMATCH                  21
-PARAMETER_NAME_MISMATCH             59
+PARAMETER_NAME_MISMATCH             58
 RETURN_TYPE_MISMATCH                 4
 UNEXPECTED_MEMBER                    3
 
@@ -101,16 +103,18 @@ CNA_INTERNAL_LEAK                    0
 allowlist entries                    0
 ```
 
-The JSON evidence is
-`tools/api-compat/baselines/xna40-windows-runtime-initial.json`. Report-only mode
+The initial 730-diagnostic JSON evidence remains
+`tools/api-compat/baselines/xna40-windows-runtime-initial.json`; the current
+Group-1 checkpoint is recorded here and in `NEXT.md`. Report-only mode
 is green for measurement. `apiCompatCheck` is deliberately red until the count
 reaches zero; it is not weakened or attached to the ordinary partial-build gate.
+The profile SHA-256-pins every reference assembly and the verifier rejects a
+different byte identity before metadata extraction.
 
 Next verifier work:
 
 - add relevant annotation and nested generic-bound comparisons;
 - expand compile probes by coherent API group;
-- retain exact reference assembly hashes in portable profile evidence;
 - review every non-missing diagnostic against actual metadata before changing
   either code or mapping.
 
@@ -118,7 +122,7 @@ Next verifier work:
 
 JNI is selected because Java 17 and future Android compatibility are retained;
 stable FFM is unavailable on Java 17. The adapter dynamically resolves only the
-stable C ABI and binds 11 functions:
+stable C ABI and binds 22 functions:
 
 ```text
 cna_get_abi_version
@@ -127,11 +131,22 @@ cna_error_copy_last_message
 cna_game_create
 cna_game_set_frame_hooks_ext
 cna_game_run
+cna_game_run_one_frame
 cna_game_request_exit
+cna_game_reset_elapsed_time
+cna_game_suppress_draw
+cna_game_tick
 cna_game_destroy
 cna_game_clear
 cna_game_set_is_mouse_visible
 cna_game_get_is_mouse_visible
+cna_game_get_is_active
+cna_game_set_is_fixed_time_step
+cna_game_get_is_fixed_time_step
+cna_game_set_target_elapsed_time_ticks
+cna_game_get_target_elapsed_time_ticks
+cna_game_set_inactive_sleep_time_ticks
+cna_game_get_inactive_sleep_time_ticks
 ```
 
 It provides ABI-version rejection, UTF-8 conversion, callback rooting,
@@ -139,10 +154,10 @@ JVM-thread attachment, exception/result conversion, and portable configuration
 through Java properties plus `CNA_JNI_LIBRARY`, `CNA_NATIVE_LIBRARY`,
 `CNA_NATIVE_DIR`, and `CNA_ROOT`.
 
-Linux x86-64 evidence: header ABI 0.7.0, all 11 symbols present, layout/signature
-probe passing, runtime ABI 0.7.0, three-frame callback lifecycle passing, and ten
-repeated create/run/destroy cycles passing. This is not Windows/macOS ABI
-evidence.
+Linux x86-64 evidence: header ABI 0.7.0, all 22 symbols present, manifest/JNI
+identity and layout/signature probes passing, runtime ABI 0.7.0, three-frame and
+one-frame/tick callback lifecycles passing, and ten repeated create/run/destroy
+cycles passing. This is not Windows/macOS ABI evidence.
 
 ## Ownership
 
@@ -159,15 +174,19 @@ evidence.
 
 ## Core and value API
 
-Implemented behavior/tests currently cover `Game`, `GameTime`,
+Implemented behavior/tests currently cover `Game`, `GameTime`, `IGameComponent`,
+`IUpdateable`, `IDrawable`, `GameComponent`, `DrawableGameComponent`,
+`GameComponentCollection`, `GameServiceContainer`, the managed
+`LaunchParameters` map container (native population pending),
 `GraphicsDeviceManager`, `ContentManager` validation/cache boundary,
 `MathHelper`, `Vector2/3/4`, `Matrix`, `Quaternion`, `Color`, `Point`,
 `Rectangle`, `Plane`, `Ray`, `BoundingBox`, and `BoundingSphere`.
 
-The verifier shows that these types remain member-incomplete. Next work is
-coherent completion of foundational lifecycle types (`GameComponent`,
-collections, services, window) and then missing math/geometry members, driven by
-metadata and differential fixtures rather than ad-hoc generation.
+The new lifecycle types match their mapped contract without local diagnostics;
+`Game` now lacks only `GameWindow` and `ShowMissingRequirementMessage` members.
+Activation/deactivation/window behavior still needs native support. Next work is
+the `GameWindow`/display-orientation design and missing math/geometry members,
+driven by metadata and differential fixtures rather than ad-hoc generation.
 
 ## Graphics
 
@@ -193,17 +212,20 @@ reported as XNB.
 
 ## Models, audio/XACT, media, storage, and GamerServices
 
-These selected-profile groups are not implemented in Java. Extinct services may
-eventually expose deterministic unsupported behavior after their compile-time
-contract is projected; namespaces must not be silently excluded.
+Models, XACT, media/video, and storage in the selected profile are not
+implemented in Java. `GamerServicesComponent` appears in the selected Game
+assembly, but the separate GamerServices and networking assemblies are outside
+this first profile. Extinct services may eventually expose deterministic
+unsupported behavior after their compile-time contract is projected; profile
+boundaries must remain explicit.
 
 ## XNA profile inventory
 
-The first strict target is the seven-assembly Windows runtime profile above.
-Core graphics/input/touch/storage/video/XACT/GamerServices/net surfaces are
-measured within that declared profile. Xbox-only, Windows Phone, and the
-build-time Content Pipeline are separate future profiles and cannot inherit the
-Windows-runtime completion status.
+The first strict target is the seven-assembly Windows runtime profile above:
+Framework, Game, Graphics, Storage, Video, Input.Touch, and Xact. The separate
+GamerServices and Net assemblies, Xbox-only, Windows Phone, and the build-time
+Content Pipeline are separately inventoried future profiles and cannot inherit
+the Windows-runtime completion status.
 
 ## CNA extensions
 
@@ -256,14 +278,14 @@ Green now:
 1. Java/JNI build with strict warnings;
 2. JUnit managed tests (native tests conditional on a supplied library);
 3. strict internal/native-leak guard;
-4. foundational compile probe;
+4. five verifier/mapping regression tests and a foundational compile probe;
 5. C header width/layout/signature checks;
 6. optional native symbol/version/integration tests;
 7. template build/tests;
 8. fresh generated-project build;
 9. optional 60-frame smoke and 600-frame stability runs.
 
-Intentionally red: strict XNA completeness (`apiCompatCheck`, 730 differences).
+Intentionally red: strict XNA completeness (`apiCompatCheck`, 691 differences).
 Future platform CI must record evidence separately per OS/architecture.
 
 ## Upstream CNA blockers
@@ -284,9 +306,9 @@ task to patch the upstream repository.
 
 1. Resolve/consume the upstream C API HEAD build blockers and rerun Linux native
    evidence against HEAD.
-2. Complete foundational lifecycle hierarchy and math members against the
-   strict diagnostics; add XNA differential fixtures.
-3. Bind keyboard/mouse and device/window/resize lifecycle.
+2. Complete `GameWindow`/orientation and math members against the strict
+   diagnostics; add XNA differential fixtures.
+3. Bind keyboard/mouse and native device/window/resize lifecycle.
 4. Add Texture2D FromStream and SpriteBatch as the first real 2D slice; then
    upgrade the template from clear-only to movement/input/raw-PNG behavior.
 5. Expand content/XNB, graphics resources/effects/models, audio/XACT, and

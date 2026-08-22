@@ -172,7 +172,7 @@ public final class ClassContractReader {
     }
 
     private static String typeName(Type type) {
-        return type.getTypeName().replace('$', '.');
+        return type.getTypeName().replace('$', '.').replace(", ", ",");
     }
 
     private static boolean isVisible(Class<?> type) {

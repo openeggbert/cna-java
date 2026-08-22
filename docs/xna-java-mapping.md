@@ -63,6 +63,10 @@ rule: Java receives `Matrix.Decomposition Decompose()`, whose result records the
 the three output values. XNA `ContentManager.Load<T>(name)` receives the class-token parameter
 required by erasure: `Load(Class<T> assetType, String assetName)`.
 
+The parameterless `IDisposable.Dispose()` contract maps to `close()`. A distinct protected
+`Dispose(boolean)` lifetime hook keeps its XNA name as `Dispose(boolean)`. CLR finalization is not
+projected: Java explicit cleanup is normative and deprecated Java finalization must not be added.
+
 ## CLR and framework types
 
 The core deterministic mappings are:
@@ -71,12 +75,25 @@ The core deterministic mappings are:
 System.Boolean/Byte/Int16/Int32/Int64/Single/Double/Char -> Java primitives
 System.String                                            -> java.lang.String
 System.Object                                            -> java.lang.Object
-System.TimeSpan                                          -> java.time.Duration
+System.Exception                                         -> java.lang.RuntimeException
+System.Type                                              -> java.lang.Class<?>
+System.TimeSpan                                          -> java.time.Duration (100 ns precision)
 System.IDisposable                                       -> java.lang.AutoCloseable
 System.Collections.Generic.IEnumerable<T>                -> java.lang.Iterable<T>
 System.Collections.Generic.IList<T>                      -> java.util.List<T>
 System.Nullable<T>                                       -> boxed T or Optional<T>, by explicit rule
+System.EventArgs                                         -> Microsoft.Xna.Framework.EventArgs
+System.EventHandler<T>                                   -> Microsoft.Xna.Framework.EventHandler<T>
+System.IServiceProvider                                  -> Microsoft.Xna.Framework.ServiceProvider
+System.Collections.ObjectModel.Collection<T>             -> java.util.AbstractList<T>
+System.Collections.Generic.Dictionary<K,V>               -> java.util.LinkedHashMap<K,V>
 ```
+
+At a `TimeSpan` API boundary, `Duration` is normalized downward to the nearest
+100-nanosecond CLR tick; a value outside the signed `TimeSpan` tick range is rejected.
+Individual XNA properties retain their own range rules (for example, positive target elapsed time
+and non-negative inactive sleep time). `RuntimeException` is used for CLR `Exception` because a
+checked Java base exception would introduce call-site obligations absent from the CLR contract.
 
 XNA collections that are fixed-size or read-only use dedicated facade types or unmodifiable Java
 views; mapping to `List<T>` does not grant mutation that XNA refused. Generic bounds are preserved
@@ -86,12 +103,18 @@ diagnostics until reviewed.
 
 ## Delegates and events
 
-A delegate becomes a same-package `@FunctionalInterface`; its `Invoke` signature becomes
-`invoke`. An event `Foo` maps to `addFooListener(FooListener)` and
-`removeFooListener(FooListener)`. Listener invocation order is registration order, duplicate
-registrations remain duplicate, removal removes one matching registration, and listener mutation
-during dispatch observes a stable snapshot. Native callback pointers and contexts are always
-hidden below `org.openeggbert.cna.internal`.
+An XNA delegate becomes a same-package `@FunctionalInterface`; its `Invoke` signature becomes
+`invoke`. The standard CLR `EventHandler<TEventArgs>` delegate maps once to the synthetic,
+machine-declared compatibility interface `Microsoft.Xna.Framework.EventHandler<TEventArgs>`.
+`System.EventArgs` similarly maps to the small `Microsoft.Xna.Framework.EventArgs` compatibility
+value. These synthetic Java necessities are exact contracts in `mapping-rules.json`, not
+allowlisted unexpected types.
+
+An event `Foo` maps to `addFooListener(EventHandler<TEventArgs>)` and
+`removeFooListener(EventHandler<TEventArgs>)`. Listener invocation order is registration order,
+duplicate registrations remain duplicate, removal removes one matching registration, and listener
+mutation during dispatch observes a stable snapshot. Native callback pointers and contexts are
+always hidden below `org.openeggbert.cna.internal`.
 
 ## Value types and copying
 

@@ -10,7 +10,17 @@
   "eventSuffix": "Listener",
   "timeSpan": "java.time.Duration",
   "disposable": "java.lang.AutoCloseable",
+  "frameworkTypeMappings": {
+    "System.EventArgs": "Microsoft.Xna.Framework.EventArgs",
+    "System.EventHandler`1": "Microsoft.Xna.Framework.EventHandler",
+    "System.IServiceProvider": "Microsoft.Xna.Framework.ServiceProvider",
+    "System.Collections.ObjectModel.Collection`1": "java.util.AbstractList",
+    "System.Collections.Generic.Dictionary`2": "java.util.LinkedHashMap"
+  },
   "mutableStaticValueProperties": "fresh-getter",
+  "excludedClrMethods": [
+    "System.Object.Finalize"
+  ],
   "genericTypeRenames": {
     "Microsoft.Xna.Framework.Content.ContentTypeReader`1": "Microsoft.Xna.Framework.Content.ContentTypeReaderOfT",
     "Microsoft.Xna.Framework.Graphics.PackedVector.IPackedVector`1": "Microsoft.Xna.Framework.Graphics.PackedVector.IPackedVectorOfT"
@@ -19,6 +29,48 @@
     "Microsoft.Xna.Framework.Color.CornflowerBlue",
     "Microsoft.Xna.Framework.Color.Transparent",
     "Microsoft.Xna.Framework.Color.White"
+  ],
+  "syntheticTypes": [
+    {
+      "name": "Microsoft.Xna.Framework.EventArgs",
+      "kind": "class",
+      "access": "public",
+      "abstract": false,
+      "sealed": false,
+      "genericArity": 0,
+      "baseType": "java.lang.Object",
+      "interfaces": [],
+      "members": [
+        {"kind": "constructor", "name": ".ctor", "access": "public", "static": false, "abstract": false, "final": false, "genericArity": 0, "returnType": null, "parameters": []},
+        {"kind": "field", "name": "Empty", "access": "public", "type": "Microsoft.Xna.Framework.EventArgs", "static": true, "final": true, "constant": null}
+      ]
+    },
+    {
+      "name": "Microsoft.Xna.Framework.EventHandler",
+      "kind": "interface",
+      "access": "public",
+      "abstract": true,
+      "sealed": false,
+      "genericArity": 1,
+      "baseType": null,
+      "interfaces": [],
+      "members": [
+        {"kind": "method", "name": "invoke", "access": "public", "static": false, "abstract": true, "final": false, "genericArity": 0, "returnType": "void", "parameters": [{"name": "sender", "type": "java.lang.Object", "out": false, "optional": false}, {"name": "args", "type": "T", "out": false, "optional": false}]}
+      ]
+    },
+    {
+      "name": "Microsoft.Xna.Framework.ServiceProvider",
+      "kind": "interface",
+      "access": "public",
+      "abstract": true,
+      "sealed": false,
+      "genericArity": 0,
+      "baseType": null,
+      "interfaces": [],
+      "members": [
+        {"kind": "method", "name": "GetService", "access": "public", "static": false, "abstract": true, "final": false, "genericArity": 0, "returnType": "java.lang.Object", "parameters": [{"name": "type", "type": "java.lang.Class<?>", "out": false, "optional": false}]}
+      ]
+    }
   ],
   "allowlist": []
 }

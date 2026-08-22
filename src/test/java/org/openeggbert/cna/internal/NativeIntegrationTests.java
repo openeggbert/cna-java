@@ -1,10 +1,12 @@
 package org.openeggbert.cna.internal;
 
 import Microsoft.Xna.Framework.Game;
+import Microsoft.Xna.Framework.GameComponent;
 import Microsoft.Xna.Framework.GameTime;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.condition.EnabledIfEnvironmentVariable;
 
+import java.time.Duration;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -41,6 +43,29 @@ final class NativeIntegrationTests {
         }
     }
 
+    @Test
+    void NativeGameSupportsOneFrameTimingAndSuppressedDrawOperations() {
+        StepGame game = new StepGame();
+        game.setIsFixedTimeStep(false);
+        game.setTargetElapsedTime(Duration.ofMillis(20));
+        game.setInactiveSleepTime(Duration.ofMillis(7));
+        game.RunOneFrame();
+
+        assertFalse(game.getIsFixedTimeStep());
+        assertEquals(Duration.ofMillis(20), game.getTargetElapsedTime());
+        assertEquals(Duration.ofMillis(7), game.getInactiveSleepTime());
+        assertEquals(1, game.updates);
+        assertEquals(1, game.draws);
+        assertTrue(game.lateComponent.initialized);
+
+        game.SuppressDraw();
+        game.Tick();
+        game.ResetElapsedTime();
+        assertEquals(2, game.updates);
+        assertEquals(1, game.draws);
+        game.close();
+    }
+
     private static final class ProbeGame extends Game {
         private final List<String> events = new ArrayList<>();
         private final int frameLimit;
@@ -60,5 +85,38 @@ final class NativeIntegrationTests {
         }
         @Override protected void EndRun() { events.add("EndRun"); }
         @Override protected void UnloadContent() { events.add("UnloadContent"); }
+    }
+
+    private static final class StepGame extends Game {
+        private int updates;
+        private int draws;
+        private LateComponent lateComponent;
+
+        @Override
+        protected void Update(GameTime gameTime) {
+            updates++;
+            if (lateComponent == null) {
+                lateComponent = new LateComponent(this);
+                getComponents().add(lateComponent);
+            }
+        }
+
+        @Override
+        protected void Draw(GameTime gameTime) {
+            draws++;
+        }
+    }
+
+    private static final class LateComponent extends GameComponent {
+        private boolean initialized;
+
+        private LateComponent(Game game) {
+            super(game);
+        }
+
+        @Override
+        public void Initialize() {
+            initialized = true;
+        }
     }
 }

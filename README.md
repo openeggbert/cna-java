@@ -24,11 +24,12 @@ input path.
 The first strict Windows-runtime measurement is intentionally red:
 
 ```text
-XNA reference: 257 types / 2,964 members
-Java target:    21 strict types / 351 members
-Differences:    measured in tools/api-compat/baselines/
-Allowlist:      0
-Strict leaks:   0
+XNA reference:        257 types / 2,964 members
+Mapped Java contract: 260 types / 3,079 members
+Java target:           33 strict types / 454 members
+Differences:          691 unreviewed diagnostics
+Allowlist:              0
+Strict leaks:           0
 ```
 
 The exact current diagnostic breakdown is recorded in [plan.md](plan.md) and
@@ -37,8 +38,10 @@ The exact current diagnostic breakdown is recorded in [plan.md](plan.md) and
 Implemented now:
 
 - normative CLR-to-Java mapping, including naming and language adaptations;
-- foundational value types and `Game` / `GameTime` lifecycle facade;
-- Java 17 JNI adapter for 11 CNA game/error functions;
+- foundational value types plus `Game`, component hierarchy/collection,
+  services, a launch-parameter container (native population pending), events,
+  and `GameTime` lifecycle behavior;
+- Java 17 JNI adapter for 22 CNA game/error functions;
 - explicit native ownership modes and idempotent cleanup;
 - class-metadata XNA contract verifier and strict implementation-leak guard;
 - header/signature/layout/native-symbol ABI verifier;

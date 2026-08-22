@@ -47,6 +47,8 @@ typedef CNA_Result (*GameUnaryFunction)(CNA_Handle);
 typedef CNA_Result (*GameClearFunction)(CNA_Handle, CNA_Color);
 typedef CNA_Result (*GameSetBoolFunction)(CNA_Handle, CNA_Bool);
 typedef CNA_Result (*GameGetBoolFunction)(CNA_Handle, CNA_Bool*);
+typedef CNA_Result (*GameSetInt64Function)(CNA_Handle, int64_t);
+typedef CNA_Result (*GameGetInt64Function)(CNA_Handle, int64_t*);
 
 typedef struct CnaFunctions {
     DynamicLibrary library;
@@ -56,11 +58,22 @@ typedef struct CnaFunctions {
     GameCreateFunction game_create;
     GameSetHooksFunction game_set_hooks;
     GameUnaryFunction game_run;
+    GameUnaryFunction game_run_one_frame;
     GameUnaryFunction game_request_exit;
+    GameUnaryFunction game_reset_elapsed_time;
+    GameUnaryFunction game_suppress_draw;
+    GameUnaryFunction game_tick;
     GameUnaryFunction game_destroy;
     GameClearFunction game_clear;
     GameSetBoolFunction game_set_mouse_visible;
     GameGetBoolFunction game_get_mouse_visible;
+    GameGetBoolFunction game_get_is_active;
+    GameSetBoolFunction game_set_fixed_time_step;
+    GameGetBoolFunction game_get_fixed_time_step;
+    GameSetInt64Function game_set_target_elapsed_time;
+    GameGetInt64Function game_get_target_elapsed_time;
+    GameSetInt64Function game_set_inactive_sleep_time;
+    GameGetInt64Function game_get_inactive_sleep_time;
 } CnaFunctions;
 
 typedef struct JavaGameContext {
@@ -344,11 +357,22 @@ JNIEXPORT jint JNICALL Java_org_openeggbert_cna_internal_NativeBindings_nativeLo
     LOAD(game_create, "cna_game_create");
     LOAD(game_set_hooks, "cna_game_set_frame_hooks_ext");
     LOAD(game_run, "cna_game_run");
+    LOAD(game_run_one_frame, "cna_game_run_one_frame");
     LOAD(game_request_exit, "cna_game_request_exit");
+    LOAD(game_reset_elapsed_time, "cna_game_reset_elapsed_time");
+    LOAD(game_suppress_draw, "cna_game_suppress_draw");
+    LOAD(game_tick, "cna_game_tick");
     LOAD(game_destroy, "cna_game_destroy");
     LOAD(game_clear, "cna_game_clear");
     LOAD(game_set_mouse_visible, "cna_game_set_is_mouse_visible");
     LOAD(game_get_mouse_visible, "cna_game_get_is_mouse_visible");
+    LOAD(game_get_is_active, "cna_game_get_is_active");
+    LOAD(game_set_fixed_time_step, "cna_game_set_is_fixed_time_step");
+    LOAD(game_get_fixed_time_step, "cna_game_get_is_fixed_time_step");
+    LOAD(game_set_target_elapsed_time, "cna_game_set_target_elapsed_time_ticks");
+    LOAD(game_get_target_elapsed_time, "cna_game_get_target_elapsed_time_ticks");
+    LOAD(game_set_inactive_sleep_time, "cna_game_set_inactive_sleep_time_ticks");
+    LOAD(game_get_inactive_sleep_time, "cna_game_get_inactive_sleep_time_ticks");
 #undef LOAD
 
     return (jint)cna.get_abi_version();
@@ -467,6 +491,38 @@ JNIEXPORT jint JNICALL Java_org_openeggbert_cna_internal_NativeBindings_nativeRu
     return (jint)cna.game_run(java_game(game)->cna_handle);
 }
 
+JNIEXPORT jint JNICALL Java_org_openeggbert_cna_internal_NativeBindings_nativeRunOneFrame(
+    JNIEnv* environment, jclass type, jlong game)
+{
+    (void)environment;
+    (void)type;
+    return (jint)cna.game_run_one_frame(java_game(game)->cna_handle);
+}
+
+JNIEXPORT jint JNICALL Java_org_openeggbert_cna_internal_NativeBindings_nativeResetElapsedTime(
+    JNIEnv* environment, jclass type, jlong game)
+{
+    (void)environment;
+    (void)type;
+    return (jint)cna.game_reset_elapsed_time(java_game(game)->cna_handle);
+}
+
+JNIEXPORT jint JNICALL Java_org_openeggbert_cna_internal_NativeBindings_nativeSuppressDraw(
+    JNIEnv* environment, jclass type, jlong game)
+{
+    (void)environment;
+    (void)type;
+    return (jint)cna.game_suppress_draw(java_game(game)->cna_handle);
+}
+
+JNIEXPORT jint JNICALL Java_org_openeggbert_cna_internal_NativeBindings_nativeTick(
+    JNIEnv* environment, jclass type, jlong game)
+{
+    (void)environment;
+    (void)type;
+    return (jint)cna.game_tick(java_game(game)->cna_handle);
+}
+
 JNIEXPORT jint JNICALL Java_org_openeggbert_cna_internal_NativeBindings_nativeRequestExit(
     JNIEnv* environment, jclass type, jlong game)
 {
@@ -514,6 +570,71 @@ JNIEXPORT jint JNICALL Java_org_openeggbert_cna_internal_NativeBindings_nativeGe
         return -(jint)result;
     }
     return visible == CNA_TRUE ? 1 : 0;
+}
+
+JNIEXPORT jint JNICALL Java_org_openeggbert_cna_internal_NativeBindings_nativeGetIsActive(
+    JNIEnv* environment, jclass type, jlong game)
+{
+    (void)environment;
+    (void)type;
+    CNA_Bool value = CNA_FALSE;
+    CNA_Result result = cna.game_get_is_active(java_game(game)->cna_handle, &value);
+    return result == CNA_RESULT_SUCCESS ? (value == CNA_TRUE ? 1 : 0) : -(jint)result;
+}
+
+JNIEXPORT jint JNICALL Java_org_openeggbert_cna_internal_NativeBindings_nativeSetFixedTimeStep(
+    JNIEnv* environment, jclass type, jlong game, jboolean value)
+{
+    (void)environment;
+    (void)type;
+    return (jint)cna.game_set_fixed_time_step(
+        java_game(game)->cna_handle, value == JNI_TRUE ? CNA_TRUE : CNA_FALSE);
+}
+
+JNIEXPORT jint JNICALL Java_org_openeggbert_cna_internal_NativeBindings_nativeGetFixedTimeStep(
+    JNIEnv* environment, jclass type, jlong game)
+{
+    (void)environment;
+    (void)type;
+    CNA_Bool value = CNA_FALSE;
+    CNA_Result result = cna.game_get_fixed_time_step(java_game(game)->cna_handle, &value);
+    return result == CNA_RESULT_SUCCESS ? (value == CNA_TRUE ? 1 : 0) : -(jint)result;
+}
+
+JNIEXPORT jint JNICALL Java_org_openeggbert_cna_internal_NativeBindings_nativeSetTargetElapsedTime(
+    JNIEnv* environment, jclass type, jlong game, jlong ticks)
+{
+    (void)environment;
+    (void)type;
+    return (jint)cna.game_set_target_elapsed_time(java_game(game)->cna_handle, (int64_t)ticks);
+}
+
+JNIEXPORT jlong JNICALL Java_org_openeggbert_cna_internal_NativeBindings_nativeGetTargetElapsedTime(
+    JNIEnv* environment, jclass type, jlong game)
+{
+    (void)environment;
+    (void)type;
+    int64_t ticks = 0;
+    CNA_Result result = cna.game_get_target_elapsed_time(java_game(game)->cna_handle, &ticks);
+    return result == CNA_RESULT_SUCCESS ? (jlong)ticks : -(jlong)result;
+}
+
+JNIEXPORT jint JNICALL Java_org_openeggbert_cna_internal_NativeBindings_nativeSetInactiveSleepTime(
+    JNIEnv* environment, jclass type, jlong game, jlong ticks)
+{
+    (void)environment;
+    (void)type;
+    return (jint)cna.game_set_inactive_sleep_time(java_game(game)->cna_handle, (int64_t)ticks);
+}
+
+JNIEXPORT jlong JNICALL Java_org_openeggbert_cna_internal_NativeBindings_nativeGetInactiveSleepTime(
+    JNIEnv* environment, jclass type, jlong game)
+{
+    (void)environment;
+    (void)type;
+    int64_t ticks = 0;
+    CNA_Result result = cna.game_get_inactive_sleep_time(java_game(game)->cna_handle, &ticks);
+    return result == CNA_RESULT_SUCCESS ? (jlong)ticks : -(jlong)result;
 }
 
 JNIEXPORT jint JNICALL Java_org_openeggbert_cna_internal_NativeBindings_nativeDestroyGame(

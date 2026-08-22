@@ -8,11 +8,21 @@
     {"name": "cna_game_create", "header": "runtime.h", "ownership": "returns owned game"},
     {"name": "cna_game_set_frame_hooks_ext", "header": "runtime.h", "ownership": "copies callback table; borrows context"},
     {"name": "cna_game_run", "header": "runtime.h", "ownership": "borrows game"},
+    {"name": "cna_game_run_one_frame", "header": "runtime.h", "ownership": "borrows game"},
     {"name": "cna_game_request_exit", "header": "runtime.h", "ownership": "borrows game"},
+    {"name": "cna_game_reset_elapsed_time", "header": "runtime.h", "ownership": "borrows game"},
+    {"name": "cna_game_suppress_draw", "header": "runtime.h", "ownership": "borrows game"},
+    {"name": "cna_game_tick", "header": "runtime.h", "ownership": "borrows game"},
     {"name": "cna_game_destroy", "header": "runtime.h", "ownership": "consumes owned game on success or callback failure"},
     {"name": "cna_game_clear", "header": "runtime.h", "ownership": "borrows game and copies color"},
     {"name": "cna_game_set_is_mouse_visible", "header": "runtime.h", "ownership": "borrows game"},
-    {"name": "cna_game_get_is_mouse_visible", "header": "runtime.h", "ownership": "borrows game; caller output"}
+    {"name": "cna_game_get_is_mouse_visible", "header": "runtime.h", "ownership": "borrows game; caller output"},
+    {"name": "cna_game_get_is_active", "header": "runtime.h", "ownership": "borrows game; caller output"},
+    {"name": "cna_game_set_is_fixed_time_step", "header": "runtime.h", "ownership": "borrows game"},
+    {"name": "cna_game_get_is_fixed_time_step", "header": "runtime.h", "ownership": "borrows game; caller output"},
+    {"name": "cna_game_set_target_elapsed_time_ticks", "header": "runtime.h", "ownership": "borrows game"},
+    {"name": "cna_game_get_target_elapsed_time_ticks", "header": "runtime.h", "ownership": "borrows game; caller output"},
+    {"name": "cna_game_set_inactive_sleep_time_ticks", "header": "runtime.h", "ownership": "borrows game"},
+    {"name": "cna_game_get_inactive_sleep_time_ticks", "header": "runtime.h", "ownership": "borrows game; caller output"}
   ]
 }
-

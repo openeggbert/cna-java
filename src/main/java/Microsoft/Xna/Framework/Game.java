@@ -6,16 +6,40 @@ import org.openeggbert.cna.internal.NativeBindings;
 import org.openeggbert.cna.internal.NativeGameHandle;
 
 import java.time.Duration;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.IdentityHashMap;
+import java.util.Objects;
+import java.util.Set;
+import java.util.concurrent.CopyOnWriteArrayList;
 
 /** XNA 4.0 game lifecycle facade backed by CNA's stable C ABI through JNI. */
 public class Game implements AutoCloseable {
 
+    private static final long TICKS_PER_SECOND = 10_000_000L;
     private static final long DEFAULT_TARGET_TICKS = 166_667L;
 
-    private final ContentManager content;
+    private final GameComponentCollection components = new GameComponentCollection();
+    private final GameServiceContainer services = new GameServiceContainer();
+    private final LaunchParameters launchParameters = new LaunchParameters();
     private final GraphicsDevice graphicsDevice;
+    private final CopyOnWriteArrayList<EventHandler<EventArgs>> activatedListeners =
+            new CopyOnWriteArrayList<>();
+    private final CopyOnWriteArrayList<EventHandler<EventArgs>> deactivatedListeners =
+            new CopyOnWriteArrayList<>();
+    private final CopyOnWriteArrayList<EventHandler<EventArgs>> disposedListeners =
+            new CopyOnWriteArrayList<>();
+    private final CopyOnWriteArrayList<EventHandler<EventArgs>> exitingListeners =
+            new CopyOnWriteArrayList<>();
+    private ContentManager content;
     private NativeGameHandle nativeGame;
     private GraphicsDeviceManager graphicsManager;
+    private Duration inactiveSleepTime = Duration.ZERO;
+    private Duration targetElapsedTime = durationFromTicks(DEFAULT_TARGET_TICKS);
+    private boolean fixedTimeStep = true;
+    private boolean initializing;
+    private boolean initialized;
     private boolean closed;
     private boolean hasRun;
     private boolean exitRequested;
@@ -25,25 +49,27 @@ public class Game implements AutoCloseable {
     public Game() {
         content = new ContentManager();
         graphicsDevice = new GraphicsDevice(this);
+        components.addComponentAddedListener(this::initializeAddedComponent);
     }
 
     /** Runs the native CNA loop until {@link #Exit()} is requested. */
-    public final void Run() {
+    public void Run() {
         ensureOpen();
         if (hasRun) {
             throw new IllegalStateException("Game.Run may only be called once");
         }
         hasRun = true;
-        nativeGame = NativeBindings.createGame(this, getClass().getSimpleName(), true, DEFAULT_TARGET_TICKS);
-        NativeBindings.setMouseVisible(nativeGame, mouseVisible);
-        if (exitRequested) {
-            NativeBindings.requestExit(nativeGame);
-        }
-        NativeBindings.run(nativeGame);
+        NativeBindings.run(ensureNativeGame());
+    }
+
+    /** Initializes if needed, advances exactly one CNA frame, and returns. */
+    public void RunOneFrame() {
+        ensureOpen();
+        NativeBindings.runOneFrame(ensureNativeGame());
     }
 
     /** Requests normal game-loop termination at CNA's next safe point. */
-    public final void Exit() {
+    public void Exit() {
         ensureOpen();
         exitRequested = true;
         if (nativeGame != null && !nativeGame.isClosed()) {
@@ -51,30 +77,154 @@ public class Game implements AutoCloseable {
         }
     }
 
+    public void ResetElapsedTime() {
+        ensureOpen();
+        NativeBindings.resetElapsedTime(ensureNativeGame());
+    }
+
+    public void SuppressDraw() {
+        ensureOpen();
+        NativeBindings.suppressDraw(ensureNativeGame());
+    }
+
+    public void Tick() {
+        ensureOpen();
+        NativeBindings.tick(ensureNativeGame());
+    }
+
+    public final GameComponentCollection getComponents() {
+        return components;
+    }
+
     public final ContentManager getContent() {
         return content;
+    }
+
+    public final void setContent(ContentManager value) {
+        ensureOpen();
+        content = Objects.requireNonNull(value, "value");
     }
 
     public final GraphicsDevice getGraphicsDevice() {
         return graphicsDevice;
     }
 
+    public final Duration getInactiveSleepTime() {
+        if (hasNativeGame()) {
+            inactiveSleepTime = durationFromTicks(NativeBindings.getInactiveSleepTime(nativeGame));
+        }
+        return inactiveSleepTime;
+    }
+
+    public final void setInactiveSleepTime(Duration value) {
+        ensureOpen();
+        long ticks = durationTicks(Objects.requireNonNull(value, "value"));
+        if (ticks < 0L) {
+            throw new IllegalArgumentException("InactiveSleepTime must not be negative");
+        }
+        inactiveSleepTime = durationFromTicks(ticks);
+        if (hasNativeGame()) {
+            NativeBindings.setInactiveSleepTime(nativeGame, ticks);
+        }
+    }
+
+    public final boolean getIsActive() {
+        return hasNativeGame() && NativeBindings.getIsActive(nativeGame);
+    }
+
+    public final boolean getIsFixedTimeStep() {
+        if (hasNativeGame()) {
+            fixedTimeStep = NativeBindings.getFixedTimeStep(nativeGame);
+        }
+        return fixedTimeStep;
+    }
+
+    public final void setIsFixedTimeStep(boolean value) {
+        ensureOpen();
+        fixedTimeStep = value;
+        if (hasNativeGame()) {
+            NativeBindings.setFixedTimeStep(nativeGame, value);
+        }
+    }
+
     public final boolean getIsMouseVisible() {
-        if (nativeGame != null && !nativeGame.isClosed()) {
+        if (hasNativeGame()) {
             mouseVisible = NativeBindings.getMouseVisible(nativeGame);
         }
         return mouseVisible;
     }
 
-    public final void setIsMouseVisible(boolean visible) {
+    public final LaunchParameters getLaunchParameters() {
+        return launchParameters;
+    }
+
+    public final void setIsMouseVisible(boolean value) {
         ensureOpen();
-        mouseVisible = visible;
-        if (nativeGame != null && !nativeGame.isClosed()) {
-            NativeBindings.setMouseVisible(nativeGame, visible);
+        mouseVisible = value;
+        if (hasNativeGame()) {
+            NativeBindings.setMouseVisible(nativeGame, value);
         }
     }
 
+    public final GameServiceContainer getServices() {
+        return services;
+    }
+
+    public final Duration getTargetElapsedTime() {
+        if (hasNativeGame()) {
+            targetElapsedTime = durationFromTicks(NativeBindings.getTargetElapsedTime(nativeGame));
+        }
+        return targetElapsedTime;
+    }
+
+    public final void setTargetElapsedTime(Duration value) {
+        ensureOpen();
+        long ticks = durationTicks(Objects.requireNonNull(value, "value"));
+        if (ticks <= 0L) {
+            throw new IllegalArgumentException("TargetElapsedTime must be positive");
+        }
+        targetElapsedTime = durationFromTicks(ticks);
+        if (hasNativeGame()) {
+            NativeBindings.setTargetElapsedTime(nativeGame, ticks);
+        }
+    }
+
+    public final void addActivatedListener(EventHandler<EventArgs> listener) {
+        activatedListeners.add(Objects.requireNonNull(listener, "listener"));
+    }
+
+    public final void removeActivatedListener(EventHandler<EventArgs> listener) {
+        activatedListeners.remove(listener);
+    }
+
+    public final void addDeactivatedListener(EventHandler<EventArgs> listener) {
+        deactivatedListeners.add(Objects.requireNonNull(listener, "listener"));
+    }
+
+    public final void removeDeactivatedListener(EventHandler<EventArgs> listener) {
+        deactivatedListeners.remove(listener);
+    }
+
+    public final void addDisposedListener(EventHandler<EventArgs> listener) {
+        disposedListeners.add(Objects.requireNonNull(listener, "listener"));
+    }
+
+    public final void removeDisposedListener(EventHandler<EventArgs> listener) {
+        disposedListeners.remove(listener);
+    }
+
+    public final void addExitingListener(EventHandler<EventArgs> listener) {
+        exitingListeners.add(Objects.requireNonNull(listener, "listener"));
+    }
+
+    public final void removeExitingListener(EventHandler<EventArgs> listener) {
+        exitingListeners.remove(listener);
+    }
+
     protected void Initialize() {
+        for (IGameComponent component : snapshot(components)) {
+            component.Initialize();
+        }
     }
 
     protected void LoadContent() {
@@ -84,6 +234,17 @@ public class Game implements AutoCloseable {
     }
 
     protected void Update(GameTime gameTime) {
+        Objects.requireNonNull(gameTime, "gameTime");
+        ArrayList<IUpdateable> updateables = new ArrayList<>();
+        for (IGameComponent component : snapshot(components)) {
+            if (component instanceof IUpdateable updateable && updateable.getEnabled()) {
+                updateables.add(updateable);
+            }
+        }
+        updateables.sort(Comparator.comparingInt(IUpdateable::getUpdateOrder));
+        for (IUpdateable updateable : updateables) {
+            updateable.Update(gameTime);
+        }
     }
 
     protected boolean BeginDraw() {
@@ -91,6 +252,17 @@ public class Game implements AutoCloseable {
     }
 
     protected void Draw(GameTime gameTime) {
+        Objects.requireNonNull(gameTime, "gameTime");
+        ArrayList<IDrawable> drawables = new ArrayList<>();
+        for (IGameComponent component : snapshot(components)) {
+            if (component instanceof IDrawable drawable && drawable.getVisible()) {
+                drawables.add(drawable);
+            }
+        }
+        drawables.sort(Comparator.comparingInt(IDrawable::getDrawOrder));
+        for (IDrawable drawable : drawables) {
+            drawable.Draw(gameTime);
+        }
     }
 
     protected void EndDraw() {
@@ -102,7 +274,50 @@ public class Game implements AutoCloseable {
     protected void UnloadContent() {
     }
 
-    /** Releases children before the owned native game. Repeated calls are harmless. */
+    protected void OnActivated(Object sender, EventArgs args) {
+        invoke(activatedListeners, sender, args);
+    }
+
+    protected void OnDeactivated(Object sender, EventArgs args) {
+        invoke(deactivatedListeners, sender, args);
+    }
+
+    protected void OnExiting(Object sender, EventArgs args) {
+        invoke(exitingListeners, sender, args);
+    }
+
+    /** Releases component and facade state before the owned native game. */
+    protected void Dispose(boolean disposing) {
+        if (!disposing) {
+            return;
+        }
+        RuntimeException failure = null;
+        Set<IGameComponent> closedComponents =
+                Collections.newSetFromMap(new IdentityHashMap<>());
+        for (IGameComponent component : snapshot(components)) {
+            if (closedComponents.add(component) && component instanceof AutoCloseable closeable) {
+                failure = closeResource(closeable, failure);
+            }
+        }
+        try {
+            components.clear();
+        } catch (RuntimeException exception) {
+            failure = appendFailure(failure, exception);
+        }
+        failure = closeResource(content, failure);
+        if (nativeGame != null) {
+            failure = closeResource(nativeGame, failure);
+        }
+        failure = closeResource(graphicsDevice, failure);
+        if (graphicsManager != null) {
+            graphicsManager.closeFromGame();
+        }
+        if (failure != null) {
+            throw failure;
+        }
+    }
+
+    /** Repeated calls are harmless; native ownership is released at most once. */
     @Override
     public final void close() {
         if (closed) {
@@ -111,24 +326,19 @@ public class Game implements AutoCloseable {
         closed = true;
         RuntimeException failure = null;
         try {
-            content.close();
+            Dispose(true);
         } catch (RuntimeException exception) {
             failure = exception;
         }
         try {
-            if (nativeGame != null) {
-                nativeGame.close();
-            }
+            invoke(disposedListeners, this, EventArgs.Empty);
         } catch (RuntimeException exception) {
-            if (failure == null) {
-                failure = exception;
-            } else {
-                failure.addSuppressed(exception);
-            }
-        }
-        graphicsDevice.close();
-        if (graphicsManager != null) {
-            graphicsManager.closeFromGame();
+            failure = appendFailure(failure, exception);
+        } finally {
+            activatedListeners.clear();
+            deactivatedListeners.clear();
+            disposedListeners.clear();
+            exitingListeners.clear();
         }
         if (failure != null) {
             throw failure;
@@ -145,7 +355,13 @@ public class Game implements AutoCloseable {
 
     @SuppressWarnings("unused")
     private void nativeInitialize() {
-        Initialize();
+        initializing = true;
+        try {
+            Initialize();
+            initialized = true;
+        } finally {
+            initializing = false;
+        }
     }
 
     @SuppressWarnings("unused")
@@ -191,21 +407,98 @@ public class Game implements AutoCloseable {
     @SuppressWarnings("unused")
     private void nativeExiting() {
         exitRequested = true;
+        OnExiting(this, EventArgs.Empty);
+    }
+
+    private NativeGameHandle ensureNativeGame() {
+        if (!hasNativeGame()) {
+            nativeGame = NativeBindings.createGame(
+                    this, getClass().getSimpleName(), fixedTimeStep, durationTicks(targetElapsedTime));
+            NativeBindings.setInactiveSleepTime(nativeGame, durationTicks(inactiveSleepTime));
+            NativeBindings.setMouseVisible(nativeGame, mouseVisible);
+            if (exitRequested) {
+                NativeBindings.requestExit(nativeGame);
+            }
+        }
+        return nativeGame;
+    }
+
+    private boolean hasNativeGame() {
+        return nativeGame != null && !nativeGame.isClosed();
+    }
+
+    private void initializeAddedComponent(
+            Object sender,
+            GameComponentCollectionEventArgs args) {
+        if (initializing || initialized) {
+            args.getGameComponent().Initialize();
+        }
     }
 
     private static GameTime gameTime(long totalTicks, long elapsedTicks, boolean slowly) {
         return new GameTime(durationFromTicks(totalTicks), durationFromTicks(elapsedTicks), slowly);
     }
 
+    private static long durationTicks(Duration duration) {
+        try {
+            return Math.addExact(
+                    Math.multiplyExact(duration.getSeconds(), TICKS_PER_SECOND),
+                    duration.getNano() / 100L);
+        } catch (ArithmeticException exception) {
+            throw new IllegalArgumentException("Duration is outside the XNA TimeSpan range", exception);
+        }
+    }
+
     private static Duration durationFromTicks(long ticks) {
-        long seconds = ticks / 10_000_000L;
-        long remainingTicks = ticks % 10_000_000L;
+        long seconds = Math.floorDiv(ticks, TICKS_PER_SECOND);
+        long remainingTicks = Math.floorMod(ticks, TICKS_PER_SECOND);
         return Duration.ofSeconds(seconds, remainingTicks * 100L);
+    }
+
+    private static void invoke(
+            CopyOnWriteArrayList<EventHandler<EventArgs>> listeners,
+            Object sender,
+            EventArgs args) {
+        for (EventHandler<EventArgs> listener : listeners) {
+            listener.invoke(sender, args);
+        }
+    }
+
+    private static RuntimeException closeResource(
+            AutoCloseable resource,
+            RuntimeException previous) {
+        try {
+            resource.close();
+            return previous;
+        } catch (RuntimeException exception) {
+            return appendFailure(previous, exception);
+        } catch (Exception exception) {
+            IllegalStateException wrapped = new IllegalStateException("Failed to close game resource", exception);
+            if (previous == null) {
+                return wrapped;
+            }
+            previous.addSuppressed(wrapped);
+            return previous;
+        }
+    }
+
+    private static RuntimeException appendFailure(
+            RuntimeException previous,
+            RuntimeException exception) {
+        if (previous == null) {
+            return exception;
+        }
+        previous.addSuppressed(exception);
+        return previous;
     }
 
     private void ensureOpen() {
         if (closed) {
             throw new IllegalStateException("Game is already closed");
         }
+    }
+
+    private static ArrayList<IGameComponent> snapshot(GameComponentCollection source) {
+        return new ArrayList<>(source);
     }
 }

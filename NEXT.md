@@ -31,6 +31,7 @@
 
 - XNA source of truth: the seven legally available XNA 4.0 Windows runtime
   assemblies listed in `tools/api-compat/profiles/xna40-windows-runtime.json`.
+  The profile now SHA-256-pins all seven inputs and rejects mismatched bits.
 - Current CNA headers: C ABI 0.7.0, `uint64_t` opaque handles, `uint8_t` booleans,
   `uint32_t` results/enums, versioned structs, UTF-8 buffers, callbacks, and
   explicit create/destroy ownership.
@@ -49,6 +50,10 @@
   - verifier/leak/ABI tooling and first baseline;
   - JNI backend and ownership wrappers;
   - foundational lifecycle/value/geometry implementations and tests.
+- `10e0daa chore: harden verification and record measured state`
+  - strengthened native lifetime/error handling and template verification;
+  - recorded complete build, ABI, runtime, template, and CNA-HEAD blocker evidence;
+  - removed the stale Maven build so Gradle is the single source of build truth.
 
 ### `cna-java-template`
 
@@ -59,10 +64,14 @@
     GWT, and TeaVM launchers;
   - pushed to `origin/develop` after build and native evidence.
 
-The final documentation/lifetime/workflow changes after `aadce19` are intended
-for the next binding checkpoint commit in this same session.
+## API measurements
 
-## Final measured API baseline
+The immutable initial measurement at the first foundation checkpoint was 257
+reference types / 2,964 members versus 21 target types / 351 members, with 730
+diagnostics, zero leaks, and an empty allowlist. Its full JSON remains at
+`tools/api-compat/baselines/xna40-windows-runtime-initial.json`.
+
+After the coherent foundational lifecycle group, the current measurement is:
 
 Command:
 
@@ -76,21 +85,35 @@ Result (`exit 0`, report-only):
 ```text
 REFERENCE_TYPES=257
 REFERENCE_MEMBERS=2964
-TARGET_TYPES=21
-TARGET_MEMBERS=351
-TOTAL_DIAGNOSTICS=730
+EXPECTED_JAVA_TYPES=260
+EXPECTED_JAVA_MEMBERS=3079
+TARGET_TYPES=33
+TARGET_MEMBERS=454
+TOTAL_DIAGNOSTICS=691
 ALLOWLIST_ENTRIES=0
 INTERFACE_MISMATCH=2
-MISSING_MEMBER=405
-MISSING_TYPE=236
+MISSING_MEMBER=376
+MISSING_TYPE=227
 PARAMETER_MISMATCH=21
-PARAMETER_NAME_MISMATCH=59
+PARAMETER_NAME_MISMATCH=58
 RETURN_TYPE_MISMATCH=4
 UNEXPECTED_MEMBER=3
 ```
 
-`apiCompatCheck` reported the same numbers and exited 1 as designed. Leak-only
-inspection reported `CNA_INTERNAL_LEAK=0` (total leak diagnostics 0).
+This is a 39-diagnostic reduction with 12 additional strict target types and
+103 additional target members. `apiCompatCheck` still exits 1 as designed.
+Leak-only inspection reports `CNA_INTERNAL_LEAK=0` (total leak diagnostics 0).
+
+The group added `EventArgs`, generic `EventHandler`, `ServiceProvider`,
+`IGameComponent`, `IUpdateable`, `IDrawable`, `GameComponent`,
+`DrawableGameComponent`, `GameComponentCollection` and its event args,
+`GameServiceContainer`, and `LaunchParameters`. Their mapped contracts have no
+local verifier findings. `Game` now exposes components/services/the mapped
+launch-parameter container, ordered listener APIs, `Duration` timing properties, one-frame,
+tick, suppress-draw, reset-time, active/fixed-step state, ordered component
+update/draw, and resilient deterministic teardown. `GameWindow` and
+`ShowMissingRequirementMessage` remain explicitly missing; native launch
+parameter population and activation/deactivation subscriptions remain behavior work.
 
 ## Managed/native binding gate
 
@@ -98,23 +121,27 @@ Command:
 
 ```bash
 CNA_NATIVE_LIBRARY=/tmp/cna-java-native-working-070/modules/c-api/libcna_c_api.so \
-./gradlew --no-daemon clean check --warning-mode all
+XNA_REFERENCE_DIR=/rv/data/development/github.com/openeggbert/xna4-decomp/reference/xna4/original/windows \
+./gradlew --no-daemon clean check apiCompatReport --warning-mode all
 ```
 
-Result: `BUILD SUCCESSFUL`, 8 tasks executed, no compiler/deprecation warnings.
+Result: `BUILD SUCCESSFUL`, 10 tasks executed, no compiler/deprecation warnings.
 
-- JUnit: 22 tests, 0 failures, 0 errors, 0 skipped.
-- Suites: 12 value/math, 3 lifecycle/content, 4 ownership, 3 native integration.
+- JUnit: 30 tests, 0 failures, 0 errors, 0 skipped.
+- Verifier regression suite: 5 tests, all passing.
+- Suites: 12 value/math, 3 lifecycle/content, 7 component/service/lifetime,
+  4 ownership, 4 native integration.
 - Native stress: one ordered three-frame lifecycle plus ten repeated
-  create/run/destroy lifecycles.
+  create/run/destroy lifecycles, and one-frame/tick/suppressed-draw timing.
 - Compile probe: passed.
-- Strict leak guard: 21 target types / 351 members, 0 findings.
-- ABI: header 0.7.0, 11 bound functions, C width/layout/function-signature probe
-  passed, native library ABI 0.7.0, symbols 11/11.
+- Strict leak guard: 33 target types / 454 members, 0 findings.
+- ABI: header 0.7.0, 22 bound functions, manifest/JNI identity and C
+  width/layout/function-signature probes passed, native library ABI 0.7.0,
+  symbols 22/22.
 - JNI compiled with `-std=c11 -Wall -Wextra -Werror -fPIC`.
 
 Without `CNA_NATIVE_LIBRARY`, the same `check` passes and conditionally skips the
-three native integration tests plus native symbol/runtime-version inspection.
+four native integration tests plus native symbol/runtime-version inspection.
 
 ## CNA native build evidence and blocker
 
@@ -171,11 +198,12 @@ keyboard/mouse state, resize, and 3D are not claimed.
 
 1. Consume an upstream CNA fix for both HEAD C API build failures and repeat all
    native evidence against current HEAD.
-2. Review the 2 interface, 21 parameter, 59 parameter-name, 4 return-type, and 3
+2. Review the 2 interface, 21 parameter, 58 parameter-name, 4 return-type, and 3
    unexpected-member diagnostics before adding more surface.
-3. Complete the foundational lifecycle hierarchy and math/geometry contract;
-   add normalized XNA differential fixtures.
-4. Bind keyboard/mouse plus window/device resize.
+3. Design the safe Java `IntPtr` mapping needed by `GameWindow`, implement the
+   remaining window/orientation lifecycle, and add normalized XNA differential
+   fixtures for the math/geometry contract.
+4. Bind keyboard/mouse plus native window/device resize.
 5. Implement Texture2D FromStream and SpriteBatch, then upgrade the clear-only
    template to the requested moving raw-PNG playable slice.
 6. Add platform-specific native packaging and CI; do not promote Windows,

@@ -23,17 +23,37 @@ static CNA_Result (*const error_copy_function)(char*, uint64_t, uint64_t*) = cna
 static CNA_Result (*const game_create_function)(const CNA_GameCreateInfo*, CNA_Handle*) = cna_game_create;
 static CNA_Result (*const game_hooks_function)(CNA_Handle, const CNA_GameFrameHooks*) = cna_game_set_frame_hooks_ext;
 static CNA_Result (*const game_run_function)(CNA_Handle) = cna_game_run;
+static CNA_Result (*const game_run_one_frame_function)(CNA_Handle) = cna_game_run_one_frame;
 static CNA_Result (*const game_exit_function)(CNA_Handle) = cna_game_request_exit;
+static CNA_Result (*const game_reset_elapsed_time_function)(CNA_Handle) = cna_game_reset_elapsed_time;
+static CNA_Result (*const game_suppress_draw_function)(CNA_Handle) = cna_game_suppress_draw;
+static CNA_Result (*const game_tick_function)(CNA_Handle) = cna_game_tick;
 static CNA_Result (*const game_destroy_function)(CNA_Handle) = cna_game_destroy;
 static CNA_Result (*const game_clear_function)(CNA_Handle, CNA_Color) = cna_game_clear;
 static CNA_Result (*const game_set_mouse_function)(CNA_Handle, CNA_Bool) = cna_game_set_is_mouse_visible;
 static CNA_Result (*const game_get_mouse_function)(CNA_Handle, CNA_Bool*) = cna_game_get_is_mouse_visible;
+static CNA_Result (*const game_get_active_function)(CNA_Handle, CNA_Bool*) = cna_game_get_is_active;
+static CNA_Result (*const game_set_fixed_function)(CNA_Handle, CNA_Bool) = cna_game_set_is_fixed_time_step;
+static CNA_Result (*const game_get_fixed_function)(CNA_Handle, CNA_Bool*) = cna_game_get_is_fixed_time_step;
+static CNA_Result (*const game_set_target_time_function)(CNA_Handle, int64_t) =
+    cna_game_set_target_elapsed_time_ticks;
+static CNA_Result (*const game_get_target_time_function)(CNA_Handle, int64_t*) =
+    cna_game_get_target_elapsed_time_ticks;
+static CNA_Result (*const game_set_inactive_time_function)(CNA_Handle, int64_t) =
+    cna_game_set_inactive_sleep_time_ticks;
+static CNA_Result (*const game_get_inactive_time_function)(CNA_Handle, int64_t*) =
+    cna_game_get_inactive_sleep_time_ticks;
 
 int cna_java_abi_probe(void)
 {
     return get_abi_version_function != NULL && error_size_function != NULL && error_copy_function != NULL &&
         game_create_function != NULL && game_hooks_function != NULL && game_run_function != NULL &&
-        game_exit_function != NULL && game_destroy_function != NULL && game_clear_function != NULL &&
-        game_set_mouse_function != NULL && game_get_mouse_function != NULL ? 0 : 1;
+        game_run_one_frame_function != NULL && game_exit_function != NULL &&
+        game_reset_elapsed_time_function != NULL && game_suppress_draw_function != NULL &&
+        game_tick_function != NULL && game_destroy_function != NULL && game_clear_function != NULL &&
+        game_set_mouse_function != NULL && game_get_mouse_function != NULL &&
+        game_get_active_function != NULL && game_set_fixed_function != NULL &&
+        game_get_fixed_function != NULL && game_set_target_time_function != NULL &&
+        game_get_target_time_function != NULL && game_set_inactive_time_function != NULL &&
+        game_get_inactive_time_function != NULL ? 0 : 1;
 }
-

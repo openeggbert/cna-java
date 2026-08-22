@@ -75,6 +75,22 @@ public final class NativeBindings {
         check("cna_game_run", nativeRun(game.requireValue()));
     }
 
+    public static void runOneFrame(NativeGameHandle game) {
+        check("cna_game_run_one_frame", nativeRunOneFrame(game.requireValue()));
+    }
+
+    public static void resetElapsedTime(NativeGameHandle game) {
+        check("cna_game_reset_elapsed_time", nativeResetElapsedTime(game.requireValue()));
+    }
+
+    public static void suppressDraw(NativeGameHandle game) {
+        check("cna_game_suppress_draw", nativeSuppressDraw(game.requireValue()));
+    }
+
+    public static void tick(NativeGameHandle game) {
+        check("cna_game_tick", nativeTick(game.requireValue()));
+    }
+
     public static void requestExit(NativeGameHandle game) {
         check("cna_game_request_exit", nativeRequestExit(game.requireValue()));
     }
@@ -100,11 +116,41 @@ public final class NativeBindings {
     }
 
     public static boolean getMouseVisible(NativeGameHandle game) {
-        int result = nativeGetMouseVisible(game.requireValue());
-        if (result < 0) {
-            throw failure("cna_game_get_is_mouse_visible", -result);
-        }
-        return result != 0;
+        return booleanResult(
+                "cna_game_get_is_mouse_visible", nativeGetMouseVisible(game.requireValue()));
+    }
+
+    public static boolean getIsActive(NativeGameHandle game) {
+        return booleanResult("cna_game_get_is_active", nativeGetIsActive(game.requireValue()));
+    }
+
+    public static void setFixedTimeStep(NativeGameHandle game, boolean value) {
+        check("cna_game_set_is_fixed_time_step", nativeSetFixedTimeStep(game.requireValue(), value));
+    }
+
+    public static boolean getFixedTimeStep(NativeGameHandle game) {
+        return booleanResult(
+                "cna_game_get_is_fixed_time_step", nativeGetFixedTimeStep(game.requireValue()));
+    }
+
+    public static void setTargetElapsedTime(NativeGameHandle game, long ticks) {
+        check("cna_game_set_target_elapsed_time_ticks",
+                nativeSetTargetElapsedTime(game.requireValue(), ticks));
+    }
+
+    public static long getTargetElapsedTime(NativeGameHandle game) {
+        return longResult("cna_game_get_target_elapsed_time_ticks",
+                nativeGetTargetElapsedTime(game.requireValue()));
+    }
+
+    public static void setInactiveSleepTime(NativeGameHandle game, long ticks) {
+        check("cna_game_set_inactive_sleep_time_ticks",
+                nativeSetInactiveSleepTime(game.requireValue(), ticks));
+    }
+
+    public static long getInactiveSleepTime(NativeGameHandle game) {
+        return longResult("cna_game_get_inactive_sleep_time_ticks",
+                nativeGetInactiveSleepTime(game.requireValue()));
     }
 
     static void destroyGame(Game game, long handle) {
@@ -122,6 +168,20 @@ public final class NativeBindings {
         if (result != 0) {
             throw failure(operation, result);
         }
+    }
+
+    private static boolean booleanResult(String operation, int result) {
+        if (result < 0) {
+            throw failure(operation, -result);
+        }
+        return result != 0;
+    }
+
+    private static long longResult(String operation, long result) {
+        if (result < 0L) {
+            throw failure(operation, Math.toIntExact(-result));
+        }
+        return result;
     }
 
     private static CnaNativeException failure(String operation, int result) {
@@ -199,6 +259,14 @@ public final class NativeBindings {
 
     private static native int nativeRun(long game);
 
+    private static native int nativeRunOneFrame(long game);
+
+    private static native int nativeResetElapsedTime(long game);
+
+    private static native int nativeSuppressDraw(long game);
+
+    private static native int nativeTick(long game);
+
     private static native int nativeRequestExit(long game);
 
     private static native int nativeClear(long game, int red, int green, int blue, int alpha);
@@ -206,6 +274,20 @@ public final class NativeBindings {
     private static native int nativeSetMouseVisible(long game, boolean visible);
 
     private static native int nativeGetMouseVisible(long game);
+
+    private static native int nativeGetIsActive(long game);
+
+    private static native int nativeSetFixedTimeStep(long game, boolean value);
+
+    private static native int nativeGetFixedTimeStep(long game);
+
+    private static native int nativeSetTargetElapsedTime(long game, long ticks);
+
+    private static native long nativeGetTargetElapsedTime(long game);
+
+    private static native int nativeSetInactiveSleepTime(long game, long ticks);
+
+    private static native long nativeGetInactiveSleepTime(long game);
 
     private static native int nativeDestroyGame(long game);
 

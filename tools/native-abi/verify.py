@@ -8,6 +8,7 @@ import ctypes
 import json
 import os
 from pathlib import Path
+import re
 import subprocess
 import sys
 import tempfile
@@ -34,6 +35,16 @@ def main() -> int:
 
     manifest = json.loads((ROOT / "tools/native-abi/bindings.json").read_text(encoding="utf-8"))
     functions = [value["name"] for value in manifest["functions"]]
+    jni_source = (ROOT / "src/main/c/cna_java_jni.c").read_text(encoding="utf-8")
+    loaded_functions = re.findall(r'LOAD\([^,]+,\s*"(cna_[^"]+)"\)', jni_source)
+    missing_manifest = sorted(set(loaded_functions) - set(functions))
+    missing_loader = sorted(set(functions) - set(loaded_functions))
+    if missing_manifest or missing_loader:
+        for name in missing_manifest:
+            print("JNI_SYMBOL_MISSING_FROM_MANIFEST=" + name)
+        for name in missing_loader:
+            print("MANIFEST_SYMBOL_MISSING_FROM_JNI=" + name)
+        return 1
     compiler = os.environ.get("CC", "cc")
     with tempfile.TemporaryDirectory(prefix="cna-java-abi-") as directory:
         output = Path(directory) / "probe.o"
@@ -43,6 +54,7 @@ def main() -> int:
 
     print(f"HEADER_ABI={manifest['compiledAbi']}")
     print(f"BOUND_FUNCTIONS={len(functions)}")
+    print("MANIFEST_JNI_BINDING_CHECK=PASS")
     print("LAYOUT_SIGNATURE_PROBE=PASS")
 
     if not arguments.library:

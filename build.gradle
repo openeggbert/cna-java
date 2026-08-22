@@ -99,6 +99,12 @@ tasks.register('leakGuard', Exec) {
             '--target', sourceSets.main.output.classesDirs.asPath
 }
 
+tasks.register('apiCompatToolTests', Exec) {
+    group = 'verification'
+    description = 'Runs mapping/verifier regression tests without XNA assemblies.'
+    commandLine 'python3', 'tools/api-compat/test_verify.py'
+}
+
 def xnaReferenceDirectory = providers.environmentVariable('XNA_REFERENCE_DIR')
 
 tasks.register('apiCompatReport', Exec) {
@@ -138,6 +144,7 @@ tasks.register('nativeAbiCheck', Exec) {
 }
 
 check {
+    dependsOn tasks.named('apiCompatToolTests')
     dependsOn tasks.named('compileCompileProbeJava')
     dependsOn tasks.named('leakGuard')
     dependsOn tasks.named('nativeAbiCheck')
