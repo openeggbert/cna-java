@@ -1,0 +1,130 @@
+plugins {
+    id 'java-library'
+    id 'maven-publish'
+}
+
+group = 'org.openeggbert'
+version = '0.1.0-SNAPSHOT'
+
+repositories {
+    mavenCentral()
+}
+
+java {
+    sourceCompatibility = JavaVersion.VERSION_17
+    targetCompatibility = JavaVersion.VERSION_17
+    withSourcesJar()
+    withJavadocJar()
+}
+
+dependencies {
+    testImplementation platform('org.junit:junit-bom:5.11.4')
+    testImplementation 'org.junit.jupiter:junit-jupiter'
+}
+
+tasks.withType(JavaCompile).configureEach {
+    options.release = 17
+    options.encoding = 'UTF-8'
+    options.compilerArgs.addAll(['-parameters', '-Xlint:all', '-Werror'])
+}
+
+tasks.withType(Javadoc).configureEach {
+    options.encoding = 'UTF-8'
+    options.addBooleanOption('Xdoclint:all,-missing', true)
+}
+
+test {
+    useJUnitPlatform()
+}
+
+def hostOs = org.gradle.internal.os.OperatingSystem.current()
+def nativeLibraryName = hostOs.isWindows() ? 'cna_java_jni.dll' :
+        (hostOs.isMacOsX() ? 'libcna_java_jni.dylib' : 'libcna_java_jni.so')
+def nativeOutput = layout.buildDirectory.file("native/${nativeLibraryName}")
+def configuredCnaRoot = providers.environmentVariable('CNA_ROOT').orElse(
+        providers.provider {
+            def directSibling = file('../cna')
+            directSibling.isDirectory() ? directSibling.absolutePath : file('../../cna').absolutePath
+        })
+
+tasks.register('compileJni', Exec) {
+    group = 'build'
+    description = 'Builds the Java 17 JNI adapter against CNA stable C headers.'
+    inputs.file('src/main/c/cna_java_jni.c')
+    inputs.dir(configuredCnaRoot.map { file("${it}/modules/c-api/include") })
+    outputs.file(nativeOutput)
+    doFirst {
+        def javaHome = file(System.getProperty('java.home'))
+        def osInclude = hostOs.isWindows() ? 'win32' : (hostOs.isMacOsX() ? 'darwin' : 'linux')
+        def compiler = System.getenv('CC') ?: 'cc'
+        def arguments = [
+                compiler, '-std=c11', '-Wall', '-Wextra', '-Werror', '-fPIC', '-shared',
+                "-I${new File(javaHome, 'include')}",
+                "-I${new File(javaHome, "include/${osInclude}")}",
+                "-I${file("${configuredCnaRoot.get()}/modules/c-api/include")}",
+                '-o', nativeOutput.get().asFile,
+                file('src/main/c/cna_java_jni.c')
+        ]
+        if (!hostOs.isWindows()) {
+            arguments.add('-ldl')
+        }
+        commandLine arguments
+    }
+}
+
+test {
+    dependsOn tasks.named('compileJni')
+    systemProperty 'cna.java.jniLibrary', nativeOutput.get().asFile.absolutePath
+    if (System.getenv('CNA_NATIVE_LIBRARY')) {
+        systemProperty 'cna.native.library', System.getenv('CNA_NATIVE_LIBRARY')
+    }
+}
+
+sourceSets {
+    compileProbe {
+        java.srcDir 'src/compileProbe/java'
+        compileClasspath += sourceSets.main.output
+    }
+}
+
+tasks.named('compileCompileProbeJava') {
+    dependsOn tasks.named('classes')
+}
+
+tasks.register('leakGuard', Exec) {
+    group = 'verification'
+    dependsOn tasks.named('classes')
+    commandLine 'python3', 'tools/api-compat/verify.py', '--leak-only',
+            '--target', sourceSets.main.output.classesDirs.asPath
+}
+
+tasks.register('nativeAbiCheck', Exec) {
+    group = 'verification'
+    commandLine 'python3', 'tools/native-abi/verify.py',
+            '--cna-root', configuredCnaRoot.get()
+}
+
+check {
+    dependsOn tasks.named('compileCompileProbeJava')
+    dependsOn tasks.named('leakGuard')
+    dependsOn tasks.named('nativeAbiCheck')
+}
+
+publishing {
+    publications {
+        mavenJava(MavenPublication) {
+            from components.java
+            pom {
+                name = 'CNA Java'
+                description = 'Java projection of XNA 4.0 backed by the CNA stable C ABI'
+                url = 'https://github.com/openeggbert/cna-java'
+                licenses {
+                    license {
+                        name = 'Microsoft Public License'
+                        url = 'https://opensource.org/license/ms-pl-html'
+                    }
+                }
+            }
+        }
+    }
+}

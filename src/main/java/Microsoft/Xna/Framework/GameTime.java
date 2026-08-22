@@ -3,17 +3,42 @@ package Microsoft.Xna.Framework;
 import java.time.Duration;
 import java.util.Objects;
 
-/** XNA 4.0-compatible game-time facade. */
-public final class GameTime {
+/** XNA 4.0 game timing snapshot with {@code TimeSpan} mapped to {@link Duration}. */
+public class GameTime {
 
-    public final Duration TotalGameTime;
-    public final Duration ElapsedGameTime;
-    public final boolean IsRunningSlowly;
+    private Duration totalGameTime;
+    private Duration elapsedGameTime;
+    private boolean runningSlowly;
 
-    /** Creates an immutable game-time snapshot. */
+    public GameTime() {
+        this(Duration.ZERO, Duration.ZERO, false);
+    }
+
+    public GameTime(Duration totalGameTime, Duration elapsedGameTime) {
+        this(totalGameTime, elapsedGameTime, false);
+    }
+
     public GameTime(Duration totalGameTime, Duration elapsedGameTime, boolean isRunningSlowly) {
-        TotalGameTime = Objects.requireNonNull(totalGameTime, "totalGameTime");
-        ElapsedGameTime = Objects.requireNonNull(elapsedGameTime, "elapsedGameTime");
-        IsRunningSlowly = isRunningSlowly;
+        this.totalGameTime = Objects.requireNonNull(totalGameTime, "totalGameTime");
+        this.elapsedGameTime = Objects.requireNonNull(elapsedGameTime, "elapsedGameTime");
+        runningSlowly = isRunningSlowly;
+    }
+
+    public Duration getTotalGameTime() {
+        return totalGameTime;
+    }
+
+    public Duration getElapsedGameTime() {
+        return elapsedGameTime;
+    }
+
+    public boolean getIsRunningSlowly() {
+        return runningSlowly;
+    }
+
+    void setNativeValues(Duration total, Duration elapsed, boolean slowly) {
+        totalGameTime = Objects.requireNonNull(total, "total");
+        elapsedGameTime = Objects.requireNonNull(elapsed, "elapsed");
+        runningSlowly = slowly;
     }
 }

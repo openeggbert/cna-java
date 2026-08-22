@@ -1,0 +1,498 @@
+#!/usr/bin/env python3
+"""Strict compiled-metadata verifier for the normative XNA-to-Java projection."""
+
+from __future__ import annotations
+
+import argparse
+import json
+import os
+from pathlib import Path
+import re
+import subprocess
+import sys
+import tempfile
+from typing import Any
+
+
+ROOT = Path(__file__).resolve().parents[2]
+PROFILE = ROOT / "tools/api-compat/profiles/xna40-windows-runtime.json"
+RULES = ROOT / "tools/api-compat/mapping-rules.json"
+EXTRACTOR = ROOT / "tools/api-compat/extractor/XnaContractExtractor.cs"
+CLASS_READER = ROOT / "tools/api-compat/java/ClassContractReader.java"
+
+PRIMITIVES = {
+    "System.Void": "void",
+    "System.Boolean": "boolean",
+    "System.Byte": "byte",
+    "System.SByte": "byte",
+    "System.Int16": "short",
+    "System.UInt16": "int",
+    "System.Int32": "int",
+    "System.UInt32": "long",
+    "System.Int64": "long",
+    "System.UInt64": "long",
+    "System.Single": "float",
+    "System.Double": "double",
+    "System.Char": "char",
+    "System.String": "java.lang.String",
+    "System.Object": "java.lang.Object",
+    "System.Exception": "java.lang.RuntimeException",
+    "System.TimeSpan": "java.time.Duration",
+    "System.Type": "java.lang.Class<?>",
+}
+
+OPERATOR_METHODS = {
+    "op_Addition": "Add",
+    "op_Subtraction": "Subtract",
+    "op_Multiply": "Multiply",
+    "op_Division": "Divide",
+    "op_UnaryNegation": "Negate",
+}
+
+GENERIC_RENAMES: dict[str, str] = {}
+
+
+def parse_args() -> argparse.Namespace:
+    parser = argparse.ArgumentParser()
+    parser.add_argument("--reference-dir", default=os.environ.get("XNA_REFERENCE_PATH"))
+    parser.add_argument("--target", required=True, help="Class directory/JAR, or os.pathsep-separated inputs")
+    parser.add_argument("--profile", default=str(PROFILE))
+    parser.add_argument("--mapping-rules", default=str(RULES))
+    parser.add_argument("--format", choices=("text", "json"), default="text")
+    parser.add_argument("--output")
+    parser.add_argument("--report-only", action="store_true")
+    parser.add_argument("--summary-only", action="store_true")
+    parser.add_argument("--leak-only", action="store_true")
+    return parser.parse_args()
+
+
+def run(command: list[str]) -> subprocess.CompletedProcess[str]:
+    return subprocess.run(command, check=True, text=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+
+
+def read_target(target: str, temporary: Path) -> dict[str, Any]:
+    classes = temporary / "reader-classes"
+    classes.mkdir()
+    run(["javac", "--release", "17", "-parameters", "-Xlint:all", "-Werror",
+         "-d", str(classes), str(CLASS_READER)])
+    output = temporary / "target.json"
+    inputs = [item for item in target.split(os.pathsep) if item]
+    run(["java", "-cp", str(classes),
+         "org.openeggbert.cna.tools.apicompat.ClassContractReader", str(output), *inputs])
+    return json.loads(output.read_text(encoding="utf-8"))
+
+
+def read_reference(reference_dir: str, profile: dict[str, Any], temporary: Path) -> dict[str, Any]:
+    executable = temporary / "XnaContractExtractor.exe"
+    run(["mcs", "-warnaserror+", "-r:System.Core", "-r:System.Web.Extensions",
+         "-out:" + str(executable), str(EXTRACTOR)])
+    output = temporary / "reference.json"
+    run(["mono", str(executable), reference_dir, str(output), *profile["referenceAssemblies"]])
+    return json.loads(output.read_text(encoding="utf-8"))
+
+
+def diagnostic(code: str, subject: str, expected: Any = None, actual: Any = None) -> dict[str, Any]:
+    value: dict[str, Any] = {"code": code, "subject": subject}
+    if expected is not None:
+        value["expected"] = expected
+    if actual is not None:
+        value["actual"] = actual
+    return value
+
+
+def leak_diagnostics(target: dict[str, Any]) -> list[dict[str, Any]]:
+    findings: list[dict[str, Any]] = []
+    banned = ("org.openeggbert.cna.internal", "java.lang.foreign.MemorySegment", "jdk.incubator.foreign")
+    for type_contract in target["types"]:
+        type_name = type_contract["name"]
+        for relationship in [type_contract.get("baseType"), *type_contract.get("interfaces", [])]:
+            if relationship and any(value in relationship for value in banned):
+                findings.append(diagnostic("CNA_INTERNAL_LEAK", type_name, actual=relationship))
+        for member in type_contract["members"]:
+            values = [member.get("type"), member.get("returnType")]
+            values.extend(parameter.get("type") for parameter in member.get("parameters", []))
+            subject = f"{type_name}.{member['name']}"
+            leaked = next((value for value in values if value and any(item in value for item in banned)), None)
+            suspicious_name = "native" in member["name"].lower()
+            raw_handle = "handle" in member["name"].lower() and any(value == "long" for value in values)
+            if leaked or suspicious_name or raw_handle:
+                findings.append(diagnostic("CNA_INTERNAL_LEAK", subject, actual=leaked or member["name"]))
+    return sorted(findings, key=lambda item: (item["code"], item["subject"]))
+
+
+def strip_arity(name: str) -> str:
+    return re.sub(r"`\d+", "", name)
+
+
+def split_generic(value: str) -> tuple[str, list[str]] | None:
+    bracket = value.find("[")
+    if bracket < 0 or not value.endswith("]"):
+        return None
+    base = value[:bracket]
+    body = value[bracket + 1:-1]
+    arguments: list[str] = []
+    start = 0
+    depth = 0
+    for index, character in enumerate(body):
+        if character == "[":
+            depth += 1
+        elif character == "]":
+            depth -= 1
+        elif character == "," and depth == 0:
+            arguments.append(body[start:index])
+            start = index + 1
+    arguments.append(body[start:])
+    return base, arguments
+
+
+def boxed(value: str) -> str:
+    return {
+        "boolean": "java.lang.Boolean", "byte": "java.lang.Byte", "short": "java.lang.Short",
+        "int": "java.lang.Integer", "long": "java.lang.Long", "float": "java.lang.Float",
+        "double": "java.lang.Double", "char": "java.lang.Character",
+    }.get(value, value)
+
+
+def map_type(value: str | None, *, identity: bool = False) -> str | None:
+    if value is None:
+        return None
+    if value.endswith("&"):
+        return map_type(value[:-1], identity=identity)
+    if value.endswith("[]"):
+        return map_type(value[:-2], identity=identity) + "[]"
+    if value.startswith("!"):
+        return "T" if value == "!0" else "T" + value[1:]
+    if value in PRIMITIVES:
+        return PRIMITIVES[value]
+    parsed = split_generic(value)
+    if parsed:
+        base, arguments = parsed
+        mapped_arguments = [boxed(map_type(argument) or "java.lang.Object") for argument in arguments]
+        collection = {
+            "System.Collections.Generic.IEnumerable`1": "java.lang.Iterable",
+            "System.Collections.Generic.ICollection`1": "java.util.Collection",
+            "System.Collections.Generic.IList`1": "java.util.List",
+            "System.Collections.Generic.List`1": "java.util.List",
+            "System.Nullable`1": None,
+        }
+        if base == "System.Nullable`1":
+            return mapped_arguments[0]
+        mapped_base = collection.get(base, GENERIC_RENAMES.get(base, strip_arity(base).replace("+", ".")))
+        return mapped_base + "<" + ",".join(mapped_arguments) + ">"
+    mapped = GENERIC_RENAMES.get(value, strip_arity(value))
+    if value == "System.IDisposable":
+        return "java.lang.AutoCloseable"
+    return mapped.replace("+", "$" if identity else ".")
+
+
+def visible(access: str | None) -> bool:
+    return access in ("public", "protected")
+
+
+def parameter(name: str, type_name: str) -> dict[str, Any]:
+    return {"name": name, "type": type_name, "out": False, "optional": False}
+
+
+def callable_member(kind: str, name: str, source: dict[str, Any], parameters: list[dict[str, Any]], return_type: str | None) -> dict[str, Any]:
+    return {
+        "kind": kind,
+        "name": name,
+        "access": source.get("access", "public"),
+        "static": source.get("static", False),
+        "abstract": source.get("abstract", False),
+        "final": source.get("final", False),
+        "genericArity": source.get("genericArity", 0),
+        "returnType": return_type,
+        "parameters": parameters,
+    }
+
+
+def map_parameters(values: list[dict[str, Any]]) -> list[dict[str, Any]]:
+    return [parameter(value["name"], map_type(value["type"]) or "java.lang.Object") for value in values]
+
+
+def mapped_members(type_contract: dict[str, Any], rules: dict[str, Any], mapping_findings: list[dict[str, Any]]) -> list[dict[str, Any]]:
+    expected: list[dict[str, Any]] = []
+    type_name = type_contract["name"]
+    if type_contract["kind"] == "struct":
+        empty = {"access": "public", "static": False, "abstract": False, "final": False, "genericArity": 0}
+        expected.append(callable_member("constructor", ".ctor", empty, [], None))
+        expected.append(callable_member("constructor", ".ctor", empty,
+                                        [parameter("value", map_type(type_name) or type_name)], None))
+
+    ordinary_methods = [value for value in type_contract["members"]
+                        if value["kind"] == "method"
+                        and not any(parameter_value["type"].endswith("&")
+                                    for parameter_value in value.get("parameters", []))]
+
+    for member in type_contract["members"]:
+        kind = member["kind"]
+        if kind == "field":
+            expected.append({**member, "type": map_type(member["type"])})
+        elif kind == "constructor":
+            expected.append(callable_member("constructor", ".ctor", member,
+                                            map_parameters(member["parameters"]), None))
+        elif kind == "property":
+            indexes = map_parameters(member.get("parameters", []))
+            property_type = map_type(member["type"]) or "java.lang.Object"
+            full_name = type_name + "." + member["name"]
+            if full_name in rules["namedImmutableValueFields"]:
+                expected.append({"kind": "field", "name": member["name"], "access": "public",
+                                 "type": property_type, "static": True, "final": True, "constant": None})
+            elif visible(member.get("getterAccess")):
+                getter_name = "get" if indexes else "get" + member["name"]
+                source = {"access": member["getterAccess"], "static": member["static"]}
+                expected.append(callable_member("method", getter_name, source, indexes, property_type))
+            if visible(member.get("setterAccess")):
+                setter_name = "set" if indexes else "set" + member["name"]
+                source = {"access": member["setterAccess"], "static": member["static"]}
+                expected.append(callable_member("method", setter_name, source,
+                                                [*indexes, parameter("value", property_type)], "void"))
+        elif kind == "event":
+            listener = map_type(member["type"]) or "java.lang.Object"
+            if visible(member.get("addAccess")):
+                source = {"access": member["addAccess"], "static": member["static"]}
+                expected.append(callable_member("method", "add" + member["name"] + "Listener", source,
+                                                [parameter("listener", listener)], "void"))
+            if visible(member.get("removeAccess")):
+                source = {"access": member["removeAccess"], "static": member["static"]}
+                expected.append(callable_member("method", "remove" + member["name"] + "Listener", source,
+                                                [parameter("listener", listener)], "void"))
+        elif kind == "method":
+            name = member["name"]
+            if name in ("op_Equality", "op_Inequality"):
+                continue
+            if name in ("op_Implicit", "op_Explicit"):
+                mapping_findings.append(diagnostic("XNA_MAPPING_MISMATCH", type_name + "." + name,
+                                                   expected="explicit conversion rule", actual="unclassified conversion"))
+                continue
+            name = OPERATOR_METHODS.get(name, name)
+            name = {"Equals": "equals", "GetHashCode": "hashCode", "ToString": "toString", "Dispose": "close"}.get(name, name)
+            if type_name == "Microsoft.Xna.Framework.Content.ContentManager" and name == "Load" \
+                    and member.get("genericArity") == 1:
+                source = dict(member)
+                source["genericArity"] = 1
+                expected.append(callable_member("method", "Load", source,
+                                                [parameter("assetType", "java.lang.Class<T>"),
+                                                 *map_parameters(member["parameters"])], "T"))
+                continue
+            by_reference = any(value["type"].endswith("&") for value in member["parameters"])
+            if by_reference:
+                out_values = [value for value in member["parameters"] if value.get("out")]
+                inputs = [value for value in member["parameters"] if not value.get("out")]
+                if len(out_values) == 1:
+                    input_types = [map_type(value["type"]) for value in inputs]
+                    output_type = map_type(out_values[0]["type"])
+                    redundant = any(value["name"] == member["name"]
+                                    and [map_type(parameter_value["type"])
+                                         for parameter_value in value["parameters"]] == input_types
+                                    and map_type(value["returnType"]) == output_type
+                                    for value in ordinary_methods)
+                    if redundant:
+                        continue
+                if not out_values:
+                    expected.append(callable_member("method", name, member,
+                                                    map_parameters(member["parameters"]),
+                                                    map_type(member["returnType"])))
+                    continue
+                if type_name == "Microsoft.Xna.Framework.Matrix" and member["name"] == "Decompose":
+                    expected.append(callable_member("method", "Decompose", member, [],
+                                                    "Microsoft.Xna.Framework.Matrix.Decomposition"))
+                    continue
+                signature = ",".join(value["type"] for value in member["parameters"])
+                mapping_findings.append(diagnostic("XNA_MAPPING_MISMATCH",
+                                                   type_name + "." + member["name"] + "(" + signature + ")",
+                                                   expected="reviewed ref/out transformation", actual="unclassified ref/out overload"))
+                continue
+            expected.append(callable_member("method", name, member, map_parameters(member["parameters"]),
+                                            map_type(member["returnType"])))
+
+    unique: dict[str, dict[str, Any]] = {}
+    for member in expected:
+        unique[member_key(member, include_return=True)] = member
+    return list(unique.values())
+
+
+def member_key(member: dict[str, Any], *, include_return: bool) -> str:
+    parameters = ",".join(value["type"] for value in member.get("parameters", []))
+    key = f"{member['kind']}:{member['name']}({parameters})"
+    if include_return:
+        key += "->" + str(member.get("returnType") if member["kind"] != "field" else member.get("type"))
+    return key
+
+
+def compare(reference: dict[str, Any], target: dict[str, Any], rules: dict[str, Any]) -> list[dict[str, Any]]:
+    findings: list[dict[str, Any]] = []
+    expected_types = {map_type(value["name"], identity=True): value for value in reference["types"]}
+    actual_types = {value["name"]: value for value in target["types"]}
+
+    for name in sorted(expected_types.keys() - actual_types.keys()):
+        findings.append(diagnostic("MISSING_TYPE", name))
+    for name in sorted(actual_types.keys() - expected_types.keys()):
+        findings.append(diagnostic("UNEXPECTED_TYPE", name))
+
+    for name in sorted(expected_types.keys() & actual_types.keys()):
+        expected_type = expected_types[name]
+        actual_type = actual_types[name]
+        expected_kind = {"struct": "class", "delegate": "interface"}.get(expected_type["kind"], expected_type["kind"])
+        if actual_type["kind"] != expected_kind:
+            findings.append(diagnostic("TYPE_KIND_MISMATCH", name, expected_kind, actual_type["kind"]))
+        if expected_type.get("access") != actual_type.get("access"):
+            findings.append(diagnostic("ACCESSIBILITY_MISMATCH", name,
+                                       expected_type.get("access"), actual_type.get("access")))
+        expected_abstract = bool(expected_type.get("abstract")) and not bool(expected_type.get("sealed"))
+        expected_sealed = bool(expected_type.get("sealed")) or expected_type["kind"] == "struct"
+        if expected_abstract != bool(actual_type.get("abstract")) or expected_sealed != bool(actual_type.get("sealed")):
+            findings.append(diagnostic("TYPE_MODIFIER_MISMATCH", name,
+                                       {"abstract": expected_abstract, "final": expected_sealed},
+                                       {"abstract": actual_type.get("abstract"), "final": actual_type.get("sealed")}))
+        expected_base = map_type(expected_type.get("baseType"))
+        if expected_type["kind"] in ("struct", "enum"):
+            expected_base = "java.lang.Object" if expected_type["kind"] == "struct" else actual_type.get("baseType")
+        if expected_base != actual_type.get("baseType"):
+            findings.append(diagnostic("BASE_TYPE_MISMATCH", name, expected_base, actual_type.get("baseType")))
+        expected_interfaces = set(filter(None, (map_type(value) for value in expected_type.get("interfaces", []))))
+        expected_interfaces.discard("System.IEquatable<T0>")
+        expected_interfaces = {value for value in expected_interfaces if not value.startswith("System.IEquatable")}
+        actual_interfaces = set(actual_type.get("interfaces", []))
+        if expected_interfaces != actual_interfaces:
+            findings.append(diagnostic("INTERFACE_MISMATCH", name, sorted(expected_interfaces), sorted(actual_interfaces)))
+        if expected_type.get("genericArity", 0) != actual_type.get("genericArity", 0):
+            findings.append(diagnostic("GENERIC_MISMATCH", name, expected_type.get("genericArity", 0), actual_type.get("genericArity", 0)))
+
+        expected_members = mapped_members(expected_type, rules, findings)
+        actual_members = actual_type["members"]
+        expected_full = {member_key(value, include_return=True): value for value in expected_members}
+        actual_full = {member_key(value, include_return=True): value for value in actual_members}
+        expected_shapes = {member_key(value, include_return=False): value for value in expected_members}
+        actual_shapes = {member_key(value, include_return=False): value for value in actual_members}
+
+        paired_expected: set[str] = set()
+        paired_actual: set[str] = set()
+        for expected_key in sorted(expected_full.keys() - actual_full.keys()):
+            expected_member = expected_full[expected_key]
+            candidates = [value for key, value in actual_full.items()
+                          if key not in paired_actual and value["kind"] == expected_member["kind"]
+                          and value["name"] == expected_member["name"]
+                          and len(value.get("parameters", [])) == len(expected_member.get("parameters", []))]
+            if len(candidates) == 1:
+                actual_member = candidates[0]
+                expected_parameters = [value["type"] for value in expected_member.get("parameters", [])]
+                actual_parameters = [value["type"] for value in actual_member.get("parameters", [])]
+                if expected_parameters != actual_parameters:
+                    actual_key = member_key(actual_member, include_return=True)
+                    paired_expected.add(expected_key)
+                    paired_actual.add(actual_key)
+                    findings.append(diagnostic("PARAMETER_MISMATCH",
+                                               name + "." + expected_member["name"],
+                                               expected_parameters, actual_parameters))
+
+        for key in sorted(expected_full.keys() - actual_full.keys()):
+            if key in paired_expected:
+                continue
+            shape = member_key(expected_full[key], include_return=False)
+            subject = name + "." + shape
+            if shape in actual_shapes:
+                code = "FIELD_TYPE_MISMATCH" if expected_full[key]["kind"] == "field" else "RETURN_TYPE_MISMATCH"
+                expected_value = expected_full[key].get("type") or expected_full[key].get("returnType")
+                actual_value = actual_shapes[shape].get("type") or actual_shapes[shape].get("returnType")
+                findings.append(diagnostic(code, subject, expected_value, actual_value))
+            else:
+                findings.append(diagnostic("MISSING_MEMBER", subject, expected=key))
+        for key in sorted(actual_full.keys() - expected_full.keys()):
+            if key in paired_actual:
+                continue
+            shape = member_key(actual_full[key], include_return=False)
+            if shape not in expected_shapes:
+                findings.append(diagnostic("UNEXPECTED_MEMBER", name + "." + shape, actual=key))
+
+        for shape in sorted(expected_shapes.keys() & actual_shapes.keys()):
+            expected_member = expected_shapes[shape]
+            actual_member = actual_shapes[shape]
+            expected_names = [value["name"] for value in expected_member.get("parameters", [])]
+            actual_names = [value["name"] for value in actual_member.get("parameters", [])]
+            if expected_names != actual_names:
+                findings.append(diagnostic("PARAMETER_NAME_MISMATCH", name + "." + shape, expected_names, actual_names))
+            expected_modifiers = {key: expected_member.get(key) for key in ("access", "static", "abstract", "genericArity")}
+            actual_modifiers = {key: actual_member.get(key) for key in ("access", "static", "abstract", "genericArity")}
+            if expected_modifiers != actual_modifiers:
+                findings.append(diagnostic("MEMBER_MODIFIER_MISMATCH", name + "." + shape,
+                                           expected_modifiers, actual_modifiers))
+            if expected_member["kind"] == "field" and expected_type["kind"] == "enum" \
+                    and expected_member.get("constant") != actual_member.get("constant"):
+                findings.append(diagnostic("ENUM_VALUE_MISMATCH", name + "." + expected_member["name"],
+                                           expected_member.get("constant"), actual_member.get("constant")))
+
+    findings.extend(leak_diagnostics(target))
+    return sorted(findings, key=lambda item: (item["code"], item["subject"], json.dumps(item, sort_keys=True)))
+
+
+def make_report(profile: dict[str, Any], reference: dict[str, Any] | None, target: dict[str, Any], findings: list[dict[str, Any]]) -> dict[str, Any]:
+    counts: dict[str, int] = {}
+    for item in findings:
+        counts[item["code"]] = counts.get(item["code"], 0) + 1
+    return {
+        "schemaVersion": 1,
+        "profile": profile["name"],
+        "referenceTypes": 0 if reference is None else len(reference["types"]),
+        "referenceMembers": 0 if reference is None else sum(len(value["members"]) for value in reference["types"]),
+        "targetTypes": len(target["types"]),
+        "targetMembers": sum(len(value["members"]) for value in target["types"]),
+        "totalDiagnostics": len(findings),
+        "allowlistEntries": 0,
+        "diagnosticCounts": dict(sorted(counts.items())),
+        "diagnostics": findings,
+    }
+
+
+def render_text(report: dict[str, Any], include_diagnostics: bool = True) -> str:
+    lines = [
+        f"PROFILE={report['profile']}",
+        f"REFERENCE_TYPES={report['referenceTypes']}",
+        f"REFERENCE_MEMBERS={report['referenceMembers']}",
+        f"TARGET_TYPES={report['targetTypes']}",
+        f"TARGET_MEMBERS={report['targetMembers']}",
+        f"TOTAL_DIAGNOSTICS={report['totalDiagnostics']}",
+        f"ALLOWLIST_ENTRIES={report['allowlistEntries']}",
+    ]
+    lines.extend(f"{key}={value}" for key, value in report["diagnosticCounts"].items())
+    if include_diagnostics:
+        lines.extend(f"{item['code']} {item['subject']}" for item in report["diagnostics"])
+    return "\n".join(lines)
+
+
+def main() -> int:
+    arguments = parse_args()
+    profile = json.loads(Path(arguments.profile).read_text(encoding="utf-8"))
+    rules = json.loads(Path(arguments.mapping_rules).read_text(encoding="utf-8"))
+    GENERIC_RENAMES.update(rules.get("genericTypeRenames", {}))
+    if rules.get("allowlist"):
+        print("mapping rules must retain an empty allowlist", file=sys.stderr)
+        return 2
+
+    with tempfile.TemporaryDirectory(prefix="cna-java-api-compat-") as directory:
+        temporary = Path(directory)
+        target = read_target(arguments.target, temporary)
+        if arguments.leak_only:
+            findings = leak_diagnostics(target)
+            report = make_report(profile, None, target, findings)
+        else:
+            if not arguments.reference_dir:
+                print("XNA_REFERENCE_PATH or --reference-dir is required for the strict verifier", file=sys.stderr)
+                return 2
+            reference = read_reference(arguments.reference_dir, profile, temporary)
+            findings = compare(reference, target, rules)
+            report = make_report(profile, reference, target, findings)
+
+    rendered = json.dumps(report, indent=2, sort_keys=True) if arguments.format == "json" \
+        else render_text(report, include_diagnostics=not arguments.summary_only)
+    print(rendered)
+    if arguments.output:
+        output = Path(arguments.output)
+        output.parent.mkdir(parents=True, exist_ok=True)
+        output.write_text(json.dumps(report, indent=2, sort_keys=True) + "\n", encoding="utf-8")
+    return 0 if arguments.report_only or report["totalDiagnostics"] == 0 else 1
+
+
+if __name__ == "__main__":
+    raise SystemExit(main())

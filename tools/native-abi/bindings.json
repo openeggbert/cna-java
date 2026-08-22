@@ -1,0 +1,18 @@
+{
+  "schemaVersion": 1,
+  "compiledAbi": "0.7.0",
+  "functions": [
+    {"name": "cna_get_abi_version", "header": "abi.h", "ownership": "none"},
+    {"name": "cna_error_get_last_message_size", "header": "core.h", "ownership": "caller output"},
+    {"name": "cna_error_copy_last_message", "header": "core.h", "ownership": "caller buffer"},
+    {"name": "cna_game_create", "header": "runtime.h", "ownership": "returns owned game"},
+    {"name": "cna_game_set_frame_hooks_ext", "header": "runtime.h", "ownership": "copies callback table; borrows context"},
+    {"name": "cna_game_run", "header": "runtime.h", "ownership": "borrows game"},
+    {"name": "cna_game_request_exit", "header": "runtime.h", "ownership": "borrows game"},
+    {"name": "cna_game_destroy", "header": "runtime.h", "ownership": "consumes owned game on success or callback failure"},
+    {"name": "cna_game_clear", "header": "runtime.h", "ownership": "borrows game and copies color"},
+    {"name": "cna_game_set_is_mouse_visible", "header": "runtime.h", "ownership": "borrows game"},
+    {"name": "cna_game_get_is_mouse_visible", "header": "runtime.h", "ownership": "borrows game; caller output"}
+  ]
+}
+

@@ -1,0 +1,24 @@
+{
+  "schemaVersion": 1,
+  "methodCasing": "preserve",
+  "propertyGetterPrefix": "get",
+  "propertySetterPrefix": "set",
+  "indexerGetter": "get",
+  "indexerSetter": "set",
+  "eventAddPrefix": "add",
+  "eventRemovePrefix": "remove",
+  "eventSuffix": "Listener",
+  "timeSpan": "java.time.Duration",
+  "disposable": "java.lang.AutoCloseable",
+  "mutableStaticValueProperties": "fresh-getter",
+  "genericTypeRenames": {
+    "Microsoft.Xna.Framework.Content.ContentTypeReader`1": "Microsoft.Xna.Framework.Content.ContentTypeReaderOfT",
+    "Microsoft.Xna.Framework.Graphics.PackedVector.IPackedVector`1": "Microsoft.Xna.Framework.Graphics.PackedVector.IPackedVectorOfT"
+  },
+  "namedImmutableValueFields": [
+    "Microsoft.Xna.Framework.Color.CornflowerBlue",
+    "Microsoft.Xna.Framework.Color.Transparent",
+    "Microsoft.Xna.Framework.Color.White"
+  ],
+  "allowlist": []
+}
