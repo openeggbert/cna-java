@@ -60,7 +60,7 @@ public final class Ray {
     }
 
     @Override
-    public boolean equals(Object other) { return this == other || other instanceof Ray value && Position.equals(value.Position) && Direction.equals(value.Direction); }
+    public boolean equals(Object obj) { return this == obj || obj instanceof Ray value && Position.equals(value.Position) && Direction.equals(value.Direction); }
     @Override
     public int hashCode() { return Position.hashCode() + Direction.hashCode(); }
     @Override

@@ -18,6 +18,10 @@ CNA C++
 The strict projection contains no raw address, JNI wrapper, CNA handle, or
 implementation class in public/protected signatures. `tools/api-compat` checks
 that boundary from compiled class metadata rather than Java source text.
+When XNA exposes no public/protected constructor but Java facades in another
+namespace must be created, the internal `FacadeFactory` invokes a package-private
+constructor reflectively. This narrow friend-construction adapter avoids adding
+an unexpected public constructor to the strict compiled contract.
 
 There is deliberately no invented `CNA.Framework` layer. Opt-in CNA-specific
 Java APIs will live under `org.openeggbert.cna.extensions` unless they project a

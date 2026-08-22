@@ -24,13 +24,27 @@ final class LifecycleAndContentTests {
 
     @Test
     void ContentManager_ValidatesNamesAndDisposedState() {
-        var content = new Microsoft.Xna.Framework.Content.ContentManager();
+        GameServiceContainer services = new GameServiceContainer();
+        var content = new Microsoft.Xna.Framework.Content.ContentManager(services);
+        assertSame(services, content.getServiceProvider());
         content.setRootDirectory("Content");
         assertEquals("Content", content.getRootDirectory());
         assertThrows(IllegalArgumentException.class, () -> content.Load(String.class, ""));
         assertThrows(ContentLoadException.class, () -> content.Load(String.class, "missing"));
         content.close();
         assertThrows(IllegalStateException.class, content::getRootDirectory);
+    }
+
+    @Test
+    void ContentManager_ExactConstructorsValidateAndSetRootDirectory() {
+        GameServiceContainer services = new GameServiceContainer();
+        var content = new Microsoft.Xna.Framework.Content.ContentManager(services, "Assets");
+        assertEquals("Assets", content.getRootDirectory());
+        assertThrows(NullPointerException.class,
+                () -> new Microsoft.Xna.Framework.Content.ContentManager(null));
+        assertThrows(NullPointerException.class,
+                () -> new Microsoft.Xna.Framework.Content.ContentManager(services, null));
+        content.close();
     }
 
     @Test
@@ -45,4 +59,3 @@ final class LifecycleAndContentTests {
     private static final class TestGame extends Game {
     }
 }
-

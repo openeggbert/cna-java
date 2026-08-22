@@ -23,6 +23,9 @@
   "excludedClrMethods": [
     "System.Object.Finalize"
   ],
+  "excludedClrMembers": [
+    "Microsoft.Xna.Framework.Content.ContentLoadException..ctor(System.Runtime.Serialization.SerializationInfo,System.Runtime.Serialization.StreamingContext)"
+  ],
   "genericTypeRenames": {
     "Microsoft.Xna.Framework.Content.ContentTypeReader`1": "Microsoft.Xna.Framework.Content.ContentTypeReaderOfT",
     "Microsoft.Xna.Framework.Graphics.PackedVector.IPackedVector`1": "Microsoft.Xna.Framework.Graphics.PackedVector.IPackedVectorOfT"

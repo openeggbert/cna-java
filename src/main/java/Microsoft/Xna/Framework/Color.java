@@ -12,20 +12,20 @@ public final class Color {
     private int packedValue;
     private final boolean frozen;
 
-    public Color(int red, int green, int blue) {
-        this(red, green, blue, 255);
+    public Color(int r, int g, int b) {
+        this(r, g, b, 255);
     }
 
-    public Color(int red, int green, int blue, int alpha) {
-        this(pack(clampByte(red), clampByte(green), clampByte(blue), clampByte(alpha)), false);
+    public Color(int r, int g, int b, int a) {
+        this(pack(clampByte(r), clampByte(g), clampByte(b), clampByte(a)), false);
     }
 
-    public Color(float red, float green, float blue) {
-        this(red, green, blue, 1.0f);
+    public Color(float r, float g, float b) {
+        this(r, g, b, 1.0f);
     }
 
-    public Color(float red, float green, float blue, float alpha) {
-        this(pack(packUnit(red), packUnit(green), packUnit(blue), packUnit(alpha)), false);
+    public Color(float r, float g, float b, float a) {
+        this(pack(packUnit(r), packUnit(g), packUnit(b), packUnit(a)), false);
     }
 
     /** Copies a color snapshot; copies of named colors are ordinary mutable values. */
@@ -95,13 +95,13 @@ public final class Color {
         return new Vector4(getR() / 255.0f, getG() / 255.0f, getB() / 255.0f, getA() / 255.0f);
     }
 
-    public static Color FromNonPremultiplied(int red, int green, int blue, int alpha) {
-        int a = clampByte(alpha);
+    public static Color FromNonPremultiplied(int r, int g, int b, int a) {
+        int alpha = clampByte(a);
         return new Color(
-                clampByte((int)((long)red * a / 255L)),
-                clampByte((int)((long)green * a / 255L)),
-                clampByte((int)((long)blue * a / 255L)),
-                a);
+                clampByte((int)((long)r * alpha / 255L)),
+                clampByte((int)((long)g * alpha / 255L)),
+                clampByte((int)((long)b * alpha / 255L)),
+                alpha);
     }
 
     public static Color FromNonPremultiplied(Vector4 vector) {
@@ -139,8 +139,8 @@ public final class Color {
     }
 
     @Override
-    public boolean equals(Object other) {
-        return this == other || other instanceof Color color && packedValue == color.packedValue;
+    public boolean equals(Object obj) {
+        return this == obj || obj instanceof Color color && packedValue == color.packedValue;
     }
 
     @Override

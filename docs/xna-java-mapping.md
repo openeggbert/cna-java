@@ -85,13 +85,17 @@ required by erasure: `Load(Class<T> assetType, String assetName)`.
 The parameterless `IDisposable.Dispose()` contract maps to `close()`. A distinct protected
 `Dispose(boolean)` lifetime hook keeps its XNA name as `Dispose(boolean)`. CLR finalization is not
 projected: Java explicit cleanup is normative and deprecated Java finalization must not be added.
+When CLR implements `IDisposable.Dispose` explicitly, Java still requires a public `close()` to
+implement `AutoCloseable`; the verifier synthesizes that member deterministically and checks it as
+non-overridable for a concrete implementation.
 
 ## CLR and framework types
 
 The core deterministic mappings are:
 
 ```text
-System.Boolean/Byte/Int16/Int32/Int64/Single/Double/Char -> Java primitives
+System.Boolean/SByte/Int16/Int32/Int64/Single/Double/Char -> Java primitives
+System.Byte                                              -> int (validated 0 through 255)
 System.String                                            -> java.lang.String
 System.Object                                            -> java.lang.Object
 System.Exception                                         -> java.lang.RuntimeException
@@ -114,6 +118,15 @@ At a `TimeSpan` API boundary, `Duration` is normalized downward to the nearest
 Individual XNA properties retain their own range rules (for example, positive target elapsed time
 and non-negative inactive sleep time). `RuntimeException` is used for CLR `Exception` because a
 checked Java base exception would introduce call-site obligations absent from the CLR contract.
+Unsigned CLR `Byte` deliberately does not become signed Java `byte`: values 128 through 255 must
+remain numerically observable, so it projects to `int` and setters/constructors validate the XNA
+0-through-255 domain. This is the same width-preserving policy used for other unsigned CLR values
+whose full range a same-width Java primitive cannot represent.
+The protected `ContentLoadException(SerializationInfo, StreamingContext)` constructor has no Java
+source or serialization-protocol equivalent and is explicitly excluded by its full CLR signature.
+Java exception serialization instead uses `RuntimeException`'s serial form and `serialVersionUID`;
+the three ordinary public constructors remain part of the strict mapped contract. This is a
+mapping rule, not an allowlist entry.
 `WindowHandle` is an opaque value that supports equality and a zero test but intentionally has no
 numeric/address accessor. It preserves the XNA window-token round trip without exposing a raw
 native address to game code; CNA-specific native-window interop belongs in the extensions layer.

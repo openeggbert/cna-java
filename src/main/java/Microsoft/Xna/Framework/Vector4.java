@@ -29,18 +29,18 @@ public final class Vector4 {
     public float Length() { return (float)Math.sqrt(LengthSquared()); }
     public float LengthSquared() { return (X * X) + (Y * Y) + (Z * Z) + (W * W); }
     public void Normalize() { float factor = 1.0f / Length(); X *= factor; Y *= factor; Z *= factor; W *= factor; }
-    public static Vector4 Normalize(Vector4 value) { Vector4 result = new Vector4(value); result.Normalize(); return result; }
-    public static Vector4 Add(Vector4 left, Vector4 right) { return new Vector4(left.X + right.X, left.Y + right.Y, left.Z + right.Z, left.W + right.W); }
-    public static Vector4 Subtract(Vector4 left, Vector4 right) { return new Vector4(left.X - right.X, left.Y - right.Y, left.Z - right.Z, left.W - right.W); }
-    public static Vector4 Multiply(Vector4 left, Vector4 right) { return new Vector4(left.X * right.X, left.Y * right.Y, left.Z * right.Z, left.W * right.W); }
-    public static Vector4 Multiply(Vector4 value, float scale) { return new Vector4(value.X * scale, value.Y * scale, value.Z * scale, value.W * scale); }
-    public static Vector4 Divide(Vector4 value, float divider) { return Multiply(value, 1.0f / divider); }
-    public static float Dot(Vector4 left, Vector4 right) { return (left.X * right.X) + (left.Y * right.Y) + (left.Z * right.Z) + (left.W * right.W); }
-    public static Vector4 Lerp(Vector4 left, Vector4 right, float amount) { return new Vector4(MathHelper.Lerp(left.X, right.X, amount), MathHelper.Lerp(left.Y, right.Y, amount), MathHelper.Lerp(left.Z, right.Z, amount), MathHelper.Lerp(left.W, right.W, amount)); }
+    public static Vector4 Normalize(Vector4 vector) { Vector4 result = new Vector4(vector); result.Normalize(); return result; }
+    public static Vector4 Add(Vector4 value1, Vector4 value2) { return new Vector4(value1.X + value2.X, value1.Y + value2.Y, value1.Z + value2.Z, value1.W + value2.W); }
+    public static Vector4 Subtract(Vector4 value1, Vector4 value2) { return new Vector4(value1.X - value2.X, value1.Y - value2.Y, value1.Z - value2.Z, value1.W - value2.W); }
+    public static Vector4 Multiply(Vector4 value1, Vector4 value2) { return new Vector4(value1.X * value2.X, value1.Y * value2.Y, value1.Z * value2.Z, value1.W * value2.W); }
+    public static Vector4 Multiply(Vector4 value1, float scaleFactor) { return new Vector4(value1.X * scaleFactor, value1.Y * scaleFactor, value1.Z * scaleFactor, value1.W * scaleFactor); }
+    public static Vector4 Divide(Vector4 value1, float divider) { return Multiply(value1, 1.0f / divider); }
+    public static float Dot(Vector4 vector1, Vector4 vector2) { return (vector1.X * vector2.X) + (vector1.Y * vector2.Y) + (vector1.Z * vector2.Z) + (vector1.W * vector2.W); }
+    public static Vector4 Lerp(Vector4 value1, Vector4 value2, float amount) { return new Vector4(MathHelper.Lerp(value1.X, value2.X, amount), MathHelper.Lerp(value1.Y, value2.Y, amount), MathHelper.Lerp(value1.Z, value2.Z, amount), MathHelper.Lerp(value1.W, value2.W, amount)); }
 
     @Override
-    public boolean equals(Object other) {
-        return this == other || other instanceof Vector4 value
+    public boolean equals(Object obj) {
+        return this == obj || obj instanceof Vector4 value
                 && FloatSemantics.equals(X, value.X) && FloatSemantics.equals(Y, value.Y)
                 && FloatSemantics.equals(Z, value.Z) && FloatSemantics.equals(W, value.W);
     }

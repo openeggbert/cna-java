@@ -70,6 +70,11 @@
   - added exact keyboard types, 160 key identities, two CNA snapshot routes,
     managed/native behavior tests, and template Escape input;
   - reduced the measured contract to 680 diagnostics with 34/34 ABI symbols.
+- `50eb603 feat: bind XNA mouse snapshots through CNA`
+  - added exact mouse types, four CNA state/position/window routes, normalized
+    behavior evidence, and opaque strict window tokens;
+  - reduced the then-current measured contract to 677 diagnostics with 38/38
+    ABI symbols.
 
 ### `cna-java-template`
 
@@ -83,6 +88,8 @@
   - configures the mapped title before native startup and tests that path.
 - `7a5c97d feat: exercise CNA keyboard input`
   - captures native keyboard state per update and exits on Escape.
+- `e12039f feat: exercise CNA mouse input`
+  - captures native mouse state per update and exits on left click.
 
 ## API measurements
 
@@ -108,22 +115,28 @@ REFERENCE_MEMBERS=2964
 EXPECTED_JAVA_TYPES=261
 EXPECTED_JAVA_MEMBERS=3086
 TARGET_TYPES=44
-TARGET_MEMBERS=693
-TOTAL_DIAGNOSTICS=677
+TARGET_MEMBERS=696
+TOTAL_DIAGNOSTICS=601
 ALLOWLIST_ENTRIES=0
 INTERFACE_MISMATCH=2
-MISSING_MEMBER=372
+MISSING_MEMBER=382
 MISSING_TYPE=217
-PARAMETER_MISMATCH=21
-PARAMETER_NAME_MISMATCH=58
-RETURN_TYPE_MISMATCH=4
-UNEXPECTED_MEMBER=3
 ```
 
-This is a 53-diagnostic reduction from the immutable initial baseline, with 23
-additional strict target types and 342 additional target members.
+This is a 129-diagnostic reduction from the immutable initial baseline, with 23
+additional strict target types and 345 additional target members.
 `apiCompatCheck` still exits 1 as designed. Leak-only inspection reports
 `CNA_INTERNAL_LEAK=0` (total leak diagnostics 0).
+
+The latest contract audit fixed overload matching so exact overloads cannot be
+reused as mismatch candidates, maps unsigned CLR `System.Byte` to Java `int`,
+and eliminated every implemented parameter-name mismatch. It also made
+`ContentManager` constructors/service-provider/disposal shape exact, explicitly
+excluded the CLR-serialization-only `ContentLoadException` constructor, and hid
+the implementation-only `GraphicsDevice` constructor behind a narrow internal
+facade factory. The remaining diagnostics contain only genuinely absent types,
+members, and two interfaces; there are no parameter, return, unexpected-member,
+or parameter-name findings.
 
 The newest group added exact `GameWindow`, `[Flags]`-aware
 `DisplayOrientation`, and opaque `WindowHandle` projections. `Game` now has all
@@ -162,14 +175,14 @@ XNA_REFERENCE_DIR=/rv/data/development/github.com/openeggbert/xna4-decomp/refere
 
 Result: `BUILD SUCCESSFUL`, 10 tasks executed, no compiler/deprecation warnings.
 
-- JUnit: 44 tests, 0 failures, 0 errors, 0 skipped.
-- Verifier regression suite: 8 tests, all passing.
-- Suites: 12 value/math, 3 lifecycle/content, 10 component/service/window,
+- JUnit: 45 tests, 0 failures, 0 errors, 0 skipped.
+- Verifier regression suite: 12 tests, all passing.
+- Suites: 12 value/math, 4 lifecycle/content, 10 component/service/window,
   4 keyboard-state, 4 mouse-state, 4 ownership, 7 native integration.
 - Native stress: one ordered three-frame lifecycle plus ten repeated
   create/run/destroy lifecycles, and one-frame/tick/suppressed-draw timing.
 - Compile probe: passed.
-- Strict leak guard: 44 target types / 693 members, 0 findings.
+- Strict leak guard: 44 target types / 696 members, 0 findings.
 - ABI: header 0.7.0, 38 bound functions, manifest/JNI identity and C
   width/layout/function-signature probes passed, native library ABI 0.7.0,
   symbols 38/38.

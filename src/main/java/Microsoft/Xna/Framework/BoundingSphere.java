@@ -57,7 +57,7 @@ public final class BoundingSphere {
     }
 
     @Override
-    public boolean equals(Object other) { return this == other || other instanceof BoundingSphere value && Center.equals(value.Center) && FloatSemantics.equals(Radius, value.Radius); }
+    public boolean equals(Object obj) { return this == obj || obj instanceof BoundingSphere value && Center.equals(value.Center) && FloatSemantics.equals(Radius, value.Radius); }
     @Override
     public int hashCode() { return Center.hashCode() + FloatSemantics.hash(Radius); }
     @Override

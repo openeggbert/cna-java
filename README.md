@@ -17,17 +17,17 @@ CNA C++
 
 ## Honest status
 
-The project is functional for a small Linux/headless lifecycle-and-clear slice;
-it is not XNA-complete and does not yet provide a playable SpriteBatch/content/
-input path.
+The project is functional for a small Linux/headless lifecycle, clear, keyboard,
+and mouse slice; it is not XNA-complete and does not yet provide a playable
+SpriteBatch/texture/content path.
 
 The first strict Windows-runtime measurement is intentionally red:
 
 ```text
 XNA reference:        257 types / 2,964 members
 Mapped Java contract: 261 types / 3,086 members
-Java target:           44 strict types / 693 members
-Differences:          677 unreviewed diagnostics
+Java target:           44 strict types / 696 members
+Differences:          601 unreviewed diagnostics
 Allowlist:              0
 Strict leaks:           0
 ```

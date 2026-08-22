@@ -15,7 +15,7 @@ The audited starting snapshot had eight Java source files (three were
 used a different Maven group, mixed XNA and Java casing, faked renderer
 capabilities, had no wrapper, and advertised unsupported Android/iOS/Web paths.
 
-The current repository has a reproducible Gradle 8.12/JDK 17 build, 53
+The current repository has a reproducible Gradle 8.12/JDK 17 build, 54
 production Java sources, managed and conditional native tests, a real JNI
 backend, class-metadata verification, and a functional desktop/headless
 template canary. Gradle is the single canonical build; the stale Maven build
@@ -88,16 +88,12 @@ reference members:               2964
 expected mapped Java types:        261
 expected mapped Java members:     3086
 mapped Java target types:           44
-mapped Java target members:        693
-unreviewed projection differences: 677
+mapped Java target members:        696
+unreviewed projection differences: 601
 
 INTERFACE_MISMATCH                   2
-MISSING_MEMBER                     372
+MISSING_MEMBER                     382
 MISSING_TYPE                       217
-PARAMETER_MISMATCH                  21
-PARAMETER_NAME_MISMATCH             58
-RETURN_TYPE_MISMATCH                 4
-UNEXPECTED_MEMBER                    3
 
 CNA_INTERNAL_LEAK                    0
 allowlist entries                    0
@@ -114,6 +110,14 @@ detected from metadata and projected as composable immutable value classes.
 CLR non-virtual methods are checked for effective Java non-overridability: an
 instance method in a final class need not redundantly carry method-level
 `final`; all nine genuine modifier mismatches in extensible classes were fixed.
+Overload comparison now reserves exact matches before pairing mismatch
+candidates, so a diagnostic can no longer steal a correct overload. The
+unsigned CLR `System.Byte` maps to Java `int` with a 0..255 contract rather than
+Java's signed `byte`. Parameter names retained in class metadata now match XNA
+for every implemented member. `ContentLoadException`'s CLR-serialization-only
+constructor is an explicit mapping exclusion, while direct `IDisposable`
+implementations project a final public `close()` even when CLR `Dispose` is an
+explicit interface method.
 
 Next verifier work:
 
@@ -310,14 +314,14 @@ Green now:
 1. Java/JNI build with strict warnings;
 2. JUnit managed tests (native tests conditional on a supplied library);
 3. strict internal/native-leak guard;
-4. eight verifier/mapping regression tests and a foundational compile probe;
+4. twelve verifier/mapping regression tests and a foundational compile probe;
 5. C header width/layout/signature checks;
 6. optional native symbol/version/integration tests;
 7. template build/tests;
 8. fresh generated-project build;
 9. optional 60-frame smoke and 600-frame stability runs.
 
-Intentionally red: strict XNA completeness (`apiCompatCheck`, 677 differences).
+Intentionally red: strict XNA completeness (`apiCompatCheck`, 601 differences).
 Future platform CI must record evidence separately per OS/architecture.
 
 ## Upstream CNA blockers

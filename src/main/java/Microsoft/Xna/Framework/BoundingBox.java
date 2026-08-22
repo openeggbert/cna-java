@@ -71,10 +71,9 @@ public final class BoundingBox {
     }
 
     @Override
-    public boolean equals(Object other) { return this == other || other instanceof BoundingBox value && Min.equals(value.Min) && Max.equals(value.Max); }
+    public boolean equals(Object obj) { return this == obj || obj instanceof BoundingBox value && Min.equals(value.Min) && Max.equals(value.Max); }
     @Override
     public int hashCode() { return Min.hashCode() + Max.hashCode(); }
     @Override
     public String toString() { return "{Min:" + Min + " Max:" + Max + '}'; }
 }
-

@@ -60,10 +60,9 @@ public final class Plane {
     }
 
     @Override
-    public boolean equals(Object other) { return this == other || other instanceof Plane value && Normal.equals(value.Normal) && FloatSemantics.equals(D, value.D); }
+    public boolean equals(Object obj) { return this == obj || obj instanceof Plane value && Normal.equals(value.Normal) && FloatSemantics.equals(D, value.D); }
     @Override
     public int hashCode() { return Normal.hashCode() + FloatSemantics.hash(D); }
     @Override
     public String toString() { return "{Normal:" + Normal + " D:" + D + '}'; }
 }
-

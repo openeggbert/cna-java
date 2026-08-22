@@ -80,8 +80,8 @@ public final class Vector2 {
         return new Vector2(value1.X / value2.X, value1.Y / value2.Y);
     }
 
-    public static Vector2 Divide(Vector2 value, float divider) {
-        return new Vector2(value.X / divider, value.Y / divider);
+    public static Vector2 Divide(Vector2 value1, float divider) {
+        return new Vector2(value1.X / divider, value1.Y / divider);
     }
 
     public static Vector2 Negate(Vector2 value) {
@@ -106,8 +106,8 @@ public final class Vector2 {
                 value1.Y + ((value2.Y - value1.Y) * amount));
     }
 
-    public static Vector2 Clamp(Vector2 value, Vector2 min, Vector2 max) {
-        return Min(Max(value, min), max);
+    public static Vector2 Clamp(Vector2 value1, Vector2 min, Vector2 max) {
+        return Min(Max(value1, min), max);
     }
 
     public static Vector2 Min(Vector2 value1, Vector2 value2) {
@@ -124,8 +124,8 @@ public final class Vector2 {
     }
 
     @Override
-    public boolean equals(Object other) {
-        return this == other || other instanceof Vector2 value
+    public boolean equals(Object obj) {
+        return this == obj || obj instanceof Vector2 value
                 && FloatSemantics.equals(X, value.X) && FloatSemantics.equals(Y, value.Y);
     }
 

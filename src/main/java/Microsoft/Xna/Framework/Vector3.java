@@ -58,20 +58,20 @@ public final class Vector3 {
         return result;
     }
 
-    public static Vector3 Add(Vector3 left, Vector3 right) {
-        return new Vector3(left.X + right.X, left.Y + right.Y, left.Z + right.Z);
+    public static Vector3 Add(Vector3 value1, Vector3 value2) {
+        return new Vector3(value1.X + value2.X, value1.Y + value2.Y, value1.Z + value2.Z);
     }
 
-    public static Vector3 Subtract(Vector3 left, Vector3 right) {
-        return new Vector3(left.X - right.X, left.Y - right.Y, left.Z - right.Z);
+    public static Vector3 Subtract(Vector3 value1, Vector3 value2) {
+        return new Vector3(value1.X - value2.X, value1.Y - value2.Y, value1.Z - value2.Z);
     }
 
-    public static Vector3 Multiply(Vector3 left, Vector3 right) {
-        return new Vector3(left.X * right.X, left.Y * right.Y, left.Z * right.Z);
+    public static Vector3 Multiply(Vector3 value1, Vector3 value2) {
+        return new Vector3(value1.X * value2.X, value1.Y * value2.Y, value1.Z * value2.Z);
     }
 
-    public static Vector3 Multiply(Vector3 value, float scale) {
-        return new Vector3(value.X * scale, value.Y * scale, value.Z * scale);
+    public static Vector3 Multiply(Vector3 value, float scaleFactor) {
+        return new Vector3(value.X * scaleFactor, value.Y * scaleFactor, value.Z * scaleFactor);
     }
 
     public static Vector3 Divide(Vector3 value, float divider) {
@@ -82,42 +82,42 @@ public final class Vector3 {
         return new Vector3(-value.X, -value.Y, -value.Z);
     }
 
-    public static float Dot(Vector3 left, Vector3 right) {
-        return (left.X * right.X) + (left.Y * right.Y) + (left.Z * right.Z);
+    public static float Dot(Vector3 vector1, Vector3 vector2) {
+        return (vector1.X * vector2.X) + (vector1.Y * vector2.Y) + (vector1.Z * vector2.Z);
     }
 
-    public static Vector3 Cross(Vector3 left, Vector3 right) {
+    public static Vector3 Cross(Vector3 vector1, Vector3 vector2) {
         return new Vector3(
-                (left.Y * right.Z) - (left.Z * right.Y),
-                (left.Z * right.X) - (left.X * right.Z),
-                (left.X * right.Y) - (left.Y * right.X));
+                (vector1.Y * vector2.Z) - (vector1.Z * vector2.Y),
+                (vector1.Z * vector2.X) - (vector1.X * vector2.Z),
+                (vector1.X * vector2.Y) - (vector1.Y * vector2.X));
     }
 
-    public static float Distance(Vector3 left, Vector3 right) { return Subtract(left, right).Length(); }
-    public static float DistanceSquared(Vector3 left, Vector3 right) { return Subtract(left, right).LengthSquared(); }
+    public static float Distance(Vector3 value1, Vector3 value2) { return Subtract(value1, value2).Length(); }
+    public static float DistanceSquared(Vector3 value1, Vector3 value2) { return Subtract(value1, value2).LengthSquared(); }
 
-    public static Vector3 Lerp(Vector3 left, Vector3 right, float amount) {
+    public static Vector3 Lerp(Vector3 value1, Vector3 value2, float amount) {
         return new Vector3(
-                MathHelper.Lerp(left.X, right.X, amount),
-                MathHelper.Lerp(left.Y, right.Y, amount),
-                MathHelper.Lerp(left.Z, right.Z, amount));
+                MathHelper.Lerp(value1.X, value2.X, amount),
+                MathHelper.Lerp(value1.Y, value2.Y, amount),
+                MathHelper.Lerp(value1.Z, value2.Z, amount));
     }
 
-    public static Vector3 Min(Vector3 left, Vector3 right) {
-        return new Vector3(Math.min(left.X, right.X), Math.min(left.Y, right.Y), Math.min(left.Z, right.Z));
+    public static Vector3 Min(Vector3 value1, Vector3 value2) {
+        return new Vector3(Math.min(value1.X, value2.X), Math.min(value1.Y, value2.Y), Math.min(value1.Z, value2.Z));
     }
 
-    public static Vector3 Max(Vector3 left, Vector3 right) {
-        return new Vector3(Math.max(left.X, right.X), Math.max(left.Y, right.Y), Math.max(left.Z, right.Z));
+    public static Vector3 Max(Vector3 value1, Vector3 value2) {
+        return new Vector3(Math.max(value1.X, value2.X), Math.max(value1.Y, value2.Y), Math.max(value1.Z, value2.Z));
     }
 
-    public static Vector3 Clamp(Vector3 value, Vector3 min, Vector3 max) {
-        return Min(Max(value, min), max);
+    public static Vector3 Clamp(Vector3 value1, Vector3 min, Vector3 max) {
+        return Min(Max(value1, min), max);
     }
 
     @Override
-    public boolean equals(Object other) {
-        return this == other || other instanceof Vector3 value
+    public boolean equals(Object obj) {
+        return this == obj || obj instanceof Vector3 value
                 && FloatSemantics.equals(X, value.X)
                 && FloatSemantics.equals(Y, value.Y)
                 && FloatSemantics.equals(Z, value.Z);
@@ -129,4 +129,3 @@ public final class Vector3 {
     @Override
     public String toString() { return "{X:" + X + " Y:" + Y + " Z:" + Z + '}'; }
 }
-

@@ -22,7 +22,7 @@ public class GraphicsDeviceManager implements AutoCloseable {
     }
 
     @Override
-    public void close() {
+    public final void close() {
         closed = true;
     }
 

@@ -24,7 +24,7 @@ CLASS_READER = ROOT / "tools/api-compat/java/ClassContractReader.java"
 PRIMITIVES = {
     "System.Void": "void",
     "System.Boolean": "boolean",
-    "System.Byte": "byte",
+    "System.Byte": "int",
     "System.SByte": "byte",
     "System.Int16": "short",
     "System.UInt16": "int",
@@ -288,6 +288,10 @@ def mapped_members(type_contract: dict[str, Any], rules: dict[str, Any], mapping
 
     for member in type_contract["members"]:
         kind = member["kind"]
+        clr_signature = type_name + "." + member["name"] + "(" \
+            + ",".join(value["type"] for value in member.get("parameters", [])) + ")"
+        if clr_signature in rules.get("excludedClrMembers", []):
+            continue
         if kind == "field":
             expected.append({**member, "type": map_type(member["type"])})
         elif kind == "constructor":
@@ -384,6 +388,14 @@ def mapped_members(type_contract: dict[str, Any], rules: dict[str, Any], mapping
                 continue
             expected.append(callable_member("method", name, member, map_parameters(member["parameters"]),
                                             map_type(member["returnType"])))
+
+    if "System.IDisposable" in type_contract.get("interfaces", []) \
+            and not any(value["kind"] == "method" and value["name"] == "close"
+                        and not value.get("parameters") for value in expected):
+        source = {"access": "public", "static": False,
+                  "abstract": bool(type_contract.get("abstract")),
+                  "final": not bool(type_contract.get("abstract")), "genericArity": 0}
+        expected.append(callable_member("method", "close", source, [], "void"))
 
     base = split_generic(type_contract.get("baseType") or "")
     if base and base[0] == "System.Collections.ObjectModel.Collection`1":
@@ -485,10 +497,12 @@ def compare(reference: dict[str, Any], target: dict[str, Any], rules: dict[str, 
 
         paired_expected: set[str] = set()
         paired_actual: set[str] = set()
+        unmatched_actual_keys = actual_full.keys() - expected_full.keys()
         for expected_key in sorted(expected_full.keys() - actual_full.keys()):
             expected_member = expected_full[expected_key]
             candidates = [value for key, value in actual_full.items()
-                          if key not in paired_actual and value["kind"] == expected_member["kind"]
+                          if key in unmatched_actual_keys and key not in paired_actual
+                          and value["kind"] == expected_member["kind"]
                           and value["name"] == expected_member["name"]
                           and len(value.get("parameters", [])) == len(expected_member.get("parameters", []))]
             if len(candidates) == 1:

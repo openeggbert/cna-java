@@ -29,40 +29,40 @@ public final class Quaternion {
 
     public void Conjugate() { X = -X; Y = -Y; Z = -Z; }
 
-    public static Quaternion Normalize(Quaternion value) { Quaternion result = new Quaternion(value); result.Normalize(); return result; }
+    public static Quaternion Normalize(Quaternion quaternion) { Quaternion result = new Quaternion(quaternion); result.Normalize(); return result; }
     public static Quaternion Conjugate(Quaternion value) { return new Quaternion(-value.X, -value.Y, -value.Z, value.W); }
 
-    public static Quaternion Inverse(Quaternion value) {
-        float inverse = 1.0f / value.LengthSquared();
-        return new Quaternion(-value.X * inverse, -value.Y * inverse, -value.Z * inverse, value.W * inverse);
+    public static Quaternion Inverse(Quaternion quaternion) {
+        float inverse = 1.0f / quaternion.LengthSquared();
+        return new Quaternion(-quaternion.X * inverse, -quaternion.Y * inverse, -quaternion.Z * inverse, quaternion.W * inverse);
     }
 
-    public static Quaternion Add(Quaternion left, Quaternion right) {
-        return new Quaternion(left.X + right.X, left.Y + right.Y, left.Z + right.Z, left.W + right.W);
+    public static Quaternion Add(Quaternion quaternion1, Quaternion quaternion2) {
+        return new Quaternion(quaternion1.X + quaternion2.X, quaternion1.Y + quaternion2.Y, quaternion1.Z + quaternion2.Z, quaternion1.W + quaternion2.W);
     }
 
-    public static Quaternion Subtract(Quaternion left, Quaternion right) {
-        return new Quaternion(left.X - right.X, left.Y - right.Y, left.Z - right.Z, left.W - right.W);
+    public static Quaternion Subtract(Quaternion quaternion1, Quaternion quaternion2) {
+        return new Quaternion(quaternion1.X - quaternion2.X, quaternion1.Y - quaternion2.Y, quaternion1.Z - quaternion2.Z, quaternion1.W - quaternion2.W);
     }
 
-    public static Quaternion Negate(Quaternion value) { return new Quaternion(-value.X, -value.Y, -value.Z, -value.W); }
+    public static Quaternion Negate(Quaternion quaternion) { return new Quaternion(-quaternion.X, -quaternion.Y, -quaternion.Z, -quaternion.W); }
 
-    public static Quaternion Multiply(Quaternion left, Quaternion right) {
+    public static Quaternion Multiply(Quaternion quaternion1, Quaternion quaternion2) {
         return new Quaternion(
-                (left.W * right.X) + (left.X * right.W) + (left.Y * right.Z) - (left.Z * right.Y),
-                (left.W * right.Y) + (left.Y * right.W) + (left.Z * right.X) - (left.X * right.Z),
-                (left.W * right.Z) + (left.Z * right.W) + (left.X * right.Y) - (left.Y * right.X),
-                (left.W * right.W) - (left.X * right.X) - (left.Y * right.Y) - (left.Z * right.Z));
+                (quaternion1.W * quaternion2.X) + (quaternion1.X * quaternion2.W) + (quaternion1.Y * quaternion2.Z) - (quaternion1.Z * quaternion2.Y),
+                (quaternion1.W * quaternion2.Y) + (quaternion1.Y * quaternion2.W) + (quaternion1.Z * quaternion2.X) - (quaternion1.X * quaternion2.Z),
+                (quaternion1.W * quaternion2.Z) + (quaternion1.Z * quaternion2.W) + (quaternion1.X * quaternion2.Y) - (quaternion1.Y * quaternion2.X),
+                (quaternion1.W * quaternion2.W) - (quaternion1.X * quaternion2.X) - (quaternion1.Y * quaternion2.Y) - (quaternion1.Z * quaternion2.Z));
     }
 
-    public static Quaternion Multiply(Quaternion value, float scale) {
-        return new Quaternion(value.X * scale, value.Y * scale, value.Z * scale, value.W * scale);
+    public static Quaternion Multiply(Quaternion quaternion1, float scaleFactor) {
+        return new Quaternion(quaternion1.X * scaleFactor, quaternion1.Y * scaleFactor, quaternion1.Z * scaleFactor, quaternion1.W * scaleFactor);
     }
 
-    public static Quaternion Divide(Quaternion left, Quaternion right) { return Multiply(left, Inverse(right)); }
+    public static Quaternion Divide(Quaternion quaternion1, Quaternion quaternion2) { return Multiply(quaternion1, Inverse(quaternion2)); }
 
-    public static float Dot(Quaternion left, Quaternion right) {
-        return (left.X * right.X) + (left.Y * right.Y) + (left.Z * right.Z) + (left.W * right.W);
+    public static float Dot(Quaternion quaternion1, Quaternion quaternion2) {
+        return (quaternion1.X * quaternion2.X) + (quaternion1.Y * quaternion2.Y) + (quaternion1.Z * quaternion2.Z) + (quaternion1.W * quaternion2.W);
     }
 
     public static Quaternion CreateFromAxisAngle(Vector3 axis, float angle) {
@@ -88,25 +88,25 @@ public final class Quaternion {
                 (cosYaw * cosPitch * cosRoll) + (sinYaw * sinPitch * sinRoll));
     }
 
-    public static Quaternion Lerp(Quaternion left, Quaternion right, float amount) {
+    public static Quaternion Lerp(Quaternion quaternion1, Quaternion quaternion2, float amount) {
         float inverse = 1.0f - amount;
-        Quaternion result = Dot(left, right) >= 0.0f
+        Quaternion result = Dot(quaternion1, quaternion2) >= 0.0f
                 ? new Quaternion(
-                        (inverse * left.X) + (amount * right.X),
-                        (inverse * left.Y) + (amount * right.Y),
-                        (inverse * left.Z) + (amount * right.Z),
-                        (inverse * left.W) + (amount * right.W))
+                        (inverse * quaternion1.X) + (amount * quaternion2.X),
+                        (inverse * quaternion1.Y) + (amount * quaternion2.Y),
+                        (inverse * quaternion1.Z) + (amount * quaternion2.Z),
+                        (inverse * quaternion1.W) + (amount * quaternion2.W))
                 : new Quaternion(
-                        (inverse * left.X) - (amount * right.X),
-                        (inverse * left.Y) - (amount * right.Y),
-                        (inverse * left.Z) - (amount * right.Z),
-                        (inverse * left.W) - (amount * right.W));
+                        (inverse * quaternion1.X) - (amount * quaternion2.X),
+                        (inverse * quaternion1.Y) - (amount * quaternion2.Y),
+                        (inverse * quaternion1.Z) - (amount * quaternion2.Z),
+                        (inverse * quaternion1.W) - (amount * quaternion2.W));
         result.Normalize();
         return result;
     }
 
-    public static Quaternion Slerp(Quaternion left, Quaternion right, float amount) {
-        float dot = Dot(left, right);
+    public static Quaternion Slerp(Quaternion quaternion1, Quaternion quaternion2, float amount) {
+        float dot = Dot(quaternion1, quaternion2);
         boolean negate = dot < 0.0f;
         if (negate) {
             dot = -dot;
@@ -123,15 +123,15 @@ public final class Quaternion {
             rightScale = (negate ? -1.0f : 1.0f) * (float)Math.sin(amount * angle) * inverseSin;
         }
         return new Quaternion(
-                (leftScale * left.X) + (rightScale * right.X),
-                (leftScale * left.Y) + (rightScale * right.Y),
-                (leftScale * left.Z) + (rightScale * right.Z),
-                (leftScale * left.W) + (rightScale * right.W));
+                (leftScale * quaternion1.X) + (rightScale * quaternion2.X),
+                (leftScale * quaternion1.Y) + (rightScale * quaternion2.Y),
+                (leftScale * quaternion1.Z) + (rightScale * quaternion2.Z),
+                (leftScale * quaternion1.W) + (rightScale * quaternion2.W));
     }
 
     @Override
-    public boolean equals(Object other) {
-        return this == other || other instanceof Quaternion value
+    public boolean equals(Object obj) {
+        return this == obj || obj instanceof Quaternion value
                 && FloatSemantics.equals(X, value.X) && FloatSemantics.equals(Y, value.Y)
                 && FloatSemantics.equals(Z, value.Z) && FloatSemantics.equals(W, value.W);
     }
@@ -142,4 +142,3 @@ public final class Quaternion {
     @Override
     public String toString() { return "{X:" + X + " Y:" + Y + " Z:" + Z + " W:" + W + '}'; }
 }
-

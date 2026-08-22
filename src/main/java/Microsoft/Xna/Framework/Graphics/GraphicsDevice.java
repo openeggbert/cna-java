@@ -12,7 +12,7 @@ public class GraphicsDevice implements AutoCloseable {
     private final Game game;
     private boolean closed;
 
-    public GraphicsDevice(Game game) {
+    GraphicsDevice(Game game) {
         this.game = Objects.requireNonNull(game, "game");
     }
 

@@ -4,6 +4,7 @@ import Microsoft.Xna.Framework.Content.ContentManager;
 import Microsoft.Xna.Framework.Graphics.GraphicsDevice;
 import org.openeggbert.cna.internal.NativeBindings;
 import org.openeggbert.cna.internal.NativeGameHandle;
+import org.openeggbert.cna.internal.FacadeFactory;
 
 import java.time.Duration;
 import java.util.ArrayList;
@@ -48,8 +49,8 @@ public class Game implements AutoCloseable {
 
     @SuppressWarnings("this-escape")
     public Game() {
-        content = new ContentManager();
-        graphicsDevice = new GraphicsDevice(this);
+        content = new ContentManager(services);
+        graphicsDevice = FacadeFactory.createGraphicsDevice(this);
         window = new CnaGameWindow(this, getClass().getSimpleName());
         components.addComponentAddedListener(this::initializeAddedComponent);
     }

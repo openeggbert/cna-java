@@ -61,8 +61,8 @@ public final class Rectangle {
     }
 
     @Override
-    public boolean equals(Object other) {
-        return this == other || other instanceof Rectangle value
+    public boolean equals(Object obj) {
+        return this == obj || obj instanceof Rectangle value
                 && X == value.X && Y == value.Y && Width == value.Width && Height == value.Height;
     }
 
@@ -72,4 +72,3 @@ public final class Rectangle {
     @Override
     public String toString() { return "{X:" + X + " Y:" + Y + " Width:" + Width + " Height:" + Height + '}'; }
 }
-

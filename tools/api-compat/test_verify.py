@@ -58,6 +58,37 @@ class VerifyTests(unittest.TestCase):
         self.assertEqual(sum(len(value["members"]) for value in self.rules["syntheticTypes"]),
                          expected_members)
 
+    def test_unsigned_clr_byte_maps_to_range_checked_java_int(self) -> None:
+        self.assertEqual("int", VERIFY.map_type("System.Byte"))
+        self.assertEqual("byte", VERIFY.map_type("System.SByte"))
+
+    def test_explicit_disposable_implementation_still_projects_close(self) -> None:
+        contract = {
+            "name": "Microsoft.Xna.Framework.DisposableProbe",
+            "kind": "class", "abstract": False,
+            "interfaces": ["System.IDisposable"], "members": [],
+        }
+        members = VERIFY.mapped_members(contract, self.rules, [])
+        close = next(value for value in members if value["name"] == "close")
+        self.assertEqual("public", close["access"])
+        self.assertTrue(close["final"])
+
+    def test_explicit_excluded_clr_member_is_a_mapping_rule_not_allowlist(self) -> None:
+        contract = {
+            "name": "Microsoft.Xna.Framework.Content.ContentLoadException",
+            "kind": "class", "interfaces": [],
+            "members": [{
+                "kind": "constructor", "name": ".ctor", "access": "protected",
+                "static": False, "abstract": False, "final": False,
+                "genericArity": 0, "returnType": None,
+                "parameters": [
+                    {"name": "info", "type": "System.Runtime.Serialization.SerializationInfo"},
+                    {"name": "context", "type": "System.Runtime.Serialization.StreamingContext"},
+                ],
+            }],
+        }
+        self.assertEqual([], VERIFY.mapped_members(contract, self.rules, []))
+
     def test_flags_enum_maps_to_composable_value_contract(self) -> None:
         contract = {
             "name": "Microsoft.Xna.Framework.ProbeFlags",
@@ -103,6 +134,38 @@ class VerifyTests(unittest.TestCase):
         self.assertFalse(VERIFY.effective_member_final({**method, "static": True}, True))
         self.assertFalse(VERIFY.effective_member_final(
             {"kind": "field", "static": False, "final": False}, True))
+
+    def test_parameter_pairing_never_steals_an_exact_overload(self) -> None:
+        reference = {"types": [{
+            "name": "Probe.Value", "kind": "class", "access": "public",
+            "abstract": False, "sealed": False, "baseType": "System.Object",
+            "interfaces": [], "genericArity": 0,
+            "members": [
+                {"kind": "method", "name": "Equals", "access": "public",
+                 "static": False, "abstract": False, "final": False, "virtual": True,
+                 "genericArity": 0, "returnType": "System.Boolean",
+                 "parameters": [{"name": "obj", "type": "System.Object"}]},
+                {"kind": "method", "name": "Equals", "access": "public",
+                 "static": False, "abstract": False, "final": False, "virtual": False,
+                 "genericArity": 0, "returnType": "System.Boolean",
+                 "parameters": [{"name": "other", "type": "Probe.Value"}]},
+            ],
+        }]}
+        target = {"types": [{
+            "name": "Probe.Value", "kind": "class", "access": "public",
+            "abstract": False, "sealed": False, "baseType": "java.lang.Object",
+            "interfaces": [], "genericArity": 0,
+            "members": [{"kind": "method", "name": "equals", "access": "public",
+                         "static": False, "abstract": False, "final": False,
+                         "genericArity": 0, "returnType": "boolean",
+                         "parameters": [{"name": "obj", "type": "java.lang.Object"}]}],
+        }]}
+
+        findings = [value for value in VERIFY.compare(reference, target, self.rules)
+                    if value["subject"].startswith("Probe.Value")]
+        self.assertEqual(1, len(findings))
+        self.assertEqual("MISSING_MEMBER", findings[0]["code"])
+        self.assertIn("Probe.Value", findings[0]["subject"])
 
     def test_leak_guard_finds_internal_types_and_raw_long_handles(self) -> None:
         target = {"types": [{

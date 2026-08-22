@@ -51,60 +51,60 @@ public final class Matrix {
                 - (M14 * ((M21 * c) - (M22 * e) + (M23 * f)));
     }
 
-    public static Matrix Add(Matrix left, Matrix right) {
+    public static Matrix Add(Matrix matrix1, Matrix matrix2) {
         return new Matrix(
-                left.M11 + right.M11, left.M12 + right.M12, left.M13 + right.M13, left.M14 + right.M14,
-                left.M21 + right.M21, left.M22 + right.M22, left.M23 + right.M23, left.M24 + right.M24,
-                left.M31 + right.M31, left.M32 + right.M32, left.M33 + right.M33, left.M34 + right.M34,
-                left.M41 + right.M41, left.M42 + right.M42, left.M43 + right.M43, left.M44 + right.M44);
+                matrix1.M11 + matrix2.M11, matrix1.M12 + matrix2.M12, matrix1.M13 + matrix2.M13, matrix1.M14 + matrix2.M14,
+                matrix1.M21 + matrix2.M21, matrix1.M22 + matrix2.M22, matrix1.M23 + matrix2.M23, matrix1.M24 + matrix2.M24,
+                matrix1.M31 + matrix2.M31, matrix1.M32 + matrix2.M32, matrix1.M33 + matrix2.M33, matrix1.M34 + matrix2.M34,
+                matrix1.M41 + matrix2.M41, matrix1.M42 + matrix2.M42, matrix1.M43 + matrix2.M43, matrix1.M44 + matrix2.M44);
     }
 
-    public static Matrix Subtract(Matrix left, Matrix right) { return Add(left, Multiply(right, -1.0f)); }
+    public static Matrix Subtract(Matrix matrix1, Matrix matrix2) { return Add(matrix1, Multiply(matrix2, -1.0f)); }
 
-    public static Matrix Multiply(Matrix a, Matrix b) {
+    public static Matrix Multiply(Matrix matrix1, Matrix matrix2) {
         return new Matrix(
-                (a.M11*b.M11)+(a.M12*b.M21)+(a.M13*b.M31)+(a.M14*b.M41),
-                (a.M11*b.M12)+(a.M12*b.M22)+(a.M13*b.M32)+(a.M14*b.M42),
-                (a.M11*b.M13)+(a.M12*b.M23)+(a.M13*b.M33)+(a.M14*b.M43),
-                (a.M11*b.M14)+(a.M12*b.M24)+(a.M13*b.M34)+(a.M14*b.M44),
-                (a.M21*b.M11)+(a.M22*b.M21)+(a.M23*b.M31)+(a.M24*b.M41),
-                (a.M21*b.M12)+(a.M22*b.M22)+(a.M23*b.M32)+(a.M24*b.M42),
-                (a.M21*b.M13)+(a.M22*b.M23)+(a.M23*b.M33)+(a.M24*b.M43),
-                (a.M21*b.M14)+(a.M22*b.M24)+(a.M23*b.M34)+(a.M24*b.M44),
-                (a.M31*b.M11)+(a.M32*b.M21)+(a.M33*b.M31)+(a.M34*b.M41),
-                (a.M31*b.M12)+(a.M32*b.M22)+(a.M33*b.M32)+(a.M34*b.M42),
-                (a.M31*b.M13)+(a.M32*b.M23)+(a.M33*b.M33)+(a.M34*b.M43),
-                (a.M31*b.M14)+(a.M32*b.M24)+(a.M33*b.M34)+(a.M34*b.M44),
-                (a.M41*b.M11)+(a.M42*b.M21)+(a.M43*b.M31)+(a.M44*b.M41),
-                (a.M41*b.M12)+(a.M42*b.M22)+(a.M43*b.M32)+(a.M44*b.M42),
-                (a.M41*b.M13)+(a.M42*b.M23)+(a.M43*b.M33)+(a.M44*b.M43),
-                (a.M41*b.M14)+(a.M42*b.M24)+(a.M43*b.M34)+(a.M44*b.M44));
+                (matrix1.M11*matrix2.M11)+(matrix1.M12*matrix2.M21)+(matrix1.M13*matrix2.M31)+(matrix1.M14*matrix2.M41),
+                (matrix1.M11*matrix2.M12)+(matrix1.M12*matrix2.M22)+(matrix1.M13*matrix2.M32)+(matrix1.M14*matrix2.M42),
+                (matrix1.M11*matrix2.M13)+(matrix1.M12*matrix2.M23)+(matrix1.M13*matrix2.M33)+(matrix1.M14*matrix2.M43),
+                (matrix1.M11*matrix2.M14)+(matrix1.M12*matrix2.M24)+(matrix1.M13*matrix2.M34)+(matrix1.M14*matrix2.M44),
+                (matrix1.M21*matrix2.M11)+(matrix1.M22*matrix2.M21)+(matrix1.M23*matrix2.M31)+(matrix1.M24*matrix2.M41),
+                (matrix1.M21*matrix2.M12)+(matrix1.M22*matrix2.M22)+(matrix1.M23*matrix2.M32)+(matrix1.M24*matrix2.M42),
+                (matrix1.M21*matrix2.M13)+(matrix1.M22*matrix2.M23)+(matrix1.M23*matrix2.M33)+(matrix1.M24*matrix2.M43),
+                (matrix1.M21*matrix2.M14)+(matrix1.M22*matrix2.M24)+(matrix1.M23*matrix2.M34)+(matrix1.M24*matrix2.M44),
+                (matrix1.M31*matrix2.M11)+(matrix1.M32*matrix2.M21)+(matrix1.M33*matrix2.M31)+(matrix1.M34*matrix2.M41),
+                (matrix1.M31*matrix2.M12)+(matrix1.M32*matrix2.M22)+(matrix1.M33*matrix2.M32)+(matrix1.M34*matrix2.M42),
+                (matrix1.M31*matrix2.M13)+(matrix1.M32*matrix2.M23)+(matrix1.M33*matrix2.M33)+(matrix1.M34*matrix2.M43),
+                (matrix1.M31*matrix2.M14)+(matrix1.M32*matrix2.M24)+(matrix1.M33*matrix2.M34)+(matrix1.M34*matrix2.M44),
+                (matrix1.M41*matrix2.M11)+(matrix1.M42*matrix2.M21)+(matrix1.M43*matrix2.M31)+(matrix1.M44*matrix2.M41),
+                (matrix1.M41*matrix2.M12)+(matrix1.M42*matrix2.M22)+(matrix1.M43*matrix2.M32)+(matrix1.M44*matrix2.M42),
+                (matrix1.M41*matrix2.M13)+(matrix1.M42*matrix2.M23)+(matrix1.M43*matrix2.M33)+(matrix1.M44*matrix2.M43),
+                (matrix1.M41*matrix2.M14)+(matrix1.M42*matrix2.M24)+(matrix1.M43*matrix2.M34)+(matrix1.M44*matrix2.M44));
     }
 
-    public static Matrix Multiply(Matrix value, float scale) {
+    public static Matrix Multiply(Matrix matrix, float scaleFactor) {
         return new Matrix(
-                value.M11*scale, value.M12*scale, value.M13*scale, value.M14*scale,
-                value.M21*scale, value.M22*scale, value.M23*scale, value.M24*scale,
-                value.M31*scale, value.M32*scale, value.M33*scale, value.M34*scale,
-                value.M41*scale, value.M42*scale, value.M43*scale, value.M44*scale);
+                matrix.M11*scaleFactor, matrix.M12*scaleFactor, matrix.M13*scaleFactor, matrix.M14*scaleFactor,
+                matrix.M21*scaleFactor, matrix.M22*scaleFactor, matrix.M23*scaleFactor, matrix.M24*scaleFactor,
+                matrix.M31*scaleFactor, matrix.M32*scaleFactor, matrix.M33*scaleFactor, matrix.M34*scaleFactor,
+                matrix.M41*scaleFactor, matrix.M42*scaleFactor, matrix.M43*scaleFactor, matrix.M44*scaleFactor);
     }
 
-    public static Matrix Transpose(Matrix value) {
+    public static Matrix Transpose(Matrix matrix) {
         return new Matrix(
-                value.M11, value.M21, value.M31, value.M41,
-                value.M12, value.M22, value.M32, value.M42,
-                value.M13, value.M23, value.M33, value.M43,
-                value.M14, value.M24, value.M34, value.M44);
+                matrix.M11, matrix.M21, matrix.M31, matrix.M41,
+                matrix.M12, matrix.M22, matrix.M32, matrix.M42,
+                matrix.M13, matrix.M23, matrix.M33, matrix.M43,
+                matrix.M14, matrix.M24, matrix.M34, matrix.M44);
     }
 
     public static Matrix CreateScale(float scale) { return CreateScale(scale, scale, scale); }
     public static Matrix CreateScale(Vector3 scales) { return CreateScale(scales.X, scales.Y, scales.Z); }
-    public static Matrix CreateScale(float x, float y, float z) {
-        return new Matrix(x,0,0,0, 0,y,0,0, 0,0,z,0, 0,0,0,1);
+    public static Matrix CreateScale(float xScale, float yScale, float zScale) {
+        return new Matrix(xScale,0,0,0, 0,yScale,0,0, 0,0,zScale,0, 0,0,0,1);
     }
 
-    public static Matrix CreateTranslation(float x, float y, float z) {
-        return new Matrix(1,0,0,0, 0,1,0,0, 0,0,1,0, x,y,z,1);
+    public static Matrix CreateTranslation(float xPosition, float yPosition, float zPosition) {
+        return new Matrix(1,0,0,0, 0,1,0,0, 0,0,1,0, xPosition,yPosition,zPosition,1);
     }
 
     public static Matrix CreateTranslation(Vector3 position) { return CreateTranslation(position.X, position.Y, position.Z); }
@@ -124,11 +124,11 @@ public final class Matrix {
         return new Matrix(cosine,sine,0,0, -sine,cosine,0,0, 0,0,1,0, 0,0,0,1);
     }
 
-    public static Matrix CreateFromQuaternion(Quaternion value) {
-        float xx = value.X * value.X; float yy = value.Y * value.Y; float zz = value.Z * value.Z;
-        float xy = value.X * value.Y; float zw = value.Z * value.W;
-        float zx = value.Z * value.X; float yw = value.Y * value.W;
-        float yz = value.Y * value.Z; float xw = value.X * value.W;
+    public static Matrix CreateFromQuaternion(Quaternion quaternion) {
+        float xx = quaternion.X * quaternion.X; float yy = quaternion.Y * quaternion.Y; float zz = quaternion.Z * quaternion.Z;
+        float xy = quaternion.X * quaternion.Y; float zw = quaternion.Z * quaternion.W;
+        float zx = quaternion.Z * quaternion.X; float yw = quaternion.Y * quaternion.W;
+        float yz = quaternion.Y * quaternion.Z; float xw = quaternion.X * quaternion.W;
         return new Matrix(
                 1-(2*(yy+zz)), 2*(xy+zw), 2*(zx-yw), 0,
                 2*(xy-zw), 1-(2*(zz+xx)), 2*(yz+xw), 0,
@@ -141,9 +141,9 @@ public final class Matrix {
     }
 
     @Override
-    public boolean equals(Object other) {
-        if (this == other) return true;
-        if (!(other instanceof Matrix v)) return false;
+    public boolean equals(Object obj) {
+        if (this == obj) return true;
+        if (!(obj instanceof Matrix v)) return false;
         return FloatSemantics.equals(M11,v.M11)&&FloatSemantics.equals(M12,v.M12)&&FloatSemantics.equals(M13,v.M13)&&FloatSemantics.equals(M14,v.M14)
                 &&FloatSemantics.equals(M21,v.M21)&&FloatSemantics.equals(M22,v.M22)&&FloatSemantics.equals(M23,v.M23)&&FloatSemantics.equals(M24,v.M24)
                 &&FloatSemantics.equals(M31,v.M31)&&FloatSemantics.equals(M32,v.M32)&&FloatSemantics.equals(M33,v.M33)&&FloatSemantics.equals(M34,v.M34)

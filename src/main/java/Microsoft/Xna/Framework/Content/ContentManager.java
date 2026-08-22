@@ -1,5 +1,7 @@
 package Microsoft.Xna.Framework.Content;
 
+import Microsoft.Xna.Framework.ServiceProvider;
+
 import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Objects;
@@ -8,8 +10,18 @@ import java.util.Objects;
 public class ContentManager implements AutoCloseable {
 
     private final Map<String, Object> assets = new LinkedHashMap<>();
+    private final ServiceProvider serviceProvider;
     private String rootDirectory = "";
     private boolean closed;
+
+    public ContentManager(ServiceProvider serviceProvider) {
+        this.serviceProvider = Objects.requireNonNull(serviceProvider, "serviceProvider");
+    }
+
+    public ContentManager(ServiceProvider serviceProvider, String rootDirectory) {
+        this(serviceProvider);
+        this.rootDirectory = Objects.requireNonNull(rootDirectory, "rootDirectory");
+    }
 
     public final String getRootDirectory() {
         ensureOpen();
@@ -19,6 +31,10 @@ public class ContentManager implements AutoCloseable {
     public final void setRootDirectory(String value) {
         ensureOpen();
         rootDirectory = Objects.requireNonNull(value, "value");
+    }
+
+    public final ServiceProvider getServiceProvider() {
+        return serviceProvider;
     }
 
     /** Normative Java projection of XNA {@code Load<T>(String)} using a class token. */
@@ -45,7 +61,9 @@ public class ContentManager implements AutoCloseable {
                 try {
                     closeable.close();
                 } catch (Exception exception) {
-                    throw new ContentLoadException("Failed to unload content", exception);
+                    RuntimeException cause = exception instanceof RuntimeException runtime
+                            ? runtime : new RuntimeException(exception);
+                    throw new ContentLoadException("Failed to unload content", cause);
                 }
             }
         }
@@ -57,7 +75,16 @@ public class ContentManager implements AutoCloseable {
         if (closed) {
             return;
         }
-        Unload();
+        Dispose(true);
+    }
+
+    protected void Dispose(boolean disposing) {
+        if (closed) {
+            return;
+        }
+        if (disposing) {
+            Unload();
+        }
         closed = true;
     }
 
