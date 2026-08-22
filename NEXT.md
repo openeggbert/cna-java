@@ -58,6 +58,11 @@
   - added the mapped component hierarchy, collection/events, services, launch
     parameters, ordered update/draw, and resilient teardown;
   - reduced the measured contract from 730 to 691 diagnostics.
+- `29ce9c9 feat: bind XNA game window through CNA`
+  - added strict `GameWindow`, composable `[Flags]` orientation, and opaque
+    `WindowHandle` projections plus ten CNA window ABI bindings;
+  - made verifier modifier checks rigorous and reduced the measured contract to
+    685 diagnostics with zero leaks and no allowlist.
 
 ### `cna-java-template`
 
@@ -132,7 +137,7 @@ XNA_REFERENCE_DIR=/rv/data/development/github.com/openeggbert/xna4-decomp/refere
 
 Result: `BUILD SUCCESSFUL`, 10 tasks executed, no compiler/deprecation warnings.
 
-- JUnit: 33 tests, 0 failures, 0 errors, 0 skipped.
+- JUnit: 34 tests, 0 failures, 0 errors, 0 skipped.
 - Verifier regression suite: 8 tests, all passing.
 - Suites: 12 value/math, 3 lifecycle/content, 9 component/service/window,
   4 ownership, 5 native integration.
@@ -195,9 +200,10 @@ Result: passed end-to-end without using the global Maven repository.
 5. Native template stability: exactly 600 frames, clean shutdown.
 
 The demonstrated runtime feature set is lifecycle callbacks, `GameTime`,
-GraphicsDeviceManager attachment, mouse visibility, `GraphicsDevice.Clear`,
-frame-limited exit, and deterministic cleanup. SpriteBatch, texture/raw PNG,
-keyboard/mouse state, resize, and 3D are not claimed.
+GraphicsDeviceManager attachment, pre-run mapped `GameWindow` title,
+mouse visibility, `GraphicsDevice.Clear`, frame-limited exit, and deterministic
+cleanup. SpriteBatch, texture/raw PNG, keyboard/mouse state, resize events, and
+3D are not claimed.
 
 ## Immediate next work
 

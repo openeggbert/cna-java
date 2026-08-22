@@ -368,6 +368,13 @@ public class Game implements AutoCloseable {
         ensureNativeGame();
     }
 
+    final void setNativeWindowTitleIfCreated(String title) {
+        ensureOpen();
+        if (hasNativeGame()) {
+            NativeBindings.setWindowTitle(this, title);
+        }
+    }
+
     @SuppressWarnings("unused")
     private void nativeInitialize() {
         initializing = true;

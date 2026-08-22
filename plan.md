@@ -260,10 +260,11 @@ temporary Maven repositories, a pinned wrapper, and deterministic 60/600-frame
 modes. Linux HEADLESS runtime has executed both counts with clean shutdown.
 
 It intentionally demonstrates only lifecycle, `GameTime`, graphics manager,
-mouse-visibility property, and `Clear`. The fake renderer name/capability banner,
-unimplemented cube/SpriteBatch/content path, and non-running Android/GWT/TeaVM
-launchers were removed. A configurable generator creates a standalone project
-and its fresh build is verified.
+pre-run `GameWindow` title configuration, mouse-visibility property, and
+`Clear`. The fake renderer name/capability banner, unimplemented
+cube/SpriteBatch/content path, and non-running Android/GWT/TeaVM launchers were
+removed. A configurable generator creates a standalone project and its fresh
+build is verified.
 
 ## Packaging
 

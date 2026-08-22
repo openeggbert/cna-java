@@ -202,6 +202,17 @@ final class GameComponentTests {
     }
 
     @Test
+    void GameWindow_TitleCanBeConfiguredBeforeNativeCreationAndRejectsUseAfterClose() {
+        TestGame game = new TestGame();
+        game.getWindow().setTitle("Configured before Run");
+        assertEquals("Configured before Run", game.getWindow().getTitle());
+
+        game.close();
+        assertThrows(IllegalStateException.class,
+                () -> game.getWindow().setTitle("Too late"));
+    }
+
+    @Test
     void Teardown_RemainsClosedWhenDisposedListenersThrow() {
         TestGame game = new TestGame();
         ClosingComponent component = new ClosingComponent(game);

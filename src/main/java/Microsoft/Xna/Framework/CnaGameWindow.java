@@ -75,7 +75,6 @@ final class CnaGameWindow extends GameWindow {
 
     @Override
     protected void SetTitle(String title) {
-        game().prepareNativeWindow();
-        NativeBindings.setWindowTitle(game(), title);
+        game().setNativeWindowTitleIfCreated(title);
     }
 }
