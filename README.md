@@ -26,8 +26,8 @@ The first strict Windows-runtime measurement is intentionally red:
 ```text
 XNA reference:        257 types / 2,964 members
 Mapped Java contract: 261 types / 3,086 members
-Java target:           41 strict types / 673 members
-Differences:          680 unreviewed diagnostics
+Java target:           44 strict types / 693 members
+Differences:          677 unreviewed diagnostics
 Allowlist:              0
 Strict leaks:           0
 ```
@@ -44,14 +44,16 @@ Implemented now:
   handle (native window event delivery remains pending);
 - exact `PlayerIndex`, `Keys`, `KeyState`, `KeyboardState`, and both native
   `Keyboard.GetState` overloads;
-- Java 17 JNI adapter for 34 CNA game/error/window/keyboard functions;
+- exact `ButtonState`, immutable `MouseState`, and native-backed `Mouse`
+  state/position/opaque-window operations;
+- Java 17 JNI adapter for 38 CNA game/error/window/keyboard/mouse functions;
 - explicit native ownership modes and idempotent cleanup;
 - class-metadata XNA contract verifier and strict implementation-leak guard;
 - header/signature/layout/native-symbol ABI verifier;
 - managed numerical, validation, lifecycle, content, and ownership tests;
 - desktop template canary with 60-frame smoke and 600-frame stability modes.
 
-Not implemented yet includes SpriteBatch, textures, mouse/gamepad/touch, XNB
+Not implemented yet includes SpriteBatch, textures, gamepad/touch, XNB
 loading, models, audio/XACT, media/storage, and most of the selected XNA profile.
 
 ## Build and verify

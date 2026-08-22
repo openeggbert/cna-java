@@ -66,6 +66,10 @@
 - `e28dd6d fix: defer native window title until startup`
   - kept pre-run title configuration managed and passed it into native creation;
   - reran binding/template/generated-project plus 60/600-frame verification.
+- `58209ac feat: bind XNA keyboard snapshots through CNA`
+  - added exact keyboard types, 160 key identities, two CNA snapshot routes,
+    managed/native behavior tests, and template Escape input;
+  - reduced the measured contract to 680 diagnostics with 34/34 ABI symbols.
 
 ### `cna-java-template`
 
@@ -75,6 +79,10 @@
   - removed fake capability/cube/content behavior and non-running Android,
     GWT, and TeaVM launchers;
   - pushed to `origin/develop` after build and native evidence.
+- `df38a41 feat: exercise mapped game window title`
+  - configures the mapped title before native startup and tests that path.
+- `7a5c97d feat: exercise CNA keyboard input`
+  - captures native keyboard state per update and exits on Escape.
 
 ## API measurements
 
@@ -83,7 +91,7 @@ reference types / 2,964 members versus 21 target types / 351 members, with 730
 diagnostics, zero leaks, and an empty allowlist. Its full JSON remains at
 `tools/api-compat/baselines/xna40-windows-runtime-initial.json`.
 
-After the coherent window/orientation group, the current measurement is:
+After the coherent window and input groups, the current measurement is:
 
 Command:
 
@@ -99,21 +107,21 @@ REFERENCE_TYPES=257
 REFERENCE_MEMBERS=2964
 EXPECTED_JAVA_TYPES=261
 EXPECTED_JAVA_MEMBERS=3086
-TARGET_TYPES=41
-TARGET_MEMBERS=673
-TOTAL_DIAGNOSTICS=680
+TARGET_TYPES=44
+TARGET_MEMBERS=693
+TOTAL_DIAGNOSTICS=677
 ALLOWLIST_ENTRIES=0
 INTERFACE_MISMATCH=2
 MISSING_MEMBER=372
-MISSING_TYPE=220
+MISSING_TYPE=217
 PARAMETER_MISMATCH=21
 PARAMETER_NAME_MISMATCH=58
 RETURN_TYPE_MISMATCH=4
 UNEXPECTED_MEMBER=3
 ```
 
-This is a 50-diagnostic reduction from the immutable initial baseline, with 20
-additional strict target types and 322 additional target members.
+This is a 53-diagnostic reduction from the immutable initial baseline, with 23
+additional strict target types and 342 additional target members.
 `apiCompatCheck` still exits 1 as designed. Leak-only inspection reports
 `CNA_INTERNAL_LEAK=0` (total leak diagnostics 0).
 
@@ -134,6 +142,14 @@ The input group adds exact `PlayerIndex`, `KeyState`, all 160 metadata-derived
 the diagnostic delta is exactly five removed `MISSING_TYPE` findings. Two new
 C ABI routes copy versioned keyboard snapshots, including the per-player route.
 
+The adjacent mouse group adds exact `ButtonState`, `MouseState`, and `Mouse`
+contracts. Four CNA routes cover snapshot capture, cursor positioning, and an
+opaque window-token round trip. The normalized XNA behavior fixture pins the
+sample hash (`-120`) and string format. No raw address enters a strict public
+signature; internally registered CNA-issued tokens are the only accepted
+nonzero setter values. Its diagnostic delta is exactly three removed
+`MISSING_TYPE` findings.
+
 ## Managed/native binding gate
 
 Command:
@@ -146,21 +162,21 @@ XNA_REFERENCE_DIR=/rv/data/development/github.com/openeggbert/xna4-decomp/refere
 
 Result: `BUILD SUCCESSFUL`, 10 tasks executed, no compiler/deprecation warnings.
 
-- JUnit: 39 tests, 0 failures, 0 errors, 0 skipped.
+- JUnit: 44 tests, 0 failures, 0 errors, 0 skipped.
 - Verifier regression suite: 8 tests, all passing.
 - Suites: 12 value/math, 3 lifecycle/content, 10 component/service/window,
-  4 keyboard-state, 4 ownership, 6 native integration.
+  4 keyboard-state, 4 mouse-state, 4 ownership, 7 native integration.
 - Native stress: one ordered three-frame lifecycle plus ten repeated
   create/run/destroy lifecycles, and one-frame/tick/suppressed-draw timing.
 - Compile probe: passed.
-- Strict leak guard: 41 target types / 673 members, 0 findings.
-- ABI: header 0.7.0, 34 bound functions, manifest/JNI identity and C
+- Strict leak guard: 44 target types / 693 members, 0 findings.
+- ABI: header 0.7.0, 38 bound functions, manifest/JNI identity and C
   width/layout/function-signature probes passed, native library ABI 0.7.0,
-  symbols 22/22.
+  symbols 38/38.
 - JNI compiled with `-std=c11 -Wall -Wextra -Werror -fPIC`.
 
 Without `CNA_NATIVE_LIBRARY`, the same `check` passes and conditionally skips the
-four native integration tests plus native symbol/runtime-version inspection.
+seven native integration tests plus native symbol/runtime-version inspection.
 
 ## CNA native build evidence and blocker
 
@@ -201,7 +217,7 @@ Result: passed end-to-end without using the global Maven repository.
 1. Binding clean/check/Javadoc/sources and publication to a unique temporary
    Maven repository: passed.
 2. Sibling template clean/test/installDist against that exact artifact: passed
-   (2 tests, no warnings).
+   (3 tests, no warnings).
 3. Generated standalone project with custom project name, package, application
    ID, game class, group, and artifact ID: clean/test/installDist passed outside
    both repositories.
@@ -210,9 +226,9 @@ Result: passed end-to-end without using the global Maven repository.
 
 The demonstrated runtime feature set is lifecycle callbacks, `GameTime`,
 GraphicsDeviceManager attachment, pre-run mapped `GameWindow` title,
-CNA-backed `KeyboardState`/Escape input, mouse visibility,
-`GraphicsDevice.Clear`, frame-limited exit, and deterministic cleanup.
-SpriteBatch, texture/raw PNG, mouse/gamepad/touch state, resize events, and 3D
+CNA-backed `KeyboardState`/Escape and `MouseState`/left-click input, mouse
+visibility, `GraphicsDevice.Clear`, frame-limited exit, and deterministic cleanup.
+SpriteBatch, texture/raw PNG, gamepad/touch state, resize events, and 3D
 are not claimed.
 
 ## Immediate next work
@@ -223,7 +239,7 @@ are not claimed.
    unexpected-member diagnostics before adding more surface.
 3. Connect native window events and supported-orientation behavior, then add
    normalized XNA differential fixtures for the math/geometry contract.
-4. Bind keyboard/mouse plus native device resize.
+4. Bind gamepad/touch plus native device resize.
 5. Implement Texture2D FromStream and SpriteBatch, then upgrade the clear-only
    template to the requested moving raw-PNG playable slice.
 6. Add platform-specific native packaging and CI; do not promote Windows,

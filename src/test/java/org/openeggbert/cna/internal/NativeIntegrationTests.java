@@ -8,6 +8,9 @@ import Microsoft.Xna.Framework.Rectangle;
 import Microsoft.Xna.Framework.Input.Keyboard;
 import Microsoft.Xna.Framework.Input.KeyboardState;
 import Microsoft.Xna.Framework.Input.Keys;
+import Microsoft.Xna.Framework.Input.ButtonState;
+import Microsoft.Xna.Framework.Input.Mouse;
+import Microsoft.Xna.Framework.Input.MouseState;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.condition.EnabledIfEnvironmentVariable;
 
@@ -102,6 +105,20 @@ final class NativeIntegrationTests {
         assertThrows(IllegalStateException.class, Keyboard::GetState);
     }
 
+    @Test
+    void NativeMouseCapturesHeadlessSnapshotAndOpaqueWindowBinding() {
+        try (MouseGame game = new MouseGame()) {
+            assertThrows(IllegalStateException.class, Mouse::GetState);
+            game.RunOneFrame();
+            assertEquals(new MouseState(), game.state);
+            assertEquals(ButtonState.Released, game.state.getLeftButton());
+            assertTrue(Mouse.getWindowHandle().getIsZero());
+            Mouse.setWindowHandle(game.getWindow().getHandle());
+            Mouse.SetPosition(17, 23);
+        }
+        assertThrows(IllegalStateException.class, Mouse::GetState);
+    }
+
     private static final class ProbeGame extends Game {
         private final List<String> events = new ArrayList<>();
         private final int frameLimit;
@@ -164,6 +181,15 @@ final class NativeIntegrationTests {
         protected void Update(GameTime gameTime) {
             first = Keyboard.GetState();
             second = Keyboard.GetState(Microsoft.Xna.Framework.PlayerIndex.One);
+        }
+    }
+
+    private static final class MouseGame extends Game {
+        private MouseState state;
+
+        @Override
+        protected void Update(GameTime gameTime) {
+            state = Mouse.GetState();
         }
     }
 }

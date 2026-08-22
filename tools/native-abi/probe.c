@@ -19,6 +19,11 @@ _Static_assert(sizeof(CNA_KeyboardState) == 40U, "CNA_KeyboardState layout chang
 _Static_assert(offsetof(CNA_KeyboardState, struct_size) == 0U, "CNA_KeyboardState.size offset");
 _Static_assert(offsetof(CNA_KeyboardState, struct_version) == 4U, "CNA_KeyboardState.version offset");
 _Static_assert(offsetof(CNA_KeyboardState, pressed_key_words) == 8U, "CNA_KeyboardState.words offset");
+_Static_assert(sizeof(CNA_MouseState) == 32U, "CNA_MouseState layout changed");
+_Static_assert(offsetof(CNA_MouseState, x) == 8U, "CNA_MouseState.x offset");
+_Static_assert(offsetof(CNA_MouseState, y) == 12U, "CNA_MouseState.y offset");
+_Static_assert(offsetof(CNA_MouseState, scroll_wheel) == 16U, "CNA_MouseState.wheel offset");
+_Static_assert(offsetof(CNA_MouseState, pressed_buttons) == 24U, "CNA_MouseState.buttons offset");
 _Static_assert(sizeof(CNA_GameTime) == 24U, "CNA_GameTime layout changed");
 _Static_assert(offsetof(CNA_GameTime, total_game_time_ticks) == 0U, "CNA_GameTime.total offset");
 _Static_assert(offsetof(CNA_GameTime, elapsed_game_time_ticks) == 8U, "CNA_GameTime.elapsed offset");
@@ -77,6 +82,14 @@ static CNA_Result (*const keyboard_get_state_function)(CNA_Handle, CNA_KeyboardS
     cna_keyboard_get_state;
 static CNA_Result (*const keyboard_get_state_for_player_function)(
     CNA_Handle, CNA_PlayerIndex, CNA_KeyboardState*) = cna_keyboard_get_state_for_player;
+static CNA_Result (*const mouse_get_state_function)(CNA_Handle, CNA_MouseState*) =
+    cna_mouse_get_state;
+static CNA_Result (*const mouse_set_position_function)(CNA_Handle, int32_t, int32_t) =
+    cna_mouse_set_position;
+static CNA_Result (*const mouse_get_window_handle_function)(CNA_Handle, uint64_t*) =
+    cna_mouse_get_window_handle;
+static CNA_Result (*const mouse_set_window_handle_function)(CNA_Handle, uint64_t) =
+    cna_mouse_set_window_handle;
 
 int cna_java_abi_probe(void)
 {
@@ -95,5 +108,7 @@ int cna_java_abi_probe(void)
         window_get_screen_size_function != NULL && window_copy_screen_function != NULL &&
         window_set_title_function != NULL && window_begin_change_function != NULL &&
         window_end_change_function != NULL && keyboard_get_state_function != NULL &&
-        keyboard_get_state_for_player_function != NULL ? 0 : 1;
+        keyboard_get_state_for_player_function != NULL && mouse_get_state_function != NULL &&
+        mouse_set_position_function != NULL && mouse_get_window_handle_function != NULL &&
+        mouse_set_window_handle_function != NULL ? 0 : 1;
 }

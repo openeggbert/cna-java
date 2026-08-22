@@ -46,9 +46,12 @@ results into Java exceptions.
 XNA's input and media entry points are static, while every corresponding CNA C
 ABI route requires a game handle. CNA-Java therefore records the most recently
 created live `Game` as the process-current game and clears it on successful
-destruction, matching XNA's one-game-per-process model. Static `Keyboard` calls
-without a live current game fail deterministically. Keyboard state crosses JNI
-as a copied four-word POD snapshot; no state retains the native parent.
+destruction, matching XNA's one-game-per-process model. Static `Keyboard` and
+`Mouse` calls without a live current game fail deterministically. Keyboard
+state crosses JNI as a copied four-word POD snapshot and mouse state as copied
+canonical scalar/button fields; no state retains the native parent. Opaque
+window tokens issued by CNA-Java are registered internally so `Mouse` can round
+trip them without exposing their numeric address.
 
 ## Ownership
 

@@ -1,6 +1,7 @@
 package org.openeggbert.cna.internal;
 
 import Microsoft.Xna.Framework.Game;
+import Microsoft.Xna.Framework.WindowHandle;
 
 import java.nio.file.Path;
 import java.nio.charset.StandardCharsets;
@@ -18,6 +19,7 @@ public final class NativeBindings {
     private static boolean bridgeLoaded;
     private static int runtimeAbiVersion;
     private static final Map<Game, NativeGameHandle> GAMES = new WeakHashMap<>();
+    private static final Map<WindowHandle, Long> WINDOW_HANDLES = new WeakHashMap<>();
     private static Game currentGame;
 
     private NativeBindings() {
@@ -220,18 +222,73 @@ public final class NativeBindings {
 
     /** Captures a copy of the current XNA keyboard bit set. A negative player selects no slot. */
     public static long[] getKeyboardState(int playerIndex) {
-        NativeGameHandle game;
-        synchronized (GAMES) {
-            game = currentGame == null ? null : GAMES.get(currentGame);
-        }
-        if (game == null || game.isClosed()) {
-            throw new IllegalStateException(
-                    "Keyboard.GetState requires a live CNA Game on the current process");
-        }
+        NativeGameHandle game = currentGameHandle("Keyboard.GetState");
         long[] words = new long[4];
         check(playerIndex < 0 ? "cna_keyboard_get_state" : "cna_keyboard_get_state_for_player",
                 nativeGetKeyboardState(game.requireValue(), playerIndex, words));
         return words;
+    }
+
+    public static int[] getMouseState() {
+        int[] state = new int[4];
+        check("cna_mouse_get_state",
+                nativeGetMouseState(currentGameHandle("Mouse.GetState").requireValue(), state));
+        return state;
+    }
+
+    public static void setMousePosition(int x, int y) {
+        check("cna_mouse_set_position",
+                nativeSetMousePosition(currentGameHandle("Mouse.SetPosition").requireValue(), x, y));
+    }
+
+    public static WindowHandle getMouseWindowHandle() {
+        long[] output = new long[1];
+        check("cna_mouse_get_window_handle", nativeGetMouseWindowHandle(
+                currentGameHandle("Mouse.WindowHandle").requireValue(), output));
+        if (output[0] == 0L) {
+            return WindowHandle.Zero;
+        }
+        synchronized (GAMES) {
+            WindowHandle known = findWindowHandle(output[0]);
+            if (known != null) {
+                return known;
+            }
+        }
+
+        Game game;
+        synchronized (GAMES) {
+            game = currentGame;
+        }
+        WindowHandle gameWindow = game.getWindow().getHandle();
+        synchronized (GAMES) {
+            Long value = WINDOW_HANDLES.get(gameWindow);
+            if (value != null && value == output[0]) {
+                return gameWindow;
+            }
+        }
+        throw new IllegalStateException("CNA returned an unrecognized opaque mouse window token");
+    }
+
+    public static void setMouseWindowHandle(WindowHandle window) {
+        long value;
+        synchronized (GAMES) {
+            Long registered = WINDOW_HANDLES.get(Objects.requireNonNull(window, "window"));
+            if (registered == null && !window.getIsZero()) {
+                throw new IllegalArgumentException(
+                        "Mouse.WindowHandle accepts only an opaque token issued by CNA-Java");
+            }
+            value = registered == null ? 0L : registered;
+        }
+        check("cna_mouse_set_window_handle", nativeSetMouseWindowHandle(
+                currentGameHandle("Mouse.WindowHandle").requireValue(), value));
+    }
+
+    public static void registerWindowHandle(WindowHandle window, long value) {
+        if (value != 0L) {
+            synchronized (GAMES) {
+                WINDOW_HANDLES.put(Objects.requireNonNull(window, "window"), value);
+            }
+        }
     }
 
     static void destroyGame(Game game, long handle) {
@@ -263,6 +320,27 @@ public final class NativeBindings {
             throw new IllegalStateException(owner + " is unavailable before native Game creation");
         }
         return handle;
+    }
+
+    private static NativeGameHandle currentGameHandle(String owner) {
+        NativeGameHandle handle;
+        synchronized (GAMES) {
+            handle = currentGame == null ? null : GAMES.get(currentGame);
+        }
+        if (handle == null || handle.isClosed()) {
+            throw new IllegalStateException(
+                    owner + " requires a live CNA Game on the current process");
+        }
+        return handle;
+    }
+
+    private static WindowHandle findWindowHandle(long value) {
+        for (Map.Entry<WindowHandle, Long> entry : WINDOW_HANDLES.entrySet()) {
+            if (entry.getValue() == value) {
+                return entry.getKey();
+            }
+        }
+        return null;
     }
 
     private static boolean booleanResult(String operation, int result) {
@@ -408,6 +486,14 @@ public final class NativeBindings {
 
     private static native int nativeGetKeyboardState(
             long game, int playerIndex, long[] words);
+
+    private static native int nativeGetMouseState(long game, int[] state);
+
+    private static native int nativeSetMousePosition(long game, int x, int y);
+
+    private static native int nativeGetMouseWindowHandle(long game, long[] window);
+
+    private static native int nativeSetMouseWindowHandle(long game, long window);
 
     private static native int nativeDestroyGame(long game);
 

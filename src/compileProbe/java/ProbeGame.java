@@ -9,6 +9,9 @@ import Microsoft.Xna.Framework.GraphicsDeviceManager;
 import Microsoft.Xna.Framework.Input.Keyboard;
 import Microsoft.Xna.Framework.Input.KeyboardState;
 import Microsoft.Xna.Framework.Input.Keys;
+import Microsoft.Xna.Framework.Input.ButtonState;
+import Microsoft.Xna.Framework.Input.Mouse;
+import Microsoft.Xna.Framework.Input.MouseState;
 
 public final class ProbeGame extends Game {
     private final GraphicsDeviceManager graphics;
@@ -34,7 +37,10 @@ public final class ProbeGame extends Game {
     @Override
     protected void Update(GameTime gameTime) {
         KeyboardState keyboard = Keyboard.GetState(PlayerIndex.One);
-        if (keyboard.IsKeyDown(Keys.Escape) || gameTime.getElapsedGameTime().isNegative()) {
+        MouseState mouse = Mouse.GetState();
+        if (keyboard.IsKeyDown(Keys.Escape)
+                || mouse.getLeftButton() == ButtonState.Pressed
+                || gameTime.getElapsedGameTime().isNegative()) {
             Exit();
         }
     }

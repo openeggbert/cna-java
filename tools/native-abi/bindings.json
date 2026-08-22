@@ -35,6 +35,10 @@
     {"name": "cna_game_window_begin_screen_device_change", "header": "runtime_window.h", "ownership": "borrows game"},
     {"name": "cna_game_window_end_screen_device_change", "header": "runtime_window.h", "ownership": "borrows game and UTF-8 bytes"},
     {"name": "cna_keyboard_get_state", "header": "input.h", "ownership": "borrows game; copies versioned keyboard state"},
-    {"name": "cna_keyboard_get_state_for_player", "header": "input_keyboard.h", "ownership": "borrows game; copies versioned keyboard state"}
+    {"name": "cna_keyboard_get_state_for_player", "header": "input_keyboard.h", "ownership": "borrows game; copies versioned keyboard state"},
+    {"name": "cna_mouse_get_state", "header": "input.h", "ownership": "borrows game; copies versioned mouse state"},
+    {"name": "cna_mouse_set_position", "header": "input_mouse.h", "ownership": "borrows game"},
+    {"name": "cna_mouse_get_window_handle", "header": "input_mouse.h", "ownership": "borrows game; returns opaque round-trip token"},
+    {"name": "cna_mouse_set_window_handle", "header": "input_mouse.h", "ownership": "borrows game and opaque round-trip token"}
   ]
 }

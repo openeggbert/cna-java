@@ -59,6 +59,9 @@ typedef CNA_Result (*GameEndScreenChangeFunction)(CNA_Handle, CNA_StringView, in
 typedef CNA_Result (*KeyboardGetStateFunction)(CNA_Handle, CNA_KeyboardState*);
 typedef CNA_Result (*KeyboardGetStateForPlayerFunction)(
     CNA_Handle, CNA_PlayerIndex, CNA_KeyboardState*);
+typedef CNA_Result (*MouseGetStateFunction)(CNA_Handle, CNA_MouseState*);
+typedef CNA_Result (*MouseSetPositionFunction)(CNA_Handle, int32_t, int32_t);
+typedef CNA_Result (*GameSetUint64Function)(CNA_Handle, uint64_t);
 
 typedef struct CnaFunctions {
     DynamicLibrary library;
@@ -96,6 +99,10 @@ typedef struct CnaFunctions {
     GameEndScreenChangeFunction game_window_end_screen_device_change;
     KeyboardGetStateFunction keyboard_get_state;
     KeyboardGetStateForPlayerFunction keyboard_get_state_for_player;
+    MouseGetStateFunction mouse_get_state;
+    MouseSetPositionFunction mouse_set_position;
+    GameGetUint64Function mouse_get_window_handle;
+    GameSetUint64Function mouse_set_window_handle;
 } CnaFunctions;
 
 typedef struct JavaGameContext {
@@ -407,6 +414,10 @@ JNIEXPORT jint JNICALL Java_org_openeggbert_cna_internal_NativeBindings_nativeLo
     LOAD(game_window_end_screen_device_change, "cna_game_window_end_screen_device_change");
     LOAD(keyboard_get_state, "cna_keyboard_get_state");
     LOAD(keyboard_get_state_for_player, "cna_keyboard_get_state_for_player");
+    LOAD(mouse_get_state, "cna_mouse_get_state");
+    LOAD(mouse_set_position, "cna_mouse_set_position");
+    LOAD(mouse_get_window_handle, "cna_mouse_get_window_handle");
+    LOAD(mouse_set_window_handle, "cna_mouse_set_window_handle");
 #undef LOAD
 
     return (jint)cna.get_abi_version();
@@ -852,6 +863,68 @@ JNIEXPORT jint JNICALL Java_org_openeggbert_cna_internal_NativeBindings_nativeGe
     }
     (*environment)->SetLongArrayRegion(environment, output, 0, 4, words);
     return (*environment)->ExceptionCheck(environment) ? (jint)CNA_RESULT_INVALID_STATE : 0;
+}
+
+JNIEXPORT jint JNICALL Java_org_openeggbert_cna_internal_NativeBindings_nativeGetMouseState(
+    JNIEnv* environment, jclass type, jlong game, jintArray output)
+{
+    (void)type;
+    if (output == NULL || (*environment)->GetArrayLength(environment, output) < 4) {
+        return (jint)CNA_RESULT_INVALID_ARGUMENT;
+    }
+    CNA_MouseState state;
+    (void)memset(&state, 0, sizeof(state));
+    state.struct_size = (uint32_t)sizeof(state);
+    state.struct_version = UINT32_C(1);
+    CNA_Result result = cna.mouse_get_state(java_game(game)->cna_handle, &state);
+    if (result != CNA_RESULT_SUCCESS) {
+        return (jint)result;
+    }
+    const jint values[4] = {
+        (jint)state.x,
+        (jint)state.y,
+        (jint)state.scroll_wheel,
+        (jint)state.pressed_buttons
+    };
+    (*environment)->SetIntArrayRegion(environment, output, 0, 4, values);
+    return (*environment)->ExceptionCheck(environment) ? (jint)CNA_RESULT_INVALID_STATE : 0;
+}
+
+JNIEXPORT jint JNICALL Java_org_openeggbert_cna_internal_NativeBindings_nativeSetMousePosition(
+    JNIEnv* environment, jclass type, jlong game, jint x, jint y)
+{
+    (void)environment;
+    (void)type;
+    return (jint)cna.mouse_set_position(
+        java_game(game)->cna_handle, (int32_t)x, (int32_t)y);
+}
+
+JNIEXPORT jint JNICALL Java_org_openeggbert_cna_internal_NativeBindings_nativeGetMouseWindowHandle(
+    JNIEnv* environment, jclass type, jlong game, jlongArray output)
+{
+    (void)type;
+    if (output == NULL || (*environment)->GetArrayLength(environment, output) < 1) {
+        return (jint)CNA_RESULT_INVALID_ARGUMENT;
+    }
+    uint64_t value = 0U;
+    CNA_Result result = cna.mouse_get_window_handle(java_game(game)->cna_handle, &value);
+    if (result != CNA_RESULT_SUCCESS) {
+        return (jint)result;
+    }
+    jlong projected;
+    (void)memcpy(&projected, &value, sizeof(projected));
+    (*environment)->SetLongArrayRegion(environment, output, 0, 1, &projected);
+    return (*environment)->ExceptionCheck(environment) ? (jint)CNA_RESULT_INVALID_STATE : 0;
+}
+
+JNIEXPORT jint JNICALL Java_org_openeggbert_cna_internal_NativeBindings_nativeSetMouseWindowHandle(
+    JNIEnv* environment, jclass type, jlong game, jlong window)
+{
+    (void)environment;
+    (void)type;
+    uint64_t value;
+    (void)memcpy(&value, &window, sizeof(value));
+    return (jint)cna.mouse_set_window_handle(java_game(game)->cna_handle, value);
 }
 
 JNIEXPORT jint JNICALL Java_org_openeggbert_cna_internal_NativeBindings_nativeDestroyGame(

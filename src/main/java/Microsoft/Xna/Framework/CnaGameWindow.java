@@ -40,7 +40,9 @@ final class CnaGameWindow extends GameWindow {
     public WindowHandle getHandle() {
         game().prepareNativeWindow();
         long value = NativeBindings.getWindowHandle(game());
-        return value == 0L ? WindowHandle.Zero : new WindowHandle(value);
+        WindowHandle handle = value == 0L ? WindowHandle.Zero : new WindowHandle(value);
+        NativeBindings.registerWindowHandle(handle, value);
+        return handle;
     }
 
     @Override

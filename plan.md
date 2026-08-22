@@ -15,7 +15,7 @@ The audited starting snapshot had eight Java source files (three were
 used a different Maven group, mixed XNA and Java casing, faked renderer
 capabilities, had no wrapper, and advertised unsupported Android/iOS/Web paths.
 
-The current repository has a reproducible Gradle 8.12/JDK 17 build, 50
+The current repository has a reproducible Gradle 8.12/JDK 17 build, 53
 production Java sources, managed and conditional native tests, a real JNI
 backend, class-metadata verification, and a functional desktop/headless
 template canary. Gradle is the single canonical build; the stale Maven build
@@ -87,13 +87,13 @@ reference types:                   257
 reference members:               2964
 expected mapped Java types:        261
 expected mapped Java members:     3086
-mapped Java target types:           41
-mapped Java target members:        673
-unreviewed projection differences: 680
+mapped Java target types:           44
+mapped Java target members:        693
+unreviewed projection differences: 677
 
 INTERFACE_MISMATCH                   2
 MISSING_MEMBER                     372
-MISSING_TYPE                       220
+MISSING_TYPE                       217
 PARAMETER_MISMATCH                  21
 PARAMETER_NAME_MISMATCH             58
 RETURN_TYPE_MISMATCH                 4
@@ -126,7 +126,7 @@ Next verifier work:
 
 JNI is selected because Java 17 and future Android compatibility are retained;
 stable FFM is unavailable on Java 17. The adapter dynamically resolves only the
-stable C ABI and binds 34 functions:
+stable C ABI and binds 38 functions:
 
 ```text
 cna_get_abi_version
@@ -163,6 +163,10 @@ cna_game_window_begin_screen_device_change
 cna_game_window_end_screen_device_change
 cna_keyboard_get_state
 cna_keyboard_get_state_for_player
+cna_mouse_get_state
+cna_mouse_set_position
+cna_mouse_get_window_handle
+cna_mouse_set_window_handle
 ```
 
 It provides ABI-version rejection, UTF-8 conversion, callback rooting,
@@ -170,7 +174,7 @@ JVM-thread attachment, exception/result conversion, and portable configuration
 through Java properties plus `CNA_JNI_LIBRARY`, `CNA_NATIVE_LIBRARY`,
 `CNA_NATIVE_DIR`, and `CNA_ROOT`.
 
-Linux x86-64 evidence: header ABI 0.7.0, all 34 symbols present, manifest/JNI
+Linux x86-64 evidence: header ABI 0.7.0, all 38 symbols present, manifest/JNI
 identity and layout/signature probes passing, runtime ABI 0.7.0, three-frame and
 one-frame/tick callback lifecycles passing, and ten repeated create/run/destroy
 cycles passing. This is not Windows/macOS ABI evidence.
@@ -219,11 +223,13 @@ substitute for behavior.
 ## Input
 
 `PlayerIndex`, all 160 measured `Keys` identities, `KeyState`, `KeyboardState`,
-and both `Keyboard.GetState` overloads match their mapped local contracts.
-Keyboard snapshots are copied from CNA's versioned four-word POD, and managed
-tests cover constructor/copy/equality/hash/indexer/pressed-key behavior. Native
-HEADLESS tests cover ordinary and per-player capture. Mouse, gamepad, and touch
-remain coherent future groups; synthetic key injection is not claimed.
+both `Keyboard.GetState` overloads, `ButtonState`, `MouseState`, and the full
+mapped `Mouse` surface match their local contracts. Keyboard and mouse snapshots
+are copied from CNA's versioned PODs. Managed tests cover value semantics and
+the normalized XNA mouse string/hash corpus; native HEADLESS tests cover
+ordinary/per-player keyboard capture, mouse capture/position, and opaque window
+round trips. Gamepad and touch remain coherent future groups; synthetic input
+injection is not claimed.
 
 ## Content
 
@@ -266,8 +272,8 @@ temporary Maven repositories, a pinned wrapper, and deterministic 60/600-frame
 modes. Linux HEADLESS runtime has executed both counts with clean shutdown.
 
 It intentionally demonstrates only lifecycle, `GameTime`, graphics manager,
-pre-run `GameWindow` title configuration, CNA-backed keyboard snapshots with
-Escape-to-exit, mouse-visibility property, and `Clear`. The fake renderer
+pre-run `GameWindow` title configuration, CNA-backed keyboard/mouse snapshots
+with Escape/left-click exit, mouse-visibility property, and `Clear`. The fake renderer
 name/capability banner, unimplemented
 cube/SpriteBatch/content path, and non-running Android/GWT/TeaVM launchers were
 removed. A configurable generator creates a standalone project and its fresh
@@ -311,7 +317,7 @@ Green now:
 8. fresh generated-project build;
 9. optional 60-frame smoke and 600-frame stability runs.
 
-Intentionally red: strict XNA completeness (`apiCompatCheck`, 680 differences).
+Intentionally red: strict XNA completeness (`apiCompatCheck`, 677 differences).
 Future platform CI must record evidence separately per OS/architecture.
 
 ## Upstream CNA blockers
@@ -334,7 +340,7 @@ task to patch the upstream repository.
    evidence against HEAD.
 2. Complete native `GameWindow` event/orientation behavior and math members
    against the strict diagnostics; add XNA differential fixtures.
-3. Bind keyboard/mouse and native device/window resize lifecycle.
+3. Bind gamepad/touch and native device/window resize lifecycle.
 4. Add Texture2D FromStream and SpriteBatch as the first real 2D slice; then
    upgrade the template from clear-only to movement/input/raw-PNG behavior.
 5. Expand content/XNB, graphics resources/effects/models, audio/XACT, and
