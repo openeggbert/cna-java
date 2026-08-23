@@ -19,6 +19,11 @@
     "System.Uri": "java.net.URI",
     "System.DateTime": "java.time.Instant",
     "System.Runtime.InteropServices.ExternalException": "java.lang.RuntimeException",
+    "System.Globalization.CultureInfo": "java.util.Locale",
+    "System.ComponentModel.ExpandableObjectConverter": "java.lang.Object",
+    "System.ComponentModel.PropertyDescriptorCollection": "java.util.LinkedHashMap<java.lang.String,java.lang.Class<?>>",
+    "System.ComponentModel.Design.Serialization.InstanceDescriptor": "java.beans.Expression",
+    "System.Collections.IDictionary": "java.util.Map<java.lang.String,java.lang.Object>",
     "System.Collections.ObjectModel.Collection`1": "java.util.AbstractList",
     "System.Collections.ObjectModel.ReadOnlyCollection`1": "java.util.List",
     "System.Collections.Generic.Dictionary`2": "java.util.LinkedHashMap",
@@ -53,7 +58,23 @@
     "Microsoft.Xna.Framework.Media.Album.GetAlbumArt()": "java.io.InputStream",
     "Microsoft.Xna.Framework.Media.Album.GetThumbnail()": "java.io.InputStream",
     "Microsoft.Xna.Framework.Media.Picture.GetImage()": "java.io.InputStream",
-    "Microsoft.Xna.Framework.Media.Picture.GetThumbnail()": "java.io.InputStream"
+    "Microsoft.Xna.Framework.Media.Picture.GetThumbnail()": "java.io.InputStream",
+    "Microsoft.Xna.Framework.Design.MathTypeConverter.GetProperties(System.ComponentModel.ITypeDescriptorContext,System.Object,System.Attribute[])": "java.util.LinkedHashMap<java.lang.String,java.lang.Object>"
+  },
+  "omittedFrameworkParameterTypes": [
+    "System.ComponentModel.ITypeDescriptorContext",
+    "System.Attribute[]"
+  ],
+  "designTypeConverterProjection": {
+    "baseContract": "Microsoft.Xna.Framework.Design.MathTypeConverter",
+    "systemType": "java.lang.Class<?>",
+    "cultureInfo": "java.util.Locale",
+    "typeDescriptorContext": "omitted",
+    "propertyDescriptions": "java.util.LinkedHashMap<java.lang.String,java.lang.Class<?>>",
+    "propertyDecomposition": "java.util.LinkedHashMap<java.lang.String,java.lang.Object>",
+    "instanceDescriptor": "java.beans.Expression",
+    "createInstanceDictionary": "java.util.Map<java.lang.String,java.lang.Object>",
+    "attributeFilter": "omitted"
   },
   "memberNameMappings": {
     "Microsoft.Xna.Framework.Content.ContentTypeReader`1.Read(Microsoft.Xna.Framework.Content.ContentReader,!0)": "ReadTyped"

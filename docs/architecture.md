@@ -147,6 +147,21 @@ portable absolute/drive/traversal rejection before the native operation. This na
 and the platform-pending origin of a real DeviceChanged event are recorded explicitly in
 `storage-evidence.md`.
 
+The Design converter family is a managed value-conversion subsystem and deliberately does not
+enter this ownership graph. `MathTypeConverter` is the compact Java base contract. Ordered
+`LinkedHashMap` metadata/decomposition replaces CLR property descriptors, `Map<String,Object>`
+supplies reconstruction values, `java.beans.Expression` replaces `InstanceDescriptor`, and
+`Locale` replaces `CultureInfo`. Context and attribute-filter parameters with no Java designer-
+host meaning are omitted by exact formal mapping. Every mutable struct component is snapshotted;
+no reflection over public fields is used as the converter contract and no native route is needed.
+
+`GamerServicesComponent` is the sole selected-profile bridge into CNA GamerServices. It remains a
+normal managed `GameComponent`: initialization copies the opaque Game window token and borrows the
+live native Game for the canonical dispatcher initialization; each enabled component update pumps
+the canonical no-argument dispatcher route. It allocates no native component handle and therefore
+adds nothing to Game teardown. The separate Gamer/Guide/Avatar/Network object profiles are not
+projected, and no native stub gamer becomes a Java public object.
+
 Managed XNB resources use the same graph rather than a parallel handle system.
 `ContentManager` records successfully constructed disposable resources once and
 unloads them in reverse construction order. Thus a SpriteFont native object is
@@ -205,6 +220,9 @@ Compatibility is tracked independently as:
 2. the deterministic XNA Java projection produced by the mapping rules;
 3. CNA-backed behavior coverage of each mapped API.
 
-A member can therefore be mapped but unimplemented without being silently
-counted as complete. The report-only verifier records the baseline; the strict
-verifier stays red until all unreviewed differences are resolved.
+A member can therefore be structurally complete without its platform-dependent runtime capability
+being available. The selected XNA 4.0 Windows runtime projection is now structurally strict at
+zero diagnostics, while `docs/runtime-capabilities.json` records managed/native evidence and the
+remaining upstream, backend, asset, hardware, platform, and language-mapping boundaries. Strict
+zero is never promoted to universal runtime completeness or to completion of other historical XNA
+profiles.

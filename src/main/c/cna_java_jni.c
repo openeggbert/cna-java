@@ -84,6 +84,8 @@ typedef CNA_Result (*TouchRaiseEventFunction)(
 typedef CNA_Result (*MouseGetStateFunction)(CNA_Handle, CNA_MouseState*);
 typedef CNA_Result (*MouseSetPositionFunction)(CNA_Handle, int32_t, int32_t);
 typedef CNA_Result (*GameSetUint64Function)(CNA_Handle, uint64_t);
+typedef CNA_Result (*Uint64UnaryFunction)(uint64_t);
+typedef CNA_Result (*ResultFunction)(void);
 typedef CNA_Result (*GameGetHandleFunction)(CNA_Handle, CNA_Handle*);
 typedef CNA_Result (*GameSetUint32Function)(CNA_Handle, uint32_t);
 typedef CNA_Result (*GameGetInt32Function)(CNA_Handle, int32_t*);
@@ -614,6 +616,9 @@ typedef struct CnaFunctions {
     GameUnaryFunction game_suppress_draw;
     GameUnaryFunction game_tick;
     GameUnaryFunction framework_dispatcher_update;
+    Uint64UnaryFunction gamer_services_dispatcher_set_window_handle;
+    GameUnaryFunction gamer_services_dispatcher_initialize;
+    ResultFunction gamer_services_dispatcher_update;
     GameUnaryFunction game_destroy;
     GameClearFunction game_clear;
     GameSetBoolFunction game_set_mouse_visible;
@@ -2138,6 +2143,12 @@ JNIEXPORT jint JNICALL Java_org_openeggbert_cna_internal_NativeBindings_nativeLo
     LOAD(game_suppress_draw, "cna_game_suppress_draw");
     LOAD(game_tick, "cna_game_tick");
     LOAD(framework_dispatcher_update, "cna_framework_dispatcher_update");
+    LOAD(gamer_services_dispatcher_set_window_handle,
+        "cna_gamer_services_dispatcher_set_window_handle");
+    LOAD(gamer_services_dispatcher_initialize,
+        "cna_gamer_services_dispatcher_initialize");
+    LOAD(gamer_services_dispatcher_update,
+        "cna_gamer_services_dispatcher_update");
     LOAD(game_destroy, "cna_game_destroy");
     LOAD(game_clear, "cna_game_clear");
     LOAD(game_set_mouse_visible, "cna_game_set_is_mouse_visible");
@@ -3197,6 +3208,30 @@ JNIEXPORT jint JNICALL Java_org_openeggbert_cna_internal_NativeBindings_nativeUp
     (void)environment;
     (void)type;
     return (jint)cna.framework_dispatcher_update(java_game(game)->cna_handle);
+}
+
+JNIEXPORT jint JNICALL Java_org_openeggbert_cna_internal_NativeBindings_nativeSetGamerServicesWindowHandle(
+    JNIEnv* environment, jclass type, jlong window)
+{
+    (void)environment;
+    (void)type;
+    return (jint)cna.gamer_services_dispatcher_set_window_handle((uint64_t)window);
+}
+
+JNIEXPORT jint JNICALL Java_org_openeggbert_cna_internal_NativeBindings_nativeInitializeGamerServices(
+    JNIEnv* environment, jclass type, jlong game)
+{
+    (void)environment;
+    (void)type;
+    return (jint)cna.gamer_services_dispatcher_initialize(java_game(game)->cna_handle);
+}
+
+JNIEXPORT jint JNICALL Java_org_openeggbert_cna_internal_NativeBindings_nativeUpdateGamerServices(
+    JNIEnv* environment, jclass type)
+{
+    (void)environment;
+    (void)type;
+    return (jint)cna.gamer_services_dispatcher_update();
 }
 
 JNIEXPORT jint JNICALL Java_org_openeggbert_cna_internal_NativeBindings_nativeRequestExit(

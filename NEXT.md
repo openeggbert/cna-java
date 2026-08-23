@@ -2,22 +2,23 @@
 
 **Updated:** 2026-08-23
 
-The complete Graphics/XNB/Model, Audio/XACT, 24-type Media/Video, and three-type Storage milestones
-are finished in the current uncommitted worktree. Do not redo them without a concrete regression.
-Preserve the pre-existing untracked `out` entry.
+The selected XNA 4.0 Windows runtime projection is structurally strict-complete in the current
+uncommitted worktree. Graphics/XNB/Model, Audio/XACT, Media/Video, Storage, all thirteen Design
+converters, and the selected `GamerServicesComponent` are finished. Do not revisit a completed
+family without a concrete regression. Preserve the pre-existing untracked `out` entry.
 
-Read `plan.md`, this file, `README.md`, `docs/xna-java-mapping.md`,
-`docs/architecture.md`, `docs/media-video-evidence.md`, `docs/storage-evidence.md`, the strict/native
-manifests, and the focused Media and Storage tests before changing shared lifecycle or callbacks.
+Read `plan.md`, this file, `README.md`, `docs/xna-java-mapping.md`, `docs/architecture.md`,
+`docs/design-evidence.md`, `docs/gamerservices-evidence.md`, and
+`docs/runtime-capabilities.json` before new work. Media/Video and Storage details remain in their
+focused evidence files.
 
 ## Repository and provenance
 
-Writable: this repository and `../cna-java-template`. The CNA, CNA-C#, CNA-TS, CNA-Rust, and their
-template siblings are read-only references. No read-only sibling was modified. CNA HEAD was
-rechecked at `1bb2145d99ed572dd4eb15009c34e2e5f410fcf0`; its unrelated networking-off
-GamerServices detail-header and networking-on renderer-identity blockers were not repaired.
+Writable: this repository and `../cna-java-template`. CNA, CNA-C#, CNA-TS, and CNA-Rust siblings
+are read-only references. No read-only repository was modified. The sibling template source was
+not changed.
 
-Continue using the qualified artifact:
+Continue native qualification with:
 
 ```text
 /tmp/cna-java-native-working-070/modules/c-api/libcna_c_api.so
@@ -27,6 +28,10 @@ HEADLESS renderer
 NULL audio
 ```
 
+The seven authoritative reference assemblies are SHA-256-pinned by
+`tools/api-compat/profiles/xna40-windows-runtime.json`; the current local reference directory used
+for qualification was `/tmp/xna-probe-out`.
+
 ## Exact strict state
 
 ```text
@@ -34,10 +39,10 @@ REFERENCE_TYPES=257
 REFERENCE_MEMBERS=2964
 EXPECTED_JAVA_TYPES=265
 EXPECTED_JAVA_MEMBERS=3206
-TARGET_TYPES=251
-TARGET_MEMBERS=3150
-TOTAL_DIAGNOSTICS=14
-MISSING_TYPE=14
+TARGET_TYPES=265
+TARGET_MEMBERS=3206
+TOTAL_DIAGNOSTICS=0
+MISSING_TYPE=0
 MISSING_MEMBER=0
 
 ACCESSIBILITY_MISMATCH=0
@@ -59,147 +64,136 @@ XNA_MAPPING_MISMATCH=0
 ALLOWLIST_ENTRIES=0
 ```
 
-Transition from the requested baseline:
+Transition from the milestone baseline:
 
 ```text
-EXPECTED_JAVA_MEMBERS: 3200 -> 3207 after Media -> 3206 after Storage serialization exclusion
-TARGET_TYPES: 224 -> 248 after Media -> 251 after Storage
-TARGET_MEMBERS: 2906 -> 3115 after Media -> 3150 after Storage
-TOTAL_DIAGNOSTICS: 41 -> 17 after Media -> 14 after Storage
-MISSING_TYPE: 41 -> 17 after Media -> 14 after Storage
-MISSING_MEMBER: 0 -> 0
+TARGET_TYPES:       251 -> 264 after Design -> 265 final
+TARGET_MEMBERS:    3150 -> 3203 after Design -> 3206 final
+TOTAL_DIAGNOSTICS:   14 ->    1 after Design ->    0 final
+MISSING_TYPE:         14 ->    1 after Design ->    0 final
+MISSING_MEMBER:        0 ->    0 -> 0
 ```
 
-Current distribution:
+Final family distribution:
 
 ```text
 Graphics=0
 Audio/XACT=0
 Media/Video=0
 Storage=0
-Design=13
-GamerServices=1
+Design=0
+GamerServices=0
 ```
 
-The 14 missing whole types are the thirteen
-`Microsoft.Xna.Framework.Design` converters (`MathTypeConverter` plus the BoundingBox,
-BoundingSphere, Color, Matrix, Plane, Point, Quaternion, Ray, Rectangle, Vector2, Vector3, and
-Vector4 converters) and
-`Microsoft.Xna.Framework.GamerServices.GamerServicesComponent`.
+Both `apiCompatReport` and `apiCompatCheck` pass. This is strict zero only for the selected Windows
+runtime mapping, not all historical XNA profiles or all runtime capabilities.
 
-## Completed Media/Video state
+## Design converter state
 
-All 24 types are strict complete. MediaLibrary uses only platform routes and may be empty on the
-qualified runtime. URI Song, static MediaPlayer, stable per-Game MediaQueue generation, native
-events through the existing FrameworkDispatcher pump, and Game recreation are verified.
-
-Video XNB metadata and native player controls are implemented. `VideoPlayer.GetTexture` never owns
-the CNA frame: a nonzero handle becomes a parent-owned facade invalidated before the next player
-operation. CNA lacks XNA stable/two-buffer identity and a generation token; HEADLESS produced no
-frame. Do not fabricate pixels or strengthen the identity claim. See `docs/media-video-evidence.md`.
-
-## Completed Storage state
-
-The coherent group is `StorageContainer`, `StorageDevice`, and
-`StorageDeviceNotConnectedException`. Public CLR support carriers were added under `System` and
-`System.IO`: `IAsyncResult`, `AsyncCallback`, `FileMode`, `FileAccess`, `FileShare`, `SeekOrigin`,
-and read/write/seek extensions on `Stream`. The protected exception serialization constructor is
-excluded by exact signature; ordinary public constructors remain strict.
-
-Important behavior:
-
-- XNA `Begin` returns an already-completed carrier, invokes the callback synchronously, and creates
-  the device/container only on one-shot `End`. Foreign and repeated End fail.
-- All four selectors execute. XNA validates negative size but not negative directory count; Java
-  preserves that and normalizes the latter only for CNA's stricter native route.
-- StorageDevice has no public close. The current Game owns its native handle; devices own
-  containers and containers own streams. Game teardown closes streams/containers/devices in
-  reverse order before native Game destruction.
-- Container CRUD, enumeration patterns, display/device identity, stream read/write/seek, and all
-  selected file mode/access/share routes execute natively.
-- Wrong-thread release returns result 8 without clearing Java ownership and then succeeds on the
-  owner thread.
-- ABI 0.7 native `Disposing` is observed exactly once. JNI records only; Java invokes user handlers
-  after the native frame. Duplicate, self-removal, recursive close, throwing/later handlers, and
-  double close pass.
-- `StorageDevice.DeviceChanged` has one process-global native registration and the existing owner-
-  thread dispatcher queue. Worker enqueue, duplicate removal, throwing/later handlers, shutdown
-  discard, and recreation pass. An actual OS-originated event is platform-pending.
-
-Exact CNA gap: ABI 0.7 accepts `..` paths outside a container, while XNA canonicalizes and rejects
-them. Java rejects null/empty, absolute Unix, Windows drive/root, and normalized escaping paths
-before JNI. Keep this visible in `docs/storage-evidence.md`; do not credit containment to CNA until
-the native route supplies it.
-
-Primary Storage implementation files:
+All thirteen types exist under `src/main/java/Microsoft/Xna/Framework/Design/` and must remain a
+coherent family:
 
 ```text
-src/main/java/Microsoft/Xna/Framework/Storage/*
-src/main/java/System/IAsyncResult.java
-src/main/java/System/AsyncCallback.java
-src/main/java/System/IO/{Stream,FileMode,FileAccess,FileShare,SeekOrigin}.java
-src/main/java/org/openeggbert/cna/internal/NativeStorage.java
-src/main/java/org/openeggbert/cna/internal/NativeStorageStream.java
-src/main/c/cna_java_jni.c
-src/test/java/Microsoft/Xna/Framework/Storage/*
-tools/native-abi/{bindings.json,probe.c}
+MathTypeConverter
+PointConverter RectangleConverter
+Vector2Converter Vector3Converter Vector4Converter QuaternionConverter
+ColorConverter MatrixConverter PlaneConverter RayConverter
+BoundingBoxConverter BoundingSphereConverter
 ```
 
-## Native evidence
+The formal mapping uses `Class<?>`, `Locale`, ordered `LinkedHashMap` metadata/value decomposition,
+`Expression`, and `Map<String,Object>`. It omits the non-equivalent CLR context and attribute-array
+parameters. Do not add a fake ComponentModel namespace. The exact projection lives in both the
+mapping document and JSON rules, backed by 23 verifier regression tests.
+
+Only Point, vectors, Quaternion, and Color accept component strings. Rectangle, Matrix, bounds,
+Plane, and Ray disable string input and use base `toString()` fallback. Formatting/parsing is
+culture-aware and follows CLR Single general formatting, including seven significant digits,
+NaN/infinity, scientific notation, and signed-zero output. Property order is explicit; Matrix is
+`Translation,M11..M44`, while creation ignores Translation and consumes all sixteen scalar keys.
+Nested components are snapshots. Create maps require exact named boxed values and ignore extras.
+
+Focused tests and the forty-observation Design corpus are under
+`src/test/java/Microsoft/Xna/Framework/Design/`. Full reasoning and per-type order are in
+`docs/design-evidence.md`.
+
+## GamerServicesComponent state
+
+The selected type is implemented at
+`src/main/java/Microsoft/Xna/Framework/GamerServices/GamerServicesComponent.java`. It extends
+`GameComponent`; its constructor delegates to the base, `Initialize` sets the window token and
+initializes the canonical dispatcher, and `Update` pumps that dispatcher before the inherited
+null check. It owns no native handle and requires no teardown.
+
+Three added canonical ABI 0.7 functions bring the manifest from 720 to 723:
 
 ```text
-PROJECT_STARTING_BOUND_FUNCTIONS=487
-MEDIA_FINAL_BOUND_FUNCTIONS=679
-STORAGE_ADDITIONS=41
-FINAL_BOUND_FUNCTIONS=720
+cna_gamer_services_dispatcher_set_window_handle(uint64_t)
+cna_gamer_services_dispatcher_initialize(CNA_Handle)
+cna_gamer_services_dispatcher_update(void)
+```
+
+The focused native test covers three Game recreation cycles. Do not add the separate Gamer,
+SignedInGamer, Guide, Achievement, Avatar, Network, or leaderboard profiles. XNA's private
+InstallingTitleUpdate→Game.Exit subscription has no current CNA selected-profile event route, and
+real GamerServices facilities remain backend-blocked. Strict shape and available lifecycle are
+real; runtime ecosystem completeness is not claimed.
+
+Read-only CNA HEAD is still `1bb2145d99ed572dd4eb15009c34e2e5f410fcf0`. Fresh remeasurement:
+
+- networking off C API build fails on missing `GameUpdateRequiredException.hpp`;
+- networking on C API build fails the renderer identity assertion at `49 == 50`.
+
+Do not repair or modify that read-only checkout. The qualified ABI 0.7 artifact independently
+exports all 723 bound symbols.
+
+## Native, tests, behavior, ownership
+
+```text
+BOUND_FUNCTIONS=723
 HEADER_ABI=0.7.0
 MANIFEST_JNI_BINDING_CHECK=PASS
 LAYOUT_SIGNATURE_PROBE=PASS
 LIBRARY_ABI=0.7.0
-LIBRARY_SYMBOL_CHECK=PASS (720/720)
+LIBRARY_SYMBOL_CHECK=PASS (723/723)
+
+TESTS=156
+SUITES=32
+FAILURES=0
+ERRORS=0
+SKIPPED=0
+
+PRIOR_OBSERVATIONS=127
+DESIGN_OBSERVATIONS=40
+TOTAL_OBSERVATIONS=167
+CORPUS_FAILURES=0
 ```
 
-The Storage additions are canonical selectors, device properties/delete/event/destroy, container
-open/display/dispose/event/CRUD/names/destroy, and owned stream operations. The probe covers every
-signature plus 32-bit Storage option values and 64-bit handle aliases. JNI compiles as C11 with
-`-Wall -Wextra -Werror`. Do not bind the C++ ABI or accept ABI 0.8.
+Existing stress evidence is unchanged: core Game recreations 25; graphics Texture/SpriteBatch
+ownership 200; audio ownership 100; standalone audio lifecycles 25; draw routes 25 iterations/150
+calls; vertex/index buffers 25; Media 40; Video 40; Storage 40; Media callbacks 100; and Storage
+DeviceChanged dispatches 4. GamerServices adds three Game recreation cycles. There were zero
+crashes, observed UAF, or double-free. No sanitizer-compatible CNA runtime was available.
 
-## Tests, behavior, stress, and template
+Preserve all existing ownership invariants: transactional destroy and wrong-thread retry; reverse
+Game/resource/content teardown; Effect parent-child ownership; Video transient parent-owned frame
+aliases; Media queue generation; Storage stream→container→device order and managed path
+containment; bound vertex/index safety; and callback exception containment.
 
-```text
-tests=141
-suites=29
-failures=0
-errors=0
-skipped=0
+## Final qualification evidence
 
-behavior observations=127
-math/geometry=94
-input=23
-Media=10
-
-MEDIA_STRESS_CYCLES=40
-VIDEO_STRESS_CYCLES=40
-STORAGE_STRESS_CYCLES=40
-MEDIA_CALLBACK_CYCLES=100
-STORAGE_DEVICE_EVENT_DISPATCHES=4
-NATIVE_CRASHES=0
-OBSERVED_UAF=0
-DOUBLE_FREE=0
-sanitizer=NOT_RUN
-```
-
-Verified gates:
+The current worktree passed:
 
 ```text
-native-enabled clean check: PASS
-apiCompatReport: PASS, exactly 14 missing whole types
-apiCompatCheck: expected exit 1, solely those 14 types
+native-enabled clean check: PASS (156/156)
+apiCompatReport: PASS, zero diagnostics
+apiCompatCheck: PASS, zero diagnostics
+verifier regression tests: PASS (23/23)
 javadoc sourcesJar: PASS
-native ABI/library exports: PASS 720/720
+native ABI/library exports: PASS (723/723)
 temporary Maven publication: PASS
 sibling template build/test/install: PASS
-fresh generated consumer build/test/install: PASS
+fresh standalone generated consumer build/test/install: PASS
 60 frames: PASS
 600 frames: PASS
 global Maven repository used: NO
@@ -207,17 +201,16 @@ template source changed: NO
 git diff --check, both writable repositories: PASS
 ```
 
-No sanitizer-compatible CNA runtime was used, so allocator leak freedom is not claimed. The
-template remains the small Game/PNG/managed-XNB/SpriteBatch/input canary and was not turned into a
-Media or Storage showcase.
+The template remains the Game/PNG/managed-XNB/SpriteBatch/input/cleanup canary. Do not add Design
+or GamerServices solely as a showcase.
 
-## Recommended next work
+## Honest next work
 
-The next coherent group is all 13 Design converters. Do not add signature shells or implement only
-a subset of the shared converter graph. Recheck XNA metadata/IL and the formal Java TypeConverter
-mapping before adding any public Design type. GamerServices is separate and still has the upstream
-networking-off header blocker noted above.
+There is no remaining strict diagnostic in this profile. Choose future work from
+`docs/runtime-capabilities.json` or formally inventory a separate profile first. Current important
+boundaries are XACT authored assets, microphone hardware, Video decode/frame identity, populated
+Media catalogs/pictures, native Storage containment, real OS DeviceChanged delivery, real
+GamerServices facilities, and the deliberate Java-vs-CLR designer-host mapping limitation.
 
-Preserve the empty allowlist, `MISSING_MEMBER=0`, every zero mismatch category, exact ABI 0.7,
-transactional release/retry, callback containment, reverse ownership, the Media queue generation,
-borrowed Video frame rule, explicit Storage path boundary, and bound-buffer safety guard.
+Any follow-up must preserve strict zero, ABI 0.7, the empty allowlist, and the distinction between
+structural completeness and runtime evidence.

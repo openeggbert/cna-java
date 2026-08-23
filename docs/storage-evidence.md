@@ -20,7 +20,7 @@ retested directly because older CNA-C# evidence observed a missing native `Dispo
 - `PLATFORM_PENDING`: a real host/device transition was not available to produce the event.
 - `CNA_GAP`: the current C route lacks a semantic that Java must preserve explicitly.
 
-## Strict result
+## Strict result at the Storage milestone boundary
 
 All three mapped Storage types are complete as one dependency group:
 
@@ -43,9 +43,11 @@ MISSING_MEMBER=0
 ALLOWLIST_ENTRIES=0
 ```
 
-Every mismatch, unexpected-type/member, internal-leak, and mapping-drift category remains zero.
-The 14 remaining whole types are thirteen Design converters and
-`GamerServicesComponent`. The mapped expected-member total decreases by one because the protected
+Every mismatch, unexpected-type/member, internal-leak, and mapping-drift category remained zero.
+At this historical boundary the 14 remaining whole types were thirteen Design converters and
+`GamerServicesComponent`; both later milestones are now complete and the project-wide state is
+265/265 target types, 3206/3206 members, and zero diagnostics. The mapped expected-member total
+decreased by one at Storage because the protected
 CLR serialization constructor on `StorageDeviceNotConnectedException` has no Java serialization-
 protocol equivalent and is excluded by its exact signature, like the existing
 `ContentLoadException` rule.

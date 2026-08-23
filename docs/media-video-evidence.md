@@ -12,9 +12,10 @@ it did not override XNA metadata or IL. CNA-Java does not scan arbitrary host di
 media records, fabricate decoded video frames, or turn a borrowed frame into an owning texture.
 
 The strict and 679-function figures below intentionally capture the Media/Video milestone boundary.
-The later optional Storage milestone is now complete and moves the project-wide state to 251 target
-types, 14 missing whole types, and 720 bound functions; see `plan.md` and
-`docs/storage-evidence.md`. No Media/Video qualification claim changed.
+The figures below intentionally preserve the Media/Video milestone boundary. Storage later moved
+the project to 251 target types, 14 missing types, and 720 routes; the completed Design and
+GamerServices work now places the project-wide selected profile at 265/265 target types, zero
+diagnostics, and 723 routes. See `plan.md`. No Media/Video qualification claim changed.
 
 ## Status vocabulary
 

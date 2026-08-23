@@ -244,11 +244,13 @@ def clr_member_signature(type_name: str, member: dict[str, Any]) -> str:
 
 def map_parameters(
         values: list[dict[str, Any]],
-        overrides: dict[str, str] | None = None) -> list[dict[str, Any]]:
+        overrides: dict[str, str] | None = None,
+        omitted_types: set[str] | None = None) -> list[dict[str, Any]]:
     selected = overrides or {}
+    omitted = omitted_types or set()
     return [parameter(value["name"] or f"arg{index}",
                       selected.get(value["name"], map_type(value["type"]) or "java.lang.Object"))
-            for index, value in enumerate(values)]
+            for index, value in enumerate(values) if value["type"] not in omitted]
 
 
 def map_member_parameters(
@@ -257,7 +259,8 @@ def map_member_parameters(
         rules: dict[str, Any]) -> list[dict[str, Any]]:
     overrides = rules.get("memberParameterTypeMappings", {}).get(
         clr_member_signature(type_name, member), {})
-    return map_parameters(member.get("parameters", []), overrides)
+    omitted = set(rules.get("omittedFrameworkParameterTypes", []))
+    return map_parameters(member.get("parameters", []), overrides, omitted)
 
 
 def map_member_return_type(

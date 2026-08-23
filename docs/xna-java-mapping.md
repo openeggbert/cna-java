@@ -236,6 +236,58 @@ Java's `Iterable<T>` contract. This adds seven expected Java members; it does no
 collections mutable. Their XNA read-only, index, ordering, and disposal behavior remains in the
 named facade types.
 
+## Design-time converter projection
+
+Java has no counterpart to the CLR `System.ComponentModel.TypeConverter` service graph. The XNA
+Design family therefore uses one compact language projection rather than a synthetic
+`System.ComponentModel` namespace:
+
+```text
+ExpandableObjectConverter / TypeConverter base -> java.lang.Object; the XNA-declared
+                                                MathTypeConverter surface is the Java contract
+System.Type                                    -> java.lang.Class<?>
+System.Globalization.CultureInfo               -> java.util.Locale
+ITypeDescriptorContext                         -> omitted parameter
+PropertyDescriptorCollection (protected state) -> LinkedHashMap<String, Class<?>>
+GetProperties(..., value, ...)                 -> LinkedHashMap<String, Object>
+InstanceDescriptor                             -> java.beans.Expression
+System.Collections.IDictionary                 -> Map<String, Object>
+System.Attribute[] property filter             -> omitted parameter
+```
+
+`MathTypeConverter` remains public, concrete, and directly constructible exactly as XNA metadata
+declares. It is the Java converter base contract; inherited CLR ComponentModel methods that XNA
+does not declare are not fictionalized. The context parameter is absent because every XNA Design
+converter only forwards it to CLR primitive conversion services and Java has no ambient component
+site/container transaction with equivalent meaning. The attribute-filter parameter is likewise
+absent because the XNA implementation ignores it. These are deterministic parameter omissions in
+`mapping-rules.json`, not verifier exceptions.
+
+Java property decomposition is value-oriented. The protected ordered metadata map records each
+stable XNA property name and declared Java component class. `GetProperties(value)` returns a new
+ordered mutable map of those names to snapshotted component values. Callers may edit that map and
+pass it to `CreateInstance`; this replaces CLR descriptor objects, their collection, and their
+boxing-based get/set machinery without adding a fake descriptor class. Required keys and exact
+boxed Java value types follow the XNA constructor contract, while unrelated extra keys are ignored
+as XNA's dictionary lookups do. Matrix retains XNA's observable 17-property order (`Translation`
+then `M11` through `M44`), although reconstruction reads only the 16 scalar constructor keys.
+
+`java.beans.Expression` is the standard-library reconstruction description corresponding to an
+XNA `InstanceDescriptor`: the target is the mapped value class, the method name is `new`, and the
+arguments are constructor snapshots in XNA order. Calling `getValue()` reconstructs the value.
+There is no Java equivalent for ComponentModel designer hosts, services, change notifications,
+reset/serialization policy, or attribute filtering. Those unsupported design-host concepts are
+represented by the two explicit parameter omissions and by value decomposition; they do not add
+types, weaken comparison, or claim a CLR designer environment exists.
+
+Locale-sensitive component strings use the locale decimal separator and a semicolon list
+separator when the decimal separator is a comma, otherwise a comma. Formatting appends one ASCII
+space after each list separator, matching XNA. Floating components use XNA/CLR `Single` general
+format semantics (seven significant digits, XNA NaN/infinity tokens, and signed zero formatted as
+zero), not Java `Float.toString()` by accident. A null locale selects `Locale.getDefault()` as the
+Java counterpart to CLR current culture. XNA's non-string converters still allow conversion to
+`String` through the base fallback (`value.toString()`), but do not accept strings as input.
+
 ## Delegates and events
 
 An XNA delegate becomes a same-package `@FunctionalInterface`; its `Invoke` signature becomes

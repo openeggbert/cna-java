@@ -672,6 +672,12 @@ static CNA_Result (*const game_create_function)(const CNA_GameCreateInfo*, CNA_H
 static CNA_Result (*const game_hooks_function)(CNA_Handle, const CNA_GameFrameHooks*) = cna_game_set_frame_hooks_ext;
 static CNA_Result (*const game_run_function)(CNA_Handle) = cna_game_run;
 static CNA_Result (*const game_run_one_frame_function)(CNA_Handle) = cna_game_run_one_frame;
+static CNA_Result (*const gamer_services_set_window_function)(uint64_t) =
+    cna_gamer_services_dispatcher_set_window_handle;
+static CNA_Result (*const gamer_services_initialize_function)(CNA_Handle) =
+    cna_gamer_services_dispatcher_initialize;
+static CNA_Result (*const gamer_services_update_function)(void) =
+    cna_gamer_services_dispatcher_update;
 static CNA_Result (*const game_exit_function)(CNA_Handle) = cna_game_request_exit;
 static CNA_Result (*const game_reset_elapsed_time_function)(CNA_Handle) = cna_game_reset_elapsed_time;
 static CNA_Result (*const game_suppress_draw_function)(CNA_Handle) = cna_game_suppress_draw;
@@ -1117,7 +1123,10 @@ int cna_java_abi_probe(void)
 {
     return get_abi_version_function != NULL && error_size_function != NULL && error_copy_function != NULL &&
         game_create_function != NULL && game_hooks_function != NULL && game_run_function != NULL &&
-        game_run_one_frame_function != NULL && game_exit_function != NULL &&
+        game_run_one_frame_function != NULL &&
+        gamer_services_set_window_function != NULL &&
+        gamer_services_initialize_function != NULL &&
+        gamer_services_update_function != NULL && game_exit_function != NULL &&
         game_reset_elapsed_time_function != NULL && game_suppress_draw_function != NULL &&
         game_tick_function != NULL && game_destroy_function != NULL && game_clear_function != NULL &&
         game_set_mouse_function != NULL && game_get_mouse_function != NULL &&

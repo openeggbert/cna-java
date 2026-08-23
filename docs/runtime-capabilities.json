@@ -1,0 +1,78 @@
+{
+  "schemaVersion": 1,
+  "updated": "2026-08-23",
+  "profile": "XNA 4.0 Windows runtime projected to Java 17",
+  "qualifiedRuntime": {
+    "platform": "Linux x86-64",
+    "cnaAbi": "0.7.0",
+    "renderer": "HEADLESS",
+    "audio": "NULL"
+  },
+  "statusVocabulary": [
+    "STRICT_COMPLETE",
+    "MANAGED_VERIFIED",
+    "NATIVE_VERIFIED",
+    "UPSTREAM_CNA_BLOCKED",
+    "BACKEND_BLOCKED",
+    "ASSET_PENDING",
+    "HARDWARE_PENDING",
+    "PLATFORM_PENDING",
+    "LANGUAGE_MAPPING_LIMITATION"
+  ],
+  "capabilities": [
+    {
+      "id": "xact-authored-banks",
+      "surface": "AudioEngine, WaveBank, SoundBank, Cue",
+      "statuses": ["STRICT_COMPLETE", "MANAGED_VERIFIED", "NATIVE_VERIFIED", "ASSET_PENDING"],
+      "detail": "The ownership graph and canonical XACT routes are verified; no licensed authored bank corpus qualified successful authored playback."
+    },
+    {
+      "id": "microphone-hardware",
+      "surface": "Microphone",
+      "statuses": ["STRICT_COMPLETE", "NATIVE_VERIFIED", "HARDWARE_PENDING"],
+      "detail": "NULL-audio no-device behavior and native routes are verified; real capture hardware and BufferReady timing are not qualified."
+    },
+    {
+      "id": "video-frame-identity",
+      "surface": "VideoPlayer.GetTexture",
+      "statuses": ["STRICT_COMPLETE", "MANAGED_VERIFIED", "BACKEND_BLOCKED"],
+      "detail": "Java safely exposes a PARENT_OWNED transient alias; CNA ABI 0.7 lacks XNA two-buffer identity and a frame generation token."
+    },
+    {
+      "id": "video-decode",
+      "surface": "Video, VideoPlayer",
+      "statuses": ["STRICT_COMPLETE", "NATIVE_VERIFIED", "BACKEND_BLOCKED", "ASSET_PENDING"],
+      "detail": "Metadata and player control routes execute, but HEADLESS produced no decoded frame and no qualified video asset established successful decode."
+    },
+    {
+      "id": "media-catalog-and-pictures",
+      "surface": "MediaLibrary, MediaSource, Picture, PictureAlbum",
+      "statuses": ["STRICT_COMPLETE", "MANAGED_VERIFIED", "NATIVE_VERIFIED", "PLATFORM_PENDING"],
+      "detail": "Canonical empty/default platform collections execute; populated catalog, token, thumbnail, and picture-store behavior require a real supported platform."
+    },
+    {
+      "id": "storage-path-containment",
+      "surface": "StorageContainer path operations",
+      "statuses": ["STRICT_COMPLETE", "MANAGED_VERIFIED", "UPSTREAM_CNA_BLOCKED"],
+      "detail": "Java enforces XNA canonical containment before JNI; qualified CNA ABI 0.7 itself accepts parent traversal and cannot yet be credited with the guarantee."
+    },
+    {
+      "id": "storage-devicechanged-os-transition",
+      "surface": "StorageDevice.DeviceChanged",
+      "statuses": ["STRICT_COMPLETE", "MANAGED_VERIFIED", "NATIVE_VERIFIED", "PLATFORM_PENDING"],
+      "detail": "Registration, queueing, owner-thread dispatch, containment, shutdown discard, and injected delivery are verified; no real OS device transition was observed."
+    },
+    {
+      "id": "gamerservices-component",
+      "surface": "GamerServicesComponent",
+      "statuses": ["STRICT_COMPLETE", "MANAGED_VERIFIED", "NATIVE_VERIFIED", "BACKEND_BLOCKED", "UPSTREAM_CNA_BLOCKED"],
+      "detail": "The selected component lifecycle uses three canonical ABI 0.7 routes. Real sign-in/Guide/network/title-update services are absent, and current CNA HEAD cannot build the C API in either networking configuration."
+    },
+    {
+      "id": "design-componentmodel-host",
+      "surface": "Microsoft.Xna.Framework.Design converters",
+      "statuses": ["STRICT_COMPLETE", "MANAGED_VERIFIED", "LANGUAGE_MAPPING_LIMITATION"],
+      "detail": "Value conversion, ordered decomposition, reconstruction, and culture are implemented; Java has no CLR ComponentModel designer host, context, descriptor services, or attribute filtering."
+    }
+  ]
+}

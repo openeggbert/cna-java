@@ -17,20 +17,19 @@ CNA C++
 
 ## Honest status
 
-The project is a member-complete, structurally strict partial projection of the
-selected XNA 4.0 Windows runtime profile. It is not XNA-complete: 14 entire
-dependency-group types remain, but every one of the 251 currently implemented
-strict types has its complete mapped member contract.
+The selected XNA 4.0 Windows runtime projection is structurally strict-complete. This means every
+formally mapped type and member matches; it does not mean every historical XNA profile or every
+platform-dependent runtime capability is complete.
 
 The current strict measurement is:
 
 ```text
 XNA reference:        257 types / 2,964 members
 Mapped Java contract: 265 types / 3,206 members
-Java target:          251 strict types / 3,150 members
-Missing types:         14
+Java target:          265 strict types / 3,206 members
+Missing types:          0
 Missing members:        0
-Structural drift:       0
+Total diagnostics:      0
 Mapping drift:          0
 Allowlist:               0
 Strict leaks:            0
@@ -78,7 +77,12 @@ Implemented now:
 - the complete three-type Storage contract, including authoritative completed-result
   `Begin`/`End` behavior, native container/stream CRUD, process-global device events,
   reverse Game ownership, and explicit Java containment for a documented CNA path gap;
-- a Java 17 JNI adapter for 720 reviewed CNA ABI 0.7.0 functions, with header,
+- all 13 Design converters as a managed Java conversion subsystem, with an explicit compact
+  TypeConverter language mapping, XNA-ordered property decomposition, constructor reconstruction,
+  and culture-aware integer, byte, and binary32 text behavior;
+- the selected `GamerServicesComponent` lifecycle through three canonical ABI 0.7 dispatcher
+  routes, without projecting or fabricating the separate Gamer/Guide/Avatar/Network profiles;
+- a Java 17 JNI adapter for 723 reviewed CNA ABI 0.7.0 functions, with header,
   manifest, layout/signature, and native-symbol verification;
 - managed and native integration/ownership tests plus a desktop template canary
   verified for 60-frame smoke and 600-frame stability runs using both raw PNG
@@ -92,8 +96,9 @@ compressed data is never reinterpreted as RGBA. SpriteFont is consequently
 verified with an uncompressed Color atlas. The Model path is verified for a
 synthetic graph using VertexDeclaration, VertexBuffer, IndexBuffer, and
 BasicEffect readers; reader families not in that graph remain explicit load
-errors. The remaining strict families are Design converters and GamerServices;
-Graphics, Audio/XACT, Media/Video, and Storage are at zero missing types.
+errors. Graphics, Audio/XACT, Media/Video, Storage, Design, and the selected GamerServices
+component are all at zero missing types. Remaining runtime boundaries are kept separately in the
+machine-readable capability inventory rather than hidden by the strict score.
 
 ## Build and verify
 
@@ -120,7 +125,7 @@ Windows runtime assemblies:
 XNA_REFERENCE_DIR=/path/to/xna4/windows ./gradlew apiCompatReport
 ```
 
-`apiCompatCheck` is the strict completeness gate and currently fails by design.
+`apiCompatCheck` is the strict completeness gate and now passes at zero diagnostics.
 The leak guard and native ABI shape checks remain part of the green `check` gate.
 
 To verify this binding, the sibling template, and a freshly generated external
@@ -144,7 +149,10 @@ not in the strict packages.
 Read [the normative mapping](docs/xna-java-mapping.md), [the architecture](docs/architecture.md),
 [the Audio/XACT evidence](docs/audio-xact-evidence.md),
 [the Media/Video evidence](docs/media-video-evidence.md),
-[the Storage evidence](docs/storage-evidence.md), and
+[the Storage evidence](docs/storage-evidence.md),
+[the Design evidence](docs/design-evidence.md),
+[the GamerServices component evidence](docs/gamerservices-evidence.md),
+[the runtime capability inventory](docs/runtime-capabilities.json), and
 [the measured engineering plan](plan.md) before expanding the surface.
 
 ## Platform evidence

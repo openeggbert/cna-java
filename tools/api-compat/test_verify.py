@@ -85,6 +85,30 @@ class VerifyTests(unittest.TestCase):
         unnamed = VERIFY.map_parameters([{"name": "", "type": "System.Boolean"}])
         self.assertEqual("arg0", unnamed[0]["name"])
 
+    def test_design_converter_projection_uses_java_concepts_and_omits_clr_context(self) -> None:
+        projection = self.rules["designTypeConverterProjection"]
+        self.assertEqual("java.util.Locale", projection["cultureInfo"])
+        self.assertEqual("java.beans.Expression", projection["instanceDescriptor"])
+        self.assertEqual("omitted", projection["typeDescriptorContext"])
+        member = {
+            "name": "ConvertTo",
+            "returnType": "System.Object",
+            "parameters": [
+                {"name": "context", "type": "System.ComponentModel.ITypeDescriptorContext"},
+                {"name": "culture", "type": "System.Globalization.CultureInfo"},
+                {"name": "value", "type": "System.Object"},
+                {"name": "destinationType", "type": "System.Type"},
+            ],
+        }
+        parameters = VERIFY.map_member_parameters(
+            "Microsoft.Xna.Framework.Design.Vector3Converter", member, self.rules)
+        self.assertEqual(
+            ["java.util.Locale", "java.lang.Object", "java.lang.Class<?>"],
+            [value["type"] for value in parameters])
+        self.assertEqual(
+            "java.util.LinkedHashMap<java.lang.String,java.lang.Class<?>>",
+            VERIFY.map_type("System.ComponentModel.PropertyDescriptorCollection"))
+
     def test_conversion_operator_requires_and_uses_an_explicit_mapping(self) -> None:
         contract = {
             "name": "Microsoft.Xna.Framework.Graphics.RenderTargetBinding",

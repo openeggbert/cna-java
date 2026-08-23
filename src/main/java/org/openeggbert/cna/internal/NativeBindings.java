@@ -787,6 +787,23 @@ public final class NativeBindings {
         NativeStorage.dispatchPendingEvents();
     }
 
+    /** Initializes the selected-profile GamerServices component against its owning game. */
+    public static void initializeGamerServices(Game game) {
+        Objects.requireNonNull(game, "game").getWindow().getHandle();
+        long gameValue = gameHandle(game, "GamerServicesComponent.Initialize").requireValue();
+        long windowValue = getWindowHandle(game);
+        check("cna_gamer_services_dispatcher_set_window_handle",
+                nativeSetGamerServicesWindowHandle(windowValue));
+        check("cna_gamer_services_dispatcher_initialize",
+                nativeInitializeGamerServices(gameValue));
+    }
+
+    /** Pumps the selected-profile GamerServices dispatcher for a live owning game. */
+    public static void updateGamerServices(Game game) {
+        gameHandle(game, "GamerServicesComponent.Update").requireValue();
+        check("cna_gamer_services_dispatcher_update", nativeUpdateGamerServices());
+    }
+
     /** Creates a non-owning facade for a VideoPlayer-owned transient frame texture. */
     public static Texture2D createBorrowedVideoTexture(
             GraphicsDevice graphicsDevice, long nativeTexture) {
@@ -4464,6 +4481,12 @@ public final class NativeBindings {
     private static native int nativeSetMouseWindowHandle(long game, long window);
 
     private static native int nativeUpdateFrameworkDispatcher(long game);
+
+    private static native int nativeSetGamerServicesWindowHandle(long window);
+
+    private static native int nativeInitializeGamerServices(long game);
+
+    private static native int nativeUpdateGamerServices();
 
     private static native int nativeCreateVertexBuffer(
             long game,
