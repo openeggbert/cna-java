@@ -19,6 +19,9 @@ import Microsoft.Xna.Framework.Graphics.Texture2D;
 import Microsoft.Xna.Framework.Graphics.VertexBuffer;
 import Microsoft.Xna.Framework.Graphics.VertexElementFormat;
 import Microsoft.Xna.Framework.Graphics.VertexElementUsage;
+import Microsoft.Xna.Framework.Media.Video;
+import Microsoft.Xna.Framework.Media.VideoPlayer;
+import Microsoft.Xna.Framework.Media.VideoSoundtrackType;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.condition.EnabledIfEnvironmentVariable;
 import org.junit.jupiter.api.io.TempDir;
@@ -72,6 +75,12 @@ final class GraphicsXnbNativeIntegrationTests {
             "Microsoft.Xna.Framework.Content.BasicEffectReader, Microsoft.Xna.Framework.Graphics";
     private static final String STRING_READER =
             "Microsoft.Xna.Framework.Content.StringReader, Microsoft.Xna.Framework";
+    private static final String INT32_READER =
+            "Microsoft.Xna.Framework.Content.Int32Reader, Microsoft.Xna.Framework";
+    private static final String SINGLE_READER =
+            "Microsoft.Xna.Framework.Content.SingleReader, Microsoft.Xna.Framework";
+    private static final String VIDEO_READER =
+            "Microsoft.Xna.Framework.Content.VideoReader, Microsoft.Xna.Framework.Video";
 
     @Test
     void texture2DXnbLoadsMipsCachesOwnsAndRejectsMalformedPayloads(
@@ -118,6 +127,19 @@ final class GraphicsXnbNativeIntegrationTests {
             @TempDir Path root) throws Exception {
         write(root, "model", modelXnb());
         try (ModelGame game = new ModelGame(root)) {
+            game.RunOneFrame();
+            assertTrue(game.completed);
+        }
+    }
+
+    @Test
+    void videoXnbUsesAuthoritativeBoxedFieldLayoutCachesAndUnloads(
+            @TempDir Path root) throws Exception {
+        Files.createDirectories(root.resolve("videos"));
+        write(root.resolve("videos"), "clip", videoXnb(
+                "missing-frame-source.mp4", 1234, 320, 180, 29.97f,
+                VideoSoundtrackType.MusicAndDialog));
+        try (VideoGame game = new VideoGame(root)) {
             game.RunOneFrame();
             assertTrue(game.completed);
         }
@@ -281,8 +303,58 @@ final class GraphicsXnbNativeIntegrationTests {
         }
     }
 
+    private static final class VideoGame extends Game {
+        private boolean completed;
+
+        private VideoGame(Path root) {
+            new GraphicsDeviceManager(this);
+            getContent().setRootDirectory(root.toString());
+        }
+
+        @Override
+        protected void Update(GameTime gameTime) {
+            Video video = getContent().Load(Video.class, "videos/clip");
+            assertSame(video, getContent().Load(Video.class, "VIDEOS/CLIP"));
+            assertEquals(java.time.Duration.ofMillis(1234), video.getDuration());
+            assertEquals(320, video.getWidth());
+            assertEquals(180, video.getHeight());
+            assertEquals(29.97f, video.getFramesPerSecond());
+            assertEquals(VideoSoundtrackType.MusicAndDialog,
+                    video.getVideoSoundtrackType());
+            try (VideoPlayer player = new VideoPlayer()) {
+                assertThrows(IllegalStateException.class, player::GetTexture);
+            }
+            getContent().Unload();
+            assertThrows(IllegalStateException.class,
+                    () -> org.openeggbert.cna.internal.NativeMedia.getVideoHandle(video));
+            completed = true;
+        }
+    }
+
     private static byte[] textureXnb(int width, int height, byte[][] mips) {
         return textureXnb(SurfaceFormat.Color.ordinal(), width, height, mips);
+    }
+
+    private static byte[] videoXnb(String reference, int durationMilliseconds,
+            int width, int height, float framesPerSecond,
+            VideoSoundtrackType soundtrackType) {
+        return xnb(new String[] {
+                VIDEO_READER, STRING_READER, INT32_READER, SINGLE_READER
+        }, output -> {
+            output.seven(1);
+            output.seven(2);
+            output.string(reference);
+            output.seven(3);
+            output.int32(durationMilliseconds);
+            output.seven(3);
+            output.int32(width);
+            output.seven(3);
+            output.int32(height);
+            output.seven(4);
+            output.single(framesPerSecond);
+            output.seven(3);
+            output.int32(soundtrackType.ordinal());
+        });
     }
 
     private static byte[] textureXnb(

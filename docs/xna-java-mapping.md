@@ -137,6 +137,8 @@ System.Boolean/SByte/Int16/Int32/Int64/Single/Double/Char -> Java primitives
 System.Byte                                              -> int (validated 0 through 255)
 System.String                                            -> java.lang.String
 System.Object                                            -> java.lang.Object
+System.Uri                                               -> java.net.URI
+System.DateTime                                          -> java.time.Instant
 System.Exception                                         -> java.lang.RuntimeException
 System.Runtime.InteropServices.ExternalException         -> java.lang.RuntimeException
 System.Text.StringBuilder                                -> java.lang.StringBuilder
@@ -152,6 +154,10 @@ System.Nullable<T>                                       -> boxed T or Optional<
 System.EventArgs                                         -> Microsoft.Xna.Framework.EventArgs
 System.EventHandler<T>                                   -> Microsoft.Xna.Framework.EventHandler<T>
 System.IServiceProvider                                  -> Microsoft.Xna.Framework.ServiceProvider
+System.IAsyncResult                                      -> System.IAsyncResult
+System.AsyncCallback                                     -> System.AsyncCallback
+System.IO.Stream (Storage read/write/seek results)       -> System.IO.Stream
+System.IO.FileMode/FileAccess/FileShare/SeekOrigin       -> same-named System.IO compatibility values
 System.Collections.ObjectModel.Collection<T>             -> java.util.AbstractList<T>
 System.Collections.ObjectModel.ReadOnlyCollection<T>     -> java.util.List<T>
 System.Collections.Generic.Dictionary<K,V>               -> java.util.LinkedHashMap<K,V>
@@ -178,8 +184,10 @@ Unsigned CLR `Byte` deliberately does not become signed Java `byte`: values 128 
 remain numerically observable, so it projects to `int` and setters/constructors validate the XNA
 0-through-255 domain. This is the same width-preserving policy used for other unsigned CLR values
 whose full range a same-width Java primitive cannot represent.
-The protected `ContentLoadException(SerializationInfo, StreamingContext)` constructor has no Java
-source or serialization-protocol equivalent and is explicitly excluded by its full CLR signature.
+The protected `ContentLoadException(SerializationInfo, StreamingContext)` and
+`StorageDeviceNotConnectedException(SerializationInfo, StreamingContext)` constructors have no
+Java source or serialization-protocol equivalent and are explicitly excluded by their full CLR
+signatures.
 Java exception serialization instead uses `RuntimeException`'s serial form and `serialVersionUID`;
 the three ordinary public constructors remain part of the strict mapped contract. This is a
 mapping rule, not an allowlist entry.
@@ -188,9 +196,16 @@ position. An inaccessible CLR interface implemented by a public XNA type is omit
 interface itself belongs to the selected reference profile. CLR `Stream` is direction-sensitive
 rather than forced onto one misleading Java type: `Texture2D.FromStream` maps its input to
 `InputStream`, `ContentManager.OpenStream` and `TitleContainer.OpenStream` map their returned
-readable streams to `InputStream`, and `SaveAsPng` and `SaveAsJpeg` map their output to
-`OutputStream`. These full-signature
-transformations are recorded in `mapping-rules.json`.
+readable streams to `InputStream`, `Album.GetAlbumArt`, `Album.GetThumbnail`, `Picture.GetImage`,
+and `Picture.GetThumbnail` likewise return `InputStream`, and `MediaLibrary.SavePicture` accepts an
+`InputStream`. `SaveAsPng` and `SaveAsJpeg` map their output to `OutputStream`. These
+full-signature transformations are recorded in `mapping-rules.json`.
+Storage is the bidirectional exception to the direction-only stream mappings: its public methods
+return the same `System.IO.Stream` compatibility type because callers must observe read/write/seek
+capabilities, position, length, and the selected `FileMode`, `FileAccess`, `FileShare`, and
+`SeekOrigin` identities. XNA's storage `Begin` methods retain their fake-async shape through
+`System.IAsyncResult` and `System.AsyncCallback`; their result is already completed and invokes a
+non-null callback synchronously, while creation occurs at the corresponding `End` method.
 `WindowHandle` is an opaque value that supports equality and a zero test but intentionally has no
 numeric/address accessor. It preserves the XNA window-token round trip without exposing a raw
 native address to game code; CNA-specific native-window interop belongs in the extensions layer.
@@ -214,6 +229,12 @@ When a public XNA concrete type derives from `ReadOnlyCollection<T>`, Java canno
 `List<T>` interface as a class. Such concrete facades use the explicitly recorded
 `AbstractList<T>` base mapping while members that merely return `ReadOnlyCollection<T>` continue to
 return `List<T>`. The four Model collection facades are the first reviewed instances of this rule.
+
+The seven XNA Media collection facades directly implement `IEnumerable<T>`. They retain the
+concrete XNA `GetEnumerator()` member and add the lower-cased `iterator()` bridge required by
+Java's `Iterable<T>` contract. This adds seven expected Java members; it does not make the
+collections mutable. Their XNA read-only, index, ordering, and disposal behavior remains in the
+named facade types.
 
 ## Delegates and events
 

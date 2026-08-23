@@ -2,29 +2,30 @@
 
 **Updated:** 2026-08-23
 
-This is the tactical continuation point for the current uncommitted worktree. Read `plan.md`, this
-file, `README.md`, `docs/xna-java-mapping.md`, `docs/architecture.md`, the verifier/native manifests,
-and the focused LZX/Audio tests before changing code. Preserve the pre-existing untracked `out`
-entry.
+The complete Graphics/XNB/Model, Audio/XACT, 24-type Media/Video, and three-type Storage milestones
+are finished in the current uncommitted worktree. Do not redo them without a concrete regression.
+Preserve the pre-existing untracked `out` entry.
 
-## Repository boundaries
+Read `plan.md`, this file, `README.md`, `docs/xna-java-mapping.md`,
+`docs/architecture.md`, `docs/media-video-evidence.md`, `docs/storage-evidence.md`, the strict/native
+manifests, and the focused Media and Storage tests before changing shared lifecycle or callbacks.
 
-Writable:
+## Repository and provenance
 
-- this repository, `cna-java`;
-- `../cna-java-template`.
+Writable: this repository and `../cna-java-template`. The CNA, CNA-C#, CNA-TS, CNA-Rust, and their
+template siblings are read-only references. No read-only sibling was modified. CNA HEAD was
+rechecked at `1bb2145d99ed572dd4eb15009c34e2e5f410fcf0`; its unrelated networking-off
+GamerServices detail-header and networking-on renderer-identity blockers were not repaired.
 
-Read-only references:
+Continue using the qualified artifact:
 
-- `../../cna` in this checkout layout;
-- `../cna-cs`, `../cna-cs-template`;
-- `../cna-ts`, `../cna-ts-template`;
-- `../cna-rust`, `../cna-rust-template`.
-
-No read-only sibling was modified. CNA remains at
-`1bb2145d99ed572dd4eb15009c34e2e5f410fcf0`; the existing untracked
-`cmake_test_discovery_e3b0c44298.json` in that read-only worktree was observed and left untouched.
-The writable template remains source-clean and deliberately has no Audio showcase.
+```text
+/tmp/cna-java-native-working-070/modules/c-api/libcna_c_api.so
+ABI=0.7.0
+Linux x86-64
+HEADLESS renderer
+NULL audio
+```
 
 ## Exact strict state
 
@@ -32,11 +33,11 @@ The writable template remains source-clean and deliberately has no Audio showcas
 REFERENCE_TYPES=257
 REFERENCE_MEMBERS=2964
 EXPECTED_JAVA_TYPES=265
-EXPECTED_JAVA_MEMBERS=3200
-TARGET_TYPES=224
-TARGET_MEMBERS=2906
-TOTAL_DIAGNOSTICS=41
-MISSING_TYPE=41
+EXPECTED_JAVA_MEMBERS=3206
+TARGET_TYPES=251
+TARGET_MEMBERS=3150
+TOTAL_DIAGNOSTICS=14
+MISSING_TYPE=14
 MISSING_MEMBER=0
 
 ACCESSIBILITY_MISMATCH=0
@@ -58,202 +59,165 @@ XNA_MAPPING_MISMATCH=0
 ALLOWLIST_ENTRIES=0
 ```
 
-This is the exact baseline change:
+Transition from the requested baseline:
 
 ```text
-TARGET_TYPES: 205 -> 224
-TARGET_MEMBERS: 2730 -> 2906
-TOTAL_DIAGNOSTICS: 60 -> 41
-MISSING_TYPE: 60 -> 41
+EXPECTED_JAVA_MEMBERS: 3200 -> 3207 after Media -> 3206 after Storage serialization exclusion
+TARGET_TYPES: 224 -> 248 after Media -> 251 after Storage
+TARGET_MEMBERS: 2906 -> 3115 after Media -> 3150 after Storage
+TOTAL_DIAGNOSTICS: 41 -> 17 after Media -> 14 after Storage
+MISSING_TYPE: 41 -> 17 after Media -> 14 after Storage
 MISSING_MEMBER: 0 -> 0
 ```
 
-The exact remaining distribution is:
+Current distribution:
 
 ```text
 Graphics=0
 Audio/XACT=0
-Media/Video=24
-Storage=3
+Media/Video=0
+Storage=0
 Design=13
 GamerServices=1
 ```
 
-The remaining types are:
+The 14 missing whole types are the thirteen
+`Microsoft.Xna.Framework.Design` converters (`MathTypeConverter` plus the BoundingBox,
+BoundingSphere, Color, Matrix, Plane, Point, Quaternion, Ray, Rectangle, Vector2, Vector3, and
+Vector4 converters) and
+`Microsoft.Xna.Framework.GamerServices.GamerServicesComponent`.
+
+## Completed Media/Video state
+
+All 24 types are strict complete. MediaLibrary uses only platform routes and may be empty on the
+qualified runtime. URI Song, static MediaPlayer, stable per-Game MediaQueue generation, native
+events through the existing FrameworkDispatcher pump, and Game recreation are verified.
+
+Video XNB metadata and native player controls are implemented. `VideoPlayer.GetTexture` never owns
+the CNA frame: a nonzero handle becomes a parent-owned facade invalidated before the next player
+operation. CNA lacks XNA stable/two-buffer identity and a generation token; HEADLESS produced no
+frame. Do not fabricate pixels or strengthen the identity claim. See `docs/media-video-evidence.md`.
+
+## Completed Storage state
+
+The coherent group is `StorageContainer`, `StorageDevice`, and
+`StorageDeviceNotConnectedException`. Public CLR support carriers were added under `System` and
+`System.IO`: `IAsyncResult`, `AsyncCallback`, `FileMode`, `FileAccess`, `FileShare`, `SeekOrigin`,
+and read/write/seek extensions on `Stream`. The protected exception serialization constructor is
+excluded by exact signature; ordinary public constructors remain strict.
+
+Important behavior:
+
+- XNA `Begin` returns an already-completed carrier, invokes the callback synchronously, and creates
+  the device/container only on one-shot `End`. Foreign and repeated End fail.
+- All four selectors execute. XNA validates negative size but not negative directory count; Java
+  preserves that and normalizes the latter only for CNA's stricter native route.
+- StorageDevice has no public close. The current Game owns its native handle; devices own
+  containers and containers own streams. Game teardown closes streams/containers/devices in
+  reverse order before native Game destruction.
+- Container CRUD, enumeration patterns, display/device identity, stream read/write/seek, and all
+  selected file mode/access/share routes execute natively.
+- Wrong-thread release returns result 8 without clearing Java ownership and then succeeds on the
+  owner thread.
+- ABI 0.7 native `Disposing` is observed exactly once. JNI records only; Java invokes user handlers
+  after the native frame. Duplicate, self-removal, recursive close, throwing/later handlers, and
+  double close pass.
+- `StorageDevice.DeviceChanged` has one process-global native registration and the existing owner-
+  thread dispatcher queue. Worker enqueue, duplicate removal, throwing/later handlers, shutdown
+  discard, and recreation pass. An actual OS-originated event is platform-pending.
+
+Exact CNA gap: ABI 0.7 accepts `..` paths outside a container, while XNA canonicalizes and rejects
+them. Java rejects null/empty, absolute Unix, Windows drive/root, and normalized escaping paths
+before JNI. Keep this visible in `docs/storage-evidence.md`; do not credit containment to CNA until
+the native route supplies it.
+
+Primary Storage implementation files:
 
 ```text
-Microsoft.Xna.Framework.Design.BoundingBoxConverter
-Microsoft.Xna.Framework.Design.BoundingSphereConverter
-Microsoft.Xna.Framework.Design.ColorConverter
-Microsoft.Xna.Framework.Design.MathTypeConverter
-Microsoft.Xna.Framework.Design.MatrixConverter
-Microsoft.Xna.Framework.Design.PlaneConverter
-Microsoft.Xna.Framework.Design.PointConverter
-Microsoft.Xna.Framework.Design.QuaternionConverter
-Microsoft.Xna.Framework.Design.RayConverter
-Microsoft.Xna.Framework.Design.RectangleConverter
-Microsoft.Xna.Framework.Design.Vector2Converter
-Microsoft.Xna.Framework.Design.Vector3Converter
-Microsoft.Xna.Framework.Design.Vector4Converter
-Microsoft.Xna.Framework.GamerServices.GamerServicesComponent
-Microsoft.Xna.Framework.Media.Album
-Microsoft.Xna.Framework.Media.AlbumCollection
-Microsoft.Xna.Framework.Media.Artist
-Microsoft.Xna.Framework.Media.ArtistCollection
-Microsoft.Xna.Framework.Media.Genre
-Microsoft.Xna.Framework.Media.GenreCollection
-Microsoft.Xna.Framework.Media.MediaLibrary
-Microsoft.Xna.Framework.Media.MediaPlayer
-Microsoft.Xna.Framework.Media.MediaQueue
-Microsoft.Xna.Framework.Media.MediaSource
-Microsoft.Xna.Framework.Media.MediaSourceType
-Microsoft.Xna.Framework.Media.MediaState
-Microsoft.Xna.Framework.Media.Picture
-Microsoft.Xna.Framework.Media.PictureAlbum
-Microsoft.Xna.Framework.Media.PictureAlbumCollection
-Microsoft.Xna.Framework.Media.PictureCollection
-Microsoft.Xna.Framework.Media.Playlist
-Microsoft.Xna.Framework.Media.PlaylistCollection
-Microsoft.Xna.Framework.Media.Song
-Microsoft.Xna.Framework.Media.SongCollection
-Microsoft.Xna.Framework.Media.Video
-Microsoft.Xna.Framework.Media.VideoPlayer
-Microsoft.Xna.Framework.Media.VideoSoundtrackType
-Microsoft.Xna.Framework.Media.VisualizationData
-Microsoft.Xna.Framework.Storage.StorageContainer
-Microsoft.Xna.Framework.Storage.StorageDevice
-Microsoft.Xna.Framework.Storage.StorageDeviceNotConnectedException
+src/main/java/Microsoft/Xna/Framework/Storage/*
+src/main/java/System/IAsyncResult.java
+src/main/java/System/AsyncCallback.java
+src/main/java/System/IO/{Stream,FileMode,FileAccess,FileShare,SeekOrigin}.java
+src/main/java/org/openeggbert/cna/internal/NativeStorage.java
+src/main/java/org/openeggbert/cna/internal/NativeStorageStream.java
+src/main/c/cna_java_jni.c
+src/test/java/Microsoft/Xna/Framework/Storage/*
+tools/native-abi/{bindings.json,probe.c}
 ```
-
-## Completed managed LZX milestone
-
-`ContentReader.create` now handles XNA compressed Windows XNB v5 through
-`XnbLzxDecompression` and the stateful `LzxDecoder`. The uncompressed code path is unchanged. XNA
-short and extended frame headers, default 32-KiB output frames, a persistent 64-KiB window, exact
-compressed/frame/decompressed lengths, canonical zero termination, and verbatim/aligned/compressed
-LZX blocks are implemented.
-
-Deterministic legal generated fixtures prove single/multi-frame XNB, Texture2D through both framing
-paths, exact output size, truncated headers/blocks, malformed lengths, trailing data rejection,
-decoder failure, post-decompression reader failure, cache identity, cleanup, and `Unload`. Two
-existing read-only compressed fixtures also matched their known 16,561- and 44,032-byte payloads;
-none was committed. LZ4 and non-Color texture fidelity gaps remain explicit failures.
-
-## Completed 19-type Audio/XACT milestone
-
-The complete public contracts now exist for:
-
-```text
-AudioCategory
-AudioChannels
-AudioEmitter
-AudioEngine
-AudioListener
-AudioStopOptions
-Cue
-DynamicSoundEffectInstance
-InstancePlayLimitException
-Microphone
-MicrophoneState
-NoAudioHardwareException
-NoMicrophoneConnectedException
-RendererDetail
-SoundBank
-SoundEffect
-SoundEffectInstance
-SoundState
-WaveBank
-```
-
-Key evidence:
-
-- XNA enum/default/value/copy/range/sample arithmetic is covered; 44.1-kHz mono one-second sizing
-  intentionally yields 88,198 bytes.
-- SoundEffect PCM and deterministic WAV construction, both Play overloads, properties, native
-  instances, Apply3D, transport/state, multiple instances, close ordering, wrong-thread retry,
-  failed-create recovery, and Game shutdown execute on NULL audio.
-- Dynamic streaming executes native buffer submission/pending-count/transport and native event
-  registration. Throwing listeners are captured inside Java, close-during-callback is safe, native
-  registration is retryable, and no callback targets a closed object.
-- Microphone enumeration/default executes and honestly reports no NULL devices. Real capture and
-  BufferReady remain hardware-pending; no samples or devices are fabricated.
-- XACT ownership, events, validation, JNI routes, and transactional release are implemented. No
-  legal redistributable XGS/XSB/XWB fixture exists, so authored engine/bank/cue success remains
-  asset-pending rather than fabricated.
-- CNA ignores AudioEngine renderer/look-ahead parameters. CNA rejects true multi-listener 3D with
-  NOT_SUPPORTED; the Java route is atomic and does not apply just one listener.
-
-The exact per-type strict/managed/native/asset status is in `plan.md` and
-`docs/audio-xact-evidence.md`.
 
 ## Native evidence
 
 ```text
-starting bound functions=399
-current bound functions=487
+PROJECT_STARTING_BOUND_FUNCTIONS=487
+MEDIA_FINAL_BOUND_FUNCTIONS=679
+STORAGE_ADDITIONS=41
+FINAL_BOUND_FUNCTIONS=720
 HEADER_ABI=0.7.0
 MANIFEST_JNI_BINDING_CHECK=PASS
 LAYOUT_SIGNATURE_PROBE=PASS
 LIBRARY_ABI=0.7.0
-LIBRARY_SYMBOL_CHECK=PASS (487/487)
+LIBRARY_SYMBOL_CHECK=PASS (720/720)
 ```
 
-The 88 additions come only from canonical `audio.h`/`xact.h` routes. Callback JNI owns global refs
-until successful unsubscribe; failed unsubscribe leaves the registration retryable. Resource
-wrappers mark handles disposed only after CNA accepts destruction. Continue using the qualified
-ABI-0.7 runtime:
+The Storage additions are canonical selectors, device properties/delete/event/destroy, container
+open/display/dispose/event/CRUD/names/destroy, and owned stream operations. The probe covers every
+signature plus 32-bit Storage option values and 64-bit handle aliases. JNI compiles as C11 with
+`-Wall -Wextra -Werror`. Do not bind the C++ ABI or accept ABI 0.8.
+
+## Tests, behavior, stress, and template
 
 ```text
-/tmp/cna-java-native-working-070/modules/c-api/libcna_c_api.so
-```
-
-Do not modify CNA, bind its C++ ABI, or silently accept a different ABI.
-
-## Test, stress, sanitizer, and template evidence
-
-Final native-enabled test evidence:
-
-```text
-tests=118
-suites=24
+tests=141
+suites=29
 failures=0
 errors=0
 skipped=0
+
+behavior observations=127
+math/geometry=94
+input=23
+Media=10
+
+MEDIA_STRESS_CYCLES=40
+VIDEO_STRESS_CYCLES=40
+STORAGE_STRESS_CYCLES=40
+MEDIA_CALLBACK_CYCLES=100
+STORAGE_DEVICE_EVENT_DISPATCHES=4
+NATIVE_CRASHES=0
+OBSERVED_UAF=0
+DOUBLE_FREE=0
+sanitizer=NOT_RUN
 ```
 
-Stress is green for 25 Game cycles, 200 Texture2D/SpriteBatch cycles, 100 Audio ownership/dynamic-
-registration cycles, an additional 25 SoundEffect/instance pairs, 25 bound-buffer cycles, and 150
-draw calls. Failed native Audio creation recovers. Wrong-thread effect/dynamic close returns CNA
-result 8 without losing the handle, then succeeds on the owner thread. No sanitizer-compatible CNA
-runtime was available, so allocator-level leak freedom is not claimed.
-
-Verified commands/evidence:
+Verified gates:
 
 ```text
-CNA_NATIVE_LIBRARY=... ./gradlew --no-daemon check
-XNA_REFERENCE_DIR=/tmp/xna-probe-out ./gradlew --no-daemon apiCompatReport
-XNA_REFERENCE_DIR=/tmp/xna-probe-out ./gradlew --no-daemon apiCompatCheck
-./gradlew --no-daemon javadoc sourcesJar
-native ABI/library export check: 487/487
-CNA_NATIVE_LIBRARY=... CNA_RUN_STABILITY_TEST=1 scripts/verify-template.sh
-template: sibling build/test/install PASS
-template: generated standalone build/test/install PASS
-template: 60 frames PASS
-template: 600 frames PASS
-git diff --check: both writable repositories PASS
+native-enabled clean check: PASS
+apiCompatReport: PASS, exactly 14 missing whole types
+apiCompatCheck: expected exit 1, solely those 14 types
+javadoc sourcesJar: PASS
+native ABI/library exports: PASS 720/720
+temporary Maven publication: PASS
+sibling template build/test/install: PASS
+fresh generated consumer build/test/install: PASS
+60 frames: PASS
+600 frames: PASS
+global Maven repository used: NO
+template source changed: NO
+git diff --check, both writable repositories: PASS
 ```
 
-`apiCompatCheck` exits 1 only for the 41 missing whole types. The fresh consumer resolved only the
-temporary Maven publication and contains no sibling/developer path.
+No sanitizer-compatible CNA runtime was used, so allocator leak freedom is not claimed. The
+template remains the small Game/PNG/managed-XNB/SpriteBatch/input canary and was not turned into a
+Media or Storage showcase.
 
 ## Recommended next work
 
-The next coherent dependency group is all 24 Media/Video types. Use XNA metadata/IL as authority
-and CNA-C# as evidence, preserve Media queue/library identity and Video texture ownership honesty,
-and do not land enum-only progress. After Media/Video, complete Storage, then the 13 Design
-converters and GamerServices.
+The next coherent group is all 13 Design converters. Do not add signature shells or implement only
+a subset of the shared converter graph. Recheck XNA metadata/IL and the formal Java TypeConverter
+mapping before adding any public Design type. GamerServices is separate and still has the upstream
+networking-off header blocker noted above.
 
-Do not revisit completed Graphics, stock effects, Model, existing readers, or Audio without a
-concrete regression. Preserve `MISSING_MEMBER=0`, every zero category, the empty allowlist,
-transactional Audio release, callback containment, reverse-order content ownership, and the bound
-vertex/index guard.
+Preserve the empty allowlist, `MISSING_MEMBER=0`, every zero mismatch category, exact ABI 0.7,
+transactional release/retry, callback containment, reverse ownership, the Media queue generation,
+borrowed Video frame rule, explicit Storage path boundary, and bound-buffer safety guard.

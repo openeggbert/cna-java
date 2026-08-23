@@ -8,4 +8,8 @@ final class NativeResourceHandle extends NativeHandle {
     NativeResourceHandle(long value, LongConsumer releaser) {
         super(value, Ownership.OWNED, releaser);
     }
+
+    NativeResourceHandle(long value, Ownership ownership, LongConsumer releaser) {
+        super(value, ownership, releaser);
+    }
 }

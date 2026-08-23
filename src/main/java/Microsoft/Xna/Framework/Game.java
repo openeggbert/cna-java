@@ -460,6 +460,8 @@ public class Game implements AutoCloseable {
 
     @SuppressWarnings("unused")
     private boolean nativeBeginDraw() {
+        org.openeggbert.cna.internal.NativeMedia.dispatchPendingEvents();
+        org.openeggbert.cna.internal.NativeStorage.dispatchPendingEvents();
         return BeginDraw();
     }
 

@@ -16,6 +16,8 @@
     "System.EventHandler`1": "Microsoft.Xna.Framework.EventHandler",
     "System.IServiceProvider": "Microsoft.Xna.Framework.ServiceProvider",
     "System.IntPtr": "Microsoft.Xna.Framework.WindowHandle",
+    "System.Uri": "java.net.URI",
+    "System.DateTime": "java.time.Instant",
     "System.Runtime.InteropServices.ExternalException": "java.lang.RuntimeException",
     "System.Collections.ObjectModel.Collection`1": "java.util.AbstractList",
     "System.Collections.ObjectModel.ReadOnlyCollection`1": "java.util.List",
@@ -40,11 +42,18 @@
     },
     "Microsoft.Xna.Framework.Graphics.Texture2D.SaveAsPng(System.IO.Stream,System.Int32,System.Int32)": {
       "stream": "java.io.OutputStream"
+    },
+    "Microsoft.Xna.Framework.Media.MediaLibrary.SavePicture(System.String,System.IO.Stream)": {
+      "source": "java.io.InputStream"
     }
   },
   "memberReturnTypeMappings": {
     "Microsoft.Xna.Framework.Content.ContentManager.OpenStream(System.String)": "java.io.InputStream",
-    "Microsoft.Xna.Framework.TitleContainer.OpenStream(System.String)": "java.io.InputStream"
+    "Microsoft.Xna.Framework.TitleContainer.OpenStream(System.String)": "java.io.InputStream",
+    "Microsoft.Xna.Framework.Media.Album.GetAlbumArt()": "java.io.InputStream",
+    "Microsoft.Xna.Framework.Media.Album.GetThumbnail()": "java.io.InputStream",
+    "Microsoft.Xna.Framework.Media.Picture.GetImage()": "java.io.InputStream",
+    "Microsoft.Xna.Framework.Media.Picture.GetThumbnail()": "java.io.InputStream"
   },
   "memberNameMappings": {
     "Microsoft.Xna.Framework.Content.ContentTypeReader`1.Read(Microsoft.Xna.Framework.Content.ContentReader,!0)": "ReadTyped"
@@ -88,7 +97,8 @@
     "System.Object.Finalize"
   ],
   "excludedClrMembers": [
-    "Microsoft.Xna.Framework.Content.ContentLoadException..ctor(System.Runtime.Serialization.SerializationInfo,System.Runtime.Serialization.StreamingContext)"
+    "Microsoft.Xna.Framework.Content.ContentLoadException..ctor(System.Runtime.Serialization.SerializationInfo,System.Runtime.Serialization.StreamingContext)",
+    "Microsoft.Xna.Framework.Storage.StorageDeviceNotConnectedException..ctor(System.Runtime.Serialization.SerializationInfo,System.Runtime.Serialization.StreamingContext)"
   ],
   "genericTypeRenames": {
     "Microsoft.Xna.Framework.Content.ContentTypeReader`1": "Microsoft.Xna.Framework.Content.ContentTypeReaderOfT",
@@ -119,7 +129,14 @@
     "Microsoft.Xna.Framework.Graphics.EffectAnnotationCollection",
     "Microsoft.Xna.Framework.Graphics.EffectParameterCollection",
     "Microsoft.Xna.Framework.Graphics.EffectPassCollection",
-    "Microsoft.Xna.Framework.Graphics.EffectTechniqueCollection"
+    "Microsoft.Xna.Framework.Graphics.EffectTechniqueCollection",
+    "Microsoft.Xna.Framework.Media.AlbumCollection",
+    "Microsoft.Xna.Framework.Media.ArtistCollection",
+    "Microsoft.Xna.Framework.Media.GenreCollection",
+    "Microsoft.Xna.Framework.Media.PictureAlbumCollection",
+    "Microsoft.Xna.Framework.Media.PictureCollection",
+    "Microsoft.Xna.Framework.Media.PlaylistCollection",
+    "Microsoft.Xna.Framework.Media.SongCollection"
   ],
   "namedImmutableValuePropertyTypes": [
     "Microsoft.Xna.Framework.Color"

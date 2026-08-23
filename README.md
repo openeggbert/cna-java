@@ -18,17 +18,17 @@ CNA C++
 ## Honest status
 
 The project is a member-complete, structurally strict partial projection of the
-selected XNA 4.0 Windows runtime profile. It is not XNA-complete: 41 entire
-dependency-group types remain, but every one of the 224 currently implemented
+selected XNA 4.0 Windows runtime profile. It is not XNA-complete: 14 entire
+dependency-group types remain, but every one of the 251 currently implemented
 strict types has its complete mapped member contract.
 
 The current strict measurement is:
 
 ```text
 XNA reference:        257 types / 2,964 members
-Mapped Java contract: 265 types / 3,200 members
-Java target:          224 strict types / 2,906 members
-Missing types:         41
+Mapped Java contract: 265 types / 3,206 members
+Java target:          251 strict types / 3,150 members
+Missing types:         14
 Missing members:        0
 Structural drift:       0
 Mapping drift:          0
@@ -71,7 +71,14 @@ Implemented now:
   SoundEffectInstance, dynamic streaming/callbacks, honest NULL-microphone
   behavior, and an ownership-correct XACT graph whose authored-bank playback is
   explicitly asset-pending;
-- a Java 17 JNI adapter for 487 reviewed CNA ABI 0.7.0 functions, with header,
+- the complete 24-type Media/Video contract, including native platform-library
+  collections, owned URI songs, process-global MediaPlayer/queue/event routes,
+  Video XNB metadata, native VideoPlayer controls, and an explicitly borrowed
+  transient frame facade whose stronger XNA identity remains backend-blocked;
+- the complete three-type Storage contract, including authoritative completed-result
+  `Begin`/`End` behavior, native container/stream CRUD, process-global device events,
+  reverse Game ownership, and explicit Java containment for a documented CNA path gap;
+- a Java 17 JNI adapter for 720 reviewed CNA ABI 0.7.0 functions, with header,
   manifest, layout/signature, and native-symbol verification;
 - managed and native integration/ownership tests plus a desktop template canary
   verified for 60-frame smoke and 600-frame stability runs using both raw PNG
@@ -85,9 +92,8 @@ compressed data is never reinterpreted as RGBA. SpriteFont is consequently
 verified with an uncompressed Color atlas. The Model path is verified for a
 synthetic graph using VertexDeclaration, VertexBuffer, IndexBuffer, and
 BasicEffect readers; reader families not in that graph remain explicit load
-errors. The remaining strict families are Media/Video, Storage, Design
-converters, and GamerServices; Graphics and Audio/XACT are at zero missing
-types.
+errors. The remaining strict families are Design converters and GamerServices;
+Graphics, Audio/XACT, Media/Video, and Storage are at zero missing types.
 
 ## Build and verify
 
@@ -136,7 +142,9 @@ belongs under `org.openeggbert.cna.extensions.*` (or a real native CNA concept),
 not in the strict packages.
 
 Read [the normative mapping](docs/xna-java-mapping.md), [the architecture](docs/architecture.md),
-[the Audio/XACT evidence](docs/audio-xact-evidence.md), and
+[the Audio/XACT evidence](docs/audio-xact-evidence.md),
+[the Media/Video evidence](docs/media-video-evidence.md),
+[the Storage evidence](docs/storage-evidence.md), and
 [the measured engineering plan](plan.md) before expanding the surface.
 
 ## Platform evidence

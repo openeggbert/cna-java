@@ -377,6 +377,229 @@ typedef CNA_Result (*SoundBankPlay3DFunction)(
 typedef CNA_Result (*CueInfoFunction)(CNA_Handle, CNA_CueInfo*);
 typedef CNA_Result (*CueStopFunction)(CNA_Handle, CNA_AudioStopOptions);
 
+typedef CNA_Result (*Media_media_source_get_available_countFunction)(CNA_Handle game, uint32_t* out_count);
+typedef CNA_Result (*Media_media_source_get_type_atFunction)(CNA_Handle game, uint32_t index, CNA_MediaSourceType* out_type);
+typedef CNA_Result (*Media_media_source_get_name_size_atFunction)(CNA_Handle game, uint32_t index, uint64_t* out_bytes);
+typedef CNA_Result (*Media_media_source_copy_name_atFunction)(CNA_Handle game, uint32_t index, char* destination, uint64_t capacity, uint64_t* out_bytes);
+typedef CNA_Result (*Media_media_library_createFunction)(CNA_Handle game, CNA_MediaLibraryHandle* out_library);
+typedef CNA_Result (*Media_media_library_create_from_sourceFunction)(CNA_Handle game, uint32_t source_index, CNA_MediaLibraryHandle* out_library);
+typedef CNA_Result (*Media_media_library_get_is_disposedFunction)(CNA_MediaLibraryHandle library, CNA_Bool* out_disposed);
+typedef CNA_Result (*Media_media_library_disposeFunction)(CNA_MediaLibraryHandle library);
+typedef CNA_Result (*Media_media_library_destroyFunction)(CNA_MediaLibraryHandle library);
+typedef CNA_Result (*Media_media_library_get_media_source_typeFunction)(CNA_MediaLibraryHandle library, CNA_MediaSourceType* out_type);
+typedef CNA_Result (*Media_media_library_get_media_source_name_sizeFunction)(CNA_MediaLibraryHandle library, uint64_t* out_bytes);
+typedef CNA_Result (*Media_media_library_copy_media_source_nameFunction)(CNA_MediaLibraryHandle library, char* destination, uint64_t capacity, uint64_t* out_bytes);
+typedef CNA_Result (*Media_media_library_get_songsFunction)(CNA_MediaLibraryHandle library, CNA_SongCollectionHandle* out_songs);
+typedef CNA_Result (*Media_media_library_get_albumsFunction)(CNA_MediaLibraryHandle library, CNA_AlbumCollectionHandle* out_albums);
+typedef CNA_Result (*Media_media_library_get_artistsFunction)(CNA_MediaLibraryHandle library, CNA_ArtistCollectionHandle* out_artists);
+typedef CNA_Result (*Media_media_library_get_genresFunction)(CNA_MediaLibraryHandle library, CNA_GenreCollectionHandle* out_genres);
+typedef CNA_Result (*Media_media_library_get_playlistsFunction)(CNA_MediaLibraryHandle library, CNA_PlaylistCollectionHandle* out_playlists);
+typedef CNA_Result (*Media_media_library_get_picturesFunction)(CNA_MediaLibraryHandle library, CNA_PictureCollectionHandle* out_pictures);
+typedef CNA_Result (*Media_media_library_get_saved_picturesFunction)(CNA_MediaLibraryHandle library, CNA_PictureCollectionHandle* out_pictures);
+typedef CNA_Result (*Media_media_library_get_root_picture_albumFunction)(CNA_MediaLibraryHandle library, CNA_PictureAlbumHandle* out_album, CNA_Bool* out_available);
+typedef CNA_Result (*Media_media_library_get_picture_from_tokenFunction)(CNA_MediaLibraryHandle library, CNA_StringView token, CNA_PictureHandle* out_picture, CNA_Bool* out_available);
+typedef CNA_Result (*Media_media_library_save_pictureFunction)(CNA_MediaLibraryHandle library, CNA_StringView name, const uint8_t* image_data, uint64_t image_byte_count, CNA_PictureHandle* out_picture);
+typedef CNA_Result (*Media_album_get_name_sizeFunction)(CNA_AlbumHandle album, uint64_t* out_bytes);
+typedef CNA_Result (*Media_album_copy_nameFunction)(CNA_AlbumHandle album, char* destination, uint64_t capacity, uint64_t* out_bytes);
+typedef CNA_Result (*Media_album_get_is_disposedFunction)(CNA_AlbumHandle album, CNA_Bool* out_disposed);
+typedef CNA_Result (*Media_album_disposeFunction)(CNA_AlbumHandle album);
+typedef CNA_Result (*Media_album_destroyFunction)(CNA_AlbumHandle album);
+typedef CNA_Result (*Media_album_equalsFunction)(CNA_AlbumHandle left, CNA_AlbumHandle right, CNA_Bool* out_equal);
+typedef CNA_Result (*Media_album_get_hash_codeFunction)(CNA_AlbumHandle album, int32_t* out_hash);
+typedef CNA_Result (*Media_artist_get_name_sizeFunction)(CNA_ArtistHandle artist, uint64_t* out_bytes);
+typedef CNA_Result (*Media_artist_copy_nameFunction)(CNA_ArtistHandle artist, char* destination, uint64_t capacity, uint64_t* out_bytes);
+typedef CNA_Result (*Media_artist_get_is_disposedFunction)(CNA_ArtistHandle artist, CNA_Bool* out_disposed);
+typedef CNA_Result (*Media_artist_disposeFunction)(CNA_ArtistHandle artist);
+typedef CNA_Result (*Media_artist_destroyFunction)(CNA_ArtistHandle artist);
+typedef CNA_Result (*Media_artist_equalsFunction)(CNA_ArtistHandle left, CNA_ArtistHandle right, CNA_Bool* out_equal);
+typedef CNA_Result (*Media_artist_get_hash_codeFunction)(CNA_ArtistHandle artist, int32_t* out_hash);
+typedef CNA_Result (*Media_genre_get_name_sizeFunction)(CNA_GenreHandle genre, uint64_t* out_bytes);
+typedef CNA_Result (*Media_genre_copy_nameFunction)(CNA_GenreHandle genre, char* destination, uint64_t capacity, uint64_t* out_bytes);
+typedef CNA_Result (*Media_genre_get_is_disposedFunction)(CNA_GenreHandle genre, CNA_Bool* out_disposed);
+typedef CNA_Result (*Media_genre_disposeFunction)(CNA_GenreHandle genre);
+typedef CNA_Result (*Media_genre_destroyFunction)(CNA_GenreHandle genre);
+typedef CNA_Result (*Media_genre_equalsFunction)(CNA_GenreHandle left, CNA_GenreHandle right, CNA_Bool* out_equal);
+typedef CNA_Result (*Media_genre_get_hash_codeFunction)(CNA_GenreHandle genre, int32_t* out_hash);
+typedef CNA_Result (*Media_playlist_get_name_sizeFunction)(CNA_PlaylistHandle playlist, uint64_t* out_bytes);
+typedef CNA_Result (*Media_playlist_copy_nameFunction)(CNA_PlaylistHandle playlist, char* destination, uint64_t capacity, uint64_t* out_bytes);
+typedef CNA_Result (*Media_playlist_get_is_disposedFunction)(CNA_PlaylistHandle playlist, CNA_Bool* out_disposed);
+typedef CNA_Result (*Media_playlist_disposeFunction)(CNA_PlaylistHandle playlist);
+typedef CNA_Result (*Media_playlist_destroyFunction)(CNA_PlaylistHandle playlist);
+typedef CNA_Result (*Media_playlist_equalsFunction)(CNA_PlaylistHandle left, CNA_PlaylistHandle right, CNA_Bool* out_equal);
+typedef CNA_Result (*Media_playlist_get_hash_codeFunction)(CNA_PlaylistHandle playlist, int32_t* out_hash);
+typedef CNA_Result (*Media_picture_get_name_sizeFunction)(CNA_PictureHandle picture, uint64_t* out_bytes);
+typedef CNA_Result (*Media_picture_copy_nameFunction)(CNA_PictureHandle picture, char* destination, uint64_t capacity, uint64_t* out_bytes);
+typedef CNA_Result (*Media_picture_get_is_disposedFunction)(CNA_PictureHandle picture, CNA_Bool* out_disposed);
+typedef CNA_Result (*Media_picture_disposeFunction)(CNA_PictureHandle picture);
+typedef CNA_Result (*Media_picture_destroyFunction)(CNA_PictureHandle picture);
+typedef CNA_Result (*Media_picture_equalsFunction)(CNA_PictureHandle left, CNA_PictureHandle right, CNA_Bool* out_equal);
+typedef CNA_Result (*Media_picture_get_hash_codeFunction)(CNA_PictureHandle picture, int32_t* out_hash);
+typedef CNA_Result (*Media_picture_album_get_name_sizeFunction)(CNA_PictureAlbumHandle album, uint64_t* out_bytes);
+typedef CNA_Result (*Media_picture_album_copy_nameFunction)(CNA_PictureAlbumHandle album, char* destination, uint64_t capacity, uint64_t* out_bytes);
+typedef CNA_Result (*Media_picture_album_get_is_disposedFunction)(CNA_PictureAlbumHandle album, CNA_Bool* out_disposed);
+typedef CNA_Result (*Media_picture_album_disposeFunction)(CNA_PictureAlbumHandle album);
+typedef CNA_Result (*Media_picture_album_destroyFunction)(CNA_PictureAlbumHandle album);
+typedef CNA_Result (*Media_picture_album_equalsFunction)(CNA_PictureAlbumHandle left, CNA_PictureAlbumHandle right, CNA_Bool* out_equal);
+typedef CNA_Result (*Media_picture_album_get_hash_codeFunction)(CNA_PictureAlbumHandle album, int32_t* out_hash);
+typedef CNA_Result (*Media_song_get_name_sizeFunction)(CNA_SongHandle song, uint64_t* out_bytes);
+typedef CNA_Result (*Media_song_copy_nameFunction)(CNA_SongHandle song, char* destination, uint64_t capacity, uint64_t* out_bytes);
+typedef CNA_Result (*Media_song_get_is_disposedFunction)(CNA_SongHandle song, CNA_Bool* out_disposed);
+typedef CNA_Result (*Media_song_disposeFunction)(CNA_SongHandle song);
+typedef CNA_Result (*Media_song_destroyFunction)(CNA_SongHandle song);
+typedef CNA_Result (*Media_song_equalsFunction)(CNA_SongHandle left, CNA_SongHandle right, CNA_Bool* out_equal);
+typedef CNA_Result (*Media_song_get_hash_codeFunction)(CNA_SongHandle song, int32_t* out_hash);
+typedef CNA_Result (*Media_album_collection_get_countFunction)(CNA_AlbumCollectionHandle collection, int32_t* out_count);
+typedef CNA_Result (*Media_album_collection_get_atFunction)(CNA_AlbumCollectionHandle collection, int32_t index, CNA_AlbumHandle* out_album);
+typedef CNA_Result (*Media_album_collection_get_is_disposedFunction)(CNA_AlbumCollectionHandle collection, CNA_Bool* out_disposed);
+typedef CNA_Result (*Media_album_collection_disposeFunction)(CNA_AlbumCollectionHandle collection);
+typedef CNA_Result (*Media_album_collection_destroyFunction)(CNA_AlbumCollectionHandle collection);
+typedef CNA_Result (*Media_artist_collection_get_countFunction)(CNA_ArtistCollectionHandle collection, int32_t* out_count);
+typedef CNA_Result (*Media_artist_collection_get_atFunction)(CNA_ArtistCollectionHandle collection, int32_t index, CNA_ArtistHandle* out_artist);
+typedef CNA_Result (*Media_artist_collection_get_is_disposedFunction)(CNA_ArtistCollectionHandle collection, CNA_Bool* out_disposed);
+typedef CNA_Result (*Media_artist_collection_disposeFunction)(CNA_ArtistCollectionHandle collection);
+typedef CNA_Result (*Media_artist_collection_destroyFunction)(CNA_ArtistCollectionHandle collection);
+typedef CNA_Result (*Media_genre_collection_get_countFunction)(CNA_GenreCollectionHandle collection, int32_t* out_count);
+typedef CNA_Result (*Media_genre_collection_get_atFunction)(CNA_GenreCollectionHandle collection, int32_t index, CNA_GenreHandle* out_genre);
+typedef CNA_Result (*Media_genre_collection_get_is_disposedFunction)(CNA_GenreCollectionHandle collection, CNA_Bool* out_disposed);
+typedef CNA_Result (*Media_genre_collection_disposeFunction)(CNA_GenreCollectionHandle collection);
+typedef CNA_Result (*Media_genre_collection_destroyFunction)(CNA_GenreCollectionHandle collection);
+typedef CNA_Result (*Media_playlist_collection_get_countFunction)(CNA_PlaylistCollectionHandle collection, int32_t* out_count);
+typedef CNA_Result (*Media_playlist_collection_get_atFunction)(CNA_PlaylistCollectionHandle collection, int32_t index, CNA_PlaylistHandle* out_playlist);
+typedef CNA_Result (*Media_playlist_collection_get_is_disposedFunction)(CNA_PlaylistCollectionHandle collection, CNA_Bool* out_disposed);
+typedef CNA_Result (*Media_playlist_collection_disposeFunction)(CNA_PlaylistCollectionHandle collection);
+typedef CNA_Result (*Media_playlist_collection_destroyFunction)(CNA_PlaylistCollectionHandle collection);
+typedef CNA_Result (*Media_picture_collection_get_countFunction)(CNA_PictureCollectionHandle collection, int32_t* out_count);
+typedef CNA_Result (*Media_picture_collection_get_atFunction)(CNA_PictureCollectionHandle collection, int32_t index, CNA_PictureHandle* out_picture);
+typedef CNA_Result (*Media_picture_collection_get_is_disposedFunction)(CNA_PictureCollectionHandle collection, CNA_Bool* out_disposed);
+typedef CNA_Result (*Media_picture_collection_disposeFunction)(CNA_PictureCollectionHandle collection);
+typedef CNA_Result (*Media_picture_collection_destroyFunction)(CNA_PictureCollectionHandle collection);
+typedef CNA_Result (*Media_picture_album_collection_get_countFunction)(CNA_PictureAlbumCollectionHandle collection, int32_t* out_count);
+typedef CNA_Result (*Media_picture_album_collection_get_atFunction)(CNA_PictureAlbumCollectionHandle collection, int32_t index, CNA_PictureAlbumHandle* out_album);
+typedef CNA_Result (*Media_picture_album_collection_get_is_disposedFunction)(CNA_PictureAlbumCollectionHandle collection, CNA_Bool* out_disposed);
+typedef CNA_Result (*Media_picture_album_collection_disposeFunction)(CNA_PictureAlbumCollectionHandle collection);
+typedef CNA_Result (*Media_picture_album_collection_destroyFunction)(CNA_PictureAlbumCollectionHandle collection);
+typedef CNA_Result (*Media_song_collection_get_countFunction)(CNA_SongCollectionHandle collection, int32_t* out_count);
+typedef CNA_Result (*Media_song_collection_get_atFunction)(CNA_SongCollectionHandle collection, int32_t index, CNA_SongHandle* out_song);
+typedef CNA_Result (*Media_song_collection_get_is_disposedFunction)(CNA_SongCollectionHandle collection, CNA_Bool* out_disposed);
+typedef CNA_Result (*Media_song_collection_disposeFunction)(CNA_SongCollectionHandle collection);
+typedef CNA_Result (*Media_song_collection_destroyFunction)(CNA_SongCollectionHandle collection);
+typedef CNA_Result (*Media_album_get_artistFunction)(CNA_AlbumHandle album, CNA_ArtistHandle* out_artist, CNA_Bool* out_available);
+typedef CNA_Result (*Media_album_get_genreFunction)(CNA_AlbumHandle album, CNA_GenreHandle* out_genre, CNA_Bool* out_available);
+typedef CNA_Result (*Media_album_get_durationFunction)(CNA_AlbumHandle album, int64_t* out_ticks);
+typedef CNA_Result (*Media_album_get_has_artFunction)(CNA_AlbumHandle album, CNA_Bool* out_has_art);
+typedef CNA_Result (*Media_album_get_art_sizeFunction)(CNA_AlbumHandle album, uint64_t* out_bytes);
+typedef CNA_Result (*Media_album_copy_artFunction)(CNA_AlbumHandle album, uint8_t* destination, uint64_t capacity, uint64_t* out_bytes);
+typedef CNA_Result (*Media_album_get_thumbnail_sizeFunction)(CNA_AlbumHandle album, uint64_t* out_bytes);
+typedef CNA_Result (*Media_album_copy_thumbnailFunction)(CNA_AlbumHandle album, uint8_t* destination, uint64_t capacity, uint64_t* out_bytes);
+typedef CNA_Result (*Media_album_get_songsFunction)(CNA_AlbumHandle album, CNA_SongCollectionHandle* out_songs);
+typedef CNA_Result (*Media_artist_get_albumsFunction)(CNA_ArtistHandle artist, CNA_AlbumCollectionHandle* out_albums);
+typedef CNA_Result (*Media_artist_get_songsFunction)(CNA_ArtistHandle artist, CNA_SongCollectionHandle* out_songs);
+typedef CNA_Result (*Media_genre_get_albumsFunction)(CNA_GenreHandle genre, CNA_AlbumCollectionHandle* out_albums);
+typedef CNA_Result (*Media_genre_get_songsFunction)(CNA_GenreHandle genre, CNA_SongCollectionHandle* out_songs);
+typedef CNA_Result (*Media_playlist_get_durationFunction)(CNA_PlaylistHandle playlist, int64_t* out_ticks);
+typedef CNA_Result (*Media_playlist_get_songsFunction)(CNA_PlaylistHandle playlist, CNA_SongCollectionHandle* out_songs);
+typedef CNA_Result (*Media_picture_get_albumFunction)(CNA_PictureHandle picture, CNA_PictureAlbumHandle* out_album, CNA_Bool* out_available);
+typedef CNA_Result (*Media_picture_get_date_unix_ticksFunction)(CNA_PictureHandle picture, int64_t* out_unix_ticks);
+typedef CNA_Result (*Media_picture_get_widthFunction)(CNA_PictureHandle picture, int32_t* out_width);
+typedef CNA_Result (*Media_picture_get_heightFunction)(CNA_PictureHandle picture, int32_t* out_height);
+typedef CNA_Result (*Media_picture_get_image_sizeFunction)(CNA_PictureHandle picture, uint64_t* out_bytes);
+typedef CNA_Result (*Media_picture_copy_imageFunction)(CNA_PictureHandle picture, uint8_t* destination, uint64_t capacity, uint64_t* out_bytes);
+typedef CNA_Result (*Media_picture_get_thumbnail_sizeFunction)(CNA_PictureHandle picture, uint64_t* out_bytes);
+typedef CNA_Result (*Media_picture_copy_thumbnailFunction)(CNA_PictureHandle picture, uint8_t* destination, uint64_t capacity, uint64_t* out_bytes);
+typedef CNA_Result (*Media_picture_album_get_parentFunction)(CNA_PictureAlbumHandle album, CNA_PictureAlbumHandle* out_parent, CNA_Bool* out_available);
+typedef CNA_Result (*Media_picture_album_get_albumsFunction)(CNA_PictureAlbumHandle album, CNA_PictureAlbumCollectionHandle* out_albums);
+typedef CNA_Result (*Media_picture_album_get_picturesFunction)(CNA_PictureAlbumHandle album, CNA_PictureCollectionHandle* out_pictures);
+typedef CNA_Result (*Media_song_get_albumFunction)(CNA_SongHandle song, CNA_AlbumHandle* out_album, CNA_Bool* out_available);
+typedef CNA_Result (*Media_song_get_artistFunction)(CNA_SongHandle song, CNA_ArtistHandle* out_artist, CNA_Bool* out_available);
+typedef CNA_Result (*Media_song_get_genreFunction)(CNA_SongHandle song, CNA_GenreHandle* out_genre, CNA_Bool* out_available);
+typedef CNA_Result (*Media_song_get_durationFunction)(CNA_SongHandle song, int64_t* out_ticks);
+typedef CNA_Result (*Media_song_get_is_protectedFunction)(CNA_SongHandle song, CNA_Bool* out_protected);
+typedef CNA_Result (*Media_song_get_is_ratedFunction)(CNA_SongHandle song, CNA_Bool* out_rated);
+typedef CNA_Result (*Media_song_get_play_countFunction)(CNA_SongHandle song, int32_t* out_play_count);
+typedef CNA_Result (*Media_song_get_ratingFunction)(CNA_SongHandle song, int32_t* out_rating);
+typedef CNA_Result (*Media_song_get_track_numberFunction)(CNA_SongHandle song, int32_t* out_track_number);
+typedef CNA_Result (*Media_song_create_from_uriFunction)(CNA_Handle game, CNA_StringView name, CNA_StringView uri, CNA_SongHandle* out_song);
+typedef CNA_Result (*Media_media_player_get_game_has_controlFunction)(CNA_Handle game, CNA_Bool* out_has_control);
+typedef CNA_Result (*Media_media_player_get_is_mutedFunction)(CNA_Handle game, CNA_Bool* out_muted);
+typedef CNA_Result (*Media_media_player_set_is_mutedFunction)(CNA_Handle game, CNA_Bool muted);
+typedef CNA_Result (*Media_media_player_get_is_repeatingFunction)(CNA_Handle game, CNA_Bool* out_repeating);
+typedef CNA_Result (*Media_media_player_set_is_repeatingFunction)(CNA_Handle game, CNA_Bool repeating);
+typedef CNA_Result (*Media_media_player_get_is_shuffledFunction)(CNA_Handle game, CNA_Bool* out_shuffled);
+typedef CNA_Result (*Media_media_player_set_is_shuffledFunction)(CNA_Handle game, CNA_Bool shuffled);
+typedef CNA_Result (*Media_media_player_get_play_position_ticksFunction)(CNA_Handle game, int64_t* out_ticks);
+typedef CNA_Result (*Media_media_player_get_stateFunction)(CNA_Handle game, CNA_MediaState* out_state);
+typedef CNA_Result (*Media_media_player_get_volumeFunction)(CNA_Handle game, float* out_volume);
+typedef CNA_Result (*Media_media_player_set_volumeFunction)(CNA_Handle game, float volume);
+typedef CNA_Result (*Media_media_player_get_is_visualization_enabledFunction)(CNA_Handle game, CNA_Bool* out_enabled);
+typedef CNA_Result (*Media_media_player_set_is_visualization_enabledFunction)(CNA_Handle game, CNA_Bool enabled);
+typedef CNA_Result (*Media_media_player_get_visualization_dataFunction)(CNA_Handle game, CNA_VisualizationData* data);
+typedef CNA_Result (*Media_media_player_get_queueFunction)(CNA_Handle game, CNA_MediaQueueHandle* out_queue);
+typedef CNA_Result (*Media_media_player_play_songFunction)(CNA_Handle game, CNA_SongHandle song);
+typedef CNA_Result (*Media_media_player_play_songsFunction)(CNA_Handle game, CNA_SongCollectionHandle songs);
+typedef CNA_Result (*Media_media_player_play_songs_fromFunction)(CNA_Handle game, CNA_SongCollectionHandle songs, int32_t index);
+typedef CNA_Result (*Media_media_player_move_nextFunction)(CNA_Handle game);
+typedef CNA_Result (*Media_media_player_move_previousFunction)(CNA_Handle game);
+typedef CNA_Result (*Media_media_player_pauseFunction)(CNA_Handle game);
+typedef CNA_Result (*Media_media_player_resumeFunction)(CNA_Handle game);
+typedef CNA_Result (*Media_media_player_stopFunction)(CNA_Handle game);
+typedef CNA_Result (*Media_media_player_program_exit_extFunction)(CNA_Handle game);
+typedef CNA_Result (*Media_media_player_raise_active_song_changed_extFunction)(CNA_Handle game);
+typedef CNA_Result (*Media_media_player_raise_media_state_changed_extFunction)(CNA_Handle game);
+typedef CNA_Result (*Media_media_player_subscribe_active_song_changed_extFunction)(CNA_MediaPlayerEventCallback callback, void* context, CNA_MediaPlayerEventRegistrationHandle* out_registration);
+typedef CNA_Result (*Media_media_player_subscribe_media_state_changed_extFunction)(CNA_MediaPlayerEventCallback callback, void* context, CNA_MediaPlayerEventRegistrationHandle* out_registration);
+typedef CNA_Result (*Media_media_player_unsubscribe_extFunction)(CNA_MediaPlayerEventRegistrationHandle registration);
+typedef CNA_Result (*Media_media_queue_get_countFunction)(CNA_MediaQueueHandle queue, int32_t* out_count);
+typedef CNA_Result (*Media_media_queue_get_active_song_indexFunction)(CNA_MediaQueueHandle queue, int32_t* out_index);
+typedef CNA_Result (*Media_media_queue_set_active_song_indexFunction)(CNA_MediaQueueHandle queue, int32_t index);
+typedef CNA_Result (*Media_media_queue_get_atFunction)(CNA_MediaQueueHandle queue, int32_t index, CNA_SongHandle* out_song);
+typedef CNA_Result (*Media_media_queue_destroyFunction)(CNA_MediaQueueHandle queue);
+typedef CNA_Result (*Media_video_create_with_metadataFunction)(CNA_Handle graphics_device, CNA_StringView file_name, int32_t duration_milliseconds, int32_t width, int32_t height, float frames_per_second, CNA_VideoSoundtrackType soundtrack_type, CNA_VideoHandle* out_video);
+typedef CNA_Result (*Media_video_destroyFunction)(CNA_VideoHandle video);
+typedef CNA_Result (*Media_video_player_createFunction)(CNA_Handle game, CNA_VideoPlayerHandle* out_player);
+typedef CNA_Result (*Media_video_player_get_is_disposedFunction)(CNA_VideoPlayerHandle player, CNA_Bool* out_disposed);
+typedef CNA_Result (*Media_video_player_set_is_loopedFunction)(CNA_VideoPlayerHandle player, CNA_Bool looped);
+typedef CNA_Result (*Media_video_player_set_is_mutedFunction)(CNA_VideoPlayerHandle player, CNA_Bool muted);
+typedef CNA_Result (*Media_video_player_get_play_position_ticksFunction)(CNA_VideoPlayerHandle player, int64_t* out_ticks);
+typedef CNA_Result (*Media_video_player_get_stateFunction)(CNA_VideoPlayerHandle player, CNA_MediaState* out_state);
+typedef CNA_Result (*Media_video_player_set_volumeFunction)(CNA_VideoPlayerHandle player, float volume);
+typedef CNA_Result (*Media_video_player_get_textureFunction)(CNA_VideoPlayerHandle player, CNA_Handle* out_texture, CNA_Bool* out_available);
+typedef CNA_Result (*Media_video_player_playFunction)(CNA_VideoPlayerHandle player, CNA_VideoHandle video);
+typedef CNA_Result (*Media_video_player_stopFunction)(CNA_VideoPlayerHandle player);
+typedef CNA_Result (*Media_video_player_pauseFunction)(CNA_VideoPlayerHandle player);
+typedef CNA_Result (*Media_video_player_resumeFunction)(CNA_VideoPlayerHandle player);
+typedef CNA_Result (*Media_video_player_disposeFunction)(CNA_VideoPlayerHandle player);
+typedef CNA_Result (*Media_video_player_destroyFunction)(CNA_VideoPlayerHandle player);
+typedef CNA_Result (*Storage_selectFunction)(CNA_StorageCompletionCallback callback, void* context, CNA_StorageDeviceHandle* out_device);
+typedef CNA_Result (*Storage_select_playerFunction)(CNA_PlayerIndex player, CNA_StorageCompletionCallback callback, void* context, CNA_StorageDeviceHandle* out_device);
+typedef CNA_Result (*Storage_select_spaceFunction)(int32_t size_in_bytes, int32_t directory_count, CNA_StorageCompletionCallback callback, void* context, CNA_StorageDeviceHandle* out_device);
+typedef CNA_Result (*Storage_select_player_spaceFunction)(CNA_PlayerIndex player, int32_t size_in_bytes, int32_t directory_count, CNA_StorageCompletionCallback callback, void* context, CNA_StorageDeviceHandle* out_device);
+typedef CNA_Result (*Storage_device_get_int64Function)(CNA_StorageDeviceHandle device, int64_t* output);
+typedef CNA_Result (*Storage_device_get_boolFunction)(CNA_StorageDeviceHandle device, CNA_Bool* output);
+typedef CNA_Result (*Storage_device_pathFunction)(CNA_StorageDeviceHandle device, CNA_StringView path);
+typedef CNA_Result (*Storage_subscribe_deviceFunction)(CNA_StorageCompletionCallback callback, void* context, CNA_Handle* output);
+typedef CNA_Result (*Storage_device_destroyFunction)(CNA_StorageDeviceHandle device);
+typedef CNA_Result (*Storage_container_openFunction)(CNA_StorageDeviceHandle device, CNA_StringView name, CNA_StorageCompletionCallback callback, void* context, CNA_StorageContainerHandle* output);
+typedef CNA_Result (*Storage_container_sizeFunction)(CNA_StorageContainerHandle container, uint64_t* output);
+typedef CNA_Result (*Storage_container_copyFunction)(CNA_StorageContainerHandle container, char* destination, uint64_t capacity, uint64_t* output);
+typedef CNA_Result (*Storage_container_unaryFunction)(CNA_StorageContainerHandle container);
+typedef CNA_Result (*Storage_subscribe_containerFunction)(CNA_StorageContainerHandle container, CNA_StorageCompletionCallback callback, void* context, CNA_Handle* output);
+typedef CNA_Result (*Storage_unsubscribeFunction)(CNA_Handle registration);
+typedef CNA_Result (*Storage_container_pathFunction)(CNA_StorageContainerHandle container, CNA_StringView path);
+typedef CNA_Result (*Storage_container_queryFunction)(CNA_StorageContainerHandle container, CNA_StringView path, CNA_Bool* output);
+typedef CNA_Result (*Storage_name_countFunction)(CNA_StorageContainerHandle container, CNA_StringView pattern, uint64_t* output);
+typedef CNA_Result (*Storage_name_copyFunction)(CNA_StorageContainerHandle container, CNA_StringView pattern, uint64_t index, char* destination, uint64_t capacity, uint64_t* output);
+typedef CNA_Result (*Storage_create_streamFunction)(CNA_StorageContainerHandle container, CNA_StringView path, CNA_StorageStreamHandle* output);
+typedef CNA_Result (*Storage_open_streamFunction)(CNA_StorageContainerHandle container, CNA_StringView path, CNA_FileMode mode, CNA_StorageStreamHandle* output);
+typedef CNA_Result (*Storage_open_stream_accessFunction)(CNA_StorageContainerHandle container, CNA_StringView path, CNA_FileMode mode, CNA_FileAccess access, CNA_StorageStreamHandle* output);
+typedef CNA_Result (*Storage_open_stream_shareFunction)(CNA_StorageContainerHandle container, CNA_StringView path, CNA_FileMode mode, CNA_FileAccess access, CNA_FileShare share, CNA_StorageStreamHandle* output);
+typedef CNA_Result (*Storage_stream_readFunction)(CNA_StorageStreamHandle stream, uint8_t* destination, uint64_t capacity, uint64_t* output);
+typedef CNA_Result (*Storage_stream_writeFunction)(CNA_StorageStreamHandle stream, const uint8_t* data, uint64_t count);
+typedef CNA_Result (*Storage_stream_seekFunction)(CNA_StorageStreamHandle stream, int64_t offset, CNA_SeekOrigin origin, int64_t* output);
+typedef CNA_Result (*Storage_stream_get_int64Function)(CNA_StorageStreamHandle stream, int64_t* output);
+typedef CNA_Result (*Storage_stream_set_int64Function)(CNA_StorageStreamHandle stream, int64_t value);
+typedef CNA_Result (*Storage_stream_get_boolFunction)(CNA_StorageStreamHandle stream, CNA_Bool* output);
+typedef CNA_Result (*Storage_stream_unaryFunction)(CNA_StorageStreamHandle stream);
+
 typedef struct CnaFunctions {
     DynamicLibrary library;
     GetAbiVersionFunction get_abi_version;
@@ -871,6 +1094,239 @@ typedef struct CnaFunctions {
     GameUnaryFunction cue_pause;
     GameUnaryFunction cue_resume;
     CueStopFunction cue_stop;
+    Media_media_source_get_available_countFunction media_source_get_available_count;
+    Media_media_source_get_type_atFunction media_source_get_type_at;
+    Media_media_source_get_name_size_atFunction media_source_get_name_size_at;
+    Media_media_source_copy_name_atFunction media_source_copy_name_at;
+    Media_media_library_createFunction media_library_create;
+    Media_media_library_create_from_sourceFunction media_library_create_from_source;
+    Media_media_library_get_is_disposedFunction media_library_get_is_disposed;
+    Media_media_library_disposeFunction media_library_dispose;
+    Media_media_library_destroyFunction media_library_destroy;
+    Media_media_library_get_media_source_typeFunction media_library_get_media_source_type;
+    Media_media_library_get_media_source_name_sizeFunction media_library_get_media_source_name_size;
+    Media_media_library_copy_media_source_nameFunction media_library_copy_media_source_name;
+    Media_media_library_get_songsFunction media_library_get_songs;
+    Media_media_library_get_albumsFunction media_library_get_albums;
+    Media_media_library_get_artistsFunction media_library_get_artists;
+    Media_media_library_get_genresFunction media_library_get_genres;
+    Media_media_library_get_playlistsFunction media_library_get_playlists;
+    Media_media_library_get_picturesFunction media_library_get_pictures;
+    Media_media_library_get_saved_picturesFunction media_library_get_saved_pictures;
+    Media_media_library_get_root_picture_albumFunction media_library_get_root_picture_album;
+    Media_media_library_get_picture_from_tokenFunction media_library_get_picture_from_token;
+    Media_media_library_save_pictureFunction media_library_save_picture;
+    Media_album_get_name_sizeFunction album_get_name_size;
+    Media_album_copy_nameFunction album_copy_name;
+    Media_album_get_is_disposedFunction album_get_is_disposed;
+    Media_album_disposeFunction album_dispose;
+    Media_album_destroyFunction album_destroy;
+    Media_album_equalsFunction album_equals;
+    Media_album_get_hash_codeFunction album_get_hash_code;
+    Media_artist_get_name_sizeFunction artist_get_name_size;
+    Media_artist_copy_nameFunction artist_copy_name;
+    Media_artist_get_is_disposedFunction artist_get_is_disposed;
+    Media_artist_disposeFunction artist_dispose;
+    Media_artist_destroyFunction artist_destroy;
+    Media_artist_equalsFunction artist_equals;
+    Media_artist_get_hash_codeFunction artist_get_hash_code;
+    Media_genre_get_name_sizeFunction genre_get_name_size;
+    Media_genre_copy_nameFunction genre_copy_name;
+    Media_genre_get_is_disposedFunction genre_get_is_disposed;
+    Media_genre_disposeFunction genre_dispose;
+    Media_genre_destroyFunction genre_destroy;
+    Media_genre_equalsFunction genre_equals;
+    Media_genre_get_hash_codeFunction genre_get_hash_code;
+    Media_playlist_get_name_sizeFunction playlist_get_name_size;
+    Media_playlist_copy_nameFunction playlist_copy_name;
+    Media_playlist_get_is_disposedFunction playlist_get_is_disposed;
+    Media_playlist_disposeFunction playlist_dispose;
+    Media_playlist_destroyFunction playlist_destroy;
+    Media_playlist_equalsFunction playlist_equals;
+    Media_playlist_get_hash_codeFunction playlist_get_hash_code;
+    Media_picture_get_name_sizeFunction picture_get_name_size;
+    Media_picture_copy_nameFunction picture_copy_name;
+    Media_picture_get_is_disposedFunction picture_get_is_disposed;
+    Media_picture_disposeFunction picture_dispose;
+    Media_picture_destroyFunction picture_destroy;
+    Media_picture_equalsFunction picture_equals;
+    Media_picture_get_hash_codeFunction picture_get_hash_code;
+    Media_picture_album_get_name_sizeFunction picture_album_get_name_size;
+    Media_picture_album_copy_nameFunction picture_album_copy_name;
+    Media_picture_album_get_is_disposedFunction picture_album_get_is_disposed;
+    Media_picture_album_disposeFunction picture_album_dispose;
+    Media_picture_album_destroyFunction picture_album_destroy;
+    Media_picture_album_equalsFunction picture_album_equals;
+    Media_picture_album_get_hash_codeFunction picture_album_get_hash_code;
+    Media_song_get_name_sizeFunction song_get_name_size;
+    Media_song_copy_nameFunction song_copy_name;
+    Media_song_get_is_disposedFunction song_get_is_disposed;
+    Media_song_disposeFunction song_dispose;
+    Media_song_destroyFunction song_destroy;
+    Media_song_equalsFunction song_equals;
+    Media_song_get_hash_codeFunction song_get_hash_code;
+    Media_album_collection_get_countFunction album_collection_get_count;
+    Media_album_collection_get_atFunction album_collection_get_at;
+    Media_album_collection_get_is_disposedFunction album_collection_get_is_disposed;
+    Media_album_collection_disposeFunction album_collection_dispose;
+    Media_album_collection_destroyFunction album_collection_destroy;
+    Media_artist_collection_get_countFunction artist_collection_get_count;
+    Media_artist_collection_get_atFunction artist_collection_get_at;
+    Media_artist_collection_get_is_disposedFunction artist_collection_get_is_disposed;
+    Media_artist_collection_disposeFunction artist_collection_dispose;
+    Media_artist_collection_destroyFunction artist_collection_destroy;
+    Media_genre_collection_get_countFunction genre_collection_get_count;
+    Media_genre_collection_get_atFunction genre_collection_get_at;
+    Media_genre_collection_get_is_disposedFunction genre_collection_get_is_disposed;
+    Media_genre_collection_disposeFunction genre_collection_dispose;
+    Media_genre_collection_destroyFunction genre_collection_destroy;
+    Media_playlist_collection_get_countFunction playlist_collection_get_count;
+    Media_playlist_collection_get_atFunction playlist_collection_get_at;
+    Media_playlist_collection_get_is_disposedFunction playlist_collection_get_is_disposed;
+    Media_playlist_collection_disposeFunction playlist_collection_dispose;
+    Media_playlist_collection_destroyFunction playlist_collection_destroy;
+    Media_picture_collection_get_countFunction picture_collection_get_count;
+    Media_picture_collection_get_atFunction picture_collection_get_at;
+    Media_picture_collection_get_is_disposedFunction picture_collection_get_is_disposed;
+    Media_picture_collection_disposeFunction picture_collection_dispose;
+    Media_picture_collection_destroyFunction picture_collection_destroy;
+    Media_picture_album_collection_get_countFunction picture_album_collection_get_count;
+    Media_picture_album_collection_get_atFunction picture_album_collection_get_at;
+    Media_picture_album_collection_get_is_disposedFunction picture_album_collection_get_is_disposed;
+    Media_picture_album_collection_disposeFunction picture_album_collection_dispose;
+    Media_picture_album_collection_destroyFunction picture_album_collection_destroy;
+    Media_song_collection_get_countFunction song_collection_get_count;
+    Media_song_collection_get_atFunction song_collection_get_at;
+    Media_song_collection_get_is_disposedFunction song_collection_get_is_disposed;
+    Media_song_collection_disposeFunction song_collection_dispose;
+    Media_song_collection_destroyFunction song_collection_destroy;
+    Media_album_get_artistFunction album_get_artist;
+    Media_album_get_genreFunction album_get_genre;
+    Media_album_get_durationFunction album_get_duration;
+    Media_album_get_has_artFunction album_get_has_art;
+    Media_album_get_art_sizeFunction album_get_art_size;
+    Media_album_copy_artFunction album_copy_art;
+    Media_album_get_thumbnail_sizeFunction album_get_thumbnail_size;
+    Media_album_copy_thumbnailFunction album_copy_thumbnail;
+    Media_album_get_songsFunction album_get_songs;
+    Media_artist_get_albumsFunction artist_get_albums;
+    Media_artist_get_songsFunction artist_get_songs;
+    Media_genre_get_albumsFunction genre_get_albums;
+    Media_genre_get_songsFunction genre_get_songs;
+    Media_playlist_get_durationFunction playlist_get_duration;
+    Media_playlist_get_songsFunction playlist_get_songs;
+    Media_picture_get_albumFunction picture_get_album;
+    Media_picture_get_date_unix_ticksFunction picture_get_date_unix_ticks;
+    Media_picture_get_widthFunction picture_get_width;
+    Media_picture_get_heightFunction picture_get_height;
+    Media_picture_get_image_sizeFunction picture_get_image_size;
+    Media_picture_copy_imageFunction picture_copy_image;
+    Media_picture_get_thumbnail_sizeFunction picture_get_thumbnail_size;
+    Media_picture_copy_thumbnailFunction picture_copy_thumbnail;
+    Media_picture_album_get_parentFunction picture_album_get_parent;
+    Media_picture_album_get_albumsFunction picture_album_get_albums;
+    Media_picture_album_get_picturesFunction picture_album_get_pictures;
+    Media_song_get_albumFunction song_get_album;
+    Media_song_get_artistFunction song_get_artist;
+    Media_song_get_genreFunction song_get_genre;
+    Media_song_get_durationFunction song_get_duration;
+    Media_song_get_is_protectedFunction song_get_is_protected;
+    Media_song_get_is_ratedFunction song_get_is_rated;
+    Media_song_get_play_countFunction song_get_play_count;
+    Media_song_get_ratingFunction song_get_rating;
+    Media_song_get_track_numberFunction song_get_track_number;
+    Media_song_create_from_uriFunction song_create_from_uri;
+    Media_media_player_get_game_has_controlFunction media_player_get_game_has_control;
+    Media_media_player_get_is_mutedFunction media_player_get_is_muted;
+    Media_media_player_set_is_mutedFunction media_player_set_is_muted;
+    Media_media_player_get_is_repeatingFunction media_player_get_is_repeating;
+    Media_media_player_set_is_repeatingFunction media_player_set_is_repeating;
+    Media_media_player_get_is_shuffledFunction media_player_get_is_shuffled;
+    Media_media_player_set_is_shuffledFunction media_player_set_is_shuffled;
+    Media_media_player_get_play_position_ticksFunction media_player_get_play_position_ticks;
+    Media_media_player_get_stateFunction media_player_get_state;
+    Media_media_player_get_volumeFunction media_player_get_volume;
+    Media_media_player_set_volumeFunction media_player_set_volume;
+    Media_media_player_get_is_visualization_enabledFunction media_player_get_is_visualization_enabled;
+    Media_media_player_set_is_visualization_enabledFunction media_player_set_is_visualization_enabled;
+    Media_media_player_get_visualization_dataFunction media_player_get_visualization_data;
+    Media_media_player_get_queueFunction media_player_get_queue;
+    Media_media_player_play_songFunction media_player_play_song;
+    Media_media_player_play_songsFunction media_player_play_songs;
+    Media_media_player_play_songs_fromFunction media_player_play_songs_from;
+    Media_media_player_move_nextFunction media_player_move_next;
+    Media_media_player_move_previousFunction media_player_move_previous;
+    Media_media_player_pauseFunction media_player_pause;
+    Media_media_player_resumeFunction media_player_resume;
+    Media_media_player_stopFunction media_player_stop;
+    Media_media_player_program_exit_extFunction media_player_program_exit_ext;
+    Media_media_player_raise_active_song_changed_extFunction media_player_raise_active_song_changed_ext;
+    Media_media_player_raise_media_state_changed_extFunction media_player_raise_media_state_changed_ext;
+    Media_media_player_subscribe_active_song_changed_extFunction media_player_subscribe_active_song_changed_ext;
+    Media_media_player_subscribe_media_state_changed_extFunction media_player_subscribe_media_state_changed_ext;
+    Media_media_player_unsubscribe_extFunction media_player_unsubscribe_ext;
+    Media_media_queue_get_countFunction media_queue_get_count;
+    Media_media_queue_get_active_song_indexFunction media_queue_get_active_song_index;
+    Media_media_queue_set_active_song_indexFunction media_queue_set_active_song_index;
+    Media_media_queue_get_atFunction media_queue_get_at;
+    Media_media_queue_destroyFunction media_queue_destroy;
+    Media_video_create_with_metadataFunction video_create_with_metadata;
+    Media_video_destroyFunction video_destroy;
+    Media_video_player_createFunction video_player_create;
+    Media_video_player_get_is_disposedFunction video_player_get_is_disposed;
+    Media_video_player_set_is_loopedFunction video_player_set_is_looped;
+    Media_video_player_set_is_mutedFunction video_player_set_is_muted;
+    Media_video_player_get_play_position_ticksFunction video_player_get_play_position_ticks;
+    Media_video_player_get_stateFunction video_player_get_state;
+    Media_video_player_set_volumeFunction video_player_set_volume;
+    Media_video_player_get_textureFunction video_player_get_texture;
+    Media_video_player_playFunction video_player_play;
+    Media_video_player_stopFunction video_player_stop;
+    Media_video_player_pauseFunction video_player_pause;
+    Media_video_player_resumeFunction video_player_resume;
+    Media_video_player_disposeFunction video_player_dispose;
+    Media_video_player_destroyFunction video_player_destroy;
+    Storage_selectFunction storage_device_show_selector;
+    Storage_select_playerFunction storage_device_show_selector_for_player;
+    Storage_select_spaceFunction storage_device_show_selector_with_space;
+    Storage_select_player_spaceFunction storage_device_show_selector_for_player_with_space;
+    Storage_device_get_int64Function storage_device_get_free_space;
+    Storage_device_get_boolFunction storage_device_get_is_connected;
+    Storage_device_get_int64Function storage_device_get_total_space;
+    Storage_device_pathFunction storage_device_delete_container;
+    Storage_subscribe_deviceFunction storage_device_subscribe_device_changed;
+    Storage_device_destroyFunction storage_device_destroy;
+    Storage_container_openFunction storage_container_open;
+    Storage_container_sizeFunction storage_container_get_display_name_size;
+    Storage_container_copyFunction storage_container_copy_display_name;
+    Storage_container_unaryFunction storage_container_dispose;
+    Storage_subscribe_containerFunction storage_container_subscribe_disposing;
+    Storage_unsubscribeFunction storage_container_unsubscribe_disposing;
+    Storage_container_pathFunction storage_container_create_directory;
+    Storage_container_queryFunction storage_container_directory_exists;
+    Storage_container_pathFunction storage_container_delete_directory;
+    Storage_container_queryFunction storage_container_file_exists;
+    Storage_container_pathFunction storage_container_delete_file;
+    Storage_name_countFunction storage_container_get_directory_name_count;
+    Storage_name_copyFunction storage_container_copy_directory_name;
+    Storage_name_countFunction storage_container_get_file_name_count;
+    Storage_name_copyFunction storage_container_copy_file_name;
+    Storage_create_streamFunction storage_container_create_file;
+    Storage_open_streamFunction storage_container_open_file;
+    Storage_open_stream_accessFunction storage_container_open_file_access;
+    Storage_open_stream_shareFunction storage_container_open_file_share;
+    Storage_container_unaryFunction storage_container_destroy;
+    Storage_stream_readFunction storage_stream_read;
+    Storage_stream_writeFunction storage_stream_write;
+    Storage_stream_seekFunction storage_stream_seek;
+    Storage_stream_get_int64Function storage_stream_get_position;
+    Storage_stream_get_int64Function storage_stream_get_length;
+    Storage_stream_set_int64Function storage_stream_set_length;
+    Storage_stream_get_boolFunction storage_stream_get_can_read;
+    Storage_stream_get_boolFunction storage_stream_get_can_write;
+    Storage_stream_get_boolFunction storage_stream_get_can_seek;
+    Storage_stream_unaryFunction storage_stream_flush;
+    Storage_stream_unaryFunction storage_stream_close;
 } CnaFunctions;
 
 typedef struct JavaGameContext {
@@ -2330,6 +2786,239 @@ JNIEXPORT jint JNICALL Java_org_openeggbert_cna_internal_NativeBindings_nativeLo
     LOAD(cue_pause, "cna_cue_pause");
     LOAD(cue_resume, "cna_cue_resume");
     LOAD(cue_stop, "cna_cue_stop");
+    LOAD(media_source_get_available_count, "cna_media_source_get_available_count");
+    LOAD(media_source_get_type_at, "cna_media_source_get_type_at");
+    LOAD(media_source_get_name_size_at, "cna_media_source_get_name_size_at");
+    LOAD(media_source_copy_name_at, "cna_media_source_copy_name_at");
+    LOAD(media_library_create, "cna_media_library_create");
+    LOAD(media_library_create_from_source, "cna_media_library_create_from_source");
+    LOAD(media_library_get_is_disposed, "cna_media_library_get_is_disposed");
+    LOAD(media_library_dispose, "cna_media_library_dispose");
+    LOAD(media_library_destroy, "cna_media_library_destroy");
+    LOAD(media_library_get_media_source_type, "cna_media_library_get_media_source_type");
+    LOAD(media_library_get_media_source_name_size, "cna_media_library_get_media_source_name_size");
+    LOAD(media_library_copy_media_source_name, "cna_media_library_copy_media_source_name");
+    LOAD(media_library_get_songs, "cna_media_library_get_songs");
+    LOAD(media_library_get_albums, "cna_media_library_get_albums");
+    LOAD(media_library_get_artists, "cna_media_library_get_artists");
+    LOAD(media_library_get_genres, "cna_media_library_get_genres");
+    LOAD(media_library_get_playlists, "cna_media_library_get_playlists");
+    LOAD(media_library_get_pictures, "cna_media_library_get_pictures");
+    LOAD(media_library_get_saved_pictures, "cna_media_library_get_saved_pictures");
+    LOAD(media_library_get_root_picture_album, "cna_media_library_get_root_picture_album");
+    LOAD(media_library_get_picture_from_token, "cna_media_library_get_picture_from_token");
+    LOAD(media_library_save_picture, "cna_media_library_save_picture");
+    LOAD(album_get_name_size, "cna_album_get_name_size");
+    LOAD(album_copy_name, "cna_album_copy_name");
+    LOAD(album_get_is_disposed, "cna_album_get_is_disposed");
+    LOAD(album_dispose, "cna_album_dispose");
+    LOAD(album_destroy, "cna_album_destroy");
+    LOAD(album_equals, "cna_album_equals");
+    LOAD(album_get_hash_code, "cna_album_get_hash_code");
+    LOAD(artist_get_name_size, "cna_artist_get_name_size");
+    LOAD(artist_copy_name, "cna_artist_copy_name");
+    LOAD(artist_get_is_disposed, "cna_artist_get_is_disposed");
+    LOAD(artist_dispose, "cna_artist_dispose");
+    LOAD(artist_destroy, "cna_artist_destroy");
+    LOAD(artist_equals, "cna_artist_equals");
+    LOAD(artist_get_hash_code, "cna_artist_get_hash_code");
+    LOAD(genre_get_name_size, "cna_genre_get_name_size");
+    LOAD(genre_copy_name, "cna_genre_copy_name");
+    LOAD(genre_get_is_disposed, "cna_genre_get_is_disposed");
+    LOAD(genre_dispose, "cna_genre_dispose");
+    LOAD(genre_destroy, "cna_genre_destroy");
+    LOAD(genre_equals, "cna_genre_equals");
+    LOAD(genre_get_hash_code, "cna_genre_get_hash_code");
+    LOAD(playlist_get_name_size, "cna_playlist_get_name_size");
+    LOAD(playlist_copy_name, "cna_playlist_copy_name");
+    LOAD(playlist_get_is_disposed, "cna_playlist_get_is_disposed");
+    LOAD(playlist_dispose, "cna_playlist_dispose");
+    LOAD(playlist_destroy, "cna_playlist_destroy");
+    LOAD(playlist_equals, "cna_playlist_equals");
+    LOAD(playlist_get_hash_code, "cna_playlist_get_hash_code");
+    LOAD(picture_get_name_size, "cna_picture_get_name_size");
+    LOAD(picture_copy_name, "cna_picture_copy_name");
+    LOAD(picture_get_is_disposed, "cna_picture_get_is_disposed");
+    LOAD(picture_dispose, "cna_picture_dispose");
+    LOAD(picture_destroy, "cna_picture_destroy");
+    LOAD(picture_equals, "cna_picture_equals");
+    LOAD(picture_get_hash_code, "cna_picture_get_hash_code");
+    LOAD(picture_album_get_name_size, "cna_picture_album_get_name_size");
+    LOAD(picture_album_copy_name, "cna_picture_album_copy_name");
+    LOAD(picture_album_get_is_disposed, "cna_picture_album_get_is_disposed");
+    LOAD(picture_album_dispose, "cna_picture_album_dispose");
+    LOAD(picture_album_destroy, "cna_picture_album_destroy");
+    LOAD(picture_album_equals, "cna_picture_album_equals");
+    LOAD(picture_album_get_hash_code, "cna_picture_album_get_hash_code");
+    LOAD(song_get_name_size, "cna_song_get_name_size");
+    LOAD(song_copy_name, "cna_song_copy_name");
+    LOAD(song_get_is_disposed, "cna_song_get_is_disposed");
+    LOAD(song_dispose, "cna_song_dispose");
+    LOAD(song_destroy, "cna_song_destroy");
+    LOAD(song_equals, "cna_song_equals");
+    LOAD(song_get_hash_code, "cna_song_get_hash_code");
+    LOAD(album_collection_get_count, "cna_album_collection_get_count");
+    LOAD(album_collection_get_at, "cna_album_collection_get_at");
+    LOAD(album_collection_get_is_disposed, "cna_album_collection_get_is_disposed");
+    LOAD(album_collection_dispose, "cna_album_collection_dispose");
+    LOAD(album_collection_destroy, "cna_album_collection_destroy");
+    LOAD(artist_collection_get_count, "cna_artist_collection_get_count");
+    LOAD(artist_collection_get_at, "cna_artist_collection_get_at");
+    LOAD(artist_collection_get_is_disposed, "cna_artist_collection_get_is_disposed");
+    LOAD(artist_collection_dispose, "cna_artist_collection_dispose");
+    LOAD(artist_collection_destroy, "cna_artist_collection_destroy");
+    LOAD(genre_collection_get_count, "cna_genre_collection_get_count");
+    LOAD(genre_collection_get_at, "cna_genre_collection_get_at");
+    LOAD(genre_collection_get_is_disposed, "cna_genre_collection_get_is_disposed");
+    LOAD(genre_collection_dispose, "cna_genre_collection_dispose");
+    LOAD(genre_collection_destroy, "cna_genre_collection_destroy");
+    LOAD(playlist_collection_get_count, "cna_playlist_collection_get_count");
+    LOAD(playlist_collection_get_at, "cna_playlist_collection_get_at");
+    LOAD(playlist_collection_get_is_disposed, "cna_playlist_collection_get_is_disposed");
+    LOAD(playlist_collection_dispose, "cna_playlist_collection_dispose");
+    LOAD(playlist_collection_destroy, "cna_playlist_collection_destroy");
+    LOAD(picture_collection_get_count, "cna_picture_collection_get_count");
+    LOAD(picture_collection_get_at, "cna_picture_collection_get_at");
+    LOAD(picture_collection_get_is_disposed, "cna_picture_collection_get_is_disposed");
+    LOAD(picture_collection_dispose, "cna_picture_collection_dispose");
+    LOAD(picture_collection_destroy, "cna_picture_collection_destroy");
+    LOAD(picture_album_collection_get_count, "cna_picture_album_collection_get_count");
+    LOAD(picture_album_collection_get_at, "cna_picture_album_collection_get_at");
+    LOAD(picture_album_collection_get_is_disposed, "cna_picture_album_collection_get_is_disposed");
+    LOAD(picture_album_collection_dispose, "cna_picture_album_collection_dispose");
+    LOAD(picture_album_collection_destroy, "cna_picture_album_collection_destroy");
+    LOAD(song_collection_get_count, "cna_song_collection_get_count");
+    LOAD(song_collection_get_at, "cna_song_collection_get_at");
+    LOAD(song_collection_get_is_disposed, "cna_song_collection_get_is_disposed");
+    LOAD(song_collection_dispose, "cna_song_collection_dispose");
+    LOAD(song_collection_destroy, "cna_song_collection_destroy");
+    LOAD(album_get_artist, "cna_album_get_artist");
+    LOAD(album_get_genre, "cna_album_get_genre");
+    LOAD(album_get_duration, "cna_album_get_duration");
+    LOAD(album_get_has_art, "cna_album_get_has_art");
+    LOAD(album_get_art_size, "cna_album_get_art_size");
+    LOAD(album_copy_art, "cna_album_copy_art");
+    LOAD(album_get_thumbnail_size, "cna_album_get_thumbnail_size");
+    LOAD(album_copy_thumbnail, "cna_album_copy_thumbnail");
+    LOAD(album_get_songs, "cna_album_get_songs");
+    LOAD(artist_get_albums, "cna_artist_get_albums");
+    LOAD(artist_get_songs, "cna_artist_get_songs");
+    LOAD(genre_get_albums, "cna_genre_get_albums");
+    LOAD(genre_get_songs, "cna_genre_get_songs");
+    LOAD(playlist_get_duration, "cna_playlist_get_duration");
+    LOAD(playlist_get_songs, "cna_playlist_get_songs");
+    LOAD(picture_get_album, "cna_picture_get_album");
+    LOAD(picture_get_date_unix_ticks, "cna_picture_get_date_unix_ticks");
+    LOAD(picture_get_width, "cna_picture_get_width");
+    LOAD(picture_get_height, "cna_picture_get_height");
+    LOAD(picture_get_image_size, "cna_picture_get_image_size");
+    LOAD(picture_copy_image, "cna_picture_copy_image");
+    LOAD(picture_get_thumbnail_size, "cna_picture_get_thumbnail_size");
+    LOAD(picture_copy_thumbnail, "cna_picture_copy_thumbnail");
+    LOAD(picture_album_get_parent, "cna_picture_album_get_parent");
+    LOAD(picture_album_get_albums, "cna_picture_album_get_albums");
+    LOAD(picture_album_get_pictures, "cna_picture_album_get_pictures");
+    LOAD(song_get_album, "cna_song_get_album");
+    LOAD(song_get_artist, "cna_song_get_artist");
+    LOAD(song_get_genre, "cna_song_get_genre");
+    LOAD(song_get_duration, "cna_song_get_duration");
+    LOAD(song_get_is_protected, "cna_song_get_is_protected");
+    LOAD(song_get_is_rated, "cna_song_get_is_rated");
+    LOAD(song_get_play_count, "cna_song_get_play_count");
+    LOAD(song_get_rating, "cna_song_get_rating");
+    LOAD(song_get_track_number, "cna_song_get_track_number");
+    LOAD(song_create_from_uri, "cna_song_create_from_uri");
+    LOAD(media_player_get_game_has_control, "cna_media_player_get_game_has_control");
+    LOAD(media_player_get_is_muted, "cna_media_player_get_is_muted");
+    LOAD(media_player_set_is_muted, "cna_media_player_set_is_muted");
+    LOAD(media_player_get_is_repeating, "cna_media_player_get_is_repeating");
+    LOAD(media_player_set_is_repeating, "cna_media_player_set_is_repeating");
+    LOAD(media_player_get_is_shuffled, "cna_media_player_get_is_shuffled");
+    LOAD(media_player_set_is_shuffled, "cna_media_player_set_is_shuffled");
+    LOAD(media_player_get_play_position_ticks, "cna_media_player_get_play_position_ticks");
+    LOAD(media_player_get_state, "cna_media_player_get_state");
+    LOAD(media_player_get_volume, "cna_media_player_get_volume");
+    LOAD(media_player_set_volume, "cna_media_player_set_volume");
+    LOAD(media_player_get_is_visualization_enabled, "cna_media_player_get_is_visualization_enabled");
+    LOAD(media_player_set_is_visualization_enabled, "cna_media_player_set_is_visualization_enabled");
+    LOAD(media_player_get_visualization_data, "cna_media_player_get_visualization_data");
+    LOAD(media_player_get_queue, "cna_media_player_get_queue");
+    LOAD(media_player_play_song, "cna_media_player_play_song");
+    LOAD(media_player_play_songs, "cna_media_player_play_songs");
+    LOAD(media_player_play_songs_from, "cna_media_player_play_songs_from");
+    LOAD(media_player_move_next, "cna_media_player_move_next");
+    LOAD(media_player_move_previous, "cna_media_player_move_previous");
+    LOAD(media_player_pause, "cna_media_player_pause");
+    LOAD(media_player_resume, "cna_media_player_resume");
+    LOAD(media_player_stop, "cna_media_player_stop");
+    LOAD(media_player_program_exit_ext, "cna_media_player_program_exit_ext");
+    LOAD(media_player_raise_active_song_changed_ext, "cna_media_player_raise_active_song_changed_ext");
+    LOAD(media_player_raise_media_state_changed_ext, "cna_media_player_raise_media_state_changed_ext");
+    LOAD(media_player_subscribe_active_song_changed_ext, "cna_media_player_subscribe_active_song_changed_ext");
+    LOAD(media_player_subscribe_media_state_changed_ext, "cna_media_player_subscribe_media_state_changed_ext");
+    LOAD(media_player_unsubscribe_ext, "cna_media_player_unsubscribe_ext");
+    LOAD(media_queue_get_count, "cna_media_queue_get_count");
+    LOAD(media_queue_get_active_song_index, "cna_media_queue_get_active_song_index");
+    LOAD(media_queue_set_active_song_index, "cna_media_queue_set_active_song_index");
+    LOAD(media_queue_get_at, "cna_media_queue_get_at");
+    LOAD(media_queue_destroy, "cna_media_queue_destroy");
+    LOAD(video_create_with_metadata, "cna_video_create_with_metadata");
+    LOAD(video_destroy, "cna_video_destroy");
+    LOAD(video_player_create, "cna_video_player_create");
+    LOAD(video_player_get_is_disposed, "cna_video_player_get_is_disposed");
+    LOAD(video_player_set_is_looped, "cna_video_player_set_is_looped");
+    LOAD(video_player_set_is_muted, "cna_video_player_set_is_muted");
+    LOAD(video_player_get_play_position_ticks, "cna_video_player_get_play_position_ticks");
+    LOAD(video_player_get_state, "cna_video_player_get_state");
+    LOAD(video_player_set_volume, "cna_video_player_set_volume");
+    LOAD(video_player_get_texture, "cna_video_player_get_texture");
+    LOAD(video_player_play, "cna_video_player_play");
+    LOAD(video_player_stop, "cna_video_player_stop");
+    LOAD(video_player_pause, "cna_video_player_pause");
+    LOAD(video_player_resume, "cna_video_player_resume");
+    LOAD(video_player_dispose, "cna_video_player_dispose");
+    LOAD(video_player_destroy, "cna_video_player_destroy");
+    LOAD(storage_device_show_selector, "cna_storage_device_show_selector");
+    LOAD(storage_device_show_selector_for_player, "cna_storage_device_show_selector_for_player");
+    LOAD(storage_device_show_selector_with_space, "cna_storage_device_show_selector_with_space");
+    LOAD(storage_device_show_selector_for_player_with_space, "cna_storage_device_show_selector_for_player_with_space");
+    LOAD(storage_device_get_free_space, "cna_storage_device_get_free_space");
+    LOAD(storage_device_get_is_connected, "cna_storage_device_get_is_connected");
+    LOAD(storage_device_get_total_space, "cna_storage_device_get_total_space");
+    LOAD(storage_device_delete_container, "cna_storage_device_delete_container");
+    LOAD(storage_device_subscribe_device_changed, "cna_storage_device_subscribe_device_changed");
+    LOAD(storage_device_destroy, "cna_storage_device_destroy");
+    LOAD(storage_container_open, "cna_storage_container_open");
+    LOAD(storage_container_get_display_name_size, "cna_storage_container_get_display_name_size");
+    LOAD(storage_container_copy_display_name, "cna_storage_container_copy_display_name");
+    LOAD(storage_container_dispose, "cna_storage_container_dispose");
+    LOAD(storage_container_subscribe_disposing, "cna_storage_container_subscribe_disposing");
+    LOAD(storage_container_unsubscribe_disposing, "cna_storage_container_unsubscribe_disposing");
+    LOAD(storage_container_create_directory, "cna_storage_container_create_directory");
+    LOAD(storage_container_directory_exists, "cna_storage_container_directory_exists");
+    LOAD(storage_container_delete_directory, "cna_storage_container_delete_directory");
+    LOAD(storage_container_file_exists, "cna_storage_container_file_exists");
+    LOAD(storage_container_delete_file, "cna_storage_container_delete_file");
+    LOAD(storage_container_get_directory_name_count, "cna_storage_container_get_directory_name_count");
+    LOAD(storage_container_copy_directory_name, "cna_storage_container_copy_directory_name");
+    LOAD(storage_container_get_file_name_count, "cna_storage_container_get_file_name_count");
+    LOAD(storage_container_copy_file_name, "cna_storage_container_copy_file_name");
+    LOAD(storage_container_create_file, "cna_storage_container_create_file");
+    LOAD(storage_container_open_file, "cna_storage_container_open_file");
+    LOAD(storage_container_open_file_access, "cna_storage_container_open_file_access");
+    LOAD(storage_container_open_file_share, "cna_storage_container_open_file_share");
+    LOAD(storage_container_destroy, "cna_storage_container_destroy");
+    LOAD(storage_stream_read, "cna_storage_stream_read");
+    LOAD(storage_stream_write, "cna_storage_stream_write");
+    LOAD(storage_stream_seek, "cna_storage_stream_seek");
+    LOAD(storage_stream_get_position, "cna_storage_stream_get_position");
+    LOAD(storage_stream_get_length, "cna_storage_stream_get_length");
+    LOAD(storage_stream_set_length, "cna_storage_stream_set_length");
+    LOAD(storage_stream_get_can_read, "cna_storage_stream_get_can_read");
+    LOAD(storage_stream_get_can_write, "cna_storage_stream_get_can_write");
+    LOAD(storage_stream_get_can_seek, "cna_storage_stream_get_can_seek");
+    LOAD(storage_stream_flush, "cna_storage_stream_flush");
+    LOAD(storage_stream_close, "cna_storage_stream_close");
 #undef LOAD
 
     return (jint)cna.get_abi_version();
@@ -10460,4 +11149,1438 @@ JNIEXPORT jstring JNICALL Java_org_openeggbert_cna_internal_NativeBindings_nativ
     jstring text = (*environment)->NewStringUTF(environment, message);
     free(message);
     return text;
+}
+
+/* ---- Media / video ----------------------------------------------------- */
+
+typedef CNA_Result (*MediaHandleSizeFunction)(CNA_Handle, uint64_t*);
+typedef CNA_Result (*MediaHandleCharCopyFunction)(CNA_Handle, char*, uint64_t, uint64_t*);
+typedef CNA_Result (*MediaHandleByteCopyFunction)(CNA_Handle, uint8_t*, uint64_t, uint64_t*);
+
+typedef struct JavaMediaEvents JavaMediaEvents;
+
+typedef struct JavaMediaEventContext {
+    JavaMediaEvents* events;
+    jint kind;
+} JavaMediaEventContext;
+
+struct JavaMediaEvents {
+    jobject type;
+    jmethodID event;
+    CNA_MediaPlayerEventRegistrationHandle registrations[2];
+    JavaMediaEventContext contexts[2];
+    atomic_int callbacks_enabled;
+};
+
+static JavaMediaEvents* media_events;
+
+static CNA_Result media_set_int(JNIEnv* environment, jintArray output, int32_t value)
+{
+    if (output == NULL || (*environment)->GetArrayLength(environment, output) < 1) {
+        return CNA_RESULT_INVALID_ARGUMENT;
+    }
+    const jint projected = (jint)value;
+    (*environment)->SetIntArrayRegion(environment, output, 0, 1, &projected);
+    return (*environment)->ExceptionCheck(environment)
+        ? CNA_RESULT_INVALID_STATE : CNA_RESULT_SUCCESS;
+}
+
+static CNA_Result media_set_pair(
+    JNIEnv* environment, jlongArray output, jintArray available,
+    CNA_Handle handle, CNA_Bool present)
+{
+    CNA_Result result = audio_set_long(environment, output, handle);
+    if (result == CNA_RESULT_SUCCESS) {
+        result = media_set_int(environment, available, present == CNA_TRUE ? 1 : 0);
+    }
+    return result;
+}
+
+static jbyteArray media_read_string(
+    JNIEnv* environment, CNA_Handle handle,
+    MediaHandleSizeFunction size_function, MediaHandleCharCopyFunction copy_function)
+{
+    uint64_t size = 0U;
+    CNA_Result result = size_function(handle, &size);
+    if (result != CNA_RESULT_SUCCESS || size > (uint64_t)INT32_MAX) return NULL;
+    jbyteArray output = (*environment)->NewByteArray(environment, (jsize)size);
+    if (output == NULL) return NULL;
+    if (size == 0U) return output;
+    jbyte* bytes = (*environment)->GetByteArrayElements(environment, output, NULL);
+    if (bytes == NULL) return NULL;
+    uint64_t written = 0U;
+    result = copy_function(handle, (char*)bytes, size, &written);
+    (*environment)->ReleaseByteArrayElements(environment, output, bytes, 0);
+    return result == CNA_RESULT_SUCCESS && written == size ? output : NULL;
+}
+
+static jbyteArray media_read_blob(
+    JNIEnv* environment, CNA_Handle handle,
+    MediaHandleSizeFunction size_function, MediaHandleByteCopyFunction copy_function)
+{
+    uint64_t size = 0U;
+    CNA_Result result = size_function(handle, &size);
+    if (result != CNA_RESULT_SUCCESS || size > (uint64_t)INT32_MAX) return NULL;
+    jbyteArray output = (*environment)->NewByteArray(environment, (jsize)size);
+    if (output == NULL) return NULL;
+    if (size == 0U) return output;
+    jbyte* bytes = (*environment)->GetByteArrayElements(environment, output, NULL);
+    if (bytes == NULL) return NULL;
+    uint64_t written = 0U;
+    result = copy_function(handle, (uint8_t*)bytes, size, &written);
+    (*environment)->ReleaseByteArrayElements(environment, output, bytes, 0);
+    return result == CNA_RESULT_SUCCESS && written == size ? output : NULL;
+}
+
+static void media_event_callback(void* context)
+{
+    JavaMediaEventContext* event_context = (JavaMediaEventContext*)context;
+    JavaMediaEvents* events = event_context == NULL ? NULL : event_context->events;
+    if (events == NULL || !atomic_load_explicit(
+            &events->callbacks_enabled, memory_order_acquire)) return;
+    int attached = 0;
+    JNIEnv* environment = callback_environment(&attached);
+    if (environment == NULL) return;
+    (*environment)->CallStaticVoidMethod(
+        environment, (jclass)events->type, events->event, event_context->kind);
+    if ((*environment)->ExceptionCheck(environment)) {
+        (*environment)->ExceptionClear(environment);
+    }
+    finish_callback_environment(attached);
+}
+
+JNIEXPORT jint JNICALL Java_org_openeggbert_cna_internal_NativeMedia_nativeGetMediaSourceCount(
+    JNIEnv* environment, jclass type, jlong game, jintArray output)
+{
+    (void)type;
+    uint32_t count = 0U;
+    CNA_Result result = cna.media_source_get_available_count(
+        java_game(game)->cna_handle, &count);
+    if (result == CNA_RESULT_SUCCESS && count > (uint32_t)INT32_MAX) {
+        result = CNA_RESULT_INVALID_STATE;
+    }
+    if (result == CNA_RESULT_SUCCESS) result = media_set_int(environment, output, (int32_t)count);
+    return (jint)result;
+}
+
+JNIEXPORT jint JNICALL Java_org_openeggbert_cna_internal_NativeMedia_nativeGetMediaSourceType(
+    JNIEnv* environment, jclass type, jlong game, jint index, jintArray output)
+{
+    (void)type;
+    if (index < 0) return (jint)CNA_RESULT_INVALID_ARGUMENT;
+    CNA_MediaSourceType value = CNA_MEDIA_SOURCE_TYPE_LOCAL_DEVICE;
+    CNA_Result result = cna.media_source_get_type_at(
+        java_game(game)->cna_handle, (uint32_t)index, &value);
+    if (result == CNA_RESULT_SUCCESS) result = media_set_int(environment, output, (int32_t)value);
+    return (jint)result;
+}
+
+JNIEXPORT jbyteArray JNICALL Java_org_openeggbert_cna_internal_NativeMedia_nativeGetMediaSourceName(
+    JNIEnv* environment, jclass type, jlong game, jint index)
+{
+    (void)type;
+    if (index < 0) return NULL;
+    CNA_Handle native_game = java_game(game)->cna_handle;
+    uint64_t size = 0U;
+    CNA_Result result = cna.media_source_get_name_size_at(
+        native_game, (uint32_t)index, &size);
+    if (result != CNA_RESULT_SUCCESS || size > (uint64_t)INT32_MAX) return NULL;
+    jbyteArray output = (*environment)->NewByteArray(environment, (jsize)size);
+    if (output == NULL || size == 0U) return output;
+    jbyte* bytes = (*environment)->GetByteArrayElements(environment, output, NULL);
+    if (bytes == NULL) return NULL;
+    uint64_t written = 0U;
+    result = cna.media_source_copy_name_at(
+        native_game, (uint32_t)index, (char*)bytes, size, &written);
+    (*environment)->ReleaseByteArrayElements(environment, output, bytes, 0);
+    return result == CNA_RESULT_SUCCESS && written == size ? output : NULL;
+}
+
+JNIEXPORT jint JNICALL Java_org_openeggbert_cna_internal_NativeMedia_nativeCreateLibrary(
+    JNIEnv* environment, jclass type, jlong game, jint source_index, jlongArray output)
+{
+    (void)type;
+    CNA_MediaLibraryHandle library = CNA_INVALID_HANDLE;
+    CNA_Result result = source_index < 0
+        ? cna.media_library_create(java_game(game)->cna_handle, &library)
+        : cna.media_library_create_from_source(
+            java_game(game)->cna_handle, (uint32_t)source_index, &library);
+    if (result == CNA_RESULT_SUCCESS) result = audio_set_long(environment, output, library);
+    return (jint)result;
+}
+
+JNIEXPORT jint JNICALL Java_org_openeggbert_cna_internal_NativeMedia_nativeGetLibraryInt(
+    JNIEnv* environment, jclass type, jlong library, jint property, jintArray output)
+{
+    (void)type;
+    CNA_Result result;
+    int32_t value = 0;
+    if (property == 0) {
+        CNA_Bool disposed = CNA_FALSE;
+        result = cna.media_library_get_is_disposed((CNA_Handle)library, &disposed);
+        value = disposed == CNA_TRUE ? 1 : 0;
+    } else if (property == 1) {
+        CNA_MediaSourceType source = CNA_MEDIA_SOURCE_TYPE_LOCAL_DEVICE;
+        result = cna.media_library_get_media_source_type((CNA_Handle)library, &source);
+        value = (int32_t)source;
+    } else {
+        return (jint)CNA_RESULT_INVALID_ARGUMENT;
+    }
+    if (result == CNA_RESULT_SUCCESS) result = media_set_int(environment, output, value);
+    return (jint)result;
+}
+
+JNIEXPORT jbyteArray JNICALL Java_org_openeggbert_cna_internal_NativeMedia_nativeGetLibraryString(
+    JNIEnv* environment, jclass type, jlong library)
+{
+    (void)type;
+    return media_read_string(environment, (CNA_Handle)library,
+        cna.media_library_get_media_source_name_size,
+        cna.media_library_copy_media_source_name);
+}
+
+JNIEXPORT jint JNICALL Java_org_openeggbert_cna_internal_NativeMedia_nativeGetLibraryChild(
+    JNIEnv* environment, jclass type, jlong library, jint relation, jbyteArray token,
+    jlongArray output, jintArray available)
+{
+    (void)type;
+    CNA_Handle child = CNA_INVALID_HANDLE;
+    CNA_Bool present = CNA_TRUE;
+    CNA_Result result;
+    switch (relation) {
+        case 0: result = cna.media_library_get_songs((CNA_Handle)library, &child); break;
+        case 1: result = cna.media_library_get_albums((CNA_Handle)library, &child); break;
+        case 2: result = cna.media_library_get_artists((CNA_Handle)library, &child); break;
+        case 3: result = cna.media_library_get_genres((CNA_Handle)library, &child); break;
+        case 4: result = cna.media_library_get_playlists((CNA_Handle)library, &child); break;
+        case 5: result = cna.media_library_get_pictures((CNA_Handle)library, &child); break;
+        case 6: result = cna.media_library_get_saved_pictures((CNA_Handle)library, &child); break;
+        case 7: result = cna.media_library_get_root_picture_album(
+            (CNA_Handle)library, &child, &present); break;
+        case 9: {
+            jbyte* bytes = NULL;
+            CNA_StringView view;
+            result = audio_string_view(environment, token, &bytes, &view);
+            if (result == CNA_RESULT_SUCCESS) result = cna.media_library_get_picture_from_token(
+                (CNA_Handle)library, view, &child, &present);
+            if (bytes != NULL) (*environment)->ReleaseByteArrayElements(
+                environment, token, bytes, JNI_ABORT);
+            break;
+        }
+        default: return (jint)CNA_RESULT_INVALID_ARGUMENT;
+    }
+    if (result == CNA_RESULT_SUCCESS) {
+        result = media_set_pair(environment, output, available, child, present);
+    }
+    return (jint)result;
+}
+
+JNIEXPORT jint JNICALL Java_org_openeggbert_cna_internal_NativeMedia_nativeSaveLibraryPicture(
+    JNIEnv* environment, jclass type, jlong library, jbyteArray name, jbyteArray input,
+    jlongArray output)
+{
+    (void)type;
+    if (input == NULL) return (jint)CNA_RESULT_INVALID_ARGUMENT;
+    jbyte* name_bytes = NULL;
+    CNA_StringView name_view;
+    CNA_Result result = audio_string_view(environment, name, &name_bytes, &name_view);
+    const jsize count = (*environment)->GetArrayLength(environment, input);
+    jbyte* bytes = result == CNA_RESULT_SUCCESS
+        ? (*environment)->GetByteArrayElements(environment, input, NULL) : NULL;
+    if (result == CNA_RESULT_SUCCESS && bytes == NULL && count != 0) {
+        result = CNA_RESULT_OUT_OF_MEMORY;
+    }
+    CNA_PictureHandle picture = CNA_INVALID_HANDLE;
+    if (result == CNA_RESULT_SUCCESS) result = cna.media_library_save_picture(
+        (CNA_Handle)library, name_view, (const uint8_t*)bytes, (uint64_t)count, &picture);
+    if (bytes != NULL) (*environment)->ReleaseByteArrayElements(
+        environment, input, bytes, JNI_ABORT);
+    if (name_bytes != NULL) (*environment)->ReleaseByteArrayElements(
+        environment, name, name_bytes, JNI_ABORT);
+    if (result == CNA_RESULT_SUCCESS) result = audio_set_long(environment, output, picture);
+    return (jint)result;
+}
+
+JNIEXPORT jint JNICALL Java_org_openeggbert_cna_internal_NativeMedia_nativeCloseLibrary(
+    JNIEnv* environment, jclass type, jlong library, jboolean destroy)
+{
+    (void)environment; (void)type;
+    return (jint)(destroy
+        ? cna.media_library_destroy((CNA_Handle)library)
+        : cna.media_library_dispose((CNA_Handle)library));
+}
+
+JNIEXPORT jint JNICALL Java_org_openeggbert_cna_internal_NativeMedia_nativeGetCollectionInt(
+    JNIEnv* environment, jclass type, jlong collection, jint kind, jint property, jintArray output)
+{
+    (void)type;
+    CNA_Result result;
+    int32_t value = 0;
+    if (property == 0) {
+        switch (kind) {
+            case 0: result = cna.album_collection_get_count(collection, &value); break;
+            case 1: result = cna.artist_collection_get_count(collection, &value); break;
+            case 2: result = cna.genre_collection_get_count(collection, &value); break;
+            case 3: result = cna.picture_collection_get_count(collection, &value); break;
+            case 4: result = cna.picture_album_collection_get_count(collection, &value); break;
+            case 5: result = cna.playlist_collection_get_count(collection, &value); break;
+            case 6: result = cna.song_collection_get_count(collection, &value); break;
+            default: return (jint)CNA_RESULT_INVALID_ARGUMENT;
+        }
+    } else if (property == 1) {
+        CNA_Bool disposed = CNA_FALSE;
+        switch (kind) {
+            case 0: result = cna.album_collection_get_is_disposed(collection, &disposed); break;
+            case 1: result = cna.artist_collection_get_is_disposed(collection, &disposed); break;
+            case 2: result = cna.genre_collection_get_is_disposed(collection, &disposed); break;
+            case 3: result = cna.picture_collection_get_is_disposed(collection, &disposed); break;
+            case 4: result = cna.picture_album_collection_get_is_disposed(collection, &disposed); break;
+            case 5: result = cna.playlist_collection_get_is_disposed(collection, &disposed); break;
+            case 6: result = cna.song_collection_get_is_disposed(collection, &disposed); break;
+            default: return (jint)CNA_RESULT_INVALID_ARGUMENT;
+        }
+        value = disposed == CNA_TRUE ? 1 : 0;
+    } else return (jint)CNA_RESULT_INVALID_ARGUMENT;
+    if (result == CNA_RESULT_SUCCESS) result = media_set_int(environment, output, value);
+    return (jint)result;
+}
+
+JNIEXPORT jint JNICALL Java_org_openeggbert_cna_internal_NativeMedia_nativeGetCollectionAt(
+    JNIEnv* environment, jclass type, jlong collection, jint kind, jint index, jlongArray output)
+{
+    (void)type;
+    CNA_Handle item = CNA_INVALID_HANDLE;
+    CNA_Result result;
+    switch (kind) {
+        case 0: result = cna.album_collection_get_at(collection, index, &item); break;
+        case 1: result = cna.artist_collection_get_at(collection, index, &item); break;
+        case 2: result = cna.genre_collection_get_at(collection, index, &item); break;
+        case 3: result = cna.picture_collection_get_at(collection, index, &item); break;
+        case 4: result = cna.picture_album_collection_get_at(collection, index, &item); break;
+        case 5: result = cna.playlist_collection_get_at(collection, index, &item); break;
+        case 6: result = cna.song_collection_get_at(collection, index, &item); break;
+        default: return (jint)CNA_RESULT_INVALID_ARGUMENT;
+    }
+    if (result == CNA_RESULT_SUCCESS) result = audio_set_long(environment, output, item);
+    return (jint)result;
+}
+
+JNIEXPORT jint JNICALL Java_org_openeggbert_cna_internal_NativeMedia_nativeCloseCollection(
+    JNIEnv* environment, jclass type, jlong collection, jint kind, jboolean destroy)
+{
+    (void)environment; (void)type;
+    switch (kind) {
+        case 0: return (jint)(destroy ? cna.album_collection_destroy(collection)
+            : cna.album_collection_dispose(collection));
+        case 1: return (jint)(destroy ? cna.artist_collection_destroy(collection)
+            : cna.artist_collection_dispose(collection));
+        case 2: return (jint)(destroy ? cna.genre_collection_destroy(collection)
+            : cna.genre_collection_dispose(collection));
+        case 3: return (jint)(destroy ? cna.picture_collection_destroy(collection)
+            : cna.picture_collection_dispose(collection));
+        case 4: return (jint)(destroy ? cna.picture_album_collection_destroy(collection)
+            : cna.picture_album_collection_dispose(collection));
+        case 5: return (jint)(destroy ? cna.playlist_collection_destroy(collection)
+            : cna.playlist_collection_dispose(collection));
+        case 6: return (jint)(destroy ? cna.song_collection_destroy(collection)
+            : cna.song_collection_dispose(collection));
+        default: return (jint)CNA_RESULT_INVALID_ARGUMENT;
+    }
+}
+
+JNIEXPORT jbyteArray JNICALL Java_org_openeggbert_cna_internal_NativeMedia_nativeGetObjectString(
+    JNIEnv* environment, jclass type, jlong object, jint kind, jint property)
+{
+    (void)type;
+    if (property != 0) return NULL;
+    MediaHandleSizeFunction size_function;
+    MediaHandleCharCopyFunction copy_function;
+    switch (kind) {
+        case 0: size_function = cna.album_get_name_size; copy_function = cna.album_copy_name; break;
+        case 1: size_function = cna.artist_get_name_size; copy_function = cna.artist_copy_name; break;
+        case 2: size_function = cna.genre_get_name_size; copy_function = cna.genre_copy_name; break;
+        case 3: size_function = cna.picture_get_name_size; copy_function = cna.picture_copy_name; break;
+        case 4: size_function = cna.picture_album_get_name_size; copy_function = cna.picture_album_copy_name; break;
+        case 5: size_function = cna.playlist_get_name_size; copy_function = cna.playlist_copy_name; break;
+        case 6: size_function = cna.song_get_name_size; copy_function = cna.song_copy_name; break;
+        default: return NULL;
+    }
+    return media_read_string(environment, object, size_function, copy_function);
+}
+
+JNIEXPORT jint JNICALL Java_org_openeggbert_cna_internal_NativeMedia_nativeGetObjectInt(
+    JNIEnv* environment, jclass type, jlong object, jint kind, jint property, jintArray output)
+{
+    (void)type;
+    CNA_Result result;
+    int32_t value = 0;
+    CNA_Bool boolean_value = CNA_FALSE;
+    if (property == 0) {
+        switch (kind) {
+            case 0: result = cna.album_get_is_disposed(object, &boolean_value); break;
+            case 1: result = cna.artist_get_is_disposed(object, &boolean_value); break;
+            case 2: result = cna.genre_get_is_disposed(object, &boolean_value); break;
+            case 3: result = cna.picture_get_is_disposed(object, &boolean_value); break;
+            case 4: result = cna.picture_album_get_is_disposed(object, &boolean_value); break;
+            case 5: result = cna.playlist_get_is_disposed(object, &boolean_value); break;
+            case 6: result = cna.song_get_is_disposed(object, &boolean_value); break;
+            default: return (jint)CNA_RESULT_INVALID_ARGUMENT;
+        }
+        value = boolean_value == CNA_TRUE ? 1 : 0;
+    } else if (kind == 0 && property == 1) {
+        result = cna.album_get_has_art(object, &boolean_value);
+        value = boolean_value == CNA_TRUE ? 1 : 0;
+    } else if (kind == 3 && property == 1) {
+        result = cna.picture_get_width(object, &value);
+    } else if (kind == 3 && property == 2) {
+        result = cna.picture_get_height(object, &value);
+    } else if (kind == 6) {
+        switch (property) {
+            case 1: result = cna.song_get_is_protected(object, &boolean_value);
+                value = boolean_value == CNA_TRUE ? 1 : 0; break;
+            case 2: result = cna.song_get_is_rated(object, &boolean_value);
+                value = boolean_value == CNA_TRUE ? 1 : 0; break;
+            case 3: result = cna.song_get_play_count(object, &value); break;
+            case 4: result = cna.song_get_rating(object, &value); break;
+            case 5: result = cna.song_get_track_number(object, &value); break;
+            default: return (jint)CNA_RESULT_INVALID_ARGUMENT;
+        }
+    } else return (jint)CNA_RESULT_INVALID_ARGUMENT;
+    if (result == CNA_RESULT_SUCCESS) result = media_set_int(environment, output, value);
+    return (jint)result;
+}
+
+JNIEXPORT jint JNICALL Java_org_openeggbert_cna_internal_NativeMedia_nativeGetObjectLong(
+    JNIEnv* environment, jclass type, jlong object, jint kind, jint property, jlongArray output)
+{
+    (void)type;
+    if (property != 0) return (jint)CNA_RESULT_INVALID_ARGUMENT;
+    int64_t value = 0;
+    CNA_Result result;
+    switch (kind) {
+        case 0: result = cna.album_get_duration(object, &value); break;
+        case 3: result = cna.picture_get_date_unix_ticks(object, &value); break;
+        case 5: result = cna.playlist_get_duration(object, &value); break;
+        case 6: result = cna.song_get_duration(object, &value); break;
+        default: return (jint)CNA_RESULT_INVALID_ARGUMENT;
+    }
+    if (result == CNA_RESULT_SUCCESS) result = audio_set_long(
+        environment, output, (uint64_t)value);
+    return (jint)result;
+}
+
+JNIEXPORT jint JNICALL Java_org_openeggbert_cna_internal_NativeMedia_nativeGetObjectChild(
+    JNIEnv* environment, jclass type, jlong object, jint kind, jint relation,
+    jlongArray output, jintArray available)
+{
+    (void)type;
+    CNA_Handle child = CNA_INVALID_HANDLE;
+    CNA_Bool present = CNA_TRUE;
+    CNA_Result result;
+    if (kind == 0) {
+        if (relation == 0) result = cna.album_get_artist(object, &child, &present);
+        else if (relation == 1) result = cna.album_get_genre(object, &child, &present);
+        else if (relation == 2) result = cna.album_get_songs(object, &child);
+        else return (jint)CNA_RESULT_INVALID_ARGUMENT;
+    } else if (kind == 1) {
+        if (relation == 0) result = cna.artist_get_albums(object, &child);
+        else if (relation == 1) result = cna.artist_get_songs(object, &child);
+        else return (jint)CNA_RESULT_INVALID_ARGUMENT;
+    } else if (kind == 2) {
+        if (relation == 0) result = cna.genre_get_albums(object, &child);
+        else if (relation == 1) result = cna.genre_get_songs(object, &child);
+        else return (jint)CNA_RESULT_INVALID_ARGUMENT;
+    } else if (kind == 3 && relation == 0) {
+        result = cna.picture_get_album(object, &child, &present);
+    } else if (kind == 4) {
+        if (relation == 0) result = cna.picture_album_get_parent(object, &child, &present);
+        else if (relation == 1) result = cna.picture_album_get_albums(object, &child);
+        else if (relation == 2) result = cna.picture_album_get_pictures(object, &child);
+        else return (jint)CNA_RESULT_INVALID_ARGUMENT;
+    } else if (kind == 5 && relation == 0) {
+        result = cna.playlist_get_songs(object, &child);
+    } else if (kind == 6) {
+        if (relation == 0) result = cna.song_get_album(object, &child, &present);
+        else if (relation == 1) result = cna.song_get_artist(object, &child, &present);
+        else if (relation == 2) result = cna.song_get_genre(object, &child, &present);
+        else return (jint)CNA_RESULT_INVALID_ARGUMENT;
+    } else return (jint)CNA_RESULT_INVALID_ARGUMENT;
+    if (result == CNA_RESULT_SUCCESS) {
+        result = media_set_pair(environment, output, available, child, present);
+    }
+    return (jint)result;
+}
+
+JNIEXPORT jbyteArray JNICALL Java_org_openeggbert_cna_internal_NativeMedia_nativeGetObjectBlob(
+    JNIEnv* environment, jclass type, jlong object, jint kind, jint property)
+{
+    (void)type;
+    if (kind == 0 && property == 0) return media_read_blob(environment, object,
+        cna.album_get_art_size, cna.album_copy_art);
+    if (kind == 0 && property == 1) return media_read_blob(environment, object,
+        cna.album_get_thumbnail_size, cna.album_copy_thumbnail);
+    if (kind == 3 && property == 0) return media_read_blob(environment, object,
+        cna.picture_get_image_size, cna.picture_copy_image);
+    if (kind == 3 && property == 1) return media_read_blob(environment, object,
+        cna.picture_get_thumbnail_size, cna.picture_copy_thumbnail);
+    return NULL;
+}
+
+JNIEXPORT jint JNICALL Java_org_openeggbert_cna_internal_NativeMedia_nativeObjectEquals(
+    JNIEnv* environment, jclass type, jlong left, jlong right, jint kind, jintArray output)
+{
+    (void)type;
+    CNA_Bool equal = CNA_FALSE;
+    CNA_Result result;
+    switch (kind) {
+        case 0: result = cna.album_equals(left, right, &equal); break;
+        case 1: result = cna.artist_equals(left, right, &equal); break;
+        case 2: result = cna.genre_equals(left, right, &equal); break;
+        case 3: result = cna.picture_equals(left, right, &equal); break;
+        case 4: result = cna.picture_album_equals(left, right, &equal); break;
+        case 5: result = cna.playlist_equals(left, right, &equal); break;
+        case 6: result = cna.song_equals(left, right, &equal); break;
+        default: return (jint)CNA_RESULT_INVALID_ARGUMENT;
+    }
+    if (result == CNA_RESULT_SUCCESS) result = media_set_int(
+        environment, output, equal == CNA_TRUE ? 1 : 0);
+    return (jint)result;
+}
+
+JNIEXPORT jint JNICALL Java_org_openeggbert_cna_internal_NativeMedia_nativeObjectHash(
+    JNIEnv* environment, jclass type, jlong object, jint kind, jintArray output)
+{
+    (void)type;
+    int32_t hash = 0;
+    CNA_Result result;
+    switch (kind) {
+        case 0: result = cna.album_get_hash_code(object, &hash); break;
+        case 1: result = cna.artist_get_hash_code(object, &hash); break;
+        case 2: result = cna.genre_get_hash_code(object, &hash); break;
+        case 3: result = cna.picture_get_hash_code(object, &hash); break;
+        case 4: result = cna.picture_album_get_hash_code(object, &hash); break;
+        case 5: result = cna.playlist_get_hash_code(object, &hash); break;
+        case 6: result = cna.song_get_hash_code(object, &hash); break;
+        default: return (jint)CNA_RESULT_INVALID_ARGUMENT;
+    }
+    if (result == CNA_RESULT_SUCCESS) result = media_set_int(environment, output, hash);
+    return (jint)result;
+}
+
+JNIEXPORT jint JNICALL Java_org_openeggbert_cna_internal_NativeMedia_nativeCloseObject(
+    JNIEnv* environment, jclass type, jlong object, jint kind, jboolean destroy)
+{
+    (void)environment; (void)type;
+    switch (kind) {
+        case 0: return (jint)(destroy ? cna.album_destroy(object) : cna.album_dispose(object));
+        case 1: return (jint)(destroy ? cna.artist_destroy(object) : cna.artist_dispose(object));
+        case 2: return (jint)(destroy ? cna.genre_destroy(object) : cna.genre_dispose(object));
+        case 3: return (jint)(destroy ? cna.picture_destroy(object) : cna.picture_dispose(object));
+        case 4: return (jint)(destroy ? cna.picture_album_destroy(object) : cna.picture_album_dispose(object));
+        case 5: return (jint)(destroy ? cna.playlist_destroy(object) : cna.playlist_dispose(object));
+        case 6: return (jint)(destroy ? cna.song_destroy(object) : cna.song_dispose(object));
+        default: return (jint)CNA_RESULT_INVALID_ARGUMENT;
+    }
+}
+
+JNIEXPORT jint JNICALL Java_org_openeggbert_cna_internal_NativeMedia_nativeCreateSong(
+    JNIEnv* environment, jclass type, jlong game, jbyteArray name, jbyteArray uri,
+    jlongArray output)
+{
+    (void)type;
+    jbyte* name_bytes = NULL;
+    jbyte* uri_bytes = NULL;
+    CNA_StringView name_view;
+    CNA_StringView uri_view;
+    CNA_Result result = audio_string_view(environment, name, &name_bytes, &name_view);
+    if (result == CNA_RESULT_SUCCESS) result = audio_string_view(
+        environment, uri, &uri_bytes, &uri_view);
+    CNA_SongHandle song = CNA_INVALID_HANDLE;
+    if (result == CNA_RESULT_SUCCESS) result = cna.song_create_from_uri(
+        java_game(game)->cna_handle, name_view, uri_view, &song);
+    if (name_bytes != NULL) (*environment)->ReleaseByteArrayElements(
+        environment, name, name_bytes, JNI_ABORT);
+    if (uri_bytes != NULL) (*environment)->ReleaseByteArrayElements(
+        environment, uri, uri_bytes, JNI_ABORT);
+    if (result == CNA_RESULT_SUCCESS) result = audio_set_long(environment, output, song);
+    return (jint)result;
+}
+
+JNIEXPORT jint JNICALL Java_org_openeggbert_cna_internal_NativeMedia_nativeGetMediaPlayerInt(
+    JNIEnv* environment, jclass type, jlong game, jint property, jintArray output)
+{
+    (void)type;
+    CNA_Handle native_game = java_game(game)->cna_handle;
+    CNA_Result result;
+    int32_t value = 0;
+    CNA_Bool boolean_value = CNA_FALSE;
+    CNA_MediaState state = CNA_MEDIA_STATE_STOPPED;
+    switch (property) {
+        case 0: result = cna.media_player_get_game_has_control(native_game, &boolean_value); break;
+        case 1: result = cna.media_player_get_is_muted(native_game, &boolean_value); break;
+        case 2: result = cna.media_player_get_is_repeating(native_game, &boolean_value); break;
+        case 3: result = cna.media_player_get_is_shuffled(native_game, &boolean_value); break;
+        case 4: result = cna.media_player_get_state(native_game, &state); value = (int32_t)state; break;
+        case 5: result = cna.media_player_get_is_visualization_enabled(native_game, &boolean_value); break;
+        default: return (jint)CNA_RESULT_INVALID_ARGUMENT;
+    }
+    if (property != 4) value = boolean_value == CNA_TRUE ? 1 : 0;
+    if (result == CNA_RESULT_SUCCESS) result = media_set_int(environment, output, value);
+    return (jint)result;
+}
+
+JNIEXPORT jint JNICALL Java_org_openeggbert_cna_internal_NativeMedia_nativeSetMediaPlayerInt(
+    JNIEnv* environment, jclass type, jlong game, jint property, jint value)
+{
+    (void)environment; (void)type;
+    CNA_Handle native_game = java_game(game)->cna_handle;
+    CNA_Bool boolean_value = value == 0 ? CNA_FALSE : CNA_TRUE;
+    switch (property) {
+        case 1: return (jint)cna.media_player_set_is_muted(native_game, boolean_value);
+        case 2: return (jint)cna.media_player_set_is_repeating(native_game, boolean_value);
+        case 3: return (jint)cna.media_player_set_is_shuffled(native_game, boolean_value);
+        case 5: return (jint)cna.media_player_set_is_visualization_enabled(native_game, boolean_value);
+        default: return (jint)CNA_RESULT_INVALID_ARGUMENT;
+    }
+}
+
+JNIEXPORT jint JNICALL Java_org_openeggbert_cna_internal_NativeMedia_nativeGetMediaPlayerLong(
+    JNIEnv* environment, jclass type, jlong game, jint property, jlongArray output)
+{
+    (void)type;
+    if (property != 0) return (jint)CNA_RESULT_INVALID_ARGUMENT;
+    int64_t ticks = 0;
+    CNA_Result result = cna.media_player_get_play_position_ticks(
+        java_game(game)->cna_handle, &ticks);
+    if (result == CNA_RESULT_SUCCESS) result = audio_set_long(
+        environment, output, (uint64_t)ticks);
+    return (jint)result;
+}
+
+JNIEXPORT jint JNICALL Java_org_openeggbert_cna_internal_NativeMedia_nativeGetMediaPlayerFloat(
+    JNIEnv* environment, jclass type, jlong game, jfloatArray output)
+{
+    (void)type;
+    float value = 0.0F;
+    CNA_Result result = cna.media_player_get_volume(java_game(game)->cna_handle, &value);
+    if (result == CNA_RESULT_SUCCESS) result = audio_set_float(environment, output, value);
+    return (jint)result;
+}
+
+JNIEXPORT jint JNICALL Java_org_openeggbert_cna_internal_NativeMedia_nativeSetMediaPlayerFloat(
+    JNIEnv* environment, jclass type, jlong game, jfloat value)
+{
+    (void)environment; (void)type;
+    return (jint)cna.media_player_set_volume(java_game(game)->cna_handle, (float)value);
+}
+
+JNIEXPORT jint JNICALL Java_org_openeggbert_cna_internal_NativeMedia_nativeMediaPlayerOperation(
+    JNIEnv* environment, jclass type, jlong game, jint operation, jlong handle, jint index)
+{
+    (void)environment; (void)type;
+    CNA_Handle native_game = java_game(game)->cna_handle;
+    switch (operation) {
+        case 0: return (jint)cna.media_player_play_song(native_game, handle);
+        case 1: return (jint)cna.media_player_play_songs(native_game, handle);
+        case 2: return (jint)cna.media_player_play_songs_from(native_game, handle, index);
+        case 3: return (jint)cna.media_player_pause(native_game);
+        case 4: return (jint)cna.media_player_resume(native_game);
+        case 5: return (jint)cna.media_player_stop(native_game);
+        case 6: return (jint)cna.media_player_move_next(native_game);
+        case 7: return (jint)cna.media_player_move_previous(native_game);
+        default: return (jint)CNA_RESULT_INVALID_ARGUMENT;
+    }
+}
+
+JNIEXPORT jint JNICALL Java_org_openeggbert_cna_internal_NativeMedia_nativeGetMediaQueue(
+    JNIEnv* environment, jclass type, jlong game, jlongArray output)
+{
+    (void)type;
+    CNA_MediaQueueHandle queue = CNA_INVALID_HANDLE;
+    CNA_Result result = cna.media_player_get_queue(java_game(game)->cna_handle, &queue);
+    if (result == CNA_RESULT_SUCCESS) result = audio_set_long(environment, output, queue);
+    return (jint)result;
+}
+
+JNIEXPORT jint JNICALL Java_org_openeggbert_cna_internal_NativeMedia_nativeGetMediaQueueInt(
+    JNIEnv* environment, jclass type, jlong queue, jint property, jintArray output)
+{
+    (void)type;
+    int32_t value = 0;
+    CNA_Result result = property == 0
+        ? cna.media_queue_get_count(queue, &value)
+        : property == 1 ? cna.media_queue_get_active_song_index(queue, &value)
+        : CNA_RESULT_INVALID_ARGUMENT;
+    if (result == CNA_RESULT_SUCCESS) result = media_set_int(environment, output, value);
+    return (jint)result;
+}
+
+JNIEXPORT jint JNICALL Java_org_openeggbert_cna_internal_NativeMedia_nativeSetMediaQueueIndex(
+    JNIEnv* environment, jclass type, jlong queue, jint index)
+{
+    (void)environment; (void)type;
+    return (jint)cna.media_queue_set_active_song_index(queue, index);
+}
+
+JNIEXPORT jint JNICALL Java_org_openeggbert_cna_internal_NativeMedia_nativeGetMediaQueueSong(
+    JNIEnv* environment, jclass type, jlong queue, jint index, jboolean active,
+    jlongArray output, jintArray available)
+{
+    (void)type;
+    if (active) return (jint)CNA_RESULT_NOT_SUPPORTED;
+    CNA_SongHandle song = CNA_INVALID_HANDLE;
+    CNA_Result result = cna.media_queue_get_at(queue, index, &song);
+    if (result == CNA_RESULT_SUCCESS) {
+        result = media_set_pair(environment, output, available, song, CNA_TRUE);
+    }
+    return (jint)result;
+}
+
+JNIEXPORT jint JNICALL Java_org_openeggbert_cna_internal_NativeMedia_nativeReleaseMediaQueue(
+    JNIEnv* environment, jclass type, jlong queue)
+{
+    (void)environment; (void)type;
+    return (jint)cna.media_queue_destroy(queue);
+}
+
+JNIEXPORT jint JNICALL Java_org_openeggbert_cna_internal_NativeMedia_nativeGetVisualizationData(
+    JNIEnv* environment, jclass type, jlong game, jfloatArray frequencies, jfloatArray samples)
+{
+    (void)type;
+    if (frequencies == NULL || samples == NULL ||
+        (*environment)->GetArrayLength(environment, frequencies) != 256 ||
+        (*environment)->GetArrayLength(environment, samples) != 256) {
+        return (jint)CNA_RESULT_INVALID_ARGUMENT;
+    }
+    CNA_VisualizationData data;
+    (void)memset(&data, 0, sizeof(data));
+    data.struct_size = (uint32_t)sizeof(data);
+    data.struct_version = UINT32_C(1);
+    CNA_Result result = cna.media_player_get_visualization_data(
+        java_game(game)->cna_handle, &data);
+    if (result == CNA_RESULT_SUCCESS) {
+        (*environment)->SetFloatArrayRegion(environment, frequencies, 0, 256, data.frequencies);
+        (*environment)->SetFloatArrayRegion(environment, samples, 0, 256, data.samples);
+        if ((*environment)->ExceptionCheck(environment)) result = CNA_RESULT_INVALID_STATE;
+    }
+    return (jint)result;
+}
+
+JNIEXPORT jint JNICALL Java_org_openeggbert_cna_internal_NativeMedia_nativeSubscribeEvents(
+    JNIEnv* environment, jclass type)
+{
+    if (media_events != NULL) return (jint)CNA_RESULT_SUCCESS;
+    JavaMediaEvents* events = (JavaMediaEvents*)calloc(1U, sizeof(JavaMediaEvents));
+    if (events == NULL) return (jint)CNA_RESULT_OUT_OF_MEMORY;
+    events->type = (*environment)->NewGlobalRef(environment, type);
+    events->event = (*environment)->GetStaticMethodID(
+        environment, type, "nativeMediaEvent", "(I)V");
+    if (events->type == NULL || events->event == NULL) {
+        if (events->type != NULL) (*environment)->DeleteGlobalRef(environment, events->type);
+        free(events);
+        return (jint)CNA_RESULT_INVALID_STATE;
+    }
+    atomic_init(&events->callbacks_enabled, 1);
+    events->contexts[0].events = events;
+    events->contexts[0].kind = 0;
+    events->contexts[1].events = events;
+    events->contexts[1].kind = 1;
+    CNA_Result result = cna.media_player_subscribe_active_song_changed_ext(
+        media_event_callback, &events->contexts[0], &events->registrations[0]);
+    if (result == CNA_RESULT_SUCCESS) result = cna.media_player_subscribe_media_state_changed_ext(
+        media_event_callback, &events->contexts[1], &events->registrations[1]);
+    if (result != CNA_RESULT_SUCCESS) {
+        atomic_store_explicit(&events->callbacks_enabled, 0, memory_order_release);
+        if (events->registrations[0] != CNA_INVALID_HANDLE) {
+            (void)cna.media_player_unsubscribe_ext(events->registrations[0]);
+        }
+        (*environment)->DeleteGlobalRef(environment, events->type);
+        free(events);
+        return (jint)result;
+    }
+    media_events = events;
+    return (jint)CNA_RESULT_SUCCESS;
+}
+
+JNIEXPORT jint JNICALL Java_org_openeggbert_cna_internal_NativeMedia_nativeMediaPlayerProgramExit(
+    JNIEnv* environment, jclass type, jlong game)
+{
+    (void)environment; (void)type;
+    return (jint)cna.media_player_program_exit_ext(java_game(game)->cna_handle);
+}
+
+JNIEXPORT jint JNICALL Java_org_openeggbert_cna_internal_NativeMedia_nativeRaiseMediaEvent(
+    JNIEnv* environment, jclass type, jlong game, jint kind)
+{
+    (void)environment; (void)type;
+    CNA_Handle native_game = java_game(game)->cna_handle;
+    if (kind == 0) return (jint)cna.media_player_raise_active_song_changed_ext(native_game);
+    if (kind == 1) return (jint)cna.media_player_raise_media_state_changed_ext(native_game);
+    return (jint)CNA_RESULT_INVALID_ARGUMENT;
+}
+
+JNIEXPORT jint JNICALL Java_org_openeggbert_cna_internal_NativeMedia_nativeCreateVideo(
+    JNIEnv* environment, jclass type, jlong game, jbyteArray file_name, jint duration_ms,
+    jint width, jint height, jfloat frames_per_second, jint soundtrack_type, jlongArray output)
+{
+    (void)type;
+    jbyte* bytes = NULL;
+    CNA_StringView view;
+    CNA_Result result = audio_string_view(environment, file_name, &bytes, &view);
+    CNA_Handle device = CNA_INVALID_HANDLE;
+    if (result == CNA_RESULT_SUCCESS) result = graphics_device_from_game(game, &device);
+    CNA_VideoHandle video = CNA_INVALID_HANDLE;
+    if (result == CNA_RESULT_SUCCESS) result = cna.video_create_with_metadata(
+        device, view, duration_ms, width, height, frames_per_second,
+        (CNA_VideoSoundtrackType)soundtrack_type, &video);
+    if (bytes != NULL) (*environment)->ReleaseByteArrayElements(
+        environment, file_name, bytes, JNI_ABORT);
+    if (result == CNA_RESULT_SUCCESS) result = audio_set_long(environment, output, video);
+    return (jint)result;
+}
+
+JNIEXPORT jint JNICALL Java_org_openeggbert_cna_internal_NativeMedia_nativeDestroyVideo(
+    JNIEnv* environment, jclass type, jlong video)
+{
+    (void)environment; (void)type;
+    return (jint)cna.video_destroy(video);
+}
+
+JNIEXPORT jint JNICALL Java_org_openeggbert_cna_internal_NativeMedia_nativeCreateVideoPlayer(
+    JNIEnv* environment, jclass type, jlong game, jlongArray output)
+{
+    (void)type;
+    CNA_VideoPlayerHandle player = CNA_INVALID_HANDLE;
+    CNA_Result result = cna.video_player_create(java_game(game)->cna_handle, &player);
+    if (result == CNA_RESULT_SUCCESS) result = audio_set_long(environment, output, player);
+    return (jint)result;
+}
+
+JNIEXPORT jint JNICALL Java_org_openeggbert_cna_internal_NativeMedia_nativeGetVideoPlayerInt(
+    JNIEnv* environment, jclass type, jlong player, jint property, jintArray output)
+{
+    (void)type;
+    CNA_Result result;
+    int32_t value = 0;
+    if (property == 0) {
+        CNA_Bool disposed = CNA_FALSE;
+        result = cna.video_player_get_is_disposed(player, &disposed);
+        value = disposed == CNA_TRUE ? 1 : 0;
+    } else if (property == 1) {
+        CNA_MediaState state = CNA_MEDIA_STATE_STOPPED;
+        result = cna.video_player_get_state(player, &state);
+        value = (int32_t)state;
+    } else return (jint)CNA_RESULT_INVALID_ARGUMENT;
+    if (result == CNA_RESULT_SUCCESS) result = media_set_int(environment, output, value);
+    return (jint)result;
+}
+
+JNIEXPORT jint JNICALL Java_org_openeggbert_cna_internal_NativeMedia_nativeSetVideoPlayerInt(
+    JNIEnv* environment, jclass type, jlong player, jint property, jint value)
+{
+    (void)environment; (void)type;
+    CNA_Bool boolean_value = value == 0 ? CNA_FALSE : CNA_TRUE;
+    if (property == 0) return (jint)cna.video_player_set_is_looped(player, boolean_value);
+    if (property == 1) return (jint)cna.video_player_set_is_muted(player, boolean_value);
+    return (jint)CNA_RESULT_INVALID_ARGUMENT;
+}
+
+JNIEXPORT jint JNICALL Java_org_openeggbert_cna_internal_NativeMedia_nativeGetVideoPlayerLong(
+    JNIEnv* environment, jclass type, jlong player, jint property, jlongArray output)
+{
+    (void)type;
+    if (property != 0) return (jint)CNA_RESULT_INVALID_ARGUMENT;
+    int64_t ticks = 0;
+    CNA_Result result = cna.video_player_get_play_position_ticks(player, &ticks);
+    if (result == CNA_RESULT_SUCCESS) result = audio_set_long(
+        environment, output, (uint64_t)ticks);
+    return (jint)result;
+}
+
+JNIEXPORT jint JNICALL Java_org_openeggbert_cna_internal_NativeMedia_nativeSetVideoPlayerFloat(
+    JNIEnv* environment, jclass type, jlong player, jfloat value)
+{
+    (void)environment; (void)type;
+    return (jint)cna.video_player_set_volume(player, value);
+}
+
+JNIEXPORT jint JNICALL Java_org_openeggbert_cna_internal_NativeMedia_nativeVideoPlayerOperation(
+    JNIEnv* environment, jclass type, jlong player, jint operation, jlong video)
+{
+    (void)environment; (void)type;
+    switch (operation) {
+        case 0: return (jint)cna.video_player_play(player, video);
+        case 1: return (jint)cna.video_player_pause(player);
+        case 2: return (jint)cna.video_player_resume(player);
+        case 3: return (jint)cna.video_player_stop(player);
+        default: return (jint)CNA_RESULT_INVALID_ARGUMENT;
+    }
+}
+
+JNIEXPORT jint JNICALL Java_org_openeggbert_cna_internal_NativeMedia_nativeGetVideoTexture(
+    JNIEnv* environment, jclass type, jlong player, jlongArray output, jintArray available)
+{
+    (void)type;
+    CNA_Handle texture = CNA_INVALID_HANDLE;
+    CNA_Bool present = CNA_FALSE;
+    CNA_Result result = cna.video_player_get_texture(player, &texture, &present);
+    if (result == CNA_RESULT_SUCCESS) {
+        result = media_set_pair(environment, output, available, texture, present);
+    }
+    return (jint)result;
+}
+
+JNIEXPORT jint JNICALL Java_org_openeggbert_cna_internal_NativeMedia_nativeCloseVideoPlayer(
+    JNIEnv* environment, jclass type, jlong player, jboolean destroy)
+{
+    (void)environment; (void)type;
+    return (jint)(destroy
+        ? cna.video_player_destroy(player) : cna.video_player_dispose(player));
+}
+
+/* ---- Storage ----------------------------------------------------------- */
+
+typedef struct JavaStorageEventContext {
+    jobject target;
+    jmethodID method;
+    CNA_Handle registration;
+    atomic_int enabled;
+} JavaStorageEventContext;
+
+static JavaStorageEventContext* storage_device_events;
+
+static void storage_completion_callback(void* context)
+{
+    int* const completions = (int*)context;
+    *completions += 1;
+}
+
+static void storage_java_callback(void* context)
+{
+    JavaStorageEventContext* const event = (JavaStorageEventContext*)context;
+    if (event == NULL || !atomic_load_explicit(&event->enabled, memory_order_acquire)) return;
+    int attached = 0;
+    JNIEnv* environment = callback_environment(&attached);
+    if (environment == NULL) return;
+    (*environment)->CallVoidMethod(environment, event->target, event->method);
+    if ((*environment)->ExceptionCheck(environment)) (*environment)->ExceptionClear(environment);
+    finish_callback_environment(attached);
+}
+
+static void storage_device_callback(void* context)
+{
+    JavaStorageEventContext* const event = (JavaStorageEventContext*)context;
+    if (event == NULL || !atomic_load_explicit(&event->enabled, memory_order_acquire)) return;
+    int attached = 0;
+    JNIEnv* environment = callback_environment(&attached);
+    if (environment == NULL) return;
+    (*environment)->CallStaticVoidMethod(
+        environment, (jclass)event->target, event->method);
+    if ((*environment)->ExceptionCheck(environment)) (*environment)->ExceptionClear(environment);
+    finish_callback_environment(attached);
+}
+
+JNIEXPORT jint JNICALL Java_org_openeggbert_cna_internal_NativeStorage_nativeSelectDevice(
+    JNIEnv* environment, jclass type, jint variant, jint player,
+    jint size_in_bytes, jint directory_count, jlongArray output)
+{
+    (void)type;
+    CNA_StorageDeviceHandle device = CNA_INVALID_HANDLE;
+    int completions = 0;
+    CNA_Result result;
+    switch (variant) {
+        case 0:
+            result = cna.storage_device_show_selector(
+                storage_completion_callback, &completions, &device);
+            break;
+        case 1:
+            result = cna.storage_device_show_selector_for_player(
+                (CNA_PlayerIndex)player,
+                storage_completion_callback,
+                &completions,
+                &device);
+            break;
+        case 2:
+            result = cna.storage_device_show_selector_with_space(
+                size_in_bytes,
+                directory_count,
+                storage_completion_callback,
+                &completions,
+                &device);
+            break;
+        case 3:
+            result = cna.storage_device_show_selector_for_player_with_space(
+                (CNA_PlayerIndex)player,
+                size_in_bytes,
+                directory_count,
+                storage_completion_callback,
+                &completions,
+                &device);
+            break;
+        default:
+            return (jint)CNA_RESULT_INVALID_ARGUMENT;
+    }
+    if (result == CNA_RESULT_SUCCESS && completions != 1) {
+        (void)cna.storage_device_destroy(device);
+        return (jint)CNA_RESULT_INVALID_STATE;
+    }
+    if (result == CNA_RESULT_SUCCESS) result = audio_set_long(environment, output, device);
+    return (jint)result;
+}
+
+JNIEXPORT jint JNICALL Java_org_openeggbert_cna_internal_NativeStorage_nativeGetDeviceInt(
+    JNIEnv* environment, jclass type, jlong device, jintArray output)
+{
+    (void)type;
+    CNA_Bool connected = CNA_FALSE;
+    CNA_Result result = cna.storage_device_get_is_connected(device, &connected);
+    if (result == CNA_RESULT_SUCCESS) {
+        result = media_set_int(environment, output, connected == CNA_TRUE ? 1 : 0);
+    }
+    return (jint)result;
+}
+
+JNIEXPORT jint JNICALL Java_org_openeggbert_cna_internal_NativeStorage_nativeGetDeviceLong(
+    JNIEnv* environment, jclass type, jlong device, jint property, jlongArray output)
+{
+    (void)type;
+    int64_t value = 0;
+    CNA_Result result;
+    if (property == 0) result = cna.storage_device_get_free_space(device, &value);
+    else if (property == 1) result = cna.storage_device_get_total_space(device, &value);
+    else return (jint)CNA_RESULT_INVALID_ARGUMENT;
+    if (result == CNA_RESULT_SUCCESS) {
+        result = audio_set_long(environment, output, (uint64_t)value);
+    }
+    return (jint)result;
+}
+
+JNIEXPORT jint JNICALL Java_org_openeggbert_cna_internal_NativeStorage_nativeDeleteContainer(
+    JNIEnv* environment, jclass type, jlong device, jbyteArray title_name)
+{
+    (void)type;
+    jbyte* bytes = NULL;
+    CNA_StringView view;
+    CNA_Result result = audio_string_view(environment, title_name, &bytes, &view);
+    if (result == CNA_RESULT_SUCCESS) {
+        result = cna.storage_device_delete_container(device, view);
+    }
+    if (bytes != NULL) {
+        (*environment)->ReleaseByteArrayElements(environment, title_name, bytes, JNI_ABORT);
+    }
+    return (jint)result;
+}
+
+JNIEXPORT jint JNICALL Java_org_openeggbert_cna_internal_NativeStorage_nativeDestroyDevice(
+    JNIEnv* environment, jclass type, jlong device)
+{
+    (void)environment; (void)type;
+    return (jint)cna.storage_device_destroy(device);
+}
+
+JNIEXPORT jint JNICALL Java_org_openeggbert_cna_internal_NativeStorage_nativeOpenContainer(
+    JNIEnv* environment, jclass type, jlong device, jbyteArray display_name, jlongArray output)
+{
+    (void)type;
+    jbyte* bytes = NULL;
+    CNA_StringView view;
+    CNA_Result result = audio_string_view(environment, display_name, &bytes, &view);
+    CNA_StorageContainerHandle container = CNA_INVALID_HANDLE;
+    int completions = 0;
+    if (result == CNA_RESULT_SUCCESS) {
+        result = cna.storage_container_open(
+            device, view, storage_completion_callback, &completions, &container);
+    }
+    if (bytes != NULL) {
+        (*environment)->ReleaseByteArrayElements(environment, display_name, bytes, JNI_ABORT);
+    }
+    if (result == CNA_RESULT_SUCCESS && completions != 1) {
+        (void)cna.storage_container_destroy(container);
+        return (jint)CNA_RESULT_INVALID_STATE;
+    }
+    if (result == CNA_RESULT_SUCCESS) result = audio_set_long(environment, output, container);
+    return (jint)result;
+}
+
+JNIEXPORT jbyteArray JNICALL Java_org_openeggbert_cna_internal_NativeStorage_nativeGetContainerDisplayName(
+    JNIEnv* environment, jclass type, jlong container)
+{
+    (void)type;
+    return media_read_string(
+        environment,
+        container,
+        cna.storage_container_get_display_name_size,
+        cna.storage_container_copy_display_name);
+}
+
+JNIEXPORT jint JNICALL Java_org_openeggbert_cna_internal_NativeStorage_nativeDisposeContainer(
+    JNIEnv* environment, jclass type, jlong container)
+{
+    (void)environment; (void)type;
+    return (jint)cna.storage_container_dispose(container);
+}
+
+JNIEXPORT jint JNICALL Java_org_openeggbert_cna_internal_NativeStorage_nativeDestroyContainer(
+    JNIEnv* environment, jclass type, jlong container)
+{
+    (void)environment; (void)type;
+    return (jint)cna.storage_container_destroy(container);
+}
+
+JNIEXPORT jint JNICALL Java_org_openeggbert_cna_internal_NativeStorage_nativeSubscribeContainerDisposing(
+    JNIEnv* environment, jclass type, jlong container, jobject target, jlongArray output)
+{
+    (void)type;
+    if (target == NULL || output == NULL ||
+        (*environment)->GetArrayLength(environment, output) < 2) {
+        return (jint)CNA_RESULT_INVALID_ARGUMENT;
+    }
+    JavaStorageEventContext* event =
+        (JavaStorageEventContext*)calloc(1U, sizeof(JavaStorageEventContext));
+    if (event == NULL) return (jint)CNA_RESULT_OUT_OF_MEMORY;
+    event->target = (*environment)->NewGlobalRef(environment, target);
+    jclass target_type = (*environment)->GetObjectClass(environment, target);
+    event->method = target_type == NULL ? NULL : (*environment)->GetMethodID(
+        environment, target_type, "nativeDisposingObserved", "()V");
+    if (target_type != NULL) (*environment)->DeleteLocalRef(environment, target_type);
+    if (event->target == NULL || event->method == NULL) {
+        if ((*environment)->ExceptionCheck(environment)) (*environment)->ExceptionClear(environment);
+        if (event->target != NULL) (*environment)->DeleteGlobalRef(environment, event->target);
+        free(event);
+        return (jint)CNA_RESULT_INVALID_STATE;
+    }
+    atomic_init(&event->enabled, 1);
+    CNA_Result result = cna.storage_container_subscribe_disposing(
+        container, storage_java_callback, event, &event->registration);
+    if (result != CNA_RESULT_SUCCESS) {
+        atomic_store_explicit(&event->enabled, 0, memory_order_release);
+        (*environment)->DeleteGlobalRef(environment, event->target);
+        free(event);
+        return (jint)result;
+    }
+    const jlong values[2] = {
+        (jlong)event->registration,
+        (jlong)(intptr_t)event
+    };
+    (*environment)->SetLongArrayRegion(environment, output, 0, 2, values);
+    if ((*environment)->ExceptionCheck(environment)) {
+        atomic_store_explicit(&event->enabled, 0, memory_order_release);
+        (void)cna.storage_container_unsubscribe_disposing(event->registration);
+        (*environment)->DeleteGlobalRef(environment, event->target);
+        free(event);
+        return (jint)CNA_RESULT_INVALID_STATE;
+    }
+    return (jint)CNA_RESULT_SUCCESS;
+}
+
+JNIEXPORT jint JNICALL Java_org_openeggbert_cna_internal_NativeStorage_nativeUnsubscribeContainerDisposing(
+    JNIEnv* environment, jclass type, jlong registration, jlong context)
+{
+    (void)type;
+    JavaStorageEventContext* event = (JavaStorageEventContext*)(intptr_t)context;
+    if (event == NULL || event->registration != (CNA_Handle)registration) {
+        return (jint)CNA_RESULT_INVALID_ARGUMENT;
+    }
+    atomic_store_explicit(&event->enabled, 0, memory_order_release);
+    CNA_Result result = cna.storage_container_unsubscribe_disposing(registration);
+    if (result != CNA_RESULT_SUCCESS) {
+        atomic_store_explicit(&event->enabled, 1, memory_order_release);
+        return (jint)result;
+    }
+    (*environment)->DeleteGlobalRef(environment, event->target);
+    free(event);
+    return (jint)CNA_RESULT_SUCCESS;
+}
+
+JNIEXPORT jint JNICALL Java_org_openeggbert_cna_internal_NativeStorage_nativePathOperation(
+    JNIEnv* environment, jclass type, jlong container, jint operation, jbyteArray path)
+{
+    (void)type;
+    jbyte* bytes = NULL;
+    CNA_StringView view;
+    CNA_Result result = audio_string_view(environment, path, &bytes, &view);
+    if (result == CNA_RESULT_SUCCESS) {
+        switch (operation) {
+            case 0: result = cna.storage_container_create_directory(container, view); break;
+            case 1: result = cna.storage_container_delete_directory(container, view); break;
+            case 2: result = cna.storage_container_delete_file(container, view); break;
+            default: result = CNA_RESULT_INVALID_ARGUMENT; break;
+        }
+    }
+    if (bytes != NULL) {
+        (*environment)->ReleaseByteArrayElements(environment, path, bytes, JNI_ABORT);
+    }
+    return (jint)result;
+}
+
+JNIEXPORT jint JNICALL Java_org_openeggbert_cna_internal_NativeStorage_nativePathQuery(
+    JNIEnv* environment, jclass type, jlong container, jboolean directory,
+    jbyteArray path, jintArray output)
+{
+    (void)type;
+    jbyte* bytes = NULL;
+    CNA_StringView view;
+    CNA_Result result = audio_string_view(environment, path, &bytes, &view);
+    CNA_Bool exists = CNA_FALSE;
+    if (result == CNA_RESULT_SUCCESS) {
+        result = directory
+            ? cna.storage_container_directory_exists(container, view, &exists)
+            : cna.storage_container_file_exists(container, view, &exists);
+    }
+    if (bytes != NULL) {
+        (*environment)->ReleaseByteArrayElements(environment, path, bytes, JNI_ABORT);
+    }
+    if (result == CNA_RESULT_SUCCESS) {
+        result = media_set_int(environment, output, exists == CNA_TRUE ? 1 : 0);
+    }
+    return (jint)result;
+}
+
+JNIEXPORT jint JNICALL Java_org_openeggbert_cna_internal_NativeStorage_nativeGetNameCount(
+    JNIEnv* environment, jclass type, jlong container, jboolean directories,
+    jbyteArray pattern, jlongArray output)
+{
+    (void)type;
+    jbyte* bytes = NULL;
+    CNA_StringView view;
+    CNA_Result result = audio_string_view(environment, pattern, &bytes, &view);
+    uint64_t count = 0U;
+    if (result == CNA_RESULT_SUCCESS) {
+        result = directories
+            ? cna.storage_container_get_directory_name_count(container, view, &count)
+            : cna.storage_container_get_file_name_count(container, view, &count);
+    }
+    if (bytes != NULL) {
+        (*environment)->ReleaseByteArrayElements(environment, pattern, bytes, JNI_ABORT);
+    }
+    if (result == CNA_RESULT_SUCCESS) result = audio_set_long(environment, output, count);
+    return (jint)result;
+}
+
+JNIEXPORT jbyteArray JNICALL Java_org_openeggbert_cna_internal_NativeStorage_nativeGetName(
+    JNIEnv* environment, jclass type, jlong container, jboolean directories,
+    jbyteArray pattern, jint index)
+{
+    (void)type;
+    if (index < 0) return NULL;
+    jbyte* pattern_bytes = NULL;
+    CNA_StringView view;
+    CNA_Result result = audio_string_view(environment, pattern, &pattern_bytes, &view);
+    uint64_t size = 0U;
+    Storage_name_copyFunction copy = directories
+        ? cna.storage_container_copy_directory_name
+        : cna.storage_container_copy_file_name;
+    if (result == CNA_RESULT_SUCCESS) {
+        result = copy(container, view, (uint64_t)index, NULL, 0U, &size);
+        if (result == CNA_RESULT_BUFFER_TOO_SMALL) result = CNA_RESULT_SUCCESS;
+    }
+    jbyteArray output = NULL;
+    if (result == CNA_RESULT_SUCCESS && size <= (uint64_t)INT32_MAX) {
+        output = (*environment)->NewByteArray(environment, (jsize)size);
+        if (output == NULL) result = CNA_RESULT_OUT_OF_MEMORY;
+    }
+    if (result == CNA_RESULT_SUCCESS && size != 0U) {
+        jbyte* output_bytes = (*environment)->GetByteArrayElements(environment, output, NULL);
+        if (output_bytes == NULL) result = CNA_RESULT_OUT_OF_MEMORY;
+        else {
+            uint64_t written = 0U;
+            result = copy(
+                container,
+                view,
+                (uint64_t)index,
+                (char*)output_bytes,
+                size,
+                &written);
+            (*environment)->ReleaseByteArrayElements(environment, output, output_bytes, 0);
+            if (result == CNA_RESULT_SUCCESS && written != size) result = CNA_RESULT_INVALID_STATE;
+        }
+    }
+    if (pattern_bytes != NULL) {
+        (*environment)->ReleaseByteArrayElements(environment, pattern, pattern_bytes, JNI_ABORT);
+    }
+    if (result != CNA_RESULT_SUCCESS) return NULL;
+    return output;
+}
+
+JNIEXPORT jint JNICALL Java_org_openeggbert_cna_internal_NativeStorage_nativeOpenStream(
+    JNIEnv* environment, jclass type, jlong container, jint variant,
+    jbyteArray path, jint mode, jint access, jint share, jlongArray output)
+{
+    (void)type;
+    jbyte* bytes = NULL;
+    CNA_StringView view;
+    CNA_Result result = audio_string_view(environment, path, &bytes, &view);
+    CNA_StorageStreamHandle stream = CNA_INVALID_HANDLE;
+    if (result == CNA_RESULT_SUCCESS) {
+        switch (variant) {
+            case 0:
+                result = cna.storage_container_create_file(container, view, &stream);
+                break;
+            case 1:
+                result = cna.storage_container_open_file(
+                    container, view, (CNA_FileMode)mode, &stream);
+                break;
+            case 2:
+                result = cna.storage_container_open_file_access(
+                    container, view, (CNA_FileMode)mode, (CNA_FileAccess)access, &stream);
+                break;
+            case 3:
+                result = cna.storage_container_open_file_share(
+                    container,
+                    view,
+                    (CNA_FileMode)mode,
+                    (CNA_FileAccess)access,
+                    (CNA_FileShare)share,
+                    &stream);
+                break;
+            default:
+                result = CNA_RESULT_INVALID_ARGUMENT;
+                break;
+        }
+    }
+    if (bytes != NULL) {
+        (*environment)->ReleaseByteArrayElements(environment, path, bytes, JNI_ABORT);
+    }
+    if (result == CNA_RESULT_SUCCESS) result = audio_set_long(environment, output, stream);
+    return (jint)result;
+}
+
+JNIEXPORT jint JNICALL Java_org_openeggbert_cna_internal_NativeStorage_nativeReadStream(
+    JNIEnv* environment, jclass type, jlong stream, jbyteArray buffer,
+    jint offset, jint count, jintArray output)
+{
+    (void)type;
+    if (buffer == NULL || offset < 0 || count < 0) return (jint)CNA_RESULT_INVALID_ARGUMENT;
+    const jsize length = (*environment)->GetArrayLength(environment, buffer);
+    if (offset > length || count > length - offset) return (jint)CNA_RESULT_INVALID_ARGUMENT;
+    jbyte* bytes = count == 0 ? NULL
+        : (*environment)->GetByteArrayElements(environment, buffer, NULL);
+    if (count != 0 && bytes == NULL) return (jint)CNA_RESULT_OUT_OF_MEMORY;
+    uint64_t read = 0U;
+    CNA_Result result = cna.storage_stream_read(
+        stream,
+        bytes == NULL ? NULL : (uint8_t*)(bytes + offset),
+        (uint64_t)count,
+        &read);
+    if (bytes != NULL) (*environment)->ReleaseByteArrayElements(environment, buffer, bytes, 0);
+    if (result == CNA_RESULT_SUCCESS && read > (uint64_t)INT32_MAX) {
+        result = CNA_RESULT_INVALID_STATE;
+    }
+    if (result == CNA_RESULT_SUCCESS) result = media_set_int(environment, output, (int32_t)read);
+    return (jint)result;
+}
+
+JNIEXPORT jint JNICALL Java_org_openeggbert_cna_internal_NativeStorage_nativeWriteStream(
+    JNIEnv* environment, jclass type, jlong stream, jbyteArray buffer, jint offset, jint count)
+{
+    (void)type;
+    if (buffer == NULL || offset < 0 || count < 0) return (jint)CNA_RESULT_INVALID_ARGUMENT;
+    const jsize length = (*environment)->GetArrayLength(environment, buffer);
+    if (offset > length || count > length - offset) return (jint)CNA_RESULT_INVALID_ARGUMENT;
+    jbyte* bytes = count == 0 ? NULL
+        : (*environment)->GetByteArrayElements(environment, buffer, NULL);
+    if (count != 0 && bytes == NULL) return (jint)CNA_RESULT_OUT_OF_MEMORY;
+    CNA_Result result = cna.storage_stream_write(
+        stream,
+        bytes == NULL ? NULL : (const uint8_t*)(bytes + offset),
+        (uint64_t)count);
+    if (bytes != NULL) {
+        (*environment)->ReleaseByteArrayElements(environment, buffer, bytes, JNI_ABORT);
+    }
+    return (jint)result;
+}
+
+JNIEXPORT jint JNICALL Java_org_openeggbert_cna_internal_NativeStorage_nativeSeekStream(
+    JNIEnv* environment, jclass type, jlong stream, jlong offset,
+    jint origin, jlongArray output)
+{
+    (void)type;
+    int64_t position = 0;
+    CNA_Result result = cna.storage_stream_seek(
+        stream, (int64_t)offset, (CNA_SeekOrigin)origin, &position);
+    if (result == CNA_RESULT_SUCCESS) {
+        result = audio_set_long(environment, output, (uint64_t)position);
+    }
+    return (jint)result;
+}
+
+JNIEXPORT jint JNICALL Java_org_openeggbert_cna_internal_NativeStorage_nativeGetStreamLong(
+    JNIEnv* environment, jclass type, jlong stream, jint property, jlongArray output)
+{
+    (void)type;
+    int64_t value = 0;
+    CNA_Result result;
+    if (property == 0) result = cna.storage_stream_get_position(stream, &value);
+    else if (property == 1) result = cna.storage_stream_get_length(stream, &value);
+    else return (jint)CNA_RESULT_INVALID_ARGUMENT;
+    if (result == CNA_RESULT_SUCCESS) {
+        result = audio_set_long(environment, output, (uint64_t)value);
+    }
+    return (jint)result;
+}
+
+JNIEXPORT jint JNICALL Java_org_openeggbert_cna_internal_NativeStorage_nativeSetStreamLength(
+    JNIEnv* environment, jclass type, jlong stream, jlong length)
+{
+    (void)environment; (void)type;
+    return (jint)cna.storage_stream_set_length(stream, (int64_t)length);
+}
+
+JNIEXPORT jint JNICALL Java_org_openeggbert_cna_internal_NativeStorage_nativeGetStreamCapability(
+    JNIEnv* environment, jclass type, jlong stream, jint capability, jintArray output)
+{
+    (void)type;
+    CNA_Bool value = CNA_FALSE;
+    CNA_Result result;
+    if (capability == 0) result = cna.storage_stream_get_can_read(stream, &value);
+    else if (capability == 1) result = cna.storage_stream_get_can_write(stream, &value);
+    else if (capability == 2) result = cna.storage_stream_get_can_seek(stream, &value);
+    else return (jint)CNA_RESULT_INVALID_ARGUMENT;
+    if (result == CNA_RESULT_SUCCESS) {
+        result = media_set_int(environment, output, value == CNA_TRUE ? 1 : 0);
+    }
+    return (jint)result;
+}
+
+JNIEXPORT jint JNICALL Java_org_openeggbert_cna_internal_NativeStorage_nativeFlushStream(
+    JNIEnv* environment, jclass type, jlong stream)
+{
+    (void)environment; (void)type;
+    return (jint)cna.storage_stream_flush(stream);
+}
+
+JNIEXPORT jint JNICALL Java_org_openeggbert_cna_internal_NativeStorage_nativeCloseStream(
+    JNIEnv* environment, jclass type, jlong stream)
+{
+    (void)environment; (void)type;
+    return (jint)cna.storage_stream_close(stream);
+}
+
+JNIEXPORT jint JNICALL Java_org_openeggbert_cna_internal_NativeStorage_nativeSubscribeDeviceChanged(
+    JNIEnv* environment, jclass type)
+{
+    if (storage_device_events != NULL) return (jint)CNA_RESULT_SUCCESS;
+    JavaStorageEventContext* event =
+        (JavaStorageEventContext*)calloc(1U, sizeof(JavaStorageEventContext));
+    if (event == NULL) return (jint)CNA_RESULT_OUT_OF_MEMORY;
+    event->target = (*environment)->NewGlobalRef(environment, type);
+    event->method = (*environment)->GetStaticMethodID(
+        environment, type, "nativeDeviceChanged", "()V");
+    if (event->target == NULL || event->method == NULL) {
+        if ((*environment)->ExceptionCheck(environment)) (*environment)->ExceptionClear(environment);
+        if (event->target != NULL) (*environment)->DeleteGlobalRef(environment, event->target);
+        free(event);
+        return (jint)CNA_RESULT_INVALID_STATE;
+    }
+    atomic_init(&event->enabled, 1);
+    CNA_Result result = cna.storage_device_subscribe_device_changed(
+        storage_device_callback, event, &event->registration);
+    if (result != CNA_RESULT_SUCCESS) {
+        atomic_store_explicit(&event->enabled, 0, memory_order_release);
+        (*environment)->DeleteGlobalRef(environment, event->target);
+        free(event);
+        return (jint)result;
+    }
+    storage_device_events = event;
+    return (jint)CNA_RESULT_SUCCESS;
 }

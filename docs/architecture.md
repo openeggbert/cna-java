@@ -47,8 +47,8 @@ The adapter owns callback global references, attaches/detaches callback threads,
 copies UTF-8 at the boundary, converts fixed-width ABI types, and turns CNA
 results into Java exceptions.
 
-XNA's input, media, and process-wide SoundEffect entry points are static, while every corresponding CNA C
-ABI route requires a game handle. CNA-Java therefore records the most recently
+XNA's input, MediaPlayer, and process-wide SoundEffect entry points are static, while every
+corresponding CNA C ABI route requires a game handle. CNA-Java therefore records the most recently
 created live `Game` as the process-current game and clears it on successful
 destruction, matching XNA's one-game-per-process model. Static `Keyboard` and
 `Mouse` calls without a live current game fail deterministically. Keyboard
@@ -97,6 +97,56 @@ surface on a later owner call/close; they never unwind across a JNI/native frame
 Failed unsubscribe re-enables and retains the registration rather than freeing a
 context CNA may still call.
 
+MediaLibrary is a native platform facade, not a host-filesystem adapter. Its seven collection
+facades are cached per library, are read-only, retain order, and cache each native object wrapper
+per index. Empty collections on the qualified HEADLESS Linux runtime are valid platform results;
+the binding never invents media records. Library-owned object relationships release only their C
+wrapper handles, while owned Song values from `Song.FromUri` and their queue aliases are tracked so
+there is no second native owner. Native destruction is transactional: a refused wrong-thread
+library or player close leaves the handle live and retryable.
+
+MediaPlayer state is process-global and uses the process-current Game. Its queue facade is stable
+within a Game lifetime and invalidated before the native Game is destroyed. Native callbacks own a
+per-registration JNI context, attach when necessary, and only enqueue an event kind. The existing
+FrameworkDispatcher/automatic successful-frame pump drains that queue on the owner thread. A
+throwing `Update` therefore skips delivery; listener exceptions are contained until the CNA Game
+callback barrier reports them, and later listeners still run. Shutdown disables and clears the
+queue before native destruction, then the next Game begins with a fresh queue generation.
+
+Video separates managed XNB metadata from native decoder ownership. ContentManager owns the
+hidden native Video handle and destroys it during reverse content teardown. VideoPlayer is a Game
+child and closes before the native Game. Loop, mute, and volume are Java-cached as XNA observes,
+including after player disposal; NaN volume is intentionally accepted while finite values outside
+`[0,1]` fail.
+
+`VideoPlayer.GetTexture` is an explicit borrowed boundary. A nonzero CNA frame handle becomes a
+parent-owned `Texture2D` facade whose `close()` never destroys native frame memory. The player
+invalidates that facade before every subsequent player operation, frame query, Stop, disposal, or
+Game teardown. CNA ABI 0.7 does not expose the XNA two-buffer identity or a frame generation token,
+so CNA-Java does not claim stable frame identity. HEADLESS may return no frame and no pixels are
+fabricated. The exact missing native contract is recorded in `media-video-evidence.md`.
+
+Storage uses the same one-live-Game ownership root because XNA exposes no public disposal member on
+`StorageDevice` while CNA returns an owned handle. A device owns its containers, each container
+owns its streams and disposal registration, and Game shutdown closes streams and containers in
+reverse order before destroying devices. The completed `Begin` results do not own native work:
+they retain arguments/state, invoke the callback synchronously, and create the device or container
+once at `End`, matching XNA IL. A refused wrong-thread close leaves all handles and owner lists
+intact for retry.
+
+Container `Disposing` has a two-stage callback boundary. The CNA callback only records native
+delivery in Java; after that native frame returns, `StorageContainer.close()` invokes a stable
+listener snapshot, contains handler failures until cleanup, and permits recursive close without a
+second event or destroy. Static `StorageDevice.DeviceChanged` has one process-owned native
+registration and enqueues into the existing FrameworkDispatcher owner-thread pump. Pending work is
+discarded at Game shutdown, so no callback targets a dead Game generation.
+
+XNA canonicalizes every file/directory path and checks that it remains below the container root.
+The qualified CNA ABI 0.7 artifact did not enforce that rule for parent traversal, so Java performs
+portable absolute/drive/traversal rejection before the native operation. This native semantic gap
+and the platform-pending origin of a real DeviceChanged event are recorded explicitly in
+`storage-evidence.md`.
+
 Managed XNB resources use the same graph rather than a parallel handle system.
 `ContentManager` records successfully constructed disposable resources once and
 unloads them in reverse construction order. Thus a SpriteFont native object is
@@ -138,6 +188,11 @@ payloads are never relabeled as RGBA. SpriteFont is assembled from its loaded
 atlas and copied glyph table. Model resolves shared vertex/index/effect
 resources through the normal XNB fixup mechanism and retains stable facade
 identity across its bone, mesh, and part graph.
+
+VideoReader follows XNA's boxed reader layout: file name, duration milliseconds, width, height,
+frames-per-second, and soundtrack type are each read through `ReadObject<T>`. The embedded video
+path is resolved relative to the XNB asset and Content root. Managed metadata stays observable even
+when the qualified HEADLESS backend cannot decode the referenced file.
 
 LZ4 and unknown compression dialects remain explicit failures. Neither framing
 path silently changes a texture format or falls back to CNA's loose-file loader.

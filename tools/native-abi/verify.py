@@ -87,8 +87,7 @@ def main() -> int:
     version = f"{encoded >> 16}.{(encoded >> 8) & 0xff}.{encoded & 0xff}"
     print(f"LIBRARY_ABI={version}")
     print(f"LIBRARY_SYMBOL_CHECK=PASS ({len(functions)}/{len(functions)})")
-    expected = (0 << 16) | (7 << 8)
-    return 0 if encoded >> 16 == 0 and encoded >= expected else 1
+    return 0 if encoded >> 16 == 0 and ((encoded >> 8) & 0xff) == 7 else 1
 
 
 if __name__ == "__main__":

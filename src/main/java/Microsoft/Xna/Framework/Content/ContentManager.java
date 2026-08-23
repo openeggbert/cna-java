@@ -4,6 +4,7 @@ import Microsoft.Xna.Framework.ServiceProvider;
 import Microsoft.Xna.Framework.Graphics.GraphicsDevice;
 import Microsoft.Xna.Framework.Graphics.IGraphicsDeviceService;
 import Microsoft.Xna.Framework.Graphics.SpriteFont;
+import Microsoft.Xna.Framework.Media.Video;
 import Microsoft.Xna.Framework.Graphics.Texture2D;
 import org.openeggbert.cna.internal.NativeBindings;
 import System.Action;
@@ -166,6 +167,8 @@ public class ContentManager implements AutoCloseable {
             try {
                 if (asset instanceof SpriteFont spriteFont) {
                     NativeBindings.closeSpriteFont(spriteFont);
+                } else if (asset instanceof Video video) {
+                    org.openeggbert.cna.internal.NativeMedia.closeVideo(video);
                 } else if (asset instanceof AutoCloseable closeable) {
                     closeable.close();
                 }
@@ -236,7 +239,7 @@ public class ContentManager implements AutoCloseable {
     }
 
     final void recordManagedNativeObject(Object value) {
-        if (!(value instanceof SpriteFont)) {
+        if (!(value instanceof SpriteFont) && !(value instanceof Video)) {
             throw new IllegalArgumentException("Unsupported managed native content object");
         }
         disposableAssets.add(value);
@@ -295,6 +298,8 @@ public class ContentManager implements AutoCloseable {
             try {
                 if (value instanceof SpriteFont font) {
                     NativeBindings.closeSpriteFont(font);
+                } else if (value instanceof Video video) {
+                    org.openeggbert.cna.internal.NativeMedia.closeVideo(video);
                 } else if (value instanceof AutoCloseable closeable) {
                     closeable.close();
                 }

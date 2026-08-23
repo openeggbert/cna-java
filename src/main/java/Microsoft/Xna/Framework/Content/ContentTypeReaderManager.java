@@ -21,6 +21,7 @@ import Microsoft.Xna.Framework.Graphics.VertexDeclaration;
 import Microsoft.Xna.Framework.Graphics.VertexElement;
 import Microsoft.Xna.Framework.Graphics.VertexElementFormat;
 import Microsoft.Xna.Framework.Graphics.VertexElementUsage;
+import Microsoft.Xna.Framework.Media.Video;
 import org.openeggbert.cna.content.ContentTypeReaderRegistry;
 import org.openeggbert.cna.internal.FacadeFactory;
 import org.openeggbert.cna.internal.NativeBindings;
@@ -143,6 +144,7 @@ public final class ContentTypeReaderManager {
             case "Microsoft.Xna.Framework.Content.EffectReader" -> new EffectReader();
             case "Microsoft.Xna.Framework.Content.BasicEffectReader" -> new BasicEffectReader();
             case "Microsoft.Xna.Framework.Content.ModelReader" -> new ModelReader();
+            case "Microsoft.Xna.Framework.Content.VideoReader" -> new VideoReader();
             default -> null;
         };
     }
@@ -330,6 +332,37 @@ public final class ContentTypeReaderManager {
                     lineSpacing, spacing, kerning, defaultCharacter);
             input.recordManagedNativeObject(font);
             return font;
+        }
+    }
+
+    private static final class VideoReader extends ContentTypeReaderOfT<Video> {
+        @Override
+        protected Video ReadTyped(ContentReader input, Video existing) {
+            String fileName = input.ReadObject(String.class);
+            int durationMilliseconds = input.ReadObject(Integer.class);
+            int width = input.ReadObject(Integer.class);
+            int height = input.ReadObject(Integer.class);
+            float framesPerSecond = input.ReadObject(Float.class);
+            int soundtrackType = input.ReadObject(Integer.class);
+            if (fileName == null) throw input.failure("Video file reference is null");
+            if (soundtrackType < 0 || soundtrackType > 2) {
+                throw input.failure("Video soundtrack identity is undefined");
+            }
+            String parent = "";
+            int slash = Math.max(input.getAssetName().lastIndexOf('/'),
+                    input.getAssetName().lastIndexOf('\\'));
+            if (slash >= 0) parent = input.getAssetName().substring(0, slash);
+            java.nio.file.Path relative = parent.isEmpty()
+                    ? java.nio.file.Path.of(fileName)
+                    : java.nio.file.Path.of(parent).resolve(fileName);
+            String resolved = java.nio.file.Path.of(
+                    input.getContentManager().getRootDirectory()).resolve(relative)
+                    .normalize().toString();
+            Video video = FacadeFactory.createVideo(
+                    input.getContentManager().graphicsDeviceForContentReader(), resolved,
+                    durationMilliseconds, width, height, framesPerSecond, soundtrackType);
+            input.recordManagedNativeObject(video);
+            return video;
         }
     }
 

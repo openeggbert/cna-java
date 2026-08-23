@@ -8,6 +8,9 @@ import Microsoft.Xna.Framework.Graphics.Texture2D;
 import Microsoft.Xna.Framework.Graphics.Texture3D;
 import Microsoft.Xna.Framework.Graphics.TextureCube;
 import Microsoft.Xna.Framework.Content.ContentReader;
+import Microsoft.Xna.Framework.Media.MediaPlayer;
+import Microsoft.Xna.Framework.Media.VisualizationData;
+import Microsoft.Xna.Framework.Media.Video;
 
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
@@ -25,6 +28,12 @@ public final class FacadeFactory {
     private static final Method TEXTURE_CUBE_INITIALIZE = textureCubeInitializeMethod();
     private static final Constructor<SpriteFont> SPRITE_FONT = spriteFontConstructor();
     private static final Method MODEL_READ = modelReadMethod();
+    private static final Method MEDIA_PLAYER_DISPATCH = mediaPlayerMethod(
+            "dispatchNativeEvent", int.class);
+    private static final Method MEDIA_PLAYER_RELEASE = mediaPlayerMethod(
+            "releaseGameScopedState");
+    private static final Method VISUALIZATION_SET = visualizationMethod();
+    private static final Constructor<Video> VIDEO = videoConstructor();
 
     private FacadeFactory() {
     }
@@ -124,6 +133,38 @@ public final class FacadeFactory {
                 throw runtime;
             }
             throw new IllegalStateException("Model reader failed", cause);
+        }
+    }
+
+    public static void dispatchMediaPlayerEvent(int kind) {
+        invokeStatic(MEDIA_PLAYER_DISPATCH, kind);
+    }
+
+    public static void releaseMediaPlayerState() {
+        invokeStatic(MEDIA_PLAYER_RELEASE);
+    }
+
+    public static void setVisualizationData(
+            VisualizationData data, float[] frequencies, float[] samples) {
+        try {
+            VISUALIZATION_SET.invoke(data, frequencies, samples);
+        } catch (IllegalAccessException exception) {
+            throw new IllegalStateException("Cannot fill VisualizationData", exception);
+        } catch (InvocationTargetException exception) {
+            throw facadeFailure("VisualizationData update failed", exception);
+        }
+    }
+
+    public static Video createVideo(GraphicsDevice graphicsDevice, String fileName,
+            int durationMilliseconds, int width, int height, float framesPerSecond,
+            int soundtrackType) {
+        try {
+            return VIDEO.newInstance(graphicsDevice, fileName, durationMilliseconds,
+                    width, height, framesPerSecond, soundtrackType);
+        } catch (InstantiationException | IllegalAccessException exception) {
+            throw new IllegalStateException("Cannot construct the Video facade", exception);
+        } catch (InvocationTargetException exception) {
+            throw facadeFailure("Video construction failed", exception);
         }
     }
 
@@ -244,6 +285,56 @@ public final class FacadeFactory {
             return method;
         } catch (NoSuchMethodException exception) {
             throw new ExceptionInInitializerError(exception);
+        }
+    }
+
+    private static Method mediaPlayerMethod(String name, Class<?>... parameters) {
+        try {
+            Method method = MediaPlayer.class.getDeclaredMethod(name, parameters);
+            if (!method.trySetAccessible()) {
+                throw new IllegalStateException("The runtime denied access to " + name);
+            }
+            return method;
+        } catch (NoSuchMethodException exception) {
+            throw new ExceptionInInitializerError(exception);
+        }
+    }
+
+    private static Method visualizationMethod() {
+        try {
+            Method method = VisualizationData.class.getDeclaredMethod(
+                    "setNativeValues", float[].class, float[].class);
+            if (!method.trySetAccessible()) {
+                throw new IllegalStateException(
+                        "The runtime denied access to VisualizationData storage");
+            }
+            return method;
+        } catch (NoSuchMethodException exception) {
+            throw new ExceptionInInitializerError(exception);
+        }
+    }
+
+    private static Constructor<Video> videoConstructor() {
+        try {
+            Constructor<Video> constructor = Video.class.getDeclaredConstructor(
+                    GraphicsDevice.class, String.class, int.class, int.class, int.class,
+                    float.class, int.class);
+            if (!constructor.trySetAccessible()) {
+                throw new IllegalStateException("The runtime denied access to the Video constructor");
+            }
+            return constructor;
+        } catch (NoSuchMethodException exception) {
+            throw new ExceptionInInitializerError(exception);
+        }
+    }
+
+    private static void invokeStatic(Method method, Object... arguments) {
+        try {
+            method.invoke(null, arguments);
+        } catch (IllegalAccessException exception) {
+            throw new IllegalStateException("Cannot invoke hidden media bridge", exception);
+        } catch (InvocationTargetException exception) {
+            throw facadeFailure("Media bridge invocation failed", exception);
         }
     }
 

@@ -95,10 +95,12 @@ public final class NativeBindings {
         String cnaLibrary = configuredCnaLibrary();
         int version = nativeLoadCna(cnaLibrary);
         int compiledMajor = versionMajor(COMPILED_ABI_VERSION);
-        if (versionMajor(version) != compiledMajor || version < COMPILED_ABI_VERSION) {
+        int compiledMinor = (COMPILED_ABI_VERSION >>> 8) & 0xff;
+        int runtimeMinor = (version >>> 8) & 0xff;
+        if (versionMajor(version) != compiledMajor || runtimeMinor != compiledMinor) {
             throw new UnsatisfiedLinkError(
-                    "CNA C ABI mismatch: cna-java requires at least "
-                            + formatVersion(COMPILED_ABI_VERSION) + " with major " + compiledMajor
+                    "CNA C ABI mismatch: cna-java requires ABI " + compiledMajor + "."
+                            + compiledMinor + ".x exactly"
                             + ", but loaded " + formatVersion(version));
         }
         runtimeAbiVersion = version;
@@ -133,6 +135,8 @@ public final class NativeBindings {
             GAMES.put(game, nativeGame);
             currentGame = game;
         }
+        NativeMedia.beginGameLifetime();
+        NativeStorage.beginGameLifetime();
         return nativeGame;
     }
 
@@ -779,6 +783,31 @@ public final class NativeBindings {
     public static void updateFrameworkDispatcher() {
         check("cna_framework_dispatcher_update", nativeUpdateFrameworkDispatcher(
                 currentGameHandle("FrameworkDispatcher.Update").requireValue()));
+        NativeMedia.dispatchPendingEvents();
+        NativeStorage.dispatchPendingEvents();
+    }
+
+    /** Creates a non-owning facade for a VideoPlayer-owned transient frame texture. */
+    public static Texture2D createBorrowedVideoTexture(
+            GraphicsDevice graphicsDevice, long nativeTexture) {
+        Objects.requireNonNull(graphicsDevice, "graphicsDevice");
+        if (nativeTexture == 0L) throw new IllegalArgumentException("nativeTexture");
+        Texture2D texture = FacadeFactory.createUninitializedTexture2D(graphicsDevice);
+        Game game = deviceGame(graphicsDevice);
+        NativeResourceHandle handle = new NativeResourceHandle(
+                nativeTexture, NativeHandle.Ownership.PARENT_OWNED, ignored -> { });
+        synchronized (GAMES) {
+            RESOURCES.put(texture, handle);
+            RESOURCE_OWNERS.put(texture, game);
+            GAME_RESOURCES.computeIfAbsent(game, ignored -> new ArrayList<>()).add(texture);
+        }
+        try {
+            FacadeFactory.initializeTexture2D(texture, textureInfoOrClose(texture));
+            return texture;
+        } catch (RuntimeException failure) {
+            closeAfterFailedFacade(texture, failure);
+            throw failure;
+        }
     }
 
     public static void registerWindowHandle(WindowHandle window, long value) {
@@ -3037,6 +3066,18 @@ public final class NativeBindings {
 
     static void destroyGame(Game game, long handle) {
         RuntimeException audioFailure = null;
+        RuntimeException mediaFailure = null;
+        RuntimeException storageFailure = null;
+        try {
+            NativeStorage.closeAllForGameShutdown();
+        } catch (RuntimeException exception) {
+            storageFailure = exception;
+        }
+        try {
+            NativeMedia.closeAllForGameShutdown();
+        } catch (RuntimeException exception) {
+            mediaFailure = exception;
+        }
         try {
             NativeAudio.closeAllForGameShutdown();
         } catch (RuntimeException exception) {
@@ -3047,6 +3088,8 @@ public final class NativeBindings {
         if (result != 0 && result != 9) {
             CnaNativeException nativeFailure = failure("cna_game_destroy", result);
             if (audioFailure != null) nativeFailure.addSuppressed(audioFailure);
+            if (mediaFailure != null) nativeFailure.addSuppressed(mediaFailure);
+            if (storageFailure != null) nativeFailure.addSuppressed(storageFailure);
             throw nativeFailure;
         }
         synchronized (GAMES) {
@@ -3067,7 +3110,16 @@ public final class NativeBindings {
                 currentGame = null;
             }
         }
-        if (audioFailure != null) throw audioFailure;
+        if (mediaFailure != null) {
+            if (audioFailure != null) mediaFailure.addSuppressed(audioFailure);
+            if (storageFailure != null) mediaFailure.addSuppressed(storageFailure);
+            throw mediaFailure;
+        }
+        if (audioFailure != null) {
+            if (storageFailure != null) audioFailure.addSuppressed(storageFailure);
+            throw audioFailure;
+        }
+        if (storageFailure != null) throw storageFailure;
     }
 
     static void destroyGraphicsDeviceManager(
