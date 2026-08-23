@@ -2,10 +2,12 @@ package org.openeggbert.cna.internal;
 
 import Microsoft.Xna.Framework.Game;
 import Microsoft.Xna.Framework.Graphics.GraphicsDevice;
+import Microsoft.Xna.Framework.Graphics.Model;
 import Microsoft.Xna.Framework.Graphics.SpriteFont;
 import Microsoft.Xna.Framework.Graphics.Texture2D;
 import Microsoft.Xna.Framework.Graphics.Texture3D;
 import Microsoft.Xna.Framework.Graphics.TextureCube;
+import Microsoft.Xna.Framework.Content.ContentReader;
 
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
@@ -22,6 +24,7 @@ public final class FacadeFactory {
     private static final Constructor<TextureCube> TEXTURE_CUBE = textureCubeConstructor();
     private static final Method TEXTURE_CUBE_INITIALIZE = textureCubeInitializeMethod();
     private static final Constructor<SpriteFont> SPRITE_FONT = spriteFontConstructor();
+    private static final Method MODEL_READ = modelReadMethod();
 
     private FacadeFactory() {
     }
@@ -107,6 +110,20 @@ public final class FacadeFactory {
             throw new IllegalStateException("Cannot construct the SpriteFont facade", exception);
         } catch (InvocationTargetException exception) {
             throw facadeFailure("SpriteFont facade construction failed", exception);
+        }
+    }
+
+    public static Model readModel(ContentReader input) {
+        try {
+            return (Model)MODEL_READ.invoke(null, input);
+        } catch (IllegalAccessException exception) {
+            throw new IllegalStateException("Cannot invoke the hidden Model reader", exception);
+        } catch (InvocationTargetException exception) {
+            Throwable cause = exception.getCause();
+            if (cause instanceof RuntimeException runtime) {
+                throw runtime;
+            }
+            throw new IllegalStateException("Model reader failed", cause);
         }
     }
 
@@ -213,6 +230,18 @@ public final class FacadeFactory {
                         "The runtime denied access to the hidden SpriteFont constructor");
             }
             return constructor;
+        } catch (NoSuchMethodException exception) {
+            throw new ExceptionInInitializerError(exception);
+        }
+    }
+
+    private static Method modelReadMethod() {
+        try {
+            Method method = Model.class.getDeclaredMethod("read", ContentReader.class);
+            if (!method.trySetAccessible()) {
+                throw new IllegalStateException("The runtime denied access to the hidden Model reader");
+            }
+            return method;
         } catch (NoSuchMethodException exception) {
             throw new ExceptionInInitializerError(exception);
         }

@@ -195,7 +195,12 @@ public class Texture2D extends Texture {
 
         TextureDataCodec codec = TextureDataCodec.select(
                 data.getClass().getComponentType(), getFormat());
-        long expected = expectedElementCount(getFormat(), transferWidth, transferHeight);
+        long expectedBytes = expectedByteCount(getFormat(), transferWidth, transferHeight);
+        if (expectedBytes % codec.elementSize() != 0L) {
+            throw new UnsupportedOperationException(
+                    "The selected Java element type cannot exactly represent the texture payload");
+        }
+        long expected = expectedBytes / codec.elementSize();
         if (elementCount != expected) {
             throw new IllegalArgumentException(
                     "Texture transfer element count must be exactly " + expected);
@@ -203,11 +208,18 @@ public class Texture2D extends Texture {
         return codec;
     }
 
-    private static long expectedElementCount(SurfaceFormat format, int width, int height) {
+    private static long expectedByteCount(SurfaceFormat format, int width, int height) {
         return switch (format) {
             case Dxt1 -> (long)((width + 3) >> 2) * ((height + 3) >> 2) * 8L;
             case Dxt3, Dxt5 -> (long)((width + 3) >> 2) * ((height + 3) >> 2) * 16L;
-            default -> (long)width * height;
+            case Bgr565, Bgra5551, Bgra4444, NormalizedByte2, HalfSingle ->
+                    (long)width * height * 2L;
+            case Color, NormalizedByte4, Rgba1010102, Rg32, Single, HalfVector2 ->
+                    (long)width * height * 4L;
+            case Rgba64, Vector2, HalfVector4, HdrBlendable ->
+                    (long)width * height * 8L;
+            case Vector4 -> (long)width * height * 16L;
+            case Alpha8 -> (long)width * height;
         };
     }
 

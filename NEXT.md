@@ -3,8 +3,8 @@
 **Updated:** 2026-08-23
 
 This is the tactical continuation point for the current uncommitted worktree. Read `plan.md`, this
-file, `docs/xna-java-mapping.md`, the verifier/native manifests, and both writable worktrees before
-changing code. Preserve the pre-existing untracked `out` file.
+file, `README.md`, `docs/xna-java-mapping.md`, `docs/architecture.md`, the verifier/native manifests,
+and both writable worktrees before changing code. Preserve the pre-existing untracked `out` file.
 
 ## Repository boundaries
 
@@ -20,8 +20,8 @@ Read-only references:
 - `../cna-ts`, `../cna-ts-template`;
 - `../cna-rust`, `../cna-rust-template`.
 
-No read-only sibling was modified. The template source is unchanged and clean apart from generated
-build output ignored by Git.
+No read-only sibling was modified. The template now intentionally contains the separate generated
+Texture2D XNB canary described below.
 
 ## Exact strict state
 
@@ -29,11 +29,11 @@ build output ignored by Git.
 REFERENCE_TYPES=257
 REFERENCE_MEMBERS=2964
 EXPECTED_JAVA_TYPES=265
-EXPECTED_JAVA_MEMBERS=3182
-TARGET_TYPES=184
-TARGET_MEMBERS=2492
-TOTAL_DIAGNOSTICS=81
-MISSING_TYPE=81
+EXPECTED_JAVA_MEMBERS=3200
+TARGET_TYPES=205
+TARGET_MEMBERS=2730
+TOTAL_DIAGNOSTICS=60
+MISSING_TYPE=60
 MISSING_MEMBER=0
 
 ACCESSIBILITY_MISMATCH=0
@@ -55,14 +55,10 @@ XNA_MAPPING_MISMATCH=0
 ALLOWLIST_ENTRIES=0
 ```
 
-`MISSING_MEMBER=0` is now a permanent invariant. Local diagnostics are zero for Effect,
-EffectTechnique, EffectPass, EffectParameter, ContentManager, ContentReader, ContentTypeReader,
-SpriteBatch, DynamicVertexBuffer, DynamicIndexBuffer, and TouchPanel.
-
-The remaining exact type distribution is:
+The exact remaining distribution is:
 
 ```text
-Graphics=21
+Graphics=0
 Audio/XACT=19
 Media/Video=24
 Storage=3
@@ -70,111 +66,124 @@ Design=13
 GamerServices=1
 ```
 
-There are no remaining missing Content, Touch, or non-Design core types.
+There are no missing Graphics, Content, Touch, or ordinary non-Design core types.
 
-## What is complete in this worktree
+## Completed graphics milestone
 
-- Full native Effect reflection/ownership family and typed parameter APIs.
-- Both real Effect-bearing SpriteBatch.Begin overloads.
-- Managed XNB ContentReader type system, custom reader registry, reader table, shared resources,
-  existing instances, external references, disposable ownership, and real ContentManager.ReadAsset.
-- Serializer attributes and ResourceContentManager.
-- FrameworkDispatcher and TitleContainer.
-- DynamicVertexBuffer/DynamicIndexBuffer with real option-aware full uploads and ContentLost
-  subscriptions; unrepresentable offset+Discard/NoOverwrite is explicitly rejected.
-- TouchPanel/capabilities/gesture types and real CNA polling/gesture routes.
-- IEffectFog/Lights/Matrices, DirectionalLight, and executable BasicEffect.
-- Isolated live-native-graph JVM shutdown test.
+- AlphaTestEffect, DualTextureEffect, EnvironmentMapEffect, and SkinnedEffect have exact contracts,
+  real CNA objects/passes/clones, validation, wrong-device checks, and ownership tests.
+- EffectMaterial and OcclusionQuery are strict-complete and CNA-native verified. The three graphics
+  device exceptions are strict-complete.
+- Model, ModelBone, ModelMesh, ModelMeshPart, all four collections/enumerators, and
+  ModelEffectCollection are strict-complete. Identity/read-only graph behavior and a real indexed
+  draw are verified.
+- Internal Texture2DReader supports exact uncompressed Color payloads and mip chains. Other formats
+  are rejected without fidelity loss until CNA exposes matching surface-format routes.
+- Internal SpriteFontReader creates a real CNA font over its content-owned Color atlas; measure,
+  fallback, DrawString, and teardown are verified.
+- Internal VertexDeclaration/VertexBuffer/IndexBuffer/Effect/BasicEffect/Model readers load a
+  synthetic legal model through the normal reader table and shared-resource mechanism.
 
-Do not redo completed math, device, buffer, SpriteFont, texture, Effect, ContentReader, core runtime,
-dynamic buffer, TouchPanel, or BasicEffect work.
+Do not redo these families without evidence of a defect. In particular, do not weaken the bound
+vertex/index guard, make Model disposable, add public reader types, or fall back to loose-asset
+loading for XNB resources.
 
-## XNB continuation boundary
+## Remaining XNB boundary
 
-Custom readers and shared resources pass through ordinary ContentManager load. Primitive/String and
-Vector/Quaternion/Matrix/Color built-in readers are real. Windows uncompressed XNB version 5 is
-supported with strict framing validation.
+Uncompressed Windows XNB v5 is stable. LZX-compressed framing remains unimplemented and fails
+explicitly. Texture formats other than Color require CNA format-preserving creation/upload;
+DXT payloads must not be decoded or relabeled silently. The verified Model fixture uses
+VertexDeclaration, vertex/index buffers, and BasicEffect. EffectMaterialReader and additional
+compiled-model dependency readers remain asset-family gaps, so do not claim arbitrary Model XNB
+compatibility.
 
-Still missing:
-
-- LZX-compressed XNB;
-- Texture2DReader and other graphics/resource built-ins;
-- Texture2D XNB upload;
-- model XNB readers.
-
-Do not route these through CNA's loose-loader registry or wait blindly for
-`RegisterAllBuiltInXnbReaders`. Add managed readers and call existing native create/upload APIs only
-where native resources are actually required.
+The next coherent XNB task is a complete managed XNA LZX framing implementation with valid,
+truncated, bad-length, wrong-size, multi-block, and post-decompression reader-failure fixtures.
 
 ## Native evidence
 
 ```text
-starting bound functions=194
-current bound functions=338
+starting bound functions=338
+current bound functions=399
 HEADER_ABI=0.7.0
 MANIFEST_JNI_BINDING_CHECK=PASS
 LAYOUT_SIGNATURE_PROBE=PASS
 LIBRARY_ABI=0.7.0
-LIBRARY_SYMBOL_CHECK=PASS (338/338)
+LIBRARY_SYMBOL_CHECK=PASS (399/399)
 ```
 
-This run added 113 Effect/stock/SpriteBatch, 5 Texture3D, 1 FrameworkDispatcher, 5 dynamic-buffer,
-and 20 touch symbols. Content XNB added no JNI dependency.
-
-Read-only CNA HEAD remains `1bb2145d99ed572dd4eb15009c34e2e5f410fcf0` and still has the
-documented networking-off missing detail header and networking-on 49/50 renderer inventory
-blockers. Continue integration with the compatible ABI-0.7 library:
+The 61 new functions cover EffectMaterial, four stock effects, OcclusionQuery, and SpriteFont
+construction. Read-only CNA HEAD remains `1bb2145d99ed572dd4eb15009c34e2e5f410fcf0`; its
+networking-off missing GamerServices detail header and networking-on renderer 49/50 blockers are
+unchanged. Use the compatible ABI-0.7 library:
 
 ```text
 /tmp/cna-java-native-working-070/modules/c-api/libcna_c_api.so
 ```
 
-Never silently load an ABI-incompatible library and do not modify `../cna`.
+Do not modify CNA or silently accept a different ABI.
 
-## Behavior and ownership evidence
+## Behavior, ownership, and verification evidence
 
-The corpus remains 117 observations: 94 math/geometry and 23 input. A temporary FNA probe ran the
-11 new packed cases: 9 matched XNA IL expectations and 2 differed (`packed.half4.saturation`,
-`packed.nshort4.minimum`). XNA execution is unavailable on Linux. The local MonoGame assembly
-cannot run without a missing .NET 6+ runtime, so no new MonoGame claim was made. Existing frozen
-106-line results remain FNA 49 and MonoGame 52 differences.
+The normalized text corpus remains 117 observations (94 math/geometry, 23 input); no new XNA, FNA,
+or MonoGame corpus run was performed. The graphics milestone instead added deterministic native and
+managed tests. Final test evidence is 109 tests, 0 failures, 0 errors, 0 skipped on Linux x86-64
+HEADLESS/NULL audio.
 
-Content tests cover duplicate disposables and partial-failure cleanup. Effect tests cover stable
-identity, foreign ownership, parent disposal with live children, and double close. Dynamic tests
-cover callbacks, invalid options/recovery, binding guards, and parent teardown. The isolated child
-JVM exits 0 with a live native ownership graph. No sanitizer run was performed and no allocator leak
-claim is valid.
+Existing stress remains green: 25 Game cycles, 200 Texture2D/SpriteBatch cycles, 25 bound-buffer
+cycles, 150 draw calls, and the isolated live-graph JVM shutdown test. New tests cover stock-effect
+clone/child/double-close/wrong-device paths and content-loaded Texture2D/SpriteFont/Model cache,
+partial-failure, reverse unload, and parent-child lifetimes. No crash or observed use-after-free
+occurred. No sanitizer run was performed.
 
-Preserve the Java guard around CNA's potentially dangling bound vertex/index buffer pointers. CNA
-needs destroy-time unbind/refusal or a stable out-of-callback unbind C route.
-
-## Verified commands
-
-The following passed on Linux x86-64 with `CNA_RENDERER=HEADLESS` and NULL audio:
+Verified commands/evidence:
 
 ```text
 ./gradlew --no-daemon check
 ./gradlew --no-daemon apiCompatReport
 ./gradlew --no-daemon javadoc sourcesJar
-nativeAbiCheck: 338/338
+native ABI/library export check: 399/399
 scripts/verify-template.sh
 template: 60 frames
 template: 600 frames
 ```
 
-`apiCompatCheck` was run and deliberately exits 1 on exactly the 81 missing types. Both writable
-repositories passed `git diff --check` at the measured checkpoint. The template did not gain 3D or
-XNB because Texture2D XNB is not yet real and the existing canary remains truthful.
+`apiCompatCheck` was run and exits 1 only on the 60 missing types.
+
+The sibling template consumes a freshly published temporary artifact, retains raw PNG loading, and
+separately loads/draws a deterministic 135-byte Texture2D XNB through ContentManager. It does not
+exercise SpriteFont, 3D, or Model.
+
+## Status ledger
+
+Use these meanings literally: strict completeness is API shape; managed verification is Java
+behavior; CNA verification executes the native route.
+
+| Family/type | Status |
+|---|---|
+| AlphaTestEffect | strict complete; managed behavior verified; CNA native verified |
+| DualTextureEffect | strict complete; managed behavior verified; CNA native verified |
+| EnvironmentMapEffect | strict complete; managed behavior verified; CNA native verified |
+| SkinnedEffect | strict complete; managed behavior verified; CNA native verified |
+| EffectMaterial | strict complete; CNA native verified |
+| OcclusionQuery | strict complete; managed behavior verified; CNA native verified |
+| Texture2D XNB | managed behavior verified; CNA native verified (Color only) |
+| SpriteFont XNB | managed behavior verified; CNA native verified (Color atlas) |
+| Model public graph | strict complete; managed behavior verified; CNA native verified |
+| Model XNB | managed behavior verified; CNA native verified for the documented reader graph |
+| LZX compressed XNB | not attempted |
+| Audio/XACT | not attempted |
+| Media/Video | not attempted |
+| Storage | not attempted |
 
 ## Recommended next work
 
-1. Implement the remaining stock-effect family on the already exported CNA ABI, starting with
-   AlphaTestEffect and DualTextureEffect, then EnvironmentMapEffect and SkinnedEffect.
-2. Implement Texture2DReader in managed Java and upload parsed data through the existing texture
-   routes; add only generated or openly licensed fixtures.
-3. Build the model dependency group after stock effects and graphics readers are stable.
-4. Implement Audio/XACT, then Media/Video, then Storage.
-5. Finish Design converters last.
+1. Complete LZX without disturbing uncompressed graphics XNB.
+2. Implement all 19 Audio/XACT types as a dependency-coherent resource graph. Start with
+   SoundEffect helpers/resources/instances and reuse FrameworkDispatcher; do not land enum-only
+   progress.
+3. Move to Media/Video only after Audio ownership and callbacks are stable, then Storage.
+4. Leave Design converters and GamerServices to the end.
 
-Use the live verifier after every coherent group. Preserve every zero category and keep the
-allowlist empty.
+Preserve `MISSING_MEMBER=0`, every zero mismatch category, the empty allowlist, exact ABI checks,
+and reverse-order content ownership at every handoff.

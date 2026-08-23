@@ -130,12 +130,18 @@ final class ContentReaderTests {
     void xnbNativeResourceRequestUsesManagedReaderDispatchBeforeLooseLoading(
             @TempDir Path root) throws Exception {
         writeAsset(root, "texture", xnb(
-                readers(entry(TEXTURE_2D_READER, 0)), 0, output -> output.seven(0)));
+                readers(entry(TEXTURE_2D_READER, 0)), 0, output -> {
+                    output.seven(1);
+                    output.int32(0);
+                    output.int32(0);
+                    output.int32(1);
+                    output.int32(1);
+                }));
         try (ContentManager content = manager(root)) {
             ContentLoadException failure = assertThrows(
                     ContentLoadException.class,
                     () -> content.Load(Texture2D.class, "texture"));
-            assertTrue(failureMessages(failure).contains("Unknown content type reader"));
+            assertTrue(failureMessages(failure).contains("dimensions"));
         }
     }
 

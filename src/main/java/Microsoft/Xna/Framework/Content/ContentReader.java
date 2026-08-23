@@ -3,6 +3,7 @@ package Microsoft.Xna.Framework.Content;
 import Microsoft.Xna.Framework.Color;
 import Microsoft.Xna.Framework.Matrix;
 import Microsoft.Xna.Framework.Quaternion;
+import Microsoft.Xna.Framework.Rectangle;
 import Microsoft.Xna.Framework.Vector2;
 import Microsoft.Xna.Framework.Vector3;
 import Microsoft.Xna.Framework.Vector4;
@@ -248,6 +249,15 @@ public final class ContentReader extends BinaryReader {
         }
     }
 
+    byte[] readByteBuffer(int count) {
+        try {
+            return ReadBytesExact(count);
+        } catch (RuntimeException exception) {
+            throw new ContentLoadException(
+                    "Content asset '" + assetName + "' has a truncated byte payload", exception);
+        }
+    }
+
     void setTypeReaderVersions(int[] versions) {
         typeReaderVersions = versions.clone();
     }
@@ -259,6 +269,10 @@ public final class ContentReader extends BinaryReader {
             }
         }
         throw new IllegalArgumentException("Reader is not in this asset's type table");
+    }
+
+    void recordManagedNativeObject(Object value) {
+        contentManager.recordManagedNativeObject(value);
     }
 
     ContentLoadException failure(String detail) {
@@ -297,7 +311,19 @@ public final class ContentReader extends BinaryReader {
                     "Content type reader '" + reader.getClass().getName()
                             + "' failed while loading '" + assetName + "'", exception);
         }
-        T typed = checkedCast(targetType, value, "reader result");
+        T typed;
+        try {
+            typed = checkedCast(targetType, value, "reader result");
+        } catch (RuntimeException failure) {
+            if (!hasExistingInstance && value instanceof AutoCloseable closeable) {
+                try {
+                    closeable.close();
+                } catch (Exception closeFailure) {
+                    failure.addSuppressed(closeFailure);
+                }
+            }
+            throw failure;
+        }
         if (hasExistingInstance && existingInstance != typed) {
             throw new IllegalStateException(
                     "Content type reader constructed a new value instead of populating the existing instance");
@@ -356,6 +382,7 @@ public final class ContentReader extends BinaryReader {
                 || type == Character.class || type == Short.class || type == Integer.class
                 || type == Long.class || type == Float.class || type == Double.class
                 || type == Color.class || type == Matrix.class || type == Quaternion.class
+                || type == Rectangle.class
                 || type == Vector2.class || type == Vector3.class || type == Vector4.class;
     }
 

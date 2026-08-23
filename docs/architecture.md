@@ -73,6 +73,43 @@ boundary. Content is unloaded while the native parent is still live, and
 borrowed Java facades are invalidated afterward. Deprecated finalization is not
 used.
 
+Managed XNB resources use the same graph rather than a parallel handle system.
+`ContentManager` records successfully constructed disposable resources once and
+unloads them in reverse construction order. Thus a SpriteFont native object is
+released before its atlas, and a Model's effects and buffers retain the native
+ownership already assigned when their shared-resource fixups were resolved.
+Partial reader failure rolls back only resources constructed by that load.
+`Model`, bones, meshes, and mesh parts are stable managed identity nodes; they
+do not become additional native owners and Model is not made disposable when
+XNA does not expose that contract.
+
+## Managed XNB pipeline
+
+```text
+ContentManager.Load(Class<T>, asset)
+        ↓
+Windows XNB v5 framing + reader table
+        ↓
+internal ContentTypeReader registry
+        ↓
+managed metadata/raw-byte parsing
+        ↓
+existing GraphicsDevice resource creation and upload
+```
+
+The registry is type-reader driven; it does not dispatch on asset names or call
+CNA's loose-file loader for XNB. Texture2D currently preserves uncompressed
+`SurfaceFormat.Color` payloads and mip levels exactly. Formats for which CNA
+cannot create/upload the matching native surface fail explicitly, so compressed
+payloads are never relabeled as RGBA. SpriteFont is assembled from its loaded
+atlas and copied glyph table. Model resolves shared vertex/index/effect
+resources through the normal XNB fixup mechanism and retains stable facade
+identity across its bone, mesh, and part graph.
+
+Compressed XNB/LZX remains outside this pipeline until its framing and failure
+semantics are implemented and tested. The supported uncompressed path does not
+silently attempt an alternate compression dialect.
+
 ## Contract layers
 
 Compatibility is tracked independently as:

@@ -21,6 +21,12 @@
     "System.Collections.Generic.Dictionary`2": "java.util.LinkedHashMap",
     "System.Text.StringBuilder": "java.lang.StringBuilder"
   },
+  "typeBaseTypeMappings": {
+    "Microsoft.Xna.Framework.Graphics.ModelBoneCollection": "java.util.AbstractList<Microsoft.Xna.Framework.Graphics.ModelBone>",
+    "Microsoft.Xna.Framework.Graphics.ModelEffectCollection": "java.util.AbstractList<Microsoft.Xna.Framework.Graphics.Effect>",
+    "Microsoft.Xna.Framework.Graphics.ModelMeshCollection": "java.util.AbstractList<Microsoft.Xna.Framework.Graphics.ModelMesh>",
+    "Microsoft.Xna.Framework.Graphics.ModelMeshPartCollection": "java.util.AbstractList<Microsoft.Xna.Framework.Graphics.ModelMeshPart>"
+  },
   "memberParameterTypeMappings": {
     "Microsoft.Xna.Framework.Graphics.Texture2D.FromStream(Microsoft.Xna.Framework.Graphics.GraphicsDevice,System.IO.Stream)": {
       "stream": "java.io.InputStream"
@@ -58,6 +64,14 @@
     "Microsoft.Xna.Framework.Input.Touch.TouchCollection.FindById(System.Int32,Microsoft.Xna.Framework.Input.Touch.TouchLocation&)": {
       "name": "FindById",
       "returnType": "Microsoft.Xna.Framework.Input.Touch.TouchCollection.FindResult"
+    },
+    "Microsoft.Xna.Framework.Graphics.ModelBoneCollection.TryGetValue(System.String,Microsoft.Xna.Framework.Graphics.ModelBone&)": {
+      "name": "TryGetValue",
+      "returnType": "Microsoft.Xna.Framework.Graphics.ModelBone"
+    },
+    "Microsoft.Xna.Framework.Graphics.ModelMeshCollection.TryGetValue(System.String,Microsoft.Xna.Framework.Graphics.ModelMesh&)": {
+      "name": "TryGetValue",
+      "returnType": "Microsoft.Xna.Framework.Graphics.ModelMesh"
     }
   },
   "conversionMemberMappings": {
@@ -93,7 +107,11 @@
     "Microsoft.Xna.Framework.Input.Touch.TouchCollection"
   ],
   "javaIteratorBridgeTypes": [
-    "Microsoft.Xna.Framework.Input.Touch.TouchCollection+Enumerator"
+    "Microsoft.Xna.Framework.Input.Touch.TouchCollection+Enumerator",
+    "Microsoft.Xna.Framework.Graphics.ModelBoneCollection+Enumerator",
+    "Microsoft.Xna.Framework.Graphics.ModelEffectCollection+Enumerator",
+    "Microsoft.Xna.Framework.Graphics.ModelMeshCollection+Enumerator",
+    "Microsoft.Xna.Framework.Graphics.ModelMeshPartCollection+Enumerator"
   ],
   "javaIterableBridgeTypes": [
     "Microsoft.Xna.Framework.Graphics.DisplayModeCollection",

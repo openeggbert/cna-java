@@ -211,6 +211,13 @@ typedef CNA_Result (*HandleSetVector3Function)(CNA_Handle, CNA_Vector3);
 typedef CNA_Result (*HandleGetMatrixFunction)(CNA_Handle, CNA_Matrix*);
 typedef CNA_Result (*HandleSetMatrixFunction)(CNA_Handle, CNA_Matrix);
 typedef CNA_Result (*HandleUint32GetHandleFunction)(CNA_Handle, uint32_t, CNA_Handle*);
+typedef CNA_Result (*HandleGetCompareFunction)(CNA_Handle, CNA_CompareFunction*);
+typedef CNA_Result (*HandleSetCompareFunction)(CNA_Handle, CNA_CompareFunction);
+typedef CNA_Result (*HandleUint32SetHandleFunction)(CNA_Handle, uint32_t, CNA_Handle);
+typedef CNA_Result (*SkinnedEffectSetBonesFunction)(
+    CNA_Handle, const CNA_Matrix*, uint64_t);
+typedef CNA_Result (*SkinnedEffectCopyBonesFunction)(
+    CNA_Handle, uint64_t, CNA_Matrix*, uint64_t, uint64_t*);
 typedef CNA_Result (*RenderTarget2DCreateFunction)(
     CNA_Handle, const CNA_RenderTarget2DCreateInfo*, CNA_Handle*);
 typedef CNA_Result (*RenderTargetCubeCreateFunction)(
@@ -296,6 +303,8 @@ typedef CNA_Result (*ContentManagerLoadTextureFunction)(
     CNA_Handle, CNA_StringView, CNA_Handle*);
 typedef CNA_Result (*ContentManagerLoadSpriteFontFunction)(
     CNA_Handle, CNA_StringView, CNA_Handle*, CNA_Handle*);
+typedef CNA_Result (*SpriteFontCreateFunction)(
+    const CNA_SpriteFontCreateInfo*, CNA_Handle*);
 typedef CNA_Result (*SpriteFontGetInfoFunction)(CNA_Handle, CNA_SpriteFontInfo*);
 typedef CNA_Result (*SpriteFontCopyCharactersFunction)(
     CNA_Handle, CNA_Char16*, uint64_t, uint64_t*);
@@ -542,6 +551,7 @@ typedef struct CnaFunctions {
     GameCopyStringFunction effect_annotation_copy_value_string;
     GameUnaryFunction effect_annotation_destroy;
     HandleGetHandleFunction basic_effect_create;
+    HandleGetHandleFunction effect_material_create;
     GameGetBoolFunction basic_effect_get_vertex_color_enabled;
     GameSetBoolFunction basic_effect_set_vertex_color_enabled;
     GameGetBoolFunction basic_effect_get_prefer_per_pixel_lighting;
@@ -559,6 +569,65 @@ typedef struct CnaFunctions {
     GameGetBoolFunction basic_effect_get_texture_enabled;
     GameSetBoolFunction basic_effect_set_texture_enabled;
     HandleSetHandleFunction basic_effect_set_texture;
+    HandleGetHandleFunction alpha_test_effect_create;
+    HandleGetVector3Function alpha_test_effect_get_diffuse_color;
+    HandleSetVector3Function alpha_test_effect_set_diffuse_color;
+    HandleGetFloatFunction alpha_test_effect_get_alpha;
+    HandleSetFloatFunction alpha_test_effect_set_alpha;
+    HandleSetHandleFunction alpha_test_effect_set_texture;
+    GameGetBoolFunction alpha_test_effect_get_vertex_color_enabled;
+    GameSetBoolFunction alpha_test_effect_set_vertex_color_enabled;
+    HandleGetCompareFunction alpha_test_effect_get_alpha_function;
+    HandleSetCompareFunction alpha_test_effect_set_alpha_function;
+    GameGetInt32Function alpha_test_effect_get_reference_alpha;
+    GameSetInt32Function alpha_test_effect_set_reference_alpha;
+    HandleGetHandleFunction dual_texture_effect_create;
+    HandleGetVector3Function dual_texture_effect_get_diffuse_color;
+    HandleSetVector3Function dual_texture_effect_set_diffuse_color;
+    HandleGetFloatFunction dual_texture_effect_get_alpha;
+    HandleSetFloatFunction dual_texture_effect_set_alpha;
+    HandleUint32SetHandleFunction dual_texture_effect_set_texture;
+    GameGetBoolFunction dual_texture_effect_get_vertex_color_enabled;
+    GameSetBoolFunction dual_texture_effect_set_vertex_color_enabled;
+    HandleGetHandleFunction environment_map_effect_create;
+    HandleGetVector3Function environment_map_effect_get_diffuse_color;
+    HandleSetVector3Function environment_map_effect_set_diffuse_color;
+    HandleGetVector3Function environment_map_effect_get_emissive_color;
+    HandleSetVector3Function environment_map_effect_set_emissive_color;
+    HandleGetFloatFunction environment_map_effect_get_alpha;
+    HandleSetFloatFunction environment_map_effect_set_alpha;
+    HandleSetHandleFunction environment_map_effect_set_texture;
+    HandleSetHandleFunction environment_map_effect_set_environment_map;
+    HandleGetFloatFunction environment_map_effect_get_amount;
+    HandleSetFloatFunction environment_map_effect_set_amount;
+    HandleGetVector3Function environment_map_effect_get_specular;
+    HandleSetVector3Function environment_map_effect_set_specular;
+    HandleGetFloatFunction environment_map_effect_get_fresnel_factor;
+    HandleSetFloatFunction environment_map_effect_set_fresnel_factor;
+    HandleGetHandleFunction skinned_effect_create;
+    HandleGetVector3Function skinned_effect_get_diffuse_color;
+    HandleSetVector3Function skinned_effect_set_diffuse_color;
+    HandleGetVector3Function skinned_effect_get_emissive_color;
+    HandleSetVector3Function skinned_effect_set_emissive_color;
+    HandleGetVector3Function skinned_effect_get_specular_color;
+    HandleSetVector3Function skinned_effect_set_specular_color;
+    HandleGetFloatFunction skinned_effect_get_specular_power;
+    HandleSetFloatFunction skinned_effect_set_specular_power;
+    HandleGetFloatFunction skinned_effect_get_alpha;
+    HandleSetFloatFunction skinned_effect_set_alpha;
+    GameGetBoolFunction skinned_effect_get_prefer_per_pixel_lighting;
+    GameSetBoolFunction skinned_effect_set_prefer_per_pixel_lighting;
+    HandleSetHandleFunction skinned_effect_set_texture;
+    GameGetInt32Function skinned_effect_get_weights_per_vertex;
+    GameSetInt32Function skinned_effect_set_weights_per_vertex;
+    SkinnedEffectSetBonesFunction skinned_effect_set_bone_transforms;
+    SkinnedEffectCopyBonesFunction skinned_effect_copy_bone_transforms;
+    HandleGetHandleFunction occlusion_query_create;
+    GameUnaryFunction occlusion_query_begin;
+    GameUnaryFunction occlusion_query_end;
+    GameGetBoolFunction occlusion_query_get_is_complete;
+    GameGetInt32Function occlusion_query_get_pixel_count;
+    GameUnaryFunction occlusion_query_destroy;
     HandleGetMatrixFunction effect_matrices_get_world;
     HandleSetMatrixFunction effect_matrices_set_world;
     HandleGetMatrixFunction effect_matrices_get_view;
@@ -645,6 +714,7 @@ typedef struct CnaFunctions {
     GameUnaryFunction content_manager_unload;
     GameUnaryFunction content_manager_register_builtin_loaders;
     GameUnaryFunction content_manager_destroy;
+    SpriteFontCreateFunction sprite_font_create;
     SpriteFontGetInfoFunction sprite_font_get_info;
     SpriteFontCopyCharactersFunction sprite_font_copy_characters;
     SpriteFontSetDefaultCharacterFunction sprite_font_set_default_character;
@@ -1753,6 +1823,7 @@ JNIEXPORT jint JNICALL Java_org_openeggbert_cna_internal_NativeBindings_nativeLo
         "cna_effect_annotation_copy_value_string");
     LOAD(effect_annotation_destroy, "cna_effect_annotation_destroy");
     LOAD(basic_effect_create, "cna_basic_effect_create");
+    LOAD(effect_material_create, "cna_effect_material_create");
     LOAD(basic_effect_get_vertex_color_enabled,
         "cna_basic_effect_get_vertex_color_enabled");
     LOAD(basic_effect_set_vertex_color_enabled,
@@ -1774,6 +1845,94 @@ JNIEXPORT jint JNICALL Java_org_openeggbert_cna_internal_NativeBindings_nativeLo
     LOAD(basic_effect_get_texture_enabled, "cna_basic_effect_get_texture_enabled");
     LOAD(basic_effect_set_texture_enabled, "cna_basic_effect_set_texture_enabled");
     LOAD(basic_effect_set_texture, "cna_basic_effect_set_texture");
+    LOAD(alpha_test_effect_create, "cna_alpha_test_effect_create");
+    LOAD(alpha_test_effect_get_diffuse_color,
+        "cna_alpha_test_effect_get_diffuse_color");
+    LOAD(alpha_test_effect_set_diffuse_color,
+        "cna_alpha_test_effect_set_diffuse_color");
+    LOAD(alpha_test_effect_get_alpha, "cna_alpha_test_effect_get_alpha");
+    LOAD(alpha_test_effect_set_alpha, "cna_alpha_test_effect_set_alpha");
+    LOAD(alpha_test_effect_set_texture, "cna_alpha_test_effect_set_texture");
+    LOAD(alpha_test_effect_get_vertex_color_enabled,
+        "cna_alpha_test_effect_get_vertex_color_enabled");
+    LOAD(alpha_test_effect_set_vertex_color_enabled,
+        "cna_alpha_test_effect_set_vertex_color_enabled");
+    LOAD(alpha_test_effect_get_alpha_function,
+        "cna_alpha_test_effect_get_alpha_function");
+    LOAD(alpha_test_effect_set_alpha_function,
+        "cna_alpha_test_effect_set_alpha_function");
+    LOAD(alpha_test_effect_get_reference_alpha,
+        "cna_alpha_test_effect_get_reference_alpha");
+    LOAD(alpha_test_effect_set_reference_alpha,
+        "cna_alpha_test_effect_set_reference_alpha");
+    LOAD(dual_texture_effect_create, "cna_dual_texture_effect_create");
+    LOAD(dual_texture_effect_get_diffuse_color,
+        "cna_dual_texture_effect_get_diffuse_color");
+    LOAD(dual_texture_effect_set_diffuse_color,
+        "cna_dual_texture_effect_set_diffuse_color");
+    LOAD(dual_texture_effect_get_alpha, "cna_dual_texture_effect_get_alpha");
+    LOAD(dual_texture_effect_set_alpha, "cna_dual_texture_effect_set_alpha");
+    LOAD(dual_texture_effect_set_texture, "cna_dual_texture_effect_set_texture");
+    LOAD(dual_texture_effect_get_vertex_color_enabled,
+        "cna_dual_texture_effect_get_vertex_color_enabled");
+    LOAD(dual_texture_effect_set_vertex_color_enabled,
+        "cna_dual_texture_effect_set_vertex_color_enabled");
+    LOAD(environment_map_effect_create, "cna_environment_map_effect_create");
+    LOAD(environment_map_effect_get_diffuse_color,
+        "cna_environment_map_effect_get_diffuse_color");
+    LOAD(environment_map_effect_set_diffuse_color,
+        "cna_environment_map_effect_set_diffuse_color");
+    LOAD(environment_map_effect_get_emissive_color,
+        "cna_environment_map_effect_get_emissive_color");
+    LOAD(environment_map_effect_set_emissive_color,
+        "cna_environment_map_effect_set_emissive_color");
+    LOAD(environment_map_effect_get_alpha, "cna_environment_map_effect_get_alpha");
+    LOAD(environment_map_effect_set_alpha, "cna_environment_map_effect_set_alpha");
+    LOAD(environment_map_effect_set_texture, "cna_environment_map_effect_set_texture");
+    LOAD(environment_map_effect_set_environment_map,
+        "cna_environment_map_effect_set_environment_map");
+    LOAD(environment_map_effect_get_amount, "cna_environment_map_effect_get_amount");
+    LOAD(environment_map_effect_set_amount, "cna_environment_map_effect_set_amount");
+    LOAD(environment_map_effect_get_specular,
+        "cna_environment_map_effect_get_specular");
+    LOAD(environment_map_effect_set_specular,
+        "cna_environment_map_effect_set_specular");
+    LOAD(environment_map_effect_get_fresnel_factor,
+        "cna_environment_map_effect_get_fresnel_factor");
+    LOAD(environment_map_effect_set_fresnel_factor,
+        "cna_environment_map_effect_set_fresnel_factor");
+    LOAD(skinned_effect_create, "cna_skinned_effect_create");
+    LOAD(skinned_effect_get_diffuse_color, "cna_skinned_effect_get_diffuse_color");
+    LOAD(skinned_effect_set_diffuse_color, "cna_skinned_effect_set_diffuse_color");
+    LOAD(skinned_effect_get_emissive_color, "cna_skinned_effect_get_emissive_color");
+    LOAD(skinned_effect_set_emissive_color, "cna_skinned_effect_set_emissive_color");
+    LOAD(skinned_effect_get_specular_color, "cna_skinned_effect_get_specular_color");
+    LOAD(skinned_effect_set_specular_color, "cna_skinned_effect_set_specular_color");
+    LOAD(skinned_effect_get_specular_power, "cna_skinned_effect_get_specular_power");
+    LOAD(skinned_effect_set_specular_power, "cna_skinned_effect_set_specular_power");
+    LOAD(skinned_effect_get_alpha, "cna_skinned_effect_get_alpha");
+    LOAD(skinned_effect_set_alpha, "cna_skinned_effect_set_alpha");
+    LOAD(skinned_effect_get_prefer_per_pixel_lighting,
+        "cna_skinned_effect_get_prefer_per_pixel_lighting");
+    LOAD(skinned_effect_set_prefer_per_pixel_lighting,
+        "cna_skinned_effect_set_prefer_per_pixel_lighting");
+    LOAD(skinned_effect_set_texture, "cna_skinned_effect_set_texture");
+    LOAD(skinned_effect_get_weights_per_vertex,
+        "cna_skinned_effect_get_weights_per_vertex");
+    LOAD(skinned_effect_set_weights_per_vertex,
+        "cna_skinned_effect_set_weights_per_vertex");
+    LOAD(skinned_effect_set_bone_transforms,
+        "cna_skinned_effect_set_bone_transforms");
+    LOAD(skinned_effect_copy_bone_transforms,
+        "cna_skinned_effect_copy_bone_transforms");
+    LOAD(occlusion_query_create, "cna_occlusion_query_create");
+    LOAD(occlusion_query_begin, "cna_occlusion_query_begin");
+    LOAD(occlusion_query_end, "cna_occlusion_query_end");
+    LOAD(occlusion_query_get_is_complete,
+        "cna_occlusion_query_get_is_complete");
+    LOAD(occlusion_query_get_pixel_count,
+        "cna_occlusion_query_get_pixel_count");
+    LOAD(occlusion_query_destroy, "cna_occlusion_query_destroy");
     LOAD(effect_matrices_get_world, "cna_effect_matrices_get_world");
     LOAD(effect_matrices_set_world, "cna_effect_matrices_set_world");
     LOAD(effect_matrices_get_view, "cna_effect_matrices_get_view");
@@ -1887,6 +2046,7 @@ JNIEXPORT jint JNICALL Java_org_openeggbert_cna_internal_NativeBindings_nativeLo
     LOAD(content_manager_register_builtin_loaders,
         "cna_content_manager_register_builtin_loaders");
     LOAD(content_manager_destroy, "cna_content_manager_destroy");
+    LOAD(sprite_font_create, "cna_sprite_font_create");
     LOAD(sprite_font_get_info, "cna_sprite_font_get_info");
     LOAD(sprite_font_copy_characters, "cna_sprite_font_copy_characters");
     LOAD(sprite_font_set_default_character, "cna_sprite_font_set_default_character");
@@ -5785,6 +5945,115 @@ JNIEXPORT jint JNICALL Java_org_openeggbert_cna_internal_NativeBindings_nativeDe
     return (jint)cna.content_manager_destroy((CNA_Handle)content_manager);
 }
 
+JNIEXPORT jint JNICALL Java_org_openeggbert_cna_internal_NativeBindings_nativeCreateSpriteFont(
+    JNIEnv* environment,
+    jclass type,
+    jlong texture,
+    jintArray rectangles,
+    jcharArray characters,
+    jfloatArray kerning,
+    jint line_spacing,
+    jfloat spacing,
+    jboolean has_default_character,
+    jint default_character,
+    jlongArray output)
+{
+    (void)type;
+    if (rectangles == NULL || characters == NULL || kerning == NULL || output == NULL ||
+        (has_default_character != JNI_FALSE && has_default_character != JNI_TRUE) ||
+        default_character < 0 || default_character > UINT16_MAX) {
+        return (jint)CNA_RESULT_INVALID_ARGUMENT;
+    }
+    const jsize count = (*environment)->GetArrayLength(environment, characters);
+    const jsize rectangle_count = (*environment)->GetArrayLength(environment, rectangles);
+    const jsize kerning_count = (*environment)->GetArrayLength(environment, kerning);
+    if (count <= 0 || count > INT32_MAX / 8 ||
+        rectangle_count != count * 8 || kerning_count != count * 3 ||
+        (*environment)->GetArrayLength(environment, output) < 1) {
+        return (jint)CNA_RESULT_INVALID_ARGUMENT;
+    }
+
+    CNA_SpriteFontGlyph* glyphs =
+        (CNA_SpriteFontGlyph*)calloc((size_t)count, sizeof(*glyphs));
+    if (glyphs == NULL) {
+        return (jint)CNA_RESULT_OUT_OF_MEMORY;
+    }
+    jint* rectangle_values =
+        (*environment)->GetIntArrayElements(environment, rectangles, NULL);
+    jchar* character_values =
+        (*environment)->GetCharArrayElements(environment, characters, NULL);
+    jfloat* kerning_values =
+        (*environment)->GetFloatArrayElements(environment, kerning, NULL);
+    if (rectangle_values == NULL || character_values == NULL || kerning_values == NULL) {
+        if (rectangle_values != NULL) {
+            (*environment)->ReleaseIntArrayElements(
+                environment, rectangles, rectangle_values, JNI_ABORT);
+        }
+        if (character_values != NULL) {
+            (*environment)->ReleaseCharArrayElements(
+                environment, characters, character_values, JNI_ABORT);
+        }
+        if (kerning_values != NULL) {
+            (*environment)->ReleaseFloatArrayElements(
+                environment, kerning, kerning_values, JNI_ABORT);
+        }
+        free(glyphs);
+        return (jint)CNA_RESULT_INVALID_STATE;
+    }
+    for (jsize index = 0; index < count; ++index) {
+        CNA_SpriteFontGlyph* glyph = &glyphs[index];
+        glyph->struct_size = (uint32_t)sizeof(*glyph);
+        glyph->struct_version = UINT32_C(1);
+        const jsize rectangle_offset = index * 8;
+        glyph->glyph_bounds = (CNA_Rectangle){
+            rectangle_values[rectangle_offset],
+            rectangle_values[rectangle_offset + 1],
+            rectangle_values[rectangle_offset + 2],
+            rectangle_values[rectangle_offset + 3]};
+        glyph->cropping = (CNA_Rectangle){
+            rectangle_values[rectangle_offset + 4],
+            rectangle_values[rectangle_offset + 5],
+            rectangle_values[rectangle_offset + 6],
+            rectangle_values[rectangle_offset + 7]};
+        glyph->character = (CNA_Char16)character_values[index];
+        const jsize kerning_offset = index * 3;
+        glyph->kerning = (CNA_Vector3){
+            kerning_values[kerning_offset],
+            kerning_values[kerning_offset + 1],
+            kerning_values[kerning_offset + 2]};
+    }
+    (*environment)->ReleaseIntArrayElements(
+        environment, rectangles, rectangle_values, JNI_ABORT);
+    (*environment)->ReleaseCharArrayElements(
+        environment, characters, character_values, JNI_ABORT);
+    (*environment)->ReleaseFloatArrayElements(
+        environment, kerning, kerning_values, JNI_ABORT);
+
+    CNA_SpriteFontCreateInfo info;
+    (void)memset(&info, 0, sizeof(info));
+    info.struct_size = (uint32_t)sizeof(info);
+    info.struct_version = UINT32_C(1);
+    info.texture = (CNA_Handle)texture;
+    info.glyphs = glyphs;
+    info.glyph_count = (uint64_t)count;
+    info.line_spacing = (int32_t)line_spacing;
+    info.spacing = spacing;
+    info.has_default_character =
+        has_default_character == JNI_TRUE ? CNA_TRUE : CNA_FALSE;
+    info.default_character = (CNA_Char16)default_character;
+    CNA_Handle sprite_font = CNA_INVALID_HANDLE;
+    CNA_Result result = cna.sprite_font_create(&info, &sprite_font);
+    free(glyphs);
+    if (result != CNA_RESULT_SUCCESS) {
+        return (jint)result;
+    }
+    result = set_handle_output(environment, output, sprite_font);
+    if (result != CNA_RESULT_SUCCESS) {
+        (void)cna.sprite_font_destroy(sprite_font);
+    }
+    return (jint)result;
+}
+
 JNIEXPORT jint JNICALL Java_org_openeggbert_cna_internal_NativeBindings_nativeGetSpriteFontInfo(
     JNIEnv* environment,
     jclass type,
@@ -5984,6 +6253,55 @@ JNIEXPORT jint JNICALL Java_org_openeggbert_cna_internal_NativeBindings_nativeCr
     }
     CNA_Handle effect = CNA_INVALID_HANDLE;
     result = cna.basic_effect_create(device, &effect);
+    if (result != CNA_RESULT_SUCCESS) {
+        return (jint)result;
+    }
+    result = set_handle_output(environment, output, effect);
+    if (result != CNA_RESULT_SUCCESS) {
+        (void)cna.effect_destroy(effect);
+    }
+    return (jint)result;
+}
+
+JNIEXPORT jint JNICALL Java_org_openeggbert_cna_internal_NativeBindings_nativeCreateStockEffect(
+    JNIEnv* environment,
+    jclass type,
+    jlong game,
+    jint effect_kind,
+    jlongArray output)
+{
+    (void)type;
+    HandleGetHandleFunction create_function = NULL;
+    switch (effect_kind) {
+        case 0: create_function = cna.alpha_test_effect_create; break;
+        case 1: create_function = cna.dual_texture_effect_create; break;
+        case 2: create_function = cna.environment_map_effect_create; break;
+        case 3: create_function = cna.skinned_effect_create; break;
+        default: return (jint)CNA_RESULT_INVALID_ARGUMENT;
+    }
+    CNA_Handle device = CNA_INVALID_HANDLE;
+    CNA_Result result = graphics_device_from_game(game, &device);
+    if (result != CNA_RESULT_SUCCESS) {
+        return (jint)result;
+    }
+    CNA_Handle effect = CNA_INVALID_HANDLE;
+    result = create_function(device, &effect);
+    if (result != CNA_RESULT_SUCCESS) {
+        return (jint)result;
+    }
+    result = set_handle_output(environment, output, effect);
+    if (result != CNA_RESULT_SUCCESS) {
+        (void)cna.effect_destroy(effect);
+    }
+    return (jint)result;
+}
+
+JNIEXPORT jint JNICALL Java_org_openeggbert_cna_internal_NativeBindings_nativeCreateEffectMaterial(
+    JNIEnv* environment, jclass type, jlong source, jlongArray output)
+{
+    (void)type;
+    CNA_Handle effect = CNA_INVALID_HANDLE;
+    CNA_Result result = cna.effect_material_create((CNA_Handle)source, &effect);
     if (result != CNA_RESULT_SUCCESS) {
         return (jint)result;
     }
@@ -7051,6 +7369,476 @@ JNIEXPORT jint JNICALL Java_org_openeggbert_cna_internal_NativeBindings_nativeSe
     (void)type;
     return (jint)cna.basic_effect_set_texture(
         (CNA_Handle)effect, (CNA_Handle)texture);
+}
+
+static GameGetBoolFunction stock_effect_bool_getter(
+    const jint effect_kind, const jint kind)
+{
+    if (kind != 0) {
+        return NULL;
+    }
+    switch (effect_kind) {
+        case 0: return cna.alpha_test_effect_get_vertex_color_enabled;
+        case 1: return cna.dual_texture_effect_get_vertex_color_enabled;
+        case 3: return cna.skinned_effect_get_prefer_per_pixel_lighting;
+        default: return NULL;
+    }
+}
+
+static GameSetBoolFunction stock_effect_bool_setter(
+    const jint effect_kind, const jint kind)
+{
+    if (kind != 0) {
+        return NULL;
+    }
+    switch (effect_kind) {
+        case 0: return cna.alpha_test_effect_set_vertex_color_enabled;
+        case 1: return cna.dual_texture_effect_set_vertex_color_enabled;
+        case 3: return cna.skinned_effect_set_prefer_per_pixel_lighting;
+        default: return NULL;
+    }
+}
+
+JNIEXPORT jint JNICALL Java_org_openeggbert_cna_internal_NativeBindings_nativeGetStockEffectBoolean(
+    JNIEnv* environment,
+    jclass type,
+    jlong effect,
+    jint effect_kind,
+    jint kind)
+{
+    (void)environment;
+    (void)type;
+    GameGetBoolFunction function = stock_effect_bool_getter(effect_kind, kind);
+    if (function == NULL) {
+        return -(jint)CNA_RESULT_INVALID_ARGUMENT;
+    }
+    CNA_Bool value = CNA_FALSE;
+    const CNA_Result result = function((CNA_Handle)effect, &value);
+    return result == CNA_RESULT_SUCCESS
+        ? (value == CNA_TRUE ? 1 : 0) : -(jint)result;
+}
+
+JNIEXPORT jint JNICALL Java_org_openeggbert_cna_internal_NativeBindings_nativeSetStockEffectBoolean(
+    JNIEnv* environment,
+    jclass type,
+    jlong effect,
+    jint effect_kind,
+    jint kind,
+    jboolean value)
+{
+    (void)environment;
+    (void)type;
+    if (value != JNI_FALSE && value != JNI_TRUE) {
+        return (jint)CNA_RESULT_INVALID_ARGUMENT;
+    }
+    GameSetBoolFunction function = stock_effect_bool_setter(effect_kind, kind);
+    return function == NULL ? (jint)CNA_RESULT_INVALID_ARGUMENT
+        : (jint)function(
+            (CNA_Handle)effect, value == JNI_TRUE ? CNA_TRUE : CNA_FALSE);
+}
+
+static HandleGetFloatFunction stock_effect_float_getter(
+    const jint effect_kind, const jint kind)
+{
+    switch (effect_kind) {
+        case 0: return kind == 0 ? cna.alpha_test_effect_get_alpha : NULL;
+        case 1: return kind == 0 ? cna.dual_texture_effect_get_alpha : NULL;
+        case 2:
+            switch (kind) {
+                case 0: return cna.environment_map_effect_get_alpha;
+                case 1: return cna.environment_map_effect_get_amount;
+                case 2: return cna.environment_map_effect_get_fresnel_factor;
+                default: return NULL;
+            }
+        case 3:
+            switch (kind) {
+                case 0: return cna.skinned_effect_get_specular_power;
+                case 1: return cna.skinned_effect_get_alpha;
+                default: return NULL;
+            }
+        default: return NULL;
+    }
+}
+
+static HandleSetFloatFunction stock_effect_float_setter(
+    const jint effect_kind, const jint kind)
+{
+    switch (effect_kind) {
+        case 0: return kind == 0 ? cna.alpha_test_effect_set_alpha : NULL;
+        case 1: return kind == 0 ? cna.dual_texture_effect_set_alpha : NULL;
+        case 2:
+            switch (kind) {
+                case 0: return cna.environment_map_effect_set_alpha;
+                case 1: return cna.environment_map_effect_set_amount;
+                case 2: return cna.environment_map_effect_set_fresnel_factor;
+                default: return NULL;
+            }
+        case 3:
+            switch (kind) {
+                case 0: return cna.skinned_effect_set_specular_power;
+                case 1: return cna.skinned_effect_set_alpha;
+                default: return NULL;
+            }
+        default: return NULL;
+    }
+}
+
+JNIEXPORT jint JNICALL Java_org_openeggbert_cna_internal_NativeBindings_nativeGetStockEffectFloat(
+    JNIEnv* environment,
+    jclass type,
+    jlong effect,
+    jint effect_kind,
+    jint kind,
+    jfloatArray output)
+{
+    (void)type;
+    if (output == NULL || (*environment)->GetArrayLength(environment, output) != 1) {
+        return (jint)CNA_RESULT_INVALID_ARGUMENT;
+    }
+    HandleGetFloatFunction function = stock_effect_float_getter(effect_kind, kind);
+    if (function == NULL) {
+        return (jint)CNA_RESULT_INVALID_ARGUMENT;
+    }
+    float value = 0.0f;
+    const CNA_Result result = function((CNA_Handle)effect, &value);
+    if (result == CNA_RESULT_SUCCESS) {
+        const jfloat projected = (jfloat)value;
+        (*environment)->SetFloatArrayRegion(environment, output, 0, 1, &projected);
+        if ((*environment)->ExceptionCheck(environment)) {
+            return (jint)CNA_RESULT_INVALID_STATE;
+        }
+    }
+    return (jint)result;
+}
+
+JNIEXPORT jint JNICALL Java_org_openeggbert_cna_internal_NativeBindings_nativeSetStockEffectFloat(
+    JNIEnv* environment,
+    jclass type,
+    jlong effect,
+    jint effect_kind,
+    jint kind,
+    jfloat value)
+{
+    (void)environment;
+    (void)type;
+    HandleSetFloatFunction function = stock_effect_float_setter(effect_kind, kind);
+    return function == NULL ? (jint)CNA_RESULT_INVALID_ARGUMENT
+        : (jint)function((CNA_Handle)effect, (float)value);
+}
+
+JNIEXPORT jint JNICALL Java_org_openeggbert_cna_internal_NativeBindings_nativeGetStockEffectInt(
+    JNIEnv* environment,
+    jclass type,
+    jlong effect,
+    jint effect_kind,
+    jint kind,
+    jintArray output)
+{
+    (void)type;
+    if (output == NULL || (*environment)->GetArrayLength(environment, output) != 1) {
+        return (jint)CNA_RESULT_INVALID_ARGUMENT;
+    }
+    int32_t value = 0;
+    CNA_Result result = CNA_RESULT_INVALID_ARGUMENT;
+    if (effect_kind == 0 && kind == 0) {
+        CNA_CompareFunction compare = CNA_COMPARE_ALWAYS;
+        result = cna.alpha_test_effect_get_alpha_function((CNA_Handle)effect, &compare);
+        value = (int32_t)compare;
+    } else if (effect_kind == 0 && kind == 1) {
+        result = cna.alpha_test_effect_get_reference_alpha((CNA_Handle)effect, &value);
+    } else if (effect_kind == 3 && kind == 0) {
+        result = cna.skinned_effect_get_weights_per_vertex((CNA_Handle)effect, &value);
+    }
+    if (result == CNA_RESULT_SUCCESS) {
+        const jint projected = (jint)value;
+        (*environment)->SetIntArrayRegion(environment, output, 0, 1, &projected);
+        if ((*environment)->ExceptionCheck(environment)) {
+            return (jint)CNA_RESULT_INVALID_STATE;
+        }
+    }
+    return (jint)result;
+}
+
+JNIEXPORT jint JNICALL Java_org_openeggbert_cna_internal_NativeBindings_nativeSetStockEffectInt(
+    JNIEnv* environment,
+    jclass type,
+    jlong effect,
+    jint effect_kind,
+    jint kind,
+    jint value)
+{
+    (void)environment;
+    (void)type;
+    if (effect_kind == 0 && kind == 0) {
+        if (value < (jint)CNA_COMPARE_ALWAYS ||
+            value > (jint)CNA_COMPARE_NOT_EQUAL) {
+            return (jint)CNA_RESULT_INVALID_ARGUMENT;
+        }
+        return (jint)cna.alpha_test_effect_set_alpha_function(
+            (CNA_Handle)effect, (CNA_CompareFunction)value);
+    }
+    if (effect_kind == 0 && kind == 1) {
+        return (jint)cna.alpha_test_effect_set_reference_alpha(
+            (CNA_Handle)effect, (int32_t)value);
+    }
+    if (effect_kind == 3 && kind == 0) {
+        return (jint)cna.skinned_effect_set_weights_per_vertex(
+            (CNA_Handle)effect, (int32_t)value);
+    }
+    return (jint)CNA_RESULT_INVALID_ARGUMENT;
+}
+
+static HandleGetVector3Function stock_effect_vector_getter(
+    const jint effect_kind, const jint kind)
+{
+    switch (effect_kind) {
+        case 0: return kind == 0 ? cna.alpha_test_effect_get_diffuse_color : NULL;
+        case 1: return kind == 0 ? cna.dual_texture_effect_get_diffuse_color : NULL;
+        case 2:
+            switch (kind) {
+                case 0: return cna.environment_map_effect_get_diffuse_color;
+                case 1: return cna.environment_map_effect_get_emissive_color;
+                case 2: return cna.environment_map_effect_get_specular;
+                default: return NULL;
+            }
+        case 3:
+            switch (kind) {
+                case 0: return cna.skinned_effect_get_diffuse_color;
+                case 1: return cna.skinned_effect_get_emissive_color;
+                case 2: return cna.skinned_effect_get_specular_color;
+                default: return NULL;
+            }
+        default: return NULL;
+    }
+}
+
+static HandleSetVector3Function stock_effect_vector_setter(
+    const jint effect_kind, const jint kind)
+{
+    switch (effect_kind) {
+        case 0: return kind == 0 ? cna.alpha_test_effect_set_diffuse_color : NULL;
+        case 1: return kind == 0 ? cna.dual_texture_effect_set_diffuse_color : NULL;
+        case 2:
+            switch (kind) {
+                case 0: return cna.environment_map_effect_set_diffuse_color;
+                case 1: return cna.environment_map_effect_set_emissive_color;
+                case 2: return cna.environment_map_effect_set_specular;
+                default: return NULL;
+            }
+        case 3:
+            switch (kind) {
+                case 0: return cna.skinned_effect_set_diffuse_color;
+                case 1: return cna.skinned_effect_set_emissive_color;
+                case 2: return cna.skinned_effect_set_specular_color;
+                default: return NULL;
+            }
+        default: return NULL;
+    }
+}
+
+JNIEXPORT jint JNICALL Java_org_openeggbert_cna_internal_NativeBindings_nativeGetStockEffectVector(
+    JNIEnv* environment,
+    jclass type,
+    jlong effect,
+    jint effect_kind,
+    jint kind,
+    jfloatArray output)
+{
+    (void)type;
+    HandleGetVector3Function function = stock_effect_vector_getter(effect_kind, kind);
+    if (function == NULL) {
+        return (jint)CNA_RESULT_INVALID_ARGUMENT;
+    }
+    CNA_Vector3 value = {0.0f, 0.0f, 0.0f};
+    CNA_Result result = function((CNA_Handle)effect, &value);
+    if (result == CNA_RESULT_SUCCESS) {
+        result = set_vector3_output(environment, output, value);
+    }
+    return (jint)result;
+}
+
+JNIEXPORT jint JNICALL Java_org_openeggbert_cna_internal_NativeBindings_nativeSetStockEffectVector(
+    JNIEnv* environment,
+    jclass type,
+    jlong effect,
+    jint effect_kind,
+    jint kind,
+    jfloatArray input)
+{
+    (void)type;
+    HandleSetVector3Function function = stock_effect_vector_setter(effect_kind, kind);
+    if (function == NULL) {
+        return (jint)CNA_RESULT_INVALID_ARGUMENT;
+    }
+    CNA_Vector3 value = {0.0f, 0.0f, 0.0f};
+    const CNA_Result result = get_vector3_input(environment, input, &value);
+    return result == CNA_RESULT_SUCCESS
+        ? (jint)function((CNA_Handle)effect, value) : (jint)result;
+}
+
+JNIEXPORT jint JNICALL Java_org_openeggbert_cna_internal_NativeBindings_nativeSetStockEffectTexture(
+    JNIEnv* environment,
+    jclass type,
+    jlong effect,
+    jint effect_kind,
+    jint slot,
+    jlong texture)
+{
+    (void)environment;
+    (void)type;
+    if (effect_kind == 0 && slot == 0) {
+        return (jint)cna.alpha_test_effect_set_texture(
+            (CNA_Handle)effect, (CNA_Handle)texture);
+    }
+    if (effect_kind == 1 && (slot == 0 || slot == 1)) {
+        return (jint)cna.dual_texture_effect_set_texture(
+            (CNA_Handle)effect, (uint32_t)slot, (CNA_Handle)texture);
+    }
+    if (effect_kind == 2 && slot == 0) {
+        return (jint)cna.environment_map_effect_set_texture(
+            (CNA_Handle)effect, (CNA_Handle)texture);
+    }
+    if (effect_kind == 2 && slot == 1) {
+        return (jint)cna.environment_map_effect_set_environment_map(
+            (CNA_Handle)effect, (CNA_Handle)texture);
+    }
+    if (effect_kind == 3 && slot == 0) {
+        return (jint)cna.skinned_effect_set_texture(
+            (CNA_Handle)effect, (CNA_Handle)texture);
+    }
+    return (jint)CNA_RESULT_INVALID_ARGUMENT;
+}
+
+JNIEXPORT jint JNICALL Java_org_openeggbert_cna_internal_NativeBindings_nativeSetSkinnedEffectBoneTransforms(
+    JNIEnv* environment,
+    jclass type,
+    jlong effect,
+    jfloatArray input)
+{
+    (void)type;
+    if (input == NULL) {
+        return (jint)CNA_RESULT_INVALID_ARGUMENT;
+    }
+    const jsize float_count = (*environment)->GetArrayLength(environment, input);
+    if (float_count < 16 || float_count > 72 * 16 || float_count % 16 != 0) {
+        return (jint)CNA_RESULT_INVALID_ARGUMENT;
+    }
+    CNA_Matrix transforms[72];
+    (void)memset(transforms, 0, sizeof(transforms));
+    (*environment)->GetFloatArrayRegion(
+        environment, input, 0, float_count, (jfloat*)transforms);
+    if ((*environment)->ExceptionCheck(environment)) {
+        return (jint)CNA_RESULT_INVALID_STATE;
+    }
+    return (jint)cna.skinned_effect_set_bone_transforms(
+        (CNA_Handle)effect, transforms, (uint64_t)(float_count / 16));
+}
+
+JNIEXPORT jint JNICALL Java_org_openeggbert_cna_internal_NativeBindings_nativeGetSkinnedEffectBoneTransforms(
+    JNIEnv* environment,
+    jclass type,
+    jlong effect,
+    jint count,
+    jfloatArray output)
+{
+    (void)type;
+    if (count < 1 || count > 72 || output == NULL ||
+        (*environment)->GetArrayLength(environment, output) != count * 16) {
+        return (jint)CNA_RESULT_INVALID_ARGUMENT;
+    }
+    CNA_Matrix transforms[72];
+    (void)memset(transforms, 0, sizeof(transforms));
+    uint64_t copied = 0U;
+    CNA_Result result = cna.skinned_effect_copy_bone_transforms(
+        (CNA_Handle)effect, (uint64_t)count, transforms, (uint64_t)count, &copied);
+    if (result == CNA_RESULT_SUCCESS && copied != (uint64_t)count) {
+        return (jint)CNA_RESULT_INVALID_STATE;
+    }
+    if (result == CNA_RESULT_SUCCESS) {
+        (*environment)->SetFloatArrayRegion(
+            environment, output, 0, count * 16, (const jfloat*)transforms);
+        if ((*environment)->ExceptionCheck(environment)) {
+            return (jint)CNA_RESULT_INVALID_STATE;
+        }
+    }
+    return (jint)result;
+}
+
+JNIEXPORT jint JNICALL Java_org_openeggbert_cna_internal_NativeBindings_nativeCreateOcclusionQuery(
+    JNIEnv* environment, jclass type, jlong game, jlongArray output)
+{
+    (void)type;
+    CNA_Handle device = CNA_INVALID_HANDLE;
+    CNA_Result result = graphics_device_from_game(game, &device);
+    if (result != CNA_RESULT_SUCCESS) {
+        return (jint)result;
+    }
+    CNA_Handle query = CNA_INVALID_HANDLE;
+    result = cna.occlusion_query_create(device, &query);
+    if (result != CNA_RESULT_SUCCESS) {
+        return (jint)result;
+    }
+    result = set_handle_output(environment, output, query);
+    if (result != CNA_RESULT_SUCCESS) {
+        (void)cna.occlusion_query_destroy(query);
+    }
+    return (jint)result;
+}
+
+JNIEXPORT jint JNICALL Java_org_openeggbert_cna_internal_NativeBindings_nativeBeginOcclusionQuery(
+    JNIEnv* environment, jclass type, jlong query)
+{
+    (void)environment;
+    (void)type;
+    return (jint)cna.occlusion_query_begin((CNA_Handle)query);
+}
+
+JNIEXPORT jint JNICALL Java_org_openeggbert_cna_internal_NativeBindings_nativeEndOcclusionQuery(
+    JNIEnv* environment, jclass type, jlong query)
+{
+    (void)environment;
+    (void)type;
+    return (jint)cna.occlusion_query_end((CNA_Handle)query);
+}
+
+JNIEXPORT jint JNICALL Java_org_openeggbert_cna_internal_NativeBindings_nativeGetOcclusionQueryComplete(
+    JNIEnv* environment, jclass type, jlong query)
+{
+    (void)environment;
+    (void)type;
+    CNA_Bool complete = CNA_FALSE;
+    const CNA_Result result = cna.occlusion_query_get_is_complete(
+        (CNA_Handle)query, &complete);
+    return result == CNA_RESULT_SUCCESS
+        ? (complete == CNA_TRUE ? 1 : 0) : -(jint)result;
+}
+
+JNIEXPORT jint JNICALL Java_org_openeggbert_cna_internal_NativeBindings_nativeGetOcclusionQueryPixelCount(
+    JNIEnv* environment, jclass type, jlong query, jintArray output)
+{
+    (void)type;
+    if (output == NULL || (*environment)->GetArrayLength(environment, output) != 1) {
+        return (jint)CNA_RESULT_INVALID_ARGUMENT;
+    }
+    int32_t pixel_count = 0;
+    const CNA_Result result = cna.occlusion_query_get_pixel_count(
+        (CNA_Handle)query, &pixel_count);
+    if (result == CNA_RESULT_SUCCESS) {
+        const jint projected = (jint)pixel_count;
+        (*environment)->SetIntArrayRegion(environment, output, 0, 1, &projected);
+        if ((*environment)->ExceptionCheck(environment)) {
+            return (jint)CNA_RESULT_INVALID_STATE;
+        }
+    }
+    return (jint)result;
+}
+
+JNIEXPORT jint JNICALL Java_org_openeggbert_cna_internal_NativeBindings_nativeDestroyOcclusionQuery(
+    JNIEnv* environment, jclass type, jlong query)
+{
+    (void)environment;
+    (void)type;
+    return (jint)cna.occlusion_query_destroy((CNA_Handle)query);
 }
 
 JNIEXPORT jint JNICALL Java_org_openeggbert_cna_internal_NativeBindings_nativeCreateTexture2D(

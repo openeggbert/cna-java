@@ -102,6 +102,11 @@ an immutable `FindResult`. Each carrier exposes `getSucceeded()` and a snapshot 
 location. These signatures are declared in `refOutMemberMappings`; other unclassified `ref`/`out`
 members remain verifier failures.
 
+The Model name collections have a narrower reviewed single-output rule. XNA's
+`TryGetValue(name, out value)` maps to `TryGetValue(name)` returning the matching ModelBone or
+ModelMesh, and returns `null` when the Boolean/out pair would report failure. This mapping is listed
+by full CLR signature; it does not establish a general rule for discarding Boolean results.
+
 `GraphicsAdapter.QueryBackBufferFormat` and `QueryRenderTargetFormat` have three `out` values in
 addition to their Boolean exact-match result. Java returns an immutable `FormatSelectionResult`
 carrying `getExactMatch()`, the selected surface and depth formats, and the selected multisample
@@ -111,6 +116,10 @@ count. `DisplayModeCollection` retains `GetEnumerator()` and also supplies the r
 The four Effect reflection collections follow the same explicit bridge rule. They retain XNA's
 concrete `GetEnumerator()` member and also declare `iterator()` so their mapped Java `Iterable`
 contracts are actual interfaces rather than metadata-only claims.
+
+The four Model collection enumerator value types likewise retain `MoveNext()`, `getCurrent()`, and
+their no-op mapped `close()` member while implementing Java Iterator through explicit `hasNext()`
+and `next()` bridges. The bridge does not make the read-only owning collection mutable.
 
 The parameterless `IDisposable.Dispose()` contract maps to `close()`. A distinct protected
 `Dispose(boolean)` lifetime hook keeps its XNA name as `Dispose(boolean)`. CLR finalization is not
@@ -196,6 +205,11 @@ views; mapping to `List<T>` does not grant mutation that XNA refused. Generic bo
 where the Java type system can express them. CLR attributes with behavioral or contract meaning
 map to annotations listed in the rules file; other attributes remain recorded as unmapped
 diagnostics until reviewed.
+
+When a public XNA concrete type derives from `ReadOnlyCollection<T>`, Java cannot extend the
+`List<T>` interface as a class. Such concrete facades use the explicitly recorded
+`AbstractList<T>` base mapping while members that merely return `ReadOnlyCollection<T>` continue to
+return `List<T>`. The four Model collection facades are the first reviewed instances of this rule.
 
 ## Delegates and events
 

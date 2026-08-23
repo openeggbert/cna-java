@@ -161,7 +161,8 @@ public class ContentManager implements AutoCloseable {
     public void Unload() {
         ensureOpen();
         RuntimeException failure = null;
-        for (Object asset : disposableAssets) {
+        for (int index = disposableAssets.size() - 1; index >= 0; index--) {
+            Object asset = disposableAssets.get(index);
             try {
                 if (asset instanceof SpriteFont spriteFont) {
                     NativeBindings.closeSpriteFont(spriteFont);
@@ -232,6 +233,17 @@ public class ContentManager implements AutoCloseable {
 
     final void recordDisposableObject(AutoCloseable value) {
         disposableAssets.add(Objects.requireNonNull(value, "value"));
+    }
+
+    final void recordManagedNativeObject(Object value) {
+        if (!(value instanceof SpriteFont)) {
+            throw new IllegalArgumentException("Unsupported managed native content object");
+        }
+        disposableAssets.add(value);
+    }
+
+    final GraphicsDevice graphicsDeviceForContentReader() {
+        return graphicsDevice();
     }
 
     boolean hasManagedAsset(String assetName) {

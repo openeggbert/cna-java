@@ -498,6 +498,15 @@ def mapped_members(type_contract: dict[str, Any], rules: dict[str, Any], mapping
             callable_member("method", "remove", source, [parameter("index", "int")], element_type),
             callable_member("method", "clear", source, [], "void"),
         ])
+    elif base and base[0] == "System.Collections.ObjectModel.ReadOnlyCollection`1":
+        element_type = map_type(base[1][0]) or "java.lang.Object"
+        source = {"access": "public", "static": False, "abstract": False,
+                  "final": False, "genericArity": 0}
+        expected.extend([
+            callable_member("method", "get", source,
+                            [parameter("index", "int")], element_type),
+            callable_member("method", "size", source, [], "int"),
+        ])
 
     if type_name in rules.get("javaCollectionBridgeTypes", []):
         collection_interface = next(
@@ -661,7 +670,7 @@ def compare(reference: dict[str, Any], target: dict[str, Any], rules: dict[str, 
                                        {"abstract": expected_abstract, "final": expected_sealed},
                                        {"abstract": actual_type.get("abstract"), "final": actual_type.get("sealed")}))
         expected_base = expected_type.get("baseType") if expected_type.get("javaSynthetic") \
-            else map_type(expected_type.get("baseType"))
+            else rules.get("typeBaseTypeMappings", {}).get(name, map_type(expected_type.get("baseType")))
         if expected_type["kind"] in ("struct", "enum"):
             expected_base = "java.lang.Object" if expected_type["kind"] == "struct" \
                 or expected_type.get("flags") else actual_type.get("baseType")

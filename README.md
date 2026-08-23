@@ -17,52 +17,68 @@ CNA C++
 
 ## Honest status
 
-The project is functional for a small Linux/headless lifecycle, texture,
-SpriteBatch, keyboard, and mouse slice; it is not XNA-complete and does not yet
-provide XNB content or the broad graphics surface.
+The project is a member-complete, structurally strict partial projection of the
+selected XNA 4.0 Windows runtime profile. It is not XNA-complete: 60 entire
+dependency-group types remain, but every one of the 205 currently implemented
+strict types has its complete mapped member contract.
 
-The first strict Windows-runtime measurement is intentionally red:
+The current strict measurement is:
 
 ```text
 XNA reference:        257 types / 2,964 members
-Mapped Java contract: 261 types / 3,086 members
-Java target:           51 strict types / 912 members
-Differences:          462 unreviewed diagnostics
-Allowlist:              0
-Strict leaks:           0
+Mapped Java contract: 265 types / 3,200 members
+Java target:          205 strict types / 2,730 members
+Missing types:         60
+Missing members:        0
+Structural drift:       0
+Mapping drift:          0
+Allowlist:               0
+Strict leaks:            0
 ```
 
-The exact current diagnostic breakdown is recorded in [plan.md](plan.md) and
-[NEXT.md](NEXT.md). No completeness claim is inferred from source counts.
+The exact diagnostic breakdown and remaining family distribution are recorded
+in [plan.md](plan.md) and [NEXT.md](NEXT.md). No completeness claim is inferred
+from source counts.
 
 Implemented now:
 
-- normative CLR-to-Java mapping, including naming and language adaptations;
-- foundational value types plus `Game`, component hierarchy/collection,
-  services, a launch-parameter container (native population pending), events,
-  `GameTime`, `GameWindow`, composable display orientation, and an opaque window
-  handle (native window event delivery remains pending);
-- exact `PlayerIndex`, `Keys`, `KeyState`, `KeyboardState`, and both native
-  `Keyboard.GetState` overloads;
-- exact `ButtonState`, immutable `MouseState`, and native-backed `Mouse`
-  state/position/opaque-window operations;
-- exact graphics-resource/texture hierarchy plus `SurfaceFormat`,
-  `SpriteSortMode`, composable `SpriteEffects`, native `Texture2D` lifecycle,
-  Color data transfer, PNG/JPEG streams, and all texture-based SpriteBatch Draw
-  overloads (stateful Begin overloads and DrawString remain missing);
-- the complete 141-value same-cased XNA named color palette, including
-  `Color.Transparent`, `Color.CornflowerBlue`, and `Color.YellowGreen`;
-- Java 17 JNI adapter for 53 CNA game/error/window/input/texture/SpriteBatch
-  functions;
-- explicit native ownership modes and idempotent cleanup;
-- class-metadata XNA contract verifier and strict implementation-leak guard;
-- header/signature/layout/native-symbol ABI verifier;
-- managed numerical, validation, lifecycle, content, and ownership tests;
-- desktop template canary with 60-frame smoke and 600-frame stability modes.
+- normative CLR-to-Java mapping, foundational math/framework types, the `Game`
+  lifecycle/component/service/window surface, and deterministic ownership;
+- native keyboard, mouse, gamepad, raw touch, and gesture paths, with
+  `FrameworkDispatcher.Update` pumping CNA framework services;
+- the graphics device, state, texture/render-target, vertex/index declaration
+  and buffer families, including dynamic uploads, ContentLost callbacks, draw
+  routes, and the safety guard around CNA's bound-buffer lifetime defect;
+- texture-based and string-based `SpriteBatch` contracts, including complete
+  Begin state/effect overloads, plus native SpriteFont measurement/drawing for
+  fonts obtained from the existing CNA loader;
+- real Effect bytecode/reflection, stable technique/pass/parameter/annotation
+  views, real pass application, and all five executable native stock effects:
+  `BasicEffect`, `AlphaTestEffect`, `DualTextureEffect`,
+  `EnvironmentMapEffect`, and `SkinnedEffect`;
+- a managed Windows XNB version-5 reader foundation with reader tables, custom
+  and primitive/value readers, shared resources, external references, cache
+  identity, existing-instance handling, partial-failure cleanup, and real
+  Texture2D, SpriteFont, vertex/index buffer, Effect/BasicEffect, and Model
+  built-in readers;
+- the complete selected-profile Model object graph, including stable read-only
+  collection identities and real indexed drawing through loaded CNA resources;
+- a Java 17 JNI adapter for 399 reviewed CNA ABI 0.7.0 functions, with header,
+  manifest, layout/signature, and native-symbol verification;
+- managed and native integration/ownership tests plus a desktop template canary
+  verified for 60-frame smoke and 600-frame stability runs using both raw PNG
+  and managed Texture2D XNB paths.
 
-Not implemented yet includes graphics states/effects, SpriteFont, gamepad/touch,
-XNB loading, models, audio/XACT, media/storage, and most of the selected XNA
-profile.
+The current managed XNB implementation supports uncompressed Windows framing.
+Texture2D upload is fidelity-preserving for `SurfaceFormat.Color`; all other
+surface formats are rejected until CNA can create/upload the exact format, and
+compressed data is never reinterpreted as RGBA. SpriteFont is consequently
+verified with an uncompressed Color atlas. The Model path is verified for a
+synthetic graph using VertexDeclaration, VertexBuffer, IndexBuffer, and
+BasicEffect readers; reader families not in that graph remain explicit load
+errors. LZX-compressed XNB is not implemented. The remaining strict families
+are Audio/XACT, Media/Video, Storage, Design converters, and GamerServices;
+Graphics is at zero missing types.
 
 ## Build and verify
 

@@ -1414,10 +1414,29 @@ public final class NativeBindings {
         registerResource(game, effect, output[0], NativeBindings::destroyEffect);
     }
 
+    public static void createStockEffect(
+            Effect effect, GraphicsDevice graphicsDevice, int effectKind) {
+        Objects.requireNonNull(effect, "effect");
+        Game game = deviceGame(graphicsDevice);
+        long[] output = new long[1];
+        check(stockEffectCreateOperation(effectKind), nativeCreateStockEffect(
+                gameHandle(game, stockEffectName(effectKind)).requireValue(), effectKind, output));
+        registerResource(game, effect, output[0], NativeBindings::destroyEffect);
+    }
+
     public static void cloneEffect(Effect effect, Effect source) {
         Objects.requireNonNull(effect, "effect");
         long[] output = new long[1];
         check("cna_effect_clone", nativeCloneEffect(resourceValue(source), output));
+        registerResource(resourceOwner(source), effect, output[0], NativeBindings::destroyEffect);
+    }
+
+    public static void createEffectMaterial(Effect effect, Effect source) {
+        Objects.requireNonNull(effect, "effect");
+        Objects.requireNonNull(source, "source");
+        long[] output = new long[1];
+        check("cna_effect_material_create",
+                nativeCreateEffectMaterial(resourceValue(source), output));
         registerResource(resourceOwner(source), effect, output[0], NativeBindings::destroyEffect);
     }
 
@@ -1808,6 +1827,125 @@ public final class NativeBindings {
                 nativeSetBasicEffectTexture(resourceValue(effect), textureHandle));
     }
 
+    public static boolean getStockEffectBoolean(Effect effect, int effectKind, int kind) {
+        return booleanResult(stockEffectBooleanOperation(effectKind, kind, false),
+                nativeGetStockEffectBoolean(resourceValue(effect), effectKind, kind));
+    }
+
+    public static void setStockEffectBoolean(
+            Effect effect, int effectKind, int kind, boolean value) {
+        check(stockEffectBooleanOperation(effectKind, kind, true),
+                nativeSetStockEffectBoolean(resourceValue(effect), effectKind, kind, value));
+    }
+
+    public static float getStockEffectFloat(Effect effect, int effectKind, int kind) {
+        float[] output = new float[1];
+        check(stockEffectFloatOperation(effectKind, kind, false),
+                nativeGetStockEffectFloat(resourceValue(effect), effectKind, kind, output));
+        return output[0];
+    }
+
+    public static void setStockEffectFloat(
+            Effect effect, int effectKind, int kind, float value) {
+        check(stockEffectFloatOperation(effectKind, kind, true),
+                nativeSetStockEffectFloat(resourceValue(effect), effectKind, kind, value));
+    }
+
+    public static int getStockEffectInt(Effect effect, int effectKind, int kind) {
+        int[] output = new int[1];
+        check(stockEffectIntOperation(effectKind, kind, false),
+                nativeGetStockEffectInt(resourceValue(effect), effectKind, kind, output));
+        return output[0];
+    }
+
+    public static void setStockEffectInt(
+            Effect effect, int effectKind, int kind, int value) {
+        check(stockEffectIntOperation(effectKind, kind, true),
+                nativeSetStockEffectInt(resourceValue(effect), effectKind, kind, value));
+    }
+
+    public static Vector3 getStockEffectVector(Effect effect, int effectKind, int kind) {
+        float[] output = new float[3];
+        check(stockEffectVectorOperation(effectKind, kind, false),
+                nativeGetStockEffectVector(resourceValue(effect), effectKind, kind, output));
+        return new Vector3(output[0], output[1], output[2]);
+    }
+
+    public static void setStockEffectVector(
+            Effect effect, int effectKind, int kind, Vector3 value) {
+        Vector3 snapshot = new Vector3(Objects.requireNonNull(value, "value"));
+        check(stockEffectVectorOperation(effectKind, kind, true),
+                nativeSetStockEffectVector(resourceValue(effect), effectKind, kind,
+                        new float[]{snapshot.X, snapshot.Y, snapshot.Z}));
+    }
+
+    public static void setStockEffectTexture(
+            Effect effect, int effectKind, int slot, Texture texture) {
+        long textureHandle = 0L;
+        if (texture != null) {
+            if (texture.getGraphicsDevice() != effect.getGraphicsDevice()) {
+                throw new IllegalArgumentException("Texture belongs to a different GraphicsDevice");
+            }
+            textureHandle = resourceValue(texture);
+        }
+        check(stockEffectTextureOperation(effectKind, slot), nativeSetStockEffectTexture(
+                resourceValue(effect), effectKind, slot, textureHandle));
+    }
+
+    public static void createOcclusionQuery(
+            GraphicsResource query, GraphicsDevice graphicsDevice) {
+        Objects.requireNonNull(query, "query");
+        Game game = deviceGame(graphicsDevice);
+        long[] output = new long[1];
+        check("cna_occlusion_query_create", nativeCreateOcclusionQuery(
+                gameHandle(game, "OcclusionQuery").requireValue(), output));
+        registerResource(game, query, output[0], NativeBindings::destroyOcclusionQuery);
+    }
+
+    public static void beginOcclusionQuery(GraphicsResource query) {
+        check("cna_occlusion_query_begin", nativeBeginOcclusionQuery(resourceValue(query)));
+    }
+
+    public static void endOcclusionQuery(GraphicsResource query) {
+        check("cna_occlusion_query_end", nativeEndOcclusionQuery(resourceValue(query)));
+    }
+
+    public static boolean getOcclusionQueryComplete(GraphicsResource query) {
+        return booleanResult("cna_occlusion_query_get_is_complete",
+                nativeGetOcclusionQueryComplete(resourceValue(query)));
+    }
+
+    public static int getOcclusionQueryPixelCount(GraphicsResource query) {
+        int[] output = new int[1];
+        check("cna_occlusion_query_get_pixel_count",
+                nativeGetOcclusionQueryPixelCount(resourceValue(query), output));
+        return output[0];
+    }
+
+    public static void setSkinnedEffectBoneTransforms(Effect effect, Matrix[] transforms) {
+        float[] values = new float[Math.multiplyExact(transforms.length, 16)];
+        for (int index = 0; index < transforms.length; index++) {
+            Matrix snapshot = new Matrix(Objects.requireNonNull(
+                    transforms[index], "boneTransforms[" + index + "]"));
+            System.arraycopy(matrixValues(snapshot), 0, values, index * 16, 16);
+        }
+        check("cna_skinned_effect_set_bone_transforms",
+                nativeSetSkinnedEffectBoneTransforms(resourceValue(effect), values));
+    }
+
+    public static Matrix[] getSkinnedEffectBoneTransforms(Effect effect, int count) {
+        float[] values = new float[Math.multiplyExact(count, 16)];
+        check("cna_skinned_effect_copy_bone_transforms",
+                nativeGetSkinnedEffectBoneTransforms(resourceValue(effect), count, values));
+        Matrix[] output = new Matrix[count];
+        for (int index = 0; index < count; index++) {
+            float[] value = new float[16];
+            System.arraycopy(values, index * 16, value, 0, 16);
+            output[index] = matrix(value);
+        }
+        return output;
+    }
+
     public static int[] createTexture2D(
             Texture2D texture,
             GraphicsDevice graphicsDevice,
@@ -1907,6 +2045,74 @@ public final class NativeBindings {
         }
     }
 
+    public static SpriteFont createSpriteFont(
+            Texture2D texture,
+            List<Rectangle> glyphBounds,
+            List<Rectangle> cropping,
+            List<Character> characters,
+            int lineSpacing,
+            float spacing,
+            List<Vector3> kerning,
+            Character defaultCharacter) {
+        Objects.requireNonNull(texture, "texture");
+        Objects.requireNonNull(glyphBounds, "glyphBounds");
+        Objects.requireNonNull(cropping, "cropping");
+        Objects.requireNonNull(characters, "characters");
+        Objects.requireNonNull(kerning, "kerning");
+        int count = characters.size();
+        if (count == 0 || glyphBounds.size() != count || cropping.size() != count
+                || kerning.size() != count || !Float.isFinite(spacing)) {
+            throw new IllegalArgumentException("Invalid SpriteFont glyph table");
+        }
+        int[] rectangles = new int[Math.multiplyExact(count, 8)];
+        char[] characterValues = new char[count];
+        float[] kerningValues = new float[Math.multiplyExact(count, 3)];
+        for (int index = 0; index < count; index++) {
+            Rectangle glyph = new Rectangle(Objects.requireNonNull(
+                    glyphBounds.get(index), "glyphBounds[" + index + "]"));
+            Rectangle crop = new Rectangle(Objects.requireNonNull(
+                    cropping.get(index), "cropping[" + index + "]"));
+            Character character = Objects.requireNonNull(
+                    characters.get(index), "characters[" + index + "]");
+            Vector3 bearing = new Vector3(Objects.requireNonNull(
+                    kerning.get(index), "kerning[" + index + "]"));
+            int rectangleOffset = index * 8;
+            rectangles[rectangleOffset] = glyph.X;
+            rectangles[rectangleOffset + 1] = glyph.Y;
+            rectangles[rectangleOffset + 2] = glyph.Width;
+            rectangles[rectangleOffset + 3] = glyph.Height;
+            rectangles[rectangleOffset + 4] = crop.X;
+            rectangles[rectangleOffset + 5] = crop.Y;
+            rectangles[rectangleOffset + 6] = crop.Width;
+            rectangles[rectangleOffset + 7] = crop.Height;
+            characterValues[index] = character;
+            int kerningOffset = index * 3;
+            kerningValues[kerningOffset] = bearing.X;
+            kerningValues[kerningOffset + 1] = bearing.Y;
+            kerningValues[kerningOffset + 2] = bearing.Z;
+        }
+
+        Game game = resourceOwner(texture);
+        SpriteFont font = FacadeFactory.createSpriteFont();
+        long[] output = new long[1];
+        check("cna_sprite_font_create", nativeCreateSpriteFont(
+                resourceValue(texture), rectangles, characterValues, kerningValues,
+                lineSpacing, spacing, defaultCharacter != null,
+                defaultCharacter == null ? 0 : defaultCharacter, output));
+        registerSpriteFont(game, font, output[0], texture);
+        try {
+            spriteFontInfo(font);
+            return font;
+        } catch (RuntimeException failure) {
+            try {
+                closeSpriteFont(font);
+            } catch (RuntimeException closeFailure) {
+                failure.addSuppressed(closeFailure);
+            }
+            throw failure;
+        }
+    }
+
     public static List<Character> getSpriteFontCharacters(SpriteFont font) {
         int count = spriteFontInfo(font).integers()[0];
         char[] characters = new char[count];
@@ -1951,10 +2157,15 @@ public final class NativeBindings {
 
     public static Vector2 measureSpriteFont(SpriteFont font, String text) {
         float[] output = new float[2];
-        check("cna_sprite_font_measure_utf8", nativeMeasureSpriteFont(
+        int result = nativeMeasureSpriteFont(
                 spriteFontValue(font),
                 Objects.requireNonNull(text, "text").getBytes(StandardCharsets.UTF_8),
-                output));
+                output);
+        if (result == 1) {
+            throw new IllegalArgumentException(
+                    "Text contains a character that is absent from the SpriteFont");
+        }
+        check("cna_sprite_font_measure_utf8", result);
         return new Vector2(output[0], output[1]);
     }
 
@@ -2001,6 +2212,17 @@ public final class NativeBindings {
                         resourceValue(buffer), offsetInBytes, vertexType,
                         Objects.requireNonNull(payload, "payload"),
                         vertexCount, vertexStride, options));
+    }
+
+    public static void setVertexBufferRawBytes(
+            VertexBuffer buffer, byte[] payload, int vertexCount, int vertexStride) {
+        byte[] snapshot = Objects.requireNonNull(payload, "payload").clone();
+        if (snapshot.length != Math.multiplyExact(vertexCount, vertexStride)) {
+            throw new IllegalArgumentException("Raw vertex payload length does not match the buffer");
+        }
+        check("cna_vertex_buffer_set_data_raw_at", nativeSetVertexBufferData(
+                resourceValue(buffer), 0, 0, snapshot,
+                vertexCount, vertexStride, 0));
     }
 
     public static boolean getVertexBufferIsContentLost(VertexBuffer buffer) {
@@ -2175,6 +2397,17 @@ public final class NativeBindings {
                 resourceValue(texture), dataType, level,
                 hasRectangle, x, y, width, height,
                 startIndex, elementCount, payload));
+    }
+
+    public static void setTexture2DRawBytes(Texture2D texture, int level, byte[] payload) {
+        byte[] snapshot = Objects.requireNonNull(payload, "payload").clone();
+        if (snapshot.length == 0 || snapshot.length % 4 != 0) {
+            throw new IllegalArgumentException("Color texture payload must contain whole RGBA texels");
+        }
+        check("cna_texture2d_set_data", nativeSetTexture2DTypedData(
+                resourceValue(texture), 0, level,
+                false, 0, 0, 0, 0,
+                0, snapshot.length / 4, snapshot));
     }
 
     public static byte[] getTexture2DData(
@@ -3300,6 +3533,143 @@ public final class NativeBindings {
         return stem;
     }
 
+    private static String stockEffectName(int effectKind) {
+        return switch (effectKind) {
+            case 0 -> "AlphaTestEffect";
+            case 1 -> "DualTextureEffect";
+            case 2 -> "EnvironmentMapEffect";
+            case 3 -> "SkinnedEffect";
+            default -> throw new IllegalArgumentException("Unknown stock Effect kind " + effectKind);
+        };
+    }
+
+    private static String stockEffectCreateOperation(int effectKind) {
+        return switch (effectKind) {
+            case 0 -> "cna_alpha_test_effect_create";
+            case 1 -> "cna_dual_texture_effect_create";
+            case 2 -> "cna_environment_map_effect_create";
+            case 3 -> "cna_skinned_effect_create";
+            default -> throw new IllegalArgumentException("Unknown stock Effect kind " + effectKind);
+        };
+    }
+
+    private static String stockEffectBooleanOperation(
+            int effectKind, int kind, boolean setter) {
+        String action = setter ? "set" : "get";
+        String operation = switch (effectKind) {
+            case 0 -> kind == 0
+                    ? "cna_alpha_test_effect_" + action + "_vertex_color_enabled" : null;
+            case 1 -> kind == 0
+                    ? "cna_dual_texture_effect_" + action + "_vertex_color_enabled" : null;
+            case 3 -> kind == 0
+                    ? "cna_skinned_effect_" + action + "_prefer_per_pixel_lighting" : null;
+            default -> throw new IllegalArgumentException(
+                    "Unknown stock Effect Boolean kind " + effectKind + ":" + kind);
+        };
+        if (operation == null) {
+            throw new IllegalArgumentException(
+                    "Unknown stock Effect Boolean kind " + effectKind + ":" + kind);
+        }
+        return operation;
+    }
+
+    private static String stockEffectFloatOperation(
+            int effectKind, int kind, boolean setter) {
+        String action = setter ? "set" : "get";
+        String operation = switch (effectKind) {
+            case 0 -> kind == 0 ? "cna_alpha_test_effect_" + action + "_alpha" : null;
+            case 1 -> kind == 0 ? "cna_dual_texture_effect_" + action + "_alpha" : null;
+            case 2 -> switch (kind) {
+                case 0 -> "cna_environment_map_effect_" + action + "_alpha";
+                case 1 -> "cna_environment_map_effect_" + action + "_amount";
+                case 2 -> "cna_environment_map_effect_" + action + "_fresnel_factor";
+                default -> null;
+            };
+            case 3 -> switch (kind) {
+                case 0 -> "cna_skinned_effect_" + action + "_specular_power";
+                case 1 -> "cna_skinned_effect_" + action + "_alpha";
+                default -> null;
+            };
+            default -> throw new IllegalArgumentException(
+                    "Unknown stock Effect float kind " + effectKind + ":" + kind);
+        };
+        if (operation == null) {
+            throw new IllegalArgumentException(
+                    "Unknown stock Effect float kind " + effectKind + ":" + kind);
+        }
+        return operation;
+    }
+
+    private static String stockEffectIntOperation(int effectKind, int kind, boolean setter) {
+        String action = setter ? "set" : "get";
+        String operation = switch (effectKind) {
+            case 0 -> switch (kind) {
+                case 0 -> "cna_alpha_test_effect_" + action + "_alpha_function";
+                case 1 -> "cna_alpha_test_effect_" + action + "_reference_alpha";
+                default -> null;
+            };
+            case 3 -> kind == 0
+                    ? "cna_skinned_effect_" + action + "_weights_per_vertex" : null;
+            default -> throw new IllegalArgumentException(
+                    "Unknown stock Effect int kind " + effectKind + ":" + kind);
+        };
+        if (operation == null) {
+            throw new IllegalArgumentException(
+                    "Unknown stock Effect int kind " + effectKind + ":" + kind);
+        }
+        return operation;
+    }
+
+    private static String stockEffectVectorOperation(
+            int effectKind, int kind, boolean setter) {
+        String action = setter ? "set" : "get";
+        String operation = switch (effectKind) {
+            case 0 -> kind == 0
+                    ? "cna_alpha_test_effect_" + action + "_diffuse_color" : null;
+            case 1 -> kind == 0
+                    ? "cna_dual_texture_effect_" + action + "_diffuse_color" : null;
+            case 2 -> switch (kind) {
+                case 0 -> "cna_environment_map_effect_" + action + "_diffuse_color";
+                case 1 -> "cna_environment_map_effect_" + action + "_emissive_color";
+                case 2 -> "cna_environment_map_effect_" + action + "_specular";
+                default -> null;
+            };
+            case 3 -> switch (kind) {
+                case 0 -> "cna_skinned_effect_" + action + "_diffuse_color";
+                case 1 -> "cna_skinned_effect_" + action + "_emissive_color";
+                case 2 -> "cna_skinned_effect_" + action + "_specular_color";
+                default -> null;
+            };
+            default -> throw new IllegalArgumentException(
+                    "Unknown stock Effect vector kind " + effectKind + ":" + kind);
+        };
+        if (operation == null) {
+            throw new IllegalArgumentException(
+                    "Unknown stock Effect vector kind " + effectKind + ":" + kind);
+        }
+        return operation;
+    }
+
+    private static String stockEffectTextureOperation(int effectKind, int slot) {
+        String operation = switch (effectKind) {
+            case 0 -> slot == 0 ? "cna_alpha_test_effect_set_texture" : null;
+            case 1 -> slot == 0 || slot == 1 ? "cna_dual_texture_effect_set_texture" : null;
+            case 2 -> switch (slot) {
+                case 0 -> "cna_environment_map_effect_set_texture";
+                case 1 -> "cna_environment_map_effect_set_environment_map";
+                default -> null;
+            };
+            case 3 -> slot == 0 ? "cna_skinned_effect_set_texture" : null;
+            default -> throw new IllegalArgumentException(
+                    "Unknown stock Effect texture kind " + effectKind + ":" + slot);
+        };
+        if (operation == null) {
+            throw new IllegalArgumentException(
+                    "Unknown stock Effect texture kind " + effectKind + ":" + slot);
+        }
+        return operation;
+    }
+
     private static String basicEffectFloatOperation(int kind, boolean setter) {
         String action = setter ? "set" : "get";
         return switch (kind) {
@@ -3452,6 +3822,10 @@ public final class NativeBindings {
 
     private static void destroyEffect(long handle) {
         check("cna_effect_destroy", nativeDestroyEffectObject(handle, 0));
+    }
+
+    private static void destroyOcclusionQuery(long handle) {
+        check("cna_occlusion_query_destroy", nativeDestroyOcclusionQuery(handle));
     }
 
     private static void destroyEffectMember(long handle, int kind) {
@@ -4107,6 +4481,11 @@ public final class NativeBindings {
 
     private static native int nativeCreateBasicEffect(long game, long[] output);
 
+    private static native int nativeCreateStockEffect(
+            long game, int effectKind, long[] output);
+
+    private static native int nativeCreateEffectMaterial(long source, long[] output);
+
     private static native int nativeCloneEffect(long effect, long[] output);
 
     private static native int nativeApplyEffect(long effect);
@@ -4201,6 +4580,51 @@ public final class NativeBindings {
 
     private static native int nativeSetBasicEffectTexture(long effect, long texture);
 
+    private static native int nativeGetStockEffectBoolean(
+            long effect, int effectKind, int kind);
+
+    private static native int nativeSetStockEffectBoolean(
+            long effect, int effectKind, int kind, boolean value);
+
+    private static native int nativeGetStockEffectFloat(
+            long effect, int effectKind, int kind, float[] output);
+
+    private static native int nativeSetStockEffectFloat(
+            long effect, int effectKind, int kind, float value);
+
+    private static native int nativeGetStockEffectInt(
+            long effect, int effectKind, int kind, int[] output);
+
+    private static native int nativeSetStockEffectInt(
+            long effect, int effectKind, int kind, int value);
+
+    private static native int nativeGetStockEffectVector(
+            long effect, int effectKind, int kind, float[] output);
+
+    private static native int nativeSetStockEffectVector(
+            long effect, int effectKind, int kind, float[] value);
+
+    private static native int nativeSetStockEffectTexture(
+            long effect, int effectKind, int slot, long texture);
+
+    private static native int nativeSetSkinnedEffectBoneTransforms(
+            long effect, float[] transforms);
+
+    private static native int nativeGetSkinnedEffectBoneTransforms(
+            long effect, int count, float[] output);
+
+    private static native int nativeCreateOcclusionQuery(long game, long[] output);
+
+    private static native int nativeBeginOcclusionQuery(long query);
+
+    private static native int nativeEndOcclusionQuery(long query);
+
+    private static native int nativeGetOcclusionQueryComplete(long query);
+
+    private static native int nativeGetOcclusionQueryPixelCount(long query, int[] output);
+
+    private static native int nativeDestroyOcclusionQuery(long query);
+
     private static native int nativeCreateTexture2D(
             long game, int width, int height, boolean mipMap, int format, long[] output);
 
@@ -4286,6 +4710,17 @@ public final class NativeBindings {
             int[] packedColors);
 
     private static native int nativeDestroyTexture3D(long texture);
+
+    private static native int nativeCreateSpriteFont(
+            long texture,
+            int[] rectangles,
+            char[] characters,
+            float[] kerning,
+            int lineSpacing,
+            float spacing,
+            boolean hasDefaultCharacter,
+            int defaultCharacter,
+            long[] output);
 
     private static native int nativeGetSpriteFontInfo(
             long spriteFont, int[] integers, float[] spacing);

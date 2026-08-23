@@ -39,6 +39,15 @@ public class Effect extends GraphicsResource {
         NativeBindings.cloneEffect(this, cloneSource);
     }
 
+    Effect(Effect cloneSource, boolean effectMaterial) {
+        super(Objects.requireNonNull(cloneSource, "cloneSource").getGraphicsDevice());
+        if (!effectMaterial) {
+            throw new IllegalArgumentException("The derived Effect route must be EffectMaterial");
+        }
+        cloneSource.requireEffectAlive();
+        NativeBindings.createEffectMaterial(this, cloneSource);
+    }
+
     Effect(GraphicsDevice graphicsDevice, boolean emptyNativeEffect) {
         super(Objects.requireNonNull(graphicsDevice, "graphicsDevice"));
         NativeBindings.createEffect(this, graphicsDevice, new byte[0], emptyNativeEffect);
@@ -46,10 +55,14 @@ public class Effect extends GraphicsResource {
 
     Effect(GraphicsDevice graphicsDevice, String stockEffect) {
         super(Objects.requireNonNull(graphicsDevice, "graphicsDevice"));
-        if (!"BasicEffect".equals(stockEffect)) {
-            throw new IllegalArgumentException("Unknown stock effect " + stockEffect);
+        switch (Objects.requireNonNull(stockEffect, "stockEffect")) {
+            case "BasicEffect" -> NativeBindings.createBasicEffect(this, graphicsDevice);
+            case "AlphaTestEffect" -> NativeBindings.createStockEffect(this, graphicsDevice, 0);
+            case "DualTextureEffect" -> NativeBindings.createStockEffect(this, graphicsDevice, 1);
+            case "EnvironmentMapEffect" -> NativeBindings.createStockEffect(this, graphicsDevice, 2);
+            case "SkinnedEffect" -> NativeBindings.createStockEffect(this, graphicsDevice, 3);
+            default -> throw new IllegalArgumentException("Unknown stock effect " + stockEffect);
         }
-        NativeBindings.createBasicEffect(this, graphicsDevice);
     }
 
     public Effect Clone() {
