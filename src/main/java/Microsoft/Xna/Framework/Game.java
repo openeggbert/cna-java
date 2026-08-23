@@ -42,7 +42,9 @@ public class Game implements AutoCloseable {
     private boolean fixedTimeStep = true;
     private boolean initializing;
     private boolean initialized;
+    private boolean closing;
     private boolean closed;
+    private boolean disposedEventRaised;
     private boolean hasRun;
     private boolean exitRequested;
     private boolean mouseVisible;
@@ -63,12 +65,16 @@ public class Game implements AutoCloseable {
         }
         hasRun = true;
         NativeBindings.run(ensureNativeGame());
+        window.rethrowPendingListenerFailure();
+        NativeBindings.rethrowGraphicsDeviceListenerFailure(graphicsDevice);
     }
 
     /** Initializes if needed, advances exactly one CNA frame, and returns. */
     public final void RunOneFrame() {
         ensureOpen();
         NativeBindings.runOneFrame(ensureNativeGame());
+        window.rethrowPendingListenerFailure();
+        NativeBindings.rethrowGraphicsDeviceListenerFailure(graphicsDevice);
     }
 
     /** Requests normal game-loop termination at CNA's next safe point. */
@@ -93,6 +99,8 @@ public class Game implements AutoCloseable {
     public final void Tick() {
         ensureOpen();
         NativeBindings.tick(ensureNativeGame());
+        window.rethrowPendingListenerFailure();
+        NativeBindings.rethrowGraphicsDeviceListenerFailure(graphicsDevice);
     }
 
     public final GameComponentCollection getComponents() {
@@ -316,17 +324,28 @@ public class Game implements AutoCloseable {
             failure = appendFailure(failure, exception);
         }
         failure = closeResource(content, failure);
+        boolean nativeChildrenReleased = true;
         try {
             NativeBindings.closeGraphicsResources(this);
         } catch (RuntimeException exception) {
+            nativeChildrenReleased = false;
             failure = appendFailure(failure, exception);
         }
-        if (nativeGame != null) {
+        boolean managerReleased = graphicsManager == null;
+        if (graphicsManager != null) {
+            try {
+                graphicsManager.closeFromGame();
+            } catch (RuntimeException exception) {
+                failure = appendFailure(failure, exception);
+            }
+            managerReleased = graphicsManager == null;
+        }
+        if (nativeChildrenReleased && managerReleased && nativeGame != null) {
             failure = closeResource(nativeGame, failure);
         }
-        failure = closeResource(graphicsDevice, failure);
-        if (graphicsManager != null) {
-            graphicsManager.closeFromGame();
+        if (nativeGame == null || nativeGame.isClosed()) {
+            window.clearEventListeners();
+            failure = closeResource(graphicsDevice, failure);
         }
         if (failure != null) {
             throw failure;
@@ -339,18 +358,23 @@ public class Game implements AutoCloseable {
         if (closed) {
             return;
         }
-        closed = true;
+        closing = true;
         RuntimeException failure = null;
         try {
             Dispose(true);
         } catch (RuntimeException exception) {
             failure = exception;
         }
-        try {
-            invoke(disposedListeners, this, EventArgs.Empty);
-        } catch (RuntimeException exception) {
-            failure = appendFailure(failure, exception);
-        } finally {
+        if (nativeGame == null || nativeGame.isClosed()) {
+            closed = true;
+            if (!disposedEventRaised) {
+                disposedEventRaised = true;
+                try {
+                    invoke(disposedListeners, this, EventArgs.Empty);
+                } catch (RuntimeException exception) {
+                    failure = appendFailure(failure, exception);
+                }
+            }
             activatedListeners.clear();
             deactivatedListeners.clear();
             disposedListeners.clear();
@@ -367,6 +391,32 @@ public class Game implements AutoCloseable {
             throw new IllegalStateException("A Game already has a GraphicsDeviceManager");
         }
         graphicsManager = manager;
+        if (hasNativeGame()) {
+            manager.attachNative(nativeGame);
+        }
+    }
+
+    final void detachGraphicsManager(GraphicsDeviceManager manager) {
+        if (graphicsManager == manager) {
+            graphicsManager = null;
+        }
+    }
+
+    final void prepareNativeGraphicsManager(GraphicsDeviceManager manager) {
+        ensureOpen();
+        if (graphicsManager != manager) {
+            throw new IllegalStateException("GraphicsDeviceManager is not attached to this Game");
+        }
+        manager.attachNative(ensureNativeGame());
+    }
+
+    final void setSupportedOrientationsFromWindow(DisplayOrientation value) {
+        ensureOpen();
+        if (graphicsManager == null) {
+            throw new IllegalStateException(
+                    "GameWindow supported orientations require a GraphicsDeviceManager");
+        }
+        graphicsManager.setSupportedOrientationsFromWindow(value);
     }
 
     final void prepareNativeWindow() {
@@ -383,6 +433,7 @@ public class Game implements AutoCloseable {
 
     @SuppressWarnings("unused")
     private void nativeInitialize() {
+        NativeBindings.ensureGraphicsDeviceEvents(graphicsDevice);
         initializing = true;
         try {
             Initialize();
@@ -438,6 +489,11 @@ public class Game implements AutoCloseable {
         OnExiting(this, EventArgs.Empty);
     }
 
+    @SuppressWarnings("unused")
+    private void nativeWindowEvent(int event) {
+        window.dispatchNativeEvent(event);
+    }
+
     private NativeGameHandle ensureNativeGame() {
         if (!hasNativeGame()) {
             nativeGame = NativeBindings.createGame(
@@ -446,6 +502,9 @@ public class Game implements AutoCloseable {
             NativeBindings.setMouseVisible(nativeGame, mouseVisible);
             if (exitRequested) {
                 NativeBindings.requestExit(nativeGame);
+            }
+            if (graphicsManager != null) {
+                graphicsManager.attachNative(nativeGame);
             }
         }
         return nativeGame;
@@ -521,7 +580,7 @@ public class Game implements AutoCloseable {
     }
 
     private void ensureOpen() {
-        if (closed) {
+        if (closed || closing) {
             throw new IllegalStateException("Game is already closed");
         }
     }

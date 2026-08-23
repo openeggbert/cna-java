@@ -20,6 +20,12 @@ public final class Rectangle {
     public int getTop() { return Y; }
     public int getBottom() { return Y + Height; }
     public Point getCenter() { return new Point(X + (Width / 2), Y + (Height / 2)); }
+    public Point getLocation() { return new Point(X, Y); }
+    public void setLocation(Point value) {
+        Point snapshot = new Point(java.util.Objects.requireNonNull(value, "value"));
+        X = snapshot.X;
+        Y = snapshot.Y;
+    }
     public boolean getIsEmpty() { return X == 0 && Y == 0 && Width == 0 && Height == 0; }
 
     public boolean Contains(int x, int y) { return X <= x && x < getRight() && Y <= y && y < getBottom(); }
@@ -66,8 +72,13 @@ public final class Rectangle {
                 && X == value.X && Y == value.Y && Width == value.Width && Height == value.Height;
     }
 
+    public boolean equals(Rectangle other) {
+        return other != null && X == other.X && Y == other.Y
+                && Width == other.Width && Height == other.Height;
+    }
+
     @Override
-    public int hashCode() { return X ^ Y ^ Width ^ Height; }
+    public int hashCode() { return X + Y + Width + Height; }
 
     @Override
     public String toString() { return "{X:" + X + " Y:" + Y + " Width:" + Width + " Height:" + Height + '}'; }

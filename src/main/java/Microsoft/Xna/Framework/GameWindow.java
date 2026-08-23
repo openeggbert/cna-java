@@ -13,6 +13,7 @@ public abstract class GameWindow {
             new CopyOnWriteArrayList<>();
     private final CopyOnWriteArrayList<EventHandler<EventArgs>> screenDeviceNameChangedListeners =
             new CopyOnWriteArrayList<>();
+    private Throwable pendingListenerFailure;
     private String title;
 
     GameWindow(Game game, String title) {
@@ -106,6 +107,48 @@ public abstract class GameWindow {
 
     final Game game() {
         return game;
+    }
+
+    final void dispatchNativeEvent(int event) {
+        try {
+            switch (event) {
+                case 0 -> OnClientSizeChanged();
+                case 1 -> OnOrientationChanged();
+                case 2 -> OnScreenDeviceNameChanged();
+                default -> throw new IllegalArgumentException("Unknown native window event " + event);
+            }
+        } catch (Throwable failure) {
+            synchronized (this) {
+                if (pendingListenerFailure == null) {
+                    pendingListenerFailure = failure;
+                } else {
+                    pendingListenerFailure.addSuppressed(failure);
+                }
+            }
+        }
+    }
+
+    final void rethrowPendingListenerFailure() {
+        Throwable failure;
+        synchronized (this) {
+            failure = pendingListenerFailure;
+            pendingListenerFailure = null;
+        }
+        if (failure instanceof RuntimeException runtime) {
+            throw runtime;
+        }
+        if (failure instanceof Error error) {
+            throw error;
+        }
+        if (failure != null) {
+            throw new IllegalStateException("Window listener failed", failure);
+        }
+    }
+
+    final void clearEventListeners() {
+        clientSizeChangedListeners.clear();
+        orientationChangedListeners.clear();
+        screenDeviceNameChangedListeners.clear();
     }
 
     private void invoke(CopyOnWriteArrayList<EventHandler<EventArgs>> listeners) {

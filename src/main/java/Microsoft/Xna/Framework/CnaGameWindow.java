@@ -21,6 +21,7 @@ final class CnaGameWindow extends GameWindow {
     public void setAllowUserResizing(boolean value) {
         game().prepareNativeWindow();
         NativeBindings.setWindowAllowUserResizing(game(), value);
+        rethrowPendingListenerFailure();
     }
 
     @Override
@@ -55,6 +56,7 @@ final class CnaGameWindow extends GameWindow {
     public void BeginScreenDeviceChange(boolean willBeFullScreen) {
         game().prepareNativeWindow();
         NativeBindings.beginWindowScreenDeviceChange(game(), willBeFullScreen);
+        rethrowPendingListenerFailure();
     }
 
     @Override
@@ -66,13 +68,13 @@ final class CnaGameWindow extends GameWindow {
         NativeBindings.endWindowScreenDeviceChange(
                 game(), Objects.requireNonNull(screenDeviceName, "screenDeviceName"),
                 clientWidth, clientHeight);
+        rethrowPendingListenerFailure();
     }
 
     @Override
     protected void SetSupportedOrientations(DisplayOrientation orientations) {
-        Objects.requireNonNull(orientations, "orientations");
-        throw new UnsupportedOperationException(
-                "SupportedOrientations requires the native GraphicsDeviceManager slice");
+        game().setSupportedOrientationsFromWindow(
+                Objects.requireNonNull(orientations, "orientations"));
     }
 
     @Override

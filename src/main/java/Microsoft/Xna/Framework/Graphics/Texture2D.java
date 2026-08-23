@@ -8,7 +8,6 @@ import org.openeggbert.cna.internal.NativeBindings;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
-import java.util.Arrays;
 import java.util.Objects;
 
 /** Device-owned two-dimensional texture backed by CNA's stable C resource ABI. */
@@ -17,6 +16,10 @@ public class Texture2D extends Texture {
 
     private int width;
     private int height;
+
+    Texture2D(GraphicsDevice graphicsDevice) {
+        super(Objects.requireNonNull(graphicsDevice, "graphicsDevice"));
+    }
 
     public Texture2D(GraphicsDevice graphicsDevice, int width, int height) {
         this(graphicsDevice, width, height, false, SurfaceFormat.Color);
@@ -84,14 +87,13 @@ public class Texture2D extends Texture {
             int elementCount) {
         ensureNotDisposed();
         Objects.requireNonNull(data, "data");
-        validateArrayWindow(data.length, startIndex, elementCount);
-        requireWholeColorTransfer(level, rect, elementCount);
-        if (!(data instanceof Color[] colors)) {
-            throw new UnsupportedOperationException(
-                    "This CNA-Java slice currently supports Texture2D Color[] transfers only");
-        }
+        Rectangle region = rect == null ? null : new Rectangle(rect);
+        TextureDataCodec codec = validateTransfer(
+                level, region, data, startIndex, elementCount);
+        byte[] snapshot = codec.encode(data, startIndex, elementCount);
         NativeBindings.setTexture2DData(
-                this, Arrays.copyOfRange(colors, startIndex, startIndex + elementCount));
+                this, codec.dataType(), level, region,
+                startIndex, elementCount, snapshot);
     }
 
     public final <T> void GetData(T[] data) {
@@ -111,14 +113,14 @@ public class Texture2D extends Texture {
             int elementCount) {
         ensureNotDisposed();
         Objects.requireNonNull(data, "data");
-        validateArrayWindow(data.length, startIndex, elementCount);
-        requireWholeColorTransfer(level, rect, elementCount);
-        if (!(data instanceof Color[] colors)) {
-            throw new UnsupportedOperationException(
-                    "This CNA-Java slice currently supports Texture2D Color[] transfers only");
-        }
-        Color[] snapshot = NativeBindings.getTexture2DData(this, elementCount);
-        System.arraycopy(snapshot, 0, colors, startIndex, elementCount);
+        Rectangle region = rect == null ? null : new Rectangle(rect);
+        TextureDataCodec codec = validateTransfer(
+                level, region, data, startIndex, elementCount);
+        int payloadBytes = Math.multiplyExact(data.length, codec.elementSize());
+        byte[] snapshot = NativeBindings.getTexture2DData(
+                this, codec.dataType(), level, region,
+                startIndex, elementCount, payloadBytes);
+        codec.decodeInto(snapshot, data, startIndex, elementCount);
     }
 
     public final void SaveAsPng(OutputStream stream, int width, int height) {
@@ -152,7 +154,7 @@ public class Texture2D extends Texture {
         super.Dispose(arg0);
     }
 
-    private void initialize(int[] info) {
+    final void initialize(int[] info) {
         if (info.length != 4 || info[0] <= 0 || info[1] <= 0 || info[2] <= 0
                 || info[3] < 0 || info[3] >= SurfaceFormat.values().length) {
             NativeBindings.closeGraphicsResource(this);
@@ -163,14 +165,50 @@ public class Texture2D extends Texture {
         setTextureInfo(SurfaceFormat.values()[info[3]], info[2]);
     }
 
-    private void requireWholeColorTransfer(int level, Rectangle rect, int elementCount) {
-        if (level != 0 || rect != null && !rect.equals(getBounds())) {
-            throw new UnsupportedOperationException(
-                    "This CNA-Java slice currently supports full level-zero transfers only");
+    private <T> TextureDataCodec validateTransfer(
+            int level,
+            Rectangle rect,
+            T[] data,
+            int startIndex,
+            int elementCount) {
+        if (data.length == 0) {
+            throw new IllegalArgumentException("Texture data array must not be empty");
         }
-        if (elementCount != Math.multiplyExact(width, height)) {
-            throw new IllegalArgumentException("Color transfer must contain exactly width * height elements");
+        if (level < 0 || level >= getLevelCount()) {
+            throw new IllegalStateException("Texture mip level is outside the allocated chain");
         }
+        validateArrayWindow(data.length, startIndex, elementCount);
+
+        int levelWidth = Math.max(1, width >> level);
+        int levelHeight = Math.max(1, height >> level);
+        int transferWidth = levelWidth;
+        int transferHeight = levelHeight;
+        if (rect != null) {
+            if (rect.X < 0 || rect.Y < 0 || rect.Width <= 0 || rect.Height <= 0
+                    || (long)rect.X + rect.Width > levelWidth
+                    || (long)rect.Y + rect.Height > levelHeight) {
+                throw new IllegalArgumentException("Texture rectangle is outside the selected mip level");
+            }
+            transferWidth = rect.Width;
+            transferHeight = rect.Height;
+        }
+
+        TextureDataCodec codec = TextureDataCodec.select(
+                data.getClass().getComponentType(), getFormat());
+        long expected = expectedElementCount(getFormat(), transferWidth, transferHeight);
+        if (elementCount != expected) {
+            throw new IllegalArgumentException(
+                    "Texture transfer element count must be exactly " + expected);
+        }
+        return codec;
+    }
+
+    private static long expectedElementCount(SurfaceFormat format, int width, int height) {
+        return switch (format) {
+            case Dxt1 -> (long)((width + 3) >> 2) * ((height + 3) >> 2) * 8L;
+            case Dxt3, Dxt5 -> (long)((width + 3) >> 2) * ((height + 3) >> 2) * 16L;
+            default -> (long)width * height;
+        };
     }
 
     private void saveAs(OutputStream stream, int format, int width, int height, String operation) {
@@ -202,7 +240,10 @@ public class Texture2D extends Texture {
     }
 
     private static void validateArrayWindow(int length, int startIndex, int elementCount) {
-        if (startIndex < 0 || elementCount < 0 || startIndex > length - elementCount) {
+        if (startIndex < 0 || startIndex > length) {
+            throw new IndexOutOfBoundsException("Texture data start index is outside the array");
+        }
+        if (elementCount <= 0 || elementCount > length - startIndex) {
             throw new IndexOutOfBoundsException("Texture data array window is outside the source array");
         }
     }

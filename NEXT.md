@@ -1,131 +1,33 @@
-# CNA-Java session evidence and next handoff
+# CNA-Java final evidence and next handoff
 
-**Session:** 2026-08-22
+**Updated:** 2026-08-23
 
-**Binding branch:** `develop`
+This file is the tactical continuation point for the current uncommitted CNA-Java worktree. The
+measured repositories and verifier output are authoritative; do not reconstruct intent from commit
+history.
 
-**Template branch:** `develop`
+## Repository boundaries and worktree state
 
-## Repository baseline observed at session start
+Writable:
 
-- `cna-java` was clean and contained exactly eight `.java` files, including
-  three `package-info.java` files.
-- `mvn -q test` could not start because Maven was not installed (`exit 127`).
-- Direct `javac --release 17` over all eight sources failed with two errors:
-  `Game` referenced missing `Microsoft.Xna.Framework.Content.ContentManager`
-  and `Microsoft.Xna.Framework.Graphics.GraphicsDevice`.
-- There was no JUnit suite, Gradle/Maven wrapper, native implementation, API
-  verifier, ABI verifier, or compile-probe corpus.
-- The binding POM used `org.openeggbert:cna-java:0.0.0-SNAPSHOT`; the template
-  requested nonexistent `com.openeggbert.cna:cna-java:1.0.0-preview`.
-- The template had no wrapper and could not compile against the binding. It
-  mixed `Run` with `begin`, `createScale`, lowercase vector fields and
-  screaming-snake constants; it referenced absent classes throughout.
-- Template renderer identity and 3D/depth capabilities were hardcoded, not
-  queried. Android did not run CNA, GWT/TeaVM could not reach desktop JNI, iOS
-  had no module, while README advertised all as supported.
-- `plan.md` incorrectly deferred selection of JNI/FFM and waited for a
-  “canonical” ABI although CNA already exposed a broad stable C API.
+- this repository, `cna-java`;
+- `../cna-java-template`.
 
-## Reference and ABI truth established
+Read-only references:
 
-- XNA source of truth: the seven legally available XNA 4.0 Windows runtime
-  assemblies listed in `tools/api-compat/profiles/xna40-windows-runtime.json`.
-  The profile now SHA-256-pins all seven inputs and rejects mismatched bits.
-- Current CNA headers: C ABI 0.7.0, `uint64_t` opaque handles, `uint8_t` booleans,
-  `uint32_t` results/enums, versioned structs, UTF-8 buffers, callbacks, and
-  explicit create/destroy ownership.
-- Java 17 is retained. JNI was selected and implemented because stable FFM is
-  not a Java 17 API and JNI preserves a future Android route.
-- No direct C++ ABI symbol is used.
-- Gradle 8.12 is now the single canonical build and publication path; the stale
-  Maven build was removed, so a second Maven wrapper/configuration cannot drift.
+- `../../cna`;
+- `../cna-cs`, `../cna-cs-template`;
+- `../cna-ts`, `../cna-ts-template`.
 
-## Commits already pushed during this session
+No template source change was needed in this phase; `../cna-java-template` is clean. The
+CNA-Java worktree intentionally contains the implementation described below. Do not discard or
+overwrite it. The untracked `out` path was already present during this continuation and was
+not deleted. The read-only CNA worktree has a pre-existing untracked
+`cmake_test_discovery_e3b0c44298.json`; leave it untouched.
 
-### `cna-java`
+## Exact strict verifier state
 
-- `aadce19 feat: establish XNA Java compatibility foundation`
-  - Gradle 8.12 wrapper/build, canonical coordinate, mapping document;
-  - verifier/leak/ABI tooling and first baseline;
-  - JNI backend and ownership wrappers;
-  - foundational lifecycle/value/geometry implementations and tests.
-- `10e0daa chore: harden verification and record measured state`
-  - strengthened native lifetime/error handling and template verification;
-  - recorded complete build, ABI, runtime, template, and CNA-HEAD blocker evidence;
-  - removed the stale Maven build so Gradle is the single source of build truth.
-- `0e7293c feat: implement foundational game components`
-  - added the mapped component hierarchy, collection/events, services, launch
-    parameters, ordered update/draw, and resilient teardown;
-  - reduced the measured contract from 730 to 691 diagnostics.
-- `29ce9c9 feat: bind XNA game window through CNA`
-  - added strict `GameWindow`, composable `[Flags]` orientation, and opaque
-    `WindowHandle` projections plus ten CNA window ABI bindings;
-  - made verifier modifier checks rigorous and reduced the measured contract to
-    685 diagnostics with zero leaks and no allowlist.
-- `e28dd6d fix: defer native window title until startup`
-  - kept pre-run title configuration managed and passed it into native creation;
-  - reran binding/template/generated-project plus 60/600-frame verification.
-- `58209ac feat: bind XNA keyboard snapshots through CNA`
-  - added exact keyboard types, 160 key identities, two CNA snapshot routes,
-    managed/native behavior tests, and template Escape input;
-  - reduced the measured contract to 680 diagnostics with 34/34 ABI symbols.
-- `50eb603 feat: bind XNA mouse snapshots through CNA`
-  - added exact mouse types, four CNA state/position/window routes, normalized
-    behavior evidence, and opaque strict window tokens;
-  - reduced the then-current measured contract to 677 diagnostics with 38/38
-    ABI symbols.
-- `b235862 fix: eliminate mapped member drift`
-  - corrected overload pairing and unsigned-byte mapping, made ContentManager
-    and disposal shapes exact, hid a non-XNA constructor, and eliminated every
-    implemented parameter/return/unexpected-member mismatch;
-  - reduced the measured contract to 601 diagnostics with zero leaks.
-- `7b882d1 feat: bind Texture2D and SpriteBatch through CNA`
-  - added the exact first graphics-resource hierarchy and 15 CNA texture/batch
-    routes with explicit owned-resource teardown;
-  - exercised raw PNG decode/encode, Color snapshot transfer, and two-frame
-    SpriteBatch drawing while recording the honest 604-diagnostic baseline.
-- `ee1e53c feat: complete XNA named color projection`
-  - uniformly mapped all 141 named XNA color properties to same-cased frozen
-    Java fields and added default/vector constructors plus typed equality;
-  - reduced the strict measurement to 462 diagnostics with 51 managed tests,
-    15 verifier tests, zero leaks, and no allowlist.
-
-### `cna-java-template`
-
-- `64dc930 feat: make desktop template a real CNA canary`
-  - real desktop lifecycle/clear canary with 60/600-frame modes;
-  - pinned wrapper, exact coordinate, tests, independent generator;
-  - removed fake capability/cube/content behavior and non-running Android,
-    GWT, and TeaVM launchers;
-  - pushed to `origin/develop` after build and native evidence.
-- `df38a41 feat: exercise mapped game window title`
-  - configures the mapped title before native startup and tests that path.
-- `7a5c97d feat: exercise CNA keyboard input`
-  - captures native keyboard state per update and exits on Escape.
-- `e12039f feat: exercise CNA mouse input`
-  - captures native mouse state per update and exits on left click.
-- `172f1b5 feat: draw a real raw PNG with SpriteBatch`
-  - loads valid PNG bytes through `Texture2D.FromStream`, draws a moving texture,
-    and closes graphics resources deterministically in `UnloadContent`.
-
-## API measurements
-
-The immutable initial measurement at the first foundation checkpoint was 257
-reference types / 2,964 members versus 21 target types / 351 members, with 730
-diagnostics, zero leaks, and an empty allowlist. Its full JSON remains at
-`tools/api-compat/baselines/xna40-windows-runtime-initial.json`.
-
-After the first coherent texture/SpriteBatch group, the current measurement is:
-
-Command:
-
-```bash
-XNA_REFERENCE_DIR=/rv/data/development/github.com/openeggbert/xna4-decomp/reference/xna4/original/windows \
-./gradlew --no-daemon apiCompatReport
-```
-
-Result (`exit 0`, report-only):
+Starting state:
 
 ```text
 REFERENCE_TYPES=257
@@ -135,168 +37,313 @@ EXPECTED_JAVA_MEMBERS=3086
 TARGET_TYPES=51
 TARGET_MEMBERS=912
 TOTAL_DIAGNOSTICS=462
-ALLOWLIST_ENTRIES=0
-INTERFACE_MISMATCH=2
-MISSING_MEMBER=250
 MISSING_TYPE=210
+MISSING_MEMBER=250
+INTERFACE_MISMATCH=2
+CNA_INTERNAL_LEAK=0
+ALLOWLIST_ENTRIES=0
 ```
 
-This is a 268-diagnostic reduction from the immutable initial baseline, with 30
-additional strict target types and 561 additional target members.
-`apiCompatCheck` still exits 1 as designed. Leak-only inspection reports
-`CNA_INTERNAL_LEAK=0` (total leak diagnostics 0).
+Current state:
 
-The graphics group intentionally raised the total from 601 to 604: seven
-formerly missing types are now present, but their compiled metadata exposes ten
-additional missing members that one-per-type diagnostics previously hid. All
-implemented graphics members match their mapped signatures; no parameter,
-return, modifier, unexpected-member, or parameter-name finding was introduced.
+```text
+REFERENCE_TYPES=257
+REFERENCE_MEMBERS=2964
+EXPECTED_JAVA_TYPES=265
+EXPECTED_JAVA_MEMBERS=3178
+TARGET_TYPES=149
+TARGET_MEMBERS=2171
+TOTAL_DIAGNOSTICS=119
+MISSING_TYPE=116
+MISSING_MEMBER=3
+INTERFACE_MISMATCH=0
 
-The subsequent `Color` group projects every one of the 141 XNA named-color
-properties as a same-cased frozen Java field, adds the mapped default/vector
-constructors and typed equality, and removes exactly 142 missing-member
-findings. Its source names and RGBA values were checked exhaustively against the
-normalized sibling reference list; managed tests pin the count, representative
-edge values, immutability, and vector snapshot behavior.
+ACCESSIBILITY_MISMATCH=0
+BASE_TYPE_MISMATCH=0
+CNA_INTERNAL_LEAK=0
+ENUM_VALUE_MISMATCH=0
+FIELD_TYPE_MISMATCH=0
+GENERIC_MISMATCH=0
+MEMBER_MODIFIER_MISMATCH=0
+PARAMETER_MISMATCH=0
+PARAMETER_NAME_MISMATCH=0
+RETURN_TYPE_MISMATCH=0
+TYPE_KIND_MISMATCH=0
+TYPE_MODIFIER_MISMATCH=0
+UNEXPECTED_MEMBER=0
+UNEXPECTED_TYPE=0
+XNA_MAPPING_MISMATCH=0
+ALLOWLIST_ENTRIES=0
+```
 
-The latest contract audit fixed overload matching so exact overloads cannot be
-reused as mismatch candidates, maps unsigned CLR `System.Byte` to Java `int`,
-and eliminated every implemented parameter-name mismatch. It also made
-`ContentManager` constructors/service-provider/disposal shape exact, explicitly
-excluded the CLR-serialization-only `ContentLoadException` constructor, and hid
-the implementation-only `GraphicsDevice` constructor behind a narrow internal
-facade factory. The remaining diagnostics contain only genuinely absent types,
-members, and two interfaces; there are no parameter, return, unexpected-member,
-or parameter-name findings.
+`apiCompatCheck` was explicitly run and exits 1 on exactly these 119 findings. That is the
+correct state until strict compatibility reaches zero.
 
-The newest group added exact `GameWindow`, `[Flags]`-aware
-`DisplayOrientation`, and opaque `WindowHandle` projections. `Game` now has all
-currently mapped local members, including `getWindow()` and deterministic
-`ShowMissingRequirementMessage`. The JNI path queries or updates resize
-permission, client bounds, orientation, opaque handle identity, screen-device
-name, title, and begin/end screen-device changes. Managed window listeners are
-ordered, but CNA event delivery and supported-orientation mutation remain
-explicit behavior work. The verifier now extracts CLR virtual/final state and
-compares effective Java overridability; it exposed nine real mismatches, all of
-which were corrected without an allowlist.
+### Only three remaining members
 
-The input group adds exact `PlayerIndex`, `KeyState`, all 160 metadata-derived
-`Keys` constants and numbers, immutable `KeyboardState`, and both static
-`Keyboard.GetState` overloads. Its five types have no local verifier findings;
-the diagnostic delta is exactly five removed `MISSING_TYPE` findings. Two new
-C ABI routes copy versioned keyboard snapshots, including the per-player route.
+```text
+Microsoft.Xna.Framework.Content.ContentManager
+  ReadAsset(String, System.Action<AutoCloseable>) -> T
 
-The adjacent mouse group adds exact `ButtonState`, `MouseState`, and `Mouse`
-contracts. Four CNA routes cover snapshot capture, cursor positioning, and an
-opaque window-token round trip. The normalized XNA behavior fixture pins the
-sample hash (`-120`) and string format. No raw address enters a strict public
-signature; internally registered CNA-issued tokens are the only accepted
-nonzero setter values. Its diagnostic delta is exactly three removed
-`MISSING_TYPE` findings.
+Microsoft.Xna.Framework.Graphics.SpriteBatch
+  Begin(SpriteSortMode, BlendState, SamplerState, DepthStencilState,
+        RasterizerState, Effect) -> void
+  Begin(SpriteSortMode, BlendState, SamplerState, DepthStencilState,
+        RasterizerState, Effect, Matrix) -> void
+```
 
-The graphics group adds the exact `GraphicsResource` / `Texture` / `Texture2D`
-hierarchy, `SpriteBatch`, `SurfaceFormat`, `SpriteSortMode`, and composable
-`SpriteEffects`. Fifteen new C ABI routes provide callback-scoped device access,
-owned texture/batch creation and destruction, RGBA snapshot transfer,
-PNG/JPEG decode/encode, and both rectangle/scaled sprite commands. The native
-test uploads mutable colors, mutates the Java source afterward, reads back the
-original snapshot, round-trips a PNG through `FromStream`, draws two frames, and
-verifies reverse child-before-game cleanup.
+Do not add these as nominal methods. `ReadAsset` needs the ContentReader/shared-resource
+architecture. The SpriteBatch members need a real Effect foundation and CNA routing.
 
-## Managed/native binding gate
+### Initially incomplete types now at zero
 
-Command:
+The following 15 of the original 51 target types were brought from local diagnostics to zero:
+
+`BoundingBox`, `BoundingSphere`, `Color`, `GameTime`,
+`GraphicsDevice`, `GraphicsDeviceManager`, `Matrix`, `Plane`,
+`Point`, `Quaternion`, `Ray`, `Rectangle`, `Vector2`,
+`Vector3`, and `Vector4`.
+
+Only `ContentManager` and `SpriteBatch` remain nonzero among the initially
+incomplete types. The exact ranked starting inventory is preserved in `plan.md`.
+
+## Behavior corpus
+
+Start: 106 observations, comprising 83 math/geometry and 23 input.
+
+Current: 117 observations, comprising 94 math/geometry and 23 input.
+
+Covered groups:
+
+- MathHelper, Vector2/3/4, Matrix, Quaternion;
+- Color, Point, Rectangle, Plane, Ray;
+- BoundingBox, BoundingSphere, BoundingFrustum, GJK;
+- Curve, CurveKey, CurveKeyCollection, loop/continuity/tangent behavior;
+- all 17 packed-vector formats;
+- keyboard, mouse, GamePad state/value filtering, and touch value/collection behavior.
+
+The original 106 expected outputs are independently XNA-adjudicated neutral observations shared
+with CNA-C#. The Java build does not depend on CNA-C# implementation code. The 11 additions are
+packed-vector observations transcribed from XNA 4.0 IL, including nearest-even rounding, channel
+order, half saturation, and signed minima.
+
+Fixed CNA-Java behavior includes binary32 grouping for scalar vector division, Viewport
+Project/Unproject edges, matrix decomposition/degeneracy, frustum/GJK relationships, curve
+boundaries, packed rounding/saturation, and GamePad button filtering.
+
+The frozen 106-line comparison outputs report:
+
+- FNA: 49 differences from the XNA-adjudicated snapshot;
+- MonoGame: 52 differences.
+
+The 11 new packed observations have not yet been executed by those two harnesses.
+
+## Implemented coherent groups
+
+### Core/value
+
+The existing math/geometry families have exact mapped public shape, value snapshots,
+equals/hash/string behavior where mapped, and real differential edge tests. BoundingFrustum, GJK,
+Curve and the packed-vector families are substantive implementations, not shells.
+
+### GameWindow and lifecycle
+
+ClientSizeChanged, OrientationChanged, and ScreenDeviceNameChanged use CNA event registrations.
+Callbacks root Java objects, attach/detach native threads safely, contain Java exceptions, tolerate
+listener removal during dispatch, and unsubscribe before Game destruction. Supported orientations
+route through GraphicsDeviceManager. Opaque window tokens remain non-numeric publicly.
+
+### GraphicsDeviceManager and GraphicsDevice
+
+Both types now have zero local diagnostics. Managed preference validation and snapshot behavior are
+separate from real CNA adapter/device routes. Device creation/change/reset events, mutable
+PreparingDeviceSettings, adapter modes, presentation parameters, viewport, state, clear/present,
+back-buffer readback, resources, render targets, buffers, and draw routes are covered.
+
+Backend limitations remain visible as CNA result codes or explicit unsupported operations. No
+native-dependent property is populated with a guessed default.
+
+### Graphics states, textures, SpriteBatch, and SpriteFont
+
+The coherent state/resource dependency groups are implemented: blend, depth/stencil, rasterizer,
+sampler and texture collections, render targets/cube textures, vertex declarations/values,
+vertex/index buffers, and packed vectors.
+
+Texture2D transfer supports array windows, partial rectangles, mip levels, validation, stream
+decoding, encoded output, association, and deterministic disposal through real CNA routes.
+
+SpriteBatch has all texture Draw overloads, all six DrawString overloads, state-bearing Begin
+overloads that do not require Effect, real CNA SpriteFont drawing, and measured Begin/End/Draw
+validation. The only omitted overloads are the two Effect-dependent Begin members listed above.
+
+### Input
+
+Buttons/flags, GamePadButtons/DPad/Triggers/ThumbSticks/State/Capabilities, dead zones, player index,
+packets, filtering, equality/hash/string behavior, native polling, and vibration are implemented.
+Touch value state and collections are present; TouchPanel/gesture polling is not.
+
+### Content
+
+ContentManager has exact constructors, protected OpenStream-to-InputStream mapping, path cleaning,
+case-insensitive caching, root validation, Unload, and deterministic resource lifetime. It really
+loads loose PNG/JPEG Texture2D assets and CNA-Java SpriteFont descriptors.
+
+This is not XNB support. Even after explicit C-API builtin-loader registration, a real XNB fails:
+
+```text
+white-1 references an unregistered .xnb content type reader
+'Microsoft.Xna.Framework.Content.Texture2DReader'
+```
+
+CNA's C-API `RegisterBuiltinLoaders()` registers loose loaders, while the global
+`RegisterAllBuiltInXnbReaders` has no C-API route. Preserve this blocker until a real reader
+pipeline exists.
+
+## JNI and ABI evidence
+
+Starting bound symbol count: 53.
+
+Current bound symbol count: 194.
+
+```text
+HEADER_ABI=0.7.0
+BOUND_FUNCTIONS=194
+MANIFEST_JNI_BINDING_CHECK=PASS
+LAYOUT_SIGNATURE_PROBE=PASS
+LIBRARY_ABI=0.7.0
+LIBRARY_SYMBOL_CHECK=PASS (194/194)
+HEADER_MISSING_SYMBOLS=0
+LIBRARY_MISSING_SYMBOLS=0
+```
+
+JNI compiles with `-std=c11 -Wall -Wextra -Werror`. Manifest/header/signature/layout/library
+identity all pass.
+
+### CNA HEAD status
+
+Read-only HEAD:
+
+```text
+1bb2145d99ed572dd4eb15009c34e2e5f410fcf0
+```
+
+It remains source-build blocked:
+
+- `CNA_ENABLE_NET=OFF`: `modules/c-api/src/CnaCApiDetail.hpp:26` includes missing
+  `Microsoft/Xna/Framework/GamerServices/GameUpdateRequiredException.hpp`;
+- networking enabled: `CnaCApiCoreExt.cpp` observes 49 renderer identities against
+  `CanonicalRendererCount == 50`.
+
+Do not repair this in `../../cna`. Working native evidence used the ABI-0.7.0 checkout:
+
+```text
+revision=a09196a6477f69a7a57c8364f990658d31531a5b
+library=/tmp/cna-java-native-working-070/modules/c-api/libcna_c_api.so
+```
+
+## Ownership evidence
+
+Passing native stress:
+
+- 25 Game create/run/destroy cycles;
+- 200 Texture2D/SpriteBatch create/draw/destroy cycles;
+- double-close after successful release;
+- failed creation followed by successful creation;
+- retained-resource release refusal and retry;
+- wrong-thread release refusal and owner-thread retry;
+- 25 bound vertex/index buffer auto-unbind cycles;
+- release refusal for bindings outside the lifecycle callback, followed by unbind/retry;
+- Game teardown with live unbound vertex/index buffer children;
+- callback listener removal, throwing callback containment, and registration teardown;
+- 150 draw calls across six routes, all returning the stable HEADLESS result 12.
+
+No crash, observed leak, or use-after-free occurred. A potential upstream dangling-binding
+use-after-free was found by inspection and blocked in Java. CNA should make buffer destruction
+aware of current device bindings, or expose an unbind route that accepts a Game/device lifetime
+handle outside callbacks.
+
+Not yet covered: JVM-shutdown-specific behavior, sanitizers, and an isolated subprocess crash
+runner.
+
+## Final verification
+
+The final implementation checkpoint passed:
 
 ```bash
-CNA_NATIVE_LIBRARY=/tmp/cna-java-native-working-070/modules/c-api/libcna_c_api.so \
-XNA_REFERENCE_DIR=/rv/data/development/github.com/openeggbert/xna4-decomp/reference/xna4/original/windows \
-./gradlew --no-daemon clean check apiCompatReport javadoc sourcesJar --warning-mode all
+env CNA_NATIVE_LIBRARY=/tmp/cna-java-native-working-070/modules/c-api/libcna_c_api.so \
+    XNA_REFERENCE_DIR=/path/to/pinned/xna40/windows \
+    ./gradlew --no-daemon check apiCompatReport javadoc sourcesJar
 ```
 
-Result: `BUILD SUCCESSFUL in 21s`, 12 actionable tasks executed, no
-compiler/deprecation warnings.
+Evidence:
 
-- JUnit: 51 tests, 0 failures, 0 errors, 0 skipped.
-- Verifier regression suite: 15 tests, all passing.
-- Suites: 14 value/math, 4 lifecycle/content, 10 component/service/window,
-  3 graphics-resource, 4 keyboard-state, 4 mouse-state, 4 ownership,
-  8 native integration.
-- Native stress: one ordered three-frame lifecycle plus ten repeated
-  create/run/destroy lifecycles, and one-frame/tick/suppressed-draw timing.
-- Compile probe: passed.
-- Strict leak guard: 51 target types / 912 members, 0 findings.
-- ABI: header 0.7.0, 53 bound functions, manifest/JNI identity and C
-  width/layout/function-signature probes passed, native library ABI 0.7.0,
-  symbols 53/53.
-- JNI compiled with `-std=c11 -Wall -Wextra -Werror -fPIC`.
+- 87/87 JUnit tests;
+- 20/20 native integration tests within that suite;
+- 22/22 verifier tests;
+- compile probe pass;
+- JNI warning-clean pass;
+- 194/194 ABI symbols;
+- Javadoc and sources JAR pass.
 
-Without `CNA_NATIVE_LIBRARY`, the same `check` passes and conditionally skips the
-eight native integration tests plus native symbol/runtime-version inspection.
-
-## CNA native build evidence and blocker
-
-The upstream CNA checkout was read-only and was not modified. Its starting
-status already contained one unrelated untracked file:
-`cmake_test_discovery_e3b0c44298.json`.
-
-Current HEAD `1bb2145d9` was configured in `/tmp` with HEADLESS renderer,
-HEADLESS platform, NULL audio, C API on, tests/examples off.
-
-Observed failures:
-
-1. `CNA_ENABLE_NET=OFF`: `CnaCApiDetail.hpp` requires
-   `GameUpdateRequiredException.hpp`, which is unavailable when GamerServices is
-   omitted.
-2. Networking on: `CnaCApiCoreExt.cpp` fails its strict assertion because
-   `RendererIdentities.size()` is 49 while `CanonicalRendererCount()` is 50
-   after NanoVG entered the native enum.
-
-For binding verification only, a local shared clone at commit `a09196a64`
-(working ABI 0.7.0 immediately before the problematic merge) was created under
-`/tmp`, configured HEADLESS/NULL audio, and built successfully. The resulting
-Linux x86-64 `libcna_c_api.so` supplied all integration evidence. This does not
-erase the current-HEAD upstream blocker.
-
-## Template and generated-project gate
-
-Final command:
+The strict red gate was checked separately:
 
 ```bash
-CNA_NATIVE_LIBRARY=/tmp/cna-java-native-working-070/modules/c-api/libcna_c_api.so \
-CNA_RUN_STABILITY_TEST=1 \
-scripts/verify-template.sh
+./gradlew --no-daemon apiCompatCheck
 ```
 
-Result: passed end-to-end without using the global Maven repository.
+Expected result: exit 1, exactly 119 diagnostics.
 
-1. Binding clean/check/Javadoc/sources and publication to a unique temporary
-   Maven repository: passed.
-2. Sibling template clean/test/installDist against that exact artifact: passed
-   (4 tests, no warnings).
-3. Generated standalone project with custom project name, package, application
-   ID, game class, group, and artifact ID: clean/test/installDist passed outside
-   both repositories.
-4. Native template smoke: exactly 60 frames, clean shutdown.
-5. Native template stability: exactly 600 frames, clean shutdown.
+## Template and generated-project evidence
 
-The demonstrated runtime feature set is lifecycle callbacks, `GameTime`,
-GraphicsDeviceManager attachment, pre-run mapped `GameWindow` title,
-CNA-backed `KeyboardState`/Escape and `MouseState`/left-click input, mouse
-visibility, `GraphicsDevice.Clear`, a real Base64-transported raw PNG decoded by
-`Texture2D.FromStream`, moving SpriteBatch drawing, frame-limited exit, and
-deterministic cleanup. XNB, gamepad/touch state, resize events, and 3D are not
-claimed.
+The exact-artifact gate ran with stability enabled:
+
+```bash
+env CNA_NATIVE_LIBRARY=/tmp/cna-java-native-working-070/modules/c-api/libcna_c_api.so \
+    CNA_RUN_STABILITY_TEST=1 \
+    scripts/verify-template.sh
+```
+
+It rebuilt CNA-Java, published to a unique temporary Maven repository, rebuilt the checked-in
+template, generated a separate project, and used only those fresh artifacts.
+
+Passed:
+
+- 4 template tests;
+- checked-in template build/installDist;
+- generated-project build/test/installDist;
+- 60 frames;
+- 600 frames.
+
+The canary remains truthful and unchanged: Game lifecycle, GameTime, title, Escape, left click,
+Clear, raw PNG FromStream, moving SpriteBatch draw, and deterministic cleanup. No XNB, Effect,
+GamePad, or resize showcase was added.
+
+## Platform status
+
+Runtime-qualified:
+
+- Linux x86-64;
+- HEADLESS renderer;
+- NULL audio.
+
+Not runtime-qualified: Windows, macOS, Android, iOS, Browser/WASM. JNI selection and compile-time
+portability do not promote those platforms.
 
 ## Immediate next work
 
-1. Consume an upstream CNA fix for both HEAD C API build failures and repeat all
-   native evidence against current HEAD.
-2. Implement the 250 measured missing members in coherent dependency groups;
-   the only non-missing diagnostics are two known missing public interfaces.
-3. Connect native window events and supported-orientation behavior, then add
-   normalized XNA differential fixtures for the math/geometry contract.
-4. Bind gamepad/touch plus native device resize.
-5. Continue the graphics state/effect/font types needed by the remaining
-   SpriteBatch Begin and DrawString overloads.
-6. Add platform-specific native packaging and CI; do not promote Windows,
-   macOS, Android, iOS, or Web status without runtime evidence.
+1. Re-run the cheap managed baseline and inspect the three member findings before editing.
+2. Implement the full Effect dependency group from XNA metadata and actual CNA routes, then close
+   both SpriteBatch Begin findings with differential validation.
+3. Implement ContentReader/ContentTypeReader/readers/shared resources and only then ReadAsset.
+   Coordinate the missing CNA XNB-reader registration route upstream.
+4. Add subprocess, JVM shutdown, and sanitizer ownership evidence; do not merely increase loop
+   counts.
+5. Carry the 11 new packed observations through XNA/FNA/MonoGame comparison harnesses.
+6. Address upstream CNA's two HEAD build blockers and bound-buffer safety outside this read-only
+   task.
+7. Continue missing types only as complete dependency groups. Preserve every zero category,
+   `CNA_INTERNAL_LEAK=0`, and `ALLOWLIST_ENTRIES=0`.
+
+At every checkpoint run `check`, `apiCompatReport`, Javadoc/sources, ABI validation,
+native integration when available, and `git diff --check`. Run the fresh 60/600-frame
+template gate before claiming a final artifact.

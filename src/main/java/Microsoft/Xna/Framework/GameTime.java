@@ -28,12 +28,24 @@ public class GameTime {
         return totalGameTime;
     }
 
+    protected final void setTotalGameTime(Duration value) {
+        totalGameTime = Objects.requireNonNull(value, "value");
+    }
+
     public final Duration getElapsedGameTime() {
         return elapsedGameTime;
     }
 
+    protected final void setElapsedGameTime(Duration value) {
+        elapsedGameTime = Objects.requireNonNull(value, "value");
+    }
+
     public final boolean getIsRunningSlowly() {
         return runningSlowly;
+    }
+
+    protected final void setIsRunningSlowly(boolean value) {
+        runningSlowly = value;
     }
 
     void setNativeValues(Duration total, Duration elapsed, boolean slowly) {

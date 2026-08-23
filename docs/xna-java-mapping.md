@@ -70,9 +70,10 @@ change the Java descriptor.
 
 An operator is mapped to the identically purposed named XNA method (`op_Addition` to `Add`,
 `op_Multiply` to `Multiply`, and so on) and is deduplicated when that method already exists.
-Equality operators map to `equals(Object)`/`hashCode()`. Conversion operators map to deterministic
-`from<Type>` static factories and `to<Type>` instance methods. An operator with no rule is a hard
-`XNA_MAPPING_MISMATCH`, not a guessed API.
+Equality operators map to `equals(Object)`/`hashCode()`. Conversion operators map to explicitly
+declared `from<Type>` static factories or `to<Type>` instance methods. The first such rule maps
+`RenderTargetBinding.op_Implicit(RenderTarget2D)` to `fromRenderTarget2D(RenderTarget2D)`. An
+operator with no full-signature rule is a hard `XNA_MAPPING_MISMATCH`, not a guessed API.
 
 The redundant XNA performance overload pattern whose only difference is `ref` inputs plus one
 `out` result maps to the ordinary return-value overload and is deduplicated. Other `ref`/`out`
@@ -81,9 +82,23 @@ marks the transformation. The strict packages never expose these extension holde
 rule.
 
 `Matrix.Decompose(out scale, out rotation, out translation)` is the first explicit multi-output
-rule: Java receives `Matrix.Decomposition Decompose()`, whose result records the XNA boolean and
-the three output values. XNA `ContentManager.Load<T>(name)` receives the class-token parameter
+rule: Java receives `Matrix.Decomposition Decompose()`. Its immutable carrier exposes
+`getSucceeded()`, `getScale()`, `getRotation()`, and `getTranslation()`; mutable value results are
+returned as snapshots. XNA `ContentManager.Load<T>(name)` receives the class-token parameter
 required by erasure: `Load(Class<T> assetType, String assetName)`.
+
+The touch value projection has two reviewed single-output adaptations where the CLR Boolean return
+and `out` value must remain observable together. `TouchLocation.TryGetPreviousLocation(out value)`
+returns an immutable `PreviousLocationResult`, and `TouchCollection.FindById(id, out value)` returns
+an immutable `FindResult`. Each carrier exposes `getSucceeded()` and a snapshot getter for its touch
+location. These signatures are declared in `refOutMemberMappings`; other unclassified `ref`/`out`
+members remain verifier failures.
+
+`GraphicsAdapter.QueryBackBufferFormat` and `QueryRenderTargetFormat` have three `out` values in
+addition to their Boolean exact-match result. Java returns an immutable `FormatSelectionResult`
+carrying `getExactMatch()`, the selected surface and depth formats, and the selected multisample
+count. `DisplayModeCollection` retains `GetEnumerator()` and also supplies the required Java
+`Iterable<DisplayMode>.iterator()` bridge.
 
 The parameterless `IDisposable.Dispose()` contract maps to `close()`. A distinct protected
 `Dispose(boolean)` lifetime hook keeps its XNA name as `Dispose(boolean)`. CLR finalization is not
@@ -108,14 +123,26 @@ System.IntPtr                                            -> Microsoft.Xna.Framew
 System.TimeSpan                                          -> java.time.Duration (100 ns precision)
 System.IDisposable                                       -> java.lang.AutoCloseable
 System.Collections.Generic.IEnumerable<T>                -> java.lang.Iterable<T>
+System.Collections.Generic.IEnumerator<T>                -> java.util.Iterator<T>
+System.Collections.Generic.ICollection<T>                -> java.util.Collection<T>
 System.Collections.Generic.IList<T>                      -> java.util.List<T>
 System.Nullable<T>                                       -> boxed T or Optional<T>, by explicit rule
 System.EventArgs                                         -> Microsoft.Xna.Framework.EventArgs
 System.EventHandler<T>                                   -> Microsoft.Xna.Framework.EventHandler<T>
 System.IServiceProvider                                  -> Microsoft.Xna.Framework.ServiceProvider
 System.Collections.ObjectModel.Collection<T>             -> java.util.AbstractList<T>
+System.Collections.ObjectModel.ReadOnlyCollection<T>     -> java.util.List<T>
 System.Collections.Generic.Dictionary<K,V>               -> java.util.LinkedHashMap<K,V>
 ```
+
+When an XNA concrete type directly implements `ICollection<T>`, it retains its mapped XNA-named
+members and also implements the required lower-cased `java.util.Collection<T>` bridge. Those Java
+bridge members are explicit expected-contract additions, not verifier-ignored extras. The first
+such type is `CurveKeyCollection`; both mutation paths maintain the same ordering and cache state.
+`TouchCollection` similarly implements the full `List<TouchLocation>` bridge while retaining its
+XNA-named members. Its indexer setter maps to Java's value-returning `List.set` signature and still
+throws because XNA marks the collection read-only. The nested XNA enumerator adds `hasNext()` and
+`next()` as explicit bridge obligations alongside `MoveNext()` and `getCurrent()`.
 
 At a `TimeSpan` API boundary, `Duration` is normalized downward to the nearest
 100-nanosecond CLR tick; a value outside the signed `TimeSpan` tick range is rejected.
@@ -135,11 +162,21 @@ CLR parameter metadata without a name deterministically maps to `argN`, where `N
 position. An inaccessible CLR interface implemented by a public XNA type is omitted unless the
 interface itself belongs to the selected reference profile. CLR `Stream` is direction-sensitive
 rather than forced onto one misleading Java type: `Texture2D.FromStream` maps its input to
-`InputStream`, while `SaveAsPng` and `SaveAsJpeg` map their output to `OutputStream`. These
-full-signature transformations are recorded in `mapping-rules.json`.
+`InputStream`, `ContentManager.OpenStream` maps its returned readable stream to `InputStream`, and
+`SaveAsPng` and `SaveAsJpeg` map their output to `OutputStream`. These full-signature
+transformations are recorded in `mapping-rules.json`.
 `WindowHandle` is an opaque value that supports equality and a zero test but intentionally has no
 numeric/address accessor. It preserves the XNA window-token round trip without exposing a raw
 native address to game code; CNA-specific native-window interop belongs in the extensions layer.
+
+A CLR explicit implementation of an interface in the selected profile is private on its declaring
+type, but Java has no explicit-interface-member syntax. The extractor records those interface-map
+entries and the Java projection promotes each one to a public method, retaining its effective
+non-overridability. This is an added Java obligation, not an omitted CLR member. When a primitive
+`PackedValue` property also implements generic `IPackedVector<T>`, its Java getter and setter use
+the corresponding boxed type so the declaring value type can actually implement
+`IPackedVectorOfT<T>` after erasure. The boxed generic-property rule is explicit in
+`mapping-rules.json`; ordinary non-generic primitive properties remain primitive.
 
 XNA collections that are fixed-size or read-only use dedicated facade types or unmodifiable Java
 views; mapping to `List<T>` does not grant mutation that XNA refused. Generic bounds are preserved

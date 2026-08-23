@@ -73,8 +73,50 @@ class VerifyTests(unittest.TestCase):
         parameters = VERIFY.map_member_parameters(
             "Microsoft.Xna.Framework.Graphics.Texture2D", member, self.rules)
         self.assertEqual("java.io.InputStream", parameters[1]["type"])
+        open_stream = {
+            "name": "OpenStream",
+            "returnType": "System.IO.Stream",
+            "parameters": [{"name": "assetName", "type": "System.String"}],
+        }
+        self.assertEqual(
+            "java.io.InputStream",
+            VERIFY.map_member_return_type(
+                "Microsoft.Xna.Framework.Content.ContentManager", open_stream, self.rules))
         unnamed = VERIFY.map_parameters([{"name": "", "type": "System.Boolean"}])
         self.assertEqual("arg0", unnamed[0]["name"])
+
+    def test_conversion_operator_requires_and_uses_an_explicit_mapping(self) -> None:
+        contract = {
+            "name": "Microsoft.Xna.Framework.Graphics.RenderTargetBinding",
+            "kind": "struct",
+            "interfaces": [],
+            "members": [{
+                "kind": "method", "name": "op_Implicit", "access": "public",
+                "static": True, "abstract": False, "final": False, "virtual": False,
+                "genericArity": 0,
+                "returnType": "Microsoft.Xna.Framework.Graphics.RenderTargetBinding",
+                "parameters": [{
+                    "name": "renderTarget",
+                    "type": "Microsoft.Xna.Framework.Graphics.RenderTarget2D",
+                }],
+            }],
+        }
+        findings = []
+        members = VERIFY.mapped_members(contract, self.rules, findings)
+        conversion = next(value for value in members
+                          if value["name"] == "fromRenderTarget2D")
+        self.assertEqual(
+            "Microsoft.Xna.Framework.Graphics.RenderTargetBinding",
+            conversion["returnType"])
+        self.assertEqual(
+            "Microsoft.Xna.Framework.Graphics.RenderTarget2D",
+            conversion["parameters"][0]["type"])
+        self.assertTrue(conversion["static"])
+        self.assertEqual([], findings)
+
+        unmapped_findings = []
+        VERIFY.mapped_members(contract, {"conversionMemberMappings": {}}, unmapped_findings)
+        self.assertEqual("XNA_MAPPING_MISMATCH", unmapped_findings[0]["code"])
 
     def test_named_color_properties_map_uniformly_to_same_cased_fields(self) -> None:
         contract = {
@@ -96,6 +138,57 @@ class VerifyTests(unittest.TestCase):
         self.assertTrue(any(value["name"] == "getR" for value in members))
         self.assertTrue(any(value["name"] == "setR" for value in members))
 
+    def test_explicit_interface_methods_are_promoted_and_packed_properties_are_boxed(self) -> None:
+        contract = {
+            "name": "Microsoft.Xna.Framework.Color", "kind": "struct",
+            "interfaces": [
+                "Microsoft.Xna.Framework.Graphics.PackedVector.IPackedVector`1[System.UInt32]"
+            ],
+            "explicitInterfaceMethods": [{
+                "kind": "method", "name": "PackFromVector4", "access": "public",
+                "static": False, "abstract": False, "final": True, "virtual": True,
+                "genericArity": 0, "returnType": "System.Void",
+                "parameters": [{
+                    "name": "vector", "type": "Microsoft.Xna.Framework.Vector4"
+                }],
+            }],
+            "members": [{
+                "kind": "property", "name": "PackedValue", "type": "System.UInt32",
+                "static": False, "getterAccess": "public", "setterAccess": "public",
+                "getterFinal": True, "setterFinal": True, "parameters": [],
+            }],
+        }
+
+        members = VERIFY.mapped_members(contract, self.rules, [])
+        getter = next(value for value in members if value["name"] == "getPackedValue")
+        setter = next(value for value in members if value["name"] == "setPackedValue")
+        promoted = next(value for value in members if value["name"] == "PackFromVector4")
+        self.assertEqual("java.lang.Long", getter["returnType"])
+        self.assertEqual("java.lang.Long", setter["parameters"][0]["type"])
+        self.assertEqual("public", promoted["access"])
+        self.assertTrue(promoted["final"])
+
+    def test_explicit_interface_property_accessor_uses_java_property_name(self) -> None:
+        contract = {
+            "name": "Microsoft.Xna.Framework.Graphics.VertexPositionColor",
+            "kind": "struct",
+            "interfaces": ["Microsoft.Xna.Framework.Graphics.IVertexType"],
+            "explicitInterfaceMethods": [{
+                "kind": "method", "name": "getVertexDeclaration", "access": "public",
+                "static": False, "abstract": False, "final": True, "virtual": True,
+                "genericArity": 0,
+                "returnType": "Microsoft.Xna.Framework.Graphics.VertexDeclaration",
+                "parameters": [],
+            }],
+            "members": [],
+        }
+
+        members = VERIFY.mapped_members(contract, self.rules, [])
+        getter = next(value for value in members if value["name"] == "getVertexDeclaration")
+        self.assertEqual("Microsoft.Xna.Framework.Graphics.VertexDeclaration", getter["returnType"])
+        self.assertEqual("public", getter["access"])
+        self.assertTrue(getter["final"])
+
     def test_explicit_disposable_implementation_still_projects_close(self) -> None:
         contract = {
             "name": "Microsoft.Xna.Framework.DisposableProbe",
@@ -106,6 +199,106 @@ class VerifyTests(unittest.TestCase):
         close = next(value for value in members if value["name"] == "close")
         self.assertEqual("public", close["access"])
         self.assertTrue(close["final"])
+
+    def test_clr_collection_projects_iterator_and_required_java_collection_bridges(self) -> None:
+        contract = {
+            "name": "Microsoft.Xna.Framework.CurveKeyCollection",
+            "kind": "class",
+            "interfaces": [
+                "System.Collections.Generic.ICollection`1[Microsoft.Xna.Framework.CurveKey]"
+            ],
+            "members": [{
+                "kind": "method", "name": "GetEnumerator", "access": "public",
+                "static": False, "abstract": False, "final": True, "virtual": True,
+                "genericArity": 0,
+                "returnType": "System.Collections.Generic.IEnumerator`1[Microsoft.Xna.Framework.CurveKey]",
+                "parameters": [],
+            }],
+        }
+
+        members = VERIFY.mapped_members(contract, self.rules, [])
+        enumerator = next(value for value in members if value["name"] == "GetEnumerator")
+        self.assertEqual(
+            "java.util.Iterator<Microsoft.Xna.Framework.CurveKey>", enumerator["returnType"])
+        bridges = {value["name"] for value in members if value["name"] != "GetEnumerator"}
+        self.assertEqual(
+            {"size", "isEmpty", "contains", "iterator", "toArray", "add", "remove",
+             "containsAll", "addAll", "removeAll", "retainAll", "clear"},
+            bridges)
+
+    def test_touch_ref_out_results_and_java_list_bridges_are_explicit(self) -> None:
+        location = {
+            "name": "Microsoft.Xna.Framework.Input.Touch.TouchLocation",
+            "kind": "struct", "interfaces": [],
+            "members": [{
+                "kind": "method", "name": "TryGetPreviousLocation", "access": "public",
+                "static": False, "abstract": False, "final": False, "virtual": False,
+                "genericArity": 0, "returnType": "System.Boolean",
+                "parameters": [{"name": "previousLocation",
+                                "type": "Microsoft.Xna.Framework.Input.Touch.TouchLocation&",
+                                "out": True}],
+            }],
+        }
+        findings = []
+        members = VERIFY.mapped_members(location, self.rules, findings)
+        result = next(value for value in members if value["name"] == "TryGetPreviousLocation")
+        self.assertEqual([], findings)
+        self.assertEqual([], result["parameters"])
+        self.assertEqual(
+            "Microsoft.Xna.Framework.Input.Touch.TouchLocation.PreviousLocationResult",
+            result["returnType"])
+
+        collection = {
+            "name": "Microsoft.Xna.Framework.Input.Touch.TouchCollection",
+            "kind": "struct",
+            "interfaces": [
+                "System.Collections.Generic.IList`1[Microsoft.Xna.Framework.Input.Touch.TouchLocation]"
+            ],
+            "members": [{
+                "kind": "property", "name": "Item",
+                "type": "Microsoft.Xna.Framework.Input.Touch.TouchLocation", "static": False,
+                "getterAccess": "public", "setterAccess": "public",
+                "getterAbstract": False, "setterAbstract": False,
+                "getterFinal": False, "setterFinal": False,
+                "getterVirtual": True, "setterVirtual": True,
+                "parameters": [{"name": "index", "type": "System.Int32"}],
+            }],
+        }
+        members = VERIFY.mapped_members(collection, self.rules, [])
+        setter = next(value for value in members
+                      if value["name"] == "set" and len(value["parameters"]) == 2)
+        self.assertEqual("Microsoft.Xna.Framework.Input.Touch.TouchLocation",
+                         setter["returnType"])
+        self.assertTrue(any(value["name"] == "listIterator" for value in members))
+
+    def test_touch_enumerator_has_reviewed_java_iterator_bridge(self) -> None:
+        contract = {
+            "name": "Microsoft.Xna.Framework.Input.Touch.TouchCollection+Enumerator",
+            "kind": "struct",
+            "interfaces": [
+                "System.Collections.Generic.IEnumerator`1[Microsoft.Xna.Framework.Input.Touch.TouchLocation]"
+            ],
+            "members": [],
+        }
+        members = VERIFY.mapped_members(contract, self.rules, [])
+        self.assertEqual({"hasNext", "next"},
+                         {value["name"] for value in members
+                          if value["name"] in ("hasNext", "next")})
+
+    def test_display_mode_collection_has_reviewed_java_iterable_bridge(self) -> None:
+        contract = {
+            "name": "Microsoft.Xna.Framework.Graphics.DisplayModeCollection",
+            "kind": "class",
+            "interfaces": [
+                "System.Collections.Generic.IEnumerable`1[Microsoft.Xna.Framework.Graphics.DisplayMode]"
+            ],
+            "members": [],
+        }
+        members = VERIFY.mapped_members(contract, self.rules, [])
+        iterator = next(value for value in members if value["name"] == "iterator")
+        self.assertEqual(
+            "java.util.Iterator<Microsoft.Xna.Framework.Graphics.DisplayMode>",
+            iterator["returnType"])
 
     def test_explicit_excluded_clr_member_is_a_mapping_rule_not_allowlist(self) -> None:
         contract = {

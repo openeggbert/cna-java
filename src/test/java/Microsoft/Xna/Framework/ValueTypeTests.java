@@ -20,7 +20,7 @@ final class ValueTypeTests {
 
     @Test
     void Vectors_PreserveClrFloatEqualityEdges() {
-        assertEquals(new Vector2(Float.NaN, -0.0f), new Vector2(Float.NaN, 0.0f));
+        assertNotEquals(new Vector2(Float.NaN, -0.0f), new Vector2(Float.NaN, 0.0f));
         assertEquals(new Vector2(-0.0f, 1.0f).hashCode(), new Vector2(0.0f, 1.0f).hashCode());
         assertEquals(new Vector3(0, 0, 1), Vector3.Cross(new Vector3(1, 0, 0), new Vector3(0, 1, 0)));
         assertEquals(4, new Vector4(1).LengthSquared());
@@ -67,7 +67,7 @@ final class ValueTypeTests {
         assertEquals(new Color(240, 248, 255), Color.AliceBlue);
         assertEquals(new Color(0, 0, 0), Color.Black);
         assertEquals(new Color(154, 205, 50), Color.YellowGreen);
-        assertEquals(new Color(255, 255, 255, 0), Color.Transparent);
+        assertEquals(new Color(0, 0, 0, 0), Color.Transparent);
         assertThrows(UnsupportedOperationException.class, () -> Color.Red.setG(1));
     }
 

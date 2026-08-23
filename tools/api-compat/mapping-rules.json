@@ -17,6 +17,7 @@
     "System.IServiceProvider": "Microsoft.Xna.Framework.ServiceProvider",
     "System.IntPtr": "Microsoft.Xna.Framework.WindowHandle",
     "System.Collections.ObjectModel.Collection`1": "java.util.AbstractList",
+    "System.Collections.ObjectModel.ReadOnlyCollection`1": "java.util.List",
     "System.Collections.Generic.Dictionary`2": "java.util.LinkedHashMap",
     "System.Text.StringBuilder": "java.lang.StringBuilder"
   },
@@ -34,6 +35,35 @@
       "stream": "java.io.OutputStream"
     }
   },
+  "memberReturnTypeMappings": {
+    "Microsoft.Xna.Framework.Content.ContentManager.OpenStream(System.String)": "java.io.InputStream"
+  },
+  "refOutMemberMappings": {
+    "Microsoft.Xna.Framework.Graphics.GraphicsAdapter.QueryBackBufferFormat(Microsoft.Xna.Framework.Graphics.GraphicsProfile,Microsoft.Xna.Framework.Graphics.SurfaceFormat,Microsoft.Xna.Framework.Graphics.DepthFormat,System.Int32,Microsoft.Xna.Framework.Graphics.SurfaceFormat&,Microsoft.Xna.Framework.Graphics.DepthFormat&,System.Int32&)": {
+      "name": "QueryBackBufferFormat",
+      "returnType": "Microsoft.Xna.Framework.Graphics.GraphicsAdapter.FormatSelectionResult"
+    },
+    "Microsoft.Xna.Framework.Graphics.GraphicsAdapter.QueryRenderTargetFormat(Microsoft.Xna.Framework.Graphics.GraphicsProfile,Microsoft.Xna.Framework.Graphics.SurfaceFormat,Microsoft.Xna.Framework.Graphics.DepthFormat,System.Int32,Microsoft.Xna.Framework.Graphics.SurfaceFormat&,Microsoft.Xna.Framework.Graphics.DepthFormat&,System.Int32&)": {
+      "name": "QueryRenderTargetFormat",
+      "returnType": "Microsoft.Xna.Framework.Graphics.GraphicsAdapter.FormatSelectionResult"
+    },
+    "Microsoft.Xna.Framework.Input.Touch.TouchLocation.TryGetPreviousLocation(Microsoft.Xna.Framework.Input.Touch.TouchLocation&)": {
+      "name": "TryGetPreviousLocation",
+      "returnType": "Microsoft.Xna.Framework.Input.Touch.TouchLocation.PreviousLocationResult"
+    },
+    "Microsoft.Xna.Framework.Input.Touch.TouchCollection.FindById(System.Int32,Microsoft.Xna.Framework.Input.Touch.TouchLocation&)": {
+      "name": "FindById",
+      "returnType": "Microsoft.Xna.Framework.Input.Touch.TouchCollection.FindResult"
+    }
+  },
+  "conversionMemberMappings": {
+    "Microsoft.Xna.Framework.Graphics.RenderTargetBinding.op_Implicit(Microsoft.Xna.Framework.Graphics.RenderTarget2D)": {
+      "name": "fromRenderTarget2D"
+    },
+    "Microsoft.Xna.Framework.Graphics.VertexBufferBinding.op_Implicit(Microsoft.Xna.Framework.Graphics.VertexBuffer)": {
+      "name": "fromVertexBuffer"
+    }
+  },
   "mutableStaticValueProperties": "fresh-getter",
   "excludedClrMethods": [
     "System.Object.Finalize"
@@ -45,6 +75,25 @@
     "Microsoft.Xna.Framework.Content.ContentTypeReader`1": "Microsoft.Xna.Framework.Content.ContentTypeReaderOfT",
     "Microsoft.Xna.Framework.Graphics.PackedVector.IPackedVector`1": "Microsoft.Xna.Framework.Graphics.PackedVector.IPackedVectorOfT"
   },
+  "boxedGenericInterfaceProperties": [
+    {
+      "interface": "Microsoft.Xna.Framework.Graphics.PackedVector.IPackedVector`1",
+      "property": "PackedValue"
+    }
+  ],
+  "javaCollectionBridgeTypes": [
+    "Microsoft.Xna.Framework.CurveKeyCollection",
+    "Microsoft.Xna.Framework.Input.Touch.TouchCollection"
+  ],
+  "javaListBridgeTypes": [
+    "Microsoft.Xna.Framework.Input.Touch.TouchCollection"
+  ],
+  "javaIteratorBridgeTypes": [
+    "Microsoft.Xna.Framework.Input.Touch.TouchCollection+Enumerator"
+  ],
+  "javaIterableBridgeTypes": [
+    "Microsoft.Xna.Framework.Graphics.DisplayModeCollection"
+  ],
   "namedImmutableValuePropertyTypes": [
     "Microsoft.Xna.Framework.Color"
   ],
@@ -103,6 +152,66 @@
         {"kind": "method", "name": "getIsZero", "access": "public", "static": false, "abstract": false, "final": false, "genericArity": 0, "returnType": "boolean", "parameters": []},
         {"kind": "method", "name": "equals", "access": "public", "static": false, "abstract": false, "final": false, "genericArity": 0, "returnType": "boolean", "parameters": [{"name": "obj", "type": "java.lang.Object", "out": false, "optional": false}]},
         {"kind": "method", "name": "hashCode", "access": "public", "static": false, "abstract": false, "final": false, "genericArity": 0, "returnType": "int", "parameters": []}
+      ]
+    },
+    {
+      "name": "Microsoft.Xna.Framework.Matrix$Decomposition",
+      "kind": "class",
+      "access": "public",
+      "abstract": false,
+      "sealed": true,
+      "genericArity": 0,
+      "baseType": "java.lang.Object",
+      "interfaces": [],
+      "members": [
+        {"kind": "method", "name": "getSucceeded", "access": "public", "static": false, "abstract": false, "final": false, "genericArity": 0, "returnType": "boolean", "parameters": []},
+        {"kind": "method", "name": "getScale", "access": "public", "static": false, "abstract": false, "final": false, "genericArity": 0, "returnType": "Microsoft.Xna.Framework.Vector3", "parameters": []},
+        {"kind": "method", "name": "getRotation", "access": "public", "static": false, "abstract": false, "final": false, "genericArity": 0, "returnType": "Microsoft.Xna.Framework.Quaternion", "parameters": []},
+        {"kind": "method", "name": "getTranslation", "access": "public", "static": false, "abstract": false, "final": false, "genericArity": 0, "returnType": "Microsoft.Xna.Framework.Vector3", "parameters": []}
+      ]
+    },
+    {
+      "name": "Microsoft.Xna.Framework.Input.Touch.TouchLocation$PreviousLocationResult",
+      "kind": "class",
+      "access": "public",
+      "abstract": false,
+      "sealed": true,
+      "genericArity": 0,
+      "baseType": "java.lang.Object",
+      "interfaces": [],
+      "members": [
+        {"kind": "method", "name": "getSucceeded", "access": "public", "static": false, "abstract": false, "final": false, "genericArity": 0, "returnType": "boolean", "parameters": []},
+        {"kind": "method", "name": "getPreviousLocation", "access": "public", "static": false, "abstract": false, "final": false, "genericArity": 0, "returnType": "Microsoft.Xna.Framework.Input.Touch.TouchLocation", "parameters": []}
+      ]
+    },
+    {
+      "name": "Microsoft.Xna.Framework.Input.Touch.TouchCollection$FindResult",
+      "kind": "class",
+      "access": "public",
+      "abstract": false,
+      "sealed": true,
+      "genericArity": 0,
+      "baseType": "java.lang.Object",
+      "interfaces": [],
+      "members": [
+        {"kind": "method", "name": "getSucceeded", "access": "public", "static": false, "abstract": false, "final": false, "genericArity": 0, "returnType": "boolean", "parameters": []},
+        {"kind": "method", "name": "getTouchLocation", "access": "public", "static": false, "abstract": false, "final": false, "genericArity": 0, "returnType": "Microsoft.Xna.Framework.Input.Touch.TouchLocation", "parameters": []}
+      ]
+    },
+    {
+      "name": "Microsoft.Xna.Framework.Graphics.GraphicsAdapter$FormatSelectionResult",
+      "kind": "class",
+      "access": "public",
+      "abstract": false,
+      "sealed": true,
+      "genericArity": 0,
+      "baseType": "java.lang.Object",
+      "interfaces": [],
+      "members": [
+        {"kind": "method", "name": "getExactMatch", "access": "public", "static": false, "abstract": false, "final": false, "genericArity": 0, "returnType": "boolean", "parameters": []},
+        {"kind": "method", "name": "getSelectedFormat", "access": "public", "static": false, "abstract": false, "final": false, "genericArity": 0, "returnType": "Microsoft.Xna.Framework.Graphics.SurfaceFormat", "parameters": []},
+        {"kind": "method", "name": "getSelectedDepthFormat", "access": "public", "static": false, "abstract": false, "final": false, "genericArity": 0, "returnType": "Microsoft.Xna.Framework.Graphics.DepthFormat", "parameters": []},
+        {"kind": "method", "name": "getSelectedMultiSampleCount", "access": "public", "static": false, "abstract": false, "final": false, "genericArity": 0, "returnType": "int", "parameters": []}
       ]
     }
   ],

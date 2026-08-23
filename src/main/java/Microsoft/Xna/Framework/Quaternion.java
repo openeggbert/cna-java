@@ -48,18 +48,51 @@ public final class Quaternion {
     public static Quaternion Negate(Quaternion quaternion) { return new Quaternion(-quaternion.X, -quaternion.Y, -quaternion.Z, -quaternion.W); }
 
     public static Quaternion Multiply(Quaternion quaternion1, Quaternion quaternion2) {
+        float x = quaternion1.X;
+        float y = quaternion1.Y;
+        float z = quaternion1.Z;
+        float w = quaternion1.W;
+        float x2 = quaternion2.X;
+        float y2 = quaternion2.Y;
+        float z2 = quaternion2.Z;
+        float w2 = quaternion2.W;
+        float crossX = (y * z2) - (z * y2);
+        float crossY = (z * x2) - (x * z2);
+        float crossZ = (x * y2) - (y * x2);
+        float dot = (x * x2) + (y * y2) + (z * z2);
         return new Quaternion(
-                (quaternion1.W * quaternion2.X) + (quaternion1.X * quaternion2.W) + (quaternion1.Y * quaternion2.Z) - (quaternion1.Z * quaternion2.Y),
-                (quaternion1.W * quaternion2.Y) + (quaternion1.Y * quaternion2.W) + (quaternion1.Z * quaternion2.X) - (quaternion1.X * quaternion2.Z),
-                (quaternion1.W * quaternion2.Z) + (quaternion1.Z * quaternion2.W) + (quaternion1.X * quaternion2.Y) - (quaternion1.Y * quaternion2.X),
-                (quaternion1.W * quaternion2.W) - (quaternion1.X * quaternion2.X) - (quaternion1.Y * quaternion2.Y) - (quaternion1.Z * quaternion2.Z));
+                (x * w2) + (x2 * w) + crossX,
+                (y * w2) + (y2 * w) + crossY,
+                (z * w2) + (z2 * w) + crossZ,
+                (w * w2) - dot);
     }
 
     public static Quaternion Multiply(Quaternion quaternion1, float scaleFactor) {
         return new Quaternion(quaternion1.X * scaleFactor, quaternion1.Y * scaleFactor, quaternion1.Z * scaleFactor, quaternion1.W * scaleFactor);
     }
 
-    public static Quaternion Divide(Quaternion quaternion1, Quaternion quaternion2) { return Multiply(quaternion1, Inverse(quaternion2)); }
+    public static Quaternion Divide(Quaternion quaternion1, Quaternion quaternion2) {
+        float x = quaternion1.X;
+        float y = quaternion1.Y;
+        float z = quaternion1.Z;
+        float w = quaternion1.W;
+        float lengthSquared = (quaternion2.X * quaternion2.X) + (quaternion2.Y * quaternion2.Y)
+                + (quaternion2.Z * quaternion2.Z) + (quaternion2.W * quaternion2.W);
+        float inverse = 1.0f / lengthSquared;
+        float x2 = -quaternion2.X * inverse;
+        float y2 = -quaternion2.Y * inverse;
+        float z2 = -quaternion2.Z * inverse;
+        float w2 = quaternion2.W * inverse;
+        float crossX = (y * z2) - (z * y2);
+        float crossY = (z * x2) - (x * z2);
+        float crossZ = (x * y2) - (y * x2);
+        float dot = (x * x2) + (y * y2) + (z * z2);
+        return new Quaternion(
+                (x * w2) + (x2 * w) + crossX,
+                (y * w2) + (y2 * w) + crossY,
+                (z * w2) + (z2 * w) + crossZ,
+                (w * w2) - dot);
+    }
 
     public static float Dot(Quaternion quaternion1, Quaternion quaternion2) {
         return (quaternion1.X * quaternion2.X) + (quaternion1.Y * quaternion2.Y) + (quaternion1.Z * quaternion2.Z) + (quaternion1.W * quaternion2.W);
@@ -86,6 +119,65 @@ public final class Quaternion {
                 (sinYaw * cosPitch * cosRoll) - (cosYaw * sinPitch * sinRoll),
                 (cosYaw * cosPitch * sinRoll) - (sinYaw * sinPitch * cosRoll),
                 (cosYaw * cosPitch * cosRoll) + (sinYaw * sinPitch * sinRoll));
+    }
+
+    public static Quaternion CreateFromRotationMatrix(Matrix matrix) {
+        float trace = matrix.M11 + matrix.M22 + matrix.M33;
+        if (trace > 0.0f) {
+            float root = (float)Math.sqrt(trace + 1.0f);
+            float w = root * 0.5f;
+            root = 0.5f / root;
+            return new Quaternion(
+                    (matrix.M23 - matrix.M32) * root,
+                    (matrix.M31 - matrix.M13) * root,
+                    (matrix.M12 - matrix.M21) * root,
+                    w);
+        }
+        if (matrix.M11 >= matrix.M22 && matrix.M11 >= matrix.M33) {
+            float root = (float)Math.sqrt(1.0f + matrix.M11 - matrix.M22 - matrix.M33);
+            float inverse = 0.5f / root;
+            return new Quaternion(
+                    0.5f * root,
+                    (matrix.M12 + matrix.M21) * inverse,
+                    (matrix.M13 + matrix.M31) * inverse,
+                    (matrix.M23 - matrix.M32) * inverse);
+        }
+        if (matrix.M22 > matrix.M33) {
+            float root = (float)Math.sqrt(1.0f + matrix.M22 - matrix.M11 - matrix.M33);
+            float inverse = 0.5f / root;
+            return new Quaternion(
+                    (matrix.M21 + matrix.M12) * inverse,
+                    0.5f * root,
+                    (matrix.M32 + matrix.M23) * inverse,
+                    (matrix.M31 - matrix.M13) * inverse);
+        }
+        float root = (float)Math.sqrt(1.0f + matrix.M33 - matrix.M11 - matrix.M22);
+        float inverse = 0.5f / root;
+        return new Quaternion(
+                (matrix.M31 + matrix.M13) * inverse,
+                (matrix.M32 + matrix.M23) * inverse,
+                0.5f * root,
+                (matrix.M12 - matrix.M21) * inverse);
+    }
+
+    public static Quaternion Concatenate(Quaternion value1, Quaternion value2) {
+        float x = value2.X;
+        float y = value2.Y;
+        float z = value2.Z;
+        float w = value2.W;
+        float x2 = value1.X;
+        float y2 = value1.Y;
+        float z2 = value1.Z;
+        float w2 = value1.W;
+        float crossX = (y * z2) - (z * y2);
+        float crossY = (z * x2) - (x * z2);
+        float crossZ = (x * y2) - (y * x2);
+        float dot = (x * x2) + (y * y2) + (z * z2);
+        return new Quaternion(
+                (x * w2) + (x2 * w) + crossX,
+                (y * w2) + (y2 * w) + crossY,
+                (z * w2) + (z2 * w) + crossZ,
+                (w * w2) - dot);
     }
 
     public static Quaternion Lerp(Quaternion quaternion1, Quaternion quaternion2, float amount) {
@@ -129,11 +221,13 @@ public final class Quaternion {
                 (leftScale * quaternion1.W) + (rightScale * quaternion2.W));
     }
 
+    public boolean equals(Quaternion other) {
+        return other != null && X == other.X && Y == other.Y && Z == other.Z && W == other.W;
+    }
+
     @Override
     public boolean equals(Object obj) {
-        return this == obj || obj instanceof Quaternion value
-                && FloatSemantics.equals(X, value.X) && FloatSemantics.equals(Y, value.Y)
-                && FloatSemantics.equals(Z, value.Z) && FloatSemantics.equals(W, value.W);
+        return obj instanceof Quaternion value && equals(value);
     }
 
     @Override

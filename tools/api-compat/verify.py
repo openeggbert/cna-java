@@ -192,6 +192,7 @@ def map_type(value: str | None, *, identity: bool = False) -> str | None:
         mapped_arguments = [boxed(map_type(argument) or "java.lang.Object") for argument in arguments]
         collection = {
             "System.Collections.Generic.IEnumerable`1": "java.lang.Iterable",
+            "System.Collections.Generic.IEnumerator`1": "java.util.Iterator",
             "System.Collections.Generic.ICollection`1": "java.util.Collection",
             "System.Collections.Generic.IList`1": "java.util.List",
             "System.Collections.Generic.List`1": "java.util.List",
@@ -259,6 +260,30 @@ def map_member_parameters(
     return map_parameters(member.get("parameters", []), overrides)
 
 
+def map_member_return_type(
+        type_name: str,
+        member: dict[str, Any],
+        rules: dict[str, Any]) -> str | None:
+    override = rules.get("memberReturnTypeMappings", {}).get(
+        clr_member_signature(type_name, member))
+    return override if override is not None else map_type(member["returnType"])
+
+
+def mapped_property_type(
+        type_contract: dict[str, Any],
+        member: dict[str, Any],
+        rules: dict[str, Any]) -> str:
+    mapped = map_type(member["type"]) or "java.lang.Object"
+    for adaptation in rules.get("boxedGenericInterfaceProperties", []):
+        if member["name"] != adaptation["property"]:
+            continue
+        for interface_name in type_contract.get("interfaces", []):
+            parsed = split_generic(interface_name)
+            if parsed and parsed[0] == adaptation["interface"]:
+                return boxed(mapped)
+    return mapped
+
+
 def mapped_enum_members(type_contract: dict[str, Any]) -> list[dict[str, Any]]:
     fields = [value for value in type_contract["members"]
               if value["kind"] == "field" and value["name"] != "value__"]
@@ -317,7 +342,7 @@ def mapped_members(type_contract: dict[str, Any], rules: dict[str, Any], mapping
                                             map_member_parameters(type_name, member, rules), None))
         elif kind == "property":
             indexes = map_member_parameters(type_name, member, rules)
-            property_type = map_type(member["type"]) or "java.lang.Object"
+            property_type = mapped_property_type(type_contract, member, rules)
             named_value_type = (type_name in rules.get("namedImmutableValuePropertyTypes", [])
                                 and member.get("static", False)
                                 and visible(member.get("getterAccess"))
@@ -338,8 +363,12 @@ def mapped_members(type_contract: dict[str, Any], rules: dict[str, Any], mapping
                           "abstract": member.get("setterAbstract", type_contract["kind"] == "interface"),
                           "final": member.get("setterFinal", False),
                           "virtual": member.get("setterVirtual")}
+                setter_return = property_type \
+                    if type_name in rules.get("javaListBridgeTypes", []) \
+                    and member["name"] == "Item" and indexes else "void"
                 expected.append(callable_member("method", setter_name, source,
-                                                [*indexes, parameter("value", property_type)], "void"))
+                                                [*indexes, parameter("value", property_type)],
+                                                setter_return))
         elif kind == "event":
             listener = map_type(member["type"]) or "java.lang.Object"
             if visible(member.get("addAccess")):
@@ -363,6 +392,15 @@ def mapped_members(type_contract: dict[str, Any], rules: dict[str, Any], mapping
             if name in ("op_Equality", "op_Inequality"):
                 continue
             if name in ("op_Implicit", "op_Explicit"):
+                adaptation = rules.get("conversionMemberMappings", {}).get(clr_signature)
+                if adaptation is not None:
+                    expected.append(callable_member(
+                        "method", adaptation["name"], member,
+                        map_parameters(
+                            member.get("parameters", []),
+                            adaptation.get("parameterTypeMappings")),
+                        adaptation.get("returnType", map_type(member["returnType"]))))
+                    continue
                 mapping_findings.append(diagnostic("XNA_MAPPING_MISMATCH", type_name + "." + name,
                                                    expected="explicit conversion rule", actual="unclassified conversion"))
                 continue
@@ -381,6 +419,14 @@ def mapped_members(type_contract: dict[str, Any], rules: dict[str, Any], mapping
                 continue
             by_reference = any(value["type"].endswith("&") for value in member["parameters"])
             if by_reference:
+                adaptation = rules.get("refOutMemberMappings", {}).get(clr_signature)
+                if adaptation is not None:
+                    inputs = [value for value in member["parameters"] if not value.get("out")]
+                    expected.append(callable_member(
+                        "method", adaptation.get("name", name), member,
+                        map_parameters(inputs, adaptation.get("parameterTypeMappings")),
+                        adaptation["returnType"]))
+                    continue
                 out_values = [value for value in member["parameters"] if value.get("out")]
                 inputs = [value for value in member["parameters"] if not value.get("out")]
                 if len(out_values) == 1:
@@ -409,7 +455,13 @@ def mapped_members(type_contract: dict[str, Any], rules: dict[str, Any], mapping
                 continue
             expected.append(callable_member("method", name, member,
                                             map_member_parameters(type_name, member, rules),
-                                            map_type(member["returnType"])))
+                                            map_member_return_type(type_name, member, rules)))
+
+    for member in type_contract.get("explicitInterfaceMethods", []):
+        expected.append(callable_member(
+            "method", member["name"], member,
+            map_member_parameters(type_name, member, rules),
+            map_type(member["returnType"])))
 
     if "System.IDisposable" in type_contract.get("interfaces", []) \
             and not any(value["kind"] == "method" and value["name"] == "close"
@@ -434,6 +486,110 @@ def mapped_members(type_contract: dict[str, Any], rules: dict[str, Any], mapping
             callable_member("method", "remove", source, [parameter("index", "int")], element_type),
             callable_member("method", "clear", source, [], "void"),
         ])
+
+    if type_name in rules.get("javaCollectionBridgeTypes", []):
+        collection_interface = next(
+            (split_generic(value) for value in type_contract.get("interfaces", [])
+             if value.startswith("System.Collections.Generic.ICollection`1[")
+             or value.startswith("System.Collections.Generic.IList`1[")),
+            None)
+        if collection_interface is None:
+            raise ValueError(f"Java collection bridge type has no ICollection<T>: {type_name}")
+        element_type = map_type(collection_interface[1][0]) or "java.lang.Object"
+        bridge = {"access": "public", "static": False, "abstract": False,
+                  "final": True, "genericArity": 0}
+        generic_bridge = {**bridge, "genericArity": 1}
+        expected.extend([
+            callable_member("method", "size", bridge, [], "int"),
+            callable_member("method", "isEmpty", bridge, [], "boolean"),
+            callable_member("method", "contains", bridge,
+                            [parameter("item", "java.lang.Object")], "boolean"),
+            callable_member("method", "iterator", bridge, [],
+                            f"java.util.Iterator<{element_type}>"),
+            callable_member("method", "toArray", bridge, [], "java.lang.Object[]"),
+            callable_member("method", "toArray", generic_bridge,
+                            [parameter("array", "T[]")], "T[]"),
+            callable_member("method", "add", bridge,
+                            [parameter("item", element_type)], "boolean"),
+            callable_member("method", "remove", bridge,
+                            [parameter("item", "java.lang.Object")], "boolean"),
+            callable_member("method", "containsAll", bridge,
+                            [parameter("collection", "java.util.Collection<?>")], "boolean"),
+            callable_member("method", "addAll", bridge,
+                            [parameter("collection", f"java.util.Collection<? extends {element_type}>")],
+                            "boolean"),
+            callable_member("method", "removeAll", bridge,
+                            [parameter("collection", "java.util.Collection<?>")], "boolean"),
+            callable_member("method", "retainAll", bridge,
+                            [parameter("collection", "java.util.Collection<?>")], "boolean"),
+            callable_member("method", "clear", bridge, [], "void"),
+        ])
+
+    if type_name in rules.get("javaListBridgeTypes", []):
+        list_interface = next(
+            (split_generic(value) for value in type_contract.get("interfaces", [])
+             if value.startswith("System.Collections.Generic.IList`1[")),
+            None)
+        if list_interface is None:
+            raise ValueError(f"Java list bridge type has no IList<T>: {type_name}")
+        element_type = map_type(list_interface[1][0]) or "java.lang.Object"
+        bridge = {"access": "public", "static": False, "abstract": False,
+                  "final": True, "genericArity": 0}
+        expected.extend([
+            callable_member("method", "get", bridge,
+                            [parameter("index", "int")], element_type),
+            callable_member("method", "set", bridge,
+                            [parameter("index", "int"), parameter("item", element_type)],
+                            element_type),
+            callable_member("method", "add", bridge,
+                            [parameter("index", "int"), parameter("item", element_type)], "void"),
+            callable_member("method", "remove", bridge,
+                            [parameter("index", "int")], element_type),
+            callable_member("method", "indexOf", bridge,
+                            [parameter("item", "java.lang.Object")], "int"),
+            callable_member("method", "lastIndexOf", bridge,
+                            [parameter("item", "java.lang.Object")], "int"),
+            callable_member("method", "listIterator", bridge, [],
+                            f"java.util.ListIterator<{element_type}>"),
+            callable_member("method", "listIterator", bridge,
+                            [parameter("index", "int")],
+                            f"java.util.ListIterator<{element_type}>"),
+            callable_member("method", "subList", bridge,
+                            [parameter("fromIndex", "int"), parameter("toIndex", "int")],
+                            f"java.util.List<{element_type}>"),
+            callable_member("method", "addAll", bridge,
+                            [parameter("index", "int"),
+                             parameter("collection", f"java.util.Collection<? extends {element_type}>")],
+                            "boolean"),
+        ])
+
+    if type_name in rules.get("javaIteratorBridgeTypes", []):
+        iterator_interface = next(
+            (split_generic(value) for value in type_contract.get("interfaces", [])
+             if value.startswith("System.Collections.Generic.IEnumerator`1[")),
+            None)
+        if iterator_interface is None:
+            raise ValueError(f"Java iterator bridge type has no IEnumerator<T>: {type_name}")
+        element_type = map_type(iterator_interface[1][0]) or "java.lang.Object"
+        bridge = {"access": "public", "static": False, "abstract": False,
+                  "final": True, "genericArity": 0}
+        expected.extend([
+            callable_member("method", "hasNext", bridge, [], "boolean"),
+            callable_member("method", "next", bridge, [], element_type),
+        ])
+
+    if type_name in rules.get("javaIterableBridgeTypes", []):
+        iterable_interface = next(
+            (split_generic(value) for value in type_contract.get("interfaces", [])
+             if value.startswith("System.Collections.Generic.IEnumerable`1[")),
+            None)
+        if iterable_interface is None:
+            raise ValueError(f"Java iterable bridge type has no IEnumerable<T>: {type_name}")
+        element_type = map_type(iterable_interface[1][0]) or "java.lang.Object"
+        bridge = {"access": "public", "static": False, "abstract": False,
+                  "final": True, "genericArity": 0}
+        expected.append(callable_member(
+            "method", "iterator", bridge, [], f"java.util.Iterator<{element_type}>"))
 
     unique: dict[str, dict[str, Any]] = {}
     for member in expected:

@@ -111,6 +111,8 @@ internal static class XnaContractExtractor
         foreach (FieldInfo field in type.GetFields(DeclaredMembers).Where(IsVisible))
             members.Add(ReadField(field));
 
+        List<object> explicitInterfaceMethods = ReadExplicitInterfaceMethods(type);
+
         return new Dictionary<string, object>
         {
             ["name"] = type.FullName,
@@ -122,8 +124,53 @@ internal static class XnaContractExtractor
             ["genericArity"] = type.IsGenericTypeDefinition ? type.GetGenericArguments().Length : 0,
             ["baseType"] = TypeName(type.BaseType),
             ["interfaces"] = DirectInterfaces(type).Select(TypeName).OrderBy(name => name, StringComparer.Ordinal).ToList(),
+            ["explicitInterfaceMethods"] = explicitInterfaceMethods,
             ["members"] = members.OrderBy(MemberSortKey, StringComparer.Ordinal).ToList()
         };
+    }
+
+    private static List<object> ReadExplicitInterfaceMethods(Type type)
+    {
+        var methods = new Dictionary<string, object>(StringComparer.Ordinal);
+        if (type.IsInterface)
+        {
+            return methods.Values.ToList();
+        }
+        foreach (Type interfaceType in type.GetInterfaces().Where(IsContractType))
+        {
+            InterfaceMapping mapping = type.GetInterfaceMap(interfaceType);
+            for (int index = 0; index < mapping.InterfaceMethods.Length; index++)
+            {
+                MethodInfo interfaceMethod = mapping.InterfaceMethods[index];
+                MethodInfo targetMethod = mapping.TargetMethods[index];
+                if (targetMethod.DeclaringType != type || IsVisible(targetMethod))
+                {
+                    continue;
+                }
+
+                string projectedName = interfaceMethod.Name;
+                if (interfaceMethod.IsSpecialName)
+                {
+                    if (projectedName.StartsWith("get_", StringComparison.Ordinal))
+                        projectedName = "get" + projectedName.Substring(4);
+                    else if (projectedName.StartsWith("set_", StringComparison.Ordinal))
+                        projectedName = "set" + projectedName.Substring(4);
+                    else if (projectedName.StartsWith("add_", StringComparison.Ordinal))
+                        projectedName = "add" + projectedName.Substring(4) + "Listener";
+                    else if (projectedName.StartsWith("remove_", StringComparison.Ordinal))
+                        projectedName = "remove" + projectedName.Substring(7) + "Listener";
+                    else
+                        continue;
+                }
+
+                Dictionary<string, object> promoted = ReadCallable(
+                    "method", projectedName, targetMethod, interfaceMethod.ReturnType);
+                promoted["access"] = "public";
+                promoted["parameters"] = interfaceMethod.GetParameters().Select(ReadParameter).ToList();
+                methods[MemberSortKey(promoted)] = promoted;
+            }
+        }
+        return methods.Values.OrderBy(MemberSortKey, StringComparer.Ordinal).ToList();
     }
 
     private static Dictionary<string, object> ReadCallable(string kind, string name, MethodBase callable, Type returnType)

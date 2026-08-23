@@ -6,6 +6,7 @@ import java.time.Duration;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
+import java.util.concurrent.atomic.AtomicReference;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
@@ -210,6 +211,37 @@ final class GameComponentTests {
         game.close();
         assertThrows(IllegalStateException.class,
                 () -> game.getWindow().setTitle("Too late"));
+    }
+
+    @Test
+    void GameWindow_NativeDispatchContainsExceptionsAndToleratesRemovalDuringDispatch() {
+        TestGame game = new TestGame();
+        ProbeWindow window = new ProbeWindow(game);
+        List<String> events = new ArrayList<>();
+        AtomicReference<EventHandler<EventArgs>> removing = new AtomicReference<>();
+        removing.set((sender, args) -> {
+            events.add("removing");
+            window.removeClientSizeChangedListener(removing.get());
+        });
+        window.addClientSizeChangedListener(removing.get());
+        window.addClientSizeChangedListener((sender, args) -> events.add("stable"));
+
+        window.dispatchNativeEvent(0);
+        window.rethrowPendingListenerFailure();
+        window.dispatchNativeEvent(0);
+        window.rethrowPendingListenerFailure();
+        assertEquals(List.of("removing", "stable", "stable"), events);
+
+        window.addOrientationChangedListener((sender, args) -> {
+            throw new IllegalStateException("window listener failure");
+        });
+        window.dispatchNativeEvent(1);
+        IllegalStateException failure = assertThrows(
+                IllegalStateException.class, window::rethrowPendingListenerFailure);
+        assertEquals("window listener failure", failure.getMessage());
+        window.rethrowPendingListenerFailure();
+        window.clearEventListeners();
+        game.close();
     }
 
     @Test

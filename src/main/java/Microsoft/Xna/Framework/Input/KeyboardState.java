@@ -35,6 +35,25 @@ public final class KeyboardState {
         this.words = words.clone();
     }
 
+    static KeyboardState fromValues(int... values) {
+        KeyboardState state = new KeyboardState();
+        if (values == null) {
+            return state;
+        }
+        for (int value : values) {
+            Keys key = keyFromValue(value);
+            if (key != null) {
+                state.words[value >>> 6] |= 1L << (value & 63);
+            }
+        }
+        return state;
+    }
+
+    boolean isKeyDownValue(int value) {
+        Keys key = keyFromValue(value);
+        return key != null && IsKeyDown(key);
+    }
+
     public KeyState get(Keys key) {
         return IsKeyDown(key) ? KeyState.Down : KeyState.Up;
     }
@@ -73,5 +92,14 @@ public final class KeyboardState {
             hash ^= (int) word ^ (int) (word >>> 32);
         }
         return hash;
+    }
+
+    private static Keys keyFromValue(int value) {
+        for (Keys key : Keys.values()) {
+            if (key.getValue() == value) {
+                return key;
+            }
+        }
+        return null;
     }
 }

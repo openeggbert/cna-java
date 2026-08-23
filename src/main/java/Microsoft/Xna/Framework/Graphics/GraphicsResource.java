@@ -2,6 +2,7 @@ package Microsoft.Xna.Framework.Graphics;
 
 import Microsoft.Xna.Framework.EventArgs;
 import Microsoft.Xna.Framework.EventHandler;
+import org.openeggbert.cna.internal.NativeBindings;
 
 import java.util.Objects;
 import java.util.concurrent.CopyOnWriteArrayList;
@@ -9,12 +10,15 @@ import java.util.concurrent.CopyOnWriteArrayList;
 /** Base for device resources whose CNA ownership is released deterministically. */
 public abstract class GraphicsResource implements AutoCloseable {
 
-    private final GraphicsDevice graphicsDevice;
+    private GraphicsDevice graphicsDevice;
     private final CopyOnWriteArrayList<EventHandler<EventArgs>> disposingListeners =
             new CopyOnWriteArrayList<>();
     private String name;
     private Object tag;
     private boolean disposed;
+
+    GraphicsResource() {
+    }
 
     GraphicsResource(GraphicsDevice graphicsDevice) {
         this.graphicsDevice = Objects.requireNonNull(graphicsDevice, "graphicsDevice");
@@ -62,11 +66,11 @@ public abstract class GraphicsResource implements AutoCloseable {
         }
         Dispose(true);
         disposed = true;
-        RuntimeException failure = null;
+        Throwable failure = null;
         for (EventHandler<EventArgs> listener : disposingListeners) {
             try {
                 listener.invoke(this, EventArgs.Empty);
-            } catch (RuntimeException exception) {
+            } catch (Throwable exception) {
                 if (failure == null) {
                     failure = exception;
                 } else {
@@ -75,8 +79,17 @@ public abstract class GraphicsResource implements AutoCloseable {
             }
         }
         disposingListeners.clear();
+        try {
+            NativeBindings.rethrowGraphicsDeviceListenerFailure(graphicsDevice);
+        } catch (Throwable exception) {
+            if (failure == null) {
+                failure = exception;
+            } else {
+                failure.addSuppressed(exception);
+            }
+        }
         if (failure != null) {
-            throw failure;
+            rethrow(failure);
         }
     }
 
@@ -89,5 +102,19 @@ public abstract class GraphicsResource implements AutoCloseable {
         if (disposed) {
             throw new IllegalStateException(getClass().getSimpleName() + " is already disposed");
         }
+    }
+
+    final void attachGraphicsDevice(GraphicsDevice value) {
+        graphicsDevice = Objects.requireNonNull(value, "graphicsDevice");
+    }
+
+    private static void rethrow(Throwable failure) {
+        if (failure instanceof RuntimeException runtime) {
+            throw runtime;
+        }
+        if (failure instanceof Error error) {
+            throw error;
+        }
+        throw new IllegalStateException("GraphicsResource listener failed", failure);
     }
 }

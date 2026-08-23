@@ -17,8 +17,10 @@ public final class Point {
     @Override
     public boolean equals(Object obj) { return this == obj || obj instanceof Point value && X == value.X && Y == value.Y; }
 
+    public boolean equals(Point other) { return other != null && X == other.X && Y == other.Y; }
+
     @Override
-    public int hashCode() { return X ^ Y; }
+    public int hashCode() { return X + Y; }
 
     @Override
     public String toString() { return "{X:" + X + " Y:" + Y + '}'; }

@@ -22,6 +22,49 @@ public class SpriteBatch extends GraphicsResource {
         begin(SpriteSortMode.Deferred);
     }
 
+    public final void Begin(SpriteSortMode sortMode, BlendState blendState) {
+        Begin(sortMode, blendState, null, null, null);
+    }
+
+    public final void Begin(
+            SpriteSortMode sortMode,
+            BlendState blendState,
+            SamplerState samplerState,
+            DepthStencilState depthStencilState,
+            RasterizerState rasterizerState) {
+        ensureBeginAllowed();
+        SpriteSortMode selectedSortMode = Objects.requireNonNull(sortMode, "sortMode");
+        BlendState selectedBlend = blendState == null ? BlendState.AlphaBlend : blendState;
+        SamplerState selectedSampler = samplerState == null ? SamplerState.LinearClamp : samplerState;
+        DepthStencilState selectedDepth =
+                depthStencilState == null ? DepthStencilState.None : depthStencilState;
+        RasterizerState selectedRasterizer = rasterizerState == null
+                ? RasterizerState.CullCounterClockwise : rasterizerState;
+
+        int[] blend = selectedBlend.snapshotForBinding();
+        int[] sampler = selectedSampler.snapshotIntegersForBinding();
+        float samplerBias = selectedSampler.snapshotBiasForBinding();
+        int[] depth = selectedDepth.snapshotForBinding();
+        int[] rasterizer = selectedRasterizer.snapshotIntegersForBinding();
+        float[] rasterizerFloats = selectedRasterizer.snapshotFloatsForBinding();
+        NativeBindings.beginSpriteBatchWithStates(
+                this,
+                selectedSortMode,
+                blend,
+                sampler,
+                samplerBias,
+                depth,
+                rasterizer,
+                rasterizerFloats);
+
+        GraphicsDevice device = getGraphicsDevice();
+        selectedBlend.bind(device);
+        selectedSampler.bind(device);
+        selectedDepth.bind(device);
+        selectedRasterizer.bind(device);
+        begun = true;
+    }
+
     public final void End() {
         ensureNotDisposed();
         if (!begun) {
@@ -102,6 +145,80 @@ public class SpriteBatch extends GraphicsResource {
                 effects, layerDepth);
     }
 
+    public final void DrawString(
+            SpriteFont spriteFont,
+            String text,
+            Vector2 position,
+            Color color) {
+        drawString(spriteFont, text, position, color, 0.0f, new Vector2(),
+                new Vector2(1.0f), SpriteEffects.None, 0.0f);
+    }
+
+    public final void DrawString(
+            SpriteFont spriteFont,
+            StringBuilder text,
+            Vector2 position,
+            Color color) {
+        drawString(spriteFont, Objects.requireNonNull(text, "text").toString(),
+                position, color, 0.0f, new Vector2(),
+                new Vector2(1.0f), SpriteEffects.None, 0.0f);
+    }
+
+    public final void DrawString(
+            SpriteFont spriteFont,
+            String text,
+            Vector2 position,
+            Color color,
+            float rotation,
+            Vector2 origin,
+            float scale,
+            SpriteEffects effects,
+            float layerDepth) {
+        drawString(spriteFont, text, position, color, rotation, origin,
+                new Vector2(scale), effects, layerDepth);
+    }
+
+    public final void DrawString(
+            SpriteFont spriteFont,
+            StringBuilder text,
+            Vector2 position,
+            Color color,
+            float rotation,
+            Vector2 origin,
+            float scale,
+            SpriteEffects effects,
+            float layerDepth) {
+        drawString(spriteFont, Objects.requireNonNull(text, "text").toString(),
+                position, color, rotation, origin, new Vector2(scale), effects, layerDepth);
+    }
+
+    public final void DrawString(
+            SpriteFont spriteFont,
+            String text,
+            Vector2 position,
+            Color color,
+            float rotation,
+            Vector2 origin,
+            Vector2 scale,
+            SpriteEffects effects,
+            float layerDepth) {
+        drawString(spriteFont, text, position, color, rotation, origin, scale, effects, layerDepth);
+    }
+
+    public final void DrawString(
+            SpriteFont spriteFont,
+            StringBuilder text,
+            Vector2 position,
+            Color color,
+            float rotation,
+            Vector2 origin,
+            Vector2 scale,
+            SpriteEffects effects,
+            float layerDepth) {
+        drawString(spriteFont, Objects.requireNonNull(text, "text").toString(),
+                position, color, rotation, origin, scale, effects, layerDepth);
+    }
+
     @Override
     protected void Dispose(boolean disposing) {
         if (disposing && !getIsDisposed()) {
@@ -112,12 +229,16 @@ public class SpriteBatch extends GraphicsResource {
     }
 
     private void begin(SpriteSortMode sortMode) {
+        ensureBeginAllowed();
+        NativeBindings.beginSpriteBatch(this, sortMode);
+        begun = true;
+    }
+
+    private void ensureBeginAllowed() {
         ensureNotDisposed();
         if (begun) {
             throw new IllegalStateException("SpriteBatch.Begin cannot be nested");
         }
-        NativeBindings.beginSpriteBatch(this, sortMode);
-        begun = true;
     }
 
     private void drawRectangle(
@@ -154,5 +275,23 @@ public class SpriteBatch extends GraphicsResource {
         if (!begun) {
             throw new IllegalStateException("SpriteBatch.Draw requires a matching Begin");
         }
+    }
+
+    private void drawString(
+            SpriteFont spriteFont,
+            String text,
+            Vector2 position,
+            Color color,
+            float rotation,
+            Vector2 origin,
+            Vector2 scale,
+            SpriteEffects effects,
+            float layerDepth) {
+        Objects.requireNonNull(spriteFont, "spriteFont");
+        Objects.requireNonNull(text, "text");
+        ensureBegun();
+        NativeBindings.drawSpriteString(
+                this, spriteFont, text, position, color, rotation,
+                origin, scale, effects, layerDepth);
     }
 }

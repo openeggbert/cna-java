@@ -8,61 +8,83 @@ public final class Ray {
     public Vector3 Position;
     public Vector3 Direction;
 
+    public Ray() {
+        Position = new Vector3();
+        Direction = new Vector3();
+    }
+
     public Ray(Vector3 position, Vector3 direction) {
         Position = new Vector3(Objects.requireNonNull(position, "position"));
         Direction = new Vector3(Objects.requireNonNull(direction, "direction"));
     }
 
-    public Float Intersects(BoundingBox box) {
-        float tMin = 0.0f;
-        float tMax = Float.MAX_VALUE;
-        float[] origins = {Position.X, Position.Y, Position.Z};
-        float[] directions = {Direction.X, Direction.Y, Direction.Z};
-        float[] minima = {box.Min.X, box.Min.Y, box.Min.Z};
-        float[] maxima = {box.Max.X, box.Max.Y, box.Max.Z};
-        for (int index = 0; index < 3; index++) {
-            if (Math.abs(directions[index]) < 1.0e-6f) {
-                if (origins[index] < minima[index] || origins[index] > maxima[index]) return null;
-            } else {
-                float inverse = 1.0f / directions[index];
-                float first = (minima[index] - origins[index]) * inverse;
-                float second = (maxima[index] - origins[index]) * inverse;
-                if (first > second) { float swap = first; first = second; second = swap; }
-                tMin = Math.max(tMin, first);
-                tMax = Math.min(tMax, second);
-                if (tMin > tMax) return null;
-            }
-        }
-        return tMin;
+    public Ray(Ray value) {
+        this(Objects.requireNonNull(value, "value").Position, value.Direction);
     }
 
-    public Float Intersects(BoundingSphere sphere) {
-        Vector3 difference = Vector3.Subtract(sphere.Center, Position);
-        float distanceSquared = difference.LengthSquared();
-        float radiusSquared = sphere.Radius * sphere.Radius;
-        if (distanceSquared <= radiusSquared) return 0.0f;
-        float along = Vector3.Dot(difference, Direction);
-        if (along < 0.0f) return null;
-        float perpendicularSquared = distanceSquared - (along * along);
-        if (perpendicularSquared > radiusSquared) return null;
-        return along - (float)Math.sqrt(radiusSquared - perpendicularSquared);
+    public Float Intersects(BoundingBox box) {
+        return box.Intersects(this);
+    }
+
+    public Float Intersects(BoundingFrustum frustum) {
+        return Objects.requireNonNull(frustum, "frustum").Intersects(this);
     }
 
     public Float Intersects(Plane plane) {
-        float denominator = Vector3.Dot(Direction, plane.Normal);
-        if (Math.abs(denominator) < 1.0e-5f) return null;
-        float distance = (-plane.D - Vector3.Dot(plane.Normal, Position)) / denominator;
+        float denominator = (plane.Normal.X * Direction.X)
+                + (plane.Normal.Y * Direction.Y) + (plane.Normal.Z * Direction.Z);
+        if (Math.abs(denominator) < 1.0E-05f) {
+            return null;
+        }
+        float positionDot = (plane.Normal.X * Position.X)
+                + (plane.Normal.Y * Position.Y) + (plane.Normal.Z * Position.Z);
+        float distance = (-plane.D - positionDot) / denominator;
         if (distance < 0.0f) {
-            if (distance < -1.0e-5f) return null;
+            if (distance < -1.0E-05f) {
+                return null;
+            }
             distance = 0.0f;
         }
         return distance;
     }
 
+    public Float Intersects(BoundingSphere sphere) {
+        float x = sphere.Center.X - Position.X;
+        float y = sphere.Center.Y - Position.Y;
+        float z = sphere.Center.Z - Position.Z;
+        float distanceSquared = (x * x) + (y * y) + (z * z);
+        float radiusSquared = sphere.Radius * sphere.Radius;
+        if (distanceSquared <= radiusSquared) {
+            return 0.0f;
+        }
+        float along = (x * Direction.X) + (y * Direction.Y) + (z * Direction.Z);
+        if (along < 0.0f) {
+            return null;
+        }
+        float perpendicularSquared = distanceSquared - (along * along);
+        if (perpendicularSquared > radiusSquared) {
+            return null;
+        }
+        float offset = (float)Math.sqrt(radiusSquared - perpendicularSquared);
+        return along - offset;
+    }
+
+    public boolean equals(Ray other) {
+        return other != null && Position.equals(other.Position) && Direction.equals(other.Direction);
+    }
+
     @Override
-    public boolean equals(Object obj) { return this == obj || obj instanceof Ray value && Position.equals(value.Position) && Direction.equals(value.Direction); }
+    public boolean equals(Object obj) {
+        return obj instanceof Ray value && equals(value);
+    }
+
     @Override
-    public int hashCode() { return Position.hashCode() + Direction.hashCode(); }
+    public int hashCode() {
+        return Position.hashCode() + Direction.hashCode();
+    }
+
     @Override
-    public String toString() { return "{Position:" + Position + " Direction:" + Direction + '}'; }
+    public String toString() {
+        return "{Position:" + Position + " Direction:" + Direction + '}';
+    }
 }

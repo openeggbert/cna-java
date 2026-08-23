@@ -1,11 +1,13 @@
 package Microsoft.Xna.Framework;
 
+import Microsoft.Xna.Framework.Graphics.PackedVector.IPackedVectorOfT;
+
 import java.util.Objects;
 
 /** Mutable XNA RGBA value. Named instances are frozen to prevent shared-state corruption. */
-public final class Color {
+public final class Color implements IPackedVectorOfT<Long> {
 
-    public static final Color Transparent = named(255, 255, 255, 0);
+    public static final Color Transparent = named(0, 0, 0, 0);
     public static final Color AliceBlue = named(240, 248, 255);
     public static final Color AntiqueWhite = named(250, 235, 215);
     public static final Color Aqua = named(0, 255, 255);
@@ -225,16 +227,27 @@ public final class Color {
     }
 
     /** Unsigned XNA packed value represented in Java's positive {@code long} range. */
-    public long getPackedValue() {
+    @Override
+    public Long getPackedValue() {
         return Integer.toUnsignedLong(packedValue);
     }
 
-    public void setPackedValue(long value) {
+    @Override
+    public void setPackedValue(Long value) {
         ensureMutable();
+        Objects.requireNonNull(value, "value");
         if (value < 0L || value > 0xffff_ffffL) {
             throw new IllegalArgumentException("value must fit an unsigned 32-bit integer");
         }
-        packedValue = (int)value;
+        packedValue = value.intValue();
+    }
+
+    @Override
+    public void PackFromVector4(Vector4 vector) {
+        ensureMutable();
+        Objects.requireNonNull(vector, "vector");
+        packedValue = pack(
+                packUnit(vector.X), packUnit(vector.Y), packUnit(vector.Z), packUnit(vector.W));
     }
 
     public Vector3 ToVector3() {
