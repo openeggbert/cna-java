@@ -22,6 +22,10 @@ import Microsoft.Xna.Framework.Input.Keys;
 import Microsoft.Xna.Framework.Input.ButtonState;
 import Microsoft.Xna.Framework.Input.Mouse;
 import Microsoft.Xna.Framework.Input.MouseState;
+import Microsoft.Xna.Framework.Audio.AudioChannels;
+import Microsoft.Xna.Framework.Audio.DynamicSoundEffectInstance;
+import Microsoft.Xna.Framework.Audio.SoundEffect;
+import Microsoft.Xna.Framework.Audio.SoundEffectInstance;
 import Microsoft.Xna.Framework.Graphics.SpriteBatch;
 import Microsoft.Xna.Framework.Graphics.SpriteFont;
 import Microsoft.Xna.Framework.Graphics.SpriteSortMode;
@@ -426,6 +430,8 @@ final class NativeIntegrationTests {
         try (OwnershipStressGame game = new OwnershipStressGame()) {
             game.RunOneFrame();
             assertEquals(200, game.completedCycles);
+            assertEquals(100, game.completedAudioCycles);
+            assertTrue(game.failedAudioCreationRecovered);
             assertTrue(game.failedCreationRecovered);
             assertTrue(game.retainedReleaseRecovered);
             assertTrue(game.wrongThreadReleaseRecovered);
@@ -1187,7 +1193,9 @@ final class NativeIntegrationTests {
 
     private static final class OwnershipStressGame extends Game {
         private int completedCycles;
+        private int completedAudioCycles;
         private boolean failedCreationRecovered;
+        private boolean failedAudioCreationRecovered;
         private boolean retainedReleaseRecovered;
         private boolean wrongThreadReleaseRecovered;
 
@@ -1208,6 +1216,39 @@ final class NativeIntegrationTests {
                 assertTrue(batch.getIsDisposed());
                 assertTrue(texture.getIsDisposed());
                 completedCycles++;
+            }
+
+            int[] pcm = new int[640];
+            for (int cycle = 0; cycle < 100; cycle++) {
+                SoundEffect effect = new SoundEffect(pcm, 8_000, AudioChannels.Mono);
+                SoundEffectInstance instance = effect.CreateInstance();
+                instance.setVolume(0.5f);
+                instance.Stop();
+                if ((cycle & 1) == 0) {
+                    effect.close();
+                    assertTrue(instance.getIsDisposed());
+                } else {
+                    instance.close();
+                    effect.close();
+                }
+                effect.close();
+
+                try (DynamicSoundEffectInstance dynamic =
+                             new DynamicSoundEffectInstance(8_000, AudioChannels.Mono)) {
+                    EventHandler<EventArgs> listener = (sender, args) -> { };
+                    dynamic.addBufferNeededListener(listener);
+                    dynamic.SubmitBuffer(pcm, 0, 320);
+                    dynamic.removeBufferNeededListener(listener);
+                    dynamic.Stop();
+                }
+                completedAudioCycles++;
+            }
+
+            assertThrows(CnaNativeException.class, () -> NativeAudio.createSoundEffect(
+                    new byte[]{0, 0}, 0, 2, 8_000, 0, 0, 1));
+            try (SoundEffect recovered = new SoundEffect(pcm, 8_000, AudioChannels.Mono)) {
+                assertFalse(recovered.getIsDisposed());
+                failedAudioCreationRecovered = true;
             }
 
             assertThrows(CnaNativeException.class, () -> Texture2D.FromStream(

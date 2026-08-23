@@ -18,8 +18,8 @@ CNA C++
 ## Honest status
 
 The project is a member-complete, structurally strict partial projection of the
-selected XNA 4.0 Windows runtime profile. It is not XNA-complete: 60 entire
-dependency-group types remain, but every one of the 205 currently implemented
+selected XNA 4.0 Windows runtime profile. It is not XNA-complete: 41 entire
+dependency-group types remain, but every one of the 224 currently implemented
 strict types has its complete mapped member contract.
 
 The current strict measurement is:
@@ -27,8 +27,8 @@ The current strict measurement is:
 ```text
 XNA reference:        257 types / 2,964 members
 Mapped Java contract: 265 types / 3,200 members
-Java target:          205 strict types / 2,730 members
-Missing types:         60
+Java target:          224 strict types / 2,906 members
+Missing types:         41
 Missing members:        0
 Structural drift:       0
 Mapping drift:          0
@@ -61,24 +61,33 @@ Implemented now:
   identity, existing-instance handling, partial-failure cleanup, and real
   Texture2D, SpriteFont, vertex/index buffer, Effect/BasicEffect, and Model
   built-in readers;
+- exact managed XNA LZX compressed-XNB framing with stateful multi-frame
+  decoding, strict length/trailing-data checks, failure cleanup, cache identity,
+  and the existing Texture2D reader verified through both compressed and
+  uncompressed framing;
 - the complete selected-profile Model object graph, including stable read-only
   collection identities and real indexed drawing through loaded CNA resources;
-- a Java 17 JNI adapter for 399 reviewed CNA ABI 0.7.0 functions, with header,
+- the complete 19-type Audio/XACT contract, including native SoundEffect,
+  SoundEffectInstance, dynamic streaming/callbacks, honest NULL-microphone
+  behavior, and an ownership-correct XACT graph whose authored-bank playback is
+  explicitly asset-pending;
+- a Java 17 JNI adapter for 487 reviewed CNA ABI 0.7.0 functions, with header,
   manifest, layout/signature, and native-symbol verification;
 - managed and native integration/ownership tests plus a desktop template canary
   verified for 60-frame smoke and 600-frame stability runs using both raw PNG
   and managed Texture2D XNB paths.
 
-The current managed XNB implementation supports uncompressed Windows framing.
+The current managed XNB implementation supports uncompressed and XNA LZX-
+compressed Windows framing.
 Texture2D upload is fidelity-preserving for `SurfaceFormat.Color`; all other
 surface formats are rejected until CNA can create/upload the exact format, and
 compressed data is never reinterpreted as RGBA. SpriteFont is consequently
 verified with an uncompressed Color atlas. The Model path is verified for a
 synthetic graph using VertexDeclaration, VertexBuffer, IndexBuffer, and
 BasicEffect readers; reader families not in that graph remain explicit load
-errors. LZX-compressed XNB is not implemented. The remaining strict families
-are Audio/XACT, Media/Video, Storage, Design converters, and GamerServices;
-Graphics is at zero missing types.
+errors. The remaining strict families are Media/Video, Storage, Design
+converters, and GamerServices; Graphics and Audio/XACT are at zero missing
+types.
 
 ## Build and verify
 
@@ -127,7 +136,8 @@ belongs under `org.openeggbert.cna.extensions.*` (or a real native CNA concept),
 not in the strict packages.
 
 Read [the normative mapping](docs/xna-java-mapping.md), [the architecture](docs/architecture.md),
-and [the measured engineering plan](plan.md) before expanding the surface.
+[the Audio/XACT evidence](docs/audio-xact-evidence.md), and
+[the measured engineering plan](plan.md) before expanding the surface.
 
 ## Platform evidence
 

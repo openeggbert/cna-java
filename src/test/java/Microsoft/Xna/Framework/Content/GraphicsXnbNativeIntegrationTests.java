@@ -76,11 +76,13 @@ final class GraphicsXnbNativeIntegrationTests {
     @Test
     void texture2DXnbLoadsMipsCachesOwnsAndRejectsMalformedPayloads(
             @TempDir Path root) throws Exception {
-        write(root, "color", textureXnb(2, 2, new byte[][]{
+        byte[] colorFixture = textureXnb(2, 2, new byte[][]{
                 rgba(255, 0, 0, 255, 0, 255, 0, 255,
                         0, 0, 255, 255, 255, 255, 255, 255),
                 rgba(7, 8, 9, 10)
-        }));
+        });
+        write(root, "color", colorFixture);
+        write(root, "color-compressed", compressXnb(colorFixture));
         write(root, "wrong-type", textureXnb(1, 1,
                 new byte[][]{rgba(1, 2, 3, 4)}));
         write(root, "bad-dimensions", textureXnb(0, 1,
@@ -174,8 +176,17 @@ final class GraphicsXnbNativeIntegrationTests {
             first.GetData(1, null, levelOne, 0, levelOne.length);
             assertArrayEquals(new Color[]{new Color(7, 8, 9, 10)}, levelOne);
 
+            Texture2D compressed = getContent().Load(
+                    Texture2D.class, "color-compressed");
+            assertSame(compressed, getContent().Load(
+                    Texture2D.class, "COLOR-COMPRESSED"));
+            Color[] compressedLevelZero = new Color[4];
+            compressed.GetData(compressedLevelZero);
+            assertArrayEquals(levelZero, compressedLevelZero);
+
             getContent().Unload();
             assertThrows(IllegalStateException.class, first::getWidth);
+            assertThrows(IllegalStateException.class, compressed::getWidth);
             Texture2D reloaded = getContent().Load(Texture2D.class, "color");
             assertNotSame(first, reloaded);
             getContent().close();
@@ -443,6 +454,44 @@ final class GraphicsXnbNativeIntegrationTests {
         framed[9] = (byte)(size >>> 24);
         System.arraycopy(payloadBytes, 0, framed, 10, payloadBytes.length);
         return framed;
+    }
+
+    private static byte[] compressXnb(byte[] uncompressed) {
+        byte[] payload = java.util.Arrays.copyOfRange(uncompressed, 10, uncompressed.length);
+        int headerBits = 3 << 28 | payload.length << 4;
+        byte[] block = new byte[16 + payload.length];
+        block[0] = (byte) (headerBits >>> 16);
+        block[1] = (byte) (headerBits >>> 24);
+        block[2] = (byte) headerBits;
+        block[3] = (byte) (headerBits >>> 8);
+        block[4] = 1;
+        block[8] = 1;
+        block[12] = 1;
+        System.arraycopy(payload, 0, block, 16, payload.length);
+
+        byte[] compressed = new byte[19 + block.length];
+        compressed[0] = 'X';
+        compressed[1] = 'N';
+        compressed[2] = 'B';
+        compressed[3] = 'w';
+        compressed[4] = 5;
+        compressed[5] = (byte) 0x80;
+        int totalSize = compressed.length;
+        compressed[6] = (byte) totalSize;
+        compressed[7] = (byte) (totalSize >>> 8);
+        compressed[8] = (byte) (totalSize >>> 16);
+        compressed[9] = (byte) (totalSize >>> 24);
+        compressed[10] = (byte) payload.length;
+        compressed[11] = (byte) (payload.length >>> 8);
+        compressed[12] = (byte) (payload.length >>> 16);
+        compressed[13] = (byte) (payload.length >>> 24);
+        compressed[14] = (byte) 0xff;
+        compressed[15] = (byte) (payload.length >>> 8);
+        compressed[16] = (byte) payload.length;
+        compressed[17] = (byte) (block.length >>> 8);
+        compressed[18] = (byte) block.length;
+        System.arraycopy(block, 0, compressed, 19, block.length);
+        return compressed;
     }
 
     private static byte[] rgba(int... values) {

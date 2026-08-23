@@ -77,16 +77,27 @@ public final class ContentReader extends BinaryReader {
             throw failure(assetName, "declared XNB size " + declaredSize
                     + " does not match stream size " + bytes.length);
         }
-        if ((flags & 0x80) != 0) {
-            throw failure(assetName,
-                    "LZX-compressed XNB is not yet supported by the managed Java reader");
-        }
         if ((flags & 0x40) != 0) {
             throw failure(assetName,
                     "LZ4-compressed XNB is not part of the selected XNA 4.0 format");
         }
+        byte[] payload;
+        if ((flags & 0x80) != 0) {
+            if (bytes.length < 14) {
+                throw failure(assetName, "truncated LZX payload header");
+            }
+            int decompressedSize = Byte.toUnsignedInt(bytes[10])
+                    | Byte.toUnsignedInt(bytes[11]) << 8
+                    | Byte.toUnsignedInt(bytes[12]) << 16
+                    | Byte.toUnsignedInt(bytes[13]) << 24;
+            payload = XnbLzxDecompression.decompress(
+                    java.util.Arrays.copyOfRange(bytes, 14, bytes.length),
+                    decompressedSize, assetName);
+        } else {
+            payload = java.util.Arrays.copyOfRange(bytes, 10, bytes.length);
+        }
         return new ContentReader(manager,
-                new ByteArrayInputStream(bytes, 10, bytes.length - 10),
+                new ByteArrayInputStream(payload),
                 assetName, recordDisposableObject);
     }
 

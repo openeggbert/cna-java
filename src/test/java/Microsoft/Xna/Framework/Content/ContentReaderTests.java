@@ -19,6 +19,7 @@ import java.util.Map;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.atomic.AtomicReference;
 
+import static org.junit.jupiter.api.Assertions.assertArrayEquals;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
@@ -123,6 +124,120 @@ final class ContentReaderTests {
             assertBad(content, "unknown-reader", "Unknown content type reader");
             assertBad(content, "version-mismatch", "version mismatch");
             assertBad(content, "invalid-index", "reader index");
+        }
+    }
+
+    @Test
+    void lzxSingleAndMultiFrameAssetsUseTheOrdinaryReaderAndCache(
+            @TempDir Path root) throws Exception {
+        byte[] single = xnb(readers(entry(STRING_READER, 0)), 0, output -> {
+            output.seven(1);
+            output.string("single compressed frame");
+        });
+        byte[] multi = xnb(readers(entry(STRING_READER, 0)), 0, output -> {
+            output.seven(1);
+            output.string("two persistent LZX frames");
+        });
+        writeAsset(root, "single-lzx", compressXnb(single));
+        writeAsset(root, "multi-lzx", compressXnb(multi, 20));
+
+        try (ContentManager content = manager(root)) {
+            String singleValue = content.Load(String.class, "single-lzx");
+            assertEquals("single compressed frame", singleValue);
+            String first = content.Load(String.class, "multi-lzx");
+            String second = content.Load(String.class, "multi-lzx");
+            assertEquals("two persistent LZX frames", first);
+            assertSame(first, second);
+        }
+    }
+
+    @Test
+    void lzxDefaultFrameAndExactOutputLengthAreValidated() {
+        byte[] payload = new byte[0x8000];
+        for (int i = 0; i < payload.length; i++) {
+            payload[i] = (byte) (i * 37 + 11);
+        }
+        byte[] block = lzxUncompressedBlock(payload, true);
+        byte[] framed = new byte[2 + block.length];
+        framed[0] = (byte) (block.length >>> 8);
+        framed[1] = (byte) block.length;
+        System.arraycopy(block, 0, framed, 2, block.length);
+        assertArrayEquals(payload,
+                XnbLzxDecompression.decompress(framed, payload.length, "default-frame"));
+
+        assertTrue(assertThrows(ContentLoadException.class,
+                () -> XnbLzxDecompression.decompress(framed, payload.length - 1,
+                        "too-long")).getMessage().contains("exceeds"));
+        assertTrue(assertThrows(ContentLoadException.class,
+                () -> XnbLzxDecompression.decompress(framed, payload.length + 1,
+                        "too-short")).getMessage().contains("decompressed size"));
+    }
+
+    @Test
+    void lzxFramingRejectsTruncationMalformedLengthsTrailingDataAndDecoderFailure() {
+        byte[] validBlock = lzxUncompressedBlock(new byte[] {1, 2, 3, 4}, true);
+        byte[] valid = extendedLzxFrame(validBlock, 4);
+
+        assertLzxBad(new byte[] {(byte) 0xff}, 4, "header");
+        assertLzxBad(new byte[] {(byte) 0xff, 0, 4, 0}, 4, "header");
+
+        byte[] truncatedBlock = valid.clone();
+        truncatedBlock[3] = 0x7f;
+        truncatedBlock[4] = (byte) 0xff;
+        assertLzxBad(truncatedBlock, 4, "truncated LZX block");
+
+        byte[] zeroBlock = valid.clone();
+        zeroBlock[3] = 0;
+        zeroBlock[4] = 0;
+        assertLzxBad(zeroBlock, 4, "block length");
+
+        byte[] zeroFrame = valid.clone();
+        zeroFrame[1] = 0;
+        zeroFrame[2] = 0;
+        assertLzxBad(zeroFrame, 4, "frame length");
+
+        byte[] oversizedFrame = valid.clone();
+        oversizedFrame[1] = 0;
+        oversizedFrame[2] = 5;
+        assertLzxBad(oversizedFrame, 4, "exceeds");
+
+        byte[] trailing = java.util.Arrays.copyOf(valid, valid.length + 1);
+        trailing[trailing.length - 1] = 1;
+        assertLzxBad(trailing, 4, "header");
+
+        byte[] invalidDecoderBlock = new byte[] {0, 0, 0, 0};
+        assertLzxBad(extendedLzxFrame(invalidDecoderBlock, 1), 1, "decompression");
+    }
+
+    @Test
+    void compressedReaderFailureCleansPartialResourcesAndUnloadClosesCachedAsset(
+            @TempDir Path root) throws Exception {
+        CloseTracked.closeCount.set(0);
+        byte[] partial = xnb(
+                readers(entry(PARTIAL_FAILURE_READER, 0), entry(DISPOSABLE_READER, 0)),
+                0, output -> {
+                    output.seven(1);
+                    output.int32(81);
+                });
+        byte[] disposable = xnb(readers(entry(DISPOSABLE_READER, 0)), 0, output -> {
+            output.seven(1);
+            output.int32(82);
+        });
+        writeAsset(root, "compressed-partial", compressXnb(partial));
+        writeAsset(root, "compressed-disposable", compressXnb(disposable));
+
+        try (AutoCloseable partialRegistration = ContentTypeReaderRegistry.register(
+                PARTIAL_FAILURE_READER, PartialFailureReader::new);
+             AutoCloseable disposableRegistration = ContentTypeReaderRegistry.register(
+                     DISPOSABLE_READER, DisposableReader::new);
+             ContentManager content = manager(root)) {
+            assertBad(content, "compressed-partial", "intentional partial failure");
+            assertEquals(1, CloseTracked.closeCount.get());
+
+            CloseTracked first = content.Load(CloseTracked.class, "compressed-disposable");
+            assertSame(first, content.Load(CloseTracked.class, "compressed-disposable"));
+            content.Unload();
+            assertEquals(2, CloseTracked.closeCount.get());
         }
     }
 
@@ -395,6 +510,87 @@ final class ContentReaderTests {
         result[9] = (byte)(size >>> 24);
         System.arraycopy(body, 0, result, 10, body.length);
         return result;
+    }
+
+    private static byte[] compressXnb(byte[] uncompressed) {
+        return compressXnb(uncompressed, -1);
+    }
+
+    private static byte[] compressXnb(byte[] uncompressed, int splitAt) {
+        byte[] body = java.util.Arrays.copyOfRange(uncompressed, 10, uncompressed.length);
+        ByteArrayOutputStream framed = new ByteArrayOutputStream();
+        if (splitAt < 0) {
+            framed.writeBytes(extendedLzxFrame(lzxUncompressedBlock(body, true), body.length));
+        } else {
+            if (splitAt <= 0 || splitAt >= body.length || (splitAt & 1) != 0) {
+                throw new IllegalArgumentException("splitAt must be an even position inside the payload");
+            }
+            byte[] first = java.util.Arrays.copyOfRange(body, 0, splitAt);
+            byte[] second = java.util.Arrays.copyOfRange(body, splitAt, body.length);
+            framed.writeBytes(extendedLzxFrame(lzxUncompressedBlock(first, true), first.length));
+            framed.writeBytes(extendedLzxFrame(lzxUncompressedBlock(second, false), second.length));
+        }
+
+        byte[] compressedPayload = framed.toByteArray();
+        byte[] result = new byte[14 + compressedPayload.length];
+        result[0] = 'X';
+        result[1] = 'N';
+        result[2] = 'B';
+        result[3] = 'w';
+        result[4] = 5;
+        result[5] = (byte) 0x80;
+        int totalSize = result.length;
+        result[6] = (byte) totalSize;
+        result[7] = (byte) (totalSize >>> 8);
+        result[8] = (byte) (totalSize >>> 16);
+        result[9] = (byte) (totalSize >>> 24);
+        result[10] = (byte) body.length;
+        result[11] = (byte) (body.length >>> 8);
+        result[12] = (byte) (body.length >>> 16);
+        result[13] = (byte) (body.length >>> 24);
+        System.arraycopy(compressedPayload, 0, result, 14, compressedPayload.length);
+        return result;
+    }
+
+    private static byte[] extendedLzxFrame(byte[] block, int frameSize) {
+        if (frameSize <= 0 || frameSize > 0x8000 || block.length > 0xffff) {
+            throw new IllegalArgumentException("invalid generated LZX frame");
+        }
+        byte[] framed = new byte[5 + block.length];
+        framed[0] = (byte) 0xff;
+        framed[1] = (byte) (frameSize >>> 8);
+        framed[2] = (byte) frameSize;
+        framed[3] = (byte) (block.length >>> 8);
+        framed[4] = (byte) block.length;
+        System.arraycopy(block, 0, framed, 5, block.length);
+        return framed;
+    }
+
+    private static byte[] lzxUncompressedBlock(byte[] payload, boolean firstBlock) {
+        if (payload.length <= 0 || payload.length > 0x8000) {
+            throw new IllegalArgumentException("invalid generated LZX block length");
+        }
+        int headerBits = firstBlock
+                ? 3 << 28 | payload.length << 4
+                : 3 << 29 | payload.length << 5;
+        byte[] block = new byte[16 + payload.length];
+        block[0] = (byte) (headerBits >>> 16);
+        block[1] = (byte) (headerBits >>> 24);
+        block[2] = (byte) headerBits;
+        block[3] = (byte) (headerBits >>> 8);
+        block[4] = 1;
+        block[8] = 1;
+        block[12] = 1;
+        System.arraycopy(payload, 0, block, 16, payload.length);
+        return block;
+    }
+
+    private static void assertLzxBad(byte[] compressed, int decompressedSize,
+            String expectedMessagePart) {
+        ContentLoadException failure = assertThrows(ContentLoadException.class,
+                () -> XnbLzxDecompression.decompress(
+                        compressed, decompressedSize, "malformed"));
+        assertTrue(failure.getMessage().contains(expectedMessagePart), failure::getMessage);
     }
 
     private static String failureMessages(Throwable failure) {

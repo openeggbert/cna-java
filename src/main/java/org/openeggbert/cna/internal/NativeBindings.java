@@ -3036,10 +3036,18 @@ public final class NativeBindings {
     }
 
     static void destroyGame(Game game, long handle) {
+        RuntimeException audioFailure = null;
+        try {
+            NativeAudio.closeAllForGameShutdown();
+        } catch (RuntimeException exception) {
+            audioFailure = exception;
+        }
         int result = nativeDestroyGame(handle);
         // CNA documents CALLBACK as released: shutdown completed but a callback reported failure.
         if (result != 0 && result != 9) {
-            throw failure("cna_game_destroy", result);
+            CnaNativeException nativeFailure = failure("cna_game_destroy", result);
+            if (audioFailure != null) nativeFailure.addSuppressed(audioFailure);
+            throw nativeFailure;
         }
         synchronized (GAMES) {
             GAMES.remove(game);
@@ -3059,6 +3067,7 @@ public final class NativeBindings {
                 currentGame = null;
             }
         }
+        if (audioFailure != null) throw audioFailure;
     }
 
     static void destroyGraphicsDeviceManager(
@@ -3096,6 +3105,10 @@ public final class NativeBindings {
                     owner + " requires a live CNA Game on the current process");
         }
         return handle;
+    }
+
+    static long currentGameValue(String owner) {
+        return currentGameHandle(owner).requireValue();
     }
 
     private static Game deviceGame(GraphicsDevice device) {
@@ -3939,7 +3952,7 @@ public final class NativeBindings {
         return result;
     }
 
-    private static CnaNativeException failure(String operation, int result) {
+    static CnaNativeException failure(String operation, int result) {
         String diagnostic;
         try {
             diagnostic = nativeLastErrorMessage();

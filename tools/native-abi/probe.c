@@ -220,6 +220,35 @@ _Static_assert(offsetof(CNA_SpriteFontInfo, character_count) == 8U,
     "CNA_SpriteFontInfo.character count offset");
 _Static_assert(offsetof(CNA_SpriteFontInfo, default_character) == 24U,
     "CNA_SpriteFontInfo.default character offset");
+_Static_assert(sizeof(CNA_SoundEffectCreateInfo) == 24U,
+    "CNA_SoundEffectCreateInfo layout changed");
+_Static_assert(offsetof(CNA_SoundEffectCreateInfo, sample_rate) == 8U,
+    "CNA_SoundEffectCreateInfo.sample rate offset");
+_Static_assert(offsetof(CNA_SoundEffectCreateInfo, reserved) == 16U,
+    "CNA_SoundEffectCreateInfo.reserved offset");
+_Static_assert(sizeof(CNA_SoundEffectInstanceInfo) == 32U,
+    "CNA_SoundEffectInstanceInfo layout changed");
+_Static_assert(offsetof(CNA_SoundEffectInstanceInfo, state) == 8U,
+    "CNA_SoundEffectInstanceInfo.state offset");
+_Static_assert(offsetof(CNA_SoundEffectInstanceInfo, volume) == 16U,
+    "CNA_SoundEffectInstanceInfo.volume offset");
+_Static_assert(sizeof(CNA_AudioListener) == 56U,
+    "CNA_AudioListener layout changed");
+_Static_assert(offsetof(CNA_AudioListener, position) == 20U,
+    "CNA_AudioListener.position offset");
+_Static_assert(sizeof(CNA_AudioEmitter) == 60U,
+    "CNA_AudioEmitter layout changed");
+_Static_assert(offsetof(CNA_AudioEmitter, doppler_scale) == 8U,
+    "CNA_AudioEmitter.doppler offset");
+_Static_assert(offsetof(CNA_AudioEmitter, velocity) == 48U,
+    "CNA_AudioEmitter.velocity offset");
+_Static_assert(sizeof(CNA_CueInfo) == 16U, "CNA_CueInfo layout changed");
+_Static_assert(offsetof(CNA_CueInfo, is_created) == 8U,
+    "CNA_CueInfo.created offset");
+_Static_assert(offsetof(CNA_CueInfo, is_stopping) == 15U,
+    "CNA_CueInfo.stopping offset");
+_Static_assert(sizeof(CNA_AudioEventRegistrationHandle) == 8U,
+    "CNA audio event registration handle width changed");
 _Static_assert(sizeof(CNA_GameTime) == 24U, "CNA_GameTime layout changed");
 _Static_assert(offsetof(CNA_GameTime, total_game_time_ticks) == 0U, "CNA_GameTime.total offset");
 _Static_assert(offsetof(CNA_GameTime, elapsed_game_time_ticks) == 8U, "CNA_GameTime.elapsed offset");
@@ -227,6 +256,156 @@ _Static_assert(offsetof(CNA_GameTime, is_running_slowly) == 16U, "CNA_GameTime.b
 _Static_assert(offsetof(CNA_StringView, data) == 0U, "CNA_StringView.data offset");
 _Static_assert(offsetof(CNA_StringView, byte_length) >= sizeof(void*), "CNA_StringView.length offset");
 _Static_assert(CNA_ABI_VERSION == CNA_ABI_VERSION_ENCODE(0, 7, 0), "unexpected CNA header ABI");
+
+#define ASSERT_SIGNATURE(name, ...) \
+    _Static_assert(_Generic(&(name), __VA_ARGS__: 1, default: 0), \
+        #name " signature changed")
+
+typedef CNA_Result (*AudioUnarySignature)(CNA_Handle);
+typedef CNA_Result (*AudioHandleBoolOutSignature)(CNA_Handle, CNA_Bool*);
+typedef CNA_Result (*AudioHandleFloatOutSignature)(CNA_Handle, float*);
+typedef CNA_Result (*AudioHandleFloatSignature)(CNA_Handle, float);
+typedef CNA_Result (*AudioHandleSizeOutSignature)(CNA_Handle, uint64_t*);
+typedef CNA_Result (*AudioHandleCopyStringSignature)(
+    CNA_Handle, char*, uint64_t, uint64_t*);
+typedef CNA_Result (*AudioHandleStringSignature)(CNA_Handle, CNA_StringView);
+typedef CNA_Result (*AudioHandleOutSignature)(CNA_Handle, CNA_Handle*);
+typedef CNA_Result (*AudioHandleStringHandleOutSignature)(
+    CNA_Handle, CNA_StringView, CNA_Handle*);
+typedef CNA_Result (*AudioHandleStringFloatOutSignature)(
+    CNA_Handle, CNA_StringView, float*);
+typedef CNA_Result (*AudioHandleStringFloatSignature)(
+    CNA_Handle, CNA_StringView, float);
+typedef CNA_Result (*AudioIndexedSizeSignature)(CNA_Handle, uint64_t, uint64_t*);
+typedef CNA_Result (*AudioIndexedCopyStringSignature)(
+    CNA_Handle, uint64_t, char*, uint64_t, uint64_t*);
+
+ASSERT_SIGNATURE(cna_sound_effect_create_pcm16_range_ext,
+    CNA_Result (*)(CNA_Handle, const CNA_SoundEffectCreateInfo*, const uint8_t*, uint64_t,
+        int32_t, int32_t, int32_t, int32_t, CNA_Handle*));
+ASSERT_SIGNATURE(cna_sound_effect_create_from_encoded_ext,
+    CNA_Result (*)(CNA_Handle, const uint8_t*, uint64_t, CNA_Handle*));
+ASSERT_SIGNATURE(cna_sound_effect_destroy, AudioUnarySignature);
+ASSERT_SIGNATURE(cna_sound_effect_create_instance, AudioHandleOutSignature);
+ASSERT_SIGNATURE(cna_sound_effect_play, AudioHandleBoolOutSignature);
+ASSERT_SIGNATURE(cna_sound_effect_play_with_settings,
+    CNA_Result (*)(CNA_Handle, float, float, float, CNA_Bool*));
+ASSERT_SIGNATURE(cna_sound_effect_get_duration_ticks,
+    CNA_Result (*)(CNA_Handle, int64_t*));
+ASSERT_SIGNATURE(cna_sound_effect_get_name_size, AudioHandleSizeOutSignature);
+ASSERT_SIGNATURE(cna_sound_effect_copy_name, AudioHandleCopyStringSignature);
+ASSERT_SIGNATURE(cna_sound_effect_set_name, AudioHandleStringSignature);
+ASSERT_SIGNATURE(cna_sound_effect_get_master_volume, AudioHandleFloatOutSignature);
+ASSERT_SIGNATURE(cna_sound_effect_set_master_volume, AudioHandleFloatSignature);
+ASSERT_SIGNATURE(cna_sound_effect_get_distance_scale, AudioHandleFloatOutSignature);
+ASSERT_SIGNATURE(cna_sound_effect_set_distance_scale, AudioHandleFloatSignature);
+ASSERT_SIGNATURE(cna_sound_effect_get_doppler_scale, AudioHandleFloatOutSignature);
+ASSERT_SIGNATURE(cna_sound_effect_set_doppler_scale, AudioHandleFloatSignature);
+ASSERT_SIGNATURE(cna_sound_effect_get_speed_of_sound, AudioHandleFloatOutSignature);
+ASSERT_SIGNATURE(cna_sound_effect_set_speed_of_sound, AudioHandleFloatSignature);
+ASSERT_SIGNATURE(cna_sound_effect_instance_play, AudioUnarySignature);
+ASSERT_SIGNATURE(cna_sound_effect_instance_pause, AudioUnarySignature);
+ASSERT_SIGNATURE(cna_sound_effect_instance_resume, AudioUnarySignature);
+ASSERT_SIGNATURE(cna_sound_effect_instance_stop,
+    CNA_Result (*)(CNA_Handle, CNA_Bool));
+ASSERT_SIGNATURE(cna_sound_effect_instance_get_info,
+    CNA_Result (*)(CNA_Handle, CNA_SoundEffectInstanceInfo*));
+ASSERT_SIGNATURE(cna_sound_effect_instance_set_volume, AudioHandleFloatSignature);
+ASSERT_SIGNATURE(cna_sound_effect_instance_set_pitch, AudioHandleFloatSignature);
+ASSERT_SIGNATURE(cna_sound_effect_instance_set_pan, AudioHandleFloatSignature);
+ASSERT_SIGNATURE(cna_sound_effect_instance_set_is_looped,
+    CNA_Result (*)(CNA_Handle, CNA_Bool));
+ASSERT_SIGNATURE(cna_sound_effect_instance_destroy, AudioUnarySignature);
+ASSERT_SIGNATURE(cna_sound_effect_instance_apply_3d,
+    CNA_Result (*)(CNA_Handle, const CNA_AudioListener*, const CNA_AudioEmitter*));
+ASSERT_SIGNATURE(cna_sound_effect_instance_apply_3d_multi_ext,
+    CNA_Result (*)(CNA_Handle, const CNA_AudioListener*, uint64_t,
+        const CNA_AudioEmitter*));
+ASSERT_SIGNATURE(cna_dynamic_sound_effect_instance_create,
+    CNA_Result (*)(CNA_Handle, int32_t, CNA_AudioChannels, CNA_Handle*));
+ASSERT_SIGNATURE(cna_dynamic_sound_effect_instance_get_pending_buffer_count,
+    CNA_Result (*)(CNA_Handle, int32_t*));
+ASSERT_SIGNATURE(cna_dynamic_sound_effect_instance_submit_buffer,
+    CNA_Result (*)(CNA_Handle, const uint8_t*, uint64_t, int32_t, int32_t));
+ASSERT_SIGNATURE(cna_dynamic_sound_effect_instance_subscribe_buffer_needed,
+    CNA_Result (*)(CNA_Handle, CNA_AudioEventCallback, void*,
+        CNA_AudioEventRegistrationHandle*));
+ASSERT_SIGNATURE(cna_audio_unsubscribe_ext, AudioUnarySignature);
+ASSERT_SIGNATURE(cna_microphone_get_count, AudioHandleSizeOutSignature);
+ASSERT_SIGNATURE(cna_microphone_get_default_index_ext,
+    CNA_Result (*)(CNA_Handle, uint64_t*, CNA_Bool*));
+ASSERT_SIGNATURE(cna_microphone_get_name_size_at, AudioIndexedSizeSignature);
+ASSERT_SIGNATURE(cna_microphone_copy_name_at, AudioIndexedCopyStringSignature);
+ASSERT_SIGNATURE(cna_microphone_get_buffer_duration_ticks_at,
+    CNA_Result (*)(CNA_Handle, uint64_t, int64_t*));
+ASSERT_SIGNATURE(cna_microphone_set_buffer_duration_ticks_at,
+    CNA_Result (*)(CNA_Handle, uint64_t, int64_t));
+ASSERT_SIGNATURE(cna_microphone_get_is_headset_at,
+    CNA_Result (*)(CNA_Handle, uint64_t, CNA_Bool*));
+ASSERT_SIGNATURE(cna_microphone_get_sample_rate_at,
+    CNA_Result (*)(CNA_Handle, uint64_t, int32_t*));
+ASSERT_SIGNATURE(cna_microphone_get_state_at,
+    CNA_Result (*)(CNA_Handle, uint64_t, CNA_MicrophoneState*));
+ASSERT_SIGNATURE(cna_microphone_start_at,
+    CNA_Result (*)(CNA_Handle, uint64_t));
+ASSERT_SIGNATURE(cna_microphone_stop_at,
+    CNA_Result (*)(CNA_Handle, uint64_t));
+ASSERT_SIGNATURE(cna_microphone_get_data_at,
+    CNA_Result (*)(CNA_Handle, uint64_t, uint8_t*, uint64_t, uint64_t*));
+ASSERT_SIGNATURE(cna_microphone_subscribe_buffer_ready_at,
+    CNA_Result (*)(CNA_Handle, uint64_t, CNA_AudioEventCallback, void*,
+        CNA_AudioEventRegistrationHandle*));
+ASSERT_SIGNATURE(cna_audio_engine_create_with_renderer,
+    CNA_Result (*)(CNA_Handle, CNA_StringView, int64_t, CNA_StringView, CNA_Handle*));
+ASSERT_SIGNATURE(cna_audio_engine_destroy, AudioUnarySignature);
+ASSERT_SIGNATURE(cna_audio_engine_get_renderer_count, AudioHandleSizeOutSignature);
+ASSERT_SIGNATURE(cna_audio_engine_get_renderer_friendly_name_size, AudioIndexedSizeSignature);
+ASSERT_SIGNATURE(cna_audio_engine_copy_renderer_friendly_name,
+    AudioIndexedCopyStringSignature);
+ASSERT_SIGNATURE(cna_audio_engine_get_renderer_id_size, AudioIndexedSizeSignature);
+ASSERT_SIGNATURE(cna_audio_engine_copy_renderer_id, AudioIndexedCopyStringSignature);
+ASSERT_SIGNATURE(cna_audio_engine_get_category, AudioHandleStringHandleOutSignature);
+ASSERT_SIGNATURE(cna_audio_engine_get_global_variable, AudioHandleStringFloatOutSignature);
+ASSERT_SIGNATURE(cna_audio_engine_set_global_variable, AudioHandleStringFloatSignature);
+ASSERT_SIGNATURE(cna_audio_engine_update, AudioUnarySignature);
+ASSERT_SIGNATURE(cna_audio_category_destroy, AudioUnarySignature);
+ASSERT_SIGNATURE(cna_audio_category_get_name_size, AudioHandleSizeOutSignature);
+ASSERT_SIGNATURE(cna_audio_category_copy_name, AudioHandleCopyStringSignature);
+ASSERT_SIGNATURE(cna_audio_category_pause, AudioUnarySignature);
+ASSERT_SIGNATURE(cna_audio_category_resume, AudioUnarySignature);
+ASSERT_SIGNATURE(cna_audio_category_set_volume, AudioHandleFloatSignature);
+ASSERT_SIGNATURE(cna_audio_category_stop,
+    CNA_Result (*)(CNA_Handle, CNA_AudioStopOptions));
+ASSERT_SIGNATURE(cna_audio_category_equals,
+    CNA_Result (*)(CNA_Handle, CNA_Handle, CNA_Bool*));
+ASSERT_SIGNATURE(cna_audio_category_get_hash_code,
+    CNA_Result (*)(CNA_Handle, int32_t*));
+ASSERT_SIGNATURE(cna_wave_bank_create, AudioHandleStringHandleOutSignature);
+ASSERT_SIGNATURE(cna_wave_bank_create_streaming,
+    CNA_Result (*)(CNA_Handle, CNA_StringView, int32_t, int16_t, CNA_Handle*));
+ASSERT_SIGNATURE(cna_wave_bank_destroy, AudioUnarySignature);
+ASSERT_SIGNATURE(cna_wave_bank_get_is_prepared, AudioHandleBoolOutSignature);
+ASSERT_SIGNATURE(cna_wave_bank_get_is_in_use, AudioHandleBoolOutSignature);
+ASSERT_SIGNATURE(cna_sound_bank_create, AudioHandleStringHandleOutSignature);
+ASSERT_SIGNATURE(cna_sound_bank_destroy, AudioUnarySignature);
+ASSERT_SIGNATURE(cna_sound_bank_get_is_in_use, AudioHandleBoolOutSignature);
+ASSERT_SIGNATURE(cna_sound_bank_get_cue, AudioHandleStringHandleOutSignature);
+ASSERT_SIGNATURE(cna_sound_bank_play_cue, AudioHandleStringSignature);
+ASSERT_SIGNATURE(cna_sound_bank_play_cue_3d,
+    CNA_Result (*)(CNA_Handle, CNA_StringView,
+        const CNA_AudioListener*, const CNA_AudioEmitter*));
+ASSERT_SIGNATURE(cna_cue_destroy, AudioUnarySignature);
+ASSERT_SIGNATURE(cna_cue_get_info, CNA_Result (*)(CNA_Handle, CNA_CueInfo*));
+ASSERT_SIGNATURE(cna_cue_apply_3d,
+    CNA_Result (*)(CNA_Handle, const CNA_AudioListener*, const CNA_AudioEmitter*));
+ASSERT_SIGNATURE(cna_cue_get_variable, AudioHandleStringFloatOutSignature);
+ASSERT_SIGNATURE(cna_cue_set_variable, AudioHandleStringFloatSignature);
+ASSERT_SIGNATURE(cna_cue_play, AudioUnarySignature);
+ASSERT_SIGNATURE(cna_cue_pause, AudioUnarySignature);
+ASSERT_SIGNATURE(cna_cue_resume, AudioUnarySignature);
+ASSERT_SIGNATURE(cna_cue_stop, CNA_Result (*)(CNA_Handle, CNA_AudioStopOptions));
+
+#undef ASSERT_SIGNATURE
 
 static uint32_t (*const get_abi_version_function)(void) = cna_get_abi_version;
 static CNA_Result (*const error_size_function)(uint64_t*) = cna_error_get_last_message_size;

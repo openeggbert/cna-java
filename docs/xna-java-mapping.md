@@ -138,6 +138,7 @@ System.Byte                                              -> int (validated 0 thr
 System.String                                            -> java.lang.String
 System.Object                                            -> java.lang.Object
 System.Exception                                         -> java.lang.RuntimeException
+System.Runtime.InteropServices.ExternalException         -> java.lang.RuntimeException
 System.Text.StringBuilder                                -> java.lang.StringBuilder
 System.Type                                              -> java.lang.Class<?>
 System.IntPtr                                            -> Microsoft.Xna.Framework.WindowHandle
@@ -170,6 +171,9 @@ At a `TimeSpan` API boundary, `Duration` is normalized downward to the nearest
 Individual XNA properties retain their own range rules (for example, positive target elapsed time
 and non-negative inactive sleep time). `RuntimeException` is used for CLR `Exception` because a
 checked Java base exception would introduce call-site obligations absent from the CLR contract.
+`ExternalException` uses the same unchecked Java base: its platform/native-error distinction is
+preserved by the concrete mapped XNA exception type and constructors, while adding a checked Java
+supertype would change every caller. This is an explicit base-type mapping, not an allowlist.
 Unsigned CLR `Byte` deliberately does not become signed Java `byte`: values 128 through 255 must
 remain numerically observable, so it projects to `int` and setters/constructors validate the XNA
 0-through-255 domain. This is the same width-preserving policy used for other unsigned CLR values

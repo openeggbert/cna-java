@@ -316,6 +316,67 @@ typedef CNA_Result (*SpriteFontMeasureFunction)(CNA_Handle, CNA_StringView, CNA_
 typedef CNA_Result (*SpriteBatchDrawStringFunction)(
     CNA_Handle, const CNA_SpriteTextCommand*);
 
+typedef CNA_Result (*AudioSoundCreateRangeFunction)(
+    CNA_Handle, const CNA_SoundEffectCreateInfo*, const uint8_t*, uint64_t,
+    int32_t, int32_t, int32_t, int32_t, CNA_Handle*);
+typedef CNA_Result (*AudioBytesCreateFunction)(
+    CNA_Handle, const uint8_t*, uint64_t, CNA_Handle*);
+typedef CNA_Result (*AudioPlaySettingsFunction)(
+    CNA_Handle, float, float, float, CNA_Bool*);
+typedef CNA_Result (*AudioInstanceStopFunction)(CNA_Handle, CNA_Bool);
+typedef CNA_Result (*AudioInstanceInfoFunction)(
+    CNA_Handle, CNA_SoundEffectInstanceInfo*);
+typedef CNA_Result (*AudioInstanceSetBoolFunction)(CNA_Handle, CNA_Bool);
+typedef CNA_Result (*AudioDynamicCreateFunction)(
+    CNA_Handle, int32_t, CNA_AudioChannels, CNA_Handle*);
+typedef CNA_Result (*AudioSubmitBufferFunction)(
+    CNA_Handle, const uint8_t*, uint64_t, int32_t, int32_t);
+typedef CNA_Result (*AudioSubscribeFunction)(
+    CNA_Handle, CNA_AudioEventCallback, void*, CNA_AudioEventRegistrationHandle*);
+typedef CNA_Result (*AudioApply3DFunction)(
+    CNA_Handle, const CNA_AudioListener*, const CNA_AudioEmitter*);
+typedef CNA_Result (*AudioApply3DMultiFunction)(
+    CNA_Handle, const CNA_AudioListener*, uint64_t, const CNA_AudioEmitter*);
+typedef CNA_Result (*MicrophoneIndexGetSizeFunction)(
+    CNA_Handle, uint64_t, uint64_t*);
+typedef CNA_Result (*MicrophoneIndexCopyStringFunction)(
+    CNA_Handle, uint64_t, char*, uint64_t, uint64_t*);
+typedef CNA_Result (*MicrophoneDefaultFunction)(
+    CNA_Handle, uint64_t*, CNA_Bool*);
+typedef CNA_Result (*MicrophoneIndexGetInt64Function)(
+    CNA_Handle, uint64_t, int64_t*);
+typedef CNA_Result (*MicrophoneIndexSetInt64Function)(
+    CNA_Handle, uint64_t, int64_t);
+typedef CNA_Result (*MicrophoneIndexGetBoolFunction)(
+    CNA_Handle, uint64_t, CNA_Bool*);
+typedef CNA_Result (*MicrophoneIndexGetInt32Function)(
+    CNA_Handle, uint64_t, int32_t*);
+typedef CNA_Result (*MicrophoneIndexGetStateFunction)(
+    CNA_Handle, uint64_t, CNA_MicrophoneState*);
+typedef CNA_Result (*MicrophoneIndexUnaryFunction)(CNA_Handle, uint64_t);
+typedef CNA_Result (*MicrophoneGetDataFunction)(
+    CNA_Handle, uint64_t, uint8_t*, uint64_t, uint64_t*);
+typedef CNA_Result (*MicrophoneSubscribeFunction)(
+    CNA_Handle, uint64_t, CNA_AudioEventCallback, void*,
+    CNA_AudioEventRegistrationHandle*);
+typedef CNA_Result (*AudioEngineCreateFunction)(
+    CNA_Handle, CNA_StringView, int64_t, CNA_StringView, CNA_Handle*);
+typedef CNA_Result (*HandleIndexGetSizeFunction)(CNA_Handle, uint64_t, uint64_t*);
+typedef CNA_Result (*HandleIndexCopyStringFunction)(
+    CNA_Handle, uint64_t, char*, uint64_t, uint64_t*);
+typedef CNA_Result (*HandleStringGetFloatFunction)(CNA_Handle, CNA_StringView, float*);
+typedef CNA_Result (*HandleStringSetFloatFunction)(CNA_Handle, CNA_StringView, float);
+typedef CNA_Result (*HandleStringGetHandleFunction)(CNA_Handle, CNA_StringView, CNA_Handle*);
+typedef CNA_Result (*CategoryStopFunction)(CNA_Handle, CNA_AudioStopOptions);
+typedef CNA_Result (*CategoryEqualsFunction)(CNA_Handle, CNA_Handle, CNA_Bool*);
+typedef CNA_Result (*WaveBankCreateFunction)(CNA_Handle, CNA_StringView, CNA_Handle*);
+typedef CNA_Result (*WaveBankStreamingCreateFunction)(
+    CNA_Handle, CNA_StringView, int32_t, int16_t, CNA_Handle*);
+typedef CNA_Result (*SoundBankPlay3DFunction)(
+    CNA_Handle, CNA_StringView, const CNA_AudioListener*, const CNA_AudioEmitter*);
+typedef CNA_Result (*CueInfoFunction)(CNA_Handle, CNA_CueInfo*);
+typedef CNA_Result (*CueStopFunction)(CNA_Handle, CNA_AudioStopOptions);
+
 typedef struct CnaFunctions {
     DynamicLibrary library;
     GetAbiVersionFunction get_abi_version;
@@ -722,6 +783,94 @@ typedef struct CnaFunctions {
     SpriteFontSetSpacingFunction sprite_font_set_spacing;
     SpriteFontMeasureFunction sprite_font_measure_utf8;
     GameUnaryFunction sprite_font_destroy;
+    AudioSoundCreateRangeFunction sound_effect_create_pcm16_range_ext;
+    AudioBytesCreateFunction sound_effect_create_from_encoded_ext;
+    GameUnaryFunction sound_effect_destroy;
+    HandleGetHandleFunction sound_effect_create_instance;
+    GameGetBoolFunction sound_effect_play;
+    AudioPlaySettingsFunction sound_effect_play_with_settings;
+    GameGetInt64Function sound_effect_get_duration_ticks;
+    GameGetSizeFunction sound_effect_get_name_size;
+    GameCopyStringFunction sound_effect_copy_name;
+    GameSetStringFunction sound_effect_set_name;
+    HandleGetFloatFunction sound_effect_get_master_volume;
+    HandleSetFloatFunction sound_effect_set_master_volume;
+    HandleGetFloatFunction sound_effect_get_distance_scale;
+    HandleSetFloatFunction sound_effect_set_distance_scale;
+    HandleGetFloatFunction sound_effect_get_doppler_scale;
+    HandleSetFloatFunction sound_effect_set_doppler_scale;
+    HandleGetFloatFunction sound_effect_get_speed_of_sound;
+    HandleSetFloatFunction sound_effect_set_speed_of_sound;
+    GameUnaryFunction sound_effect_instance_play;
+    GameUnaryFunction sound_effect_instance_pause;
+    GameUnaryFunction sound_effect_instance_resume;
+    AudioInstanceStopFunction sound_effect_instance_stop;
+    AudioInstanceInfoFunction sound_effect_instance_get_info;
+    HandleSetFloatFunction sound_effect_instance_set_volume;
+    HandleSetFloatFunction sound_effect_instance_set_pitch;
+    HandleSetFloatFunction sound_effect_instance_set_pan;
+    AudioInstanceSetBoolFunction sound_effect_instance_set_is_looped;
+    GameUnaryFunction sound_effect_instance_destroy;
+    AudioApply3DFunction sound_effect_instance_apply_3d;
+    AudioApply3DMultiFunction sound_effect_instance_apply_3d_multi_ext;
+    AudioDynamicCreateFunction dynamic_sound_effect_instance_create;
+    GameGetInt32Function dynamic_sound_effect_instance_get_pending_buffer_count;
+    AudioSubmitBufferFunction dynamic_sound_effect_instance_submit_buffer;
+    AudioSubscribeFunction dynamic_sound_effect_instance_subscribe_buffer_needed;
+    GameUnaryFunction audio_unsubscribe_ext;
+    GameGetSizeFunction microphone_get_count;
+    MicrophoneDefaultFunction microphone_get_default_index_ext;
+    MicrophoneIndexGetSizeFunction microphone_get_name_size_at;
+    MicrophoneIndexCopyStringFunction microphone_copy_name_at;
+    MicrophoneIndexGetInt64Function microphone_get_buffer_duration_ticks_at;
+    MicrophoneIndexSetInt64Function microphone_set_buffer_duration_ticks_at;
+    MicrophoneIndexGetBoolFunction microphone_get_is_headset_at;
+    MicrophoneIndexGetInt32Function microphone_get_sample_rate_at;
+    MicrophoneIndexGetStateFunction microphone_get_state_at;
+    MicrophoneIndexUnaryFunction microphone_start_at;
+    MicrophoneIndexUnaryFunction microphone_stop_at;
+    MicrophoneGetDataFunction microphone_get_data_at;
+    MicrophoneSubscribeFunction microphone_subscribe_buffer_ready_at;
+    AudioEngineCreateFunction audio_engine_create_with_renderer;
+    GameUnaryFunction audio_engine_destroy;
+    GameGetSizeFunction audio_engine_get_renderer_count;
+    HandleIndexGetSizeFunction audio_engine_get_renderer_friendly_name_size;
+    HandleIndexCopyStringFunction audio_engine_copy_renderer_friendly_name;
+    HandleIndexGetSizeFunction audio_engine_get_renderer_id_size;
+    HandleIndexCopyStringFunction audio_engine_copy_renderer_id;
+    HandleStringGetHandleFunction audio_engine_get_category;
+    HandleStringGetFloatFunction audio_engine_get_global_variable;
+    HandleStringSetFloatFunction audio_engine_set_global_variable;
+    GameUnaryFunction audio_engine_update;
+    GameUnaryFunction audio_category_destroy;
+    GameGetSizeFunction audio_category_get_name_size;
+    GameCopyStringFunction audio_category_copy_name;
+    GameUnaryFunction audio_category_pause;
+    GameUnaryFunction audio_category_resume;
+    HandleSetFloatFunction audio_category_set_volume;
+    CategoryStopFunction audio_category_stop;
+    CategoryEqualsFunction audio_category_equals;
+    GameGetInt32Function audio_category_get_hash_code;
+    WaveBankCreateFunction wave_bank_create;
+    WaveBankStreamingCreateFunction wave_bank_create_streaming;
+    GameUnaryFunction wave_bank_destroy;
+    GameGetBoolFunction wave_bank_get_is_prepared;
+    GameGetBoolFunction wave_bank_get_is_in_use;
+    WaveBankCreateFunction sound_bank_create;
+    GameUnaryFunction sound_bank_destroy;
+    GameGetBoolFunction sound_bank_get_is_in_use;
+    HandleStringGetHandleFunction sound_bank_get_cue;
+    GameSetStringFunction sound_bank_play_cue;
+    SoundBankPlay3DFunction sound_bank_play_cue_3d;
+    GameUnaryFunction cue_destroy;
+    CueInfoFunction cue_get_info;
+    AudioApply3DFunction cue_apply_3d;
+    HandleStringGetFloatFunction cue_get_variable;
+    HandleStringSetFloatFunction cue_set_variable;
+    GameUnaryFunction cue_play;
+    GameUnaryFunction cue_pause;
+    GameUnaryFunction cue_resume;
+    CueStopFunction cue_stop;
 } CnaFunctions;
 
 typedef struct JavaGameContext {
@@ -790,6 +939,13 @@ typedef struct JavaBufferContentLostRegistration {
     int is_vertex;
 } JavaBufferContentLostRegistration;
 
+typedef struct JavaAudioEventRegistration {
+    jobject target;
+    jmethodID event;
+    CNA_AudioEventRegistrationHandle native_registration;
+    atomic_int callbacks_enabled;
+} JavaAudioEventRegistration;
+
 static JavaVM* java_vm;
 static CnaFunctions cna;
 
@@ -855,6 +1011,25 @@ static void on_buffer_content_lost(CNA_Handle buffer, void* value)
     }
     (*environment)->CallVoidMethod(
         environment, registration->target, registration->event);
+    if ((*environment)->ExceptionCheck(environment)) {
+        (*environment)->ExceptionClear(environment);
+    }
+    finish_callback_environment(attached);
+}
+
+static void on_audio_event(void* value)
+{
+    JavaAudioEventRegistration* registration = (JavaAudioEventRegistration*)value;
+    if (registration == NULL || atomic_load_explicit(
+            &registration->callbacks_enabled, memory_order_acquire) == 0) {
+        return;
+    }
+    int attached = 0;
+    JNIEnv* environment = callback_environment(&attached);
+    if (environment == NULL) {
+        return;
+    }
+    (*environment)->CallVoidMethod(environment, registration->target, registration->event);
     if ((*environment)->ExceptionCheck(environment)) {
         (*environment)->ExceptionClear(environment);
     }
@@ -2054,6 +2229,107 @@ JNIEXPORT jint JNICALL Java_org_openeggbert_cna_internal_NativeBindings_nativeLo
     LOAD(sprite_font_set_spacing, "cna_sprite_font_set_spacing");
     LOAD(sprite_font_measure_utf8, "cna_sprite_font_measure_utf8");
     LOAD(sprite_font_destroy, "cna_sprite_font_destroy");
+    LOAD(sound_effect_create_pcm16_range_ext,
+        "cna_sound_effect_create_pcm16_range_ext");
+    LOAD(sound_effect_create_from_encoded_ext,
+        "cna_sound_effect_create_from_encoded_ext");
+    LOAD(sound_effect_destroy, "cna_sound_effect_destroy");
+    LOAD(sound_effect_create_instance, "cna_sound_effect_create_instance");
+    LOAD(sound_effect_play, "cna_sound_effect_play");
+    LOAD(sound_effect_play_with_settings, "cna_sound_effect_play_with_settings");
+    LOAD(sound_effect_get_duration_ticks, "cna_sound_effect_get_duration_ticks");
+    LOAD(sound_effect_get_name_size, "cna_sound_effect_get_name_size");
+    LOAD(sound_effect_copy_name, "cna_sound_effect_copy_name");
+    LOAD(sound_effect_set_name, "cna_sound_effect_set_name");
+    LOAD(sound_effect_get_master_volume, "cna_sound_effect_get_master_volume");
+    LOAD(sound_effect_set_master_volume, "cna_sound_effect_set_master_volume");
+    LOAD(sound_effect_get_distance_scale, "cna_sound_effect_get_distance_scale");
+    LOAD(sound_effect_set_distance_scale, "cna_sound_effect_set_distance_scale");
+    LOAD(sound_effect_get_doppler_scale, "cna_sound_effect_get_doppler_scale");
+    LOAD(sound_effect_set_doppler_scale, "cna_sound_effect_set_doppler_scale");
+    LOAD(sound_effect_get_speed_of_sound, "cna_sound_effect_get_speed_of_sound");
+    LOAD(sound_effect_set_speed_of_sound, "cna_sound_effect_set_speed_of_sound");
+    LOAD(sound_effect_instance_play, "cna_sound_effect_instance_play");
+    LOAD(sound_effect_instance_pause, "cna_sound_effect_instance_pause");
+    LOAD(sound_effect_instance_resume, "cna_sound_effect_instance_resume");
+    LOAD(sound_effect_instance_stop, "cna_sound_effect_instance_stop");
+    LOAD(sound_effect_instance_get_info, "cna_sound_effect_instance_get_info");
+    LOAD(sound_effect_instance_set_volume, "cna_sound_effect_instance_set_volume");
+    LOAD(sound_effect_instance_set_pitch, "cna_sound_effect_instance_set_pitch");
+    LOAD(sound_effect_instance_set_pan, "cna_sound_effect_instance_set_pan");
+    LOAD(sound_effect_instance_set_is_looped,
+        "cna_sound_effect_instance_set_is_looped");
+    LOAD(sound_effect_instance_destroy, "cna_sound_effect_instance_destroy");
+    LOAD(sound_effect_instance_apply_3d, "cna_sound_effect_instance_apply_3d");
+    LOAD(sound_effect_instance_apply_3d_multi_ext,
+        "cna_sound_effect_instance_apply_3d_multi_ext");
+    LOAD(dynamic_sound_effect_instance_create,
+        "cna_dynamic_sound_effect_instance_create");
+    LOAD(dynamic_sound_effect_instance_get_pending_buffer_count,
+        "cna_dynamic_sound_effect_instance_get_pending_buffer_count");
+    LOAD(dynamic_sound_effect_instance_submit_buffer,
+        "cna_dynamic_sound_effect_instance_submit_buffer");
+    LOAD(dynamic_sound_effect_instance_subscribe_buffer_needed,
+        "cna_dynamic_sound_effect_instance_subscribe_buffer_needed");
+    LOAD(audio_unsubscribe_ext, "cna_audio_unsubscribe_ext");
+    LOAD(microphone_get_count, "cna_microphone_get_count");
+    LOAD(microphone_get_default_index_ext, "cna_microphone_get_default_index_ext");
+    LOAD(microphone_get_name_size_at, "cna_microphone_get_name_size_at");
+    LOAD(microphone_copy_name_at, "cna_microphone_copy_name_at");
+    LOAD(microphone_get_buffer_duration_ticks_at,
+        "cna_microphone_get_buffer_duration_ticks_at");
+    LOAD(microphone_set_buffer_duration_ticks_at,
+        "cna_microphone_set_buffer_duration_ticks_at");
+    LOAD(microphone_get_is_headset_at, "cna_microphone_get_is_headset_at");
+    LOAD(microphone_get_sample_rate_at, "cna_microphone_get_sample_rate_at");
+    LOAD(microphone_get_state_at, "cna_microphone_get_state_at");
+    LOAD(microphone_start_at, "cna_microphone_start_at");
+    LOAD(microphone_stop_at, "cna_microphone_stop_at");
+    LOAD(microphone_get_data_at, "cna_microphone_get_data_at");
+    LOAD(microphone_subscribe_buffer_ready_at,
+        "cna_microphone_subscribe_buffer_ready_at");
+    LOAD(audio_engine_create_with_renderer, "cna_audio_engine_create_with_renderer");
+    LOAD(audio_engine_destroy, "cna_audio_engine_destroy");
+    LOAD(audio_engine_get_renderer_count, "cna_audio_engine_get_renderer_count");
+    LOAD(audio_engine_get_renderer_friendly_name_size,
+        "cna_audio_engine_get_renderer_friendly_name_size");
+    LOAD(audio_engine_copy_renderer_friendly_name,
+        "cna_audio_engine_copy_renderer_friendly_name");
+    LOAD(audio_engine_get_renderer_id_size, "cna_audio_engine_get_renderer_id_size");
+    LOAD(audio_engine_copy_renderer_id, "cna_audio_engine_copy_renderer_id");
+    LOAD(audio_engine_get_category, "cna_audio_engine_get_category");
+    LOAD(audio_engine_get_global_variable, "cna_audio_engine_get_global_variable");
+    LOAD(audio_engine_set_global_variable, "cna_audio_engine_set_global_variable");
+    LOAD(audio_engine_update, "cna_audio_engine_update");
+    LOAD(audio_category_destroy, "cna_audio_category_destroy");
+    LOAD(audio_category_get_name_size, "cna_audio_category_get_name_size");
+    LOAD(audio_category_copy_name, "cna_audio_category_copy_name");
+    LOAD(audio_category_pause, "cna_audio_category_pause");
+    LOAD(audio_category_resume, "cna_audio_category_resume");
+    LOAD(audio_category_set_volume, "cna_audio_category_set_volume");
+    LOAD(audio_category_stop, "cna_audio_category_stop");
+    LOAD(audio_category_equals, "cna_audio_category_equals");
+    LOAD(audio_category_get_hash_code, "cna_audio_category_get_hash_code");
+    LOAD(wave_bank_create, "cna_wave_bank_create");
+    LOAD(wave_bank_create_streaming, "cna_wave_bank_create_streaming");
+    LOAD(wave_bank_destroy, "cna_wave_bank_destroy");
+    LOAD(wave_bank_get_is_prepared, "cna_wave_bank_get_is_prepared");
+    LOAD(wave_bank_get_is_in_use, "cna_wave_bank_get_is_in_use");
+    LOAD(sound_bank_create, "cna_sound_bank_create");
+    LOAD(sound_bank_destroy, "cna_sound_bank_destroy");
+    LOAD(sound_bank_get_is_in_use, "cna_sound_bank_get_is_in_use");
+    LOAD(sound_bank_get_cue, "cna_sound_bank_get_cue");
+    LOAD(sound_bank_play_cue, "cna_sound_bank_play_cue");
+    LOAD(sound_bank_play_cue_3d, "cna_sound_bank_play_cue_3d");
+    LOAD(cue_destroy, "cna_cue_destroy");
+    LOAD(cue_get_info, "cna_cue_get_info");
+    LOAD(cue_apply_3d, "cna_cue_apply_3d");
+    LOAD(cue_get_variable, "cna_cue_get_variable");
+    LOAD(cue_set_variable, "cna_cue_set_variable");
+    LOAD(cue_play, "cna_cue_play");
+    LOAD(cue_pause, "cna_cue_pause");
+    LOAD(cue_resume, "cna_cue_resume");
+    LOAD(cue_stop, "cna_cue_stop");
 #undef LOAD
 
     return (jint)cna.get_abi_version();
@@ -9347,6 +9623,818 @@ JNIEXPORT jint JNICALL Java_org_openeggbert_cna_internal_NativeBindings_nativeDe
         free(wrapper->context);
         free(wrapper);
     }
+    return (jint)result;
+}
+
+static CNA_Result audio_set_long(JNIEnv* environment, jlongArray output, uint64_t value)
+{
+    if (output == NULL || (*environment)->GetArrayLength(environment, output) < 1) {
+        return CNA_RESULT_INVALID_ARGUMENT;
+    }
+    const jlong projected = (jlong)value;
+    (*environment)->SetLongArrayRegion(environment, output, 0, 1, &projected);
+    return (*environment)->ExceptionCheck(environment)
+        ? CNA_RESULT_INVALID_STATE : CNA_RESULT_SUCCESS;
+}
+
+static CNA_Result audio_set_float(JNIEnv* environment, jfloatArray output, float value)
+{
+    if (output == NULL || (*environment)->GetArrayLength(environment, output) < 1) {
+        return CNA_RESULT_INVALID_ARGUMENT;
+    }
+    const jfloat projected = (jfloat)value;
+    (*environment)->SetFloatArrayRegion(environment, output, 0, 1, &projected);
+    return (*environment)->ExceptionCheck(environment)
+        ? CNA_RESULT_INVALID_STATE : CNA_RESULT_SUCCESS;
+}
+
+static CNA_Result audio_string_view(
+    JNIEnv* environment, jbyteArray input, jbyte** out_bytes, CNA_StringView* out_view)
+{
+    if (input == NULL || out_bytes == NULL || out_view == NULL) {
+        return CNA_RESULT_INVALID_ARGUMENT;
+    }
+    const jsize length = (*environment)->GetArrayLength(environment, input);
+    jbyte* bytes = (*environment)->GetByteArrayElements(environment, input, NULL);
+    if (bytes == NULL && length != 0) {
+        return CNA_RESULT_OUT_OF_MEMORY;
+    }
+    *out_bytes = bytes;
+    *out_view = (CNA_StringView){(const char*)bytes, (uint64_t)length};
+    return CNA_RESULT_SUCCESS;
+}
+
+static CNA_Result audio_listener_from_floats(
+    JNIEnv* environment, jfloatArray input, jsize offset, CNA_AudioListener* output)
+{
+    if (input == NULL || output == NULL || offset < 0 ||
+        (*environment)->GetArrayLength(environment, input) < offset + 12) {
+        return CNA_RESULT_INVALID_ARGUMENT;
+    }
+    jfloat values[12];
+    (*environment)->GetFloatArrayRegion(environment, input, offset, 12, values);
+    if ((*environment)->ExceptionCheck(environment)) {
+        return CNA_RESULT_INVALID_STATE;
+    }
+    (void)memset(output, 0, sizeof(*output));
+    output->struct_size = (uint32_t)sizeof(*output);
+    output->struct_version = UINT32_C(1);
+    output->forward = (CNA_Vector3){values[0], values[1], values[2]};
+    output->position = (CNA_Vector3){values[3], values[4], values[5]};
+    output->up = (CNA_Vector3){values[6], values[7], values[8]};
+    output->velocity = (CNA_Vector3){values[9], values[10], values[11]};
+    return CNA_RESULT_SUCCESS;
+}
+
+static CNA_Result audio_emitter_from_floats(
+    JNIEnv* environment, jfloatArray input, CNA_AudioEmitter* output)
+{
+    if (input == NULL || output == NULL ||
+        (*environment)->GetArrayLength(environment, input) < 13) {
+        return CNA_RESULT_INVALID_ARGUMENT;
+    }
+    jfloat values[13];
+    (*environment)->GetFloatArrayRegion(environment, input, 0, 13, values);
+    if ((*environment)->ExceptionCheck(environment)) {
+        return CNA_RESULT_INVALID_STATE;
+    }
+    (void)memset(output, 0, sizeof(*output));
+    output->struct_size = (uint32_t)sizeof(*output);
+    output->struct_version = UINT32_C(1);
+    output->doppler_scale = values[0];
+    output->forward = (CNA_Vector3){values[1], values[2], values[3]};
+    output->position = (CNA_Vector3){values[4], values[5], values[6]};
+    output->up = (CNA_Vector3){values[7], values[8], values[9]};
+    output->velocity = (CNA_Vector3){values[10], values[11], values[12]};
+    return CNA_RESULT_SUCCESS;
+}
+
+JNIEXPORT jint JNICALL Java_org_openeggbert_cna_internal_NativeAudio_nativeCreateSoundEffect(
+    JNIEnv* environment, jclass type, jlong game, jbyteArray data, jint offset,
+    jint count, jint sample_rate, jint channels, jint loop_start, jint loop_length,
+    jlongArray output)
+{
+    (void)type;
+    if (data == NULL) return (jint)CNA_RESULT_INVALID_ARGUMENT;
+    const jsize byte_count = (*environment)->GetArrayLength(environment, data);
+    jbyte* bytes = (*environment)->GetByteArrayElements(environment, data, NULL);
+    if (bytes == NULL) return (jint)CNA_RESULT_OUT_OF_MEMORY;
+    CNA_SoundEffectCreateInfo info;
+    (void)memset(&info, 0, sizeof(info));
+    info.struct_size = (uint32_t)sizeof(info);
+    info.struct_version = UINT32_C(1);
+    info.sample_rate = (uint32_t)sample_rate;
+    info.channels = (CNA_AudioChannels)channels;
+    CNA_Handle handle = CNA_INVALID_HANDLE;
+    CNA_Result result = cna.sound_effect_create_pcm16_range_ext(
+        java_game(game)->cna_handle, &info, (const uint8_t*)bytes, (uint64_t)byte_count,
+        offset, count, loop_start, loop_length, &handle);
+    (*environment)->ReleaseByteArrayElements(environment, data, bytes, JNI_ABORT);
+    if (result == CNA_RESULT_SUCCESS) result = audio_set_long(environment, output, handle);
+    return (jint)result;
+}
+
+JNIEXPORT jint JNICALL Java_org_openeggbert_cna_internal_NativeAudio_nativeCreateSoundEffectEncoded(
+    JNIEnv* environment, jclass type, jlong game, jbyteArray data, jlongArray output)
+{
+    (void)type;
+    if (data == NULL) return (jint)CNA_RESULT_INVALID_ARGUMENT;
+    const jsize count = (*environment)->GetArrayLength(environment, data);
+    jbyte* bytes = (*environment)->GetByteArrayElements(environment, data, NULL);
+    if (bytes == NULL) return (jint)CNA_RESULT_OUT_OF_MEMORY;
+    CNA_Handle handle = CNA_INVALID_HANDLE;
+    CNA_Result result = cna.sound_effect_create_from_encoded_ext(
+        java_game(game)->cna_handle, (const uint8_t*)bytes, (uint64_t)count, &handle);
+    (*environment)->ReleaseByteArrayElements(environment, data, bytes, JNI_ABORT);
+    if (result == CNA_RESULT_SUCCESS) result = audio_set_long(environment, output, handle);
+    return (jint)result;
+}
+
+#define AUDIO_UNARY_JNI(java_name, field_name) \
+JNIEXPORT jint JNICALL Java_org_openeggbert_cna_internal_NativeAudio_##java_name( \
+    JNIEnv* environment, jclass type, jlong handle) \
+{ \
+    (void)environment; (void)type; \
+    return (jint)cna.field_name((CNA_Handle)handle); \
+}
+
+AUDIO_UNARY_JNI(nativeDestroySoundEffect, sound_effect_destroy)
+AUDIO_UNARY_JNI(nativeDestroySoundEffectInstance, sound_effect_instance_destroy)
+AUDIO_UNARY_JNI(nativeDestroyAudioEngine, audio_engine_destroy)
+AUDIO_UNARY_JNI(nativeDestroyCategory, audio_category_destroy)
+AUDIO_UNARY_JNI(nativeUpdateAudioEngine, audio_engine_update)
+AUDIO_UNARY_JNI(nativeDestroyWaveBank, wave_bank_destroy)
+AUDIO_UNARY_JNI(nativeDestroySoundBank, sound_bank_destroy)
+AUDIO_UNARY_JNI(nativeDestroyCue, cue_destroy)
+
+#undef AUDIO_UNARY_JNI
+
+JNIEXPORT jint JNICALL Java_org_openeggbert_cna_internal_NativeAudio_nativeCreateSoundEffectInstance(
+    JNIEnv* environment, jclass type, jlong effect, jlongArray output)
+{
+    (void)type;
+    CNA_Handle handle = CNA_INVALID_HANDLE;
+    CNA_Result result = cna.sound_effect_create_instance((CNA_Handle)effect, &handle);
+    if (result == CNA_RESULT_SUCCESS) result = audio_set_long(environment, output, handle);
+    return (jint)result;
+}
+
+JNIEXPORT jint JNICALL Java_org_openeggbert_cna_internal_NativeAudio_nativePlaySoundEffect(
+    JNIEnv* environment, jclass type, jlong effect, jfloat volume, jfloat pitch,
+    jfloat pan, jboolean settings)
+{
+    (void)environment; (void)type;
+    CNA_Bool played = CNA_FALSE;
+    CNA_Result result = settings == JNI_TRUE
+        ? cna.sound_effect_play_with_settings(
+            (CNA_Handle)effect, volume, pitch, pan, &played)
+        : cna.sound_effect_play((CNA_Handle)effect, &played);
+    return result == CNA_RESULT_SUCCESS
+        ? (played == CNA_TRUE ? 1 : 0) : -(jint)result;
+}
+
+JNIEXPORT jint JNICALL Java_org_openeggbert_cna_internal_NativeAudio_nativeGetSoundEffectDuration(
+    JNIEnv* environment, jclass type, jlong effect, jlongArray output)
+{
+    (void)type;
+    int64_t ticks = 0;
+    CNA_Result result = cna.sound_effect_get_duration_ticks((CNA_Handle)effect, &ticks);
+    if (result == CNA_RESULT_SUCCESS) result = audio_set_long(environment, output, (uint64_t)ticks);
+    return (jint)result;
+}
+
+JNIEXPORT jint JNICALL Java_org_openeggbert_cna_internal_NativeAudio_nativeSetSoundEffectName(
+    JNIEnv* environment, jclass type, jlong effect, jbyteArray name)
+{
+    (void)type;
+    jbyte* bytes = NULL;
+    CNA_StringView view;
+    CNA_Result result = audio_string_view(environment, name, &bytes, &view);
+    if (result == CNA_RESULT_SUCCESS) {
+        result = cna.sound_effect_set_name((CNA_Handle)effect, view);
+        (*environment)->ReleaseByteArrayElements(environment, name, bytes, JNI_ABORT);
+    }
+    return (jint)result;
+}
+
+static HandleGetFloatFunction audio_setting_getter(jint kind)
+{
+    switch (kind) {
+        case 0: return cna.sound_effect_get_master_volume;
+        case 1: return cna.sound_effect_get_distance_scale;
+        case 2: return cna.sound_effect_get_doppler_scale;
+        case 3: return cna.sound_effect_get_speed_of_sound;
+        default: return NULL;
+    }
+}
+
+static HandleSetFloatFunction audio_setting_setter(jint kind)
+{
+    switch (kind) {
+        case 0: return cna.sound_effect_set_master_volume;
+        case 1: return cna.sound_effect_set_distance_scale;
+        case 2: return cna.sound_effect_set_doppler_scale;
+        case 3: return cna.sound_effect_set_speed_of_sound;
+        default: return NULL;
+    }
+}
+
+JNIEXPORT jint JNICALL Java_org_openeggbert_cna_internal_NativeAudio_nativeGetSoundSetting(
+    JNIEnv* environment, jclass type, jlong game, jint kind, jfloatArray output)
+{
+    (void)type;
+    HandleGetFloatFunction function = audio_setting_getter(kind);
+    if (function == NULL) return (jint)CNA_RESULT_INVALID_ARGUMENT;
+    float value = 0.0f;
+    CNA_Result result = function(java_game(game)->cna_handle, &value);
+    if (result == CNA_RESULT_SUCCESS) result = audio_set_float(environment, output, value);
+    return (jint)result;
+}
+
+JNIEXPORT jint JNICALL Java_org_openeggbert_cna_internal_NativeAudio_nativeSetSoundSetting(
+    JNIEnv* environment, jclass type, jlong game, jint kind, jfloat value)
+{
+    (void)environment; (void)type;
+    HandleSetFloatFunction function = audio_setting_setter(kind);
+    return function == NULL ? (jint)CNA_RESULT_INVALID_ARGUMENT
+        : (jint)function(java_game(game)->cna_handle, value);
+}
+
+JNIEXPORT jint JNICALL Java_org_openeggbert_cna_internal_NativeAudio_nativeInstanceTransport(
+    JNIEnv* environment, jclass type, jlong instance, jint operation, jboolean immediate)
+{
+    (void)environment; (void)type;
+    switch (operation) {
+        case 0: return (jint)cna.sound_effect_instance_play((CNA_Handle)instance);
+        case 1: return (jint)cna.sound_effect_instance_pause((CNA_Handle)instance);
+        case 2: return (jint)cna.sound_effect_instance_resume((CNA_Handle)instance);
+        case 3: return (jint)cna.sound_effect_instance_stop(
+            (CNA_Handle)instance, immediate == JNI_TRUE ? CNA_TRUE : CNA_FALSE);
+        default: return (jint)CNA_RESULT_INVALID_ARGUMENT;
+    }
+}
+
+JNIEXPORT jint JNICALL Java_org_openeggbert_cna_internal_NativeAudio_nativeSetInstanceFloat(
+    JNIEnv* environment, jclass type, jlong instance, jint kind, jfloat value)
+{
+    (void)environment; (void)type;
+    HandleSetFloatFunction function = kind == 0 ? cna.sound_effect_instance_set_volume
+        : kind == 1 ? cna.sound_effect_instance_set_pitch
+        : kind == 2 ? cna.sound_effect_instance_set_pan : NULL;
+    return function == NULL ? (jint)CNA_RESULT_INVALID_ARGUMENT
+        : (jint)function((CNA_Handle)instance, value);
+}
+
+JNIEXPORT jint JNICALL Java_org_openeggbert_cna_internal_NativeAudio_nativeSetInstanceBoolean(
+    JNIEnv* environment, jclass type, jlong instance, jboolean value)
+{
+    (void)environment; (void)type;
+    return (jint)cna.sound_effect_instance_set_is_looped(
+        (CNA_Handle)instance, value == JNI_TRUE ? CNA_TRUE : CNA_FALSE);
+}
+
+JNIEXPORT jint JNICALL Java_org_openeggbert_cna_internal_NativeAudio_nativeGetInstanceState(
+    JNIEnv* environment, jclass type, jlong instance, jintArray output)
+{
+    (void)type;
+    CNA_SoundEffectInstanceInfo info;
+    (void)memset(&info, 0, sizeof(info));
+    info.struct_size = (uint32_t)sizeof(info);
+    info.struct_version = UINT32_C(1);
+    CNA_Result result = cna.sound_effect_instance_get_info((CNA_Handle)instance, &info);
+    if (result == CNA_RESULT_SUCCESS) result = set_int_output(environment, output, (int32_t)info.state);
+    return (jint)result;
+}
+
+JNIEXPORT jint JNICALL Java_org_openeggbert_cna_internal_NativeAudio_nativeApply3D(
+    JNIEnv* environment, jclass type, jlong instance,
+    jfloatArray listeners, jfloatArray emitter_values)
+{
+    (void)type;
+    if (listeners == NULL || (*environment)->GetArrayLength(environment, listeners) < 12 ||
+        ((*environment)->GetArrayLength(environment, listeners) % 12) != 0) {
+        return (jint)CNA_RESULT_INVALID_ARGUMENT;
+    }
+    CNA_AudioEmitter emitter;
+    CNA_Result result = audio_emitter_from_floats(environment, emitter_values, &emitter);
+    const jsize count = (*environment)->GetArrayLength(environment, listeners) / 12;
+    CNA_AudioListener* values = NULL;
+    if (result == CNA_RESULT_SUCCESS) {
+        values = (CNA_AudioListener*)calloc((size_t)count, sizeof(*values));
+        if (values == NULL) result = CNA_RESULT_OUT_OF_MEMORY;
+    }
+    for (jsize i = 0; result == CNA_RESULT_SUCCESS && i < count; ++i) {
+        result = audio_listener_from_floats(environment, listeners, i * 12, &values[i]);
+    }
+    if (result == CNA_RESULT_SUCCESS) {
+        result = count == 1
+            ? cna.sound_effect_instance_apply_3d((CNA_Handle)instance, &values[0], &emitter)
+            : cna.sound_effect_instance_apply_3d_multi_ext(
+                (CNA_Handle)instance, values, (uint64_t)count, &emitter);
+    }
+    free(values);
+    return (jint)result;
+}
+
+JNIEXPORT jint JNICALL Java_org_openeggbert_cna_internal_NativeAudio_nativeCreateDynamicSoundEffect(
+    JNIEnv* environment, jclass type, jlong game, jint sample_rate,
+    jint channels, jlongArray output)
+{
+    (void)type;
+    CNA_Handle handle = CNA_INVALID_HANDLE;
+    CNA_Result result = cna.dynamic_sound_effect_instance_create(
+        java_game(game)->cna_handle, sample_rate, (CNA_AudioChannels)channels, &handle);
+    if (result == CNA_RESULT_SUCCESS) result = audio_set_long(environment, output, handle);
+    return (jint)result;
+}
+
+JNIEXPORT jint JNICALL Java_org_openeggbert_cna_internal_NativeAudio_nativeGetPendingBufferCount(
+    JNIEnv* environment, jclass type, jlong instance, jintArray output)
+{
+    (void)type;
+    int32_t count = 0;
+    CNA_Result result = cna.dynamic_sound_effect_instance_get_pending_buffer_count(
+        (CNA_Handle)instance, &count);
+    if (result == CNA_RESULT_SUCCESS) result = set_int_output(environment, output, count);
+    return (jint)result;
+}
+
+JNIEXPORT jint JNICALL Java_org_openeggbert_cna_internal_NativeAudio_nativeSubmitDynamicBuffer(
+    JNIEnv* environment, jclass type, jlong instance, jbyteArray buffer,
+    jint offset, jint count)
+{
+    (void)type;
+    if (buffer == NULL) return (jint)CNA_RESULT_INVALID_ARGUMENT;
+    const jsize length = (*environment)->GetArrayLength(environment, buffer);
+    jbyte* bytes = (*environment)->GetByteArrayElements(environment, buffer, NULL);
+    if (bytes == NULL) return (jint)CNA_RESULT_OUT_OF_MEMORY;
+    const CNA_Result result = cna.dynamic_sound_effect_instance_submit_buffer(
+        (CNA_Handle)instance, (const uint8_t*)bytes, (uint64_t)length, offset, count);
+    (*environment)->ReleaseByteArrayElements(environment, buffer, bytes, JNI_ABORT);
+    return (jint)result;
+}
+
+JNIEXPORT jint JNICALL Java_org_openeggbert_cna_internal_NativeAudio_nativeSubscribeAudioEvent(
+    JNIEnv* environment, jclass type, jlong handle, jint index,
+    jobject target, jboolean microphone, jlongArray output)
+{
+    (void)type;
+    if (target == NULL || output == NULL) return (jint)CNA_RESULT_INVALID_ARGUMENT;
+    JavaAudioEventRegistration* registration =
+        (JavaAudioEventRegistration*)calloc(1, sizeof(*registration));
+    if (registration == NULL) return (jint)CNA_RESULT_OUT_OF_MEMORY;
+    registration->target = (*environment)->NewGlobalRef(environment, target);
+    if (registration->target == NULL) { free(registration); return (jint)CNA_RESULT_OUT_OF_MEMORY; }
+    jclass target_class = (*environment)->GetObjectClass(environment, target);
+    const char* method_name = microphone == JNI_TRUE ? "nativeBufferReady" : "nativeBufferNeeded";
+    registration->event = (*environment)->GetMethodID(environment, target_class, method_name, "()V");
+    (*environment)->DeleteLocalRef(environment, target_class);
+    if (registration->event == NULL) {
+        (*environment)->DeleteGlobalRef(environment, registration->target);
+        free(registration);
+        return (jint)CNA_RESULT_INVALID_ARGUMENT;
+    }
+    atomic_init(&registration->callbacks_enabled, 1);
+    CNA_Result result = microphone == JNI_TRUE
+        ? cna.microphone_subscribe_buffer_ready_at(
+            java_game(handle)->cna_handle, (uint64_t)index, on_audio_event, registration,
+            &registration->native_registration)
+        : cna.dynamic_sound_effect_instance_subscribe_buffer_needed(
+            (CNA_Handle)handle, on_audio_event, registration,
+            &registration->native_registration);
+    if (result != CNA_RESULT_SUCCESS) {
+        atomic_store_explicit(&registration->callbacks_enabled, 0, memory_order_release);
+        (*environment)->DeleteGlobalRef(environment, registration->target);
+        free(registration);
+        return (jint)result;
+    }
+    result = audio_set_long(environment, output, (uint64_t)(uintptr_t)registration);
+    if (result != CNA_RESULT_SUCCESS) {
+        (void)cna.audio_unsubscribe_ext(registration->native_registration);
+        (*environment)->DeleteGlobalRef(environment, registration->target);
+        free(registration);
+    }
+    return (jint)result;
+}
+
+JNIEXPORT jint JNICALL Java_org_openeggbert_cna_internal_NativeAudio_nativeUnsubscribeAudioEvent(
+    JNIEnv* environment, jclass type, jlong token)
+{
+    (void)type;
+    JavaAudioEventRegistration* registration =
+        (JavaAudioEventRegistration*)(uintptr_t)token;
+    if (registration == NULL) return (jint)CNA_RESULT_INVALID_ARGUMENT;
+    atomic_store_explicit(&registration->callbacks_enabled, 0, memory_order_release);
+    const CNA_Result result = cna.audio_unsubscribe_ext(registration->native_registration);
+    if (result != CNA_RESULT_SUCCESS) {
+        atomic_store_explicit(&registration->callbacks_enabled, 1, memory_order_release);
+        return (jint)result;
+    }
+    (*environment)->DeleteGlobalRef(environment, registration->target);
+    free(registration);
+    return (jint)CNA_RESULT_SUCCESS;
+}
+
+JNIEXPORT jint JNICALL Java_org_openeggbert_cna_internal_NativeAudio_nativeGetMicrophoneCount(
+    JNIEnv* environment, jclass type, jlong game, jlongArray output)
+{
+    (void)type;
+    uint64_t count = 0;
+    CNA_Result result = cna.microphone_get_count(java_game(game)->cna_handle, &count);
+    if (result == CNA_RESULT_SUCCESS) result = audio_set_long(environment, output, count);
+    return (jint)result;
+}
+
+JNIEXPORT jint JNICALL Java_org_openeggbert_cna_internal_NativeAudio_nativeGetDefaultMicrophone(
+    JNIEnv* environment, jclass type, jlong game, jlongArray index, jintArray present)
+{
+    (void)type;
+    uint64_t value = 0;
+    CNA_Bool has_value = CNA_FALSE;
+    CNA_Result result = cna.microphone_get_default_index_ext(
+        java_game(game)->cna_handle, &value, &has_value);
+    if (result == CNA_RESULT_SUCCESS) result = audio_set_long(environment, index, value);
+    if (result == CNA_RESULT_SUCCESS) result = set_int_output(
+        environment, present, has_value == CNA_TRUE ? 1 : 0);
+    return (jint)result;
+}
+
+JNIEXPORT jint JNICALL Java_org_openeggbert_cna_internal_NativeAudio_nativeGetMicrophoneInt(
+    JNIEnv* environment, jclass type, jlong game, jint index, jint kind, jintArray output)
+{
+    (void)type;
+    CNA_Result result;
+    int32_t projected = 0;
+    if (kind == 1) {
+        CNA_Bool value = CNA_FALSE;
+        result = cna.microphone_get_is_headset_at(
+            java_game(game)->cna_handle, (uint64_t)index, &value);
+        projected = value == CNA_TRUE ? 1 : 0;
+    } else if (kind == 2) {
+        result = cna.microphone_get_sample_rate_at(
+            java_game(game)->cna_handle, (uint64_t)index, &projected);
+    } else if (kind == 3) {
+        CNA_MicrophoneState state = CNA_MICROPHONE_STATE_STOPPED;
+        result = cna.microphone_get_state_at(
+            java_game(game)->cna_handle, (uint64_t)index, &state);
+        projected = (int32_t)state;
+    } else {
+        return (jint)CNA_RESULT_INVALID_ARGUMENT;
+    }
+    if (result == CNA_RESULT_SUCCESS) result = set_int_output(environment, output, projected);
+    return (jint)result;
+}
+
+JNIEXPORT jint JNICALL Java_org_openeggbert_cna_internal_NativeAudio_nativeGetMicrophoneDuration(
+    JNIEnv* environment, jclass type, jlong game, jint index, jlongArray output)
+{
+    (void)type;
+    int64_t ticks = 0;
+    CNA_Result result = cna.microphone_get_buffer_duration_ticks_at(
+        java_game(game)->cna_handle, (uint64_t)index, &ticks);
+    if (result == CNA_RESULT_SUCCESS) result = audio_set_long(environment, output, (uint64_t)ticks);
+    return (jint)result;
+}
+
+JNIEXPORT jint JNICALL Java_org_openeggbert_cna_internal_NativeAudio_nativeSetMicrophoneDuration(
+    JNIEnv* environment, jclass type, jlong game, jint index, jlong ticks)
+{
+    (void)environment; (void)type;
+    return (jint)cna.microphone_set_buffer_duration_ticks_at(
+        java_game(game)->cna_handle, (uint64_t)index, (int64_t)ticks);
+}
+
+JNIEXPORT jint JNICALL Java_org_openeggbert_cna_internal_NativeAudio_nativeMicrophoneTransport(
+    JNIEnv* environment, jclass type, jlong game, jint index, jboolean start)
+{
+    (void)environment; (void)type;
+    return start == JNI_TRUE
+        ? (jint)cna.microphone_start_at(java_game(game)->cna_handle, (uint64_t)index)
+        : (jint)cna.microphone_stop_at(java_game(game)->cna_handle, (uint64_t)index);
+}
+
+JNIEXPORT jint JNICALL Java_org_openeggbert_cna_internal_NativeAudio_nativeGetMicrophoneData(
+    JNIEnv* environment, jclass type, jlong game, jint index, jbyteArray data,
+    jint offset, jint count, jlongArray output)
+{
+    (void)type;
+    if (data == NULL) return (jint)CNA_RESULT_INVALID_ARGUMENT;
+    const jsize length = (*environment)->GetArrayLength(environment, data);
+    if (offset < 0 || count < 0 || offset > length || count > length - offset) {
+        return (jint)CNA_RESULT_INVALID_ARGUMENT;
+    }
+    jbyte* bytes = (*environment)->GetByteArrayElements(environment, data, NULL);
+    if (bytes == NULL) return (jint)CNA_RESULT_OUT_OF_MEMORY;
+    uint64_t read = 0;
+    CNA_Result result = cna.microphone_get_data_at(
+        java_game(game)->cna_handle, (uint64_t)index, (uint8_t*)bytes + offset,
+        (uint64_t)count, &read);
+    (*environment)->ReleaseByteArrayElements(environment, data, bytes, 0);
+    if (result == CNA_RESULT_SUCCESS) result = audio_set_long(environment, output, read);
+    return (jint)result;
+}
+
+JNIEXPORT jint JNICALL Java_org_openeggbert_cna_internal_NativeAudio_nativeCreateAudioEngine(
+    JNIEnv* environment, jclass type, jlong game, jbyteArray settings,
+    jlong look_ahead, jbyteArray renderer, jlongArray output)
+{
+    (void)type;
+    jbyte* settings_bytes = NULL;
+    jbyte* renderer_bytes = NULL;
+    CNA_StringView settings_view;
+    CNA_StringView renderer_view;
+    CNA_Result result = audio_string_view(
+        environment, settings, &settings_bytes, &settings_view);
+    if (result == CNA_RESULT_SUCCESS) result = audio_string_view(
+        environment, renderer, &renderer_bytes, &renderer_view);
+    CNA_Handle handle = CNA_INVALID_HANDLE;
+    if (result == CNA_RESULT_SUCCESS) result = cna.audio_engine_create_with_renderer(
+        java_game(game)->cna_handle, settings_view,
+        (int64_t)look_ahead, renderer_view, &handle);
+    if (renderer_bytes != NULL) (*environment)->ReleaseByteArrayElements(
+        environment, renderer, renderer_bytes, JNI_ABORT);
+    if (settings_bytes != NULL) (*environment)->ReleaseByteArrayElements(
+        environment, settings, settings_bytes, JNI_ABORT);
+    if (result == CNA_RESULT_SUCCESS) result = audio_set_long(environment, output, handle);
+    return (jint)result;
+}
+
+JNIEXPORT jint JNICALL Java_org_openeggbert_cna_internal_NativeAudio_nativeGetRendererCount(
+    JNIEnv* environment, jclass type, jlong engine, jlongArray output)
+{
+    (void)type;
+    uint64_t count = 0;
+    CNA_Result result = cna.audio_engine_get_renderer_count((CNA_Handle)engine, &count);
+    if (result == CNA_RESULT_SUCCESS) result = audio_set_long(environment, output, count);
+    return (jint)result;
+}
+
+JNIEXPORT jint JNICALL Java_org_openeggbert_cna_internal_NativeAudio_nativeGetAudioCategory(
+    JNIEnv* environment, jclass type, jlong engine, jbyteArray name, jlongArray output)
+{
+    (void)type;
+    jbyte* bytes = NULL;
+    CNA_StringView view;
+    CNA_Result result = audio_string_view(environment, name, &bytes, &view);
+    CNA_Handle handle = CNA_INVALID_HANDLE;
+    if (result == CNA_RESULT_SUCCESS) result = cna.audio_engine_get_category(
+        (CNA_Handle)engine, view, &handle);
+    if (bytes != NULL) (*environment)->ReleaseByteArrayElements(environment, name, bytes, JNI_ABORT);
+    if (result == CNA_RESULT_SUCCESS) result = audio_set_long(environment, output, handle);
+    return (jint)result;
+}
+
+JNIEXPORT jint JNICALL Java_org_openeggbert_cna_internal_NativeAudio_nativeCategoryOperation(
+    JNIEnv* environment, jclass type, jlong category, jint operation, jfloat volume)
+{
+    (void)environment; (void)type;
+    switch (operation) {
+        case 0: return (jint)cna.audio_category_pause((CNA_Handle)category);
+        case 1: return (jint)cna.audio_category_resume((CNA_Handle)category);
+        case 2: return (jint)cna.audio_category_set_volume((CNA_Handle)category, volume);
+        case 3: return (jint)cna.audio_category_stop(
+            (CNA_Handle)category, CNA_AUDIO_STOP_OPTIONS_AS_AUTHORED);
+        case 4: return (jint)cna.audio_category_stop(
+            (CNA_Handle)category, CNA_AUDIO_STOP_OPTIONS_IMMEDIATE);
+        default: return (jint)CNA_RESULT_INVALID_ARGUMENT;
+    }
+}
+
+JNIEXPORT jint JNICALL Java_org_openeggbert_cna_internal_NativeAudio_nativeCategoryEquals(
+    JNIEnv* environment, jclass type, jlong category, jlong other, jintArray output)
+{
+    (void)type;
+    CNA_Bool equal = CNA_FALSE;
+    CNA_Result result = cna.audio_category_equals(
+        (CNA_Handle)category, (CNA_Handle)other, &equal);
+    if (result == CNA_RESULT_SUCCESS) {
+        result = set_int_output(environment, output, equal != CNA_FALSE ? 1 : 0);
+    }
+    return (jint)result;
+}
+
+JNIEXPORT jint JNICALL Java_org_openeggbert_cna_internal_NativeAudio_nativeCategoryHashCode(
+    JNIEnv* environment, jclass type, jlong category, jintArray output)
+{
+    (void)type;
+    int32_t hash_code = 0;
+    CNA_Result result = cna.audio_category_get_hash_code(
+        (CNA_Handle)category, &hash_code);
+    if (result == CNA_RESULT_SUCCESS) {
+        result = set_int_output(environment, output, hash_code);
+    }
+    return (jint)result;
+}
+
+JNIEXPORT jint JNICALL Java_org_openeggbert_cna_internal_NativeAudio_nativeXactVariable(
+    JNIEnv* environment, jclass type, jlong engine, jlong cue, jbyteArray name,
+    jboolean set, jfloat value, jfloatArray output)
+{
+    (void)type;
+    jbyte* bytes = NULL;
+    CNA_StringView view;
+    CNA_Result result = audio_string_view(environment, name, &bytes, &view);
+    float read = 0.0f;
+    if (result == CNA_RESULT_SUCCESS) {
+        if (cue != 0) result = set == JNI_TRUE
+            ? cna.cue_set_variable((CNA_Handle)cue, view, value)
+            : cna.cue_get_variable((CNA_Handle)cue, view, &read);
+        else result = set == JNI_TRUE
+            ? cna.audio_engine_set_global_variable((CNA_Handle)engine, view, value)
+            : cna.audio_engine_get_global_variable((CNA_Handle)engine, view, &read);
+    }
+    if (bytes != NULL) (*environment)->ReleaseByteArrayElements(environment, name, bytes, JNI_ABORT);
+    if (result == CNA_RESULT_SUCCESS) result = audio_set_float(environment, output, read);
+    return (jint)result;
+}
+
+JNIEXPORT jint JNICALL Java_org_openeggbert_cna_internal_NativeAudio_nativeCreateWaveBank(
+    JNIEnv* environment, jclass type, jlong engine, jbyteArray path, jint offset,
+    jshort packet_size, jboolean streaming, jlongArray output)
+{
+    (void)type;
+    jbyte* bytes = NULL;
+    CNA_StringView view;
+    CNA_Result result = audio_string_view(environment, path, &bytes, &view);
+    CNA_Handle handle = CNA_INVALID_HANDLE;
+    if (result == CNA_RESULT_SUCCESS) result = streaming == JNI_TRUE
+        ? cna.wave_bank_create_streaming(
+            (CNA_Handle)engine, view, offset, packet_size, &handle)
+        : cna.wave_bank_create((CNA_Handle)engine, view, &handle);
+    if (bytes != NULL) (*environment)->ReleaseByteArrayElements(environment, path, bytes, JNI_ABORT);
+    if (result == CNA_RESULT_SUCCESS) result = audio_set_long(environment, output, handle);
+    return (jint)result;
+}
+
+JNIEXPORT jint JNICALL Java_org_openeggbert_cna_internal_NativeAudio_nativeGetBankBoolean(
+    JNIEnv* environment, jclass type, jlong bank, jint kind, jboolean sound_bank)
+{
+    (void)environment; (void)type;
+    GameGetBoolFunction function = sound_bank == JNI_TRUE
+        ? cna.sound_bank_get_is_in_use
+        : kind == 1 ? cna.wave_bank_get_is_prepared
+        : kind == 2 ? cna.wave_bank_get_is_in_use : NULL;
+    if (function == NULL) return -(jint)CNA_RESULT_INVALID_ARGUMENT;
+    CNA_Bool value = CNA_FALSE;
+    const CNA_Result result = function((CNA_Handle)bank, &value);
+    return result == CNA_RESULT_SUCCESS
+        ? (value == CNA_TRUE ? 1 : 0) : -(jint)result;
+}
+
+static CNA_Result audio_handle_string_create(
+    JNIEnv* environment, jlong parent, jbyteArray text,
+    HandleStringGetHandleFunction function, jlongArray output)
+{
+    jbyte* bytes = NULL;
+    CNA_StringView view;
+    CNA_Result result = audio_string_view(environment, text, &bytes, &view);
+    CNA_Handle handle = CNA_INVALID_HANDLE;
+    if (result == CNA_RESULT_SUCCESS) result = function((CNA_Handle)parent, view, &handle);
+    if (bytes != NULL) (*environment)->ReleaseByteArrayElements(environment, text, bytes, JNI_ABORT);
+    if (result == CNA_RESULT_SUCCESS) result = audio_set_long(environment, output, handle);
+    return result;
+}
+
+JNIEXPORT jint JNICALL Java_org_openeggbert_cna_internal_NativeAudio_nativeCreateSoundBank(
+    JNIEnv* environment, jclass type, jlong engine, jbyteArray path, jlongArray output)
+{
+    (void)type;
+    return (jint)audio_handle_string_create(
+        environment, engine, path, cna.sound_bank_create, output);
+}
+
+JNIEXPORT jint JNICALL Java_org_openeggbert_cna_internal_NativeAudio_nativeGetCue(
+    JNIEnv* environment, jclass type, jlong bank, jbyteArray name, jlongArray output)
+{
+    (void)type;
+    return (jint)audio_handle_string_create(
+        environment, bank, name, cna.sound_bank_get_cue, output);
+}
+
+JNIEXPORT jint JNICALL Java_org_openeggbert_cna_internal_NativeAudio_nativePlayCueFromBank(
+    JNIEnv* environment, jclass type, jlong bank, jbyteArray name,
+    jfloatArray listener_values, jfloatArray emitter_values)
+{
+    (void)type;
+    jbyte* bytes = NULL;
+    CNA_StringView view;
+    CNA_Result result = audio_string_view(environment, name, &bytes, &view);
+    if (result == CNA_RESULT_SUCCESS && listener_values == NULL && emitter_values == NULL) {
+        result = cna.sound_bank_play_cue((CNA_Handle)bank, view);
+    } else if (result == CNA_RESULT_SUCCESS) {
+        CNA_AudioListener listener;
+        CNA_AudioEmitter emitter;
+        result = audio_listener_from_floats(environment, listener_values, 0, &listener);
+        if (result == CNA_RESULT_SUCCESS) result = audio_emitter_from_floats(
+            environment, emitter_values, &emitter);
+        if (result == CNA_RESULT_SUCCESS) result = cna.sound_bank_play_cue_3d(
+            (CNA_Handle)bank, view, &listener, &emitter);
+    }
+    if (bytes != NULL) (*environment)->ReleaseByteArrayElements(environment, name, bytes, JNI_ABORT);
+    return (jint)result;
+}
+
+JNIEXPORT jint JNICALL Java_org_openeggbert_cna_internal_NativeAudio_nativeGetCueInfo(
+    JNIEnv* environment, jclass type, jlong cue, jintArray output)
+{
+    (void)type;
+    if (output == NULL || (*environment)->GetArrayLength(environment, output) < 8) {
+        return (jint)CNA_RESULT_INVALID_ARGUMENT;
+    }
+    CNA_CueInfo info;
+    (void)memset(&info, 0, sizeof(info));
+    info.struct_size = (uint32_t)sizeof(info);
+    info.struct_version = UINT32_C(1);
+    CNA_Result result = cna.cue_get_info((CNA_Handle)cue, &info);
+    if (result == CNA_RESULT_SUCCESS) {
+        const jint values[8] = {
+            info.is_created == CNA_TRUE, info.is_disposed == CNA_TRUE,
+            info.is_paused == CNA_TRUE, info.is_playing == CNA_TRUE,
+            info.is_prepared == CNA_TRUE, info.is_preparing == CNA_TRUE,
+            info.is_stopped == CNA_TRUE, info.is_stopping == CNA_TRUE};
+        (*environment)->SetIntArrayRegion(environment, output, 0, 8, values);
+        if ((*environment)->ExceptionCheck(environment)) result = CNA_RESULT_INVALID_STATE;
+    }
+    return (jint)result;
+}
+
+JNIEXPORT jint JNICALL Java_org_openeggbert_cna_internal_NativeAudio_nativeApplyCue3D(
+    JNIEnv* environment, jclass type, jlong cue,
+    jfloatArray listener_values, jfloatArray emitter_values)
+{
+    (void)type;
+    CNA_AudioListener listener;
+    CNA_AudioEmitter emitter;
+    CNA_Result result = audio_listener_from_floats(environment, listener_values, 0, &listener);
+    if (result == CNA_RESULT_SUCCESS) result = audio_emitter_from_floats(
+        environment, emitter_values, &emitter);
+    if (result == CNA_RESULT_SUCCESS) result = cna.cue_apply_3d(
+        (CNA_Handle)cue, &listener, &emitter);
+    return (jint)result;
+}
+
+JNIEXPORT jint JNICALL Java_org_openeggbert_cna_internal_NativeAudio_nativeCueTransport(
+    JNIEnv* environment, jclass type, jlong cue, jint operation, jint option)
+{
+    (void)environment; (void)type;
+    switch (operation) {
+        case 0: return (jint)cna.cue_play((CNA_Handle)cue);
+        case 1: return (jint)cna.cue_pause((CNA_Handle)cue);
+        case 2: return (jint)cna.cue_resume((CNA_Handle)cue);
+        case 3: return (jint)cna.cue_stop((CNA_Handle)cue, (CNA_AudioStopOptions)option);
+        default: return (jint)CNA_RESULT_INVALID_ARGUMENT;
+    }
+}
+
+JNIEXPORT jint JNICALL Java_org_openeggbert_cna_internal_NativeAudio_nativeGetStringSize(
+    JNIEnv* environment, jclass type, jlong handle, jint kind, jint index, jlongArray output)
+{
+    (void)type;
+    uint64_t size = 0;
+    CNA_Result result;
+    switch (kind) {
+        case 0: result = cna.sound_effect_get_name_size((CNA_Handle)handle, &size); break;
+        case 1: result = cna.microphone_get_name_size_at(
+            java_game(handle)->cna_handle, (uint64_t)index, &size); break;
+        case 2: result = cna.audio_engine_get_renderer_friendly_name_size(
+            (CNA_Handle)handle, (uint64_t)index, &size); break;
+        case 3: result = cna.audio_engine_get_renderer_id_size(
+            (CNA_Handle)handle, (uint64_t)index, &size); break;
+        case 4: result = cna.audio_category_get_name_size(
+            (CNA_Handle)handle, &size); break;
+        default: return (jint)CNA_RESULT_INVALID_ARGUMENT;
+    }
+    if (result == CNA_RESULT_SUCCESS) result = audio_set_long(environment, output, size);
+    return (jint)result;
+}
+
+JNIEXPORT jint JNICALL Java_org_openeggbert_cna_internal_NativeAudio_nativeCopyString(
+    JNIEnv* environment, jclass type, jlong handle, jint kind, jint index, jbyteArray output)
+{
+    (void)type;
+    if (output == NULL) return (jint)CNA_RESULT_INVALID_ARGUMENT;
+    const jsize capacity = (*environment)->GetArrayLength(environment, output);
+    jbyte* bytes = (*environment)->GetByteArrayElements(environment, output, NULL);
+    if (bytes == NULL && capacity != 0) return (jint)CNA_RESULT_OUT_OF_MEMORY;
+    uint64_t required = 0;
+    CNA_Result result;
+    switch (kind) {
+        case 0: result = cna.sound_effect_copy_name(
+            (CNA_Handle)handle, (char*)bytes, (uint64_t)capacity, &required); break;
+        case 1: result = cna.microphone_copy_name_at(
+            java_game(handle)->cna_handle, (uint64_t)index, (char*)bytes,
+            (uint64_t)capacity, &required); break;
+        case 2: result = cna.audio_engine_copy_renderer_friendly_name(
+            (CNA_Handle)handle, (uint64_t)index, (char*)bytes,
+            (uint64_t)capacity, &required); break;
+        case 3: result = cna.audio_engine_copy_renderer_id(
+            (CNA_Handle)handle, (uint64_t)index, (char*)bytes,
+            (uint64_t)capacity, &required); break;
+        case 4: result = cna.audio_category_copy_name(
+            (CNA_Handle)handle, (char*)bytes, (uint64_t)capacity, &required); break;
+        default: result = CNA_RESULT_INVALID_ARGUMENT; break;
+    }
+    if (bytes != NULL) (*environment)->ReleaseByteArrayElements(environment, output, bytes, 0);
     return (jint)result;
 }
 

@@ -16,6 +16,7 @@
     "System.EventHandler`1": "Microsoft.Xna.Framework.EventHandler",
     "System.IServiceProvider": "Microsoft.Xna.Framework.ServiceProvider",
     "System.IntPtr": "Microsoft.Xna.Framework.WindowHandle",
+    "System.Runtime.InteropServices.ExternalException": "java.lang.RuntimeException",
     "System.Collections.ObjectModel.Collection`1": "java.util.AbstractList",
     "System.Collections.ObjectModel.ReadOnlyCollection`1": "java.util.List",
     "System.Collections.Generic.Dictionary`2": "java.util.LinkedHashMap",

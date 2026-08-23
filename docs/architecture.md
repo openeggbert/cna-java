@@ -47,7 +47,7 @@ The adapter owns callback global references, attaches/detaches callback threads,
 copies UTF-8 at the boundary, converts fixed-width ABI types, and turns CNA
 results into Java exceptions.
 
-XNA's input and media entry points are static, while every corresponding CNA C
+XNA's input, media, and process-wide SoundEffect entry points are static, while every corresponding CNA C
 ABI route requires a game handle. CNA-Java therefore records the most recently
 created live `Game` as the process-current game and clears it on successful
 destruction, matching XNA's one-game-per-process model. Static `Keyboard` and
@@ -73,6 +73,30 @@ boundary. Content is unloaded while the native parent is still live, and
 borrowed Java facades are invalidated afterward. Deprecated finalization is not
 used.
 
+Audio uses the same transactional ownership rule. A SoundEffect owns one native
+effect and closes its independently owned instances first; every instance
+strongly retains its parent so CNA cannot observe a dead effect. A dynamic
+instance owns its callback registration until CNA accepts unsubscribe. Java
+handles and listener contexts remain live after a refused wrong-thread release,
+so owner-thread retry is safe. Game teardown closes registered Audio roots before
+destroying the CNA game.
+
+The XACT graph has one dependency root. AudioEngine owns its engine and category
+handles; WaveBank and SoundBank retain/register with the engine; Cue retains the
+engine and participates in SoundBank bookkeeping. Engine teardown walks cues and
+banks before categories and the native root. Disposal events are raised once
+after successful native destruction, and listener failures are aggregated only
+after cleanup. Authored-bank runtime qualification remains separate from this
+implemented ownership graph because no redistributable XGS/XSB/XWB fixture is
+available.
+
+Native Audio callbacks enter Java only through registered global references.
+Dynamic BufferNeeded and microphone BufferReady listeners run on CNA's
+FrameworkDispatcher owner-thread pump. User exceptions are captured in Java and
+surface on a later owner call/close; they never unwind across a JNI/native frame.
+Failed unsubscribe re-enables and retains the registration rather than freeing a
+context CNA may still call.
+
 Managed XNB resources use the same graph rather than a parallel handle system.
 `ContentManager` records successfully constructed disposable resources once and
 unloads them in reverse construction order. Thus a SpriteFont native object is
@@ -88,7 +112,9 @@ XNA does not expose that contract.
 ```text
 ContentManager.Load(Class<T>, asset)
         ↓
-Windows XNB v5 framing + reader table
+Windows XNB v5 framing
+        ↓ optional XNA LZX frame decompression
+reader table
         ↓
 internal ContentTypeReader registry
         ↓
@@ -96,6 +122,13 @@ managed metadata/raw-byte parsing
         ↓
 existing GraphicsDevice resource creation and upload
 ```
+
+Compressed framing validates the XNB decompressed-size field, XNA short and
+extended frame headers, the 32-KiB frame bound, exact block availability, and
+canonical end padding. One stateful LZX decoder retains its 64-KiB window across
+frames. The decompressed bytes then enter exactly the same reader-table pipeline
+as uncompressed assets; reader failures and resource rollback are therefore not
+a separate content mode.
 
 The registry is type-reader driven; it does not dispatch on asset names or call
 CNA's loose-file loader for XNB. Texture2D currently preserves uncompressed
@@ -106,9 +139,8 @@ atlas and copied glyph table. Model resolves shared vertex/index/effect
 resources through the normal XNB fixup mechanism and retains stable facade
 identity across its bone, mesh, and part graph.
 
-Compressed XNB/LZX remains outside this pipeline until its framing and failure
-semantics are implemented and tested. The supported uncompressed path does not
-silently attempt an alternate compression dialect.
+LZ4 and unknown compression dialects remain explicit failures. Neither framing
+path silently changes a texture format or falls back to CNA's loose-file loader.
 
 ## Contract layers
 
