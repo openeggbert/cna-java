@@ -19,6 +19,14 @@ non-generic type keeps the XNA name and the colliding generic type deterministic
 `OfT` suffix (currently `ContentTypeReaderOfT<T>` and `IPackedVectorOfT<T>`). Every collision and
 rename is explicit in `mapping-rules.json`; silently collapsing two CLR types is forbidden.
 
+`ContentReader` generic read methods receive a leading `Class<T> targetType` token, by the same
+rule used for `ContentManager.Load`. Java erases method type parameters, while XNA uses `typeof(T)`
+for raw-reader selection, result checking, shared-resource fixups, and external references; the
+token preserves those semantics and avoids untyped `Object` APIs. CLR's object dispatch bridge and
+strongly typed `ContentTypeReader<T>.Read(ContentReader,T)` erase to the same Java descriptor, so
+the bridge retains `Read` and the typed user extension point is deterministically named
+`ReadTyped`. Both members remain in the strict contract; only the colliding name is adapted.
+
 Public XNA fields remain public Java fields with the same names. Ordinary enum types become Java
 enums and their members keep XNA spelling (`Keys.Escape`). CLR numeric values use Java ordinals
 when they are exactly sequential; otherwise the enum receives `getValue()` and compiled-metadata
@@ -100,6 +108,10 @@ carrying `getExactMatch()`, the selected surface and depth formats, and the sele
 count. `DisplayModeCollection` retains `GetEnumerator()` and also supplies the required Java
 `Iterable<DisplayMode>.iterator()` bridge.
 
+The four Effect reflection collections follow the same explicit bridge rule. They retain XNA's
+concrete `GetEnumerator()` member and also declare `iterator()` so their mapped Java `Iterable`
+contracts are actual interfaces rather than metadata-only claims.
+
 The parameterless `IDisposable.Dispose()` contract maps to `close()`. A distinct protected
 `Dispose(boolean)` lifetime hook keeps its XNA name as `Dispose(boolean)`. CLR finalization is not
 projected: Java explicit cleanup is normative and deprecated Java finalization must not be added.
@@ -162,8 +174,9 @@ CLR parameter metadata without a name deterministically maps to `argN`, where `N
 position. An inaccessible CLR interface implemented by a public XNA type is omitted unless the
 interface itself belongs to the selected reference profile. CLR `Stream` is direction-sensitive
 rather than forced onto one misleading Java type: `Texture2D.FromStream` maps its input to
-`InputStream`, `ContentManager.OpenStream` maps its returned readable stream to `InputStream`, and
-`SaveAsPng` and `SaveAsJpeg` map their output to `OutputStream`. These full-signature
+`InputStream`, `ContentManager.OpenStream` and `TitleContainer.OpenStream` map their returned
+readable streams to `InputStream`, and `SaveAsPng` and `SaveAsJpeg` map their output to
+`OutputStream`. These full-signature
 transformations are recorded in `mapping-rules.json`.
 `WindowHandle` is an opaque value that supports equality and a zero test but intentionally has no
 numeric/address accessor. It preserves the XNA window-token round trip without exposing a raw

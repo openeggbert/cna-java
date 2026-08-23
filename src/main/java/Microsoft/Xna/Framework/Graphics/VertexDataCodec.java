@@ -13,11 +13,13 @@ import java.util.Objects;
 final class VertexDataCodec {
 
     private final Class<?> type;
+    private final int nativeType;
     private final int stride;
     private final int userSource;
 
-    private VertexDataCodec(Class<?> type, int stride, int userSource) {
+    private VertexDataCodec(Class<?> type, int nativeType, int stride, int userSource) {
         this.type = type;
+        this.nativeType = nativeType;
         this.stride = stride;
         this.userSource = userSource;
     }
@@ -29,16 +31,16 @@ final class VertexDataCodec {
 
     static VertexDataCodec forType(Class<?> type) {
         if (type == VertexPositionColor.class) {
-            return new VertexDataCodec(type, 16, 1);
+            return new VertexDataCodec(type, 0, 16, 1);
         }
         if (type == VertexPositionColorTexture.class) {
-            return new VertexDataCodec(type, 24, 2);
+            return new VertexDataCodec(type, 1, 24, 2);
         }
         if (type == VertexPositionTexture.class) {
-            return new VertexDataCodec(type, 20, 3);
+            return new VertexDataCodec(type, 6, 20, 3);
         }
         if (type == VertexPositionNormalTexture.class) {
-            return new VertexDataCodec(type, 32, 4);
+            return new VertexDataCodec(type, 4, 32, 4);
         }
         throw new UnsupportedOperationException(
                 "CNA-Java can marshal only the four built-in XNA vertex value types");
@@ -46,6 +48,10 @@ final class VertexDataCodec {
 
     int stride() {
         return stride;
+    }
+
+    int nativeType() {
+        return nativeType;
     }
 
     int userSource() {

@@ -70,6 +70,17 @@ typedef CNA_Result (*GamePadGetCapabilitiesFunction)(
     CNA_Handle, CNA_PlayerIndex, CNA_GamePadCapabilities*);
 typedef CNA_Result (*GamePadSetVibrationFunction)(
     CNA_Handle, CNA_PlayerIndex, float, float, CNA_Bool*);
+typedef CNA_Result (*TouchGetCapabilitiesFunction)(
+    CNA_Handle, CNA_TouchCapabilities*);
+typedef CNA_Result (*TouchGetStateFunction)(CNA_Handle, CNA_TouchState*);
+typedef CNA_Result (*TouchReadGestureFunction)(CNA_Handle, CNA_GestureSample*);
+typedef CNA_Result (*TouchEnqueueGestureFunction)(
+    CNA_Handle, const CNA_GestureSample*);
+typedef CNA_Result (*TouchSetFingerFunction)(
+    CNA_Handle, int32_t, int32_t, CNA_Vector2);
+typedef CNA_Result (*TouchRaiseEventFunction)(
+    CNA_Handle, int32_t, CNA_TouchLocationState,
+    float, float, float, float);
 typedef CNA_Result (*MouseGetStateFunction)(CNA_Handle, CNA_MouseState*);
 typedef CNA_Result (*MouseSetPositionFunction)(CNA_Handle, int32_t, int32_t);
 typedef CNA_Result (*GameSetUint64Function)(CNA_Handle, uint64_t);
@@ -167,6 +178,39 @@ typedef CNA_Result (*TextureCubeSetDataFunction)(
     CNA_Handle, const CNA_TextureCubeTransfer*, const CNA_Color*, uint64_t);
 typedef CNA_Result (*TextureCubeGetDataFunction)(
     CNA_Handle, const CNA_TextureCubeTransfer*, CNA_Color*, uint64_t, uint64_t*);
+typedef CNA_Result (*Texture3DCreateFunction)(
+    CNA_Handle, const CNA_Texture3DCreateInfo*, CNA_Handle*);
+typedef CNA_Result (*Texture3DGetInfoFunction)(CNA_Handle, CNA_Texture3DInfo*);
+typedef CNA_Result (*Texture3DSetDataFunction)(
+    CNA_Handle, const CNA_Texture3DTransfer*, const CNA_Color*, uint64_t);
+typedef CNA_Result (*Texture3DGetDataFunction)(
+    CNA_Handle, const CNA_Texture3DTransfer*, CNA_Color*, uint64_t, uint64_t*);
+typedef CNA_Result (*EffectCreateCompiledFunction)(
+    CNA_Handle, const uint8_t*, uint64_t, CNA_EffectHandle*);
+typedef CNA_Result (*HandleGetHandleFunction)(CNA_Handle, CNA_Handle*);
+typedef CNA_Result (*HandleSetHandleFunction)(CNA_Handle, CNA_Handle);
+typedef CNA_Result (*HandleIndexGetHandleFunction)(CNA_Handle, uint64_t, CNA_Handle*);
+typedef CNA_Result (*HandleGetInfoFunction)(CNA_Handle, void*);
+typedef CNA_Result (*HandleGetValueFunction)(CNA_Handle, void*);
+typedef CNA_Result (*EffectParameterGetValuesFunction)(
+    CNA_Handle, CNA_EffectValueType, uint64_t, void*, uint64_t, uint64_t*);
+typedef CNA_Result (*EffectParameterGetValueFunction)(
+    CNA_Handle, CNA_EffectValueType, void*);
+typedef CNA_Result (*EffectParameterSetValuesFunction)(
+    CNA_Handle, CNA_EffectValueType, const void*, uint64_t);
+typedef CNA_Result (*EffectParameterSetValueFunction)(
+    CNA_Handle, CNA_EffectValueType, const void*);
+typedef CNA_Result (*EffectParameterGetTextureFunction)(
+    CNA_Handle, CNA_EffectTextureType, CNA_Handle*);
+typedef CNA_Result (*EffectParameterSetTextureFunction)(
+    CNA_Handle, CNA_EffectTextureType, CNA_Handle);
+typedef CNA_Result (*HandleGetFloatFunction)(CNA_Handle, float*);
+typedef CNA_Result (*HandleSetFloatFunction)(CNA_Handle, float);
+typedef CNA_Result (*HandleGetVector3Function)(CNA_Handle, CNA_Vector3*);
+typedef CNA_Result (*HandleSetVector3Function)(CNA_Handle, CNA_Vector3);
+typedef CNA_Result (*HandleGetMatrixFunction)(CNA_Handle, CNA_Matrix*);
+typedef CNA_Result (*HandleSetMatrixFunction)(CNA_Handle, CNA_Matrix);
+typedef CNA_Result (*HandleUint32GetHandleFunction)(CNA_Handle, uint32_t, CNA_Handle*);
 typedef CNA_Result (*RenderTarget2DCreateFunction)(
     CNA_Handle, const CNA_RenderTarget2DCreateInfo*, CNA_Handle*);
 typedef CNA_Result (*RenderTargetCubeCreateFunction)(
@@ -184,12 +228,19 @@ typedef CNA_Result (*VertexBufferCreateFunction)(
     CNA_Handle, const CNA_VertexBufferCreateInfo*, CNA_VertexBufferHandle*);
 typedef CNA_Result (*VertexBufferGetInfoFunction)(
     CNA_VertexBufferHandle, CNA_VertexBufferInfo*);
+typedef CNA_Result (*VertexBufferSetFunction)(
+    CNA_VertexBufferHandle, const CNA_VertexBufferTransfer*, const void*, uint64_t);
 typedef CNA_Result (*VertexBufferSetRawFunction)(
     CNA_VertexBufferHandle, const void*, uint64_t, uint64_t, uint32_t);
 typedef CNA_Result (*VertexBufferSetRawAtFunction)(
     CNA_VertexBufferHandle, uint64_t, const void*, uint64_t, uint64_t, uint32_t);
 typedef CNA_Result (*VertexBufferGetRawFunction)(
     CNA_VertexBufferHandle, uint64_t, void*, uint64_t, uint64_t, uint32_t);
+typedef CNA_Result (*VertexBufferSubscribeFunction)(
+    CNA_VertexBufferHandle, CNA_VertexBufferContentLostCallback, void*,
+    CNA_VertexBufferEventRegistrationHandle*);
+typedef CNA_Result (*VertexBufferUnsubscribeFunction)(
+    CNA_VertexBufferEventRegistrationHandle);
 typedef CNA_Result (*IndexBufferCreateFunction)(
     CNA_Handle, const CNA_IndexBufferCreateInfo*, CNA_IndexBufferHandle*);
 typedef CNA_Result (*IndexBufferGetInfoFunction)(
@@ -200,6 +251,11 @@ typedef CNA_Result (*IndexBufferSetAtFunction)(
     CNA_IndexBufferHandle, uint64_t, const CNA_IndexBufferTransfer*, const void*, uint64_t);
 typedef CNA_Result (*IndexBufferGetFunction)(
     CNA_IndexBufferHandle, const CNA_IndexBufferTransfer*, void*, uint64_t, uint64_t*);
+typedef CNA_Result (*IndexBufferSubscribeFunction)(
+    CNA_IndexBufferHandle, CNA_IndexBufferContentLostCallback, void*,
+    CNA_IndexBufferEventRegistrationHandle*);
+typedef CNA_Result (*IndexBufferUnsubscribeFunction)(
+    CNA_IndexBufferEventRegistrationHandle);
 typedef CNA_Result (*GraphicsDeviceSetVertexBufferFunction)(
     CNA_Handle, CNA_VertexBufferHandle);
 typedef CNA_Result (*GraphicsDeviceSetVertexBufferOffsetFunction)(
@@ -227,6 +283,10 @@ typedef CNA_Result (*SpriteBatchBeginFunction)(CNA_Handle, const CNA_SpriteBatch
 typedef CNA_Result (*SpriteBatchBeginStatesFunction)(
     CNA_Handle, CNA_SpriteSortMode, const CNA_BlendState*, const CNA_SamplerState*,
     const CNA_DepthStencilState*, const CNA_RasterizerState*);
+typedef CNA_Result (*SpriteBatchBeginEffectFunction)(
+    CNA_Handle, CNA_SpriteSortMode, const CNA_BlendState*, const CNA_SamplerState*,
+    const CNA_DepthStencilState*, const CNA_RasterizerState*, CNA_Handle,
+    const CNA_Matrix*);
 typedef CNA_Result (*SpriteBatchSubmitFunction)(CNA_Handle, const CNA_SpriteCommand*, uint64_t);
 typedef CNA_Result (*SpriteBatchSubmitScaledFunction)(
     CNA_Handle, const CNA_SpriteScaledCommand*, uint64_t);
@@ -260,6 +320,7 @@ typedef struct CnaFunctions {
     GameUnaryFunction game_reset_elapsed_time;
     GameUnaryFunction game_suppress_draw;
     GameUnaryFunction game_tick;
+    GameUnaryFunction framework_dispatcher_update;
     GameUnaryFunction game_destroy;
     GameClearFunction game_clear;
     GameSetBoolFunction game_set_mouse_visible;
@@ -289,6 +350,26 @@ typedef struct CnaFunctions {
     GamePadGetStateWithDeadZoneFunction gamepad_get_state_with_dead_zone;
     GamePadGetCapabilitiesFunction gamepad_get_capabilities;
     GamePadSetVibrationFunction gamepad_set_vibration;
+    TouchGetCapabilitiesFunction touch_get_capabilities;
+    TouchGetStateFunction touch_get_state;
+    GameGetInt32Function touch_panel_get_display_width;
+    GameSetInt32Function touch_panel_set_display_width;
+    GameGetInt32Function touch_panel_get_display_height;
+    GameSetInt32Function touch_panel_set_display_height;
+    GameGetUint32Function touch_panel_get_display_orientation;
+    GameSetUint32Function touch_panel_set_display_orientation;
+    GameGetUint32Function touch_panel_get_enabled_gestures;
+    GameSetUint32Function touch_panel_set_enabled_gestures;
+    GameGetBoolFunction touch_panel_get_is_gesture_available;
+    GameGetUint64Function touch_panel_get_window_handle;
+    GameSetUint64Function touch_panel_set_window_handle;
+    TouchReadGestureFunction touch_panel_read_gesture;
+    TouchEnqueueGestureFunction touch_panel_enqueue_gesture_ext;
+    GameSetBoolFunction touch_panel_set_touch_device_exists_ext;
+    TouchSetFingerFunction touch_panel_set_finger_ext;
+    TouchRaiseEventFunction touch_panel_raise_touch_event_ext;
+    GameUnaryFunction touch_panel_update_ext;
+    GameUnaryFunction touch_panel_reset_for_tests_ext;
     MouseGetStateFunction mouse_get_state;
     MouseSetPositionFunction mouse_set_position;
     GameGetUint64Function mouse_get_window_handle;
@@ -390,6 +471,123 @@ typedef struct CnaFunctions {
     TextureCubeSetDataFunction texturecube_set_data;
     TextureCubeGetDataFunction texturecube_get_data;
     GameUnaryFunction texturecube_destroy;
+    Texture3DCreateFunction texture3d_create;
+    Texture3DGetInfoFunction texture3d_get_info;
+    Texture3DSetDataFunction texture3d_set_data;
+    Texture3DGetDataFunction texture3d_get_data;
+    GameUnaryFunction texture3d_destroy;
+    HandleGetHandleFunction effect_create_empty;
+    EffectCreateCompiledFunction effect_create_compiled;
+    GameUnaryFunction effect_destroy;
+    HandleGetHandleFunction effect_clone;
+    GameUnaryFunction effect_apply;
+    HandleGetHandleFunction effect_get_parameters;
+    HandleGetHandleFunction effect_get_techniques;
+    HandleGetHandleFunction effect_get_current_technique;
+    HandleSetHandleFunction effect_set_current_technique;
+    GameGetUint32Function effect_technique_get_index_ext;
+    GameGetSizeFunction effect_technique_get_name_byte_count;
+    GameCopyStringFunction effect_technique_copy_name;
+    HandleGetHandleFunction effect_technique_get_passes;
+    HandleGetHandleFunction effect_technique_get_annotations;
+    GameUnaryFunction effect_technique_destroy;
+    GameGetSizeFunction effect_pass_get_name_byte_count;
+    GameCopyStringFunction effect_pass_copy_name;
+    HandleGetHandleFunction effect_pass_get_annotations;
+    GameUnaryFunction effect_pass_apply;
+    GameUnaryFunction effect_pass_destroy;
+    HandleGetInfoFunction effect_parameter_get_info;
+    GameGetSizeFunction effect_parameter_get_name_byte_count;
+    GameCopyStringFunction effect_parameter_copy_name;
+    GameGetSizeFunction effect_parameter_get_semantic_byte_count;
+    GameCopyStringFunction effect_parameter_copy_semantic;
+    HandleGetHandleFunction effect_parameter_get_elements;
+    HandleGetHandleFunction effect_parameter_get_structure_members;
+    HandleGetHandleFunction effect_parameter_get_annotations;
+    EffectParameterGetValueFunction effect_parameter_get_value;
+    EffectParameterGetValuesFunction effect_parameter_get_values;
+    EffectParameterSetValueFunction effect_parameter_set_value;
+    EffectParameterSetValuesFunction effect_parameter_set_values;
+    GameGetSizeFunction effect_parameter_get_value_string_byte_count;
+    GameCopyStringFunction effect_parameter_copy_value_string;
+    GameSetStringFunction effect_parameter_set_value_string;
+    EffectParameterGetTextureFunction effect_parameter_get_value_texture;
+    EffectParameterSetTextureFunction effect_parameter_set_value_texture;
+    GameUnaryFunction effect_parameter_destroy;
+    GameGetSizeFunction effect_parameter_collection_get_count;
+    HandleIndexGetHandleFunction effect_parameter_collection_get_at;
+    GameUnaryFunction effect_parameter_collection_destroy;
+    GameGetSizeFunction effect_technique_collection_get_count;
+    HandleIndexGetHandleFunction effect_technique_collection_get_at;
+    GameUnaryFunction effect_technique_collection_destroy;
+    GameGetSizeFunction effect_pass_collection_get_count;
+    HandleIndexGetHandleFunction effect_pass_collection_get_at;
+    GameUnaryFunction effect_pass_collection_destroy;
+    GameGetSizeFunction effect_annotation_collection_get_count;
+    HandleIndexGetHandleFunction effect_annotation_collection_get_at;
+    GameUnaryFunction effect_annotation_collection_destroy;
+    HandleGetInfoFunction effect_annotation_get_info;
+    GameGetSizeFunction effect_annotation_get_name_byte_count;
+    GameCopyStringFunction effect_annotation_copy_name;
+    GameGetSizeFunction effect_annotation_get_semantic_byte_count;
+    GameCopyStringFunction effect_annotation_copy_semantic;
+    HandleGetValueFunction effect_annotation_get_value_boolean;
+    HandleGetValueFunction effect_annotation_get_value_int32;
+    HandleGetValueFunction effect_annotation_get_value_single;
+    HandleGetValueFunction effect_annotation_get_value_vector2;
+    HandleGetValueFunction effect_annotation_get_value_vector3;
+    HandleGetValueFunction effect_annotation_get_value_vector4;
+    HandleGetValueFunction effect_annotation_get_value_matrix;
+    GameGetSizeFunction effect_annotation_get_value_string_byte_count;
+    GameCopyStringFunction effect_annotation_copy_value_string;
+    GameUnaryFunction effect_annotation_destroy;
+    HandleGetHandleFunction basic_effect_create;
+    GameGetBoolFunction basic_effect_get_vertex_color_enabled;
+    GameSetBoolFunction basic_effect_set_vertex_color_enabled;
+    GameGetBoolFunction basic_effect_get_prefer_per_pixel_lighting;
+    GameSetBoolFunction basic_effect_set_prefer_per_pixel_lighting;
+    HandleGetVector3Function basic_effect_get_diffuse_color;
+    HandleSetVector3Function basic_effect_set_diffuse_color;
+    HandleGetVector3Function basic_effect_get_emissive_color;
+    HandleSetVector3Function basic_effect_set_emissive_color;
+    HandleGetVector3Function basic_effect_get_specular_color;
+    HandleSetVector3Function basic_effect_set_specular_color;
+    HandleGetFloatFunction basic_effect_get_specular_power;
+    HandleSetFloatFunction basic_effect_set_specular_power;
+    HandleGetFloatFunction basic_effect_get_alpha;
+    HandleSetFloatFunction basic_effect_set_alpha;
+    GameGetBoolFunction basic_effect_get_texture_enabled;
+    GameSetBoolFunction basic_effect_set_texture_enabled;
+    HandleSetHandleFunction basic_effect_set_texture;
+    HandleGetMatrixFunction effect_matrices_get_world;
+    HandleSetMatrixFunction effect_matrices_set_world;
+    HandleGetMatrixFunction effect_matrices_get_view;
+    HandleSetMatrixFunction effect_matrices_set_view;
+    HandleGetMatrixFunction effect_matrices_get_projection;
+    HandleSetMatrixFunction effect_matrices_set_projection;
+    HandleGetVector3Function effect_fog_get_color;
+    HandleSetVector3Function effect_fog_set_color;
+    GameGetBoolFunction effect_fog_get_enabled;
+    GameSetBoolFunction effect_fog_set_enabled;
+    HandleGetFloatFunction effect_fog_get_start;
+    HandleSetFloatFunction effect_fog_set_start;
+    HandleGetFloatFunction effect_fog_get_end;
+    HandleSetFloatFunction effect_fog_set_end;
+    HandleGetVector3Function effect_lights_get_ambient_color;
+    HandleSetVector3Function effect_lights_set_ambient_color;
+    HandleUint32GetHandleFunction effect_lights_get_directional_light;
+    GameGetBoolFunction effect_lights_get_enabled;
+    GameSetBoolFunction effect_lights_set_enabled;
+    GameUnaryFunction effect_lights_enable_default;
+    GameUnaryFunction directional_light_destroy;
+    HandleGetVector3Function directional_light_get_diffuse_color;
+    HandleSetVector3Function directional_light_set_diffuse_color;
+    HandleGetVector3Function directional_light_get_direction;
+    HandleSetVector3Function directional_light_set_direction;
+    HandleGetVector3Function directional_light_get_specular_color;
+    HandleSetVector3Function directional_light_set_specular_color;
+    GameGetBoolFunction directional_light_get_enabled;
+    GameSetBoolFunction directional_light_set_enabled;
     RenderTarget2DCreateFunction render_target2d_create;
     RenderTargetCubeCreateFunction render_target_cube_create;
     RenderTargetGetInfoFunction render_target_get_info;
@@ -403,15 +601,20 @@ typedef struct CnaFunctions {
     GameUnaryFunction vertex_declaration_destroy;
     VertexBufferCreateFunction vertex_buffer_create;
     VertexBufferGetInfoFunction vertex_buffer_get_info;
+    VertexBufferSetFunction vertex_buffer_set_data;
     VertexBufferSetRawFunction vertex_buffer_set_data_raw;
     VertexBufferSetRawAtFunction vertex_buffer_set_data_raw_at;
     VertexBufferGetRawFunction vertex_buffer_get_data_raw;
+    VertexBufferSubscribeFunction vertex_buffer_subscribe_content_lost;
+    VertexBufferUnsubscribeFunction vertex_buffer_unsubscribe_content_lost;
     GameUnaryFunction vertex_buffer_destroy;
     IndexBufferCreateFunction index_buffer_create;
     IndexBufferGetInfoFunction index_buffer_get_info;
     IndexBufferSetFunction index_buffer_set_data;
     IndexBufferSetAtFunction index_buffer_set_data_at;
     IndexBufferGetFunction index_buffer_get_data;
+    IndexBufferSubscribeFunction index_buffer_subscribe_content_lost;
+    IndexBufferUnsubscribeFunction index_buffer_unsubscribe_content_lost;
     GameUnaryFunction index_buffer_destroy;
     GraphicsDeviceSetVertexBufferFunction graphics_device_set_vertex_buffer;
     GraphicsDeviceSetVertexBufferOffsetFunction graphics_device_set_vertex_buffer_offset;
@@ -429,6 +632,7 @@ typedef struct CnaFunctions {
     SpriteBatchCreateFunction sprite_batch_create;
     SpriteBatchBeginFunction sprite_batch_begin;
     SpriteBatchBeginStatesFunction sprite_batch_begin_with_states;
+    SpriteBatchBeginEffectFunction sprite_batch_begin_with_effect;
     SpriteBatchSubmitFunction sprite_batch_submit_many;
     SpriteBatchSubmitScaledFunction sprite_batch_submit_scaled_many;
     SpriteBatchDrawStringFunction sprite_batch_draw_string;
@@ -508,6 +712,14 @@ typedef struct JavaGraphicsDeviceManager {
     CNA_GameEventRegistrationHandle preparing_registration;
 } JavaGraphicsDeviceManager;
 
+typedef struct JavaBufferContentLostRegistration {
+    jobject target;
+    jmethodID event;
+    CNA_Handle native_registration;
+    atomic_int callbacks_enabled;
+    int is_vertex;
+} JavaBufferContentLostRegistration;
+
 static JavaVM* java_vm;
 static CnaFunctions cna;
 
@@ -554,6 +766,29 @@ static void finish_callback_environment(int attached)
     if (attached != 0) {
         (void)(*java_vm)->DetachCurrentThread(java_vm);
     }
+}
+
+static void on_buffer_content_lost(CNA_Handle buffer, void* value)
+{
+    (void)buffer;
+    JavaBufferContentLostRegistration* registration =
+        (JavaBufferContentLostRegistration*)value;
+    if (registration == NULL ||
+        atomic_load_explicit(
+            &registration->callbacks_enabled, memory_order_acquire) == 0) {
+        return;
+    }
+    int attached = 0;
+    JNIEnv* environment = callback_environment(&attached);
+    if (environment == NULL) {
+        return;
+    }
+    (*environment)->CallVoidMethod(
+        environment, registration->target, registration->event);
+    if ((*environment)->ExceptionCheck(environment)) {
+        (*environment)->ExceptionClear(environment);
+    }
+    finish_callback_environment(attached);
 }
 
 static CNA_Result capture_java_exception(
@@ -1201,6 +1436,7 @@ JNIEXPORT jint JNICALL Java_org_openeggbert_cna_internal_NativeBindings_nativeLo
     LOAD(game_reset_elapsed_time, "cna_game_reset_elapsed_time");
     LOAD(game_suppress_draw, "cna_game_suppress_draw");
     LOAD(game_tick, "cna_game_tick");
+    LOAD(framework_dispatcher_update, "cna_framework_dispatcher_update");
     LOAD(game_destroy, "cna_game_destroy");
     LOAD(game_clear, "cna_game_clear");
     LOAD(game_set_mouse_visible, "cna_game_set_is_mouse_visible");
@@ -1230,6 +1466,33 @@ JNIEXPORT jint JNICALL Java_org_openeggbert_cna_internal_NativeBindings_nativeLo
     LOAD(gamepad_get_state_with_dead_zone, "cna_gamepad_get_state_with_dead_zone");
     LOAD(gamepad_get_capabilities, "cna_gamepad_get_capabilities");
     LOAD(gamepad_set_vibration, "cna_gamepad_set_vibration");
+    LOAD(touch_get_capabilities, "cna_touch_get_capabilities");
+    LOAD(touch_get_state, "cna_touch_get_state");
+    LOAD(touch_panel_get_display_width, "cna_touch_panel_get_display_width");
+    LOAD(touch_panel_set_display_width, "cna_touch_panel_set_display_width");
+    LOAD(touch_panel_get_display_height, "cna_touch_panel_get_display_height");
+    LOAD(touch_panel_set_display_height, "cna_touch_panel_set_display_height");
+    LOAD(touch_panel_get_display_orientation,
+        "cna_touch_panel_get_display_orientation");
+    LOAD(touch_panel_set_display_orientation,
+        "cna_touch_panel_set_display_orientation");
+    LOAD(touch_panel_get_enabled_gestures,
+        "cna_touch_panel_get_enabled_gestures");
+    LOAD(touch_panel_set_enabled_gestures,
+        "cna_touch_panel_set_enabled_gestures");
+    LOAD(touch_panel_get_is_gesture_available,
+        "cna_touch_panel_get_is_gesture_available");
+    LOAD(touch_panel_get_window_handle, "cna_touch_panel_get_window_handle");
+    LOAD(touch_panel_set_window_handle, "cna_touch_panel_set_window_handle");
+    LOAD(touch_panel_read_gesture, "cna_touch_panel_read_gesture");
+    LOAD(touch_panel_enqueue_gesture_ext, "cna_touch_panel_enqueue_gesture_ext");
+    LOAD(touch_panel_set_touch_device_exists_ext,
+        "cna_touch_panel_set_touch_device_exists_ext");
+    LOAD(touch_panel_set_finger_ext, "cna_touch_panel_set_finger_ext");
+    LOAD(touch_panel_raise_touch_event_ext,
+        "cna_touch_panel_raise_touch_event_ext");
+    LOAD(touch_panel_update_ext, "cna_touch_panel_update_ext");
+    LOAD(touch_panel_reset_for_tests_ext, "cna_touch_panel_reset_for_tests_ext");
     LOAD(mouse_get_state, "cna_mouse_get_state");
     LOAD(mouse_set_position, "cna_mouse_set_position");
     LOAD(mouse_get_window_handle, "cna_mouse_get_window_handle");
@@ -1399,6 +1662,152 @@ JNIEXPORT jint JNICALL Java_org_openeggbert_cna_internal_NativeBindings_nativeLo
     LOAD(texturecube_set_data, "cna_texturecube_set_data");
     LOAD(texturecube_get_data, "cna_texturecube_get_data");
     LOAD(texturecube_destroy, "cna_texturecube_destroy");
+    LOAD(texture3d_create, "cna_texture3d_create");
+    LOAD(texture3d_get_info, "cna_texture3d_get_info");
+    LOAD(texture3d_set_data, "cna_texture3d_set_data");
+    LOAD(texture3d_get_data, "cna_texture3d_get_data");
+    LOAD(texture3d_destroy, "cna_texture3d_destroy");
+    LOAD(effect_create_empty, "cna_effect_create_empty");
+    LOAD(effect_create_compiled, "cna_effect_create_compiled");
+    LOAD(effect_destroy, "cna_effect_destroy");
+    LOAD(effect_clone, "cna_effect_clone");
+    LOAD(effect_apply, "cna_effect_apply");
+    LOAD(effect_get_parameters, "cna_effect_get_parameters");
+    LOAD(effect_get_techniques, "cna_effect_get_techniques");
+    LOAD(effect_get_current_technique, "cna_effect_get_current_technique");
+    LOAD(effect_set_current_technique, "cna_effect_set_current_technique");
+    LOAD(effect_technique_get_index_ext, "cna_effect_technique_get_index_ext");
+    LOAD(effect_technique_get_name_byte_count,
+        "cna_effect_technique_get_name_byte_count");
+    LOAD(effect_technique_copy_name, "cna_effect_technique_copy_name");
+    LOAD(effect_technique_get_passes, "cna_effect_technique_get_passes");
+    LOAD(effect_technique_get_annotations, "cna_effect_technique_get_annotations");
+    LOAD(effect_technique_destroy, "cna_effect_technique_destroy");
+    LOAD(effect_pass_get_name_byte_count, "cna_effect_pass_get_name_byte_count");
+    LOAD(effect_pass_copy_name, "cna_effect_pass_copy_name");
+    LOAD(effect_pass_get_annotations, "cna_effect_pass_get_annotations");
+    LOAD(effect_pass_apply, "cna_effect_pass_apply");
+    LOAD(effect_pass_destroy, "cna_effect_pass_destroy");
+    LOAD(effect_parameter_get_info, "cna_effect_parameter_get_info");
+    LOAD(effect_parameter_get_name_byte_count,
+        "cna_effect_parameter_get_name_byte_count");
+    LOAD(effect_parameter_copy_name, "cna_effect_parameter_copy_name");
+    LOAD(effect_parameter_get_semantic_byte_count,
+        "cna_effect_parameter_get_semantic_byte_count");
+    LOAD(effect_parameter_copy_semantic, "cna_effect_parameter_copy_semantic");
+    LOAD(effect_parameter_get_elements, "cna_effect_parameter_get_elements");
+    LOAD(effect_parameter_get_structure_members,
+        "cna_effect_parameter_get_structure_members");
+    LOAD(effect_parameter_get_annotations, "cna_effect_parameter_get_annotations");
+    LOAD(effect_parameter_get_value, "cna_effect_parameter_get_value");
+    LOAD(effect_parameter_get_values, "cna_effect_parameter_get_values");
+    LOAD(effect_parameter_set_value, "cna_effect_parameter_set_value");
+    LOAD(effect_parameter_set_values, "cna_effect_parameter_set_values");
+    LOAD(effect_parameter_get_value_string_byte_count,
+        "cna_effect_parameter_get_value_string_byte_count");
+    LOAD(effect_parameter_copy_value_string,
+        "cna_effect_parameter_copy_value_string");
+    LOAD(effect_parameter_set_value_string, "cna_effect_parameter_set_value_string");
+    LOAD(effect_parameter_get_value_texture, "cna_effect_parameter_get_value_texture");
+    LOAD(effect_parameter_set_value_texture, "cna_effect_parameter_set_value_texture");
+    LOAD(effect_parameter_destroy, "cna_effect_parameter_destroy");
+    LOAD(effect_parameter_collection_get_count,
+        "cna_effect_parameter_collection_get_count");
+    LOAD(effect_parameter_collection_get_at,
+        "cna_effect_parameter_collection_get_at");
+    LOAD(effect_parameter_collection_destroy,
+        "cna_effect_parameter_collection_destroy");
+    LOAD(effect_technique_collection_get_count,
+        "cna_effect_technique_collection_get_count");
+    LOAD(effect_technique_collection_get_at,
+        "cna_effect_technique_collection_get_at");
+    LOAD(effect_technique_collection_destroy,
+        "cna_effect_technique_collection_destroy");
+    LOAD(effect_pass_collection_get_count, "cna_effect_pass_collection_get_count");
+    LOAD(effect_pass_collection_get_at, "cna_effect_pass_collection_get_at");
+    LOAD(effect_pass_collection_destroy, "cna_effect_pass_collection_destroy");
+    LOAD(effect_annotation_collection_get_count,
+        "cna_effect_annotation_collection_get_count");
+    LOAD(effect_annotation_collection_get_at,
+        "cna_effect_annotation_collection_get_at");
+    LOAD(effect_annotation_collection_destroy,
+        "cna_effect_annotation_collection_destroy");
+    LOAD(effect_annotation_get_info, "cna_effect_annotation_get_info");
+    LOAD(effect_annotation_get_name_byte_count,
+        "cna_effect_annotation_get_name_byte_count");
+    LOAD(effect_annotation_copy_name, "cna_effect_annotation_copy_name");
+    LOAD(effect_annotation_get_semantic_byte_count,
+        "cna_effect_annotation_get_semantic_byte_count");
+    LOAD(effect_annotation_copy_semantic, "cna_effect_annotation_copy_semantic");
+    LOAD(effect_annotation_get_value_boolean,
+        "cna_effect_annotation_get_value_boolean");
+    LOAD(effect_annotation_get_value_int32, "cna_effect_annotation_get_value_int32");
+    LOAD(effect_annotation_get_value_single, "cna_effect_annotation_get_value_single");
+    LOAD(effect_annotation_get_value_vector2, "cna_effect_annotation_get_value_vector2");
+    LOAD(effect_annotation_get_value_vector3, "cna_effect_annotation_get_value_vector3");
+    LOAD(effect_annotation_get_value_vector4, "cna_effect_annotation_get_value_vector4");
+    LOAD(effect_annotation_get_value_matrix, "cna_effect_annotation_get_value_matrix");
+    LOAD(effect_annotation_get_value_string_byte_count,
+        "cna_effect_annotation_get_value_string_byte_count");
+    LOAD(effect_annotation_copy_value_string,
+        "cna_effect_annotation_copy_value_string");
+    LOAD(effect_annotation_destroy, "cna_effect_annotation_destroy");
+    LOAD(basic_effect_create, "cna_basic_effect_create");
+    LOAD(basic_effect_get_vertex_color_enabled,
+        "cna_basic_effect_get_vertex_color_enabled");
+    LOAD(basic_effect_set_vertex_color_enabled,
+        "cna_basic_effect_set_vertex_color_enabled");
+    LOAD(basic_effect_get_prefer_per_pixel_lighting,
+        "cna_basic_effect_get_prefer_per_pixel_lighting");
+    LOAD(basic_effect_set_prefer_per_pixel_lighting,
+        "cna_basic_effect_set_prefer_per_pixel_lighting");
+    LOAD(basic_effect_get_diffuse_color, "cna_basic_effect_get_diffuse_color");
+    LOAD(basic_effect_set_diffuse_color, "cna_basic_effect_set_diffuse_color");
+    LOAD(basic_effect_get_emissive_color, "cna_basic_effect_get_emissive_color");
+    LOAD(basic_effect_set_emissive_color, "cna_basic_effect_set_emissive_color");
+    LOAD(basic_effect_get_specular_color, "cna_basic_effect_get_specular_color");
+    LOAD(basic_effect_set_specular_color, "cna_basic_effect_set_specular_color");
+    LOAD(basic_effect_get_specular_power, "cna_basic_effect_get_specular_power");
+    LOAD(basic_effect_set_specular_power, "cna_basic_effect_set_specular_power");
+    LOAD(basic_effect_get_alpha, "cna_basic_effect_get_alpha");
+    LOAD(basic_effect_set_alpha, "cna_basic_effect_set_alpha");
+    LOAD(basic_effect_get_texture_enabled, "cna_basic_effect_get_texture_enabled");
+    LOAD(basic_effect_set_texture_enabled, "cna_basic_effect_set_texture_enabled");
+    LOAD(basic_effect_set_texture, "cna_basic_effect_set_texture");
+    LOAD(effect_matrices_get_world, "cna_effect_matrices_get_world");
+    LOAD(effect_matrices_set_world, "cna_effect_matrices_set_world");
+    LOAD(effect_matrices_get_view, "cna_effect_matrices_get_view");
+    LOAD(effect_matrices_set_view, "cna_effect_matrices_set_view");
+    LOAD(effect_matrices_get_projection, "cna_effect_matrices_get_projection");
+    LOAD(effect_matrices_set_projection, "cna_effect_matrices_set_projection");
+    LOAD(effect_fog_get_color, "cna_effect_fog_get_color");
+    LOAD(effect_fog_set_color, "cna_effect_fog_set_color");
+    LOAD(effect_fog_get_enabled, "cna_effect_fog_get_enabled");
+    LOAD(effect_fog_set_enabled, "cna_effect_fog_set_enabled");
+    LOAD(effect_fog_get_start, "cna_effect_fog_get_start");
+    LOAD(effect_fog_set_start, "cna_effect_fog_set_start");
+    LOAD(effect_fog_get_end, "cna_effect_fog_get_end");
+    LOAD(effect_fog_set_end, "cna_effect_fog_set_end");
+    LOAD(effect_lights_get_ambient_color, "cna_effect_lights_get_ambient_color");
+    LOAD(effect_lights_set_ambient_color, "cna_effect_lights_set_ambient_color");
+    LOAD(effect_lights_get_directional_light,
+        "cna_effect_lights_get_directional_light");
+    LOAD(effect_lights_get_enabled, "cna_effect_lights_get_enabled");
+    LOAD(effect_lights_set_enabled, "cna_effect_lights_set_enabled");
+    LOAD(effect_lights_enable_default, "cna_effect_lights_enable_default");
+    LOAD(directional_light_destroy, "cna_directional_light_destroy");
+    LOAD(directional_light_get_diffuse_color,
+        "cna_directional_light_get_diffuse_color");
+    LOAD(directional_light_set_diffuse_color,
+        "cna_directional_light_set_diffuse_color");
+    LOAD(directional_light_get_direction, "cna_directional_light_get_direction");
+    LOAD(directional_light_set_direction, "cna_directional_light_set_direction");
+    LOAD(directional_light_get_specular_color,
+        "cna_directional_light_get_specular_color");
+    LOAD(directional_light_set_specular_color,
+        "cna_directional_light_set_specular_color");
+    LOAD(directional_light_get_enabled, "cna_directional_light_get_enabled");
+    LOAD(directional_light_set_enabled, "cna_directional_light_set_enabled");
     LOAD(render_target2d_create, "cna_render_target2d_create");
     LOAD(render_target_cube_create, "cna_render_target_cube_create");
     LOAD(render_target_get_info, "cna_render_target_get_info");
@@ -1418,15 +1827,24 @@ JNIEXPORT jint JNICALL Java_org_openeggbert_cna_internal_NativeBindings_nativeLo
     LOAD(vertex_declaration_destroy, "cna_vertex_declaration_destroy");
     LOAD(vertex_buffer_create, "cna_vertex_buffer_create");
     LOAD(vertex_buffer_get_info, "cna_vertex_buffer_get_info");
+    LOAD(vertex_buffer_set_data, "cna_vertex_buffer_set_data");
     LOAD(vertex_buffer_set_data_raw, "cna_vertex_buffer_set_data_raw");
     LOAD(vertex_buffer_set_data_raw_at, "cna_vertex_buffer_set_data_raw_at");
     LOAD(vertex_buffer_get_data_raw, "cna_vertex_buffer_get_data_raw");
+    LOAD(vertex_buffer_subscribe_content_lost,
+        "cna_vertex_buffer_subscribe_content_lost");
+    LOAD(vertex_buffer_unsubscribe_content_lost,
+        "cna_vertex_buffer_unsubscribe_content_lost");
     LOAD(vertex_buffer_destroy, "cna_vertex_buffer_destroy");
     LOAD(index_buffer_create, "cna_index_buffer_create");
     LOAD(index_buffer_get_info, "cna_index_buffer_get_info");
     LOAD(index_buffer_set_data, "cna_index_buffer_set_data");
     LOAD(index_buffer_set_data_at, "cna_index_buffer_set_data_at");
     LOAD(index_buffer_get_data, "cna_index_buffer_get_data");
+    LOAD(index_buffer_subscribe_content_lost,
+        "cna_index_buffer_subscribe_content_lost");
+    LOAD(index_buffer_unsubscribe_content_lost,
+        "cna_index_buffer_unsubscribe_content_lost");
     LOAD(index_buffer_destroy, "cna_index_buffer_destroy");
     LOAD(graphics_device_set_vertex_buffer,
         "cna_graphics_device_set_vertex_buffer");
@@ -1455,6 +1873,7 @@ JNIEXPORT jint JNICALL Java_org_openeggbert_cna_internal_NativeBindings_nativeLo
     LOAD(sprite_batch_create, "cna_sprite_batch_create");
     LOAD(sprite_batch_begin, "cna_sprite_batch_begin");
     LOAD(sprite_batch_begin_with_states, "cna_sprite_batch_begin_with_states");
+    LOAD(sprite_batch_begin_with_effect, "cna_sprite_batch_begin_with_effect");
     LOAD(sprite_batch_submit_many, "cna_sprite_batch_submit_many");
     LOAD(sprite_batch_submit_scaled_many, "cna_sprite_batch_submit_scaled_many");
     LOAD(sprite_batch_draw_string, "cna_sprite_batch_draw_string");
@@ -1645,6 +2064,14 @@ JNIEXPORT jint JNICALL Java_org_openeggbert_cna_internal_NativeBindings_nativeTi
     (void)environment;
     (void)type;
     return (jint)cna.game_tick(java_game(game)->cna_handle);
+}
+
+JNIEXPORT jint JNICALL Java_org_openeggbert_cna_internal_NativeBindings_nativeUpdateFrameworkDispatcher(
+    JNIEnv* environment, jclass type, jlong game)
+{
+    (void)environment;
+    (void)type;
+    return (jint)cna.framework_dispatcher_update(java_game(game)->cna_handle);
 }
 
 JNIEXPORT jint JNICALL Java_org_openeggbert_cna_internal_NativeBindings_nativeRequestExit(
@@ -2096,6 +2523,342 @@ JNIEXPORT jint JNICALL Java_org_openeggbert_cna_internal_NativeBindings_nativeSe
         (float)right_motor,
         &applied);
     return result == CNA_RESULT_SUCCESS ? (applied == CNA_TRUE ? 1 : 0) : -(jint)result;
+}
+
+JNIEXPORT jint JNICALL Java_org_openeggbert_cna_internal_NativeBindings_nativeGetTouchCapabilities(
+    JNIEnv* environment, jclass type, jlong game, jintArray output)
+{
+    (void)type;
+    if (output == NULL || (*environment)->GetArrayLength(environment, output) < 2) {
+        return (jint)CNA_RESULT_INVALID_ARGUMENT;
+    }
+    CNA_TouchCapabilities capabilities;
+    (void)memset(&capabilities, 0, sizeof(capabilities));
+    capabilities.struct_size = (uint32_t)sizeof(capabilities);
+    capabilities.struct_version = UINT32_C(1);
+    CNA_Result result = cna.touch_get_capabilities(
+        java_game(game)->cna_handle, &capabilities);
+    if (result != CNA_RESULT_SUCCESS ||
+        capabilities.maximum_touch_count > (uint32_t)INT32_MAX) {
+        return (jint)(result == CNA_RESULT_SUCCESS
+            ? CNA_RESULT_INVALID_STATE : result);
+    }
+    const jint values[2] = {
+        capabilities.is_connected == CNA_TRUE ? 1 : 0,
+        (jint)capabilities.maximum_touch_count
+    };
+    (*environment)->SetIntArrayRegion(environment, output, 0, 2, values);
+    return (*environment)->ExceptionCheck(environment)
+        ? (jint)CNA_RESULT_INVALID_STATE : (jint)CNA_RESULT_SUCCESS;
+}
+
+JNIEXPORT jint JNICALL Java_org_openeggbert_cna_internal_NativeBindings_nativeGetTouchState(
+    JNIEnv* environment,
+    jclass type,
+    jlong game,
+    jintArray discrete_output,
+    jfloatArray position_output)
+{
+    (void)type;
+    if (discrete_output == NULL || position_output == NULL ||
+        (*environment)->GetArrayLength(environment, discrete_output) < 26 ||
+        (*environment)->GetArrayLength(environment, position_output) < 32) {
+        return (jint)CNA_RESULT_INVALID_ARGUMENT;
+    }
+    CNA_TouchState state;
+    (void)memset(&state, 0, sizeof(state));
+    state.struct_size = (uint32_t)sizeof(state);
+    state.struct_version = UINT32_C(1);
+    CNA_Result result = cna.touch_get_state(java_game(game)->cna_handle, &state);
+    if (result != CNA_RESULT_SUCCESS || state.touch_count > CNA_TOUCH_MAX_TOUCHES) {
+        return (jint)(result == CNA_RESULT_SUCCESS
+            ? CNA_RESULT_INVALID_STATE : result);
+    }
+    jint discrete[26] = {0};
+    jfloat positions[32] = {0.0F};
+    discrete[0] = state.is_connected == CNA_TRUE ? 1 : 0;
+    discrete[1] = (jint)state.touch_count;
+    for (uint32_t index = 0U; index < state.touch_count; ++index) {
+        const CNA_TouchLocation* location = &state.touches[index];
+        const size_t integer = 2U + (size_t)index * 3U;
+        const size_t vector = (size_t)index * 4U;
+        discrete[integer] = (jint)location->id;
+        discrete[integer + 1U] = (jint)location->state;
+        discrete[integer + 2U] = (jint)location->previous_state;
+        positions[vector] = location->position.x;
+        positions[vector + 1U] = location->position.y;
+        positions[vector + 2U] = location->previous_position.x;
+        positions[vector + 3U] = location->previous_position.y;
+    }
+    (*environment)->SetIntArrayRegion(environment, discrete_output, 0, 26, discrete);
+    if ((*environment)->ExceptionCheck(environment)) {
+        return (jint)CNA_RESULT_INVALID_STATE;
+    }
+    (*environment)->SetFloatArrayRegion(environment, position_output, 0, 32, positions);
+    return (*environment)->ExceptionCheck(environment)
+        ? (jint)CNA_RESULT_INVALID_STATE : (jint)CNA_RESULT_SUCCESS;
+}
+
+static CNA_Result set_int_output(JNIEnv* environment, jintArray output, int32_t value)
+{
+    if (output == NULL || (*environment)->GetArrayLength(environment, output) < 1) {
+        return CNA_RESULT_INVALID_ARGUMENT;
+    }
+    const jint projected = (jint)value;
+    (*environment)->SetIntArrayRegion(environment, output, 0, 1, &projected);
+    return (*environment)->ExceptionCheck(environment)
+        ? CNA_RESULT_INVALID_STATE : CNA_RESULT_SUCCESS;
+}
+
+JNIEXPORT jint JNICALL Java_org_openeggbert_cna_internal_NativeBindings_nativeTouchPanelGetDisplayWidth(
+    JNIEnv* environment, jclass type, jlong game, jintArray output)
+{
+    (void)type;
+    int32_t value = 0;
+    CNA_Result result = cna.touch_panel_get_display_width(
+        java_game(game)->cna_handle, &value);
+    return (jint)(result == CNA_RESULT_SUCCESS
+        ? set_int_output(environment, output, value) : result);
+}
+
+JNIEXPORT jint JNICALL Java_org_openeggbert_cna_internal_NativeBindings_nativeTouchPanelSetDisplayWidth(
+    JNIEnv* environment, jclass type, jlong game, jint value)
+{
+    (void)environment;
+    (void)type;
+    return (jint)cna.touch_panel_set_display_width(
+        java_game(game)->cna_handle, (int32_t)value);
+}
+
+JNIEXPORT jint JNICALL Java_org_openeggbert_cna_internal_NativeBindings_nativeTouchPanelGetDisplayHeight(
+    JNIEnv* environment, jclass type, jlong game, jintArray output)
+{
+    (void)type;
+    int32_t value = 0;
+    CNA_Result result = cna.touch_panel_get_display_height(
+        java_game(game)->cna_handle, &value);
+    return (jint)(result == CNA_RESULT_SUCCESS
+        ? set_int_output(environment, output, value) : result);
+}
+
+JNIEXPORT jint JNICALL Java_org_openeggbert_cna_internal_NativeBindings_nativeTouchPanelSetDisplayHeight(
+    JNIEnv* environment, jclass type, jlong game, jint value)
+{
+    (void)environment;
+    (void)type;
+    return (jint)cna.touch_panel_set_display_height(
+        java_game(game)->cna_handle, (int32_t)value);
+}
+
+JNIEXPORT jint JNICALL Java_org_openeggbert_cna_internal_NativeBindings_nativeTouchPanelGetDisplayOrientation(
+    JNIEnv* environment, jclass type, jlong game, jintArray output)
+{
+    (void)type;
+    CNA_DisplayOrientation value = CNA_DISPLAY_ORIENTATION_DEFAULT;
+    CNA_Result result = cna.touch_panel_get_display_orientation(
+        java_game(game)->cna_handle, &value);
+    return (jint)(result == CNA_RESULT_SUCCESS
+        ? set_int_output(environment, output, (int32_t)value) : result);
+}
+
+JNIEXPORT jint JNICALL Java_org_openeggbert_cna_internal_NativeBindings_nativeTouchPanelSetDisplayOrientation(
+    JNIEnv* environment, jclass type, jlong game, jint value)
+{
+    (void)environment;
+    (void)type;
+    return (jint)cna.touch_panel_set_display_orientation(
+        java_game(game)->cna_handle, (CNA_DisplayOrientation)(uint32_t)value);
+}
+
+JNIEXPORT jint JNICALL Java_org_openeggbert_cna_internal_NativeBindings_nativeTouchPanelGetEnabledGestures(
+    JNIEnv* environment, jclass type, jlong game, jintArray output)
+{
+    (void)type;
+    CNA_GestureType value = CNA_GESTURE_TYPE_NONE;
+    CNA_Result result = cna.touch_panel_get_enabled_gestures(
+        java_game(game)->cna_handle, &value);
+    return (jint)(result == CNA_RESULT_SUCCESS
+        ? set_int_output(environment, output, (int32_t)value) : result);
+}
+
+JNIEXPORT jint JNICALL Java_org_openeggbert_cna_internal_NativeBindings_nativeTouchPanelSetEnabledGestures(
+    JNIEnv* environment, jclass type, jlong game, jint value)
+{
+    (void)environment;
+    (void)type;
+    return (jint)cna.touch_panel_set_enabled_gestures(
+        java_game(game)->cna_handle, (CNA_GestureType)(uint32_t)value);
+}
+
+JNIEXPORT jint JNICALL Java_org_openeggbert_cna_internal_NativeBindings_nativeTouchPanelGetIsGestureAvailable(
+    JNIEnv* environment, jclass type, jlong game)
+{
+    (void)environment;
+    (void)type;
+    CNA_Bool value = CNA_FALSE;
+    CNA_Result result = cna.touch_panel_get_is_gesture_available(
+        java_game(game)->cna_handle, &value);
+    return result == CNA_RESULT_SUCCESS
+        ? (value == CNA_TRUE ? 1 : 0) : -(jint)result;
+}
+
+JNIEXPORT jint JNICALL Java_org_openeggbert_cna_internal_NativeBindings_nativeTouchPanelGetWindowHandle(
+    JNIEnv* environment, jclass type, jlong game, jlongArray output)
+{
+    (void)type;
+    uint64_t value = 0U;
+    CNA_Result result = cna.touch_panel_get_window_handle(
+        java_game(game)->cna_handle, &value);
+    return (jint)(result == CNA_RESULT_SUCCESS
+        ? set_handle_output(environment, output, (CNA_Handle)value) : result);
+}
+
+JNIEXPORT jint JNICALL Java_org_openeggbert_cna_internal_NativeBindings_nativeTouchPanelSetWindowHandle(
+    JNIEnv* environment, jclass type, jlong game, jlong value)
+{
+    (void)environment;
+    (void)type;
+    return (jint)cna.touch_panel_set_window_handle(
+        java_game(game)->cna_handle, (uint64_t)value);
+}
+
+JNIEXPORT jint JNICALL Java_org_openeggbert_cna_internal_NativeBindings_nativeReadTouchGesture(
+    JNIEnv* environment,
+    jclass type,
+    jlong game,
+    jintArray type_output,
+    jlongArray timestamp_output,
+    jfloatArray vector_output)
+{
+    (void)type;
+    if (type_output == NULL || timestamp_output == NULL || vector_output == NULL ||
+        (*environment)->GetArrayLength(environment, type_output) < 1 ||
+        (*environment)->GetArrayLength(environment, timestamp_output) < 1 ||
+        (*environment)->GetArrayLength(environment, vector_output) < 8) {
+        return (jint)CNA_RESULT_INVALID_ARGUMENT;
+    }
+    CNA_GestureSample sample;
+    (void)memset(&sample, 0, sizeof(sample));
+    sample.struct_size = (uint32_t)sizeof(sample);
+    sample.struct_version = UINT32_C(1);
+    CNA_Result result = cna.touch_panel_read_gesture(
+        java_game(game)->cna_handle, &sample);
+    if (result != CNA_RESULT_SUCCESS) {
+        return (jint)result;
+    }
+    const jint gesture_type = (jint)sample.gesture_type;
+    const jlong timestamp = (jlong)sample.timestamp_ticks;
+    const jfloat vectors[8] = {
+        sample.position.x, sample.position.y,
+        sample.position2.x, sample.position2.y,
+        sample.delta.x, sample.delta.y,
+        sample.delta2.x, sample.delta2.y
+    };
+    (*environment)->SetIntArrayRegion(environment, type_output, 0, 1, &gesture_type);
+    if ((*environment)->ExceptionCheck(environment)) {
+        return (jint)CNA_RESULT_INVALID_STATE;
+    }
+    (*environment)->SetLongArrayRegion(environment, timestamp_output, 0, 1, &timestamp);
+    if ((*environment)->ExceptionCheck(environment)) {
+        return (jint)CNA_RESULT_INVALID_STATE;
+    }
+    (*environment)->SetFloatArrayRegion(environment, vector_output, 0, 8, vectors);
+    return (*environment)->ExceptionCheck(environment)
+        ? (jint)CNA_RESULT_INVALID_STATE : (jint)CNA_RESULT_SUCCESS;
+}
+
+JNIEXPORT jint JNICALL Java_org_openeggbert_cna_internal_NativeBindings_nativeSetTouchDeviceExists(
+    JNIEnv* environment, jclass type, jlong game, jboolean value)
+{
+    (void)environment;
+    (void)type;
+    return (jint)cna.touch_panel_set_touch_device_exists_ext(
+        java_game(game)->cna_handle, value == JNI_TRUE ? CNA_TRUE : CNA_FALSE);
+}
+
+JNIEXPORT jint JNICALL Java_org_openeggbert_cna_internal_NativeBindings_nativeSetTouchFinger(
+    JNIEnv* environment,
+    jclass type,
+    jlong game,
+    jint index,
+    jint finger_id,
+    jfloat x,
+    jfloat y)
+{
+    (void)environment;
+    (void)type;
+    return (jint)cna.touch_panel_set_finger_ext(
+        java_game(game)->cna_handle,
+        (int32_t)index, (int32_t)finger_id, (CNA_Vector2){x, y});
+}
+
+JNIEXPORT jint JNICALL Java_org_openeggbert_cna_internal_NativeBindings_nativeRaiseTouchEvent(
+    JNIEnv* environment,
+    jclass type,
+    jlong game,
+    jint finger_id,
+    jint state,
+    jfloat x,
+    jfloat y,
+    jfloat delta_x,
+    jfloat delta_y)
+{
+    (void)environment;
+    (void)type;
+    return (jint)cna.touch_panel_raise_touch_event_ext(
+        java_game(game)->cna_handle,
+        (int32_t)finger_id, (CNA_TouchLocationState)(uint32_t)state,
+        x, y, delta_x, delta_y);
+}
+
+JNIEXPORT jint JNICALL Java_org_openeggbert_cna_internal_NativeBindings_nativeEnqueueTouchGesture(
+    JNIEnv* environment,
+    jclass type,
+    jlong game,
+    jint gesture_type,
+    jlong timestamp_ticks,
+    jfloatArray vector_values)
+{
+    (void)type;
+    if (vector_values == NULL ||
+        (*environment)->GetArrayLength(environment, vector_values) < 8) {
+        return (jint)CNA_RESULT_INVALID_ARGUMENT;
+    }
+    jfloat vectors[8];
+    (*environment)->GetFloatArrayRegion(environment, vector_values, 0, 8, vectors);
+    if ((*environment)->ExceptionCheck(environment)) {
+        return (jint)CNA_RESULT_INVALID_STATE;
+    }
+    CNA_GestureSample sample;
+    (void)memset(&sample, 0, sizeof(sample));
+    sample.struct_size = (uint32_t)sizeof(sample);
+    sample.struct_version = UINT32_C(1);
+    sample.gesture_type = (CNA_GestureType)(uint32_t)gesture_type;
+    sample.finger_id_ext = CNA_TOUCH_NO_FINGER;
+    sample.finger_id2_ext = CNA_TOUCH_NO_FINGER;
+    sample.timestamp_ticks = (int64_t)timestamp_ticks;
+    sample.position = (CNA_Vector2){vectors[0], vectors[1]};
+    sample.position2 = (CNA_Vector2){vectors[2], vectors[3]};
+    sample.delta = (CNA_Vector2){vectors[4], vectors[5]};
+    sample.delta2 = (CNA_Vector2){vectors[6], vectors[7]};
+    return (jint)cna.touch_panel_enqueue_gesture_ext(
+        java_game(game)->cna_handle, &sample);
+}
+
+JNIEXPORT jint JNICALL Java_org_openeggbert_cna_internal_NativeBindings_nativeUpdateTouchPanel(
+    JNIEnv* environment, jclass type, jlong game)
+{
+    (void)environment;
+    (void)type;
+    return (jint)cna.touch_panel_update_ext(java_game(game)->cna_handle);
+}
+
+JNIEXPORT jint JNICALL Java_org_openeggbert_cna_internal_NativeBindings_nativeResetTouchPanel(
+    JNIEnv* environment, jclass type, jlong game)
+{
+    (void)environment;
+    (void)type;
+    return (jint)cna.touch_panel_reset_for_tests_ext(java_game(game)->cna_handle);
 }
 
 JNIEXPORT jint JNICALL Java_org_openeggbert_cna_internal_NativeBindings_nativeCreateGraphicsDeviceManager(
@@ -3801,6 +4564,7 @@ JNIEXPORT jint JNICALL Java_org_openeggbert_cna_internal_NativeBindings_nativeCr
     jintArray declaration,
     jint vertex_count,
     jint usage,
+    jboolean dynamic,
     jlongArray output)
 {
     (void)type;
@@ -3822,7 +4586,7 @@ JNIEXPORT jint JNICALL Java_org_openeggbert_cna_internal_NativeBindings_nativeCr
     info.vertex_declaration = native_declaration;
     info.vertex_count = (int32_t)vertex_count;
     info.buffer_usage = (CNA_BufferUsage)(uint32_t)usage;
-    info.dynamic = CNA_FALSE;
+    info.dynamic = dynamic == JNI_TRUE ? CNA_TRUE : CNA_FALSE;
     CNA_VertexBufferHandle vertex_buffer = CNA_INVALID_HANDLE;
     result = cna.vertex_buffer_create(device, &info, &vertex_buffer);
     CNA_Result declaration_result = cna.vertex_declaration_destroy(native_declaration);
@@ -3844,7 +4608,7 @@ JNIEXPORT jint JNICALL Java_org_openeggbert_cna_internal_NativeBindings_nativeGe
     JNIEnv* environment, jclass type, jlong vertex_buffer, jintArray output)
 {
     (void)type;
-    if (output == NULL || (*environment)->GetArrayLength(environment, output) < 4) {
+    if (output == NULL || (*environment)->GetArrayLength(environment, output) < 7) {
         return (jint)CNA_RESULT_INVALID_ARGUMENT;
     }
     CNA_VertexBufferInfo info;
@@ -3860,13 +4624,16 @@ JNIEXPORT jint JNICALL Java_org_openeggbert_cna_internal_NativeBindings_nativeGe
         info.vertex_element_count > (uint64_t)INT32_MAX) {
         return (jint)CNA_RESULT_INVALID_STATE;
     }
-    const jint values[4] = {
+    const jint values[7] = {
         (jint)info.vertex_count,
         (jint)info.buffer_usage,
         (jint)info.vertex_stride,
-        (jint)info.vertex_element_count
+        (jint)info.vertex_element_count,
+        info.dynamic == CNA_TRUE ? 1 : 0,
+        info.is_content_lost == CNA_TRUE ? 1 : 0,
+        info.has_renderer == CNA_TRUE ? 1 : 0
     };
-    (*environment)->SetIntArrayRegion(environment, output, 0, 4, values);
+    (*environment)->SetIntArrayRegion(environment, output, 0, 7, values);
     return (*environment)->ExceptionCheck(environment)
         ? (jint)CNA_RESULT_INVALID_STATE : (jint)CNA_RESULT_SUCCESS;
 }
@@ -3876,9 +4643,11 @@ JNIEXPORT jint JNICALL Java_org_openeggbert_cna_internal_NativeBindings_nativeSe
     jclass type,
     jlong vertex_buffer,
     jint offset_in_bytes,
+    jint vertex_type,
     jbyteArray payload,
     jint vertex_count,
-    jint vertex_stride)
+    jint vertex_stride,
+    jint options)
 {
     (void)type;
     if (vertex_count < 0 || vertex_stride <= 0 || offset_in_bytes < -1) {
@@ -3894,16 +4663,27 @@ JNIEXPORT jint JNICALL Java_org_openeggbert_cna_internal_NativeBindings_nativeSe
         result = CNA_RESULT_INVALID_ARGUMENT;
     }
     if (result == CNA_RESULT_SUCCESS) {
-        result = offset_in_bytes < 0
-            ? cna.vertex_buffer_set_data_raw(
+        if (offset_in_bytes < 0) {
+            CNA_VertexBufferTransfer transfer;
+            (void)memset(&transfer, 0, sizeof(transfer));
+            transfer.struct_size = (uint32_t)sizeof(transfer);
+            transfer.struct_version = UINT32_C(1);
+            transfer.vertex_type = (CNA_VertexType)(uint32_t)vertex_type;
+            transfer.options = (CNA_SetDataOptions)(uint32_t)options;
+            transfer.start_index = 0U;
+            transfer.element_count = (uint64_t)(uint32_t)vertex_count;
+            result = cna.vertex_buffer_set_data(
                 (CNA_VertexBufferHandle)vertex_buffer,
-                bytes, byte_count, (uint64_t)(uint32_t)vertex_count,
-                (uint32_t)vertex_stride)
-            : cna.vertex_buffer_set_data_raw_at(
+                &transfer, bytes, (uint64_t)(uint32_t)vertex_count);
+        } else if (options != (jint)CNA_SET_DATA_NONE) {
+            result = CNA_RESULT_NOT_SUPPORTED;
+        } else {
+            result = cna.vertex_buffer_set_data_raw_at(
                 (CNA_VertexBufferHandle)vertex_buffer,
                 (uint64_t)(uint32_t)offset_in_bytes,
                 bytes, byte_count, (uint64_t)(uint32_t)vertex_count,
                 (uint32_t)vertex_stride);
+        }
     }
     free(bytes);
     return (jint)result;
@@ -3958,6 +4738,85 @@ JNIEXPORT jint JNICALL Java_org_openeggbert_cna_internal_NativeBindings_nativeDe
     return (jint)cna.vertex_buffer_destroy((CNA_VertexBufferHandle)vertex_buffer);
 }
 
+JNIEXPORT jint JNICALL Java_org_openeggbert_cna_internal_NativeBindings_nativeSubscribeVertexBufferContentLost(
+    JNIEnv* environment,
+    jclass type,
+    jlong vertex_buffer,
+    jobject callback_target,
+    jlongArray output)
+{
+    (void)type;
+    if (callback_target == NULL || output == NULL ||
+        (*environment)->GetArrayLength(environment, output) < 1) {
+        return (jint)CNA_RESULT_INVALID_ARGUMENT;
+    }
+    JavaBufferContentLostRegistration* registration =
+        (JavaBufferContentLostRegistration*)calloc(1U, sizeof(*registration));
+    if (registration == NULL) {
+        return (jint)CNA_RESULT_OUT_OF_MEMORY;
+    }
+    atomic_init(&registration->callbacks_enabled, 1);
+    registration->is_vertex = 1;
+    registration->target = (*environment)->NewGlobalRef(environment, callback_target);
+    if (registration->target == NULL) {
+        free(registration);
+        return (jint)CNA_RESULT_OUT_OF_MEMORY;
+    }
+    jclass target_class = (*environment)->GetObjectClass(environment, callback_target);
+    if (target_class != NULL) {
+        registration->event = (*environment)->GetMethodID(
+            environment, target_class, "nativeContentLost", "()V");
+        (*environment)->DeleteLocalRef(environment, target_class);
+    }
+    if (registration->event == NULL) {
+        (*environment)->DeleteGlobalRef(environment, registration->target);
+        free(registration);
+        return (jint)CNA_RESULT_INVALID_STATE;
+    }
+    CNA_VertexBufferEventRegistrationHandle native_registration = CNA_INVALID_HANDLE;
+    CNA_Result result = cna.vertex_buffer_subscribe_content_lost(
+        (CNA_VertexBufferHandle)vertex_buffer,
+        on_buffer_content_lost, registration, &native_registration);
+    if (result != CNA_RESULT_SUCCESS) {
+        (*environment)->DeleteGlobalRef(environment, registration->target);
+        free(registration);
+        return (jint)result;
+    }
+    registration->native_registration = native_registration;
+    const jlong token = (jlong)(intptr_t)registration;
+    (*environment)->SetLongArrayRegion(environment, output, 0, 1, &token);
+    if ((*environment)->ExceptionCheck(environment)) {
+        (void)cna.vertex_buffer_unsubscribe_content_lost(native_registration);
+        (*environment)->DeleteGlobalRef(environment, registration->target);
+        free(registration);
+        return (jint)CNA_RESULT_INVALID_STATE;
+    }
+    return (jint)CNA_RESULT_SUCCESS;
+}
+
+JNIEXPORT jint JNICALL Java_org_openeggbert_cna_internal_NativeBindings_nativeUnsubscribeVertexBufferContentLost(
+    JNIEnv* environment, jclass type, jlong registration_token)
+{
+    (void)type;
+    JavaBufferContentLostRegistration* registration =
+        (JavaBufferContentLostRegistration*)(intptr_t)registration_token;
+    if (registration == NULL || registration->is_vertex == 0) {
+        return (jint)CNA_RESULT_INVALID_ARGUMENT;
+    }
+    atomic_store_explicit(
+        &registration->callbacks_enabled, 0, memory_order_release);
+    CNA_Result result = cna.vertex_buffer_unsubscribe_content_lost(
+        (CNA_VertexBufferEventRegistrationHandle)registration->native_registration);
+    if (result != CNA_RESULT_SUCCESS) {
+        atomic_store_explicit(
+            &registration->callbacks_enabled, 1, memory_order_release);
+        return (jint)result;
+    }
+    (*environment)->DeleteGlobalRef(environment, registration->target);
+    free(registration);
+    return (jint)CNA_RESULT_SUCCESS;
+}
+
 JNIEXPORT jint JNICALL Java_org_openeggbert_cna_internal_NativeBindings_nativeCreateIndexBuffer(
     JNIEnv* environment,
     jclass type,
@@ -3965,6 +4824,7 @@ JNIEXPORT jint JNICALL Java_org_openeggbert_cna_internal_NativeBindings_nativeCr
     jint index_element_size,
     jint index_count,
     jint usage,
+    jboolean dynamic,
     jlongArray output)
 {
     (void)type;
@@ -3980,7 +4840,7 @@ JNIEXPORT jint JNICALL Java_org_openeggbert_cna_internal_NativeBindings_nativeCr
     info.index_count = (int32_t)index_count;
     info.index_element_size = (CNA_IndexElementSize)(uint32_t)index_element_size;
     info.buffer_usage = (CNA_BufferUsage)(uint32_t)usage;
-    info.dynamic = CNA_FALSE;
+    info.dynamic = dynamic == JNI_TRUE ? CNA_TRUE : CNA_FALSE;
     CNA_IndexBufferHandle index_buffer = CNA_INVALID_HANDLE;
     result = cna.index_buffer_create(device, &info, &index_buffer);
     if (result != CNA_RESULT_SUCCESS) {
@@ -3997,7 +4857,7 @@ JNIEXPORT jint JNICALL Java_org_openeggbert_cna_internal_NativeBindings_nativeGe
     JNIEnv* environment, jclass type, jlong index_buffer, jintArray output)
 {
     (void)type;
-    if (output == NULL || (*environment)->GetArrayLength(environment, output) < 3) {
+    if (output == NULL || (*environment)->GetArrayLength(environment, output) < 6) {
         return (jint)CNA_RESULT_INVALID_ARGUMENT;
     }
     CNA_IndexBufferInfo info;
@@ -4013,12 +4873,15 @@ JNIEXPORT jint JNICALL Java_org_openeggbert_cna_internal_NativeBindings_nativeGe
         info.buffer_usage > (uint32_t)INT32_MAX) {
         return (jint)CNA_RESULT_INVALID_STATE;
     }
-    const jint values[3] = {
+    const jint values[6] = {
         (jint)info.index_count,
         (jint)info.index_element_size,
-        (jint)info.buffer_usage
+        (jint)info.buffer_usage,
+        info.dynamic == CNA_TRUE ? 1 : 0,
+        info.is_content_lost == CNA_TRUE ? 1 : 0,
+        info.has_renderer == CNA_TRUE ? 1 : 0
     };
-    (*environment)->SetIntArrayRegion(environment, output, 0, 3, values);
+    (*environment)->SetIntArrayRegion(environment, output, 0, 6, values);
     return (*environment)->ExceptionCheck(environment)
         ? (jint)CNA_RESULT_INVALID_STATE : (jint)CNA_RESULT_SUCCESS;
 }
@@ -4026,6 +4889,7 @@ JNIEXPORT jint JNICALL Java_org_openeggbert_cna_internal_NativeBindings_nativeGe
 static CNA_Result make_index_transfer(
     jint index_element_size,
     jsize element_count,
+    jint options,
     CNA_IndexBufferTransfer* out_transfer)
 {
     if (out_transfer == NULL || element_count < 0 ||
@@ -4038,7 +4902,7 @@ static CNA_Result make_index_transfer(
     out_transfer->struct_version = UINT32_C(1);
     out_transfer->index_element_size =
         (CNA_IndexElementSize)(uint32_t)index_element_size;
-    out_transfer->options = CNA_SET_DATA_NONE;
+    out_transfer->options = (CNA_SetDataOptions)(uint32_t)options;
     out_transfer->start_index = 0U;
     out_transfer->element_count = (uint64_t)element_count;
     return CNA_RESULT_SUCCESS;
@@ -4050,7 +4914,8 @@ JNIEXPORT jint JNICALL Java_org_openeggbert_cna_internal_NativeBindings_nativeSe
     jlong index_buffer,
     jint offset_in_bytes,
     jint index_element_size,
-    jintArray values)
+    jintArray values,
+    jint options)
 {
     (void)type;
     if (values == NULL || offset_in_bytes < -1) {
@@ -4059,7 +4924,7 @@ JNIEXPORT jint JNICALL Java_org_openeggbert_cna_internal_NativeBindings_nativeSe
     const jsize count = (*environment)->GetArrayLength(environment, values);
     CNA_IndexBufferTransfer transfer;
     CNA_Result result = make_index_transfer(
-        index_element_size, count, &transfer);
+        index_element_size, count, options, &transfer);
     if (result != CNA_RESULT_SUCCESS) {
         return (jint)result;
     }
@@ -4120,7 +4985,7 @@ JNIEXPORT jint JNICALL Java_org_openeggbert_cna_internal_NativeBindings_nativeGe
     const jsize count = (*environment)->GetArrayLength(environment, output);
     CNA_IndexBufferTransfer transfer;
     CNA_Result result = make_index_transfer(
-        index_element_size, count, &transfer);
+        index_element_size, count, (jint)CNA_SET_DATA_NONE, &transfer);
     if (result != CNA_RESULT_SUCCESS) {
         return (jint)result;
     }
@@ -4173,6 +5038,84 @@ JNIEXPORT jint JNICALL Java_org_openeggbert_cna_internal_NativeBindings_nativeDe
     (void)environment;
     (void)type;
     return (jint)cna.index_buffer_destroy((CNA_IndexBufferHandle)index_buffer);
+}
+
+JNIEXPORT jint JNICALL Java_org_openeggbert_cna_internal_NativeBindings_nativeSubscribeIndexBufferContentLost(
+    JNIEnv* environment,
+    jclass type,
+    jlong index_buffer,
+    jobject callback_target,
+    jlongArray output)
+{
+    (void)type;
+    if (callback_target == NULL || output == NULL ||
+        (*environment)->GetArrayLength(environment, output) < 1) {
+        return (jint)CNA_RESULT_INVALID_ARGUMENT;
+    }
+    JavaBufferContentLostRegistration* registration =
+        (JavaBufferContentLostRegistration*)calloc(1U, sizeof(*registration));
+    if (registration == NULL) {
+        return (jint)CNA_RESULT_OUT_OF_MEMORY;
+    }
+    atomic_init(&registration->callbacks_enabled, 1);
+    registration->target = (*environment)->NewGlobalRef(environment, callback_target);
+    if (registration->target == NULL) {
+        free(registration);
+        return (jint)CNA_RESULT_OUT_OF_MEMORY;
+    }
+    jclass target_class = (*environment)->GetObjectClass(environment, callback_target);
+    if (target_class != NULL) {
+        registration->event = (*environment)->GetMethodID(
+            environment, target_class, "nativeContentLost", "()V");
+        (*environment)->DeleteLocalRef(environment, target_class);
+    }
+    if (registration->event == NULL) {
+        (*environment)->DeleteGlobalRef(environment, registration->target);
+        free(registration);
+        return (jint)CNA_RESULT_INVALID_STATE;
+    }
+    CNA_IndexBufferEventRegistrationHandle native_registration = CNA_INVALID_HANDLE;
+    CNA_Result result = cna.index_buffer_subscribe_content_lost(
+        (CNA_IndexBufferHandle)index_buffer,
+        on_buffer_content_lost, registration, &native_registration);
+    if (result != CNA_RESULT_SUCCESS) {
+        (*environment)->DeleteGlobalRef(environment, registration->target);
+        free(registration);
+        return (jint)result;
+    }
+    registration->native_registration = native_registration;
+    const jlong token = (jlong)(intptr_t)registration;
+    (*environment)->SetLongArrayRegion(environment, output, 0, 1, &token);
+    if ((*environment)->ExceptionCheck(environment)) {
+        (void)cna.index_buffer_unsubscribe_content_lost(native_registration);
+        (*environment)->DeleteGlobalRef(environment, registration->target);
+        free(registration);
+        return (jint)CNA_RESULT_INVALID_STATE;
+    }
+    return (jint)CNA_RESULT_SUCCESS;
+}
+
+JNIEXPORT jint JNICALL Java_org_openeggbert_cna_internal_NativeBindings_nativeUnsubscribeIndexBufferContentLost(
+    JNIEnv* environment, jclass type, jlong registration_token)
+{
+    (void)type;
+    JavaBufferContentLostRegistration* registration =
+        (JavaBufferContentLostRegistration*)(intptr_t)registration_token;
+    if (registration == NULL || registration->is_vertex != 0) {
+        return (jint)CNA_RESULT_INVALID_ARGUMENT;
+    }
+    atomic_store_explicit(
+        &registration->callbacks_enabled, 0, memory_order_release);
+    CNA_Result result = cna.index_buffer_unsubscribe_content_lost(
+        (CNA_IndexBufferEventRegistrationHandle)registration->native_registration);
+    if (result != CNA_RESULT_SUCCESS) {
+        atomic_store_explicit(
+            &registration->callbacks_enabled, 1, memory_order_release);
+        return (jint)result;
+    }
+    (*environment)->DeleteGlobalRef(environment, registration->target);
+    free(registration);
+    return (jint)CNA_RESULT_SUCCESS;
 }
 
 JNIEXPORT jint JNICALL Java_org_openeggbert_cna_internal_NativeBindings_nativeSetGraphicsDeviceVertexBuffer(
@@ -4989,6 +5932,1127 @@ JNIEXPORT jint JNICALL Java_org_openeggbert_cna_internal_NativeBindings_nativeDe
     return (jint)cna.sprite_font_destroy((CNA_Handle)sprite_font);
 }
 
+JNIEXPORT jint JNICALL Java_org_openeggbert_cna_internal_NativeBindings_nativeCreateEffect(
+    JNIEnv* environment,
+    jclass type,
+    jlong game,
+    jbyteArray effect_code,
+    jboolean empty,
+    jlongArray output)
+{
+    (void)type;
+    if (effect_code == NULL || (empty != JNI_FALSE && empty != JNI_TRUE)) {
+        return (jint)CNA_RESULT_INVALID_ARGUMENT;
+    }
+    CNA_Handle device = CNA_INVALID_HANDLE;
+    CNA_Result result = graphics_device_from_game(game, &device);
+    if (result != CNA_RESULT_SUCCESS) {
+        return (jint)result;
+    }
+    CNA_Handle effect = CNA_INVALID_HANDLE;
+    if (empty == JNI_TRUE) {
+        result = cna.effect_create_empty(device, &effect);
+    } else {
+        const jsize byte_count = (*environment)->GetArrayLength(environment, effect_code);
+        jbyte* bytes = (*environment)->GetByteArrayElements(environment, effect_code, NULL);
+        if (bytes == NULL) {
+            return (jint)CNA_RESULT_INVALID_STATE;
+        }
+        result = cna.effect_create_compiled(
+            device, (const uint8_t*)bytes, (uint64_t)byte_count, &effect);
+        (*environment)->ReleaseByteArrayElements(
+            environment, effect_code, bytes, JNI_ABORT);
+    }
+    if (result != CNA_RESULT_SUCCESS) {
+        return (jint)result;
+    }
+    result = set_handle_output(environment, output, effect);
+    if (result != CNA_RESULT_SUCCESS) {
+        (void)cna.effect_destroy(effect);
+    }
+    return (jint)result;
+}
+
+JNIEXPORT jint JNICALL Java_org_openeggbert_cna_internal_NativeBindings_nativeCreateBasicEffect(
+    JNIEnv* environment, jclass type, jlong game, jlongArray output)
+{
+    (void)type;
+    CNA_Handle device = CNA_INVALID_HANDLE;
+    CNA_Result result = graphics_device_from_game(game, &device);
+    if (result != CNA_RESULT_SUCCESS) {
+        return (jint)result;
+    }
+    CNA_Handle effect = CNA_INVALID_HANDLE;
+    result = cna.basic_effect_create(device, &effect);
+    if (result != CNA_RESULT_SUCCESS) {
+        return (jint)result;
+    }
+    result = set_handle_output(environment, output, effect);
+    if (result != CNA_RESULT_SUCCESS) {
+        (void)cna.effect_destroy(effect);
+    }
+    return (jint)result;
+}
+
+JNIEXPORT jint JNICALL Java_org_openeggbert_cna_internal_NativeBindings_nativeCloneEffect(
+    JNIEnv* environment, jclass type, jlong effect, jlongArray output)
+{
+    (void)type;
+    CNA_Handle clone = CNA_INVALID_HANDLE;
+    CNA_Result result = cna.effect_clone((CNA_Handle)effect, &clone);
+    if (result != CNA_RESULT_SUCCESS) {
+        return (jint)result;
+    }
+    result = set_handle_output(environment, output, clone);
+    if (result != CNA_RESULT_SUCCESS) {
+        (void)cna.effect_destroy(clone);
+    }
+    return (jint)result;
+}
+
+JNIEXPORT jint JNICALL Java_org_openeggbert_cna_internal_NativeBindings_nativeApplyEffect(
+    JNIEnv* environment, jclass type, jlong effect)
+{
+    (void)environment;
+    (void)type;
+    return (jint)cna.effect_apply((CNA_Handle)effect);
+}
+
+static HandleGetHandleFunction effect_child_function(const jint kind)
+{
+    switch (kind) {
+        case 0: return cna.effect_get_parameters;
+        case 1: return cna.effect_get_techniques;
+        case 2: return cna.effect_get_current_technique;
+        case 3: return cna.effect_technique_get_passes;
+        case 4: return cna.effect_technique_get_annotations;
+        case 5: return cna.effect_pass_get_annotations;
+        case 6: return cna.effect_parameter_get_elements;
+        case 7: return cna.effect_parameter_get_structure_members;
+        case 8: return cna.effect_parameter_get_annotations;
+        default: return NULL;
+    }
+}
+
+JNIEXPORT jint JNICALL Java_org_openeggbert_cna_internal_NativeBindings_nativeGetEffectChild(
+    JNIEnv* environment,
+    jclass type,
+    jlong handle,
+    jint kind,
+    jlongArray output)
+{
+    (void)type;
+    if (output == NULL || (*environment)->GetArrayLength(environment, output) < 2) {
+        return (jint)CNA_RESULT_INVALID_ARGUMENT;
+    }
+    HandleGetHandleFunction function = effect_child_function(kind);
+    if (function == NULL) {
+        return (jint)CNA_RESULT_INVALID_ARGUMENT;
+    }
+    CNA_Handle child = CNA_INVALID_HANDLE;
+    CNA_Result result = function((CNA_Handle)handle, &child);
+    uint32_t index = 0U;
+    if (result == CNA_RESULT_SUCCESS && kind == 2 && child != CNA_INVALID_HANDLE) {
+        result = cna.effect_technique_get_index_ext(child, &index);
+        if (result != CNA_RESULT_SUCCESS) {
+            (void)cna.effect_technique_destroy(child);
+            child = CNA_INVALID_HANDLE;
+        }
+    }
+    if (result != CNA_RESULT_SUCCESS) {
+        return (jint)result;
+    }
+    const jlong values[2] = {(jlong)child, (jlong)index};
+    (*environment)->SetLongArrayRegion(environment, output, 0, 2, values);
+    if ((*environment)->ExceptionCheck(environment)) {
+        if (child != CNA_INVALID_HANDLE) {
+            switch (kind) {
+                case 0: (void)cna.effect_parameter_collection_destroy(child); break;
+                case 1: (void)cna.effect_technique_collection_destroy(child); break;
+                case 2: (void)cna.effect_technique_destroy(child); break;
+                case 3: (void)cna.effect_pass_collection_destroy(child); break;
+                case 4: case 5: case 8:
+                    (void)cna.effect_annotation_collection_destroy(child); break;
+                case 6: case 7:
+                    (void)cna.effect_parameter_collection_destroy(child); break;
+                default: break;
+            }
+        }
+        return (jint)CNA_RESULT_INVALID_STATE;
+    }
+    return (jint)CNA_RESULT_SUCCESS;
+}
+
+JNIEXPORT jint JNICALL Java_org_openeggbert_cna_internal_NativeBindings_nativeSetEffectCurrentTechnique(
+    JNIEnv* environment, jclass type, jlong effect, jlong technique)
+{
+    (void)environment;
+    (void)type;
+    return (jint)cna.effect_set_current_technique(
+        (CNA_Handle)effect, (CNA_Handle)technique);
+}
+
+JNIEXPORT jint JNICALL Java_org_openeggbert_cna_internal_NativeBindings_nativeDestroyEffectObject(
+    JNIEnv* environment, jclass type, jlong handle, jint kind)
+{
+    (void)environment;
+    (void)type;
+    switch (kind) {
+        case 0: return (jint)cna.effect_destroy((CNA_Handle)handle);
+        case 1: return (jint)cna.effect_parameter_collection_destroy((CNA_Handle)handle);
+        case 2: return (jint)cna.effect_technique_collection_destroy((CNA_Handle)handle);
+        case 3: return (jint)cna.effect_pass_collection_destroy((CNA_Handle)handle);
+        case 4: return (jint)cna.effect_annotation_collection_destroy((CNA_Handle)handle);
+        case 5: return (jint)cna.effect_parameter_destroy((CNA_Handle)handle);
+        case 6: return (jint)cna.effect_technique_destroy((CNA_Handle)handle);
+        case 7: return (jint)cna.effect_pass_destroy((CNA_Handle)handle);
+        case 8: return (jint)cna.effect_annotation_destroy((CNA_Handle)handle);
+        case 9: return (jint)cna.directional_light_destroy((CNA_Handle)handle);
+        default: return (jint)CNA_RESULT_INVALID_ARGUMENT;
+    }
+}
+
+static GameGetSizeFunction effect_collection_count_function(const jint kind)
+{
+    switch (kind) {
+        case 0: return cna.effect_parameter_collection_get_count;
+        case 1: return cna.effect_technique_collection_get_count;
+        case 2: return cna.effect_pass_collection_get_count;
+        case 3: return cna.effect_annotation_collection_get_count;
+        default: return NULL;
+    }
+}
+
+static HandleIndexGetHandleFunction effect_collection_at_function(const jint kind)
+{
+    switch (kind) {
+        case 0: return cna.effect_parameter_collection_get_at;
+        case 1: return cna.effect_technique_collection_get_at;
+        case 2: return cna.effect_pass_collection_get_at;
+        case 3: return cna.effect_annotation_collection_get_at;
+        default: return NULL;
+    }
+}
+
+JNIEXPORT jlong JNICALL Java_org_openeggbert_cna_internal_NativeBindings_nativeGetEffectCollectionCount(
+    JNIEnv* environment, jclass type, jlong collection, jint kind)
+{
+    (void)environment;
+    (void)type;
+    GameGetSizeFunction function = effect_collection_count_function(kind);
+    if (function == NULL) {
+        return -(jlong)CNA_RESULT_INVALID_ARGUMENT;
+    }
+    uint64_t count = 0U;
+    CNA_Result result = function((CNA_Handle)collection, &count);
+    if (result != CNA_RESULT_SUCCESS) {
+        return -(jlong)result;
+    }
+    return count > (uint64_t)INT64_MAX
+        ? -(jlong)CNA_RESULT_INVALID_STATE : (jlong)count;
+}
+
+JNIEXPORT jint JNICALL Java_org_openeggbert_cna_internal_NativeBindings_nativeGetEffectCollectionElement(
+    JNIEnv* environment,
+    jclass type,
+    jlong collection,
+    jint kind,
+    jint index,
+    jlongArray output)
+{
+    (void)type;
+    HandleIndexGetHandleFunction function = effect_collection_at_function(kind);
+    if (function == NULL || index < 0) {
+        return (jint)CNA_RESULT_INVALID_ARGUMENT;
+    }
+    CNA_Handle element = CNA_INVALID_HANDLE;
+    CNA_Result result = function((CNA_Handle)collection, (uint64_t)index, &element);
+    if (result != CNA_RESULT_SUCCESS) {
+        return (jint)result;
+    }
+    result = set_handle_output(environment, output, element);
+    if (result != CNA_RESULT_SUCCESS) {
+        switch (kind) {
+            case 0: (void)cna.effect_parameter_destroy(element); break;
+            case 1: (void)cna.effect_technique_destroy(element); break;
+            case 2: (void)cna.effect_pass_destroy(element); break;
+            case 3: (void)cna.effect_annotation_destroy(element); break;
+            default: break;
+        }
+    }
+    return (jint)result;
+}
+
+static GameGetSizeFunction effect_string_size_function(const jint kind)
+{
+    switch (kind) {
+        case 0: return cna.effect_technique_get_name_byte_count;
+        case 1: return cna.effect_pass_get_name_byte_count;
+        case 2: return cna.effect_parameter_get_name_byte_count;
+        case 3: return cna.effect_parameter_get_semantic_byte_count;
+        case 4: return cna.effect_annotation_get_name_byte_count;
+        case 5: return cna.effect_annotation_get_semantic_byte_count;
+        case 6: return cna.effect_parameter_get_value_string_byte_count;
+        case 7: return cna.effect_annotation_get_value_string_byte_count;
+        default: return NULL;
+    }
+}
+
+static GameCopyStringFunction effect_string_copy_function(const jint kind)
+{
+    switch (kind) {
+        case 0: return cna.effect_technique_copy_name;
+        case 1: return cna.effect_pass_copy_name;
+        case 2: return cna.effect_parameter_copy_name;
+        case 3: return cna.effect_parameter_copy_semantic;
+        case 4: return cna.effect_annotation_copy_name;
+        case 5: return cna.effect_annotation_copy_semantic;
+        case 6: return cna.effect_parameter_copy_value_string;
+        case 7: return cna.effect_annotation_copy_value_string;
+        default: return NULL;
+    }
+}
+
+JNIEXPORT jlong JNICALL Java_org_openeggbert_cna_internal_NativeBindings_nativeGetEffectStringSize(
+    JNIEnv* environment, jclass type, jlong handle, jint kind)
+{
+    (void)environment;
+    (void)type;
+    GameGetSizeFunction function = effect_string_size_function(kind);
+    if (function == NULL) {
+        return -(jlong)CNA_RESULT_INVALID_ARGUMENT;
+    }
+    uint64_t size = 0U;
+    CNA_Result result = function((CNA_Handle)handle, &size);
+    if (result != CNA_RESULT_SUCCESS) {
+        return -(jlong)result;
+    }
+    return size > (uint64_t)INT64_MAX
+        ? -(jlong)CNA_RESULT_INVALID_STATE : (jlong)size;
+}
+
+JNIEXPORT jint JNICALL Java_org_openeggbert_cna_internal_NativeBindings_nativeCopyEffectString(
+    JNIEnv* environment, jclass type, jlong handle, jint kind, jbyteArray output)
+{
+    (void)type;
+    GameCopyStringFunction function = effect_string_copy_function(kind);
+    if (function == NULL || output == NULL) {
+        return (jint)CNA_RESULT_INVALID_ARGUMENT;
+    }
+    const jsize capacity = (*environment)->GetArrayLength(environment, output);
+    jbyte* bytes = (*environment)->GetByteArrayElements(environment, output, NULL);
+    if (bytes == NULL) {
+        return (jint)CNA_RESULT_INVALID_STATE;
+    }
+    uint64_t written = 0U;
+    CNA_Result result = function(
+        (CNA_Handle)handle, (char*)bytes, (uint64_t)capacity, &written);
+    (*environment)->ReleaseByteArrayElements(environment, output, bytes, 0);
+    if (result == CNA_RESULT_SUCCESS && written != (uint64_t)capacity) {
+        result = CNA_RESULT_INVALID_STATE;
+    }
+    return (jint)result;
+}
+
+JNIEXPORT jint JNICALL Java_org_openeggbert_cna_internal_NativeBindings_nativeGetEffectInfo(
+    JNIEnv* environment,
+    jclass type,
+    jlong handle,
+    jint kind,
+    jintArray output)
+{
+    (void)type;
+    if (output == NULL || (*environment)->GetArrayLength(environment, output) < 4) {
+        return (jint)CNA_RESULT_INVALID_ARGUMENT;
+    }
+    jint values[4];
+    CNA_Result result;
+    if (kind == 0) {
+        CNA_EffectParameterInfo info;
+        (void)memset(&info, 0, sizeof(info));
+        info.struct_size = (uint32_t)sizeof(info);
+        info.struct_version = UINT32_C(1);
+        result = cna.effect_parameter_get_info((CNA_Handle)handle, &info);
+        values[0] = (jint)info.row_count;
+        values[1] = (jint)info.column_count;
+        values[2] = (jint)info.parameter_class;
+        values[3] = (jint)info.parameter_type;
+    } else if (kind == 1) {
+        CNA_EffectAnnotationInfo info;
+        (void)memset(&info, 0, sizeof(info));
+        info.struct_size = (uint32_t)sizeof(info);
+        info.struct_version = UINT32_C(1);
+        result = cna.effect_annotation_get_info((CNA_Handle)handle, &info);
+        values[0] = (jint)info.row_count;
+        values[1] = (jint)info.column_count;
+        values[2] = (jint)info.parameter_class;
+        values[3] = (jint)info.parameter_type;
+    } else {
+        return (jint)CNA_RESULT_INVALID_ARGUMENT;
+    }
+    if (result != CNA_RESULT_SUCCESS) {
+        return (jint)result;
+    }
+    (*environment)->SetIntArrayRegion(environment, output, 0, 4, values);
+    return (*environment)->ExceptionCheck(environment)
+        ? (jint)CNA_RESULT_INVALID_STATE : (jint)CNA_RESULT_SUCCESS;
+}
+
+static size_t effect_float_width(const jint value_type)
+{
+    switch (value_type) {
+        case CNA_EFFECT_VALUE_SINGLE: return 1U;
+        case CNA_EFFECT_VALUE_MATRIX:
+        case CNA_EFFECT_VALUE_MATRIX_TRANSPOSE: return 16U;
+        case CNA_EFFECT_VALUE_QUATERNION:
+        case CNA_EFFECT_VALUE_VECTOR4: return 4U;
+        case CNA_EFFECT_VALUE_VECTOR2: return 2U;
+        case CNA_EFFECT_VALUE_VECTOR3: return 3U;
+        default: return 0U;
+    }
+}
+
+JNIEXPORT jlong JNICALL Java_org_openeggbert_cna_internal_NativeBindings_nativeGetEffectInts(
+    JNIEnv* environment,
+    jclass type,
+    jlong handle,
+    jboolean annotation,
+    jint value_type,
+    jint count,
+    jintArray output)
+{
+    (void)type;
+    if (output == NULL || count < 0 || (*environment)->GetArrayLength(environment, output) < count ||
+        (annotation != JNI_FALSE && annotation != JNI_TRUE) ||
+        (value_type != CNA_EFFECT_VALUE_BOOLEAN && value_type != CNA_EFFECT_VALUE_INT32)) {
+        return -(jlong)CNA_RESULT_INVALID_ARGUMENT;
+    }
+    if (annotation == JNI_TRUE) {
+        if (count < 1) {
+            return -(jlong)CNA_RESULT_INVALID_ARGUMENT;
+        }
+        jint value;
+        CNA_Result result;
+        if (value_type == CNA_EFFECT_VALUE_BOOLEAN) {
+            CNA_Bool native = CNA_FALSE;
+            result = cna.effect_annotation_get_value_boolean((CNA_Handle)handle, &native);
+            value = native == CNA_TRUE ? 1 : 0;
+        } else {
+            int32_t native = 0;
+            result = cna.effect_annotation_get_value_int32((CNA_Handle)handle, &native);
+            value = (jint)native;
+        }
+        if (result != CNA_RESULT_SUCCESS) {
+            return -(jlong)result;
+        }
+        (*environment)->SetIntArrayRegion(environment, output, 0, 1, &value);
+        return (*environment)->ExceptionCheck(environment)
+            ? -(jlong)CNA_RESULT_INVALID_STATE : (jlong)1;
+    }
+    void* native = NULL;
+    if (count != 0) {
+        const size_t element_size = value_type == CNA_EFFECT_VALUE_BOOLEAN
+            ? sizeof(CNA_Bool) : sizeof(int32_t);
+        native = calloc((size_t)count, element_size);
+        if (native == NULL) {
+            return -(jlong)CNA_RESULT_OUT_OF_MEMORY;
+        }
+    }
+    uint64_t written = 0U;
+    CNA_Result result = cna.effect_parameter_get_values(
+        (CNA_Handle)handle, (CNA_EffectValueType)value_type,
+        (uint64_t)count, native, (uint64_t)count, &written);
+    if (result == CNA_RESULT_SUCCESS && written > (uint64_t)count) {
+        result = CNA_RESULT_INVALID_STATE;
+    }
+    jint* projected = NULL;
+    if (result == CNA_RESULT_SUCCESS && written != 0U) {
+        projected = (jint*)malloc((size_t)written * sizeof(jint));
+        if (projected == NULL) {
+            result = CNA_RESULT_OUT_OF_MEMORY;
+        } else {
+            for (uint64_t index = 0U; index < written; ++index) {
+                projected[index] = value_type == CNA_EFFECT_VALUE_BOOLEAN
+                    ? (((CNA_Bool*)native)[index] == CNA_TRUE ? 1 : 0)
+                    : (jint)((int32_t*)native)[index];
+            }
+            (*environment)->SetIntArrayRegion(
+                environment, output, 0, (jsize)written, projected);
+            if ((*environment)->ExceptionCheck(environment)) {
+                result = CNA_RESULT_INVALID_STATE;
+            }
+        }
+    }
+    free(projected);
+    free(native);
+    return result == CNA_RESULT_SUCCESS ? (jlong)written : -(jlong)result;
+}
+
+JNIEXPORT jlong JNICALL Java_org_openeggbert_cna_internal_NativeBindings_nativeGetEffectFloats(
+    JNIEnv* environment,
+    jclass type,
+    jlong handle,
+    jboolean annotation,
+    jint value_type,
+    jint count,
+    jfloatArray output)
+{
+    (void)type;
+    const size_t width = effect_float_width(value_type);
+    if (width == 0U || output == NULL || count < 0 ||
+        (annotation != JNI_FALSE && annotation != JNI_TRUE) ||
+        (uint64_t)(*environment)->GetArrayLength(environment, output)
+            < (uint64_t)(uint32_t)count * width) {
+        return -(jlong)CNA_RESULT_INVALID_ARGUMENT;
+    }
+    float* values = count == 0 ? NULL
+        : (float*)calloc((size_t)count * width, sizeof(float));
+    if (count != 0 && values == NULL) {
+        return -(jlong)CNA_RESULT_OUT_OF_MEMORY;
+    }
+    uint64_t written = 0U;
+    CNA_Result result = CNA_RESULT_SUCCESS;
+    if (annotation == JNI_TRUE) {
+        if (count < 1) {
+            result = CNA_RESULT_INVALID_ARGUMENT;
+        } else {
+            void* destination = values;
+            switch (value_type) {
+                case CNA_EFFECT_VALUE_SINGLE:
+                    result = cna.effect_annotation_get_value_single(
+                        (CNA_Handle)handle, destination); break;
+                case CNA_EFFECT_VALUE_MATRIX:
+                    result = cna.effect_annotation_get_value_matrix(
+                        (CNA_Handle)handle, destination); break;
+                case CNA_EFFECT_VALUE_VECTOR2:
+                    result = cna.effect_annotation_get_value_vector2(
+                        (CNA_Handle)handle, destination); break;
+                case CNA_EFFECT_VALUE_VECTOR3:
+                    result = cna.effect_annotation_get_value_vector3(
+                        (CNA_Handle)handle, destination); break;
+                case CNA_EFFECT_VALUE_VECTOR4:
+                    result = cna.effect_annotation_get_value_vector4(
+                        (CNA_Handle)handle, destination); break;
+                default: result = CNA_RESULT_INVALID_ARGUMENT; break;
+            }
+            written = result == CNA_RESULT_SUCCESS ? UINT64_C(1) : UINT64_C(0);
+        }
+    } else {
+        result = cna.effect_parameter_get_values(
+            (CNA_Handle)handle, (CNA_EffectValueType)value_type,
+            (uint64_t)count, values, (uint64_t)count, &written);
+        if (result == CNA_RESULT_SUCCESS && written > (uint64_t)count) {
+            result = CNA_RESULT_INVALID_STATE;
+        }
+    }
+    if (result == CNA_RESULT_SUCCESS && written != 0U) {
+        (*environment)->SetFloatArrayRegion(
+            environment, output, 0, (jsize)(written * width), values);
+        if ((*environment)->ExceptionCheck(environment)) {
+            result = CNA_RESULT_INVALID_STATE;
+        }
+    }
+    free(values);
+    return result == CNA_RESULT_SUCCESS ? (jlong)written : -(jlong)result;
+}
+
+JNIEXPORT jint JNICALL Java_org_openeggbert_cna_internal_NativeBindings_nativeSetEffectInts(
+    JNIEnv* environment,
+    jclass type,
+    jlong parameter,
+    jint value_type,
+    jintArray values)
+{
+    (void)type;
+    if (values == NULL ||
+        (value_type != CNA_EFFECT_VALUE_BOOLEAN && value_type != CNA_EFFECT_VALUE_INT32)) {
+        return (jint)CNA_RESULT_INVALID_ARGUMENT;
+    }
+    const jsize count = (*environment)->GetArrayLength(environment, values);
+    jint* projected = (*environment)->GetIntArrayElements(environment, values, NULL);
+    if (projected == NULL && count != 0) {
+        return (jint)CNA_RESULT_INVALID_STATE;
+    }
+    const size_t element_size = value_type == CNA_EFFECT_VALUE_BOOLEAN
+        ? sizeof(CNA_Bool) : sizeof(int32_t);
+    void* native = count == 0 ? NULL : malloc((size_t)count * element_size);
+    if (count != 0 && native == NULL) {
+        (*environment)->ReleaseIntArrayElements(environment, values, projected, JNI_ABORT);
+        return (jint)CNA_RESULT_OUT_OF_MEMORY;
+    }
+    for (jsize index = 0; index < count; ++index) {
+        if (value_type == CNA_EFFECT_VALUE_BOOLEAN) {
+            ((CNA_Bool*)native)[index] = projected[index] == 0 ? CNA_FALSE : CNA_TRUE;
+        } else {
+            ((int32_t*)native)[index] = (int32_t)projected[index];
+        }
+    }
+    CNA_Result result = cna.effect_parameter_set_values(
+        (CNA_Handle)parameter, (CNA_EffectValueType)value_type,
+        native, (uint64_t)count);
+    free(native);
+    if (count != 0) {
+        (*environment)->ReleaseIntArrayElements(environment, values, projected, JNI_ABORT);
+    }
+    return (jint)result;
+}
+
+JNIEXPORT jint JNICALL Java_org_openeggbert_cna_internal_NativeBindings_nativeGetEffectIntValue(
+    JNIEnv* environment,
+    jclass type,
+    jlong parameter,
+    jint value_type,
+    jintArray output)
+{
+    (void)type;
+    if (output == NULL || (*environment)->GetArrayLength(environment, output) != 1 ||
+        (value_type != CNA_EFFECT_VALUE_BOOLEAN && value_type != CNA_EFFECT_VALUE_INT32)) {
+        return (jint)CNA_RESULT_INVALID_ARGUMENT;
+    }
+    CNA_Result result;
+    jint projected = 0;
+    if (value_type == CNA_EFFECT_VALUE_BOOLEAN) {
+        CNA_Bool value = CNA_FALSE;
+        result = cna.effect_parameter_get_value(
+            (CNA_Handle)parameter, CNA_EFFECT_VALUE_BOOLEAN, &value);
+        projected = value == CNA_FALSE ? 0 : 1;
+    } else {
+        int32_t value = 0;
+        result = cna.effect_parameter_get_value(
+            (CNA_Handle)parameter, CNA_EFFECT_VALUE_INT32, &value);
+        projected = (jint)value;
+    }
+    if (result == CNA_RESULT_SUCCESS) {
+        (*environment)->SetIntArrayRegion(environment, output, 0, 1, &projected);
+        if ((*environment)->ExceptionCheck(environment)) {
+            return (jint)CNA_RESULT_INVALID_STATE;
+        }
+    }
+    return (jint)result;
+}
+
+JNIEXPORT jint JNICALL Java_org_openeggbert_cna_internal_NativeBindings_nativeSetEffectIntValue(
+    JNIEnv* environment,
+    jclass type,
+    jlong parameter,
+    jint value_type,
+    jint value)
+{
+    (void)environment;
+    (void)type;
+    if (value_type == CNA_EFFECT_VALUE_BOOLEAN) {
+        const CNA_Bool native = value == 0 ? CNA_FALSE : CNA_TRUE;
+        return (jint)cna.effect_parameter_set_value(
+            (CNA_Handle)parameter, CNA_EFFECT_VALUE_BOOLEAN, &native);
+    }
+    if (value_type == CNA_EFFECT_VALUE_INT32) {
+        const int32_t native = (int32_t)value;
+        return (jint)cna.effect_parameter_set_value(
+            (CNA_Handle)parameter, CNA_EFFECT_VALUE_INT32, &native);
+    }
+    return (jint)CNA_RESULT_INVALID_ARGUMENT;
+}
+
+JNIEXPORT jint JNICALL Java_org_openeggbert_cna_internal_NativeBindings_nativeGetEffectFloatValue(
+    JNIEnv* environment,
+    jclass type,
+    jlong parameter,
+    jint value_type,
+    jfloatArray output)
+{
+    (void)type;
+    const size_t width = effect_float_width(value_type);
+    if (width == 0U || output == NULL ||
+        (size_t)(*environment)->GetArrayLength(environment, output) != width) {
+        return (jint)CNA_RESULT_INVALID_ARGUMENT;
+    }
+    float values[16] = {0};
+    const CNA_Result result = cna.effect_parameter_get_value(
+        (CNA_Handle)parameter, (CNA_EffectValueType)value_type, values);
+    if (result == CNA_RESULT_SUCCESS) {
+        (*environment)->SetFloatArrayRegion(
+            environment, output, 0, (jsize)width, (const jfloat*)values);
+        if ((*environment)->ExceptionCheck(environment)) {
+            return (jint)CNA_RESULT_INVALID_STATE;
+        }
+    }
+    return (jint)result;
+}
+
+JNIEXPORT jint JNICALL Java_org_openeggbert_cna_internal_NativeBindings_nativeSetEffectFloatValue(
+    JNIEnv* environment,
+    jclass type,
+    jlong parameter,
+    jint value_type,
+    jfloatArray input)
+{
+    (void)type;
+    const size_t width = effect_float_width(value_type);
+    if (width == 0U || input == NULL ||
+        (size_t)(*environment)->GetArrayLength(environment, input) != width) {
+        return (jint)CNA_RESULT_INVALID_ARGUMENT;
+    }
+    float values[16] = {0};
+    (*environment)->GetFloatArrayRegion(
+        environment, input, 0, (jsize)width, (jfloat*)values);
+    if ((*environment)->ExceptionCheck(environment)) {
+        return (jint)CNA_RESULT_INVALID_STATE;
+    }
+    return (jint)cna.effect_parameter_set_value(
+        (CNA_Handle)parameter, (CNA_EffectValueType)value_type, values);
+}
+
+JNIEXPORT jint JNICALL Java_org_openeggbert_cna_internal_NativeBindings_nativeSetEffectFloats(
+    JNIEnv* environment,
+    jclass type,
+    jlong parameter,
+    jint value_type,
+    jfloatArray values,
+    jint count)
+{
+    (void)type;
+    const size_t width = effect_float_width(value_type);
+    if (width == 0U || values == NULL || count < 0 ||
+        (uint64_t)(*environment)->GetArrayLength(environment, values)
+            != (uint64_t)(uint32_t)count * width) {
+        return (jint)CNA_RESULT_INVALID_ARGUMENT;
+    }
+    jfloat* native = (*environment)->GetFloatArrayElements(environment, values, NULL);
+    if (native == NULL && count != 0) {
+        return (jint)CNA_RESULT_INVALID_STATE;
+    }
+    CNA_Result result = cna.effect_parameter_set_values(
+        (CNA_Handle)parameter, (CNA_EffectValueType)value_type,
+        native, (uint64_t)count);
+    if (count != 0) {
+        (*environment)->ReleaseFloatArrayElements(environment, values, native, JNI_ABORT);
+    }
+    return (jint)result;
+}
+
+JNIEXPORT jint JNICALL Java_org_openeggbert_cna_internal_NativeBindings_nativeSetEffectString(
+    JNIEnv* environment, jclass type, jlong parameter, jbyteArray value)
+{
+    (void)type;
+    if (value == NULL) {
+        return (jint)CNA_RESULT_INVALID_ARGUMENT;
+    }
+    const jsize byte_count = (*environment)->GetArrayLength(environment, value);
+    jbyte* bytes = (*environment)->GetByteArrayElements(environment, value, NULL);
+    if (bytes == NULL && byte_count != 0) {
+        return (jint)CNA_RESULT_INVALID_STATE;
+    }
+    CNA_Result result = cna.effect_parameter_set_value_string(
+        (CNA_Handle)parameter,
+        (CNA_StringView){(const char*)bytes, (uint64_t)byte_count});
+    if (byte_count != 0) {
+        (*environment)->ReleaseByteArrayElements(environment, value, bytes, JNI_ABORT);
+    }
+    return (jint)result;
+}
+
+JNIEXPORT jint JNICALL Java_org_openeggbert_cna_internal_NativeBindings_nativeGetEffectTexture(
+    JNIEnv* environment,
+    jclass type,
+    jlong parameter,
+    jint texture_type,
+    jlongArray output)
+{
+    (void)type;
+    CNA_Handle texture = CNA_INVALID_HANDLE;
+    CNA_Result result = cna.effect_parameter_get_value_texture(
+        (CNA_Handle)parameter, (CNA_EffectTextureType)texture_type, &texture);
+    return result == CNA_RESULT_SUCCESS
+        ? (jint)set_handle_output(environment, output, texture) : (jint)result;
+}
+
+JNIEXPORT jint JNICALL Java_org_openeggbert_cna_internal_NativeBindings_nativeSetEffectTexture(
+    JNIEnv* environment,
+    jclass type,
+    jlong parameter,
+    jint texture_type,
+    jlong texture)
+{
+    (void)environment;
+    (void)type;
+    return (jint)cna.effect_parameter_set_value_texture(
+        (CNA_Handle)parameter, (CNA_EffectTextureType)texture_type,
+        (CNA_Handle)texture);
+}
+
+JNIEXPORT jint JNICALL Java_org_openeggbert_cna_internal_NativeBindings_nativeApplyEffectPass(
+    JNIEnv* environment, jclass type, jlong pass)
+{
+    (void)environment;
+    (void)type;
+    return (jint)cna.effect_pass_apply((CNA_Handle)pass);
+}
+
+static GameGetBoolFunction basic_effect_bool_getter(const jint kind)
+{
+    switch (kind) {
+        case 0: return cna.basic_effect_get_vertex_color_enabled;
+        case 1: return cna.basic_effect_get_prefer_per_pixel_lighting;
+        case 2: return cna.basic_effect_get_texture_enabled;
+        case 3: return cna.effect_lights_get_enabled;
+        case 4: return cna.effect_fog_get_enabled;
+        default: return NULL;
+    }
+}
+
+static GameSetBoolFunction basic_effect_bool_setter(const jint kind)
+{
+    switch (kind) {
+        case 0: return cna.basic_effect_set_vertex_color_enabled;
+        case 1: return cna.basic_effect_set_prefer_per_pixel_lighting;
+        case 2: return cna.basic_effect_set_texture_enabled;
+        case 3: return cna.effect_lights_set_enabled;
+        case 4: return cna.effect_fog_set_enabled;
+        default: return NULL;
+    }
+}
+
+JNIEXPORT jint JNICALL Java_org_openeggbert_cna_internal_NativeBindings_nativeGetBasicEffectBoolean(
+    JNIEnv* environment, jclass type, jlong effect, jint kind)
+{
+    (void)environment;
+    (void)type;
+    GameGetBoolFunction function = basic_effect_bool_getter(kind);
+    if (function == NULL) {
+        return -(jint)CNA_RESULT_INVALID_ARGUMENT;
+    }
+    CNA_Bool value = CNA_FALSE;
+    const CNA_Result result = function((CNA_Handle)effect, &value);
+    return result == CNA_RESULT_SUCCESS
+        ? (value == CNA_TRUE ? 1 : 0) : -(jint)result;
+}
+
+JNIEXPORT jint JNICALL Java_org_openeggbert_cna_internal_NativeBindings_nativeSetBasicEffectBoolean(
+    JNIEnv* environment, jclass type, jlong effect, jint kind, jboolean value)
+{
+    (void)environment;
+    (void)type;
+    if (value != JNI_FALSE && value != JNI_TRUE) {
+        return (jint)CNA_RESULT_INVALID_ARGUMENT;
+    }
+    GameSetBoolFunction function = basic_effect_bool_setter(kind);
+    return function == NULL ? (jint)CNA_RESULT_INVALID_ARGUMENT
+        : (jint)function(
+            (CNA_Handle)effect, value == JNI_TRUE ? CNA_TRUE : CNA_FALSE);
+}
+
+static HandleGetFloatFunction basic_effect_float_getter(const jint kind)
+{
+    switch (kind) {
+        case 0: return cna.basic_effect_get_specular_power;
+        case 1: return cna.basic_effect_get_alpha;
+        case 2: return cna.effect_fog_get_start;
+        case 3: return cna.effect_fog_get_end;
+        default: return NULL;
+    }
+}
+
+static HandleSetFloatFunction basic_effect_float_setter(const jint kind)
+{
+    switch (kind) {
+        case 0: return cna.basic_effect_set_specular_power;
+        case 1: return cna.basic_effect_set_alpha;
+        case 2: return cna.effect_fog_set_start;
+        case 3: return cna.effect_fog_set_end;
+        default: return NULL;
+    }
+}
+
+JNIEXPORT jint JNICALL Java_org_openeggbert_cna_internal_NativeBindings_nativeGetBasicEffectFloat(
+    JNIEnv* environment, jclass type, jlong effect, jint kind, jfloatArray output)
+{
+    (void)type;
+    if (output == NULL || (*environment)->GetArrayLength(environment, output) != 1) {
+        return (jint)CNA_RESULT_INVALID_ARGUMENT;
+    }
+    HandleGetFloatFunction function = basic_effect_float_getter(kind);
+    if (function == NULL) {
+        return (jint)CNA_RESULT_INVALID_ARGUMENT;
+    }
+    float value = 0.0f;
+    const CNA_Result result = function((CNA_Handle)effect, &value);
+    if (result == CNA_RESULT_SUCCESS) {
+        const jfloat projected = (jfloat)value;
+        (*environment)->SetFloatArrayRegion(environment, output, 0, 1, &projected);
+        if ((*environment)->ExceptionCheck(environment)) {
+            return (jint)CNA_RESULT_INVALID_STATE;
+        }
+    }
+    return (jint)result;
+}
+
+JNIEXPORT jint JNICALL Java_org_openeggbert_cna_internal_NativeBindings_nativeSetBasicEffectFloat(
+    JNIEnv* environment, jclass type, jlong effect, jint kind, jfloat value)
+{
+    (void)environment;
+    (void)type;
+    HandleSetFloatFunction function = basic_effect_float_setter(kind);
+    return function == NULL ? (jint)CNA_RESULT_INVALID_ARGUMENT
+        : (jint)function((CNA_Handle)effect, (float)value);
+}
+
+static HandleGetVector3Function basic_effect_vector_getter(const jint kind)
+{
+    switch (kind) {
+        case 0: return cna.basic_effect_get_diffuse_color;
+        case 1: return cna.basic_effect_get_emissive_color;
+        case 2: return cna.basic_effect_get_specular_color;
+        case 3: return cna.effect_lights_get_ambient_color;
+        case 4: return cna.effect_fog_get_color;
+        default: return NULL;
+    }
+}
+
+static HandleSetVector3Function basic_effect_vector_setter(const jint kind)
+{
+    switch (kind) {
+        case 0: return cna.basic_effect_set_diffuse_color;
+        case 1: return cna.basic_effect_set_emissive_color;
+        case 2: return cna.basic_effect_set_specular_color;
+        case 3: return cna.effect_lights_set_ambient_color;
+        case 4: return cna.effect_fog_set_color;
+        default: return NULL;
+    }
+}
+
+static CNA_Result set_vector3_output(
+    JNIEnv* environment, jfloatArray output, const CNA_Vector3 value)
+{
+    if (output == NULL || (*environment)->GetArrayLength(environment, output) != 3) {
+        return CNA_RESULT_INVALID_ARGUMENT;
+    }
+    const jfloat projected[3] = {(jfloat)value.x, (jfloat)value.y, (jfloat)value.z};
+    (*environment)->SetFloatArrayRegion(environment, output, 0, 3, projected);
+    return (*environment)->ExceptionCheck(environment)
+        ? CNA_RESULT_INVALID_STATE : CNA_RESULT_SUCCESS;
+}
+
+static CNA_Result get_vector3_input(
+    JNIEnv* environment, jfloatArray input, CNA_Vector3* output)
+{
+    if (input == NULL || output == NULL ||
+        (*environment)->GetArrayLength(environment, input) != 3) {
+        return CNA_RESULT_INVALID_ARGUMENT;
+    }
+    jfloat values[3] = {0.0f, 0.0f, 0.0f};
+    (*environment)->GetFloatArrayRegion(environment, input, 0, 3, values);
+    if ((*environment)->ExceptionCheck(environment)) {
+        return CNA_RESULT_INVALID_STATE;
+    }
+    output->x = values[0];
+    output->y = values[1];
+    output->z = values[2];
+    return CNA_RESULT_SUCCESS;
+}
+
+JNIEXPORT jint JNICALL Java_org_openeggbert_cna_internal_NativeBindings_nativeGetBasicEffectVector(
+    JNIEnv* environment, jclass type, jlong effect, jint kind, jfloatArray output)
+{
+    (void)type;
+    HandleGetVector3Function function = basic_effect_vector_getter(kind);
+    if (function == NULL) {
+        return (jint)CNA_RESULT_INVALID_ARGUMENT;
+    }
+    CNA_Vector3 value = {0.0f, 0.0f, 0.0f};
+    CNA_Result result = function((CNA_Handle)effect, &value);
+    if (result == CNA_RESULT_SUCCESS) {
+        result = set_vector3_output(environment, output, value);
+    }
+    return (jint)result;
+}
+
+JNIEXPORT jint JNICALL Java_org_openeggbert_cna_internal_NativeBindings_nativeSetBasicEffectVector(
+    JNIEnv* environment, jclass type, jlong effect, jint kind, jfloatArray input)
+{
+    (void)type;
+    HandleSetVector3Function function = basic_effect_vector_setter(kind);
+    if (function == NULL) {
+        return (jint)CNA_RESULT_INVALID_ARGUMENT;
+    }
+    CNA_Vector3 value = {0.0f, 0.0f, 0.0f};
+    const CNA_Result result = get_vector3_input(environment, input, &value);
+    return result == CNA_RESULT_SUCCESS
+        ? (jint)function((CNA_Handle)effect, value) : (jint)result;
+}
+
+static HandleGetMatrixFunction basic_effect_matrix_getter(const jint kind)
+{
+    switch (kind) {
+        case 0: return cna.effect_matrices_get_world;
+        case 1: return cna.effect_matrices_get_view;
+        case 2: return cna.effect_matrices_get_projection;
+        default: return NULL;
+    }
+}
+
+static HandleSetMatrixFunction basic_effect_matrix_setter(const jint kind)
+{
+    switch (kind) {
+        case 0: return cna.effect_matrices_set_world;
+        case 1: return cna.effect_matrices_set_view;
+        case 2: return cna.effect_matrices_set_projection;
+        default: return NULL;
+    }
+}
+
+JNIEXPORT jint JNICALL Java_org_openeggbert_cna_internal_NativeBindings_nativeGetBasicEffectMatrix(
+    JNIEnv* environment, jclass type, jlong effect, jint kind, jfloatArray output)
+{
+    (void)type;
+    if (output == NULL || (*environment)->GetArrayLength(environment, output) != 16) {
+        return (jint)CNA_RESULT_INVALID_ARGUMENT;
+    }
+    HandleGetMatrixFunction function = basic_effect_matrix_getter(kind);
+    if (function == NULL) {
+        return (jint)CNA_RESULT_INVALID_ARGUMENT;
+    }
+    CNA_Matrix value = {0};
+    const CNA_Result result = function((CNA_Handle)effect, &value);
+    if (result == CNA_RESULT_SUCCESS) {
+        (*environment)->SetFloatArrayRegion(
+            environment, output, 0, 16, (const jfloat*)&value);
+        if ((*environment)->ExceptionCheck(environment)) {
+            return (jint)CNA_RESULT_INVALID_STATE;
+        }
+    }
+    return (jint)result;
+}
+
+JNIEXPORT jint JNICALL Java_org_openeggbert_cna_internal_NativeBindings_nativeSetBasicEffectMatrix(
+    JNIEnv* environment, jclass type, jlong effect, jint kind, jfloatArray input)
+{
+    (void)type;
+    if (input == NULL || (*environment)->GetArrayLength(environment, input) != 16) {
+        return (jint)CNA_RESULT_INVALID_ARGUMENT;
+    }
+    HandleSetMatrixFunction function = basic_effect_matrix_setter(kind);
+    if (function == NULL) {
+        return (jint)CNA_RESULT_INVALID_ARGUMENT;
+    }
+    CNA_Matrix value = {0};
+    (*environment)->GetFloatArrayRegion(environment, input, 0, 16, (jfloat*)&value);
+    return (*environment)->ExceptionCheck(environment)
+        ? (jint)CNA_RESULT_INVALID_STATE : (jint)function((CNA_Handle)effect, value);
+}
+
+JNIEXPORT jint JNICALL Java_org_openeggbert_cna_internal_NativeBindings_nativeGetBasicEffectDirectionalLight(
+    JNIEnv* environment,
+    jclass type,
+    jlong effect,
+    jint index,
+    jlongArray output)
+{
+    (void)type;
+    if (index < 0) {
+        return (jint)CNA_RESULT_INVALID_ARGUMENT;
+    }
+    CNA_Handle light = CNA_INVALID_HANDLE;
+    CNA_Result result = cna.effect_lights_get_directional_light(
+        (CNA_Handle)effect, (uint32_t)index, &light);
+    if (result == CNA_RESULT_SUCCESS) {
+        result = set_handle_output(environment, output, light);
+        if (result != CNA_RESULT_SUCCESS && light != CNA_INVALID_HANDLE) {
+            (void)cna.directional_light_destroy(light);
+        }
+    }
+    return (jint)result;
+}
+
+JNIEXPORT jint JNICALL Java_org_openeggbert_cna_internal_NativeBindings_nativeEnableDefaultLighting(
+    JNIEnv* environment, jclass type, jlong effect)
+{
+    (void)environment;
+    (void)type;
+    return (jint)cna.effect_lights_enable_default((CNA_Handle)effect);
+}
+
+static HandleGetVector3Function directional_light_vector_getter(const jint kind)
+{
+    switch (kind) {
+        case 0: return cna.directional_light_get_diffuse_color;
+        case 1: return cna.directional_light_get_direction;
+        case 2: return cna.directional_light_get_specular_color;
+        default: return NULL;
+    }
+}
+
+static HandleSetVector3Function directional_light_vector_setter(const jint kind)
+{
+    switch (kind) {
+        case 0: return cna.directional_light_set_diffuse_color;
+        case 1: return cna.directional_light_set_direction;
+        case 2: return cna.directional_light_set_specular_color;
+        default: return NULL;
+    }
+}
+
+JNIEXPORT jint JNICALL Java_org_openeggbert_cna_internal_NativeBindings_nativeGetDirectionalLightVector(
+    JNIEnv* environment, jclass type, jlong light, jint kind, jfloatArray output)
+{
+    (void)type;
+    HandleGetVector3Function function = directional_light_vector_getter(kind);
+    if (function == NULL) {
+        return (jint)CNA_RESULT_INVALID_ARGUMENT;
+    }
+    CNA_Vector3 value = {0.0f, 0.0f, 0.0f};
+    CNA_Result result = function((CNA_Handle)light, &value);
+    if (result == CNA_RESULT_SUCCESS) {
+        result = set_vector3_output(environment, output, value);
+    }
+    return (jint)result;
+}
+
+JNIEXPORT jint JNICALL Java_org_openeggbert_cna_internal_NativeBindings_nativeSetDirectionalLightVector(
+    JNIEnv* environment, jclass type, jlong light, jint kind, jfloatArray input)
+{
+    (void)type;
+    HandleSetVector3Function function = directional_light_vector_setter(kind);
+    if (function == NULL) {
+        return (jint)CNA_RESULT_INVALID_ARGUMENT;
+    }
+    CNA_Vector3 value = {0.0f, 0.0f, 0.0f};
+    const CNA_Result result = get_vector3_input(environment, input, &value);
+    return result == CNA_RESULT_SUCCESS
+        ? (jint)function((CNA_Handle)light, value) : (jint)result;
+}
+
+JNIEXPORT jint JNICALL Java_org_openeggbert_cna_internal_NativeBindings_nativeGetDirectionalLightEnabled(
+    JNIEnv* environment, jclass type, jlong light)
+{
+    (void)environment;
+    (void)type;
+    CNA_Bool value = CNA_FALSE;
+    const CNA_Result result = cna.directional_light_get_enabled((CNA_Handle)light, &value);
+    return result == CNA_RESULT_SUCCESS
+        ? (value == CNA_TRUE ? 1 : 0) : -(jint)result;
+}
+
+JNIEXPORT jint JNICALL Java_org_openeggbert_cna_internal_NativeBindings_nativeSetDirectionalLightEnabled(
+    JNIEnv* environment, jclass type, jlong light, jboolean value)
+{
+    (void)environment;
+    (void)type;
+    if (value != JNI_FALSE && value != JNI_TRUE) {
+        return (jint)CNA_RESULT_INVALID_ARGUMENT;
+    }
+    return (jint)cna.directional_light_set_enabled(
+        (CNA_Handle)light, value == JNI_TRUE ? CNA_TRUE : CNA_FALSE);
+}
+
+JNIEXPORT jint JNICALL Java_org_openeggbert_cna_internal_NativeBindings_nativeSetBasicEffectTexture(
+    JNIEnv* environment, jclass type, jlong effect, jlong texture)
+{
+    (void)environment;
+    (void)type;
+    return (jint)cna.basic_effect_set_texture(
+        (CNA_Handle)effect, (CNA_Handle)texture);
+}
+
 JNIEXPORT jint JNICALL Java_org_openeggbert_cna_internal_NativeBindings_nativeCreateTexture2D(
     JNIEnv* environment,
     jclass type,
@@ -5399,6 +7463,225 @@ JNIEXPORT jint JNICALL Java_org_openeggbert_cna_internal_NativeBindings_nativeDe
     (void)environment;
     (void)type;
     return (jint)cna.texture2d_destroy((CNA_Handle)texture);
+}
+
+JNIEXPORT jint JNICALL Java_org_openeggbert_cna_internal_NativeBindings_nativeCreateTexture3D(
+    JNIEnv* environment,
+    jclass type,
+    jlong game,
+    jint width,
+    jint height,
+    jint depth,
+    jboolean mip_map,
+    jint format,
+    jlongArray output)
+{
+    (void)type;
+    if (width <= 0 || height <= 0 || depth <= 0 ||
+        (mip_map != JNI_FALSE && mip_map != JNI_TRUE)) {
+        return (jint)CNA_RESULT_INVALID_ARGUMENT;
+    }
+    CNA_Handle device = CNA_INVALID_HANDLE;
+    CNA_Result result = graphics_device_from_game(game, &device);
+    if (result != CNA_RESULT_SUCCESS) {
+        return (jint)result;
+    }
+    CNA_Texture3DCreateInfo info;
+    (void)memset(&info, 0, sizeof(info));
+    info.struct_size = (uint32_t)sizeof(info);
+    info.struct_version = UINT32_C(1);
+    info.width = (uint32_t)width;
+    info.height = (uint32_t)height;
+    info.depth = (uint32_t)depth;
+    info.mip_map = mip_map == JNI_TRUE ? CNA_TRUE : CNA_FALSE;
+    info.format = (CNA_SurfaceFormat)(uint32_t)format;
+    CNA_Handle texture = CNA_INVALID_HANDLE;
+    result = cna.texture3d_create(device, &info, &texture);
+    if (result != CNA_RESULT_SUCCESS) {
+        return (jint)result;
+    }
+    result = set_handle_output(environment, output, texture);
+    if (result != CNA_RESULT_SUCCESS) {
+        (void)cna.texture3d_destroy(texture);
+    }
+    return (jint)result;
+}
+
+JNIEXPORT jint JNICALL Java_org_openeggbert_cna_internal_NativeBindings_nativeGetTexture3DInfo(
+    JNIEnv* environment, jclass type, jlong texture, jintArray output)
+{
+    (void)type;
+    if (output == NULL || (*environment)->GetArrayLength(environment, output) < 5) {
+        return (jint)CNA_RESULT_INVALID_ARGUMENT;
+    }
+    CNA_Texture3DInfo info;
+    (void)memset(&info, 0, sizeof(info));
+    info.struct_size = (uint32_t)sizeof(info);
+    info.struct_version = UINT32_C(1);
+    CNA_Result result = cna.texture3d_get_info((CNA_Handle)texture, &info);
+    if (result != CNA_RESULT_SUCCESS) {
+        return (jint)result;
+    }
+    if (info.width > (uint32_t)INT32_MAX || info.height > (uint32_t)INT32_MAX ||
+        info.depth > (uint32_t)INT32_MAX || info.level_count > (uint32_t)INT32_MAX ||
+        info.format > (uint32_t)INT32_MAX) {
+        return (jint)CNA_RESULT_INVALID_STATE;
+    }
+    const jint values[5] = {
+        (jint)info.width, (jint)info.height, (jint)info.depth,
+        (jint)info.level_count, (jint)info.format
+    };
+    (*environment)->SetIntArrayRegion(environment, output, 0, 5, values);
+    return (*environment)->ExceptionCheck(environment)
+        ? (jint)CNA_RESULT_INVALID_STATE : (jint)CNA_RESULT_SUCCESS;
+}
+
+static CNA_Result make_texture3d_transfer(
+    const jint level,
+    const jint left,
+    const jint top,
+    const jint right,
+    const jint bottom,
+    const jint front,
+    const jint back,
+    const jint start_index,
+    const jint element_count,
+    CNA_Texture3DTransfer* const out_transfer)
+{
+    if (out_transfer == NULL || level < 0 || start_index < 0 || element_count < 0) {
+        return CNA_RESULT_INVALID_ARGUMENT;
+    }
+    (void)memset(out_transfer, 0, sizeof(*out_transfer));
+    out_transfer->struct_size = (uint32_t)sizeof(*out_transfer);
+    out_transfer->struct_version = UINT32_C(1);
+    out_transfer->level = (int32_t)level;
+    out_transfer->left = (int32_t)left;
+    out_transfer->top = (int32_t)top;
+    out_transfer->right = (int32_t)right;
+    out_transfer->bottom = (int32_t)bottom;
+    out_transfer->front = (int32_t)front;
+    out_transfer->back = (int32_t)back;
+    out_transfer->start_index = (uint64_t)start_index;
+    out_transfer->element_count = (uint64_t)element_count;
+    return CNA_RESULT_SUCCESS;
+}
+
+JNIEXPORT jint JNICALL Java_org_openeggbert_cna_internal_NativeBindings_nativeSetTexture3DData(
+    JNIEnv* environment,
+    jclass type,
+    jlong texture,
+    jint level,
+    jint left,
+    jint top,
+    jint right,
+    jint bottom,
+    jint front,
+    jint back,
+    jint start_index,
+    jint element_count,
+    jintArray packed_colors)
+{
+    (void)type;
+    if (packed_colors == NULL) {
+        return (jint)CNA_RESULT_INVALID_ARGUMENT;
+    }
+    CNA_Texture3DTransfer transfer;
+    CNA_Result result = make_texture3d_transfer(
+        level, left, top, right, bottom, front, back,
+        start_index, element_count, &transfer);
+    const jsize capacity = (*environment)->GetArrayLength(environment, packed_colors);
+    if (result != CNA_RESULT_SUCCESS ||
+        transfer.start_index + transfer.element_count > (uint64_t)capacity) {
+        return (jint)(result == CNA_RESULT_SUCCESS ? CNA_RESULT_INVALID_ARGUMENT : result);
+    }
+    jint* packed = (*environment)->GetIntArrayElements(environment, packed_colors, NULL);
+    if (packed == NULL) {
+        return (jint)CNA_RESULT_INVALID_STATE;
+    }
+    CNA_Color* colors = capacity == 0 ? NULL
+        : (CNA_Color*)malloc((size_t)capacity * sizeof(CNA_Color));
+    if (capacity != 0 && colors == NULL) {
+        (*environment)->ReleaseIntArrayElements(
+            environment, packed_colors, packed, JNI_ABORT);
+        return (jint)CNA_RESULT_OUT_OF_MEMORY;
+    }
+    for (jsize index = 0; index < capacity; ++index) {
+        colors[index] = color_from_packed(packed[index]);
+    }
+    result = cna.texture3d_set_data(
+        (CNA_Handle)texture, &transfer, colors, (uint64_t)capacity);
+    free(colors);
+    (*environment)->ReleaseIntArrayElements(
+        environment, packed_colors, packed, JNI_ABORT);
+    return (jint)result;
+}
+
+JNIEXPORT jint JNICALL Java_org_openeggbert_cna_internal_NativeBindings_nativeGetTexture3DData(
+    JNIEnv* environment,
+    jclass type,
+    jlong texture,
+    jint level,
+    jint left,
+    jint top,
+    jint right,
+    jint bottom,
+    jint front,
+    jint back,
+    jint start_index,
+    jint element_count,
+    jintArray packed_colors)
+{
+    (void)type;
+    if (packed_colors == NULL) {
+        return (jint)CNA_RESULT_INVALID_ARGUMENT;
+    }
+    CNA_Texture3DTransfer transfer;
+    CNA_Result result = make_texture3d_transfer(
+        level, left, top, right, bottom, front, back,
+        start_index, element_count, &transfer);
+    const jsize capacity = (*environment)->GetArrayLength(environment, packed_colors);
+    if (result != CNA_RESULT_SUCCESS ||
+        transfer.start_index + transfer.element_count > (uint64_t)capacity) {
+        return (jint)(result == CNA_RESULT_SUCCESS ? CNA_RESULT_INVALID_ARGUMENT : result);
+    }
+    CNA_Color* colors = capacity == 0 ? NULL
+        : (CNA_Color*)calloc((size_t)capacity, sizeof(CNA_Color));
+    if (capacity != 0 && colors == NULL) {
+        return (jint)CNA_RESULT_OUT_OF_MEMORY;
+    }
+    uint64_t written = 0U;
+    result = cna.texture3d_get_data(
+        (CNA_Handle)texture, &transfer, colors, (uint64_t)capacity, &written);
+    if (result == CNA_RESULT_SUCCESS && written != transfer.element_count) {
+        result = CNA_RESULT_INVALID_STATE;
+    }
+    jint* packed = NULL;
+    if (result == CNA_RESULT_SUCCESS && capacity != 0) {
+        packed = (jint*)malloc((size_t)capacity * sizeof(jint));
+        if (packed == NULL) {
+            result = CNA_RESULT_OUT_OF_MEMORY;
+        } else {
+            for (jsize index = 0; index < capacity; ++index) {
+                packed[index] = packed_from_color(colors[index]);
+            }
+            (*environment)->SetIntArrayRegion(
+                environment, packed_colors, 0, capacity, packed);
+            if ((*environment)->ExceptionCheck(environment)) {
+                result = CNA_RESULT_INVALID_STATE;
+            }
+        }
+    }
+    free(packed);
+    free(colors);
+    return (jint)result;
+}
+
+JNIEXPORT jint JNICALL Java_org_openeggbert_cna_internal_NativeBindings_nativeDestroyTexture3D(
+    JNIEnv* environment, jclass type, jlong texture)
+{
+    (void)environment;
+    (void)type;
+    return (jint)cna.texture3d_destroy((CNA_Handle)texture);
 }
 
 JNIEXPORT jint JNICALL Java_org_openeggbert_cna_internal_NativeBindings_nativeCreateTextureCube(
@@ -5982,6 +8265,71 @@ JNIEXPORT jint JNICALL Java_org_openeggbert_cna_internal_NativeBindings_nativeBe
             &sampler,
             &depth,
             &rasterizer)
+        : (jint)result;
+}
+
+JNIEXPORT jint JNICALL Java_org_openeggbert_cna_internal_NativeBindings_nativeBeginSpriteBatchWithEffect(
+    JNIEnv* environment,
+    jclass type,
+    jlong sprite_batch,
+    jint sort_mode,
+    jintArray blend_input,
+    jintArray sampler_input,
+    jfloat sampler_bias,
+    jintArray depth_input,
+    jintArray rasterizer_input,
+    jfloatArray rasterizer_float_input,
+    jlong effect,
+    jfloatArray transform_input)
+{
+    (void)type;
+    CNA_BlendState blend;
+    CNA_SamplerState sampler;
+    CNA_DepthStencilState depth;
+    CNA_RasterizerState rasterizer;
+    CNA_Result result = blend_state_from_java_array(environment, blend_input, &blend);
+    if (result == CNA_RESULT_SUCCESS) {
+        result = sampler_state_from_java_array(
+            environment, sampler_input, sampler_bias, &sampler);
+    }
+    if (result == CNA_RESULT_SUCCESS) {
+        result = depth_state_from_java_array(environment, depth_input, &depth);
+    }
+    if (result == CNA_RESULT_SUCCESS) {
+        result = rasterizer_state_from_java_arrays(
+            environment, rasterizer_input, rasterizer_float_input, &rasterizer);
+    }
+    CNA_Matrix transform;
+    const CNA_Matrix* transform_pointer = NULL;
+    if (result == CNA_RESULT_SUCCESS && transform_input != NULL) {
+        if ((*environment)->GetArrayLength(environment, transform_input) != 16) {
+            result = CNA_RESULT_INVALID_ARGUMENT;
+        } else {
+            jfloat values[16];
+            (*environment)->GetFloatArrayRegion(
+                environment, transform_input, 0, 16, values);
+            if ((*environment)->ExceptionCheck(environment)) {
+                result = CNA_RESULT_INVALID_STATE;
+            } else {
+                transform = (CNA_Matrix){
+                    values[0], values[1], values[2], values[3],
+                    values[4], values[5], values[6], values[7],
+                    values[8], values[9], values[10], values[11],
+                    values[12], values[13], values[14], values[15]};
+                transform_pointer = &transform;
+            }
+        }
+    }
+    return result == CNA_RESULT_SUCCESS
+        ? (jint)cna.sprite_batch_begin_with_effect(
+            (CNA_Handle)sprite_batch,
+            (CNA_SpriteSortMode)(uint32_t)sort_mode,
+            &blend,
+            &sampler,
+            &depth,
+            &rasterizer,
+            (CNA_Handle)effect,
+            transform_pointer)
         : (jint)result;
 }
 

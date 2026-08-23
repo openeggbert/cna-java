@@ -18,6 +18,15 @@ public class IndexBuffer extends GraphicsResource {
             IndexElementSize indexElementSize,
             int indexCount,
             BufferUsage usage) {
+        this(graphicsDevice, indexElementSize, indexCount, usage, false);
+    }
+
+    IndexBuffer(
+            GraphicsDevice graphicsDevice,
+            IndexElementSize indexElementSize,
+            int indexCount,
+            BufferUsage usage,
+            boolean dynamic) {
         super(Objects.requireNonNull(graphicsDevice, "graphicsDevice"));
         IndexElementSize selectedSize = Objects.requireNonNull(
                 indexElementSize, "indexElementSize");
@@ -27,10 +36,11 @@ public class IndexBuffer extends GraphicsResource {
         BufferUsage selectedUsage = Objects.requireNonNull(usage, "usage");
         int[] info = NativeBindings.createIndexBuffer(
                 this, graphicsDevice, selectedSize.ordinal(), indexCount,
-                selectedUsage.getValue());
-        if (info.length != 3 || info[0] != indexCount
+                selectedUsage.getValue(), dynamic);
+        if (info.length != 6 || info[0] != indexCount
                 || info[1] != selectedSize.ordinal()
-                || info[2] != selectedUsage.getValue()) {
+                || info[2] != selectedUsage.getValue()
+                || (info[3] != 0) != dynamic) {
             NativeBindings.closeGraphicsResource(this);
             throw new IllegalStateException("CNA returned inconsistent IndexBuffer metadata");
         }
@@ -53,7 +63,7 @@ public class IndexBuffer extends GraphicsResource {
     }
 
     public final <T> void SetData(T[] data, int startIndex, int elementCount) {
-        setData(-1, data, startIndex, elementCount);
+        setData(-1, data, startIndex, elementCount, SetDataOptions.None);
     }
 
     public final <T> void SetData(
@@ -61,7 +71,7 @@ public class IndexBuffer extends GraphicsResource {
             T[] data,
             int startIndex,
             int elementCount) {
-        setData(offsetInBytes, data, startIndex, elementCount);
+        setData(offsetInBytes, data, startIndex, elementCount, SetDataOptions.None);
     }
 
     public final <T> void GetData(T[] data) {
@@ -113,16 +123,21 @@ public class IndexBuffer extends GraphicsResource {
     @Override
     protected void Dispose(boolean arg0) {
         if (arg0 && !getIsDisposed()) {
+            releaseDynamicSubscription();
             NativeBindings.closeGraphicsResource(this);
         }
         super.Dispose(arg0);
     }
 
-    private <T> void setData(
+    void releaseDynamicSubscription() {
+    }
+
+    final <T> void setData(
             int offsetInBytes,
             T[] data,
             int startIndex,
-            int elementCount) {
+            int elementCount,
+            SetDataOptions options) {
         ensureNotDisposed();
         Objects.requireNonNull(data, "data");
         validateArrayWindow(data.length, startIndex, elementCount);
@@ -137,12 +152,18 @@ public class IndexBuffer extends GraphicsResource {
         if (offsetInBytes < -1) {
             throw new IllegalArgumentException("offsetInBytes must not be negative");
         }
+        if (offsetInBytes >= 0
+                && !SetDataOptions.None.equals(Objects.requireNonNull(options, "options"))) {
+            throw new UnsupportedOperationException(
+                    "CNA's windowed index-buffer ABI cannot carry SetDataOptions");
+        }
         if (offsetInBytes < 0 && elementCount > indexCount) {
             throw new IndexOutOfBoundsException("Index upload exceeds the buffer capacity");
         }
         int[] snapshot = encode(data, startIndex, elementCount);
         NativeBindings.setIndexBufferData(
-                this, offsetInBytes, indexElementSize.ordinal(), snapshot);
+                this, offsetInBytes, indexElementSize.ordinal(), snapshot,
+                Objects.requireNonNull(options, "options").getValue());
     }
 
     private int[] encode(Object[] data, int startIndex, int elementCount) {
@@ -197,7 +218,7 @@ public class IndexBuffer extends GraphicsResource {
         }
     }
 
-    private static IndexElementSize sizeForType(Class<?> type) {
+    static IndexElementSize sizeForType(Class<?> type) {
         Class<?> selected = Objects.requireNonNull(type, "indexType");
         if (selected == short.class || selected == Short.class) {
             return IndexElementSize.SixteenBits;

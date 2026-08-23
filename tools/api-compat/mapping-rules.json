@@ -36,7 +36,11 @@
     }
   },
   "memberReturnTypeMappings": {
-    "Microsoft.Xna.Framework.Content.ContentManager.OpenStream(System.String)": "java.io.InputStream"
+    "Microsoft.Xna.Framework.Content.ContentManager.OpenStream(System.String)": "java.io.InputStream",
+    "Microsoft.Xna.Framework.TitleContainer.OpenStream(System.String)": "java.io.InputStream"
+  },
+  "memberNameMappings": {
+    "Microsoft.Xna.Framework.Content.ContentTypeReader`1.Read(Microsoft.Xna.Framework.Content.ContentReader,!0)": "ReadTyped"
   },
   "refOutMemberMappings": {
     "Microsoft.Xna.Framework.Graphics.GraphicsAdapter.QueryBackBufferFormat(Microsoft.Xna.Framework.Graphics.GraphicsProfile,Microsoft.Xna.Framework.Graphics.SurfaceFormat,Microsoft.Xna.Framework.Graphics.DepthFormat,System.Int32,Microsoft.Xna.Framework.Graphics.SurfaceFormat&,Microsoft.Xna.Framework.Graphics.DepthFormat&,System.Int32&)": {
@@ -92,7 +96,11 @@
     "Microsoft.Xna.Framework.Input.Touch.TouchCollection+Enumerator"
   ],
   "javaIterableBridgeTypes": [
-    "Microsoft.Xna.Framework.Graphics.DisplayModeCollection"
+    "Microsoft.Xna.Framework.Graphics.DisplayModeCollection",
+    "Microsoft.Xna.Framework.Graphics.EffectAnnotationCollection",
+    "Microsoft.Xna.Framework.Graphics.EffectParameterCollection",
+    "Microsoft.Xna.Framework.Graphics.EffectPassCollection",
+    "Microsoft.Xna.Framework.Graphics.EffectTechniqueCollection"
   ],
   "namedImmutableValuePropertyTypes": [
     "Microsoft.Xna.Framework.Color"

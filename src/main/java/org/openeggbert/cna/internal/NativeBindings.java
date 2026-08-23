@@ -2,13 +2,21 @@ package org.openeggbert.cna.internal;
 
 import Microsoft.Xna.Framework.Game;
 import Microsoft.Xna.Framework.Color;
+import Microsoft.Xna.Framework.Matrix;
 import Microsoft.Xna.Framework.GraphicsDeviceManager;
 import Microsoft.Xna.Framework.Rectangle;
 import Microsoft.Xna.Framework.Vector2;
+import Microsoft.Xna.Framework.Vector3;
 import Microsoft.Xna.Framework.WindowHandle;
 import Microsoft.Xna.Framework.Content.ContentManager;
 import Microsoft.Xna.Framework.Graphics.GraphicsDevice;
 import Microsoft.Xna.Framework.Graphics.GraphicsResource;
+import Microsoft.Xna.Framework.Graphics.Effect;
+import Microsoft.Xna.Framework.Graphics.EffectAnnotation;
+import Microsoft.Xna.Framework.Graphics.EffectParameter;
+import Microsoft.Xna.Framework.Graphics.EffectPass;
+import Microsoft.Xna.Framework.Graphics.EffectTechnique;
+import Microsoft.Xna.Framework.Graphics.DirectionalLight;
 import Microsoft.Xna.Framework.Graphics.CubeMapFace;
 import Microsoft.Xna.Framework.Graphics.Texture;
 import Microsoft.Xna.Framework.Graphics.PresentationParameters;
@@ -20,6 +28,7 @@ import Microsoft.Xna.Framework.Graphics.SpriteEffects;
 import Microsoft.Xna.Framework.Graphics.SpriteFont;
 import Microsoft.Xna.Framework.Graphics.SpriteSortMode;
 import Microsoft.Xna.Framework.Graphics.Texture2D;
+import Microsoft.Xna.Framework.Graphics.Texture3D;
 import Microsoft.Xna.Framework.Graphics.TextureCube;
 import Microsoft.Xna.Framework.Graphics.IndexBuffer;
 import Microsoft.Xna.Framework.Graphics.VertexBuffer;
@@ -50,6 +59,8 @@ public final class NativeBindings {
             new WeakHashMap<>();
     private static final Map<GraphicsResource, Game> RESOURCE_OWNERS = new WeakHashMap<>();
     private static final Map<Game, List<GraphicsResource>> GAME_RESOURCES = new WeakHashMap<>();
+    private static final Map<Object, NativeResourceHandle> EFFECT_MEMBERS = new WeakHashMap<>();
+    private static final Map<Effect, List<Object>> EFFECT_MEMBER_OWNERS = new WeakHashMap<>();
     private static final Map<GraphicsDevice, List<VertexBuffer>> DEVICE_VERTEX_BINDINGS =
             new WeakHashMap<>();
     private static final Map<GraphicsDevice, IndexBuffer> DEVICE_INDEX_BINDINGS =
@@ -306,6 +317,142 @@ public final class NativeBindings {
         return booleanResult("cna_gamepad_set_vibration", nativeSetGamePadVibration(
                 currentGameHandle("GamePad.SetVibration").requireValue(),
                 playerIndex, leftMotor, rightMotor));
+    }
+
+    public static int[] getTouchCapabilities() {
+        int[] output = new int[2];
+        check("cna_touch_get_capabilities", nativeGetTouchCapabilities(
+                currentGameHandle("TouchPanel.GetCapabilities").requireValue(), output));
+        return output;
+    }
+
+    public static void getTouchState(int[] discrete, float[] positions) {
+        requireOutputLength(discrete, 26, "TouchPanel state integer");
+        requireOutputLength(positions, 32, "TouchPanel state position");
+        check("cna_touch_get_state", nativeGetTouchState(
+                currentGameHandle("TouchPanel.GetState").requireValue(),
+                discrete, positions));
+    }
+
+    public static int getTouchPanelDisplayWidth() {
+        int[] output = new int[1];
+        check("cna_touch_panel_get_display_width", nativeTouchPanelGetDisplayWidth(
+                currentGameHandle("TouchPanel.DisplayWidth").requireValue(), output));
+        return output[0];
+    }
+
+    public static void setTouchPanelDisplayWidth(int value) {
+        check("cna_touch_panel_set_display_width", nativeTouchPanelSetDisplayWidth(
+                currentGameHandle("TouchPanel.DisplayWidth").requireValue(), value));
+    }
+
+    public static int getTouchPanelDisplayHeight() {
+        int[] output = new int[1];
+        check("cna_touch_panel_get_display_height", nativeTouchPanelGetDisplayHeight(
+                currentGameHandle("TouchPanel.DisplayHeight").requireValue(), output));
+        return output[0];
+    }
+
+    public static void setTouchPanelDisplayHeight(int value) {
+        check("cna_touch_panel_set_display_height", nativeTouchPanelSetDisplayHeight(
+                currentGameHandle("TouchPanel.DisplayHeight").requireValue(), value));
+    }
+
+    public static int getTouchPanelDisplayOrientation() {
+        int[] output = new int[1];
+        check("cna_touch_panel_get_display_orientation", nativeTouchPanelGetDisplayOrientation(
+                currentGameHandle("TouchPanel.DisplayOrientation").requireValue(), output));
+        return output[0];
+    }
+
+    public static void setTouchPanelDisplayOrientation(int value) {
+        check("cna_touch_panel_set_display_orientation", nativeTouchPanelSetDisplayOrientation(
+                currentGameHandle("TouchPanel.DisplayOrientation").requireValue(), value));
+    }
+
+    public static int getTouchPanelEnabledGestures() {
+        int[] output = new int[1];
+        check("cna_touch_panel_get_enabled_gestures", nativeTouchPanelGetEnabledGestures(
+                currentGameHandle("TouchPanel.EnabledGestures").requireValue(), output));
+        return output[0];
+    }
+
+    public static void setTouchPanelEnabledGestures(int value) {
+        check("cna_touch_panel_set_enabled_gestures", nativeTouchPanelSetEnabledGestures(
+                currentGameHandle("TouchPanel.EnabledGestures").requireValue(), value));
+    }
+
+    public static boolean getTouchPanelIsGestureAvailable() {
+        return booleanResult("cna_touch_panel_get_is_gesture_available",
+                nativeTouchPanelGetIsGestureAvailable(
+                        currentGameHandle("TouchPanel.IsGestureAvailable").requireValue()));
+    }
+
+    public static WindowHandle getTouchPanelWindowHandle() {
+        long[] output = new long[1];
+        check("cna_touch_panel_get_window_handle", nativeTouchPanelGetWindowHandle(
+                currentGameHandle("TouchPanel.WindowHandle").requireValue(), output));
+        return knownWindowHandle(output[0], "TouchPanel.WindowHandle");
+    }
+
+    public static void setTouchPanelWindowHandle(WindowHandle window) {
+        check("cna_touch_panel_set_window_handle", nativeTouchPanelSetWindowHandle(
+                currentGameHandle("TouchPanel.WindowHandle").requireValue(),
+                knownWindowValue(window, "TouchPanel.WindowHandle")));
+    }
+
+    public static void readTouchGesture(
+            int[] type, long[] timestamp, float[] vectors) {
+        requireOutputLength(type, 1, "GestureSample type");
+        Objects.requireNonNull(timestamp, "timestamp");
+        if (timestamp.length != 1) {
+            throw new IllegalArgumentException("GestureSample timestamp output must contain 1 value");
+        }
+        requireOutputLength(vectors, 8, "GestureSample vector");
+        check("cna_touch_panel_read_gesture", nativeReadTouchGesture(
+                currentGameHandle("TouchPanel.ReadGesture").requireValue(),
+                type, timestamp, vectors));
+    }
+
+    public static void setTouchDeviceExistsForTests(boolean value) {
+        check("cna_touch_panel_set_touch_device_exists_ext",
+                nativeSetTouchDeviceExists(
+                        currentGameHandle("TouchPanel test device").requireValue(), value));
+    }
+
+    public static void setTouchFingerForTests(
+            int index, int fingerId, float x, float y) {
+        check("cna_touch_panel_set_finger_ext", nativeSetTouchFinger(
+                currentGameHandle("TouchPanel test finger").requireValue(),
+                index, fingerId, x, y));
+    }
+
+    public static void raiseTouchEventForTests(
+            int fingerId, int state, float x, float y, float deltaX, float deltaY) {
+        check("cna_touch_panel_raise_touch_event_ext", nativeRaiseTouchEvent(
+                currentGameHandle("TouchPanel test event").requireValue(),
+                fingerId, state, x, y, deltaX, deltaY));
+    }
+
+    public static void enqueueTouchGestureForTests(
+            int type, long timestampTicks, float[] vectors) {
+        Objects.requireNonNull(vectors, "vectors");
+        if (vectors.length != 8) {
+            throw new IllegalArgumentException("GestureSample vectors must contain 8 values");
+        }
+        check("cna_touch_panel_enqueue_gesture_ext", nativeEnqueueTouchGesture(
+                currentGameHandle("TouchPanel test gesture").requireValue(),
+                type, timestampTicks, vectors));
+    }
+
+    public static void updateTouchPanelForTests() {
+        check("cna_touch_panel_update_ext", nativeUpdateTouchPanel(
+                currentGameHandle("TouchPanel test update").requireValue()));
+    }
+
+    public static void resetTouchPanelForTests() {
+        check("cna_touch_panel_reset_for_tests_ext", nativeResetTouchPanel(
+                currentGameHandle("TouchPanel test reset").requireValue()));
     }
 
     public static NativeGraphicsDeviceManagerHandle createGraphicsDeviceManager(
@@ -627,6 +774,11 @@ public final class NativeBindings {
         }
         check("cna_mouse_set_window_handle", nativeSetMouseWindowHandle(
                 currentGameHandle("Mouse.WindowHandle").requireValue(), value));
+    }
+
+    public static void updateFrameworkDispatcher() {
+        check("cna_framework_dispatcher_update", nativeUpdateFrameworkDispatcher(
+                currentGameHandle("FrameworkDispatcher.Update").requireValue()));
     }
 
     public static void registerWindowHandle(WindowHandle window, long value) {
@@ -1238,6 +1390,424 @@ public final class NativeBindings {
         }
     }
 
+    public static void createEffect(
+            Effect effect,
+            GraphicsDevice graphicsDevice,
+            byte[] effectCode,
+            boolean empty) {
+        Objects.requireNonNull(effect, "effect");
+        Game game = deviceGame(graphicsDevice);
+        long[] output = new long[1];
+        check(empty ? "cna_effect_create_empty" : "cna_effect_create_compiled",
+                nativeCreateEffect(
+                        gameHandle(game, "Effect").requireValue(),
+                        Objects.requireNonNull(effectCode, "effectCode"), empty, output));
+        registerResource(game, effect, output[0], NativeBindings::destroyEffect);
+    }
+
+    public static void createBasicEffect(Effect effect, GraphicsDevice graphicsDevice) {
+        Objects.requireNonNull(effect, "effect");
+        Game game = deviceGame(graphicsDevice);
+        long[] output = new long[1];
+        check("cna_basic_effect_create",
+                nativeCreateBasicEffect(gameHandle(game, "BasicEffect").requireValue(), output));
+        registerResource(game, effect, output[0], NativeBindings::destroyEffect);
+    }
+
+    public static void cloneEffect(Effect effect, Effect source) {
+        Objects.requireNonNull(effect, "effect");
+        long[] output = new long[1];
+        check("cna_effect_clone", nativeCloneEffect(resourceValue(source), output));
+        registerResource(resourceOwner(source), effect, output[0], NativeBindings::destroyEffect);
+    }
+
+    public static void applyEffect(Effect effect) {
+        check("cna_effect_apply", nativeApplyEffect(resourceValue(effect)));
+    }
+
+    public static long getEffectCollection(Effect effect, int kind) {
+        long[] output = new long[2];
+        check(kind == 0 ? "cna_effect_get_parameters" : "cna_effect_get_techniques",
+                nativeGetEffectChild(resourceValue(effect), kind, output));
+        return requireNativeEffectHandle(output[0]);
+    }
+
+    public static long[] getEffectCurrentTechnique(Effect effect) {
+        long[] output = new long[2];
+        check("cna_effect_get_current_technique",
+                nativeGetEffectChild(resourceValue(effect), 2, output));
+        return output;
+    }
+
+    public static void setEffectCurrentTechnique(Effect effect, EffectTechnique technique) {
+        check("cna_effect_set_current_technique", nativeSetEffectCurrentTechnique(
+                resourceValue(effect), effectMemberValue(technique)));
+    }
+
+    public static void registerEffectMember(
+            Effect owner, Object member, long value, int destroyKind) {
+        Objects.requireNonNull(owner, "owner");
+        Objects.requireNonNull(member, "member");
+        NativeResourceHandle handle = new NativeResourceHandle(
+                requireNativeEffectHandle(value),
+                closing -> destroyEffectMember(closing, destroyKind));
+        synchronized (GAMES) {
+            if (!RESOURCES.containsKey(owner)) {
+                throw new IllegalStateException("Effect has no live CNA resource");
+            }
+            if (EFFECT_MEMBERS.put(member, handle) != null) {
+                throw new IllegalStateException("Effect member was registered twice");
+            }
+            EFFECT_MEMBER_OWNERS.computeIfAbsent(owner, ignored -> new ArrayList<>()).add(member);
+        }
+    }
+
+    public static void requireEffectMember(Object member) {
+        effectMemberValue(member);
+    }
+
+    public static void releaseDuplicateEffectMember(long value, int destroyKind) {
+        destroyEffectMember(requireNativeEffectHandle(value), destroyKind);
+    }
+
+    public static void closeEffectMembers(Effect owner) {
+        List<Object> snapshot;
+        synchronized (GAMES) {
+            List<Object> members = EFFECT_MEMBER_OWNERS.get(owner);
+            snapshot = members == null ? List.of() : new ArrayList<>(members);
+        }
+        Collections.reverse(snapshot);
+        RuntimeException failure = null;
+        for (Object member : snapshot) {
+            NativeResourceHandle handle;
+            synchronized (GAMES) {
+                handle = EFFECT_MEMBERS.get(member);
+            }
+            if (handle == null) {
+                continue;
+            }
+            try {
+                handle.close();
+                synchronized (GAMES) {
+                    EFFECT_MEMBERS.remove(member);
+                    List<Object> members = EFFECT_MEMBER_OWNERS.get(owner);
+                    if (members != null) {
+                        members.remove(member);
+                    }
+                }
+            } catch (RuntimeException exception) {
+                if (failure == null) {
+                    failure = exception;
+                } else {
+                    failure.addSuppressed(exception);
+                }
+            }
+        }
+        synchronized (GAMES) {
+            List<Object> members = EFFECT_MEMBER_OWNERS.get(owner);
+            if (members != null && members.isEmpty()) {
+                EFFECT_MEMBER_OWNERS.remove(owner);
+            }
+        }
+        if (failure != null) {
+            throw failure;
+        }
+    }
+
+    public static long getEffectMemberCollection(Object member, int childKind) {
+        long[] output = new long[2];
+        check(effectChildOperation(childKind), nativeGetEffectChild(
+                effectMemberValue(member), childKind, output));
+        return requireNativeEffectHandle(output[0]);
+    }
+
+    public static int getEffectCollectionCount(Object collection, int collectionKind) {
+        return Math.toIntExact(longResult(
+                effectCollectionOperation(collectionKind, "get_count"),
+                nativeGetEffectCollectionCount(effectMemberValue(collection), collectionKind)));
+    }
+
+    public static long getEffectCollectionElement(
+            Object collection, int collectionKind, int index) {
+        long[] output = new long[1];
+        check(effectCollectionOperation(collectionKind, "get_at"),
+                nativeGetEffectCollectionElement(
+                        effectMemberValue(collection), collectionKind, index, output));
+        return requireNativeEffectHandle(output[0]);
+    }
+
+    public static String getEffectString(Object member, int stringKind) {
+        long handle = effectMemberValue(member);
+        int size = Math.toIntExact(longResult(
+                effectStringOperation(stringKind, true),
+                nativeGetEffectStringSize(handle, stringKind)));
+        if (size == 0) {
+            return "";
+        }
+        byte[] output = new byte[size];
+        check(effectStringOperation(stringKind, false),
+                nativeCopyEffectString(handle, stringKind, output));
+        return new String(output, StandardCharsets.UTF_8);
+    }
+
+    public static int[] getEffectInfo(Object member, int infoKind) {
+        int[] output = new int[4];
+        check(infoKind == 0
+                        ? "cna_effect_parameter_get_info"
+                        : "cna_effect_annotation_get_info",
+                nativeGetEffectInfo(effectMemberValue(member), infoKind, output));
+        return output;
+    }
+
+    public static int[] getEffectInts(Object member, int valueType, int count) {
+        if (count < 0) {
+            throw new IllegalArgumentException("Effect value count must not be negative");
+        }
+        int[] output = new int[count];
+        int written = Math.toIntExact(longResult(
+                member instanceof EffectAnnotation
+                        ? annotationValueOperation(valueType)
+                        : "cna_effect_parameter_get_values",
+                nativeGetEffectInts(
+                        effectMemberValue(member), member instanceof EffectAnnotation,
+                        valueType, count, output)));
+        return written == output.length ? output : Arrays.copyOf(output, written);
+    }
+
+    public static int getEffectIntValue(Object parameter, int valueType) {
+        int[] output = new int[1];
+        check("cna_effect_parameter_get_value", nativeGetEffectIntValue(
+                effectMemberValue(parameter), valueType, output));
+        return output[0];
+    }
+
+    public static float[] getEffectFloatValue(
+            Object parameter, int valueType, int width) {
+        if (width <= 0) {
+            throw new IllegalArgumentException("Effect value width must be positive");
+        }
+        float[] output = new float[width];
+        check("cna_effect_parameter_get_value", nativeGetEffectFloatValue(
+                effectMemberValue(parameter), valueType, output));
+        return output;
+    }
+
+    public static float[] getEffectFloats(
+            Object member, int valueType, int count, int width) {
+        if (count < 0 || width <= 0) {
+            throw new IllegalArgumentException("Effect value shape is invalid");
+        }
+        float[] output = new float[Math.multiplyExact(count, width)];
+        int written = Math.toIntExact(longResult(
+                member instanceof EffectAnnotation
+                        ? annotationValueOperation(valueType)
+                        : "cna_effect_parameter_get_values",
+                nativeGetEffectFloats(
+                        effectMemberValue(member), member instanceof EffectAnnotation,
+                        valueType, count, output)));
+        int floatCount = Math.multiplyExact(written, width);
+        return floatCount == output.length ? output : Arrays.copyOf(output, floatCount);
+    }
+
+    public static void setEffectInts(Object parameter, int valueType, int[] values) {
+        check("cna_effect_parameter_set_values", nativeSetEffectInts(
+                effectMemberValue(parameter), valueType,
+                Objects.requireNonNull(values, "values")));
+    }
+
+    public static void setEffectIntValue(Object parameter, int valueType, int value) {
+        check("cna_effect_parameter_set_value", nativeSetEffectIntValue(
+                effectMemberValue(parameter), valueType, value));
+    }
+
+    public static void setEffectFloatValue(
+            Object parameter, int valueType, float[] value) {
+        check("cna_effect_parameter_set_value", nativeSetEffectFloatValue(
+                effectMemberValue(parameter), valueType,
+                Objects.requireNonNull(value, "value")));
+    }
+
+    public static void setEffectFloats(
+            Object parameter, int valueType, float[] values, int count) {
+        check("cna_effect_parameter_set_values", nativeSetEffectFloats(
+                effectMemberValue(parameter), valueType,
+                Objects.requireNonNull(values, "values"), count));
+    }
+
+    public static void setEffectString(Object parameter, String value) {
+        check("cna_effect_parameter_set_value_string", nativeSetEffectString(
+                effectMemberValue(parameter),
+                Objects.requireNonNull(value, "value").getBytes(StandardCharsets.UTF_8)));
+    }
+
+    public static Texture2D getEffectTexture2D(Effect owner, EffectParameter parameter) {
+        long handle = getEffectTextureHandle(parameter, 1);
+        if (handle == 0L) {
+            return null;
+        }
+        Texture2D texture = FacadeFactory.createUninitializedTexture2D(owner.getGraphicsDevice());
+        registerResource(resourceOwner(owner), texture, handle, NativeBindings::destroyTexture2D);
+        try {
+            FacadeFactory.initializeTexture2D(texture, textureInfoOrClose(texture));
+            return texture;
+        } catch (RuntimeException failure) {
+            closeAfterFailedFacade(texture, failure);
+            throw failure;
+        }
+    }
+
+    public static Texture3D getEffectTexture3D(Effect owner, EffectParameter parameter) {
+        long handle = getEffectTextureHandle(parameter, 2);
+        if (handle == 0L) {
+            return null;
+        }
+        Texture3D texture = FacadeFactory.createUninitializedTexture3D(owner.getGraphicsDevice());
+        registerResource(resourceOwner(owner), texture, handle, NativeBindings::destroyTexture3D);
+        try {
+            FacadeFactory.initializeTexture3D(texture, texture3DInfoOrClose(texture));
+            return texture;
+        } catch (RuntimeException failure) {
+            closeAfterFailedFacade(texture, failure);
+            throw failure;
+        }
+    }
+
+    public static TextureCube getEffectTextureCube(Effect owner, EffectParameter parameter) {
+        long handle = getEffectTextureHandle(parameter, 3);
+        if (handle == 0L) {
+            return null;
+        }
+        TextureCube texture = FacadeFactory.createUninitializedTextureCube(owner.getGraphicsDevice());
+        registerResource(resourceOwner(owner), texture, handle, NativeBindings::destroyTextureCube);
+        try {
+            FacadeFactory.initializeTextureCube(texture, textureCubeInfoOrClose(texture));
+            return texture;
+        } catch (RuntimeException failure) {
+            closeAfterFailedFacade(texture, failure);
+            throw failure;
+        }
+    }
+
+    public static void setEffectTexture(Effect owner, EffectParameter parameter, Texture value) {
+        long texture = 0L;
+        if (value != null) {
+            if (value.getGraphicsDevice() != owner.getGraphicsDevice()) {
+                throw new IllegalArgumentException("Texture belongs to a different GraphicsDevice");
+            }
+            texture = resourceValue(value);
+        }
+        check("cna_effect_parameter_set_value_texture", nativeSetEffectTexture(
+                effectMemberValue(parameter), 0, texture));
+    }
+
+    public static void applyEffectPass(EffectPass pass) {
+        check("cna_effect_pass_apply", nativeApplyEffectPass(effectMemberValue(pass)));
+    }
+
+    public static boolean getBasicEffectBoolean(Effect effect, int kind) {
+        return booleanResult(basicEffectBooleanOperation(kind, false),
+                nativeGetBasicEffectBoolean(resourceValue(effect), kind));
+    }
+
+    public static void setBasicEffectBoolean(Effect effect, int kind, boolean value) {
+        check(basicEffectBooleanOperation(kind, true),
+                nativeSetBasicEffectBoolean(resourceValue(effect), kind, value));
+    }
+
+    public static float getBasicEffectFloat(Effect effect, int kind) {
+        float[] output = new float[1];
+        check(basicEffectFloatOperation(kind, false),
+                nativeGetBasicEffectFloat(resourceValue(effect), kind, output));
+        return output[0];
+    }
+
+    public static void setBasicEffectFloat(Effect effect, int kind, float value) {
+        check(basicEffectFloatOperation(kind, true),
+                nativeSetBasicEffectFloat(resourceValue(effect), kind, value));
+    }
+
+    public static Vector3 getBasicEffectVector(Effect effect, int kind) {
+        float[] output = new float[3];
+        check(basicEffectVectorOperation(kind, false),
+                nativeGetBasicEffectVector(resourceValue(effect), kind, output));
+        return new Vector3(output[0], output[1], output[2]);
+    }
+
+    public static void setBasicEffectVector(Effect effect, int kind, Vector3 value) {
+        Vector3 snapshot = new Vector3(Objects.requireNonNull(value, "value"));
+        check(basicEffectVectorOperation(kind, true),
+                nativeSetBasicEffectVector(
+                        resourceValue(effect), kind,
+                        new float[]{snapshot.X, snapshot.Y, snapshot.Z}));
+    }
+
+    public static Matrix getBasicEffectMatrix(Effect effect, int kind) {
+        float[] output = new float[16];
+        check(basicEffectMatrixOperation(kind, false),
+                nativeGetBasicEffectMatrix(resourceValue(effect), kind, output));
+        return matrix(output);
+    }
+
+    public static void setBasicEffectMatrix(Effect effect, int kind, Matrix value) {
+        check(basicEffectMatrixOperation(kind, true),
+                nativeSetBasicEffectMatrix(
+                        resourceValue(effect), kind,
+                        matrixValues(new Matrix(Objects.requireNonNull(value, "value")))));
+    }
+
+    public static long getBasicEffectDirectionalLightHandle(Effect effect, int index) {
+        if (index < 0 || index > 2) {
+            throw new IndexOutOfBoundsException("Directional-light index must be between 0 and 2");
+        }
+        long[] output = new long[1];
+        check("cna_effect_lights_get_directional_light",
+                nativeGetBasicEffectDirectionalLight(resourceValue(effect), index, output));
+        return requireNativeEffectHandle(output[0]);
+    }
+
+    public static void enableDefaultLighting(Effect effect) {
+        check("cna_effect_lights_enable_default",
+                nativeEnableDefaultLighting(resourceValue(effect)));
+    }
+
+    public static Vector3 getDirectionalLightVector(DirectionalLight light, int kind) {
+        float[] output = new float[3];
+        check(directionalLightVectorOperation(kind, false),
+                nativeGetDirectionalLightVector(effectMemberValue(light), kind, output));
+        return new Vector3(output[0], output[1], output[2]);
+    }
+
+    public static void setDirectionalLightVector(
+            DirectionalLight light, int kind, Vector3 value) {
+        Vector3 snapshot = new Vector3(Objects.requireNonNull(value, "value"));
+        check(directionalLightVectorOperation(kind, true),
+                nativeSetDirectionalLightVector(
+                        effectMemberValue(light), kind,
+                        new float[]{snapshot.X, snapshot.Y, snapshot.Z}));
+    }
+
+    public static boolean getDirectionalLightEnabled(DirectionalLight light) {
+        return booleanResult("cna_directional_light_get_enabled",
+                nativeGetDirectionalLightEnabled(effectMemberValue(light)));
+    }
+
+    public static void setDirectionalLightEnabled(DirectionalLight light, boolean value) {
+        check("cna_directional_light_set_enabled",
+                nativeSetDirectionalLightEnabled(effectMemberValue(light), value));
+    }
+
+    public static void setBasicEffectTexture(Effect effect, Texture2D texture) {
+        long textureHandle = 0L;
+        if (texture != null) {
+            if (texture.getGraphicsDevice() != effect.getGraphicsDevice()) {
+                throw new IllegalArgumentException("Texture belongs to a different GraphicsDevice");
+            }
+            textureHandle = resourceValue(texture);
+        }
+        check("cna_basic_effect_set_texture",
+                nativeSetBasicEffectTexture(resourceValue(effect), textureHandle));
+    }
+
     public static int[] createTexture2D(
             Texture2D texture,
             GraphicsDevice graphicsDevice,
@@ -1394,7 +1964,8 @@ public final class NativeBindings {
             int vertexStride,
             int[] declaration,
             int vertexCount,
-            int usage) {
+            int usage,
+            boolean dynamic) {
         Game game = deviceGame(graphicsDevice);
         long[] output = new long[1];
         GraphicsResource previous = GRAPHICS_RESOURCE_EVENT.get();
@@ -1403,7 +1974,7 @@ public final class NativeBindings {
             check("cna_vertex_buffer_create", nativeCreateVertexBuffer(
                     gameHandle(game, "VertexBuffer").requireValue(),
                     vertexStride, Objects.requireNonNull(declaration, "declaration"),
-                    vertexCount, usage, output));
+                    vertexCount, usage, dynamic, output));
         } finally {
             restoreGraphicsResourceEvent(previous);
         }
@@ -1416,16 +1987,42 @@ public final class NativeBindings {
     public static void setVertexBufferData(
             VertexBuffer buffer,
             int offsetInBytes,
+            int vertexType,
             byte[] payload,
             int vertexCount,
-            int vertexStride) {
+            int vertexStride,
+            int options) {
         check(offsetInBytes < 0
-                        ? "cna_vertex_buffer_set_data_raw"
+                        ? (options == 0
+                                ? "cna_vertex_buffer_set_data"
+                                : "cna_vertex_buffer_set_data(options)")
                         : "cna_vertex_buffer_set_data_raw_at",
                 nativeSetVertexBufferData(
-                        resourceValue(buffer), offsetInBytes,
+                        resourceValue(buffer), offsetInBytes, vertexType,
                         Objects.requireNonNull(payload, "payload"),
-                        vertexCount, vertexStride));
+                        vertexCount, vertexStride, options));
+    }
+
+    public static boolean getVertexBufferIsContentLost(VertexBuffer buffer) {
+        return vertexBufferInfo(buffer)[5] != 0;
+    }
+
+    public static long subscribeVertexBufferContentLost(
+            VertexBuffer buffer, Object callbackTarget) {
+        long[] output = new long[1];
+        check("cna_vertex_buffer_subscribe_content_lost",
+                nativeSubscribeVertexBufferContentLost(
+                        resourceValue(buffer),
+                        Objects.requireNonNull(callbackTarget, "callbackTarget"), output));
+        if (output[0] == 0L) {
+            throw new IllegalStateException("CNA returned an invalid vertex-buffer subscription");
+        }
+        return output[0];
+    }
+
+    public static void unsubscribeVertexBufferContentLost(long registration) {
+        check("cna_vertex_buffer_unsubscribe_content_lost",
+                nativeUnsubscribeVertexBufferContentLost(registration));
     }
 
     public static byte[] getVertexBufferData(
@@ -1446,7 +2043,8 @@ public final class NativeBindings {
             GraphicsDevice graphicsDevice,
             int indexElementSize,
             int indexCount,
-            int usage) {
+            int usage,
+            boolean dynamic) {
         Game game = deviceGame(graphicsDevice);
         long[] output = new long[1];
         GraphicsResource previous = GRAPHICS_RESOURCE_EVENT.get();
@@ -1454,7 +2052,7 @@ public final class NativeBindings {
         try {
             check("cna_index_buffer_create", nativeCreateIndexBuffer(
                     gameHandle(game, "IndexBuffer").requireValue(),
-                    indexElementSize, indexCount, usage, output));
+                    indexElementSize, indexCount, usage, dynamic, output));
         } finally {
             restoreGraphicsResourceEvent(previous);
         }
@@ -1468,13 +2066,36 @@ public final class NativeBindings {
             IndexBuffer buffer,
             int offsetInBytes,
             int indexElementSize,
-            int[] values) {
+            int[] values,
+            int options) {
         check(offsetInBytes < 0
                         ? "cna_index_buffer_set_data"
                         : "cna_index_buffer_set_data_at",
                 nativeSetIndexBufferData(
                         resourceValue(buffer), offsetInBytes, indexElementSize,
-                        Objects.requireNonNull(values, "values")));
+                        Objects.requireNonNull(values, "values"), options));
+    }
+
+    public static boolean getIndexBufferIsContentLost(IndexBuffer buffer) {
+        return indexBufferInfo(buffer)[4] != 0;
+    }
+
+    public static long subscribeIndexBufferContentLost(
+            IndexBuffer buffer, Object callbackTarget) {
+        long[] output = new long[1];
+        check("cna_index_buffer_subscribe_content_lost",
+                nativeSubscribeIndexBufferContentLost(
+                        resourceValue(buffer),
+                        Objects.requireNonNull(callbackTarget, "callbackTarget"), output));
+        if (output[0] == 0L) {
+            throw new IllegalStateException("CNA returned an invalid index-buffer subscription");
+        }
+        return output[0];
+    }
+
+    public static void unsubscribeIndexBufferContentLost(long registration) {
+        check("cna_index_buffer_unsubscribe_content_lost",
+                nativeUnsubscribeIndexBufferContentLost(registration));
     }
 
     public static int[] getIndexBufferData(
@@ -1587,6 +2208,72 @@ public final class NativeBindings {
         byte[] output = new byte[size];
         check("cna_texture2d_copy_encoded",
                 nativeCopyTexture2DEncoded(handle, format, width, height, output));
+        return output;
+    }
+
+    public static int[] createTexture3D(
+            Texture3D texture,
+            GraphicsDevice graphicsDevice,
+            int width,
+            int height,
+            int depth,
+            boolean mipMap,
+            int format) {
+        Game game = deviceGame(graphicsDevice);
+        long[] output = new long[1];
+        check("cna_texture3d_create", nativeCreateTexture3D(
+                gameHandle(game, "Texture3D").requireValue(),
+                width, height, depth, mipMap, format, output));
+        registerResource(game, texture, output[0], NativeBindings::destroyTexture3D);
+        int[] info = texture3DInfoOrClose(texture);
+        rethrowGraphicsDeviceListenerFailure(graphicsDevice);
+        return info;
+    }
+
+    public static void setTexture3DData(
+            Texture3D texture,
+            int level,
+            int left,
+            int top,
+            int right,
+            int bottom,
+            int front,
+            int back,
+            Color[] data,
+            int startIndex,
+            int elementCount) {
+        int[] packed = new int[data.length];
+        for (int index = startIndex; index < startIndex + elementCount; index++) {
+            packed[index] = Objects.requireNonNull(data[index], "data[" + index + "]")
+                    .getPackedValue().intValue();
+        }
+        check("cna_texture3d_set_data", nativeSetTexture3DData(
+                resourceValue(texture), level, left, top, right, bottom, front, back,
+                startIndex, elementCount, packed));
+    }
+
+    public static Color[] getTexture3DData(
+            Texture3D texture,
+            int level,
+            int left,
+            int top,
+            int right,
+            int bottom,
+            int front,
+            int back,
+            int capacity,
+            int startIndex,
+            int elementCount) {
+        int[] packed = new int[capacity];
+        check("cna_texture3d_get_data", nativeGetTexture3DData(
+                resourceValue(texture), level, left, top, right, bottom, front, back,
+                startIndex, elementCount, packed));
+        Color[] output = new Color[capacity];
+        for (int index = startIndex; index < startIndex + elementCount; index++) {
+            Color color = new Color();
+            color.setPackedValue(Integer.toUnsignedLong(packed[index]));
+            output[index] = color;
+        }
         return output;
     }
 
@@ -1835,6 +2522,41 @@ public final class NativeBindings {
                 requireLength(depthStencil, 16, "DepthStencilState"),
                 requireLength(rasterizer, 4, "RasterizerState integer"),
                 requireLength(rasterizerFloats, 2, "RasterizerState float")));
+    }
+
+    public static void beginSpriteBatchWithEffect(
+            SpriteBatch spriteBatch,
+            SpriteSortMode sortMode,
+            int[] blend,
+            int[] sampler,
+            float samplerBias,
+            int[] depthStencil,
+            int[] rasterizer,
+            float[] rasterizerFloats,
+            Effect effect,
+            Matrix transform) {
+        if (effect != null && effect.getGraphicsDevice() != spriteBatch.getGraphicsDevice()) {
+            throw new IllegalArgumentException("Effect belongs to a different GraphicsDevice");
+        }
+        float[] matrix = null;
+        if (transform != null) {
+            Matrix value = new Matrix(transform);
+            matrix = new float[] {
+                    value.M11, value.M12, value.M13, value.M14,
+                    value.M21, value.M22, value.M23, value.M24,
+                    value.M31, value.M32, value.M33, value.M34,
+                    value.M41, value.M42, value.M43, value.M44};
+        }
+        check("cna_sprite_batch_begin_with_effect", nativeBeginSpriteBatchWithEffect(
+                resourceValue(spriteBatch),
+                Objects.requireNonNull(sortMode, "sortMode").ordinal(),
+                requireLength(blend, 12, "BlendState"),
+                requireLength(sampler, 6, "SamplerState integer"),
+                samplerBias,
+                requireLength(depthStencil, 16, "DepthStencilState"),
+                requireLength(rasterizer, 4, "RasterizerState integer"),
+                requireLength(rasterizerFloats, 2, "RasterizerState float"),
+                effect == null ? 0L : resourceValue(effect), matrix));
     }
 
     public static void drawSpriteRectangle(
@@ -2354,11 +3076,8 @@ public final class NativeBindings {
     }
 
     private static int[] vertexBufferInfoOrClose(VertexBuffer buffer) {
-        int[] info = new int[4];
         try {
-            check("cna_vertex_buffer_get_info",
-                    nativeGetVertexBufferInfo(resourceValue(buffer), info));
-            return info;
+            return vertexBufferInfo(buffer);
         } catch (RuntimeException failure) {
             try {
                 closeGraphicsResource(buffer);
@@ -2369,18 +3088,37 @@ public final class NativeBindings {
         }
     }
 
-    private static int[] indexBufferInfoOrClose(IndexBuffer buffer) {
-        int[] info = new int[3];
+    private static int[] vertexBufferInfo(VertexBuffer buffer) {
+        int[] info = new int[7];
         try {
-            check("cna_index_buffer_get_info",
-                    nativeGetIndexBufferInfo(resourceValue(buffer), info));
+            check("cna_vertex_buffer_get_info",
+                    nativeGetVertexBufferInfo(resourceValue(buffer), info));
             return info;
+        } catch (RuntimeException failure) {
+            throw failure;
+        }
+    }
+
+    private static int[] indexBufferInfoOrClose(IndexBuffer buffer) {
+        try {
+            return indexBufferInfo(buffer);
         } catch (RuntimeException failure) {
             try {
                 closeGraphicsResource(buffer);
             } catch (RuntimeException closeFailure) {
                 failure.addSuppressed(closeFailure);
             }
+            throw failure;
+        }
+    }
+
+    private static int[] indexBufferInfo(IndexBuffer buffer) {
+        int[] info = new int[6];
+        try {
+            check("cna_index_buffer_get_info",
+                    nativeGetIndexBufferInfo(resourceValue(buffer), info));
+            return info;
+        } catch (RuntimeException failure) {
             throw failure;
         }
     }
@@ -2397,6 +3135,17 @@ public final class NativeBindings {
             } catch (RuntimeException closeFailure) {
                 failure.addSuppressed(closeFailure);
             }
+            throw failure;
+        }
+    }
+
+    private static int[] texture3DInfoOrClose(Texture3D texture) {
+        int[] info = new int[5];
+        try {
+            check("cna_texture3d_get_info", nativeGetTexture3DInfo(resourceValue(texture), info));
+            return info;
+        } catch (RuntimeException failure) {
+            closeAfterFailedFacade(texture, failure);
             throw failure;
         }
     }
@@ -2431,6 +3180,183 @@ public final class NativeBindings {
                     resource.getClass().getSimpleName() + " has no live CNA resource");
         }
         return handle.requireValue();
+    }
+
+    private static Game resourceOwner(GraphicsResource resource) {
+        synchronized (GAMES) {
+            Game owner = RESOURCE_OWNERS.get(Objects.requireNonNull(resource, "resource"));
+            if (owner == null) {
+                throw new IllegalStateException(
+                        resource.getClass().getSimpleName() + " has no live CNA owner");
+            }
+            return owner;
+        }
+    }
+
+    private static long effectMemberValue(Object member) {
+        NativeResourceHandle handle;
+        synchronized (GAMES) {
+            handle = EFFECT_MEMBERS.get(Objects.requireNonNull(member, "member"));
+        }
+        if (handle == null) {
+            throw new IllegalStateException("Effect member is unavailable after parent disposal");
+        }
+        return handle.requireValue();
+    }
+
+    private static long requireNativeEffectHandle(long value) {
+        if (value == 0L) {
+            throw new IllegalStateException("CNA returned an invalid Effect reflection handle");
+        }
+        return value;
+    }
+
+    private static long getEffectTextureHandle(EffectParameter parameter, int textureType) {
+        long[] output = new long[1];
+        check("cna_effect_parameter_get_value_texture", nativeGetEffectTexture(
+                effectMemberValue(parameter), textureType, output));
+        return output[0];
+    }
+
+    private static void closeAfterFailedFacade(
+            GraphicsResource resource, RuntimeException failure) {
+        try {
+            resource.close();
+        } catch (RuntimeException closeFailure) {
+            failure.addSuppressed(closeFailure);
+        }
+    }
+
+    private static String effectChildOperation(int kind) {
+        return switch (kind) {
+            case 3 -> "cna_effect_technique_get_passes";
+            case 4 -> "cna_effect_technique_get_annotations";
+            case 5 -> "cna_effect_pass_get_annotations";
+            case 6 -> "cna_effect_parameter_get_elements";
+            case 7 -> "cna_effect_parameter_get_structure_members";
+            case 8 -> "cna_effect_parameter_get_annotations";
+            default -> throw new IllegalArgumentException("Unknown Effect child kind " + kind);
+        };
+    }
+
+    private static String effectCollectionOperation(int kind, String suffix) {
+        String stem = switch (kind) {
+            case 0 -> "cna_effect_parameter_collection_";
+            case 1 -> "cna_effect_technique_collection_";
+            case 2 -> "cna_effect_pass_collection_";
+            case 3 -> "cna_effect_annotation_collection_";
+            default -> throw new IllegalArgumentException("Unknown Effect collection kind " + kind);
+        };
+        return stem + suffix;
+    }
+
+    private static String effectStringOperation(int kind, boolean size) {
+        String operation = switch (kind) {
+            case 0 -> "cna_effect_technique_";
+            case 1 -> "cna_effect_pass_";
+            case 2 -> "cna_effect_parameter_";
+            case 3 -> "cna_effect_parameter_";
+            case 4 -> "cna_effect_annotation_";
+            case 5 -> "cna_effect_annotation_";
+            case 6 -> "cna_effect_parameter_";
+            case 7 -> "cna_effect_annotation_";
+            default -> throw new IllegalArgumentException("Unknown Effect string kind " + kind);
+        };
+        String field = switch (kind) {
+            case 0, 1, 2, 4 -> "name";
+            case 3, 5 -> "semantic";
+            case 6, 7 -> "value_string";
+            default -> throw new AssertionError();
+        };
+        return operation + (size ? "get_" + field + "_byte_count" : "copy_" + field);
+    }
+
+    private static String annotationValueOperation(int valueType) {
+        return switch (valueType) {
+            case 0 -> "cna_effect_annotation_get_value_boolean";
+            case 1 -> "cna_effect_annotation_get_value_int32";
+            case 2 -> "cna_effect_annotation_get_value_single";
+            case 3 -> "cna_effect_annotation_get_value_matrix";
+            case 6 -> "cna_effect_annotation_get_value_vector2";
+            case 7 -> "cna_effect_annotation_get_value_vector3";
+            case 8 -> "cna_effect_annotation_get_value_vector4";
+            default -> throw new IllegalArgumentException(
+                    "Unsupported Effect annotation value kind " + valueType);
+        };
+    }
+
+    private static String basicEffectBooleanOperation(int kind, boolean setter) {
+        String stem = switch (kind) {
+            case 0 -> "cna_basic_effect_" + (setter ? "set" : "get")
+                    + "_vertex_color_enabled";
+            case 1 -> "cna_basic_effect_" + (setter ? "set" : "get")
+                    + "_prefer_per_pixel_lighting";
+            case 2 -> "cna_basic_effect_" + (setter ? "set" : "get")
+                    + "_texture_enabled";
+            case 3 -> "cna_effect_lights_" + (setter ? "set" : "get") + "_enabled";
+            case 4 -> "cna_effect_fog_" + (setter ? "set" : "get") + "_enabled";
+            default -> throw new IllegalArgumentException("Unknown BasicEffect Boolean kind " + kind);
+        };
+        return stem;
+    }
+
+    private static String basicEffectFloatOperation(int kind, boolean setter) {
+        String action = setter ? "set" : "get";
+        return switch (kind) {
+            case 0 -> "cna_basic_effect_" + action + "_specular_power";
+            case 1 -> "cna_basic_effect_" + action + "_alpha";
+            case 2 -> "cna_effect_fog_" + action + "_start";
+            case 3 -> "cna_effect_fog_" + action + "_end";
+            default -> throw new IllegalArgumentException("Unknown BasicEffect float kind " + kind);
+        };
+    }
+
+    private static String basicEffectVectorOperation(int kind, boolean setter) {
+        String action = setter ? "set" : "get";
+        return switch (kind) {
+            case 0 -> "cna_basic_effect_" + action + "_diffuse_color";
+            case 1 -> "cna_basic_effect_" + action + "_emissive_color";
+            case 2 -> "cna_basic_effect_" + action + "_specular_color";
+            case 3 -> "cna_effect_lights_" + action + "_ambient_color";
+            case 4 -> "cna_effect_fog_" + action + "_color";
+            default -> throw new IllegalArgumentException("Unknown BasicEffect vector kind " + kind);
+        };
+    }
+
+    private static String basicEffectMatrixOperation(int kind, boolean setter) {
+        String action = setter ? "set" : "get";
+        return switch (kind) {
+            case 0 -> "cna_effect_matrices_" + action + "_world";
+            case 1 -> "cna_effect_matrices_" + action + "_view";
+            case 2 -> "cna_effect_matrices_" + action + "_projection";
+            default -> throw new IllegalArgumentException("Unknown BasicEffect matrix kind " + kind);
+        };
+    }
+
+    private static String directionalLightVectorOperation(int kind, boolean setter) {
+        String action = setter ? "set" : "get";
+        return switch (kind) {
+            case 0 -> "cna_directional_light_" + action + "_diffuse_color";
+            case 1 -> "cna_directional_light_" + action + "_direction";
+            case 2 -> "cna_directional_light_" + action + "_specular_color";
+            default -> throw new IllegalArgumentException("Unknown DirectionalLight vector kind " + kind);
+        };
+    }
+
+    private static float[] matrixValues(Matrix value) {
+        return new float[]{
+                value.M11, value.M12, value.M13, value.M14,
+                value.M21, value.M22, value.M23, value.M24,
+                value.M31, value.M32, value.M33, value.M34,
+                value.M41, value.M42, value.M43, value.M44};
+    }
+
+    private static Matrix matrix(float[] value) {
+        return new Matrix(
+                value[0], value[1], value[2], value[3],
+                value[4], value[5], value[6], value[7],
+                value[8], value[9], value[10], value[11],
+                value[12], value[13], value[14], value[15]);
     }
 
     private static Texture findTexture(long value, Texture cached) {
@@ -2520,6 +3446,34 @@ public final class NativeBindings {
         check("cna_texture2d_destroy", nativeDestroyTexture2D(handle));
     }
 
+    private static void destroyTexture3D(long handle) {
+        check("cna_texture3d_destroy", nativeDestroyTexture3D(handle));
+    }
+
+    private static void destroyEffect(long handle) {
+        check("cna_effect_destroy", nativeDestroyEffectObject(handle, 0));
+    }
+
+    private static void destroyEffectMember(long handle, int kind) {
+        check(effectDestroyOperation(kind), nativeDestroyEffectObject(handle, kind));
+    }
+
+    private static String effectDestroyOperation(int kind) {
+        return switch (kind) {
+            case 0 -> "cna_effect_destroy";
+            case 1 -> "cna_effect_parameter_collection_destroy";
+            case 2 -> "cna_effect_technique_collection_destroy";
+            case 3 -> "cna_effect_pass_collection_destroy";
+            case 4 -> "cna_effect_annotation_collection_destroy";
+            case 5 -> "cna_effect_parameter_destroy";
+            case 6 -> "cna_effect_technique_destroy";
+            case 7 -> "cna_effect_pass_destroy";
+            case 8 -> "cna_effect_annotation_destroy";
+            case 9 -> "cna_directional_light_destroy";
+            default -> throw new IllegalArgumentException("Unknown Effect handle kind " + kind);
+        };
+    }
+
     private static void destroyVertexBuffer(long handle) {
         check("cna_vertex_buffer_destroy", nativeDestroyVertexBuffer(handle));
     }
@@ -2555,6 +3509,31 @@ public final class NativeBindings {
             }
         }
         return null;
+    }
+
+    private static WindowHandle knownWindowHandle(long value, String operation) {
+        if (value == 0L) {
+            return WindowHandle.Zero;
+        }
+        synchronized (GAMES) {
+            WindowHandle known = findWindowHandle(value);
+            if (known != null) {
+                return known;
+            }
+        }
+        throw new IllegalStateException(
+                "CNA returned an unrecognized opaque token for " + operation);
+    }
+
+    private static long knownWindowValue(WindowHandle window, String operation) {
+        synchronized (GAMES) {
+            Long registered = WINDOW_HANDLES.get(Objects.requireNonNull(window, "window"));
+            if (registered == null && !window.getIsZero()) {
+                throw new IllegalArgumentException(
+                        operation + " accepts only an opaque token issued by CNA-Java");
+            }
+            return registered == null ? 0L : registered;
+        }
     }
 
     private static String getGraphicsAdapterString(
@@ -2724,6 +3703,52 @@ public final class NativeBindings {
 
     private static native int nativeSetGamePadVibration(
             long game, int playerIndex, float leftMotor, float rightMotor);
+
+    private static native int nativeGetTouchCapabilities(long game, int[] output);
+
+    private static native int nativeGetTouchState(
+            long game, int[] discrete, float[] positions);
+
+    private static native int nativeTouchPanelGetDisplayWidth(long game, int[] output);
+
+    private static native int nativeTouchPanelSetDisplayWidth(long game, int value);
+
+    private static native int nativeTouchPanelGetDisplayHeight(long game, int[] output);
+
+    private static native int nativeTouchPanelSetDisplayHeight(long game, int value);
+
+    private static native int nativeTouchPanelGetDisplayOrientation(long game, int[] output);
+
+    private static native int nativeTouchPanelSetDisplayOrientation(long game, int value);
+
+    private static native int nativeTouchPanelGetEnabledGestures(long game, int[] output);
+
+    private static native int nativeTouchPanelSetEnabledGestures(long game, int value);
+
+    private static native int nativeTouchPanelGetIsGestureAvailable(long game);
+
+    private static native int nativeTouchPanelGetWindowHandle(long game, long[] output);
+
+    private static native int nativeTouchPanelSetWindowHandle(long game, long value);
+
+    private static native int nativeReadTouchGesture(
+            long game, int[] type, long[] timestamp, float[] vectors);
+
+    private static native int nativeSetTouchDeviceExists(long game, boolean value);
+
+    private static native int nativeSetTouchFinger(
+            long game, int index, int fingerId, float x, float y);
+
+    private static native int nativeRaiseTouchEvent(
+            long game, int fingerId, int state,
+            float x, float y, float deltaX, float deltaY);
+
+    private static native int nativeEnqueueTouchGesture(
+            long game, int type, long timestampTicks, float[] vectors);
+
+    private static native int nativeUpdateTouchPanel(long game);
+
+    private static native int nativeResetTouchPanel(long game);
 
     private static native int nativeCreateGraphicsDeviceManager(
             long game, GraphicsDeviceManager manager, long[] output);
@@ -2999,12 +4024,15 @@ public final class NativeBindings {
 
     private static native int nativeSetMouseWindowHandle(long game, long window);
 
+    private static native int nativeUpdateFrameworkDispatcher(long game);
+
     private static native int nativeCreateVertexBuffer(
             long game,
             int vertexStride,
             int[] declaration,
             int vertexCount,
             int usage,
+            boolean dynamic,
             long[] output);
 
     private static native int nativeGetVertexBufferInfo(long vertexBuffer, int[] output);
@@ -3012,9 +4040,16 @@ public final class NativeBindings {
     private static native int nativeSetVertexBufferData(
             long vertexBuffer,
             int offsetInBytes,
+            int vertexType,
             byte[] payload,
             int vertexCount,
-            int vertexStride);
+            int vertexStride,
+            int options);
+
+    private static native int nativeSubscribeVertexBufferContentLost(
+            long vertexBuffer, Object callbackTarget, long[] output);
+
+    private static native int nativeUnsubscribeVertexBufferContentLost(long registration);
 
     private static native int nativeGetVertexBufferData(
             long vertexBuffer,
@@ -3030,12 +4065,19 @@ public final class NativeBindings {
             int indexElementSize,
             int indexCount,
             int usage,
+            boolean dynamic,
             long[] output);
 
     private static native int nativeGetIndexBufferInfo(long indexBuffer, int[] output);
 
     private static native int nativeSetIndexBufferData(
-            long indexBuffer, int offsetInBytes, int indexElementSize, int[] values);
+            long indexBuffer, int offsetInBytes, int indexElementSize,
+            int[] values, int options);
+
+    private static native int nativeSubscribeIndexBufferContentLost(
+            long indexBuffer, Object callbackTarget, long[] output);
+
+    private static native int nativeUnsubscribeIndexBufferContentLost(long registration);
 
     private static native int nativeGetIndexBufferData(
             long indexBuffer, int indexElementSize, int[] output);
@@ -3059,6 +4101,105 @@ public final class NativeBindings {
     private static native int nativeRegisterContentManagerBuiltinLoaders(long contentManager);
 
     private static native int nativeDestroyContentManager(long contentManager);
+
+    private static native int nativeCreateEffect(
+            long game, byte[] effectCode, boolean empty, long[] output);
+
+    private static native int nativeCreateBasicEffect(long game, long[] output);
+
+    private static native int nativeCloneEffect(long effect, long[] output);
+
+    private static native int nativeApplyEffect(long effect);
+
+    private static native int nativeGetEffectChild(long handle, int kind, long[] output);
+
+    private static native int nativeSetEffectCurrentTechnique(long effect, long technique);
+
+    private static native int nativeDestroyEffectObject(long handle, int kind);
+
+    private static native long nativeGetEffectCollectionCount(long collection, int kind);
+
+    private static native int nativeGetEffectCollectionElement(
+            long collection, int kind, int index, long[] output);
+
+    private static native long nativeGetEffectStringSize(long handle, int kind);
+
+    private static native int nativeCopyEffectString(long handle, int kind, byte[] output);
+
+    private static native int nativeGetEffectInfo(long handle, int kind, int[] output);
+
+    private static native long nativeGetEffectInts(
+            long handle, boolean annotation, int valueType, int count, int[] output);
+
+    private static native long nativeGetEffectFloats(
+            long handle, boolean annotation, int valueType, int count, float[] output);
+
+    private static native int nativeGetEffectIntValue(
+            long parameter, int valueType, int[] output);
+
+    private static native int nativeGetEffectFloatValue(
+            long parameter, int valueType, float[] output);
+
+    private static native int nativeSetEffectInts(
+            long parameter, int valueType, int[] values);
+
+    private static native int nativeSetEffectFloats(
+            long parameter, int valueType, float[] values, int count);
+
+    private static native int nativeSetEffectIntValue(
+            long parameter, int valueType, int value);
+
+    private static native int nativeSetEffectFloatValue(
+            long parameter, int valueType, float[] value);
+
+    private static native int nativeSetEffectString(long parameter, byte[] value);
+
+    private static native int nativeGetEffectTexture(
+            long parameter, int textureType, long[] output);
+
+    private static native int nativeSetEffectTexture(
+            long parameter, int textureType, long texture);
+
+    private static native int nativeApplyEffectPass(long pass);
+
+    private static native int nativeGetBasicEffectBoolean(long effect, int kind);
+
+    private static native int nativeSetBasicEffectBoolean(
+            long effect, int kind, boolean value);
+
+    private static native int nativeGetBasicEffectFloat(
+            long effect, int kind, float[] output);
+
+    private static native int nativeSetBasicEffectFloat(long effect, int kind, float value);
+
+    private static native int nativeGetBasicEffectVector(
+            long effect, int kind, float[] output);
+
+    private static native int nativeSetBasicEffectVector(
+            long effect, int kind, float[] value);
+
+    private static native int nativeGetBasicEffectMatrix(
+            long effect, int kind, float[] output);
+
+    private static native int nativeSetBasicEffectMatrix(
+            long effect, int kind, float[] value);
+
+    private static native int nativeGetBasicEffectDirectionalLight(
+            long effect, int index, long[] output);
+
+    private static native int nativeEnableDefaultLighting(long effect);
+
+    private static native int nativeGetDirectionalLightVector(
+            long light, int kind, float[] output);
+
+    private static native int nativeSetDirectionalLightVector(
+            long light, int kind, float[] value);
+
+    private static native int nativeGetDirectionalLightEnabled(long light);
+
+    private static native int nativeSetDirectionalLightEnabled(long light, boolean value);
+
+    private static native int nativeSetBasicEffectTexture(long effect, long texture);
 
     private static native int nativeCreateTexture2D(
             long game, int width, int height, boolean mipMap, int format, long[] output);
@@ -3106,6 +4247,45 @@ public final class NativeBindings {
             long texture, int format, int width, int height, byte[] output);
 
     private static native int nativeDestroyTexture2D(long texture);
+
+    private static native int nativeCreateTexture3D(
+            long game,
+            int width,
+            int height,
+            int depth,
+            boolean mipMap,
+            int format,
+            long[] output);
+
+    private static native int nativeGetTexture3DInfo(long texture, int[] output);
+
+    private static native int nativeSetTexture3DData(
+            long texture,
+            int level,
+            int left,
+            int top,
+            int right,
+            int bottom,
+            int front,
+            int back,
+            int startIndex,
+            int elementCount,
+            int[] packedColors);
+
+    private static native int nativeGetTexture3DData(
+            long texture,
+            int level,
+            int left,
+            int top,
+            int right,
+            int bottom,
+            int front,
+            int back,
+            int startIndex,
+            int elementCount,
+            int[] packedColors);
+
+    private static native int nativeDestroyTexture3D(long texture);
 
     private static native int nativeGetSpriteFontInfo(
             long spriteFont, int[] integers, float[] spacing);
@@ -3210,6 +4390,18 @@ public final class NativeBindings {
             int[] depthStencil,
             int[] rasterizer,
             float[] rasterizerFloats);
+
+    private static native int nativeBeginSpriteBatchWithEffect(
+            long spriteBatch,
+            int sortMode,
+            int[] blend,
+            int[] sampler,
+            float samplerBias,
+            int[] depthStencil,
+            int[] rasterizer,
+            float[] rasterizerFloats,
+            long effect,
+            float[] transform);
 
     private static native int nativeDrawSpriteRectangle(
             long spriteBatch, long texture,

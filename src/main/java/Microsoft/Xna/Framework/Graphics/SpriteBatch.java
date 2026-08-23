@@ -1,6 +1,7 @@
 package Microsoft.Xna.Framework.Graphics;
 
 import Microsoft.Xna.Framework.Color;
+import Microsoft.Xna.Framework.Matrix;
 import Microsoft.Xna.Framework.Rectangle;
 import Microsoft.Xna.Framework.Vector2;
 import org.openeggbert.cna.internal.NativeBindings;
@@ -63,6 +64,30 @@ public class SpriteBatch extends GraphicsResource {
         selectedDepth.bind(device);
         selectedRasterizer.bind(device);
         begun = true;
+    }
+
+    public final void Begin(
+            SpriteSortMode sortMode,
+            BlendState blendState,
+            SamplerState samplerState,
+            DepthStencilState depthStencilState,
+            RasterizerState rasterizerState,
+            Effect effect) {
+        beginWithEffect(sortMode, blendState, samplerState, depthStencilState,
+                rasterizerState, effect, null, false);
+    }
+
+    public final void Begin(
+            SpriteSortMode sortMode,
+            BlendState blendState,
+            SamplerState samplerState,
+            DepthStencilState depthStencilState,
+            RasterizerState rasterizerState,
+            Effect effect,
+            Matrix transformMatrix) {
+        beginWithEffect(sortMode, blendState, samplerState, depthStencilState,
+                rasterizerState, effect,
+                new Matrix(Objects.requireNonNull(transformMatrix, "transformMatrix")), true);
     }
 
     public final void End() {
@@ -239,6 +264,51 @@ public class SpriteBatch extends GraphicsResource {
         if (begun) {
             throw new IllegalStateException("SpriteBatch.Begin cannot be nested");
         }
+    }
+
+    private void beginWithEffect(
+            SpriteSortMode sortMode,
+            BlendState blendState,
+            SamplerState samplerState,
+            DepthStencilState depthStencilState,
+            RasterizerState rasterizerState,
+            Effect effect,
+            Matrix transformMatrix,
+            boolean hasTransform) {
+        ensureBeginAllowed();
+        SpriteSortMode selectedSortMode = Objects.requireNonNull(sortMode, "sortMode");
+        BlendState selectedBlend = blendState == null ? BlendState.AlphaBlend : blendState;
+        SamplerState selectedSampler = samplerState == null ? SamplerState.LinearClamp : samplerState;
+        DepthStencilState selectedDepth =
+                depthStencilState == null ? DepthStencilState.None : depthStencilState;
+        RasterizerState selectedRasterizer = rasterizerState == null
+                ? RasterizerState.CullCounterClockwise : rasterizerState;
+        if (effect != null) {
+            if (effect.getIsDisposed()) {
+                throw new IllegalStateException("Effect is already disposed");
+            }
+            if (effect.getGraphicsDevice() != getGraphicsDevice()) {
+                throw new IllegalArgumentException("Effect belongs to a different GraphicsDevice");
+            }
+        }
+
+        int[] blend = selectedBlend.snapshotForBinding();
+        int[] sampler = selectedSampler.snapshotIntegersForBinding();
+        float samplerBias = selectedSampler.snapshotBiasForBinding();
+        int[] depth = selectedDepth.snapshotForBinding();
+        int[] rasterizer = selectedRasterizer.snapshotIntegersForBinding();
+        float[] rasterizerFloats = selectedRasterizer.snapshotFloatsForBinding();
+        NativeBindings.beginSpriteBatchWithEffect(
+                this, selectedSortMode, blend, sampler, samplerBias, depth,
+                rasterizer, rasterizerFloats, effect,
+                hasTransform ? transformMatrix : null);
+
+        GraphicsDevice device = getGraphicsDevice();
+        selectedBlend.bind(device);
+        selectedSampler.bind(device);
+        selectedDepth.bind(device);
+        selectedRasterizer.bind(device);
+        begun = true;
     }
 
     private void drawRectangle(

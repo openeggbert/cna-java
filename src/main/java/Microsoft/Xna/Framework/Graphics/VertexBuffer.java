@@ -17,6 +17,15 @@ public class VertexBuffer extends GraphicsResource {
             VertexDeclaration vertexDeclaration,
             int vertexCount,
             BufferUsage usage) {
+        this(graphicsDevice, vertexDeclaration, vertexCount, usage, false);
+    }
+
+    VertexBuffer(
+            GraphicsDevice graphicsDevice,
+            VertexDeclaration vertexDeclaration,
+            int vertexCount,
+            BufferUsage usage,
+            boolean dynamic) {
         super(Objects.requireNonNull(graphicsDevice, "graphicsDevice"));
         VertexDeclaration declaration = Objects.requireNonNull(
                 vertexDeclaration, "vertexDeclaration");
@@ -27,11 +36,12 @@ public class VertexBuffer extends GraphicsResource {
         int[] info = NativeBindings.createVertexBuffer(
                 this, graphicsDevice, declaration.getVertexStride(),
                 declaration.descriptorForUse(graphicsDevice),
-                vertexCount, selectedUsage.getValue());
-        if (info.length != 4 || info[0] != vertexCount
+                vertexCount, selectedUsage.getValue(), dynamic);
+        if (info.length != 7 || info[0] != vertexCount
                 || info[1] != selectedUsage.getValue()
                 || info[2] != declaration.getVertexStride()
-                || info[3] != declaration.GetVertexElements().length) {
+                || info[3] != declaration.GetVertexElements().length
+                || (info[4] != 0) != dynamic) {
             NativeBindings.closeGraphicsResource(this);
             throw new IllegalStateException("CNA returned inconsistent VertexBuffer metadata");
         }
@@ -54,19 +64,8 @@ public class VertexBuffer extends GraphicsResource {
     }
 
     public final <T> void SetData(T[] data, int startIndex, int elementCount) {
-        ensureNotDisposed();
-        validateArrayWindow(Objects.requireNonNull(data, "data").length, startIndex, elementCount);
-        if (elementCount > vertexCount) {
-            throw new IllegalArgumentException("Vertex upload exceeds the buffer capacity");
-        }
-        VertexDataCodec codec = VertexDataCodec.select(data);
-        if (codec.stride() != vertexDeclaration.getVertexStride()) {
-            throw new IllegalArgumentException(
-                    "Vertex value size does not match the buffer declaration stride");
-        }
-        NativeBindings.setVertexBufferData(
-                this, -1, codec.encode(data, startIndex, elementCount),
-                elementCount, codec.stride());
+        setData(-1, data, startIndex, elementCount,
+                vertexDeclaration.getVertexStride(), SetDataOptions.None);
     }
 
     public final <T> void SetData(
@@ -75,13 +74,8 @@ public class VertexBuffer extends GraphicsResource {
             int startIndex,
             int elementCount,
             int vertexStride) {
-        ensureNotDisposed();
-        validateArrayWindow(Objects.requireNonNull(data, "data").length, startIndex, elementCount);
-        VertexDataCodec codec = VertexDataCodec.select(data);
-        validateRawWindow(offsetInBytes, elementCount, vertexStride, codec);
-        NativeBindings.setVertexBufferData(
-                this, offsetInBytes, codec.encode(data, startIndex, elementCount),
-                elementCount, vertexStride);
+        setData(offsetInBytes, data, startIndex, elementCount,
+                vertexStride, SetDataOptions.None);
     }
 
     public final <T> void GetData(T[] data) {
@@ -127,9 +121,45 @@ public class VertexBuffer extends GraphicsResource {
     @Override
     protected void Dispose(boolean arg0) {
         if (arg0 && !getIsDisposed()) {
+            releaseDynamicSubscription();
             NativeBindings.closeGraphicsResource(this);
         }
         super.Dispose(arg0);
+    }
+
+    void releaseDynamicSubscription() {
+    }
+
+    final <T> void setData(
+            int offsetInBytes,
+            T[] data,
+            int startIndex,
+            int elementCount,
+            int vertexStride,
+            SetDataOptions options) {
+        ensureNotDisposed();
+        validateArrayWindow(Objects.requireNonNull(data, "data").length, startIndex, elementCount);
+        VertexDataCodec codec = VertexDataCodec.select(data);
+        if (offsetInBytes < 0) {
+            if (elementCount > vertexCount) {
+                throw new IllegalArgumentException("Vertex upload exceeds the buffer capacity");
+            }
+            if (codec.stride() != vertexDeclaration.getVertexStride()) {
+                throw new IllegalArgumentException(
+                        "Vertex value size does not match the buffer declaration stride");
+            }
+        } else {
+            validateRawWindow(offsetInBytes, elementCount, vertexStride, codec);
+            if (!SetDataOptions.None.equals(Objects.requireNonNull(options, "options"))) {
+                throw new UnsupportedOperationException(
+                        "CNA's windowed raw vertex-buffer ABI cannot carry SetDataOptions");
+            }
+        }
+        NativeBindings.setVertexBufferData(
+                this, offsetInBytes, codec.nativeType(),
+                codec.encode(data, startIndex, elementCount),
+                elementCount, vertexStride,
+                Objects.requireNonNull(options, "options").getValue());
     }
 
     private void validateRawWindow(

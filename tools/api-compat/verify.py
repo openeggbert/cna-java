@@ -386,7 +386,8 @@ def mapped_members(type_contract: dict[str, Any], rules: dict[str, Any], mapping
                 expected.append(callable_member("method", "remove" + member["name"] + "Listener", source,
                                                 [parameter("listener", listener)], "void"))
         elif kind == "method":
-            name = member["name"]
+            name = rules.get("memberNameMappings", {}).get(
+                clr_signature, member["name"])
             if name == "Finalize" and "System.Object.Finalize" in rules.get("excludedClrMethods", []):
                 continue
             if name in ("op_Equality", "op_Inequality"):
@@ -409,13 +410,24 @@ def mapped_members(type_contract: dict[str, Any], rules: dict[str, Any], mapping
                 name = "close"
             else:
                 name = {"Equals": "equals", "GetHashCode": "hashCode", "ToString": "toString"}.get(name, name)
-            if type_name == "Microsoft.Xna.Framework.Content.ContentManager" and name == "Load" \
+            if type_name == "Microsoft.Xna.Framework.Content.ContentManager" \
+                    and name in ("Load", "ReadAsset") \
                     and member.get("genericArity") == 1:
                 source = dict(member)
                 source["genericArity"] = 1
-                expected.append(callable_member("method", "Load", source,
+                expected.append(callable_member("method", name, source,
                                                 [parameter("assetType", "java.lang.Class<T>"),
                                                  *map_member_parameters(type_name, member, rules)], "T"))
+                continue
+            if type_name == "Microsoft.Xna.Framework.Content.ContentReader" \
+                    and member.get("genericArity") == 1:
+                source = dict(member)
+                source["genericArity"] = 1
+                expected.append(callable_member(
+                    "method", name, source,
+                    [parameter("targetType", "java.lang.Class<T>"),
+                     *map_member_parameters(type_name, member, rules)],
+                    map_member_return_type(type_name, member, rules)))
                 continue
             by_reference = any(value["type"].endswith("&") for value in member["parameters"])
             if by_reference:
