@@ -26,6 +26,14 @@
     CNA_JNI_ROUTE(cna_achievement_get_key_size) achievement_get_key_size;
     CNA_JNI_ROUTE(cna_achievement_get_name_size) achievement_get_name_size;
     CNA_JNI_ROUTE(cna_achievement_get_picture_size) achievement_get_picture_size;
+    CNA_JNI_ROUTE(cna_ascii_post_process_effect_create) ascii_post_process_effect_create;
+    CNA_JNI_ROUTE(cna_ascii_post_process_effect_destroy) ascii_post_process_effect_destroy;
+    CNA_JNI_ROUTE(cna_ascii_post_process_effect_draw) ascii_post_process_effect_draw;
+    CNA_JNI_ROUTE(cna_ascii_post_process_effect_get_cell_size) ascii_post_process_effect_get_cell_size;
+    CNA_JNI_ROUTE(cna_ascii_post_process_effect_get_last_grid_dimensions) ascii_post_process_effect_get_last_grid_dimensions;
+    CNA_JNI_ROUTE(cna_ascii_post_process_effect_get_quantize_mode) ascii_post_process_effect_get_quantize_mode;
+    CNA_JNI_ROUTE(cna_ascii_post_process_effect_set_cell_size) ascii_post_process_effect_set_cell_size;
+    CNA_JNI_ROUTE(cna_ascii_post_process_effect_set_quantize_mode) ascii_post_process_effect_set_quantize_mode;
     CNA_JNI_ROUTE(cna_available_network_session_collection_copy_session) available_network_session_collection_copy_session;
     CNA_JNI_ROUTE(cna_available_network_session_collection_create_ext) available_network_session_collection_create_ext;
     CNA_JNI_ROUTE(cna_available_network_session_collection_destroy) available_network_session_collection_destroy;
@@ -146,6 +154,7 @@
     CNA_JNI_ROUTE(cna_gamer_signed_in_contains) gamer_signed_in_contains;
     CNA_JNI_ROUTE(cna_gamer_signed_in_index_of) gamer_signed_in_index_of;
     CNA_JNI_ROUTE(cna_gamer_unsubscribe_ext) gamer_unsubscribe_ext;
+    CNA_JNI_ROUTE(cna_graphics_ext_is_available) graphics_ext_is_available;
     CNA_JNI_ROUTE(cna_guide_begin_show_keyboard_input) guide_begin_show_keyboard_input;
     CNA_JNI_ROUTE(cna_guide_copy_pending_keyboard_input_description_ext) guide_copy_pending_keyboard_input_description_ext;
     CNA_JNI_ROUTE(cna_guide_copy_pending_keyboard_input_display_text_ext) guide_copy_pending_keyboard_input_display_text_ext;
@@ -352,6 +361,7 @@
     CNA_JNI_ROUTE(cna_packet_writer_write_vector2) packet_writer_write_vector2;
     CNA_JNI_ROUTE(cna_packet_writer_write_vector3) packet_writer_write_vector3;
     CNA_JNI_ROUTE(cna_packet_writer_write_vector4) packet_writer_write_vector4;
+    CNA_JNI_ROUTE(cna_pbr_material_init) pbr_material_init;
     CNA_JNI_ROUTE(cna_property_dictionary_clear) property_dictionary_clear;
     CNA_JNI_ROUTE(cna_property_dictionary_contains_key) property_dictionary_contains_key;
     CNA_JNI_ROUTE(cna_property_dictionary_copy_key_at) property_dictionary_copy_key_at;
@@ -382,6 +392,7 @@
     CNA_JNI_ROUTE(cna_property_dictionary_try_get_value_kind_ext) property_dictionary_try_get_value_kind_ext;
     CNA_JNI_ROUTE(cna_quality_of_service_init) quality_of_service_init;
     CNA_JNI_ROUTE(cna_quality_of_service_init_measured) quality_of_service_init_measured;
+    CNA_JNI_ROUTE(cna_render_pipeline_settings_init) render_pipeline_settings_init;
     CNA_JNI_ROUTE(cna_signed_in_gamer_award_achievement) signed_in_gamer_award_achievement;
     CNA_JNI_ROUTE(cna_signed_in_gamer_begin_award_achievement) signed_in_gamer_begin_award_achievement;
     CNA_JNI_ROUTE(cna_signed_in_gamer_begin_get_achievements) signed_in_gamer_begin_get_achievements;

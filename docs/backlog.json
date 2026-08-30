@@ -8,7 +8,11 @@
     "JAVA-TEMPLATE": "Work in the sibling cna-java-template consumer canary.",
     "JAVA-UPSTREAM": "Blocked on cnanext or sharp-runtimenext. Never worked around in Java."
   },
-  "statuses": ["done", "ready", "blocked"],
+  "statuses": [
+    "done",
+    "ready",
+    "blocked"
+  ],
   "tasks": [
     {
       "id": "JAVA-NATIVE-001",
@@ -17,7 +21,10 @@
       "authority": "cnanext HEAD 72262a33, sharp-runtimenext HEAD df1b42ab",
       "currentState": "Qualified against an unrelated historical CNA checkout and a pinned /tmp artifact at ABI 0.7.0.",
       "expectedState": "libcna_c_api built out of tree from cnanext against sharp-runtimenext, HEADLESS/HEADLESS/NULL, and every native check run against it.",
-      "tests": ["nativeAbiCheck", "native integration suites"],
+      "tests": [
+        "nativeAbiCheck",
+        "native integration suites"
+      ],
       "priority": 1,
       "status": "done"
     },
@@ -28,7 +35,9 @@
       "authority": "docs/c-api/ABI_VERSIONING.md",
       "currentState": "A hardcoded exact-minor check against 0.7 with no stated policy.",
       "expectedState": "The required version comes from the manifest; major and minor are exact, patch is free, and each rule has a negative-mutation test.",
-      "tests": ["tools/native-abi/test_verify.py"],
+      "tests": [
+        "tools/native-abi/test_verify.py"
+      ],
       "priority": 1,
       "status": "done"
     },
@@ -39,7 +48,10 @@
       "authority": "CNA/C/*.h",
       "currentState": "426 hand-written function-pointer typedefs that dlsym could never check.",
       "expectedState": "Every dispatch-table slot declared CNA_JNI_ROUTE(symbol), whose type is the header's own declaration.",
-      "tests": ["compileJni", "tools/native-abi/test_verify.py"],
+      "tests": [
+        "compileJni",
+        "tools/native-abi/test_verify.py"
+      ],
       "priority": 1,
       "status": "done"
     },
@@ -50,7 +62,10 @@
       "authority": "CNA/C/*.h",
       "currentState": "Every route hand-written, which is where drift came from.",
       "expectedState": "tools/native-abi/generate_jni.py derives JNI, dispatch slots, LOAD lines and Java declarations from the headers; generateJniCheck fails on stale output.",
-      "tests": ["generateJniCheck", "tools/native-abi/test_verify.py"],
+      "tests": [
+        "generateJniCheck",
+        "tools/native-abi/test_verify.py"
+      ],
       "priority": 1,
       "status": "done"
     },
@@ -61,7 +76,9 @@
       "authority": "the live header inventory",
       "currentState": "723 bound routes and 3,328 unexplained ones.",
       "expectedState": "Every one of the 4,051 canonical functions classified, with zero UNMAPPED_REQUIRES_REVIEW, and the public surface that reaches each bound route derived from the JNI call graph and the Java sources.",
-      "tests": ["nativeCoverageCheck"],
+      "tests": [
+        "nativeCoverageCheck"
+      ],
       "priority": 2,
       "status": "done"
     },
@@ -72,7 +89,10 @@
       "authority": "the original Microsoft assemblies at xna4-decomp/dlls, SHA-256 pinned",
       "currentState": "One seven-assembly Windows runtime profile.",
       "expectedState": "A ten-assembly full runtime superset profile and a separate seven-assembly Content Pipeline build-time profile, both hash-pinned, with the selected profile kept as a subset regression gate.",
-      "tests": ["apiCompatCheck", "apiCompatFullCheck"],
+      "tests": [
+        "apiCompatCheck",
+        "apiCompatFullCheck"
+      ],
       "priority": 2,
       "status": "done"
     },
@@ -84,7 +104,9 @@
       "currentState": "Dispose() renamed to close(), the one place a legal XNA name was dropped for Java convention.",
       "expectedState": "Dispose() keeps its name with the CLR member's modifiers; close() delegates to it so every disposable type is still an AutoCloseable.",
       "compatibility": "Additive. 33 types gained Dispose(); no member was removed and every close() call site still compiles.",
-      "tests": ["tools/api-compat/test_verify.py"],
+      "tests": [
+        "tools/api-compat/test_verify.py"
+      ],
       "priority": 3,
       "status": "done"
     },
@@ -95,7 +117,10 @@
       "authority": "Microsoft.Xna.Framework.GamerServices.dll, Microsoft.Xna.Framework.Avatar.dll",
       "currentState": "Only GamerServicesComponent existed; 51 types were missing from the full profile.",
       "expectedState": "The whole namespace projected and backed by CNA's gamer-services routes.",
-      "tests": ["GamerServicesMappingTests", "GamerServicesNativeIntegrationTests"],
+      "tests": [
+        "GamerServicesMappingTests",
+        "GamerServicesNativeIntegrationTests"
+      ],
       "priority": 4,
       "status": "done"
     },
@@ -106,7 +131,9 @@
       "authority": "Microsoft.Xna.Framework.Net.dll",
       "currentState": "The whole namespace was missing; 23 types.",
       "expectedState": "Sessions, discovery, rosters, machines, packets and the nine session events projected, session and gamer state backed by CNA.",
-      "tests": ["NetworkMappingTests"],
+      "tests": [
+        "NetworkMappingTests"
+      ],
       "priority": 4,
       "status": "done"
     },
@@ -118,8 +145,13 @@
       "currentState": "The event members exist and accept listeners; no native producer raises them, because their CNA routes take a real callback the generator refuses.",
       "expectedState": "Hand-written JNI callback plumbing that attaches the JVM thread, contains a Java exception, and survives session teardown, so each event has a real producer.",
       "blocker": "None. It needs the callback lifetime work that the media and storage families already have, applied to eleven more callbacks.",
-      "dependsOn": ["JAVA-XNA-001", "JAVA-XNA-002"],
-      "tests": ["a native event test per event, plus a teardown stress"],
+      "dependsOn": [
+        "JAVA-XNA-001",
+        "JAVA-XNA-002"
+      ],
+      "tests": [
+        "a native event test per event, plus a teardown stress"
+      ],
       "priority": 5,
       "status": "ready"
     },
@@ -199,7 +231,9 @@
       "family": "cna-java-template",
       "currentState": "The template exercises the XNA surface only.",
       "expectedState": "An opt-in extensions smoke that proves the Java extension facade compiles externally, the JNI route exists, the availability query is truthful, and HEADLESS NOT_SUPPORTED is represented as itself.",
-      "dependsOn": ["JAVA-EXT-001"],
+      "dependsOn": [
+        "JAVA-EXT-001"
+      ],
       "priority": 7,
       "status": "ready"
     },
@@ -212,6 +246,23 @@
       "blocker": "cnanext storage: cna_storage_container_* accept a path containing parent traversal.",
       "priority": 12,
       "status": "blocked"
+    },
+    {
+      "id": "JAVA-EXT-004",
+      "title": "Project CNA's CRT and depth-reduction post-process effects",
+      "family": "org.openeggbert.cna.extensions.graphics",
+      "authority": "cna_crt_effect_* and cna_depth_effect_* in graphics_ext.h",
+      "currentState": "Not bound. Both routes produce a CNA_EffectHandle, and the Java Effect's adopting constructors are package-private, so a Java facade needs a reviewed cross-package accessor of the kind FacadeFactory already uses for Texture2D and GraphicsDevice.",
+      "expectedState": "CrtEffect and DepthEffect projected as extension types that are real XNA Effects, so SpriteBatch.Begin can take them.",
+      "blocker": "None upstream. It needs the facade accessor, not a CNA change.",
+      "dependsOn": [
+        "JAVA-EXT-001"
+      ],
+      "tests": [
+        "an extension test that creates each effect and round-trips its parameters"
+      ],
+      "priority": 7,
+      "status": "ready"
     }
   ]
 }

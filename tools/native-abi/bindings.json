@@ -5651,6 +5651,116 @@
       ]
     },
     {
+      "name": "cna_ascii_post_process_effect_create",
+      "header": "graphics_ext.h",
+      "ownership": "borrows its inputs; returns an owned handle",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_Handle",
+        "CNA_AsciiPostProcessEffectHandle*"
+      ]
+    },
+    {
+      "name": "cna_ascii_post_process_effect_destroy",
+      "header": "graphics_ext.h",
+      "ownership": "consumes the owned handle on success",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_AsciiPostProcessEffectHandle"
+      ]
+    },
+    {
+      "name": "cna_ascii_post_process_effect_draw",
+      "header": "graphics_ext.h",
+      "ownership": "borrows its inputs",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_AsciiPostProcessEffectHandle",
+        "CNA_Handle",
+        "const CNA_Rectangle*"
+      ]
+    },
+    {
+      "name": "cna_ascii_post_process_effect_get_cell_size",
+      "header": "graphics_ext.h",
+      "ownership": "borrows its inputs; caller output",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_AsciiPostProcessEffectHandle",
+        "int32_t*",
+        "int32_t*"
+      ]
+    },
+    {
+      "name": "cna_ascii_post_process_effect_get_last_grid_dimensions",
+      "header": "graphics_ext.h",
+      "ownership": "borrows its inputs; caller output",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_AsciiPostProcessEffectHandle",
+        "int32_t*",
+        "int32_t*"
+      ]
+    },
+    {
+      "name": "cna_ascii_post_process_effect_get_quantize_mode",
+      "header": "graphics_ext.h",
+      "ownership": "borrows its inputs; caller output",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_AsciiPostProcessEffectHandle",
+        "CNA_AsciiQuantizeMode*"
+      ]
+    },
+    {
+      "name": "cna_ascii_post_process_effect_set_cell_size",
+      "header": "graphics_ext.h",
+      "ownership": "borrows its inputs",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_AsciiPostProcessEffectHandle",
+        "int32_t",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "cna_ascii_post_process_effect_set_quantize_mode",
+      "header": "graphics_ext.h",
+      "ownership": "borrows its inputs",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_AsciiPostProcessEffectHandle",
+        "CNA_AsciiQuantizeMode"
+      ]
+    },
+    {
+      "name": "cna_graphics_ext_is_available",
+      "header": "graphics_ext.h",
+      "ownership": "borrows its inputs; caller output",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_Bool*"
+      ]
+    },
+    {
+      "name": "cna_pbr_material_init",
+      "header": "graphics_ext.h",
+      "ownership": "caller output only; initializes a value structure",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_PbrMaterial*"
+      ]
+    },
+    {
+      "name": "cna_render_pipeline_settings_init",
+      "header": "graphics_ext.h",
+      "ownership": "caller output only; initializes a value structure",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_RenderPipelineSettings*"
+      ]
+    },
+    {
       "name": "cna_graphics_device_get_blend_state",
       "header": "graphics_state.h",
       "ownership": "borrows callback-scoped device; copies versioned blend descriptor",

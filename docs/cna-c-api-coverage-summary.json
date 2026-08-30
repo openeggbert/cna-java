@@ -3,7 +3,7 @@
   "boundButUnreached": [
     "cna_vertex_buffer_set_data_raw"
   ],
-  "boundFunctions": 1130,
+  "boundFunctions": 1141,
   "byHeader": {
     "abi.h": {
       "XNA_BACKING": 1,

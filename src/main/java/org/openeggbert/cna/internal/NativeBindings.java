@@ -3507,6 +3507,24 @@ public final class NativeBindings {
         return info;
     }
 
+    /**
+     * Returns the live native handle behind one graphics resource.
+     *
+     * <p>For the CNA extension surface, which owns its own native objects but has to hand CNA
+     * an XNA-projected texture or device. It stays inside
+     * {@code org.openeggbert.cna.internal}; no public or protected signature exposes it.
+     */
+    public static long nativeResourceHandle(GraphicsResource resource) {
+        return resourceValue(resource);
+    }
+
+    /** Returns the live native handle of the game that owns a graphics device. */
+    public static long nativeDeviceGameHandle(GraphicsDevice device) {
+        Game game = deviceGame(device);
+        return gameHandle(game, "CNA extension").requireValue();
+    }
+
+
     private static long resourceValue(GraphicsResource resource) {
         NativeResourceHandle handle;
         synchronized (GAMES) {
@@ -4043,7 +4061,7 @@ public final class NativeBindings {
         return result;
     }
 
-    static CnaNativeException failure(String operation, int result) {
+    public static CnaNativeException failure(String operation, int result) {
         String diagnostic;
         try {
             diagnostic = nativeLastErrorMessage();

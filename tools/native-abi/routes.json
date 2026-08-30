@@ -1641,6 +1641,52 @@
         "java": "writeLeaderboardsEventInfoInit",
         "symbol": "cna_write_leaderboards_event_info_init"
       }
+    ],
+    "NativeGraphicsExtensionRoutes": [
+      {
+        "java": "asciiPostProcessEffectCreate",
+        "symbol": "cna_ascii_post_process_effect_create"
+      },
+      {
+        "java": "asciiPostProcessEffectDestroy",
+        "symbol": "cna_ascii_post_process_effect_destroy"
+      },
+      {
+        "java": "asciiPostProcessEffectDraw",
+        "symbol": "cna_ascii_post_process_effect_draw"
+      },
+      {
+        "java": "asciiPostProcessEffectGetCellSize",
+        "symbol": "cna_ascii_post_process_effect_get_cell_size"
+      },
+      {
+        "java": "asciiPostProcessEffectGetLastGridDimensions",
+        "symbol": "cna_ascii_post_process_effect_get_last_grid_dimensions"
+      },
+      {
+        "java": "asciiPostProcessEffectGetQuantizeMode",
+        "symbol": "cna_ascii_post_process_effect_get_quantize_mode"
+      },
+      {
+        "java": "asciiPostProcessEffectSetCellSize",
+        "symbol": "cna_ascii_post_process_effect_set_cell_size"
+      },
+      {
+        "java": "asciiPostProcessEffectSetQuantizeMode",
+        "symbol": "cna_ascii_post_process_effect_set_quantize_mode"
+      },
+      {
+        "java": "graphicsExtIsAvailable",
+        "symbol": "cna_graphics_ext_is_available"
+      },
+      {
+        "java": "pbrMaterialInit",
+        "symbol": "cna_pbr_material_init"
+      },
+      {
+        "java": "renderPipelineSettingsInit",
+        "symbol": "cna_render_pipeline_settings_init"
+      }
     ]
   }
 }
