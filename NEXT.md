@@ -38,7 +38,7 @@ would make every ABI, symbol and layout result describe a library nobody ships.
 ```text
 SELECTED PROFILE (7 Windows runtime assemblies)
 REFERENCE_TYPES=257  REFERENCE_MEMBERS=2964
-EXPECTED_JAVA_TYPES=265  EXPECTED_JAVA_MEMBERS=3242
+EXPECTED_JAVA_TYPES=266  EXPECTED_JAVA_MEMBERS=3242
 TOTAL_DIAGNOSTICS=0  ALLOWLIST_ENTRIES=0
 
 FULL PROFILE (10 runtime assemblies, adding GamerServices, Net and Avatar)
