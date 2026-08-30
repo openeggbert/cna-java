@@ -12154,3 +12154,4 @@ Java_org_openeggbert_cna_internal_NativeGamerServices_nativeGuideShowMessageBox(
  * they share this translation unit's single dispatch table and its helpers.
  */
 #include "generated/NativeGamerServicesRoutes.inc"
+#include "generated/NativeNetworkRoutes.inc"

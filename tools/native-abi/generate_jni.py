@@ -168,6 +168,14 @@ def plan(route: dict, live: dict) -> dict:
             steps.append({"shape": "string", "name": name})
             index += 1
             continue
+        if pointers == 0 and type_name in live["structures"]:
+            raw_leaves = flatten_struct(type_name, live)
+            groups = group_leaves(raw_leaves)
+            steps.append({"shape": "struct_value", "name": name, "ctype": type_name,
+                          "versioned": [path for path, _ in raw_leaves if path in VERSION_FIELDS],
+                          "version": struct_version(type_name, live), **groups})
+            index += 1
+            continue
         if pointers == 0:
             jni, kind = classify_scalar(type_name, live)
             steps.append({"shape": "value", "name": name, "jni": jni, "kind": kind,
@@ -248,7 +256,7 @@ def java_signature(entry: dict) -> tuple[str, list[str]]:
                 parameters.append(f"long[] {java_name(step['written'])}")
         elif step["shape"] == "array":
             parameters.append(f"{JAVA_OF_JNI[step['jni']]}[] {java_name(step['name'])}")
-        elif step["shape"] in ("struct", "struct_array"):
+        elif step["shape"] in ("struct", "struct_array", "struct_value"):
             for group, java in (("bytes", "byte"), ("integral", "long"), ("floating", "float")):
                 if step[group]:
                     parameters.append(f"{java}[] {java_name(step['name'])}{group.capitalize()}")
@@ -436,6 +444,29 @@ def render_c(class_name: str, entries: list[dict]) -> str:
                 arguments.append(f"{name}_values")
                 arguments.append(f"(uint64_t){name}_count")
                 cleanup.append(f"    free({name}_values);")
+            elif shape == "struct_value":
+                body.append(f"    {step['ctype']} {name}_value;")
+                body.append(f"    memset(&{name}_value, 0, sizeof {name}_value);")
+                if "struct_size" in step["versioned"]:
+                    body.append(f"    {name}_value.struct_size = (uint32_t)(sizeof {name}_value);")
+                if "struct_version" in step["versioned"]:
+                    body.append(f"    {name}_value.struct_version = {step['version']};")
+                for group, jni, java in (("bytes", "jbyte", "Byte"),
+                                         ("integral", "jlong", "Long"),
+                                         ("floating", "jfloat", "Float")):
+                    if not step[group]:
+                        continue
+                    field = f"{name}{group.capitalize()}"
+                    parameters.append(f"{jni}Array {field}")
+                    body.append("    {")
+                    body.append(f"        {jni} {field}_values[{len(step[group])}];")
+                    body.append(f"        (*environment)->Get{java}ArrayRegion(environment, "
+                                f"{field}, 0, {len(step[group])}, {field}_values);")
+                    for position, (path, leaf) in enumerate(step[group]):
+                        body.append(f"        {name}_value.{path} = "
+                                    f"({leaf}){field}_values[{position}];")
+                    body.append("    }")
+                arguments.append(f"{name}_value")
             elif shape == "struct":
                 body.append(f"    {step['ctype']} {name}_value;")
                 body.append(f"    memset(&{name}_value, 0, sizeof {name}_value);")

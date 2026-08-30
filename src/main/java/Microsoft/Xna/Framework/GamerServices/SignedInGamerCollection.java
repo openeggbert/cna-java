@@ -16,23 +16,21 @@ import java.util.Objects;
 public final class SignedInGamerCollection extends GamerCollection<SignedInGamer> {
 
     private SignedInGamerCollection() {
-        super(0L, SignedInGamer::new, new Source() {
-            @Override
-            public int count() {
-                int[] count = new int[1];
-                NativeGamerServices.check("Gamer.SignedInGamers",
-                        NativeGamerServicesRoutes.gamerGetSignedInGamerCount(count));
-                return count[0];
-            }
+        super(SignedInGamerCollection::slot, SignedInGamerCollection::count);
+    }
 
-            @Override
-            public long at(int index) {
-                long[] gamer = new long[1];
-                NativeGamerServices.check("Gamer.SignedInGamers",
-                        NativeGamerServicesRoutes.gamerGetSignedInGamerAt(index, gamer));
-                return gamer[0];
-            }
-        });
+    private static SignedInGamer slot(int index) {
+        long[] gamer = new long[1];
+        NativeGamerServices.check("Gamer.SignedInGamers",
+                NativeGamerServicesRoutes.gamerGetSignedInGamerAt(index, gamer));
+        return new SignedInGamer(gamer[0]);
+    }
+
+    private static int count() {
+        int[] count = new int[1];
+        NativeGamerServices.check("Gamer.SignedInGamers",
+                NativeGamerServicesRoutes.gamerGetSignedInGamerCount(count));
+        return count[0];
     }
 
     static SignedInGamerCollection current() {

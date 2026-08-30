@@ -7951,6 +7951,1704 @@
       ]
     },
     {
+      "name": "cna_net_get_last_join_error",
+      "header": "net.h",
+      "ownership": "borrows its inputs; caller output",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_NetworkSessionJoinError*",
+        "CNA_Bool*"
+      ]
+    },
+    {
+      "name": "cna_network_session_properties_add",
+      "header": "net.h",
+      "ownership": "borrows its inputs",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_NetworkSessionPropertiesHandle",
+        "CNA_OptionalInt32"
+      ]
+    },
+    {
+      "name": "cna_network_session_properties_clear",
+      "header": "net.h",
+      "ownership": "borrows its inputs",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_NetworkSessionPropertiesHandle"
+      ]
+    },
+    {
+      "name": "cna_network_session_properties_contains",
+      "header": "net.h",
+      "ownership": "borrows its inputs; caller output",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_NetworkSessionPropertiesHandle",
+        "CNA_OptionalInt32",
+        "CNA_Bool*"
+      ]
+    },
+    {
+      "name": "cna_network_session_properties_copy_to",
+      "header": "net.h",
+      "ownership": "borrows its inputs; caller output",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_NetworkSessionPropertiesHandle",
+        "CNA_OptionalInt32*",
+        "uint64_t",
+        "int32_t",
+        "uint64_t*"
+      ]
+    },
+    {
+      "name": "cna_network_session_properties_create",
+      "header": "net.h",
+      "ownership": "borrows its inputs; returns an owned handle",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_NetworkSessionPropertiesHandle*"
+      ]
+    },
+    {
+      "name": "cna_network_session_properties_create_enumerator",
+      "header": "net.h",
+      "ownership": "borrows its inputs; returns an owned handle",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_NetworkSessionPropertiesHandle",
+        "CNA_NetworkSessionPropertyEnumeratorHandle*"
+      ]
+    },
+    {
+      "name": "cna_network_session_properties_destroy",
+      "header": "net.h",
+      "ownership": "consumes the owned handle on success",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_NetworkSessionPropertiesHandle"
+      ]
+    },
+    {
+      "name": "cna_network_session_properties_get_count",
+      "header": "net.h",
+      "ownership": "borrows its inputs; caller output",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_NetworkSessionPropertiesHandle",
+        "int32_t*"
+      ]
+    },
+    {
+      "name": "cna_network_session_properties_get_is_read_only",
+      "header": "net.h",
+      "ownership": "borrows its inputs; caller output",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_NetworkSessionPropertiesHandle",
+        "CNA_Bool*"
+      ]
+    },
+    {
+      "name": "cna_network_session_properties_get_item",
+      "header": "net.h",
+      "ownership": "borrows its inputs; caller output",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_NetworkSessionPropertiesHandle",
+        "int32_t",
+        "CNA_OptionalInt32*"
+      ]
+    },
+    {
+      "name": "cna_network_session_properties_index_of",
+      "header": "net.h",
+      "ownership": "borrows its inputs; caller output",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_NetworkSessionPropertiesHandle",
+        "CNA_OptionalInt32",
+        "int32_t*"
+      ]
+    },
+    {
+      "name": "cna_network_session_properties_insert",
+      "header": "net.h",
+      "ownership": "borrows its inputs",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_NetworkSessionPropertiesHandle",
+        "int32_t",
+        "CNA_OptionalInt32"
+      ]
+    },
+    {
+      "name": "cna_network_session_properties_remove",
+      "header": "net.h",
+      "ownership": "borrows its inputs; caller output",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_NetworkSessionPropertiesHandle",
+        "CNA_OptionalInt32",
+        "CNA_Bool*"
+      ]
+    },
+    {
+      "name": "cna_network_session_properties_remove_at",
+      "header": "net.h",
+      "ownership": "borrows its inputs",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_NetworkSessionPropertiesHandle",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "cna_network_session_properties_set_item",
+      "header": "net.h",
+      "ownership": "borrows its inputs",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_NetworkSessionPropertiesHandle",
+        "int32_t",
+        "CNA_OptionalInt32"
+      ]
+    },
+    {
+      "name": "cna_network_session_property_enumerator_destroy",
+      "header": "net.h",
+      "ownership": "consumes the owned handle on success",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_NetworkSessionPropertyEnumeratorHandle"
+      ]
+    },
+    {
+      "name": "cna_network_session_property_enumerator_get_current",
+      "header": "net.h",
+      "ownership": "borrows its inputs; caller output",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_NetworkSessionPropertyEnumeratorHandle",
+        "CNA_OptionalInt32*"
+      ]
+    },
+    {
+      "name": "cna_network_session_property_enumerator_move_next",
+      "header": "net.h",
+      "ownership": "borrows its inputs; caller output",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_NetworkSessionPropertyEnumeratorHandle",
+        "CNA_Bool*"
+      ]
+    },
+    {
+      "name": "cna_network_session_property_enumerator_reset",
+      "header": "net.h",
+      "ownership": "borrows its inputs",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_NetworkSessionPropertyEnumeratorHandle"
+      ]
+    },
+    {
+      "name": "cna_packet_reader_create",
+      "header": "net.h",
+      "ownership": "borrows its inputs; returns an owned handle",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "int32_t",
+        "CNA_PacketReaderHandle*"
+      ]
+    },
+    {
+      "name": "cna_packet_reader_destroy",
+      "header": "net.h",
+      "ownership": "consumes the owned handle on success",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_PacketReaderHandle"
+      ]
+    },
+    {
+      "name": "cna_packet_reader_get_length",
+      "header": "net.h",
+      "ownership": "borrows its inputs; caller output",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_PacketReaderHandle",
+        "int32_t*"
+      ]
+    },
+    {
+      "name": "cna_packet_reader_get_position",
+      "header": "net.h",
+      "ownership": "borrows its inputs; caller output",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_PacketReaderHandle",
+        "int32_t*"
+      ]
+    },
+    {
+      "name": "cna_packet_reader_read_color",
+      "header": "net.h",
+      "ownership": "borrows its inputs; caller output",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_PacketReaderHandle",
+        "CNA_Color*"
+      ]
+    },
+    {
+      "name": "cna_packet_reader_read_double",
+      "header": "net.h",
+      "ownership": "borrows its inputs; caller output",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_PacketReaderHandle",
+        "double*"
+      ]
+    },
+    {
+      "name": "cna_packet_reader_read_matrix",
+      "header": "net.h",
+      "ownership": "borrows its inputs; caller output",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_PacketReaderHandle",
+        "CNA_Matrix*"
+      ]
+    },
+    {
+      "name": "cna_packet_reader_read_quaternion",
+      "header": "net.h",
+      "ownership": "borrows its inputs; caller output",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_PacketReaderHandle",
+        "CNA_Quaternion*"
+      ]
+    },
+    {
+      "name": "cna_packet_reader_read_single",
+      "header": "net.h",
+      "ownership": "borrows its inputs; caller output",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_PacketReaderHandle",
+        "float*"
+      ]
+    },
+    {
+      "name": "cna_packet_reader_read_vector2",
+      "header": "net.h",
+      "ownership": "borrows its inputs; caller output",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_PacketReaderHandle",
+        "CNA_Vector2*"
+      ]
+    },
+    {
+      "name": "cna_packet_reader_read_vector3",
+      "header": "net.h",
+      "ownership": "borrows its inputs; caller output",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_PacketReaderHandle",
+        "CNA_Vector3*"
+      ]
+    },
+    {
+      "name": "cna_packet_reader_read_vector4",
+      "header": "net.h",
+      "ownership": "borrows its inputs; caller output",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_PacketReaderHandle",
+        "CNA_Vector4*"
+      ]
+    },
+    {
+      "name": "cna_packet_reader_set_data_ext",
+      "header": "net.h",
+      "ownership": "borrows its inputs",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_PacketReaderHandle",
+        "const uint8_t*",
+        "uint64_t"
+      ]
+    },
+    {
+      "name": "cna_packet_reader_set_position",
+      "header": "net.h",
+      "ownership": "borrows its inputs",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_PacketReaderHandle",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "cna_packet_writer_copy_data_ext",
+      "header": "net.h",
+      "ownership": "borrows its inputs; caller output",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_PacketWriterHandle",
+        "uint8_t*",
+        "uint64_t",
+        "uint64_t*"
+      ]
+    },
+    {
+      "name": "cna_packet_writer_create",
+      "header": "net.h",
+      "ownership": "borrows its inputs; returns an owned handle",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "int32_t",
+        "CNA_PacketWriterHandle*"
+      ]
+    },
+    {
+      "name": "cna_packet_writer_destroy",
+      "header": "net.h",
+      "ownership": "consumes the owned handle on success",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_PacketWriterHandle"
+      ]
+    },
+    {
+      "name": "cna_packet_writer_get_length",
+      "header": "net.h",
+      "ownership": "borrows its inputs; caller output",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_PacketWriterHandle",
+        "int32_t*"
+      ]
+    },
+    {
+      "name": "cna_packet_writer_get_position",
+      "header": "net.h",
+      "ownership": "borrows its inputs; caller output",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_PacketWriterHandle",
+        "int32_t*"
+      ]
+    },
+    {
+      "name": "cna_packet_writer_set_position",
+      "header": "net.h",
+      "ownership": "borrows its inputs",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_PacketWriterHandle",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "cna_packet_writer_write_color",
+      "header": "net.h",
+      "ownership": "borrows its inputs",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_PacketWriterHandle",
+        "CNA_Color"
+      ]
+    },
+    {
+      "name": "cna_packet_writer_write_double",
+      "header": "net.h",
+      "ownership": "borrows its inputs",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_PacketWriterHandle",
+        "double"
+      ]
+    },
+    {
+      "name": "cna_packet_writer_write_matrix",
+      "header": "net.h",
+      "ownership": "borrows its inputs",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_PacketWriterHandle",
+        "CNA_Matrix"
+      ]
+    },
+    {
+      "name": "cna_packet_writer_write_quaternion",
+      "header": "net.h",
+      "ownership": "borrows its inputs",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_PacketWriterHandle",
+        "CNA_Quaternion"
+      ]
+    },
+    {
+      "name": "cna_packet_writer_write_single",
+      "header": "net.h",
+      "ownership": "borrows its inputs",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_PacketWriterHandle",
+        "float"
+      ]
+    },
+    {
+      "name": "cna_packet_writer_write_vector2",
+      "header": "net.h",
+      "ownership": "borrows its inputs",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_PacketWriterHandle",
+        "CNA_Vector2"
+      ]
+    },
+    {
+      "name": "cna_packet_writer_write_vector3",
+      "header": "net.h",
+      "ownership": "borrows its inputs",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_PacketWriterHandle",
+        "CNA_Vector3"
+      ]
+    },
+    {
+      "name": "cna_packet_writer_write_vector4",
+      "header": "net.h",
+      "ownership": "borrows its inputs",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_PacketWriterHandle",
+        "CNA_Vector4"
+      ]
+    },
+    {
+      "name": "cna_quality_of_service_init",
+      "header": "net.h",
+      "ownership": "borrows its inputs; caller output",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_QualityOfService*"
+      ]
+    },
+    {
+      "name": "cna_quality_of_service_init_measured",
+      "header": "net.h",
+      "ownership": "borrows its inputs; caller output",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "int64_t",
+        "CNA_QualityOfService*"
+      ]
+    },
+    {
+      "name": "cna_game_ended_event_info_init",
+      "header": "net_gamers.h",
+      "ownership": "borrows its inputs; caller output",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_GameEndedEventInfo*"
+      ]
+    },
+    {
+      "name": "cna_game_started_event_info_init",
+      "header": "net_gamers.h",
+      "ownership": "borrows its inputs; caller output",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_GameStartedEventInfo*"
+      ]
+    },
+    {
+      "name": "cna_gamer_joined_event_info_init",
+      "header": "net_gamers.h",
+      "ownership": "borrows its inputs; caller output",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_NetworkGamerHandle",
+        "CNA_GamerJoinedEventInfo*"
+      ]
+    },
+    {
+      "name": "cna_gamer_left_event_info_init",
+      "header": "net_gamers.h",
+      "ownership": "borrows its inputs; caller output",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_NetworkGamerHandle",
+        "CNA_GamerLeftEventInfo*"
+      ]
+    },
+    {
+      "name": "cna_host_changed_event_info_init",
+      "header": "net_gamers.h",
+      "ownership": "borrows its inputs; caller output",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_NetworkGamerHandle",
+        "CNA_NetworkGamerHandle",
+        "CNA_HostChangedEventInfo*"
+      ]
+    },
+    {
+      "name": "cna_network_gamer_copy_machine",
+      "header": "net_gamers.h",
+      "ownership": "borrows its inputs; returns an owned handle",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_NetworkGamerHandle",
+        "CNA_NetworkMachineHandle*"
+      ]
+    },
+    {
+      "name": "cna_network_gamer_create",
+      "header": "net_gamers.h",
+      "ownership": "borrows its inputs; returns an owned handle",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_Handle",
+        "CNA_StringView",
+        "CNA_NetworkGamerHandle*"
+      ]
+    },
+    {
+      "name": "cna_network_gamer_destroy",
+      "header": "net_gamers.h",
+      "ownership": "consumes the owned handle on success",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_NetworkGamerHandle"
+      ]
+    },
+    {
+      "name": "cna_network_gamer_get_has_left_session",
+      "header": "net_gamers.h",
+      "ownership": "borrows its inputs; caller output",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_NetworkGamerHandle",
+        "CNA_Bool*"
+      ]
+    },
+    {
+      "name": "cna_network_gamer_get_has_voice",
+      "header": "net_gamers.h",
+      "ownership": "borrows its inputs; caller output",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_NetworkGamerHandle",
+        "CNA_Bool*"
+      ]
+    },
+    {
+      "name": "cna_network_gamer_get_id",
+      "header": "net_gamers.h",
+      "ownership": "borrows its inputs; caller output",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_NetworkGamerHandle",
+        "uint8_t*"
+      ]
+    },
+    {
+      "name": "cna_network_gamer_get_is_guest",
+      "header": "net_gamers.h",
+      "ownership": "borrows its inputs; caller output",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_NetworkGamerHandle",
+        "CNA_Bool*"
+      ]
+    },
+    {
+      "name": "cna_network_gamer_get_is_host",
+      "header": "net_gamers.h",
+      "ownership": "borrows its inputs; caller output",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_NetworkGamerHandle",
+        "CNA_Bool*"
+      ]
+    },
+    {
+      "name": "cna_network_gamer_get_is_local",
+      "header": "net_gamers.h",
+      "ownership": "borrows its inputs; caller output",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_NetworkGamerHandle",
+        "CNA_Bool*"
+      ]
+    },
+    {
+      "name": "cna_network_gamer_get_is_muted_by_local_user",
+      "header": "net_gamers.h",
+      "ownership": "borrows its inputs; caller output",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_NetworkGamerHandle",
+        "CNA_Bool*"
+      ]
+    },
+    {
+      "name": "cna_network_gamer_get_is_private_slot",
+      "header": "net_gamers.h",
+      "ownership": "borrows its inputs; caller output",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_NetworkGamerHandle",
+        "CNA_Bool*"
+      ]
+    },
+    {
+      "name": "cna_network_gamer_get_is_ready",
+      "header": "net_gamers.h",
+      "ownership": "borrows its inputs; caller output",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_NetworkGamerHandle",
+        "CNA_Bool*"
+      ]
+    },
+    {
+      "name": "cna_network_gamer_get_is_talking",
+      "header": "net_gamers.h",
+      "ownership": "borrows its inputs; caller output",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_NetworkGamerHandle",
+        "CNA_Bool*"
+      ]
+    },
+    {
+      "name": "cna_network_gamer_get_roundtrip_ticks",
+      "header": "net_gamers.h",
+      "ownership": "borrows its inputs; caller output",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_NetworkGamerHandle",
+        "int64_t*"
+      ]
+    },
+    {
+      "name": "cna_network_gamer_get_session",
+      "header": "net_gamers.h",
+      "ownership": "borrows its inputs; returns an owned handle",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_NetworkGamerHandle",
+        "CNA_Handle*"
+      ]
+    },
+    {
+      "name": "cna_network_gamer_set_has_left_session_ext",
+      "header": "net_gamers.h",
+      "ownership": "borrows its inputs",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_NetworkGamerHandle",
+        "CNA_Bool"
+      ]
+    },
+    {
+      "name": "cna_network_gamer_set_id_ext",
+      "header": "net_gamers.h",
+      "ownership": "borrows its inputs",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_NetworkGamerHandle",
+        "uint8_t"
+      ]
+    },
+    {
+      "name": "cna_network_gamer_set_is_host_ext",
+      "header": "net_gamers.h",
+      "ownership": "borrows its inputs",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_NetworkGamerHandle",
+        "CNA_Bool"
+      ]
+    },
+    {
+      "name": "cna_network_gamer_set_is_ready",
+      "header": "net_gamers.h",
+      "ownership": "borrows its inputs",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_NetworkGamerHandle",
+        "CNA_Bool"
+      ]
+    },
+    {
+      "name": "cna_network_gamer_set_machine",
+      "header": "net_gamers.h",
+      "ownership": "borrows its inputs",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_NetworkGamerHandle",
+        "CNA_NetworkMachineHandle"
+      ]
+    },
+    {
+      "name": "cna_network_gamer_set_roundtrip_ticks_ext",
+      "header": "net_gamers.h",
+      "ownership": "borrows its inputs",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_NetworkGamerHandle",
+        "int64_t"
+      ]
+    },
+    {
+      "name": "cna_network_machine_create",
+      "header": "net_gamers.h",
+      "ownership": "borrows its inputs; returns an owned handle",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_NetworkMachineHandle*"
+      ]
+    },
+    {
+      "name": "cna_network_machine_destroy",
+      "header": "net_gamers.h",
+      "ownership": "consumes the owned handle on success",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_NetworkMachineHandle"
+      ]
+    },
+    {
+      "name": "cna_network_machine_get_gamer",
+      "header": "net_gamers.h",
+      "ownership": "borrows its inputs; returns an owned handle",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_NetworkMachineHandle",
+        "int32_t",
+        "CNA_NetworkGamerHandle*"
+      ]
+    },
+    {
+      "name": "cna_network_machine_get_gamer_count",
+      "header": "net_gamers.h",
+      "ownership": "borrows its inputs; caller output",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_NetworkMachineHandle",
+        "int32_t*"
+      ]
+    },
+    {
+      "name": "cna_network_machine_remove_from_session",
+      "header": "net_gamers.h",
+      "ownership": "borrows its inputs",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_NetworkMachineHandle"
+      ]
+    },
+    {
+      "name": "cna_network_session_ended_event_info_init",
+      "header": "net_gamers.h",
+      "ownership": "borrows its inputs; caller output",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_NetworkSessionEndReason",
+        "CNA_NetworkSessionEndedEventInfo*"
+      ]
+    },
+    {
+      "name": "cna_write_leaderboards_event_info_init",
+      "header": "net_gamers.h",
+      "ownership": "borrows its inputs; caller output",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_NetworkGamerHandle",
+        "CNA_Bool",
+        "CNA_WriteLeaderboardsEventInfo*"
+      ]
+    },
+    {
+      "name": "cna_available_network_session_collection_copy_session",
+      "header": "net_sessions.h",
+      "ownership": "borrows its inputs; returns an owned handle",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_AvailableNetworkSessionCollectionHandle",
+        "int32_t",
+        "CNA_AvailableNetworkSessionHandle*"
+      ]
+    },
+    {
+      "name": "cna_available_network_session_collection_create_ext",
+      "header": "net_sessions.h",
+      "ownership": "borrows its inputs; returns an owned handle",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "const CNA_AvailableNetworkSessionHandle*",
+        "uint64_t",
+        "CNA_AvailableNetworkSessionCollectionHandle*"
+      ]
+    },
+    {
+      "name": "cna_available_network_session_collection_destroy",
+      "header": "net_sessions.h",
+      "ownership": "consumes the owned handle on success",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_AvailableNetworkSessionCollectionHandle"
+      ]
+    },
+    {
+      "name": "cna_available_network_session_collection_dispose",
+      "header": "net_sessions.h",
+      "ownership": "borrows its inputs",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_AvailableNetworkSessionCollectionHandle"
+      ]
+    },
+    {
+      "name": "cna_available_network_session_collection_get_count",
+      "header": "net_sessions.h",
+      "ownership": "borrows its inputs; caller output",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_AvailableNetworkSessionCollectionHandle",
+        "int32_t*"
+      ]
+    },
+    {
+      "name": "cna_available_network_session_collection_get_is_disposed",
+      "header": "net_sessions.h",
+      "ownership": "borrows its inputs; caller output",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_AvailableNetworkSessionCollectionHandle",
+        "CNA_Bool*"
+      ]
+    },
+    {
+      "name": "cna_available_network_session_copy_connect_address_ext",
+      "header": "net_sessions.h",
+      "ownership": "borrows its inputs; caller output",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_AvailableNetworkSessionHandle",
+        "char*",
+        "uint64_t",
+        "uint64_t*"
+      ]
+    },
+    {
+      "name": "cna_available_network_session_copy_host_gamertag",
+      "header": "net_sessions.h",
+      "ownership": "borrows its inputs; caller output",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_AvailableNetworkSessionHandle",
+        "char*",
+        "uint64_t",
+        "uint64_t*"
+      ]
+    },
+    {
+      "name": "cna_available_network_session_copy_session_properties",
+      "header": "net_sessions.h",
+      "ownership": "borrows its inputs; returns an owned handle",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_AvailableNetworkSessionHandle",
+        "CNA_NetworkSessionPropertiesHandle*"
+      ]
+    },
+    {
+      "name": "cna_available_network_session_destroy",
+      "header": "net_sessions.h",
+      "ownership": "consumes the owned handle on success",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_AvailableNetworkSessionHandle"
+      ]
+    },
+    {
+      "name": "cna_available_network_session_equals",
+      "header": "net_sessions.h",
+      "ownership": "borrows its inputs; caller output",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_AvailableNetworkSessionHandle",
+        "CNA_AvailableNetworkSessionHandle",
+        "CNA_Bool*"
+      ]
+    },
+    {
+      "name": "cna_available_network_session_get_connect_address_size_ext",
+      "header": "net_sessions.h",
+      "ownership": "borrows its inputs; caller output",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_AvailableNetworkSessionHandle",
+        "uint64_t*"
+      ]
+    },
+    {
+      "name": "cna_available_network_session_get_connect_port_ext",
+      "header": "net_sessions.h",
+      "ownership": "borrows its inputs; caller output",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_AvailableNetworkSessionHandle",
+        "uint16_t*"
+      ]
+    },
+    {
+      "name": "cna_available_network_session_get_current_gamer_count",
+      "header": "net_sessions.h",
+      "ownership": "borrows its inputs; caller output",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_AvailableNetworkSessionHandle",
+        "int32_t*"
+      ]
+    },
+    {
+      "name": "cna_available_network_session_get_host_gamertag_size",
+      "header": "net_sessions.h",
+      "ownership": "borrows its inputs; caller output",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_AvailableNetworkSessionHandle",
+        "uint64_t*"
+      ]
+    },
+    {
+      "name": "cna_available_network_session_get_open_private_gamer_slots",
+      "header": "net_sessions.h",
+      "ownership": "borrows its inputs; caller output",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_AvailableNetworkSessionHandle",
+        "int32_t*"
+      ]
+    },
+    {
+      "name": "cna_available_network_session_get_open_public_gamer_slots",
+      "header": "net_sessions.h",
+      "ownership": "borrows its inputs; caller output",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_AvailableNetworkSessionHandle",
+        "int32_t*"
+      ]
+    },
+    {
+      "name": "cna_available_network_session_get_quality_of_service",
+      "header": "net_sessions.h",
+      "ownership": "borrows its inputs; caller output",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_AvailableNetworkSessionHandle",
+        "CNA_QualityOfService*"
+      ]
+    },
+    {
+      "name": "cna_available_network_session_get_session_type_ext",
+      "header": "net_sessions.h",
+      "ownership": "borrows its inputs; caller output",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_AvailableNetworkSessionHandle",
+        "CNA_NetworkSessionType*"
+      ]
+    },
+    {
+      "name": "cna_available_network_session_not_equals",
+      "header": "net_sessions.h",
+      "ownership": "borrows its inputs; caller output",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_AvailableNetworkSessionHandle",
+        "CNA_AvailableNetworkSessionHandle",
+        "CNA_Bool*"
+      ]
+    },
+    {
+      "name": "cna_local_network_gamer_clear_packet_queue_ext",
+      "header": "net_sessions.h",
+      "ownership": "borrows its inputs",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_NetworkGamerHandle"
+      ]
+    },
+    {
+      "name": "cna_local_network_gamer_create_ext",
+      "header": "net_sessions.h",
+      "ownership": "borrows its inputs; returns an owned handle",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_SignedInGamerHandle",
+        "CNA_NetworkSessionHandle",
+        "CNA_NetworkGamerHandle*"
+      ]
+    },
+    {
+      "name": "cna_local_network_gamer_enable_send_voice",
+      "header": "net_sessions.h",
+      "ownership": "borrows its inputs",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_NetworkGamerHandle",
+        "CNA_NetworkGamerHandle",
+        "CNA_Bool"
+      ]
+    },
+    {
+      "name": "cna_local_network_gamer_get_is_data_available",
+      "header": "net_sessions.h",
+      "ownership": "borrows its inputs; caller output",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_NetworkGamerHandle",
+        "CNA_Bool*"
+      ]
+    },
+    {
+      "name": "cna_local_network_gamer_get_signed_in_gamer",
+      "header": "net_sessions.h",
+      "ownership": "borrows its inputs; returns an owned handle",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_NetworkGamerHandle",
+        "CNA_SignedInGamerHandle*"
+      ]
+    },
+    {
+      "name": "cna_local_network_gamer_receive_data",
+      "header": "net_sessions.h",
+      "ownership": "borrows its inputs; returns an owned handle",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_NetworkGamerHandle",
+        "uint8_t*",
+        "uint64_t",
+        "CNA_NetworkGamerHandle*",
+        "uint64_t*"
+      ]
+    },
+    {
+      "name": "cna_local_network_gamer_receive_data_at",
+      "header": "net_sessions.h",
+      "ownership": "borrows its inputs; returns an owned handle",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_NetworkGamerHandle",
+        "uint8_t*",
+        "uint64_t",
+        "int32_t",
+        "CNA_NetworkGamerHandle*",
+        "uint64_t*"
+      ]
+    },
+    {
+      "name": "cna_local_network_gamer_receive_data_into_packet_reader",
+      "header": "net_sessions.h",
+      "ownership": "borrows its inputs; returns an owned handle",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_NetworkGamerHandle",
+        "CNA_PacketReaderHandle",
+        "CNA_NetworkGamerHandle*",
+        "uint64_t*"
+      ]
+    },
+    {
+      "name": "cna_local_network_gamer_send_data",
+      "header": "net_sessions.h",
+      "ownership": "borrows its inputs",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_NetworkGamerHandle",
+        "const uint8_t*",
+        "uint64_t",
+        "CNA_SendDataOptions"
+      ]
+    },
+    {
+      "name": "cna_local_network_gamer_send_data_range",
+      "header": "net_sessions.h",
+      "ownership": "borrows its inputs",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_NetworkGamerHandle",
+        "const uint8_t*",
+        "uint64_t",
+        "int32_t",
+        "int32_t",
+        "CNA_SendDataOptions"
+      ]
+    },
+    {
+      "name": "cna_local_network_gamer_send_data_range_to",
+      "header": "net_sessions.h",
+      "ownership": "borrows its inputs",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_NetworkGamerHandle",
+        "const uint8_t*",
+        "uint64_t",
+        "int32_t",
+        "int32_t",
+        "CNA_SendDataOptions",
+        "CNA_NetworkGamerHandle"
+      ]
+    },
+    {
+      "name": "cna_local_network_gamer_send_data_to",
+      "header": "net_sessions.h",
+      "ownership": "borrows its inputs",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_NetworkGamerHandle",
+        "const uint8_t*",
+        "uint64_t",
+        "CNA_SendDataOptions",
+        "CNA_NetworkGamerHandle"
+      ]
+    },
+    {
+      "name": "cna_local_network_gamer_send_packet_writer",
+      "header": "net_sessions.h",
+      "ownership": "borrows its inputs",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_NetworkGamerHandle",
+        "CNA_PacketWriterHandle",
+        "CNA_SendDataOptions"
+      ]
+    },
+    {
+      "name": "cna_local_network_gamer_send_packet_writer_to",
+      "header": "net_sessions.h",
+      "ownership": "borrows its inputs",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_NetworkGamerHandle",
+        "CNA_PacketWriterHandle",
+        "CNA_SendDataOptions",
+        "CNA_NetworkGamerHandle"
+      ]
+    },
+    {
+      "name": "cna_local_network_gamer_send_party_invites",
+      "header": "net_sessions.h",
+      "ownership": "borrows its inputs",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_NetworkGamerHandle"
+      ]
+    },
+    {
+      "name": "cna_network_session_add_local_gamer",
+      "header": "net_sessions.h",
+      "ownership": "borrows its inputs",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_NetworkSessionHandle",
+        "CNA_Handle"
+      ]
+    },
+    {
+      "name": "cna_network_session_add_remote_gamer_ext",
+      "header": "net_sessions.h",
+      "ownership": "borrows its inputs",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_NetworkSessionHandle",
+        "CNA_NetworkGamerHandle"
+      ]
+    },
+    {
+      "name": "cna_network_session_copy_session_properties",
+      "header": "net_sessions.h",
+      "ownership": "borrows its inputs; returns an owned handle",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_NetworkSessionHandle",
+        "CNA_NetworkSessionPropertiesHandle*"
+      ]
+    },
+    {
+      "name": "cna_network_session_copy_type_name",
+      "header": "net_sessions.h",
+      "ownership": "borrows its inputs; caller output",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_NetworkSessionHandle",
+        "char*",
+        "uint64_t",
+        "uint64_t*"
+      ]
+    },
+    {
+      "name": "cna_network_session_create",
+      "header": "net_sessions.h",
+      "ownership": "borrows its inputs; returns an owned handle",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_NetworkSessionType",
+        "int32_t",
+        "int32_t",
+        "CNA_NetworkSessionHandle*"
+      ]
+    },
+    {
+      "name": "cna_network_session_create_with_local_gamers",
+      "header": "net_sessions.h",
+      "ownership": "borrows its inputs; returns an owned handle",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_NetworkSessionType",
+        "const CNA_Handle*",
+        "uint64_t",
+        "int32_t",
+        "int32_t",
+        "CNA_NetworkSessionPropertiesHandle",
+        "CNA_NetworkSessionHandle*"
+      ]
+    },
+    {
+      "name": "cna_network_session_create_with_properties",
+      "header": "net_sessions.h",
+      "ownership": "borrows its inputs; returns an owned handle",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_NetworkSessionType",
+        "int32_t",
+        "int32_t",
+        "int32_t",
+        "CNA_NetworkSessionPropertiesHandle",
+        "CNA_NetworkSessionHandle*"
+      ]
+    },
+    {
+      "name": "cna_network_session_destroy",
+      "header": "net_sessions.h",
+      "ownership": "consumes the owned handle on success",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_NetworkSessionHandle"
+      ]
+    },
+    {
+      "name": "cna_network_session_dispose",
+      "header": "net_sessions.h",
+      "ownership": "borrows its inputs",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_NetworkSessionHandle"
+      ]
+    },
+    {
+      "name": "cna_network_session_end_game",
+      "header": "net_sessions.h",
+      "ownership": "borrows its inputs",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_NetworkSessionHandle"
+      ]
+    },
+    {
+      "name": "cna_network_session_find",
+      "header": "net_sessions.h",
+      "ownership": "borrows its inputs; returns an owned handle",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_NetworkSessionType",
+        "int32_t",
+        "CNA_NetworkSessionPropertiesHandle",
+        "CNA_AvailableNetworkSessionCollectionHandle*"
+      ]
+    },
+    {
+      "name": "cna_network_session_find_gamer_by_id",
+      "header": "net_sessions.h",
+      "ownership": "borrows its inputs; returns an owned handle",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_NetworkSessionHandle",
+        "uint8_t",
+        "CNA_NetworkGamerHandle*"
+      ]
+    },
+    {
+      "name": "cna_network_session_find_with_local_gamers",
+      "header": "net_sessions.h",
+      "ownership": "borrows its inputs; returns an owned handle",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_NetworkSessionType",
+        "const CNA_Handle*",
+        "uint64_t",
+        "CNA_NetworkSessionPropertiesHandle",
+        "CNA_AvailableNetworkSessionCollectionHandle*"
+      ]
+    },
+    {
+      "name": "cna_network_session_get_active_action_count_ext",
+      "header": "net_sessions.h",
+      "ownership": "borrows its inputs; caller output",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "int32_t*"
+      ]
+    },
+    {
+      "name": "cna_network_session_get_allow_host_migration",
+      "header": "net_sessions.h",
+      "ownership": "borrows its inputs; caller output",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_NetworkSessionHandle",
+        "CNA_Bool*"
+      ]
+    },
+    {
+      "name": "cna_network_session_get_allow_join_in_progress",
+      "header": "net_sessions.h",
+      "ownership": "borrows its inputs; caller output",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_NetworkSessionHandle",
+        "CNA_Bool*"
+      ]
+    },
+    {
+      "name": "cna_network_session_get_bytes_per_second_received",
+      "header": "net_sessions.h",
+      "ownership": "borrows its inputs; caller output",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_NetworkSessionHandle",
+        "int32_t*"
+      ]
+    },
+    {
+      "name": "cna_network_session_get_bytes_per_second_sent",
+      "header": "net_sessions.h",
+      "ownership": "borrows its inputs; caller output",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_NetworkSessionHandle",
+        "int32_t*"
+      ]
+    },
+    {
+      "name": "cna_network_session_get_gamer",
+      "header": "net_sessions.h",
+      "ownership": "borrows its inputs; returns an owned handle",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_NetworkSessionHandle",
+        "uint32_t",
+        "int32_t",
+        "CNA_NetworkGamerHandle*"
+      ]
+    },
+    {
+      "name": "cna_network_session_get_gamer_count",
+      "header": "net_sessions.h",
+      "ownership": "borrows its inputs; caller output",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_NetworkSessionHandle",
+        "uint32_t",
+        "int32_t*"
+      ]
+    },
+    {
+      "name": "cna_network_session_get_host",
+      "header": "net_sessions.h",
+      "ownership": "borrows its inputs; returns an owned handle",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_NetworkSessionHandle",
+        "CNA_NetworkGamerHandle*"
+      ]
+    },
+    {
+      "name": "cna_network_session_get_instance_count_ext",
+      "header": "net_sessions.h",
+      "ownership": "borrows its inputs; caller output",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "int32_t*"
+      ]
+    },
+    {
+      "name": "cna_network_session_get_is_disposed",
+      "header": "net_sessions.h",
+      "ownership": "borrows its inputs; caller output",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_NetworkSessionHandle",
+        "CNA_Bool*"
+      ]
+    },
+    {
+      "name": "cna_network_session_get_is_everyone_ready",
+      "header": "net_sessions.h",
+      "ownership": "borrows its inputs; caller output",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_NetworkSessionHandle",
+        "CNA_Bool*"
+      ]
+    },
+    {
+      "name": "cna_network_session_get_is_host",
+      "header": "net_sessions.h",
+      "ownership": "borrows its inputs; caller output",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_NetworkSessionHandle",
+        "CNA_Bool*"
+      ]
+    },
+    {
+      "name": "cna_network_session_get_max_gamers",
+      "header": "net_sessions.h",
+      "ownership": "borrows its inputs; caller output",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_NetworkSessionHandle",
+        "int32_t*"
+      ]
+    },
+    {
+      "name": "cna_network_session_get_owned_gamer_count_ext",
+      "header": "net_sessions.h",
+      "ownership": "borrows its inputs; caller output",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_NetworkSessionHandle",
+        "uint64_t*"
+      ]
+    },
+    {
+      "name": "cna_network_session_get_private_gamer_slots",
+      "header": "net_sessions.h",
+      "ownership": "borrows its inputs; caller output",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_NetworkSessionHandle",
+        "int32_t*"
+      ]
+    },
+    {
+      "name": "cna_network_session_get_session_state",
+      "header": "net_sessions.h",
+      "ownership": "borrows its inputs; caller output",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_NetworkSessionHandle",
+        "CNA_NetworkSessionState*"
+      ]
+    },
+    {
+      "name": "cna_network_session_get_session_type",
+      "header": "net_sessions.h",
+      "ownership": "borrows its inputs; caller output",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_NetworkSessionHandle",
+        "CNA_NetworkSessionType*"
+      ]
+    },
+    {
+      "name": "cna_network_session_get_simulated_latency_ticks",
+      "header": "net_sessions.h",
+      "ownership": "borrows its inputs; caller output",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_NetworkSessionHandle",
+        "int64_t*"
+      ]
+    },
+    {
+      "name": "cna_network_session_get_simulated_packet_loss",
+      "header": "net_sessions.h",
+      "ownership": "borrows its inputs; caller output",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_NetworkSessionHandle",
+        "float*"
+      ]
+    },
+    {
+      "name": "cna_network_session_get_type_name_size",
+      "header": "net_sessions.h",
+      "ownership": "borrows its inputs; caller output",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_NetworkSessionHandle",
+        "uint64_t*"
+      ]
+    },
+    {
+      "name": "cna_network_session_join",
+      "header": "net_sessions.h",
+      "ownership": "borrows its inputs; returns an owned handle",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_AvailableNetworkSessionHandle",
+        "CNA_NetworkSessionHandle*"
+      ]
+    },
+    {
+      "name": "cna_network_session_join_invited",
+      "header": "net_sessions.h",
+      "ownership": "borrows its inputs; returns an owned handle",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "int32_t",
+        "CNA_NetworkSessionHandle*"
+      ]
+    },
+    {
+      "name": "cna_network_session_join_invited_with_local_gamers",
+      "header": "net_sessions.h",
+      "ownership": "borrows its inputs; returns an owned handle",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "const CNA_Handle*",
+        "uint64_t",
+        "CNA_NetworkSessionHandle*"
+      ]
+    },
+    {
+      "name": "cna_network_session_remove_gamer_ext",
+      "header": "net_sessions.h",
+      "ownership": "borrows its inputs",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_NetworkSessionHandle",
+        "CNA_NetworkGamerHandle",
+        "CNA_NetworkSessionEndReason"
+      ]
+    },
+    {
+      "name": "cna_network_session_reset_ready",
+      "header": "net_sessions.h",
+      "ownership": "borrows its inputs",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_NetworkSessionHandle"
+      ]
+    },
+    {
+      "name": "cna_network_session_set_allow_host_migration",
+      "header": "net_sessions.h",
+      "ownership": "borrows its inputs",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_NetworkSessionHandle",
+        "CNA_Bool"
+      ]
+    },
+    {
+      "name": "cna_network_session_set_allow_join_in_progress",
+      "header": "net_sessions.h",
+      "ownership": "borrows its inputs",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_NetworkSessionHandle",
+        "CNA_Bool"
+      ]
+    },
+    {
+      "name": "cna_network_session_set_max_gamers",
+      "header": "net_sessions.h",
+      "ownership": "borrows its inputs",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_NetworkSessionHandle",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "cna_network_session_set_private_gamer_slots",
+      "header": "net_sessions.h",
+      "ownership": "borrows its inputs",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_NetworkSessionHandle",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "cna_network_session_set_simulated_latency_ticks",
+      "header": "net_sessions.h",
+      "ownership": "borrows its inputs",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_NetworkSessionHandle",
+        "int64_t"
+      ]
+    },
+    {
+      "name": "cna_network_session_set_simulated_packet_loss",
+      "header": "net_sessions.h",
+      "ownership": "borrows its inputs",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_NetworkSessionHandle",
+        "float"
+      ]
+    },
+    {
+      "name": "cna_network_session_start_game",
+      "header": "net_sessions.h",
+      "ownership": "borrows its inputs",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_NetworkSessionHandle"
+      ]
+    },
+    {
+      "name": "cna_network_session_unsubscribe",
+      "header": "net_sessions.h",
+      "ownership": "consumes the owned registration",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_NetworkSessionEventRegistrationHandle"
+      ]
+    },
+    {
+      "name": "cna_network_session_update",
+      "header": "net_sessions.h",
+      "ownership": "borrows its inputs",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_NetworkSessionHandle"
+      ]
+    },
+    {
       "name": "cna_graphics_device_copy_render_targets",
       "header": "render_target.h",
       "ownership": "borrows device; copies complete binding array",

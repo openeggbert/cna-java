@@ -1,6 +1,8 @@
 package Microsoft.Xna.Framework.GamerServices;
 
 import org.openeggbert.cna.internal.CompletedAsyncResult;
+import org.openeggbert.cna.internal.GamerFactories;
+import org.openeggbert.cna.internal.GamerHandles;
 import org.openeggbert.cna.internal.NativeGamerServices;
 import org.openeggbert.cna.internal.generated.NativeGamerServicesRoutes;
 import System.AsyncCallback;
@@ -19,15 +21,33 @@ import java.util.Objects;
  */
 public abstract class Gamer {
 
-    private final long handle;
+    static {
+        // Microsoft.Xna.Framework.Net builds signed-in gamers, which CLR reaches through
+        // assembly-internal access. Installing the factory here is safe because every network
+        // gamer derives from this type, so this initializer always runs first.
+        GamerFactories.setSignedInGamer(SignedInGamer::new);
+    }
+
     private final LeaderboardWriter leaderboardWriter = new LeaderboardWriter();
 
     Gamer(long handle) {
-        this.handle = handle;
+        GamerHandles.register(this, handle);
+    }
+
+    /**
+     * Creates a gamer whose native handle its own constructor records.
+     *
+     * <p>CLR derives {@code Microsoft.Xna.Framework.Net}'s gamers from this type through
+     * assembly-internal access, which Java has no equivalent for across packages. The
+     * replacement is this protected constructor: the handle is recorded through the internal
+     * handle table instead of crossing a protected signature, so no raw native handle appears
+     * in the public or protected surface.
+     */
+    protected Gamer() {
     }
 
     long handle() {
-        return handle;
+        return GamerHandles.of(this);
     }
 
     public static IAsyncResult BeginGetFromGamertag(
@@ -83,7 +103,7 @@ public abstract class Gamer {
     public final GamerProfile GetProfile() {
         long[] profile = new long[1];
         NativeGamerServices.check("Gamer.GetProfile",
-                NativeGamerServicesRoutes.gamerGetProfile(handle, profile));
+                NativeGamerServicesRoutes.gamerGetProfile(handle(), profile));
         return new GamerProfile(profile[0]);
     }
 
@@ -91,33 +111,33 @@ public abstract class Gamer {
     @Override
     public String toString() {
         return NativeGamerServices.text("Gamer.ToString",
-                out -> NativeGamerServicesRoutes.gamerGetTextSize(handle, out),
-                (buffer, out) -> NativeGamerServicesRoutes.gamerCopyText(handle, buffer, out));
+                out -> NativeGamerServicesRoutes.gamerGetTextSize(handle(), out),
+                (buffer, out) -> NativeGamerServicesRoutes.gamerCopyText(handle(), buffer, out));
     }
 
     public final String getDisplayName() {
         return NativeGamerServices.text("Gamer.DisplayName",
-                out -> NativeGamerServicesRoutes.gamerGetDisplayNameSize(handle, out),
+                out -> NativeGamerServicesRoutes.gamerGetDisplayNameSize(handle(), out),
                 (buffer, out) -> NativeGamerServicesRoutes.gamerCopyDisplayName(
-                        handle, buffer, out));
+                        handle(), buffer, out));
     }
 
     protected final void setDisplayName(String value) {
         NativeGamerServices.check("Gamer.DisplayName",
                 NativeGamerServicesRoutes.gamerSetDisplayName(
-                        handle, NativeGamerServices.utf8(value)));
+                        handle(), NativeGamerServices.utf8(value)));
     }
 
     public final String getGamertag() {
         return NativeGamerServices.text("Gamer.Gamertag",
-                out -> NativeGamerServicesRoutes.gamerGetGamertagSize(handle, out),
-                (buffer, out) -> NativeGamerServicesRoutes.gamerCopyGamertag(handle, buffer, out));
+                out -> NativeGamerServicesRoutes.gamerGetGamertagSize(handle(), out),
+                (buffer, out) -> NativeGamerServicesRoutes.gamerCopyGamertag(handle(), buffer, out));
     }
 
     public final boolean getIsDisposed() {
         boolean[] disposed = new boolean[1];
         NativeGamerServices.check("Gamer.IsDisposed",
-                NativeGamerServicesRoutes.gamerGetIsDisposed(handle, disposed));
+                NativeGamerServicesRoutes.gamerGetIsDisposed(handle(), disposed));
         return disposed[0];
     }
 
@@ -139,14 +159,14 @@ public abstract class Gamer {
     public final Object getTag() {
         long[] tag = new long[1];
         NativeGamerServices.check("Gamer.Tag",
-                NativeGamerServicesRoutes.gamerGetTag(handle, tag));
+                NativeGamerServicesRoutes.gamerGetTag(handle(), tag));
         return GamerTags.get(tag[0]);
     }
 
     public final void setTag(Object value) {
         long token = GamerTags.put(value);
         NativeGamerServices.check("Gamer.Tag",
-                NativeGamerServicesRoutes.gamerSetTag(handle, token));
+                NativeGamerServicesRoutes.gamerSetTag(handle(), token));
     }
 
     /** A gamer reached by gamertag, which XNA models as an ordinary abstract {@code Gamer}. */

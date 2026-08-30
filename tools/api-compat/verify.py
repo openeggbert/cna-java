@@ -682,6 +682,20 @@ def mapped_members(type_contract: dict[str, Any], rules: dict[str, Any], mapping
         expected.append(callable_member(
             "method", "iterator", bridge, [], f"java.util.Iterator<{element_type}>"))
 
+    # CLR `internal` grants assembly-wide access; Java has no equivalent across packages.
+    # Where a CLR type is constructed by another namespace of the same assembly, the rules file
+    # declares the Java member that replaces that access, with its exact signature and reason,
+    # so it is an expected member rather than a suppressed one.
+    for declared in rules.get("clrInternalMembers", {}).get(type_name, []):
+        source = {"access": declared.get("access", "protected"), "static": declared.get("static", False),
+                  "abstract": False, "final": declared.get("final", False),
+                  "genericArity": declared.get("genericArity", 0)}
+        expected.append(callable_member(
+            declared["kind"], ".ctor" if declared["kind"] == "constructor" else declared["name"],
+            source,
+            [parameter(value["name"], value["type"]) for value in declared.get("parameters", [])],
+            declared.get("returnType")))
+
     unique: dict[str, dict[str, Any]] = {}
     for member in expected:
         unique[member_key(member, include_return=True)] = member

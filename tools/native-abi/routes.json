@@ -979,6 +979,668 @@
         "java": "signedInGamerSetPresenceModeStringExt",
         "symbol": "cna_signed_in_gamer_set_presence_mode_string_ext"
       }
+    ],
+    "NativeNetworkRoutes": [
+      {
+        "java": "availableNetworkSessionCollectionCopySession",
+        "symbol": "cna_available_network_session_collection_copy_session"
+      },
+      {
+        "java": "availableNetworkSessionCollectionCreateExt",
+        "symbol": "cna_available_network_session_collection_create_ext"
+      },
+      {
+        "java": "availableNetworkSessionCollectionDestroy",
+        "symbol": "cna_available_network_session_collection_destroy"
+      },
+      {
+        "java": "availableNetworkSessionCollectionDispose",
+        "symbol": "cna_available_network_session_collection_dispose"
+      },
+      {
+        "java": "availableNetworkSessionCollectionGetCount",
+        "symbol": "cna_available_network_session_collection_get_count"
+      },
+      {
+        "java": "availableNetworkSessionCollectionGetIsDisposed",
+        "symbol": "cna_available_network_session_collection_get_is_disposed"
+      },
+      {
+        "java": "availableNetworkSessionCopyConnectAddressExt",
+        "symbol": "cna_available_network_session_copy_connect_address_ext"
+      },
+      {
+        "java": "availableNetworkSessionCopyHostGamertag",
+        "symbol": "cna_available_network_session_copy_host_gamertag"
+      },
+      {
+        "java": "availableNetworkSessionCopySessionProperties",
+        "symbol": "cna_available_network_session_copy_session_properties"
+      },
+      {
+        "java": "availableNetworkSessionDestroy",
+        "symbol": "cna_available_network_session_destroy"
+      },
+      {
+        "java": "availableNetworkSessionEquals",
+        "symbol": "cna_available_network_session_equals"
+      },
+      {
+        "java": "availableNetworkSessionGetConnectAddressSizeExt",
+        "symbol": "cna_available_network_session_get_connect_address_size_ext"
+      },
+      {
+        "java": "availableNetworkSessionGetConnectPortExt",
+        "symbol": "cna_available_network_session_get_connect_port_ext"
+      },
+      {
+        "java": "availableNetworkSessionGetCurrentGamerCount",
+        "symbol": "cna_available_network_session_get_current_gamer_count"
+      },
+      {
+        "java": "availableNetworkSessionGetHostGamertagSize",
+        "symbol": "cna_available_network_session_get_host_gamertag_size"
+      },
+      {
+        "java": "availableNetworkSessionGetOpenPrivateGamerSlots",
+        "symbol": "cna_available_network_session_get_open_private_gamer_slots"
+      },
+      {
+        "java": "availableNetworkSessionGetOpenPublicGamerSlots",
+        "symbol": "cna_available_network_session_get_open_public_gamer_slots"
+      },
+      {
+        "java": "availableNetworkSessionGetQualityOfService",
+        "symbol": "cna_available_network_session_get_quality_of_service"
+      },
+      {
+        "java": "availableNetworkSessionGetSessionTypeExt",
+        "symbol": "cna_available_network_session_get_session_type_ext"
+      },
+      {
+        "java": "availableNetworkSessionNotEquals",
+        "symbol": "cna_available_network_session_not_equals"
+      },
+      {
+        "java": "gameEndedEventInfoInit",
+        "symbol": "cna_game_ended_event_info_init"
+      },
+      {
+        "java": "gameStartedEventInfoInit",
+        "symbol": "cna_game_started_event_info_init"
+      },
+      {
+        "java": "gamerJoinedEventInfoInit",
+        "symbol": "cna_gamer_joined_event_info_init"
+      },
+      {
+        "java": "gamerLeftEventInfoInit",
+        "symbol": "cna_gamer_left_event_info_init"
+      },
+      {
+        "java": "hostChangedEventInfoInit",
+        "symbol": "cna_host_changed_event_info_init"
+      },
+      {
+        "java": "localNetworkGamerClearPacketQueueExt",
+        "symbol": "cna_local_network_gamer_clear_packet_queue_ext"
+      },
+      {
+        "java": "localNetworkGamerCreateExt",
+        "symbol": "cna_local_network_gamer_create_ext"
+      },
+      {
+        "java": "localNetworkGamerEnableSendVoice",
+        "symbol": "cna_local_network_gamer_enable_send_voice"
+      },
+      {
+        "java": "localNetworkGamerGetIsDataAvailable",
+        "symbol": "cna_local_network_gamer_get_is_data_available"
+      },
+      {
+        "java": "localNetworkGamerGetSignedInGamer",
+        "symbol": "cna_local_network_gamer_get_signed_in_gamer"
+      },
+      {
+        "java": "localNetworkGamerReceiveData",
+        "symbol": "cna_local_network_gamer_receive_data"
+      },
+      {
+        "java": "localNetworkGamerReceiveDataAt",
+        "symbol": "cna_local_network_gamer_receive_data_at"
+      },
+      {
+        "java": "localNetworkGamerReceiveDataIntoPacketReader",
+        "symbol": "cna_local_network_gamer_receive_data_into_packet_reader"
+      },
+      {
+        "java": "localNetworkGamerSendData",
+        "symbol": "cna_local_network_gamer_send_data"
+      },
+      {
+        "java": "localNetworkGamerSendDataRange",
+        "symbol": "cna_local_network_gamer_send_data_range"
+      },
+      {
+        "java": "localNetworkGamerSendDataRangeTo",
+        "symbol": "cna_local_network_gamer_send_data_range_to"
+      },
+      {
+        "java": "localNetworkGamerSendDataTo",
+        "symbol": "cna_local_network_gamer_send_data_to"
+      },
+      {
+        "java": "localNetworkGamerSendPacketWriter",
+        "symbol": "cna_local_network_gamer_send_packet_writer"
+      },
+      {
+        "java": "localNetworkGamerSendPacketWriterTo",
+        "symbol": "cna_local_network_gamer_send_packet_writer_to"
+      },
+      {
+        "java": "localNetworkGamerSendPartyInvites",
+        "symbol": "cna_local_network_gamer_send_party_invites"
+      },
+      {
+        "java": "netGetLastJoinError",
+        "symbol": "cna_net_get_last_join_error"
+      },
+      {
+        "java": "networkGamerCopyMachine",
+        "symbol": "cna_network_gamer_copy_machine"
+      },
+      {
+        "java": "networkGamerCreate",
+        "symbol": "cna_network_gamer_create"
+      },
+      {
+        "java": "networkGamerDestroy",
+        "symbol": "cna_network_gamer_destroy"
+      },
+      {
+        "java": "networkGamerGetHasLeftSession",
+        "symbol": "cna_network_gamer_get_has_left_session"
+      },
+      {
+        "java": "networkGamerGetHasVoice",
+        "symbol": "cna_network_gamer_get_has_voice"
+      },
+      {
+        "java": "networkGamerGetId",
+        "symbol": "cna_network_gamer_get_id"
+      },
+      {
+        "java": "networkGamerGetIsGuest",
+        "symbol": "cna_network_gamer_get_is_guest"
+      },
+      {
+        "java": "networkGamerGetIsHost",
+        "symbol": "cna_network_gamer_get_is_host"
+      },
+      {
+        "java": "networkGamerGetIsLocal",
+        "symbol": "cna_network_gamer_get_is_local"
+      },
+      {
+        "java": "networkGamerGetIsMutedByLocalUser",
+        "symbol": "cna_network_gamer_get_is_muted_by_local_user"
+      },
+      {
+        "java": "networkGamerGetIsPrivateSlot",
+        "symbol": "cna_network_gamer_get_is_private_slot"
+      },
+      {
+        "java": "networkGamerGetIsReady",
+        "symbol": "cna_network_gamer_get_is_ready"
+      },
+      {
+        "java": "networkGamerGetIsTalking",
+        "symbol": "cna_network_gamer_get_is_talking"
+      },
+      {
+        "java": "networkGamerGetRoundtripTicks",
+        "symbol": "cna_network_gamer_get_roundtrip_ticks"
+      },
+      {
+        "java": "networkGamerGetSession",
+        "symbol": "cna_network_gamer_get_session"
+      },
+      {
+        "java": "networkGamerSetHasLeftSessionExt",
+        "symbol": "cna_network_gamer_set_has_left_session_ext"
+      },
+      {
+        "java": "networkGamerSetIdExt",
+        "symbol": "cna_network_gamer_set_id_ext"
+      },
+      {
+        "java": "networkGamerSetIsHostExt",
+        "symbol": "cna_network_gamer_set_is_host_ext"
+      },
+      {
+        "java": "networkGamerSetIsReady",
+        "symbol": "cna_network_gamer_set_is_ready"
+      },
+      {
+        "java": "networkGamerSetMachine",
+        "symbol": "cna_network_gamer_set_machine"
+      },
+      {
+        "java": "networkGamerSetRoundtripTicksExt",
+        "symbol": "cna_network_gamer_set_roundtrip_ticks_ext"
+      },
+      {
+        "java": "networkMachineCreate",
+        "symbol": "cna_network_machine_create"
+      },
+      {
+        "java": "networkMachineDestroy",
+        "symbol": "cna_network_machine_destroy"
+      },
+      {
+        "java": "networkMachineGetGamer",
+        "symbol": "cna_network_machine_get_gamer"
+      },
+      {
+        "java": "networkMachineGetGamerCount",
+        "symbol": "cna_network_machine_get_gamer_count"
+      },
+      {
+        "java": "networkMachineRemoveFromSession",
+        "symbol": "cna_network_machine_remove_from_session"
+      },
+      {
+        "java": "networkSessionAddLocalGamer",
+        "symbol": "cna_network_session_add_local_gamer"
+      },
+      {
+        "java": "networkSessionAddRemoteGamerExt",
+        "symbol": "cna_network_session_add_remote_gamer_ext"
+      },
+      {
+        "java": "networkSessionCopySessionProperties",
+        "symbol": "cna_network_session_copy_session_properties"
+      },
+      {
+        "java": "networkSessionCopyTypeName",
+        "symbol": "cna_network_session_copy_type_name"
+      },
+      {
+        "java": "networkSessionCreate",
+        "symbol": "cna_network_session_create"
+      },
+      {
+        "java": "networkSessionCreateWithLocalGamers",
+        "symbol": "cna_network_session_create_with_local_gamers"
+      },
+      {
+        "java": "networkSessionCreateWithProperties",
+        "symbol": "cna_network_session_create_with_properties"
+      },
+      {
+        "java": "networkSessionDestroy",
+        "symbol": "cna_network_session_destroy"
+      },
+      {
+        "java": "networkSessionDispose",
+        "symbol": "cna_network_session_dispose"
+      },
+      {
+        "java": "networkSessionEndGame",
+        "symbol": "cna_network_session_end_game"
+      },
+      {
+        "java": "networkSessionEndedEventInfoInit",
+        "symbol": "cna_network_session_ended_event_info_init"
+      },
+      {
+        "java": "networkSessionFind",
+        "symbol": "cna_network_session_find"
+      },
+      {
+        "java": "networkSessionFindGamerById",
+        "symbol": "cna_network_session_find_gamer_by_id"
+      },
+      {
+        "java": "networkSessionFindWithLocalGamers",
+        "symbol": "cna_network_session_find_with_local_gamers"
+      },
+      {
+        "java": "networkSessionGetActiveActionCountExt",
+        "symbol": "cna_network_session_get_active_action_count_ext"
+      },
+      {
+        "java": "networkSessionGetAllowHostMigration",
+        "symbol": "cna_network_session_get_allow_host_migration"
+      },
+      {
+        "java": "networkSessionGetAllowJoinInProgress",
+        "symbol": "cna_network_session_get_allow_join_in_progress"
+      },
+      {
+        "java": "networkSessionGetBytesPerSecondReceived",
+        "symbol": "cna_network_session_get_bytes_per_second_received"
+      },
+      {
+        "java": "networkSessionGetBytesPerSecondSent",
+        "symbol": "cna_network_session_get_bytes_per_second_sent"
+      },
+      {
+        "java": "networkSessionGetGamer",
+        "symbol": "cna_network_session_get_gamer"
+      },
+      {
+        "java": "networkSessionGetGamerCount",
+        "symbol": "cna_network_session_get_gamer_count"
+      },
+      {
+        "java": "networkSessionGetHost",
+        "symbol": "cna_network_session_get_host"
+      },
+      {
+        "java": "networkSessionGetInstanceCountExt",
+        "symbol": "cna_network_session_get_instance_count_ext"
+      },
+      {
+        "java": "networkSessionGetIsDisposed",
+        "symbol": "cna_network_session_get_is_disposed"
+      },
+      {
+        "java": "networkSessionGetIsEveryoneReady",
+        "symbol": "cna_network_session_get_is_everyone_ready"
+      },
+      {
+        "java": "networkSessionGetIsHost",
+        "symbol": "cna_network_session_get_is_host"
+      },
+      {
+        "java": "networkSessionGetMaxGamers",
+        "symbol": "cna_network_session_get_max_gamers"
+      },
+      {
+        "java": "networkSessionGetOwnedGamerCountExt",
+        "symbol": "cna_network_session_get_owned_gamer_count_ext"
+      },
+      {
+        "java": "networkSessionGetPrivateGamerSlots",
+        "symbol": "cna_network_session_get_private_gamer_slots"
+      },
+      {
+        "java": "networkSessionGetSessionState",
+        "symbol": "cna_network_session_get_session_state"
+      },
+      {
+        "java": "networkSessionGetSessionType",
+        "symbol": "cna_network_session_get_session_type"
+      },
+      {
+        "java": "networkSessionGetSimulatedLatencyTicks",
+        "symbol": "cna_network_session_get_simulated_latency_ticks"
+      },
+      {
+        "java": "networkSessionGetSimulatedPacketLoss",
+        "symbol": "cna_network_session_get_simulated_packet_loss"
+      },
+      {
+        "java": "networkSessionGetTypeNameSize",
+        "symbol": "cna_network_session_get_type_name_size"
+      },
+      {
+        "java": "networkSessionJoin",
+        "symbol": "cna_network_session_join"
+      },
+      {
+        "java": "networkSessionJoinInvited",
+        "symbol": "cna_network_session_join_invited"
+      },
+      {
+        "java": "networkSessionJoinInvitedWithLocalGamers",
+        "symbol": "cna_network_session_join_invited_with_local_gamers"
+      },
+      {
+        "java": "networkSessionPropertiesAdd",
+        "symbol": "cna_network_session_properties_add"
+      },
+      {
+        "java": "networkSessionPropertiesClear",
+        "symbol": "cna_network_session_properties_clear"
+      },
+      {
+        "java": "networkSessionPropertiesContains",
+        "symbol": "cna_network_session_properties_contains"
+      },
+      {
+        "java": "networkSessionPropertiesCopyTo",
+        "symbol": "cna_network_session_properties_copy_to"
+      },
+      {
+        "java": "networkSessionPropertiesCreate",
+        "symbol": "cna_network_session_properties_create"
+      },
+      {
+        "java": "networkSessionPropertiesCreateEnumerator",
+        "symbol": "cna_network_session_properties_create_enumerator"
+      },
+      {
+        "java": "networkSessionPropertiesDestroy",
+        "symbol": "cna_network_session_properties_destroy"
+      },
+      {
+        "java": "networkSessionPropertiesGetCount",
+        "symbol": "cna_network_session_properties_get_count"
+      },
+      {
+        "java": "networkSessionPropertiesGetIsReadOnly",
+        "symbol": "cna_network_session_properties_get_is_read_only"
+      },
+      {
+        "java": "networkSessionPropertiesGetItem",
+        "symbol": "cna_network_session_properties_get_item"
+      },
+      {
+        "java": "networkSessionPropertiesIndexOf",
+        "symbol": "cna_network_session_properties_index_of"
+      },
+      {
+        "java": "networkSessionPropertiesInsert",
+        "symbol": "cna_network_session_properties_insert"
+      },
+      {
+        "java": "networkSessionPropertiesRemove",
+        "symbol": "cna_network_session_properties_remove"
+      },
+      {
+        "java": "networkSessionPropertiesRemoveAt",
+        "symbol": "cna_network_session_properties_remove_at"
+      },
+      {
+        "java": "networkSessionPropertiesSetItem",
+        "symbol": "cna_network_session_properties_set_item"
+      },
+      {
+        "java": "networkSessionPropertyEnumeratorDestroy",
+        "symbol": "cna_network_session_property_enumerator_destroy"
+      },
+      {
+        "java": "networkSessionPropertyEnumeratorGetCurrent",
+        "symbol": "cna_network_session_property_enumerator_get_current"
+      },
+      {
+        "java": "networkSessionPropertyEnumeratorMoveNext",
+        "symbol": "cna_network_session_property_enumerator_move_next"
+      },
+      {
+        "java": "networkSessionPropertyEnumeratorReset",
+        "symbol": "cna_network_session_property_enumerator_reset"
+      },
+      {
+        "java": "networkSessionRemoveGamerExt",
+        "symbol": "cna_network_session_remove_gamer_ext"
+      },
+      {
+        "java": "networkSessionResetReady",
+        "symbol": "cna_network_session_reset_ready"
+      },
+      {
+        "java": "networkSessionSetAllowHostMigration",
+        "symbol": "cna_network_session_set_allow_host_migration"
+      },
+      {
+        "java": "networkSessionSetAllowJoinInProgress",
+        "symbol": "cna_network_session_set_allow_join_in_progress"
+      },
+      {
+        "java": "networkSessionSetMaxGamers",
+        "symbol": "cna_network_session_set_max_gamers"
+      },
+      {
+        "java": "networkSessionSetPrivateGamerSlots",
+        "symbol": "cna_network_session_set_private_gamer_slots"
+      },
+      {
+        "java": "networkSessionSetSimulatedLatencyTicks",
+        "symbol": "cna_network_session_set_simulated_latency_ticks"
+      },
+      {
+        "java": "networkSessionSetSimulatedPacketLoss",
+        "symbol": "cna_network_session_set_simulated_packet_loss"
+      },
+      {
+        "java": "networkSessionStartGame",
+        "symbol": "cna_network_session_start_game"
+      },
+      {
+        "java": "networkSessionUnsubscribe",
+        "symbol": "cna_network_session_unsubscribe"
+      },
+      {
+        "java": "networkSessionUpdate",
+        "symbol": "cna_network_session_update"
+      },
+      {
+        "java": "packetReaderCreate",
+        "symbol": "cna_packet_reader_create"
+      },
+      {
+        "java": "packetReaderDestroy",
+        "symbol": "cna_packet_reader_destroy"
+      },
+      {
+        "java": "packetReaderGetLength",
+        "symbol": "cna_packet_reader_get_length"
+      },
+      {
+        "java": "packetReaderGetPosition",
+        "symbol": "cna_packet_reader_get_position"
+      },
+      {
+        "java": "packetReaderReadColor",
+        "symbol": "cna_packet_reader_read_color"
+      },
+      {
+        "java": "packetReaderReadDouble",
+        "symbol": "cna_packet_reader_read_double"
+      },
+      {
+        "java": "packetReaderReadMatrix",
+        "symbol": "cna_packet_reader_read_matrix"
+      },
+      {
+        "java": "packetReaderReadQuaternion",
+        "symbol": "cna_packet_reader_read_quaternion"
+      },
+      {
+        "java": "packetReaderReadSingle",
+        "symbol": "cna_packet_reader_read_single"
+      },
+      {
+        "java": "packetReaderReadVector2",
+        "symbol": "cna_packet_reader_read_vector2"
+      },
+      {
+        "java": "packetReaderReadVector3",
+        "symbol": "cna_packet_reader_read_vector3"
+      },
+      {
+        "java": "packetReaderReadVector4",
+        "symbol": "cna_packet_reader_read_vector4"
+      },
+      {
+        "java": "packetReaderSetDataExt",
+        "symbol": "cna_packet_reader_set_data_ext"
+      },
+      {
+        "java": "packetReaderSetPosition",
+        "symbol": "cna_packet_reader_set_position"
+      },
+      {
+        "java": "packetWriterCopyDataExt",
+        "symbol": "cna_packet_writer_copy_data_ext"
+      },
+      {
+        "java": "packetWriterCreate",
+        "symbol": "cna_packet_writer_create"
+      },
+      {
+        "java": "packetWriterDestroy",
+        "symbol": "cna_packet_writer_destroy"
+      },
+      {
+        "java": "packetWriterGetLength",
+        "symbol": "cna_packet_writer_get_length"
+      },
+      {
+        "java": "packetWriterGetPosition",
+        "symbol": "cna_packet_writer_get_position"
+      },
+      {
+        "java": "packetWriterSetPosition",
+        "symbol": "cna_packet_writer_set_position"
+      },
+      {
+        "java": "packetWriterWriteColor",
+        "symbol": "cna_packet_writer_write_color"
+      },
+      {
+        "java": "packetWriterWriteDouble",
+        "symbol": "cna_packet_writer_write_double"
+      },
+      {
+        "java": "packetWriterWriteMatrix",
+        "symbol": "cna_packet_writer_write_matrix"
+      },
+      {
+        "java": "packetWriterWriteQuaternion",
+        "symbol": "cna_packet_writer_write_quaternion"
+      },
+      {
+        "java": "packetWriterWriteSingle",
+        "symbol": "cna_packet_writer_write_single"
+      },
+      {
+        "java": "packetWriterWriteVector2",
+        "symbol": "cna_packet_writer_write_vector2"
+      },
+      {
+        "java": "packetWriterWriteVector3",
+        "symbol": "cna_packet_writer_write_vector3"
+      },
+      {
+        "java": "packetWriterWriteVector4",
+        "symbol": "cna_packet_writer_write_vector4"
+      },
+      {
+        "java": "qualityOfServiceInit",
+        "symbol": "cna_quality_of_service_init"
+      },
+      {
+        "java": "qualityOfServiceInitMeasured",
+        "symbol": "cna_quality_of_service_init_measured"
+      },
+      {
+        "java": "writeLeaderboardsEventInfoInit",
+        "symbol": "cna_write_leaderboards_event_info_init"
+      }
     ]
   }
 }
