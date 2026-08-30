@@ -146,6 +146,13 @@ def test_coverage(cna_root: Path) -> None:
     check("Java_org_openeggbert_cna_internal_NativeAudio_nativeDestroyCue" in entries,
           "a macro-generated JNI entry point is expanded rather than dropped")
 
+    # A facade often hands a route to a functional interface as `Type::method` rather than
+    # calling it. Missing that form would report a reached route as unreached.
+    check(coverage_tool.called_names("a(); Type::b; c ();") == {"a", "b", "c"},
+          "a Java method reference counts as a call site")
+    check("nativeRun" not in coverage_tool.called_names("// nativeRun"),
+          "a bare identifier is not a call site")
+
     rules = json.loads(coverage_tool.RULES.read_text(encoding="utf-8"))
     unmatched = coverage_tool.match_rule({"match": {}}, "cna_anything", "anything.h")
     check(not unmatched, "an empty rule never matches")

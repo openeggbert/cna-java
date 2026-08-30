@@ -38,8 +38,7 @@
       "total": 3
     },
     "core_ext.h": {
-      "CNA_EXTENSION_CANDIDATE": 53,
-      "JAVA_INTERNAL_ONLY": 4,
+      "CNA_EXTENSION_CANDIDATE": 57,
       "total": 57
     },
     "curve.h": {
@@ -67,8 +66,8 @@
     },
     "gamer_services.h": {
       "DEFERRED_RUNTIME": 5,
-      "JAVA_INTERNAL_ONLY": 84,
-      "XNA_BACKING": 161,
+      "JAVA_INTERNAL_ONLY": 82,
+      "XNA_BACKING": 163,
       "total": 250
     },
     "geometry.h": {
@@ -266,8 +265,7 @@
     },
     "video.h": {
       "DEFERRED_RUNTIME": 26,
-      "JAVA_INTERNAL_ONLY": 1,
-      "XNA_BACKING": 15,
+      "XNA_BACKING": 16,
       "total": 42
     },
     "xact.h": {
@@ -278,11 +276,11 @@
   },
   "canonicalFunctions": 4051,
   "classificationCounts": {
-    "CNA_EXTENSION_CANDIDATE": 1729,
+    "CNA_EXTENSION_CANDIDATE": 1733,
     "DEFERRED_RUNTIME": 692,
-    "JAVA_INTERNAL_ONLY": 180,
+    "JAVA_INTERNAL_ONLY": 173,
     "NOT_USEFUL_IN_JAVA": 496,
-    "XNA_BACKING": 954
+    "XNA_BACKING": 957
   },
   "cnaInventorySha256": "e9e0be892dbdce49dedf195dac35f604a9263565a74473195d878ee9e580696d",
   "deferredTasks": {
@@ -365,13 +363,9 @@
     "cna_gamer_signed_in_contains",
     "cna_gamer_signed_in_index_of",
     "cna_gamer_unsubscribe_ext",
-    "cna_graphics_renderer_copy_current_name",
-    "cna_graphics_renderer_get_current_name_size",
     "cna_guide_copy_pending_keyboard_input_description_ext",
     "cna_guide_copy_pending_keyboard_input_display_text_ext",
     "cna_guide_copy_pending_keyboard_input_title_ext",
-    "cna_guide_end_show_keyboard_input",
-    "cna_guide_end_show_keyboard_input_size",
     "cna_guide_get_has_pending_keyboard_input_ext",
     "cna_guide_get_has_pending_message_box_ext",
     "cna_guide_get_pending_keyboard_input_description_size_ext",
@@ -462,8 +456,6 @@
     "cna_packet_writer_write_vector2",
     "cna_packet_writer_write_vector3",
     "cna_packet_writer_write_vector4",
-    "cna_platform_copy_current_name_ext",
-    "cna_platform_get_current_name_size_ext",
     "cna_property_dictionary_create_ext",
     "cna_property_dictionary_destroy",
     "cna_property_dictionary_get_is_read_only",
@@ -483,7 +475,6 @@
     "cna_touch_panel_set_touch_device_exists_ext",
     "cna_touch_panel_update_ext",
     "cna_vertex_buffer_set_data_raw",
-    "cna_video_destroy",
     "cna_write_leaderboards_event_info_init"
   ],
   "schemaVersion": 1,

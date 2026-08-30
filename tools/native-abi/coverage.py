@@ -224,7 +224,13 @@ def java_methods(text: str) -> dict[str, str]:
     return methods
 
 
-CALL = re.compile(r"\b([A-Za-z_][A-Za-z0-9_]*)\s*\(")
+# A Java call site is either `name(` or a `Type::name` method reference. Missing the second
+# would report a route as unreached when a facade passes it as a functional-interface value.
+CALL = re.compile(r"\b([A-Za-z_][A-Za-z0-9_]*)\s*\(|::\s*([A-Za-z_][A-Za-z0-9_]*)")
+
+
+def called_names(text: str) -> set[str]:
+    return {name for pair in CALL.findall(text) for name in pair if name}
 
 
 def internal_route_map(sources: dict[str, str]) -> tuple[dict[str, set[str]], set[str]]:
@@ -239,7 +245,7 @@ def internal_route_map(sources: dict[str, str]) -> tuple[dict[str, set[str]], se
         for name, body in java_methods(text).items():
             bodies[name] = bodies.get(name, "") + "\n" + body
 
-    calls = {name: {value for value in CALL.findall(body) if value in bodies and value != name}
+    calls = {name: {value for value in called_names(body) if value in bodies and value != name}
              for name, body in bodies.items()}
     resolved: dict[str, set[str]] = {}
 
@@ -279,7 +285,7 @@ def surface_reach(sources: dict[str, str], routes: dict[str, set[str]]) -> dict[
     reach: dict[str, set[str]] = {}
     for relative, text in sources.items():
         package = java_package(relative)
-        for name in set(CALL.findall(text)):
+        for name in called_names(text):
             for native in routes.get(name, ()):
                 reach.setdefault(native, set()).add(package)
     return reach
