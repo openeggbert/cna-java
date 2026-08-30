@@ -4144,6 +4144,82 @@
       ]
     },
     {
+      "name": "cna_gamepad_copy_guid_ext",
+      "header": "input_gamepad.h",
+      "ownership": "borrows game; caller buffer",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_Handle",
+        "CNA_PlayerIndex",
+        "char*",
+        "uint64_t",
+        "uint64_t*"
+      ]
+    },
+    {
+      "name": "cna_gamepad_copy_name_ext",
+      "header": "input_gamepad.h",
+      "ownership": "borrows game; caller buffer",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_Handle",
+        "CNA_PlayerIndex",
+        "char*",
+        "uint64_t",
+        "uint64_t*"
+      ]
+    },
+    {
+      "name": "cna_gamepad_copy_path_ext",
+      "header": "input_gamepad.h",
+      "ownership": "borrows game; caller buffer",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_Handle",
+        "CNA_PlayerIndex",
+        "char*",
+        "uint64_t",
+        "uint64_t*"
+      ]
+    },
+    {
+      "name": "cna_gamepad_copy_serial_ext",
+      "header": "input_gamepad.h",
+      "ownership": "borrows game; caller buffer",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_Handle",
+        "CNA_PlayerIndex",
+        "char*",
+        "uint64_t",
+        "uint64_t*"
+      ]
+    },
+    {
+      "name": "cna_gamepad_get_accelerometer_ext",
+      "header": "input_gamepad.h",
+      "ownership": "borrows game; caller structure and bool outputs",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_Handle",
+        "CNA_PlayerIndex",
+        "CNA_Vector3*",
+        "CNA_Bool*"
+      ]
+    },
+    {
+      "name": "cna_gamepad_get_button_label_ext",
+      "header": "input_gamepad.h",
+      "ownership": "borrows game; caller identity output",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_Handle",
+        "CNA_PlayerIndex",
+        "CNA_GamePadButtonFlags",
+        "CNA_GamePadButtonLabel*"
+      ]
+    },
+    {
       "name": "cna_gamepad_get_capabilities",
       "header": "input_gamepad.h",
       "ownership": "borrows game; copies versioned capabilities",
@@ -4152,6 +4228,107 @@
         "CNA_Handle",
         "CNA_PlayerIndex",
         "CNA_GamePadCapabilities*"
+      ]
+    },
+    {
+      "name": "cna_gamepad_get_connection_state_ext",
+      "header": "input_gamepad.h",
+      "ownership": "borrows game; caller identity output",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_Handle",
+        "CNA_PlayerIndex",
+        "CNA_GamePadConnectionState*"
+      ]
+    },
+    {
+      "name": "cna_gamepad_get_firmware_version_ext",
+      "header": "input_gamepad.h",
+      "ownership": "borrows game; caller integer output",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_Handle",
+        "CNA_PlayerIndex",
+        "uint16_t*"
+      ]
+    },
+    {
+      "name": "cna_gamepad_get_guid_size_ext",
+      "header": "input_gamepad.h",
+      "ownership": "borrows game; caller integer output",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_Handle",
+        "CNA_PlayerIndex",
+        "uint64_t*"
+      ]
+    },
+    {
+      "name": "cna_gamepad_get_gyro_ext",
+      "header": "input_gamepad.h",
+      "ownership": "borrows game; caller structure and bool outputs",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_Handle",
+        "CNA_PlayerIndex",
+        "CNA_Vector3*",
+        "CNA_Bool*"
+      ]
+    },
+    {
+      "name": "cna_gamepad_get_name_size_ext",
+      "header": "input_gamepad.h",
+      "ownership": "borrows game; caller integer output",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_Handle",
+        "CNA_PlayerIndex",
+        "uint64_t*"
+      ]
+    },
+    {
+      "name": "cna_gamepad_get_path_size_ext",
+      "header": "input_gamepad.h",
+      "ownership": "borrows game; caller integer output",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_Handle",
+        "CNA_PlayerIndex",
+        "uint64_t*"
+      ]
+    },
+    {
+      "name": "cna_gamepad_get_player_index_ext",
+      "header": "input_gamepad.h",
+      "ownership": "borrows game; caller integer output",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_Handle",
+        "CNA_PlayerIndex",
+        "int32_t*"
+      ]
+    },
+    {
+      "name": "cna_gamepad_get_power_info_ext",
+      "header": "input_gamepad.h",
+      "ownership": "borrows game; caller identity and integer outputs",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_Handle",
+        "CNA_PlayerIndex",
+        "CNA_PowerState*",
+        "int32_t*"
+      ]
+    },
+    {
+      "name": "cna_gamepad_get_serial_size_ext",
+      "header": "input_gamepad.h",
+      "ownership": "borrows game; caller integer output",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_Handle",
+        "CNA_PlayerIndex",
+        "uint64_t*"
       ]
     },
     {
@@ -4175,6 +4352,90 @@
         "CNA_PlayerIndex",
         "CNA_GamePadDeadZone",
         "CNA_GamePadState*"
+      ]
+    },
+    {
+      "name": "cna_gamepad_get_steam_handle_ext",
+      "header": "input_gamepad.h",
+      "ownership": "borrows game; caller integer output",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_Handle",
+        "CNA_PlayerIndex",
+        "uint64_t*"
+      ]
+    },
+    {
+      "name": "cna_gamepad_get_touchpad_count_ext",
+      "header": "input_gamepad.h",
+      "ownership": "borrows game; caller integer output",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_Handle",
+        "CNA_PlayerIndex",
+        "int32_t*"
+      ]
+    },
+    {
+      "name": "cna_gamepad_get_touchpad_finger_count_ext",
+      "header": "input_gamepad.h",
+      "ownership": "borrows game; caller integer output",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_Handle",
+        "CNA_PlayerIndex",
+        "int32_t",
+        "int32_t*"
+      ]
+    },
+    {
+      "name": "cna_gamepad_get_touchpad_finger_ext",
+      "header": "input_gamepad.h",
+      "ownership": "borrows game; caller structure and bool outputs",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_Handle",
+        "CNA_PlayerIndex",
+        "int32_t",
+        "int32_t",
+        "CNA_GamePadTouchpadFinger*",
+        "CNA_Bool*"
+      ]
+    },
+    {
+      "name": "cna_gamepad_set_light_bar_ext",
+      "header": "input_gamepad.h",
+      "ownership": "borrows game; colour passed by value",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_Handle",
+        "CNA_PlayerIndex",
+        "CNA_Color"
+      ]
+    },
+    {
+      "name": "cna_gamepad_set_player_index_ext",
+      "header": "input_gamepad.h",
+      "ownership": "borrows game; caller bool output",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_Handle",
+        "CNA_PlayerIndex",
+        "int32_t",
+        "CNA_Bool*"
+      ]
+    },
+    {
+      "name": "cna_gamepad_set_trigger_vibration_ext",
+      "header": "input_gamepad.h",
+      "ownership": "borrows game; caller bool output",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_Handle",
+        "CNA_PlayerIndex",
+        "float",
+        "float",
+        "CNA_Bool*"
       ]
     },
     {
@@ -6573,6 +6834,323 @@
       ]
     },
     {
+      "name": "cna_haptic_device_copy_name",
+      "header": "input_haptics.h",
+      "ownership": "borrows device; caller buffer",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_HapticDeviceHandle",
+        "char*",
+        "uint64_t",
+        "uint64_t*"
+      ]
+    },
+    {
+      "name": "cna_haptic_device_create_effect",
+      "header": "input_haptics.h",
+      "ownership": "borrows device; the effect identifier is owned by the device",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_HapticDeviceHandle",
+        "const CNA_HapticEffect*",
+        "const uint16_t*",
+        "uint64_t",
+        "int32_t*"
+      ]
+    },
+    {
+      "name": "cna_haptic_device_destroy",
+      "header": "input_haptics.h",
+      "ownership": "releases the owned device handle and every effect it owns",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_HapticDeviceHandle"
+      ]
+    },
+    {
+      "name": "cna_haptic_device_destroy_effect",
+      "header": "input_haptics.h",
+      "ownership": "releases one device-owned effect identifier",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_HapticDeviceHandle",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "cna_haptic_device_get_capabilities",
+      "header": "input_haptics.h",
+      "ownership": "borrows device; caller structure output",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_HapticDeviceHandle",
+        "CNA_HapticCapabilities*"
+      ]
+    },
+    {
+      "name": "cna_haptic_device_get_effect_status",
+      "header": "input_haptics.h",
+      "ownership": "borrows device and its effect identifier; caller bool output",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_HapticDeviceHandle",
+        "int32_t",
+        "CNA_Bool*"
+      ]
+    },
+    {
+      "name": "cna_haptic_device_get_is_effect_supported",
+      "header": "input_haptics.h",
+      "ownership": "borrows device; caller structure and sample inputs, bool output",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_HapticDeviceHandle",
+        "const CNA_HapticEffect*",
+        "const uint16_t*",
+        "uint64_t",
+        "CNA_Bool*"
+      ]
+    },
+    {
+      "name": "cna_haptic_device_get_is_open",
+      "header": "input_haptics.h",
+      "ownership": "borrows device; caller bool output",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_HapticDeviceHandle",
+        "CNA_Bool*"
+      ]
+    },
+    {
+      "name": "cna_haptic_device_get_name_size",
+      "header": "input_haptics.h",
+      "ownership": "borrows device; caller integer output",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_HapticDeviceHandle",
+        "uint64_t*"
+      ]
+    },
+    {
+      "name": "cna_haptic_device_init_rumble",
+      "header": "input_haptics.h",
+      "ownership": "borrows device; caller bool output",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_HapticDeviceHandle",
+        "CNA_Bool*"
+      ]
+    },
+    {
+      "name": "cna_haptic_device_pause",
+      "header": "input_haptics.h",
+      "ownership": "borrows device; caller bool output",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_HapticDeviceHandle",
+        "CNA_Bool*"
+      ]
+    },
+    {
+      "name": "cna_haptic_device_play_rumble",
+      "header": "input_haptics.h",
+      "ownership": "borrows device; caller bool output",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_HapticDeviceHandle",
+        "float",
+        "uint32_t",
+        "CNA_Bool*"
+      ]
+    },
+    {
+      "name": "cna_haptic_device_resume",
+      "header": "input_haptics.h",
+      "ownership": "borrows device; caller bool output",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_HapticDeviceHandle",
+        "CNA_Bool*"
+      ]
+    },
+    {
+      "name": "cna_haptic_device_run_effect",
+      "header": "input_haptics.h",
+      "ownership": "borrows device and its effect identifier; caller bool output",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_HapticDeviceHandle",
+        "int32_t",
+        "uint32_t",
+        "CNA_Bool*"
+      ]
+    },
+    {
+      "name": "cna_haptic_device_set_autocenter",
+      "header": "input_haptics.h",
+      "ownership": "borrows device; caller bool output",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_HapticDeviceHandle",
+        "int32_t",
+        "CNA_Bool*"
+      ]
+    },
+    {
+      "name": "cna_haptic_device_set_gain",
+      "header": "input_haptics.h",
+      "ownership": "borrows device; caller bool output",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_HapticDeviceHandle",
+        "int32_t",
+        "CNA_Bool*"
+      ]
+    },
+    {
+      "name": "cna_haptic_device_stop_all_effects",
+      "header": "input_haptics.h",
+      "ownership": "borrows device; caller bool output",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_HapticDeviceHandle",
+        "CNA_Bool*"
+      ]
+    },
+    {
+      "name": "cna_haptic_device_stop_effect",
+      "header": "input_haptics.h",
+      "ownership": "borrows device and its effect identifier; caller bool output",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_HapticDeviceHandle",
+        "int32_t",
+        "CNA_Bool*"
+      ]
+    },
+    {
+      "name": "cna_haptic_device_stop_rumble",
+      "header": "input_haptics.h",
+      "ownership": "borrows device; caller bool output",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_HapticDeviceHandle",
+        "CNA_Bool*"
+      ]
+    },
+    {
+      "name": "cna_haptic_device_update_effect",
+      "header": "input_haptics.h",
+      "ownership": "borrows device and its effect identifier; caller bool output",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_HapticDeviceHandle",
+        "int32_t",
+        "const CNA_HapticEffect*",
+        "const uint16_t*",
+        "uint64_t",
+        "CNA_Bool*"
+      ]
+    },
+    {
+      "name": "cna_haptics_copy_name_at",
+      "header": "input_haptics.h",
+      "ownership": "borrows game; caller buffer",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_Handle",
+        "uint32_t",
+        "char*",
+        "uint64_t",
+        "uint64_t*"
+      ]
+    },
+    {
+      "name": "cna_haptics_get_count",
+      "header": "input_haptics.h",
+      "ownership": "borrows game; caller integer output",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_Handle",
+        "uint32_t*"
+      ]
+    },
+    {
+      "name": "cna_haptics_get_id_at",
+      "header": "input_haptics.h",
+      "ownership": "borrows game; caller integer output",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_Handle",
+        "uint32_t",
+        "uint32_t*"
+      ]
+    },
+    {
+      "name": "cna_haptics_get_is_joystick_haptic",
+      "header": "input_haptics.h",
+      "ownership": "borrows game; caller bool output",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_Handle",
+        "uint32_t",
+        "CNA_Bool*"
+      ]
+    },
+    {
+      "name": "cna_haptics_get_is_mouse_haptic",
+      "header": "input_haptics.h",
+      "ownership": "borrows game; caller bool output",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_Handle",
+        "CNA_Bool*"
+      ]
+    },
+    {
+      "name": "cna_haptics_get_name_size_at",
+      "header": "input_haptics.h",
+      "ownership": "borrows game; caller integer output",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_Handle",
+        "uint32_t",
+        "uint64_t*"
+      ]
+    },
+    {
+      "name": "cna_haptics_open",
+      "header": "input_haptics.h",
+      "ownership": "borrows game; returns an owned device handle, open or closed",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_Handle",
+        "uint32_t",
+        "CNA_HapticDeviceHandle*"
+      ]
+    },
+    {
+      "name": "cna_haptics_open_from_joystick",
+      "header": "input_haptics.h",
+      "ownership": "borrows game; returns an owned device handle, open or closed",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_Handle",
+        "uint32_t",
+        "CNA_HapticDeviceHandle*"
+      ]
+    },
+    {
+      "name": "cna_haptics_open_from_mouse",
+      "header": "input_haptics.h",
+      "ownership": "borrows game; returns an owned device handle, open or closed",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_Handle",
+        "CNA_HapticDeviceHandle*"
+      ]
+    },
+    {
       "name": "cna_host_changed_event_info_init",
       "header": "net_gamers.h",
       "ownership": "borrows its inputs; caller output",
@@ -6909,6 +7487,360 @@
         "CNA_SignedInGamerHandle",
         "CNA_Bool",
         "CNA_InviteAcceptedEventInfo*"
+      ]
+    },
+    {
+      "name": "cna_joystick_state_copy_axes",
+      "header": "input_joystick.h",
+      "ownership": "borrows snapshot; caller buffer",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_JoystickStateHandle",
+        "int16_t*",
+        "uint64_t",
+        "uint64_t*"
+      ]
+    },
+    {
+      "name": "cna_joystick_state_copy_balls",
+      "header": "input_joystick.h",
+      "ownership": "borrows snapshot; caller structure array buffer",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_JoystickStateHandle",
+        "CNA_Point*",
+        "uint64_t",
+        "uint64_t*"
+      ]
+    },
+    {
+      "name": "cna_joystick_state_copy_buttons",
+      "header": "input_joystick.h",
+      "ownership": "borrows snapshot; caller buffer",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_JoystickStateHandle",
+        "CNA_Bool*",
+        "uint64_t",
+        "uint64_t*"
+      ]
+    },
+    {
+      "name": "cna_joystick_state_copy_hats",
+      "header": "input_joystick.h",
+      "ownership": "borrows snapshot; caller buffer",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_JoystickStateHandle",
+        "CNA_JoystickHatPosition*",
+        "uint64_t",
+        "uint64_t*"
+      ]
+    },
+    {
+      "name": "cna_joystick_state_destroy",
+      "header": "input_joystick.h",
+      "ownership": "releases the owned snapshot handle",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_JoystickStateHandle"
+      ]
+    },
+    {
+      "name": "cna_joystick_state_get_axis_count",
+      "header": "input_joystick.h",
+      "ownership": "borrows snapshot; caller integer output",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_JoystickStateHandle",
+        "uint32_t*"
+      ]
+    },
+    {
+      "name": "cna_joystick_state_get_ball_count",
+      "header": "input_joystick.h",
+      "ownership": "borrows snapshot; caller integer output",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_JoystickStateHandle",
+        "uint32_t*"
+      ]
+    },
+    {
+      "name": "cna_joystick_state_get_button_count",
+      "header": "input_joystick.h",
+      "ownership": "borrows snapshot; caller integer output",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_JoystickStateHandle",
+        "uint32_t*"
+      ]
+    },
+    {
+      "name": "cna_joystick_state_get_hat_count",
+      "header": "input_joystick.h",
+      "ownership": "borrows snapshot; caller integer output",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_JoystickStateHandle",
+        "uint32_t*"
+      ]
+    },
+    {
+      "name": "cna_joysticks_capture_state",
+      "header": "input_joystick.h",
+      "ownership": "borrows game; returns an owned snapshot handle",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_Handle",
+        "uint32_t",
+        "CNA_JoystickStateHandle*"
+      ]
+    },
+    {
+      "name": "cna_joysticks_copy_capabilities_guid",
+      "header": "input_joystick.h",
+      "ownership": "borrows game; caller buffer",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_Handle",
+        "uint32_t",
+        "char*",
+        "uint64_t",
+        "uint64_t*"
+      ]
+    },
+    {
+      "name": "cna_joysticks_copy_capabilities_name",
+      "header": "input_joystick.h",
+      "ownership": "borrows game; caller buffer",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_Handle",
+        "uint32_t",
+        "char*",
+        "uint64_t",
+        "uint64_t*"
+      ]
+    },
+    {
+      "name": "cna_joysticks_copy_name_at",
+      "header": "input_joystick.h",
+      "ownership": "borrows game; caller buffer",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_Handle",
+        "uint32_t",
+        "char*",
+        "uint64_t",
+        "uint64_t*"
+      ]
+    },
+    {
+      "name": "cna_joysticks_get_capabilities",
+      "header": "input_joystick.h",
+      "ownership": "borrows game; caller structure output",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_Handle",
+        "uint32_t",
+        "CNA_JoystickCapabilities*"
+      ]
+    },
+    {
+      "name": "cna_joysticks_get_capabilities_guid_size",
+      "header": "input_joystick.h",
+      "ownership": "borrows game; caller integer output",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_Handle",
+        "uint32_t",
+        "uint64_t*"
+      ]
+    },
+    {
+      "name": "cna_joysticks_get_capabilities_name_size",
+      "header": "input_joystick.h",
+      "ownership": "borrows game; caller integer output",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_Handle",
+        "uint32_t",
+        "uint64_t*"
+      ]
+    },
+    {
+      "name": "cna_joysticks_get_count",
+      "header": "input_joystick.h",
+      "ownership": "borrows game; caller integer output",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_Handle",
+        "uint32_t*"
+      ]
+    },
+    {
+      "name": "cna_joysticks_get_info_at",
+      "header": "input_joystick.h",
+      "ownership": "borrows game; caller structure output",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_Handle",
+        "uint32_t",
+        "CNA_JoystickInfo*"
+      ]
+    },
+    {
+      "name": "cna_joysticks_get_name_size_at",
+      "header": "input_joystick.h",
+      "ownership": "borrows game; caller integer output",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_Handle",
+        "uint32_t",
+        "uint64_t*"
+      ]
+    },
+    {
+      "name": "cna_joysticks_raise_connected_ext",
+      "header": "input_joystick.h",
+      "ownership": "borrows game; invokes the process-wide hot-plug event",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_Handle",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "cna_joysticks_raise_disconnected_ext",
+      "header": "input_joystick.h",
+      "ownership": "borrows game; invokes the process-wide hot-plug event",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_Handle",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "cna_joysticks_subscribe_connected_ext",
+      "header": "input_joystick.h",
+      "ownership": "no handle; returns an owned process-wide registration handle",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_JoystickHotplugCallback",
+        "void*",
+        "CNA_JoystickEventRegistrationHandle*"
+      ]
+    },
+    {
+      "name": "cna_joysticks_subscribe_disconnected_ext",
+      "header": "input_joystick.h",
+      "ownership": "no handle; returns an owned process-wide registration handle",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_JoystickHotplugCallback",
+        "void*",
+        "CNA_JoystickEventRegistrationHandle*"
+      ]
+    },
+    {
+      "name": "cna_joysticks_unsubscribe_ext",
+      "header": "input_joystick.h",
+      "ownership": "releases one owned registration handle",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_JoystickEventRegistrationHandle"
+      ]
+    },
+    {
+      "name": "cna_keyboard_copy_key_name_ext",
+      "header": "input_keyboard.h",
+      "ownership": "borrows game; caller buffer",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_Handle",
+        "CNA_Key",
+        "char*",
+        "uint64_t",
+        "uint64_t*"
+      ]
+    },
+    {
+      "name": "cna_keyboard_copy_scancode_name_ext",
+      "header": "input_keyboard.h",
+      "ownership": "borrows game; caller buffer",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_Handle",
+        "CNA_Key",
+        "char*",
+        "uint64_t",
+        "uint64_t*"
+      ]
+    },
+    {
+      "name": "cna_keyboard_get_key_from_name_ext",
+      "header": "input_keyboard.h",
+      "ownership": "borrows game; caller identity output",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_Handle",
+        "CNA_StringView",
+        "CNA_Key*"
+      ]
+    },
+    {
+      "name": "cna_keyboard_get_key_from_scancode_ext",
+      "header": "input_keyboard.h",
+      "ownership": "borrows game; caller identity output",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_Handle",
+        "CNA_Key",
+        "CNA_Key*"
+      ]
+    },
+    {
+      "name": "cna_keyboard_get_key_name_size_ext",
+      "header": "input_keyboard.h",
+      "ownership": "borrows game; caller integer output",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_Handle",
+        "CNA_Key",
+        "uint64_t*"
+      ]
+    },
+    {
+      "name": "cna_keyboard_get_mod_state_ext",
+      "header": "input_keyboard.h",
+      "ownership": "borrows game; caller identity output",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_Handle",
+        "CNA_KeyModifiers*"
+      ]
+    },
+    {
+      "name": "cna_keyboard_get_scancode_from_name_ext",
+      "header": "input_keyboard.h",
+      "ownership": "borrows game; caller identity output",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_Handle",
+        "CNA_StringView",
+        "CNA_Key*"
+      ]
+    },
+    {
+      "name": "cna_keyboard_get_scancode_name_size_ext",
+      "header": "input_keyboard.h",
+      "ownership": "borrows game; caller integer output",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_Handle",
+        "CNA_Key",
+        "uint64_t*"
       ]
     },
     {
@@ -8313,6 +9245,27 @@
       ]
     },
     {
+      "name": "cna_mouse_get_global_position_ext",
+      "header": "input_mouse.h",
+      "ownership": "borrows game; caller integer outputs",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_Handle",
+        "int32_t*",
+        "int32_t*"
+      ]
+    },
+    {
+      "name": "cna_mouse_get_is_relative_mouse_mode_ext",
+      "header": "input_mouse.h",
+      "ownership": "borrows game; caller bool output",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_Handle",
+        "CNA_Bool*"
+      ]
+    },
+    {
       "name": "cna_mouse_get_state",
       "header": "input.h",
       "ownership": "borrows game; copies versioned mouse state",
@@ -8333,6 +9286,27 @@
       ]
     },
     {
+      "name": "cna_mouse_raise_clicked_ext",
+      "header": "input_mouse.h",
+      "ownership": "borrows game; invokes the process-wide click event",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_Handle",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "cna_mouse_set_capture_ext",
+      "header": "input_mouse.h",
+      "ownership": "borrows game; caller bool output",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_Handle",
+        "CNA_Bool",
+        "CNA_Bool*"
+      ]
+    },
+    {
       "name": "cna_mouse_set_cursor_ext",
       "header": "input_cursor.h",
       "ownership": "borrows its inputs",
@@ -8340,6 +9314,16 @@
       "parameters": [
         "CNA_Handle",
         "CNA_MouseCursorHandle"
+      ]
+    },
+    {
+      "name": "cna_mouse_set_is_relative_mouse_mode_ext",
+      "header": "input_mouse.h",
+      "ownership": "borrows game",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_Handle",
+        "CNA_Bool"
       ]
     },
     {
@@ -8361,6 +9345,38 @@
       "parameters": [
         "CNA_Handle",
         "uint64_t"
+      ]
+    },
+    {
+      "name": "cna_mouse_subscribe_clicked_ext",
+      "header": "input_mouse.h",
+      "ownership": "no handle; returns an owned process-wide registration handle",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_MouseClickedCallback",
+        "void*",
+        "CNA_MouseEventRegistrationHandle*"
+      ]
+    },
+    {
+      "name": "cna_mouse_unsubscribe_clicked_ext",
+      "header": "input_mouse.h",
+      "ownership": "releases one owned registration handle",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_MouseEventRegistrationHandle"
+      ]
+    },
+    {
+      "name": "cna_mouse_warp_global_ext",
+      "header": "input_mouse.h",
+      "ownership": "borrows game; caller bool output",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_Handle",
+        "int32_t",
+        "int32_t",
+        "CNA_Bool*"
       ]
     },
     {
@@ -12879,6 +13895,26 @@
       ]
     },
     {
+      "name": "cna_touch_panel_get_mouse_touch_emulation_enabled_ext",
+      "header": "input_touch.h",
+      "ownership": "borrows game; caller bool output",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_Handle",
+        "CNA_Bool*"
+      ]
+    },
+    {
+      "name": "cna_touch_panel_get_touch_device_exists_ext",
+      "header": "input_touch.h",
+      "ownership": "borrows game; caller bool output",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_Handle",
+        "CNA_Bool*"
+      ]
+    },
+    {
       "name": "cna_touch_panel_get_window_handle",
       "header": "input_touch.h",
       "ownership": "borrows game; returns opaque round-trip token",
@@ -12972,6 +14008,16 @@
         "int32_t",
         "int32_t",
         "CNA_Vector2"
+      ]
+    },
+    {
+      "name": "cna_touch_panel_set_mouse_touch_emulation_enabled_ext",
+      "header": "input_touch.h",
+      "ownership": "borrows game",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_Handle",
+        "CNA_Bool"
       ]
     },
     {

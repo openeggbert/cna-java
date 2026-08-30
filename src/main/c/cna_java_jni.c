@@ -95,6 +95,11 @@ typedef struct CnaFunctions {
     CNA_JNI_ROUTE(cna_input_devices_subscribe_keyboard_connected_ext) input_devices_subscribe_keyboard_connected_ext;
     CNA_JNI_ROUTE(cna_input_devices_subscribe_keyboard_disconnected_ext) input_devices_subscribe_keyboard_disconnected_ext;
     CNA_JNI_ROUTE(cna_input_devices_unsubscribe_ext) input_devices_unsubscribe_ext;
+    CNA_JNI_ROUTE(cna_joysticks_subscribe_connected_ext) joysticks_subscribe_connected_ext;
+    CNA_JNI_ROUTE(cna_joysticks_subscribe_disconnected_ext) joysticks_subscribe_disconnected_ext;
+    CNA_JNI_ROUTE(cna_joysticks_unsubscribe_ext) joysticks_unsubscribe_ext;
+    CNA_JNI_ROUTE(cna_mouse_subscribe_clicked_ext) mouse_subscribe_clicked_ext;
+    CNA_JNI_ROUTE(cna_mouse_unsubscribe_clicked_ext) mouse_unsubscribe_clicked_ext;
     CNA_JNI_ROUTE(cna_signed_in_gamer_subscribe_signed_in_ext) signed_in_gamer_subscribe_signed_in_ext;
     CNA_JNI_ROUTE(cna_signed_in_gamer_subscribe_signed_out_ext) signed_in_gamer_subscribe_signed_out_ext;
     CNA_JNI_ROUTE(cna_gamer_services_dispatcher_subscribe_installing_title_update_ext) gamer_services_dispatcher_subscribe_installing_title_update_ext;
@@ -1646,6 +1651,11 @@ JNIEXPORT jint JNICALL Java_org_openeggbert_cna_internal_NativeBindings_nativeLo
     LOAD(input_devices_subscribe_keyboard_disconnected_ext,
         "cna_input_devices_subscribe_keyboard_disconnected_ext");
     LOAD(input_devices_unsubscribe_ext, "cna_input_devices_unsubscribe_ext");
+    LOAD(joysticks_subscribe_connected_ext, "cna_joysticks_subscribe_connected_ext");
+    LOAD(joysticks_subscribe_disconnected_ext, "cna_joysticks_subscribe_disconnected_ext");
+    LOAD(joysticks_unsubscribe_ext, "cna_joysticks_unsubscribe_ext");
+    LOAD(mouse_subscribe_clicked_ext, "cna_mouse_subscribe_clicked_ext");
+    LOAD(mouse_unsubscribe_clicked_ext, "cna_mouse_unsubscribe_clicked_ext");
     LOAD(signed_in_gamer_subscribe_signed_in_ext, "cna_signed_in_gamer_subscribe_signed_in_ext");
     LOAD(signed_in_gamer_subscribe_signed_out_ext, "cna_signed_in_gamer_subscribe_signed_out_ext");
     LOAD(gamer_services_dispatcher_subscribe_installing_title_update_ext, "cna_gamer_services_dispatcher_subscribe_installing_title_update_ext");

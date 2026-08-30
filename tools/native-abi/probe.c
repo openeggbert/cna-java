@@ -99,6 +99,75 @@ _Static_assert(offsetof(CNA_MotionReading, device_acceleration) == 144U,
     "CNA_MotionReading.device_acceleration offset");
 _Static_assert(offsetof(CNA_MotionReading, gravity) == 168U,
     "CNA_MotionReading.gravity offset");
+
+/*
+ * The device-enumeration and raw-joystick values, for the same reason: field order is what the
+ * generated adapter flattens into the Java carrier arrays.
+ */
+_Static_assert(sizeof(CNA_SensorType) == 4U, "CNA_SensorType must be uint32_t");
+_Static_assert(sizeof(CNA_JoystickType) == 4U, "CNA_JoystickType must be uint32_t");
+_Static_assert(sizeof(CNA_JoystickHatPosition) == 4U,
+    "CNA_JoystickHatPosition must be uint32_t");
+_Static_assert(sizeof(CNA_PowerState) == 4U, "CNA_PowerState must be uint32_t");
+_Static_assert(sizeof(CNA_Point) == 8U, "CNA_Point layout changed");
+_Static_assert(offsetof(CNA_Point, y) == 4U, "CNA_Point.y offset");
+_Static_assert(sizeof(CNA_SensorInfo) == 16U, "CNA_SensorInfo layout changed");
+_Static_assert(offsetof(CNA_SensorInfo, id) == 8U, "CNA_SensorInfo.id offset");
+_Static_assert(offsetof(CNA_SensorInfo, type) == 12U, "CNA_SensorInfo.type offset");
+_Static_assert(sizeof(CNA_InputDeviceInfo) == 16U, "CNA_InputDeviceInfo layout changed");
+_Static_assert(offsetof(CNA_InputDeviceInfo, id) == 8U, "CNA_InputDeviceInfo.id offset");
+_Static_assert(sizeof(CNA_JoystickInfo) == 16U, "CNA_JoystickInfo layout changed");
+_Static_assert(offsetof(CNA_JoystickInfo, id) == 8U, "CNA_JoystickInfo.id offset");
+_Static_assert(offsetof(CNA_JoystickInfo, type) == 12U, "CNA_JoystickInfo.type offset");
+_Static_assert(sizeof(CNA_JoystickCapabilities) == 40U,
+    "CNA_JoystickCapabilities layout changed");
+_Static_assert(offsetof(CNA_JoystickCapabilities, axis_count) == 8U,
+    "CNA_JoystickCapabilities.axis_count offset");
+_Static_assert(offsetof(CNA_JoystickCapabilities, type) == 24U,
+    "CNA_JoystickCapabilities.type offset");
+_Static_assert(offsetof(CNA_JoystickCapabilities, power_state) == 28U,
+    "CNA_JoystickCapabilities.power_state offset");
+_Static_assert(offsetof(CNA_JoystickCapabilities, power_percent) == 32U,
+    "CNA_JoystickCapabilities.power_percent offset");
+_Static_assert(offsetof(CNA_JoystickCapabilities, is_connected) == 36U,
+    "CNA_JoystickCapabilities.is_connected offset");
+
+/*
+ * The haptic values. CNA_HapticEffect is the widest flattened structure this binding sends, and
+ * the Java side names its 44 leaves by index, so a reordering upstream would change the meaning
+ * of every one of them.
+ */
+_Static_assert(sizeof(CNA_HapticFeature) == 4U, "CNA_HapticFeature must be uint32_t");
+_Static_assert(sizeof(CNA_HapticEffectType) == 4U, "CNA_HapticEffectType must be uint32_t");
+_Static_assert(sizeof(CNA_HapticDirectionType) == 4U,
+    "CNA_HapticDirectionType must be uint32_t");
+_Static_assert(sizeof(CNA_HapticDirection) == 16U, "CNA_HapticDirection layout changed");
+_Static_assert(offsetof(CNA_HapticDirection, values) == 4U,
+    "CNA_HapticDirection.values offset");
+_Static_assert(sizeof(CNA_HapticCapabilities) == 28U, "CNA_HapticCapabilities layout changed");
+_Static_assert(offsetof(CNA_HapticCapabilities, features) == 8U,
+    "CNA_HapticCapabilities.features offset");
+_Static_assert(offsetof(CNA_HapticCapabilities, axis_count) == 12U,
+    "CNA_HapticCapabilities.axis_count offset");
+_Static_assert(offsetof(CNA_HapticCapabilities, is_open) == 24U,
+    "CNA_HapticCapabilities.is_open offset");
+_Static_assert(sizeof(CNA_HapticEffect) == 108U, "CNA_HapticEffect layout changed");
+_Static_assert(offsetof(CNA_HapticEffect, type) == 8U, "CNA_HapticEffect.type offset");
+_Static_assert(offsetof(CNA_HapticEffect, direction) == 16U,
+    "CNA_HapticEffect.direction offset");
+_Static_assert(offsetof(CNA_HapticEffect, length) == 32U, "CNA_HapticEffect.length offset");
+_Static_assert(offsetof(CNA_HapticEffect, level) == 42U, "CNA_HapticEffect.level offset");
+_Static_assert(offsetof(CNA_HapticEffect, right_saturation) == 56U,
+    "CNA_HapticEffect.right_saturation offset");
+_Static_assert(offsetof(CNA_HapticEffect, center) == 86U, "CNA_HapticEffect.center offset");
+_Static_assert(offsetof(CNA_HapticEffect, large_magnitude) == 92U,
+    "CNA_HapticEffect.large_magnitude offset");
+_Static_assert(offsetof(CNA_HapticEffect, custom_channels) == 98U,
+    "CNA_HapticEffect.custom_channels offset");
+_Static_assert(offsetof(CNA_HapticEffect, attack_length) == 100U,
+    "CNA_HapticEffect.attack_length offset");
+_Static_assert(offsetof(CNA_HapticEffect, fade_level) == 106U,
+    "CNA_HapticEffect.fade_level offset");
 _Static_assert(offsetof(CNA_GamePadCapabilities, gamepad_type) == 8U,
     "CNA_GamePadCapabilities.type offset");
 _Static_assert(offsetof(CNA_GamePadCapabilities, is_connected) == 12U,

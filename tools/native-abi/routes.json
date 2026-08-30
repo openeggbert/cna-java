@@ -1986,28 +1986,324 @@
     ],
     "NativeInputExtensionRoutes": [
       {
-        "java": "textInputStartExt",
-        "symbol": "cna_text_input_start_ext"
+        "java": "gamepadCopyGuidExt",
+        "symbol": "cna_gamepad_copy_guid_ext"
       },
       {
-        "java": "textInputStartWithTypeExt",
-        "symbol": "cna_text_input_start_with_type_ext"
+        "java": "gamepadCopyNameExt",
+        "symbol": "cna_gamepad_copy_name_ext"
       },
       {
-        "java": "textInputStopExt",
-        "symbol": "cna_text_input_stop_ext"
+        "java": "gamepadCopyPathExt",
+        "symbol": "cna_gamepad_copy_path_ext"
       },
       {
-        "java": "textInputIsActiveExt",
-        "symbol": "cna_text_input_is_active_ext"
+        "java": "gamepadCopySerialExt",
+        "symbol": "cna_gamepad_copy_serial_ext"
       },
       {
-        "java": "textInputIsScreenKeyboardShownExt",
-        "symbol": "cna_text_input_is_screen_keyboard_shown_ext"
+        "java": "gamepadGetAccelerometerExt",
+        "symbol": "cna_gamepad_get_accelerometer_ext"
       },
       {
-        "java": "textInputSetInputRectangleExt",
-        "symbol": "cna_text_input_set_input_rectangle_ext"
+        "java": "gamepadGetButtonLabelExt",
+        "symbol": "cna_gamepad_get_button_label_ext"
+      },
+      {
+        "java": "gamepadGetConnectionStateExt",
+        "symbol": "cna_gamepad_get_connection_state_ext"
+      },
+      {
+        "java": "gamepadGetFirmwareVersionExt",
+        "symbol": "cna_gamepad_get_firmware_version_ext"
+      },
+      {
+        "java": "gamepadGetGuidSizeExt",
+        "symbol": "cna_gamepad_get_guid_size_ext"
+      },
+      {
+        "java": "gamepadGetGyroExt",
+        "symbol": "cna_gamepad_get_gyro_ext"
+      },
+      {
+        "java": "gamepadGetNameSizeExt",
+        "symbol": "cna_gamepad_get_name_size_ext"
+      },
+      {
+        "java": "gamepadGetPathSizeExt",
+        "symbol": "cna_gamepad_get_path_size_ext"
+      },
+      {
+        "java": "gamepadGetPlayerIndexExt",
+        "symbol": "cna_gamepad_get_player_index_ext"
+      },
+      {
+        "java": "gamepadGetPowerInfoExt",
+        "symbol": "cna_gamepad_get_power_info_ext"
+      },
+      {
+        "java": "gamepadGetSerialSizeExt",
+        "symbol": "cna_gamepad_get_serial_size_ext"
+      },
+      {
+        "java": "gamepadGetSteamHandleExt",
+        "symbol": "cna_gamepad_get_steam_handle_ext"
+      },
+      {
+        "java": "gamepadGetTouchpadCountExt",
+        "symbol": "cna_gamepad_get_touchpad_count_ext"
+      },
+      {
+        "java": "gamepadGetTouchpadFingerCountExt",
+        "symbol": "cna_gamepad_get_touchpad_finger_count_ext"
+      },
+      {
+        "java": "gamepadGetTouchpadFingerExt",
+        "symbol": "cna_gamepad_get_touchpad_finger_ext"
+      },
+      {
+        "java": "gamepadSetLightBarExt",
+        "symbol": "cna_gamepad_set_light_bar_ext"
+      },
+      {
+        "java": "gamepadSetPlayerIndexExt",
+        "symbol": "cna_gamepad_set_player_index_ext"
+      },
+      {
+        "java": "gamepadSetTriggerVibrationExt",
+        "symbol": "cna_gamepad_set_trigger_vibration_ext"
+      },
+      {
+        "java": "hapticDeviceCopyName",
+        "symbol": "cna_haptic_device_copy_name"
+      },
+      {
+        "java": "hapticDeviceCreateEffect",
+        "symbol": "cna_haptic_device_create_effect"
+      },
+      {
+        "java": "hapticDeviceDestroy",
+        "symbol": "cna_haptic_device_destroy"
+      },
+      {
+        "java": "hapticDeviceDestroyEffect",
+        "symbol": "cna_haptic_device_destroy_effect"
+      },
+      {
+        "java": "hapticDeviceGetCapabilities",
+        "symbol": "cna_haptic_device_get_capabilities"
+      },
+      {
+        "java": "hapticDeviceGetEffectStatus",
+        "symbol": "cna_haptic_device_get_effect_status"
+      },
+      {
+        "java": "hapticDeviceGetIsEffectSupported",
+        "symbol": "cna_haptic_device_get_is_effect_supported"
+      },
+      {
+        "java": "hapticDeviceGetIsOpen",
+        "symbol": "cna_haptic_device_get_is_open"
+      },
+      {
+        "java": "hapticDeviceGetNameSize",
+        "symbol": "cna_haptic_device_get_name_size"
+      },
+      {
+        "java": "hapticDeviceInitRumble",
+        "symbol": "cna_haptic_device_init_rumble"
+      },
+      {
+        "java": "hapticDevicePause",
+        "symbol": "cna_haptic_device_pause"
+      },
+      {
+        "java": "hapticDevicePlayRumble",
+        "symbol": "cna_haptic_device_play_rumble"
+      },
+      {
+        "java": "hapticDeviceResume",
+        "symbol": "cna_haptic_device_resume"
+      },
+      {
+        "java": "hapticDeviceRunEffect",
+        "symbol": "cna_haptic_device_run_effect"
+      },
+      {
+        "java": "hapticDeviceSetAutocenter",
+        "symbol": "cna_haptic_device_set_autocenter"
+      },
+      {
+        "java": "hapticDeviceSetGain",
+        "symbol": "cna_haptic_device_set_gain"
+      },
+      {
+        "java": "hapticDeviceStopAllEffects",
+        "symbol": "cna_haptic_device_stop_all_effects"
+      },
+      {
+        "java": "hapticDeviceStopEffect",
+        "symbol": "cna_haptic_device_stop_effect"
+      },
+      {
+        "java": "hapticDeviceStopRumble",
+        "symbol": "cna_haptic_device_stop_rumble"
+      },
+      {
+        "java": "hapticDeviceUpdateEffect",
+        "symbol": "cna_haptic_device_update_effect"
+      },
+      {
+        "java": "hapticsCopyNameAt",
+        "symbol": "cna_haptics_copy_name_at"
+      },
+      {
+        "java": "hapticsGetCount",
+        "symbol": "cna_haptics_get_count"
+      },
+      {
+        "java": "hapticsGetIdAt",
+        "symbol": "cna_haptics_get_id_at"
+      },
+      {
+        "java": "hapticsGetIsJoystickHaptic",
+        "symbol": "cna_haptics_get_is_joystick_haptic"
+      },
+      {
+        "java": "hapticsGetIsMouseHaptic",
+        "symbol": "cna_haptics_get_is_mouse_haptic"
+      },
+      {
+        "java": "hapticsGetNameSizeAt",
+        "symbol": "cna_haptics_get_name_size_at"
+      },
+      {
+        "java": "hapticsOpen",
+        "symbol": "cna_haptics_open"
+      },
+      {
+        "java": "hapticsOpenFromJoystick",
+        "symbol": "cna_haptics_open_from_joystick"
+      },
+      {
+        "java": "hapticsOpenFromMouse",
+        "symbol": "cna_haptics_open_from_mouse"
+      },
+      {
+        "java": "joystickStateCopyAxes",
+        "symbol": "cna_joystick_state_copy_axes"
+      },
+      {
+        "java": "joystickStateCopyBalls",
+        "symbol": "cna_joystick_state_copy_balls"
+      },
+      {
+        "java": "joystickStateCopyButtons",
+        "symbol": "cna_joystick_state_copy_buttons"
+      },
+      {
+        "java": "joystickStateCopyHats",
+        "symbol": "cna_joystick_state_copy_hats"
+      },
+      {
+        "java": "joystickStateDestroy",
+        "symbol": "cna_joystick_state_destroy"
+      },
+      {
+        "java": "joystickStateGetAxisCount",
+        "symbol": "cna_joystick_state_get_axis_count"
+      },
+      {
+        "java": "joystickStateGetBallCount",
+        "symbol": "cna_joystick_state_get_ball_count"
+      },
+      {
+        "java": "joystickStateGetButtonCount",
+        "symbol": "cna_joystick_state_get_button_count"
+      },
+      {
+        "java": "joystickStateGetHatCount",
+        "symbol": "cna_joystick_state_get_hat_count"
+      },
+      {
+        "java": "joysticksCaptureState",
+        "symbol": "cna_joysticks_capture_state"
+      },
+      {
+        "java": "joysticksCopyCapabilitiesGuid",
+        "symbol": "cna_joysticks_copy_capabilities_guid"
+      },
+      {
+        "java": "joysticksCopyCapabilitiesName",
+        "symbol": "cna_joysticks_copy_capabilities_name"
+      },
+      {
+        "java": "joysticksCopyNameAt",
+        "symbol": "cna_joysticks_copy_name_at"
+      },
+      {
+        "java": "joysticksGetCapabilities",
+        "symbol": "cna_joysticks_get_capabilities"
+      },
+      {
+        "java": "joysticksGetCapabilitiesGuidSize",
+        "symbol": "cna_joysticks_get_capabilities_guid_size"
+      },
+      {
+        "java": "joysticksGetCapabilitiesNameSize",
+        "symbol": "cna_joysticks_get_capabilities_name_size"
+      },
+      {
+        "java": "joysticksGetCount",
+        "symbol": "cna_joysticks_get_count"
+      },
+      {
+        "java": "joysticksGetInfoAt",
+        "symbol": "cna_joysticks_get_info_at"
+      },
+      {
+        "java": "joysticksGetNameSizeAt",
+        "symbol": "cna_joysticks_get_name_size_at"
+      },
+      {
+        "java": "joysticksRaiseConnectedExt",
+        "symbol": "cna_joysticks_raise_connected_ext"
+      },
+      {
+        "java": "joysticksRaiseDisconnectedExt",
+        "symbol": "cna_joysticks_raise_disconnected_ext"
+      },
+      {
+        "java": "keyboardCopyKeyNameExt",
+        "symbol": "cna_keyboard_copy_key_name_ext"
+      },
+      {
+        "java": "keyboardCopyScancodeNameExt",
+        "symbol": "cna_keyboard_copy_scancode_name_ext"
+      },
+      {
+        "java": "keyboardGetKeyFromNameExt",
+        "symbol": "cna_keyboard_get_key_from_name_ext"
+      },
+      {
+        "java": "keyboardGetKeyFromScancodeExt",
+        "symbol": "cna_keyboard_get_key_from_scancode_ext"
+      },
+      {
+        "java": "keyboardGetKeyNameSizeExt",
+        "symbol": "cna_keyboard_get_key_name_size_ext"
+      },
+      {
+        "java": "keyboardGetModStateExt",
+        "symbol": "cna_keyboard_get_mod_state_ext"
+      },
+      {
+        "java": "keyboardGetScancodeFromNameExt",
+        "symbol": "cna_keyboard_get_scancode_from_name_ext"
+      },
+      {
+        "java": "keyboardGetScancodeNameSizeExt",
+        "symbol": "cna_keyboard_get_scancode_name_size_ext"
       },
       {
         "java": "mouseCursorCreateExt",
@@ -2030,8 +2326,68 @@
         "symbol": "cna_mouse_cursor_get_stock_ext"
       },
       {
+        "java": "mouseGetGlobalPositionExt",
+        "symbol": "cna_mouse_get_global_position_ext"
+      },
+      {
+        "java": "mouseGetIsRelativeMouseModeExt",
+        "symbol": "cna_mouse_get_is_relative_mouse_mode_ext"
+      },
+      {
+        "java": "mouseRaiseClickedExt",
+        "symbol": "cna_mouse_raise_clicked_ext"
+      },
+      {
+        "java": "mouseSetCaptureExt",
+        "symbol": "cna_mouse_set_capture_ext"
+      },
+      {
         "java": "mouseSetCursorExt",
         "symbol": "cna_mouse_set_cursor_ext"
+      },
+      {
+        "java": "mouseSetIsRelativeMouseModeExt",
+        "symbol": "cna_mouse_set_is_relative_mouse_mode_ext"
+      },
+      {
+        "java": "mouseWarpGlobalExt",
+        "symbol": "cna_mouse_warp_global_ext"
+      },
+      {
+        "java": "textInputIsActiveExt",
+        "symbol": "cna_text_input_is_active_ext"
+      },
+      {
+        "java": "textInputIsScreenKeyboardShownExt",
+        "symbol": "cna_text_input_is_screen_keyboard_shown_ext"
+      },
+      {
+        "java": "textInputSetInputRectangleExt",
+        "symbol": "cna_text_input_set_input_rectangle_ext"
+      },
+      {
+        "java": "textInputStartExt",
+        "symbol": "cna_text_input_start_ext"
+      },
+      {
+        "java": "textInputStartWithTypeExt",
+        "symbol": "cna_text_input_start_with_type_ext"
+      },
+      {
+        "java": "textInputStopExt",
+        "symbol": "cna_text_input_stop_ext"
+      },
+      {
+        "java": "touchPanelGetMouseTouchEmulationEnabledExt",
+        "symbol": "cna_touch_panel_get_mouse_touch_emulation_enabled_ext"
+      },
+      {
+        "java": "touchPanelGetTouchDeviceExistsExt",
+        "symbol": "cna_touch_panel_get_touch_device_exists_ext"
+      },
+      {
+        "java": "touchPanelSetMouseTouchEmulationEnabledExt",
+        "symbol": "cna_touch_panel_set_mouse_touch_emulation_enabled_ext"
       }
     ],
     "NativeSensorExtensionRoutes": [

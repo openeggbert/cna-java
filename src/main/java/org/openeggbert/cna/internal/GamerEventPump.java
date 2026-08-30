@@ -38,6 +38,8 @@ public final class GamerEventPump {
     private static volatile boolean subscribed;
     private static long textInputRegistration;
     private static long[] inputDeviceRegistrations;
+    private static long[] joystickRegistrations;
+    private static long mouseClickedRegistration;
 
     private GamerEventPump() {
     }
@@ -91,6 +93,54 @@ public final class GamerEventPump {
         inputDeviceRegistrations = null;
         NativeGamerServices.check("Input device hot-plug events",
                 NativeGamerServices.nativeUnsubscribeInputDeviceEvents(registrations));
+    }
+
+    /**
+     * Subscribes CNA's two raw-joystick hot-plug events once.
+     *
+     * <p>Process-wide, for the same reason the mouse and keyboard ones are.
+     */
+    public static synchronized void ensureJoysticksSubscribed() {
+        if (joystickRegistrations != null) {
+            return;
+        }
+        long[] registrations = new long[2];
+        NativeGamerServices.check("Joystick hot-plug events",
+                NativeGamerServices.nativeSubscribeJoystickEvents(registrations));
+        joystickRegistrations = registrations;
+    }
+
+    /** Releases the raw-joystick registrations. */
+    public static synchronized void releaseJoysticks() {
+        if (joystickRegistrations == null) {
+            return;
+        }
+        long[] registrations = joystickRegistrations;
+        joystickRegistrations = null;
+        NativeGamerServices.check("Joystick hot-plug events",
+                NativeGamerServices.nativeUnsubscribeJoystickEvents(registrations));
+    }
+
+    /** Subscribes CNA's mouse-click event once. Process-wide, like the hot-plug events. */
+    public static synchronized void ensureMouseClickedSubscribed() {
+        if (mouseClickedRegistration != 0L) {
+            return;
+        }
+        long[] registration = new long[1];
+        NativeGamerServices.check("Mouse click events",
+                NativeGamerServices.nativeSubscribeMouseClicked(registration));
+        mouseClickedRegistration = registration[0];
+    }
+
+    /** Releases the mouse-click registration. */
+    public static synchronized void releaseMouseClicked() {
+        if (mouseClickedRegistration == 0L) {
+            return;
+        }
+        long registration = mouseClickedRegistration;
+        mouseClickedRegistration = 0L;
+        NativeGamerServices.check("Mouse click events",
+                NativeGamerServices.nativeUnsubscribeMouseClicked(registration));
     }
 
     /** Subscribes CNA's typed-character event once. */

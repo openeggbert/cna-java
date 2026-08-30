@@ -185,14 +185,19 @@
       "title": "Expose CNA's runtime and device extensions",
       "family": "org.openeggbert.cna.extensions",
       "authority": "core_ext.h, devices.h, sensors.h, input_haptics.h, input_joystick.h, input_text.h, input_cursor.h, input_devices.h",
-      "currentState": "Three families are projected: the runtime's own identity and logger, the host devices, and typed text plus the mouse cursor. Sensors, haptics, raw joysticks, text composition and device enumeration are not.",
-      "expectedState": "Typed Java facades under the extension namespace, never inside Microsoft.Xna.Framework.",
+      "currentState": "Six families are projected: the runtime's own identity and logger, the host devices, typed text plus the mouse cursor, the four host motion sensors, device and sensor enumeration with hot plug, and raw joysticks, haptics and the modern game-pad, keyboard, mouse and touch capabilities.",
+      "expectedState": "Typed Java facades under the extension namespace, never inside Microsoft.Xna.Framework. Availability is CNA's answer everywhere: an absent sensor reports NotSupported and refuses a reading rather than answering zeros, a closed haptic device is a safe no-op, and an unconnected joystick captures empty.",
       "priority": 7,
-      "status": "ready",
+      "status": "done",
       "tests": [
         "CnaRuntimeTests",
         "DeviceExtensionTests",
-        "InputExtensionTests"
+        "InputExtensionTests",
+        "SensorExtensionTests",
+        "InputDeviceEnumerationTests",
+        "JoystickExtensionTests",
+        "HapticExtensionTests",
+        "DeviceInputExtensionTests"
       ]
     },
     {
@@ -230,10 +235,16 @@
       "title": "Bind the remaining input routes",
       "family": "Microsoft.Xna.Framework.Input",
       "authority": "input*.h",
-      "currentState": "132 routes deferred: gamepad capabilities and vibration, keyboard scancodes, mouse capture, touch panel details.",
-      "expectedState": "The XNA-shaped ones bound; the rest reclassified as extension candidates.",
+      "currentState": "132 routes were deferred. The audit found that none of them was an XNA-shaped route lacking backing: the whole XNA input surface -- game-pad state, capabilities and vibration, keyboard state, mouse state and position, touch state, capabilities, panel and gestures -- was already bound.",
+      "expectedState": "Every input route classified with a stated reason and no deferred remainder. 39 became bound CNA extensions (modern game-pad identity, battery, light bar, trigger motors, touchpad, button labels and sensors; keyboard scancode and layout naming; mouse capture, relative mode, desktop position and the click event; mouse-driven touch emulation). The remaining 92 are NOT_USEFUL_IN_JAVA: construction, equality, hashing, string form and indexing of XNA's input value types, which are managed structs in XNA and managed values here, plus two CNA test seams.",
       "priority": 6,
-      "status": "ready"
+      "status": "done",
+      "tests": [
+        "nativeCoverageCheck",
+        "DeviceInputExtensionTests",
+        "JoystickExtensionTests",
+        "HapticExtensionTests"
+      ]
     },
     {
       "id": "JAVA-TEMPLATE-001",

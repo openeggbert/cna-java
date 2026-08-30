@@ -162,6 +162,18 @@ public final class NativeGamerServices {
     /** Releases the four mouse and keyboard hot-plug registrations. */
     static native int nativeUnsubscribeInputDeviceEvents(long[] registrations);
 
+    /** Subscribes both process-wide raw-joystick hot-plug events. */
+    static native int nativeSubscribeJoystickEvents(long[] outRegistrations);
+
+    /** Releases both raw-joystick hot-plug registrations. */
+    static native int nativeUnsubscribeJoystickEvents(long[] registrations);
+
+    /** Subscribes CNA's process-wide mouse-click event. */
+    static native int nativeSubscribeMouseClicked(long[] outRegistration);
+
+    /** Releases the mouse-click subscription. */
+    static native int nativeUnsubscribeMouseClicked(long registration);
+
     /** Converts this adapter's game token into the CNA game handle a generated route needs. */
     static native long nativeCnaGameHandle(long game);
 

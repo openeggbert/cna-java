@@ -1,7 +1,7 @@
 {
   "abiVersion": "0.20.0",
   "boundButUnreached": [],
-  "boundFunctions": 1294,
+  "boundFunctions": 1388,
   "boundWithoutJavaCallSite": [
     "cna_achievement_collection_add",
     "cna_achievement_collection_clear",
@@ -266,7 +266,7 @@
       "total": 10
     },
     "input.h": {
-      "DEFERRED_RUNTIME": 9,
+      "NOT_USEFUL_IN_JAVA": 9,
       "XNA_BACKING": 6,
       "total": 15
     },
@@ -279,7 +279,8 @@
       "total": 37
     },
     "input_gamepad.h": {
-      "DEFERRED_RUNTIME": 61,
+      "CNA_EXTENSION_CANDIDATE": 22,
+      "NOT_USEFUL_IN_JAVA": 39,
       "XNA_BACKING": 2,
       "total": 63
     },
@@ -292,12 +293,15 @@
       "total": 30
     },
     "input_keyboard.h": {
-      "DEFERRED_RUNTIME": 16,
+      "CNA_EXTENSION_CANDIDATE": 8,
+      "NOT_USEFUL_IN_JAVA": 8,
       "XNA_BACKING": 1,
       "total": 17
     },
     "input_mouse.h": {
-      "DEFERRED_RUNTIME": 17,
+      "CNA_EXTENSION_CANDIDATE": 7,
+      "JAVA_INTERNAL_ONLY": 1,
+      "NOT_USEFUL_IN_JAVA": 9,
       "XNA_BACKING": 3,
       "total": 20
     },
@@ -307,8 +311,9 @@
       "total": 17
     },
     "input_touch.h": {
-      "DEFERRED_RUNTIME": 29,
+      "CNA_EXTENSION_CANDIDATE": 3,
       "JAVA_INTERNAL_ONLY": 6,
+      "NOT_USEFUL_IN_JAVA": 26,
       "XNA_BACKING": 12,
       "total": 47
     },
@@ -439,10 +444,10 @@
   },
   "canonicalFunctions": 4051,
   "classificationCounts": {
-    "CNA_EXTENSION_CANDIDATE": 1730,
-    "DEFERRED_RUNTIME": 679,
-    "JAVA_INTERNAL_ONLY": 170,
-    "NOT_USEFUL_IN_JAVA": 496,
+    "CNA_EXTENSION_CANDIDATE": 1770,
+    "DEFERRED_RUNTIME": 547,
+    "JAVA_INTERNAL_ONLY": 171,
+    "NOT_USEFUL_IN_JAVA": 587,
     "XNA_BACKING": 976
   },
   "cnaInventorySha256": "e9e0be892dbdce49dedf195dac35f604a9263565a74473195d878ee9e580696d",
@@ -459,7 +464,6 @@
     "JAVA-NATIVE-019": 48,
     "JAVA-NATIVE-020": 78,
     "JAVA-NATIVE-021": 8,
-    "JAVA-NATIVE-022": 132,
     "JAVA-NATIVE-023": 41,
     "JAVA-XNA-001": 2,
     "JAVA-XNA-002": 11
@@ -561,6 +565,7 @@
     "cna_local_network_gamer_send_packet_writer_to",
     "cna_media_player_raise_active_song_changed_ext",
     "cna_media_player_raise_media_state_changed_ext",
+    "cna_mouse_unsubscribe_clicked_ext",
     "cna_net_get_last_join_error",
     "cna_network_gamer_create",
     "cna_network_gamer_destroy",

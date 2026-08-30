@@ -37,6 +37,9 @@
 #define CNA_JAVA_EVENT_MOUSE_DISCONNECTED 32
 #define CNA_JAVA_EVENT_KEYBOARD_CONNECTED 33
 #define CNA_JAVA_EVENT_KEYBOARD_DISCONNECTED 34
+#define CNA_JAVA_EVENT_JOYSTICK_CONNECTED 35
+#define CNA_JAVA_EVENT_JOYSTICK_DISCONNECTED 36
+#define CNA_JAVA_EVENT_MOUSE_CLICKED 37
 
 typedef struct JavaGamerEvent {
     int64_t kind;
@@ -293,6 +296,113 @@ Java_org_openeggbert_cna_internal_NativeGamerServices_nativeUnsubscribeInputDevi
         }
     }
     return (jint)first;
+}
+
+/*
+ * The two raw-joystick hot-plug callbacks.
+ *
+ * Same shape as the mouse and keyboard ones: a static CNA event carrying only an identifier, so
+ * it rides the numeric record and the existing drain.
+ */
+static void java_joystick_connected_callback(uint32_t joystick_id, void* context)
+{
+    (void)context;
+    java_gamer_event_push(CNA_JAVA_EVENT_JOYSTICK_CONNECTED, 0, (int64_t)joystick_id, 0, 0);
+}
+
+static void java_joystick_disconnected_callback(uint32_t joystick_id, void* context)
+{
+    (void)context;
+    java_gamer_event_push(CNA_JAVA_EVENT_JOYSTICK_DISCONNECTED, 0, (int64_t)joystick_id, 0, 0);
+}
+
+/** Subscribes both raw-joystick hot-plug events, or neither. */
+JNIEXPORT jint JNICALL
+Java_org_openeggbert_cna_internal_NativeGamerServices_nativeSubscribeJoystickEvents(
+    JNIEnv* environment, jclass type, jlongArray out_registrations)
+{
+    (void)type;
+    CNA_JoystickEventRegistrationHandle registrations[2];
+    registrations[0] = CNA_INVALID_HANDLE;
+    registrations[1] = CNA_INVALID_HANDLE;
+    CNA_Result result = cna.joysticks_subscribe_connected_ext(
+        java_joystick_connected_callback, NULL, &registrations[0]);
+    if (result == CNA_RESULT_SUCCESS) {
+        result = cna.joysticks_subscribe_disconnected_ext(
+            java_joystick_disconnected_callback, NULL, &registrations[1]);
+    }
+    if (result != CNA_RESULT_SUCCESS) {
+        for (int index = 1; index >= 0; --index) {
+            if (registrations[index] != CNA_INVALID_HANDLE) {
+                (void)cna.joysticks_unsubscribe_ext(registrations[index]);
+            }
+        }
+        return (jint)result;
+    }
+    jlong values[2] = {(jlong)registrations[0], (jlong)registrations[1]};
+    (*environment)->SetLongArrayRegion(environment, out_registrations, 0, 2, values);
+    return (jint)CNA_RESULT_SUCCESS;
+}
+
+/** Releases both raw-joystick hot-plug registrations, in reverse subscription order. */
+JNIEXPORT jint JNICALL
+Java_org_openeggbert_cna_internal_NativeGamerServices_nativeUnsubscribeJoystickEvents(
+    JNIEnv* environment, jclass type, jlongArray registrations)
+{
+    (void)type;
+    jlong values[2];
+    (*environment)->GetLongArrayRegion(environment, registrations, 0, 2, values);
+    CNA_Result first = CNA_RESULT_SUCCESS;
+    for (int index = 1; index >= 0; --index) {
+        if (values[index] == 0) {
+            continue;
+        }
+        CNA_Result result = cna.joysticks_unsubscribe_ext(
+            (CNA_JoystickEventRegistrationHandle)values[index]);
+        if (result != CNA_RESULT_SUCCESS && first == CNA_RESULT_SUCCESS) {
+            first = result;
+        }
+    }
+    return (jint)first;
+}
+
+/*
+ * CNA's mouse-click event.
+ *
+ * The payload is the button index, so this rides the numeric record like the hot-plug events.
+ */
+static void java_mouse_clicked_callback(int32_t button, void* context)
+{
+    (void)context;
+    java_gamer_event_push(CNA_JAVA_EVENT_MOUSE_CLICKED, 0, (int64_t)button, 0, 0);
+}
+
+/** Subscribes CNA's mouse-click event. */
+JNIEXPORT jint JNICALL
+Java_org_openeggbert_cna_internal_NativeGamerServices_nativeSubscribeMouseClicked(
+    JNIEnv* environment, jclass type, jlongArray out_registration)
+{
+    (void)type;
+    CNA_MouseEventRegistrationHandle registration = CNA_INVALID_HANDLE;
+    CNA_Result result = cna.mouse_subscribe_clicked_ext(
+        java_mouse_clicked_callback, NULL, &registration);
+    if (result != CNA_RESULT_SUCCESS) {
+        return (jint)result;
+    }
+    jlong value = (jlong)registration;
+    (*environment)->SetLongArrayRegion(environment, out_registration, 0, 1, &value);
+    return (jint)CNA_RESULT_SUCCESS;
+}
+
+/** Releases the mouse-click subscription. */
+JNIEXPORT jint JNICALL
+Java_org_openeggbert_cna_internal_NativeGamerServices_nativeUnsubscribeMouseClicked(
+    JNIEnv* environment, jclass type, jlong registration)
+{
+    (void)environment;
+    (void)type;
+    return (jint)cna.mouse_unsubscribe_clicked_ext(
+        (CNA_MouseEventRegistrationHandle)registration);
 }
 
 /*
