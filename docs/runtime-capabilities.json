@@ -1,78 +1,193 @@
 {
   "schemaVersion": 1,
-  "updated": "2026-08-23",
-  "profile": "XNA 4.0 Windows runtime projected to Java 17",
+  "updated": "2026-08-30",
+  "profile": "XNA 4.0 full runtime superset projected to Java 17, plus the CNA extension surface",
   "qualifiedRuntime": {
     "platform": "Linux x86-64",
-    "cnaAbi": "0.7.0",
+    "cnaAbi": "0.20.0",
+    "cnaHead": "72262a33ed5ae7657024c7f1251338748a3feee5",
+    "sharpRuntimeHead": "df1b42abfcdefda030d63e97f16d2f7ea883837f",
     "renderer": "HEADLESS",
-    "audio": "NULL"
+    "audio": "NULL",
+    "extendedGraphicsLayer": true,
+    "devices": true
   },
   "statusVocabulary": [
-    "STRICT_COMPLETE",
+    "ASSET_PENDING",
+    "BACKEND_BLOCKED",
+    "EXTENSION_NOT_IN_BUILD",
+    "EXTENSION_VERIFIED",
+    "HARDWARE_PENDING",
+    "LANGUAGE_MAPPING_LIMITATION",
     "MANAGED_VERIFIED",
     "NATIVE_VERIFIED",
-    "UPSTREAM_CNA_BLOCKED",
-    "BACKEND_BLOCKED",
-    "ASSET_PENDING",
-    "HARDWARE_PENDING",
+    "NO_NATIVE_PRODUCER",
     "PLATFORM_PENDING",
-    "LANGUAGE_MAPPING_LIMITATION"
+    "STRICT_COMPLETE",
+    "UPSTREAM_CNA_BLOCKED"
   ],
   "capabilities": [
     {
       "id": "xact-authored-banks",
       "surface": "AudioEngine, WaveBank, SoundBank, Cue",
-      "statuses": ["STRICT_COMPLETE", "MANAGED_VERIFIED", "NATIVE_VERIFIED", "ASSET_PENDING"],
+      "statuses": [
+        "STRICT_COMPLETE",
+        "MANAGED_VERIFIED",
+        "NATIVE_VERIFIED",
+        "ASSET_PENDING"
+      ],
       "detail": "The ownership graph and canonical XACT routes are verified; no licensed authored bank corpus qualified successful authored playback."
     },
     {
       "id": "microphone-hardware",
       "surface": "Microphone",
-      "statuses": ["STRICT_COMPLETE", "NATIVE_VERIFIED", "HARDWARE_PENDING"],
+      "statuses": [
+        "STRICT_COMPLETE",
+        "NATIVE_VERIFIED",
+        "HARDWARE_PENDING"
+      ],
       "detail": "NULL-audio no-device behavior and native routes are verified; real capture hardware and BufferReady timing are not qualified."
     },
     {
       "id": "video-frame-identity",
       "surface": "VideoPlayer.GetTexture",
-      "statuses": ["STRICT_COMPLETE", "MANAGED_VERIFIED", "BACKEND_BLOCKED"],
+      "statuses": [
+        "STRICT_COMPLETE",
+        "MANAGED_VERIFIED",
+        "BACKEND_BLOCKED"
+      ],
       "detail": "Java safely exposes a PARENT_OWNED transient alias; CNA ABI 0.7 lacks XNA two-buffer identity and a frame generation token."
     },
     {
       "id": "video-decode",
       "surface": "Video, VideoPlayer",
-      "statuses": ["STRICT_COMPLETE", "NATIVE_VERIFIED", "BACKEND_BLOCKED", "ASSET_PENDING"],
+      "statuses": [
+        "STRICT_COMPLETE",
+        "NATIVE_VERIFIED",
+        "BACKEND_BLOCKED",
+        "ASSET_PENDING"
+      ],
       "detail": "Metadata and player control routes execute, but HEADLESS produced no decoded frame and no qualified video asset established successful decode."
     },
     {
       "id": "media-catalog-and-pictures",
       "surface": "MediaLibrary, MediaSource, Picture, PictureAlbum",
-      "statuses": ["STRICT_COMPLETE", "MANAGED_VERIFIED", "NATIVE_VERIFIED", "PLATFORM_PENDING"],
+      "statuses": [
+        "STRICT_COMPLETE",
+        "MANAGED_VERIFIED",
+        "NATIVE_VERIFIED",
+        "PLATFORM_PENDING"
+      ],
       "detail": "Canonical empty/default platform collections execute; populated catalog, token, thumbnail, and picture-store behavior require a real supported platform."
     },
     {
       "id": "storage-path-containment",
       "surface": "StorageContainer path operations",
-      "statuses": ["STRICT_COMPLETE", "MANAGED_VERIFIED", "UPSTREAM_CNA_BLOCKED"],
+      "statuses": [
+        "STRICT_COMPLETE",
+        "MANAGED_VERIFIED",
+        "UPSTREAM_CNA_BLOCKED"
+      ],
       "detail": "Java enforces XNA canonical containment before JNI; qualified CNA ABI 0.7 itself accepts parent traversal and cannot yet be credited with the guarantee."
     },
     {
       "id": "storage-devicechanged-os-transition",
       "surface": "StorageDevice.DeviceChanged",
-      "statuses": ["STRICT_COMPLETE", "MANAGED_VERIFIED", "NATIVE_VERIFIED", "PLATFORM_PENDING"],
+      "statuses": [
+        "STRICT_COMPLETE",
+        "MANAGED_VERIFIED",
+        "NATIVE_VERIFIED",
+        "PLATFORM_PENDING"
+      ],
       "detail": "Registration, queueing, owner-thread dispatch, containment, shutdown discard, and injected delivery are verified; no real OS device transition was observed."
     },
     {
       "id": "gamerservices-component",
       "surface": "GamerServicesComponent",
-      "statuses": ["STRICT_COMPLETE", "MANAGED_VERIFIED", "NATIVE_VERIFIED", "BACKEND_BLOCKED", "UPSTREAM_CNA_BLOCKED"],
+      "statuses": [
+        "STRICT_COMPLETE",
+        "MANAGED_VERIFIED",
+        "NATIVE_VERIFIED",
+        "BACKEND_BLOCKED",
+        "UPSTREAM_CNA_BLOCKED"
+      ],
       "detail": "The selected component lifecycle uses three canonical ABI 0.7 routes. Real sign-in/Guide/network/title-update services are absent, and current CNA HEAD cannot build the C API in either networking configuration."
     },
     {
       "id": "design-componentmodel-host",
       "surface": "Microsoft.Xna.Framework.Design converters",
-      "statuses": ["STRICT_COMPLETE", "MANAGED_VERIFIED", "LANGUAGE_MAPPING_LIMITATION"],
+      "statuses": [
+        "STRICT_COMPLETE",
+        "MANAGED_VERIFIED",
+        "LANGUAGE_MAPPING_LIMITATION"
+      ],
       "detail": "Value conversion, ordered decomposition, reconstruction, and culture are implemented; Java has no CLR ComponentModel designer host, context, descriptor services, or attribute filtering."
+    },
+    {
+      "id": "gamerservices-roster-and-guide",
+      "surface": "Gamer, SignedInGamer, SignedInGamerCollection, Guide, GamerProfile, GamerPrivileges, GameDefaults, GamerPresence",
+      "statuses": [
+        "STRICT_COMPLETE",
+        "NATIVE_VERIFIED",
+        "BACKEND_BLOCKED"
+      ],
+      "detail": "Every member reaches a real CNA route and CNA answers: it publishes a local signed-in roster on this runtime and implements the Guide in process. No Xbox Live service is present, so what a real sign-in, a real friends list or a real achievement award would report is not qualified. Guide.IsScreenSaverEnabled does not round-trip, because CNA accepts the request and the headless platform does not honour it."
+    },
+    {
+      "id": "gamerservices-and-net-events",
+      "surface": "SignedInGamer.SignedIn/SignedOut, GamerServicesDispatcher.InstallingTitleUpdate, the nine NetworkSession events",
+      "statuses": [
+        "STRICT_COMPLETE",
+        "NO_NATIVE_PRODUCER"
+      ],
+      "detail": "The event members exist, accept and remove listeners, and dispatch to them. Nothing native raises them yet: their CNA subscribe routes take real callbacks, which the JNI generator refuses by design, so hand-written callback plumbing owns that work. Backlog JAVA-XNA-005. No event is fabricated."
+    },
+    {
+      "id": "avatar-family",
+      "surface": "AvatarDescription, AvatarAnimation, AvatarRenderer, AvatarExpression, IAvatarAnimation",
+      "statuses": [
+        "STRICT_COMPLETE",
+        "NATIVE_VERIFIED",
+        "PLATFORM_PENDING"
+      ],
+      "detail": "The whole family reaches CNA's avatar routes. XNA's avatars are an Xbox 360 facility; what a real avatar description, a real animation clip or a rendered avatar looks like is not qualified on this platform."
+    },
+    {
+      "id": "network-sessions",
+      "surface": "NetworkSession, AvailableNetworkSession, NetworkGamer, LocalNetworkGamer, NetworkMachine, NetworkSessionProperties",
+      "statuses": [
+        "STRICT_COMPLETE",
+        "NATIVE_VERIFIED",
+        "PLATFORM_PENDING"
+      ],
+      "detail": "Creation, discovery, rosters, state and properties reach CNA. Only a SystemLink search reaches real discovery in CNA, and no second machine took part in this qualification, so a real joined session is not qualified."
+    },
+    {
+      "id": "network-packets",
+      "surface": "PacketReader, PacketWriter",
+      "statuses": [
+        "STRICT_COMPLETE",
+        "MANAGED_VERIFIED"
+      ],
+      "detail": "Managed by design: XNA's are a BinaryReader and BinaryWriter over a memory stream, so Position and Length keep exactly that meaning over one cursor. Every value type round-trips in XNA's own layout, verified in the managed tests."
+    },
+    {
+      "id": "extension-graphics",
+      "surface": "org.openeggbert.cna.extensions.graphics",
+      "statuses": [
+        "EXTENSION_VERIFIED",
+        "NATIVE_VERIFIED"
+      ],
+      "detail": "Availability, the render pipeline settings, the physically based material and the ASCII post-process effect reach CNA. This build carries the extended layer, so availability reports true; a build without it answers false and the routes raise ExtensionNotSupportedException rather than downgrading. The CRT and depth-reduction effects are not bound yet: backlog JAVA-EXT-004."
+    },
+    {
+      "id": "extension-runtime",
+      "surface": "org.openeggbert.cna.extensions.runtime",
+      "statuses": [
+        "EXTENSION_VERIFIED",
+        "NATIVE_VERIFIED"
+      ],
+      "detail": "The platform, desktop operating system, renderer name, backend category and maturity, application title and CNA's logger all reach CNA and are asserted against what this build reports: Desktop, Linux, HEADLESS, Diagnostic, Supported."
     }
   ]
 }
