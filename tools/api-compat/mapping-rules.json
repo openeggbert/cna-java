@@ -9,7 +9,12 @@
   "eventRemovePrefix": "remove",
   "eventSuffix": "Listener",
   "timeSpan": "java.time.Duration",
-  "disposable": "java.lang.AutoCloseable",
+  "disposable": {
+    "clrPublicDispose": "Dispose()",
+    "javaBridge": "close()",
+    "javaInterface": "java.lang.AutoCloseable",
+    "note": "A public parameterless CLR Dispose keeps its XNA name; close() is added as the AutoCloseable bridge and delegates to it. A CLR type that implements IDisposable explicitly projects close() alone."
+  },
   "flagsEnumProjection": "immutable-value-class",
   "frameworkTypeMappings": {
     "System.EventArgs": "Microsoft.Xna.Framework.EventArgs",
@@ -173,8 +178,26 @@
       "baseType": "java.lang.Object",
       "interfaces": [],
       "members": [
-        {"kind": "constructor", "name": ".ctor", "access": "public", "static": false, "abstract": false, "final": false, "genericArity": 0, "returnType": null, "parameters": []},
-        {"kind": "field", "name": "Empty", "access": "public", "type": "Microsoft.Xna.Framework.EventArgs", "static": true, "final": true, "constant": null}
+        {
+          "kind": "constructor",
+          "name": ".ctor",
+          "access": "public",
+          "static": false,
+          "abstract": false,
+          "final": false,
+          "genericArity": 0,
+          "returnType": null,
+          "parameters": []
+        },
+        {
+          "kind": "field",
+          "name": "Empty",
+          "access": "public",
+          "type": "Microsoft.Xna.Framework.EventArgs",
+          "static": true,
+          "final": true,
+          "constant": null
+        }
       ]
     },
     {
@@ -187,7 +210,30 @@
       "baseType": null,
       "interfaces": [],
       "members": [
-        {"kind": "method", "name": "invoke", "access": "public", "static": false, "abstract": true, "final": false, "genericArity": 0, "returnType": "void", "parameters": [{"name": "sender", "type": "java.lang.Object", "out": false, "optional": false}, {"name": "args", "type": "T", "out": false, "optional": false}]}
+        {
+          "kind": "method",
+          "name": "invoke",
+          "access": "public",
+          "static": false,
+          "abstract": true,
+          "final": false,
+          "genericArity": 0,
+          "returnType": "void",
+          "parameters": [
+            {
+              "name": "sender",
+              "type": "java.lang.Object",
+              "out": false,
+              "optional": false
+            },
+            {
+              "name": "args",
+              "type": "T",
+              "out": false,
+              "optional": false
+            }
+          ]
+        }
       ]
     },
     {
@@ -200,7 +246,24 @@
       "baseType": null,
       "interfaces": [],
       "members": [
-        {"kind": "method", "name": "GetService", "access": "public", "static": false, "abstract": true, "final": false, "genericArity": 0, "returnType": "java.lang.Object", "parameters": [{"name": "type", "type": "java.lang.Class<?>", "out": false, "optional": false}]}
+        {
+          "kind": "method",
+          "name": "GetService",
+          "access": "public",
+          "static": false,
+          "abstract": true,
+          "final": false,
+          "genericArity": 0,
+          "returnType": "java.lang.Object",
+          "parameters": [
+            {
+              "name": "type",
+              "type": "java.lang.Class<?>",
+              "out": false,
+              "optional": false
+            }
+          ]
+        }
       ]
     },
     {
@@ -213,10 +276,55 @@
       "baseType": "java.lang.Object",
       "interfaces": [],
       "members": [
-        {"kind": "field", "name": "Zero", "access": "public", "type": "Microsoft.Xna.Framework.WindowHandle", "static": true, "final": true, "constant": null},
-        {"kind": "method", "name": "getIsZero", "access": "public", "static": false, "abstract": false, "final": false, "genericArity": 0, "returnType": "boolean", "parameters": []},
-        {"kind": "method", "name": "equals", "access": "public", "static": false, "abstract": false, "final": false, "genericArity": 0, "returnType": "boolean", "parameters": [{"name": "obj", "type": "java.lang.Object", "out": false, "optional": false}]},
-        {"kind": "method", "name": "hashCode", "access": "public", "static": false, "abstract": false, "final": false, "genericArity": 0, "returnType": "int", "parameters": []}
+        {
+          "kind": "field",
+          "name": "Zero",
+          "access": "public",
+          "type": "Microsoft.Xna.Framework.WindowHandle",
+          "static": true,
+          "final": true,
+          "constant": null
+        },
+        {
+          "kind": "method",
+          "name": "getIsZero",
+          "access": "public",
+          "static": false,
+          "abstract": false,
+          "final": false,
+          "genericArity": 0,
+          "returnType": "boolean",
+          "parameters": []
+        },
+        {
+          "kind": "method",
+          "name": "equals",
+          "access": "public",
+          "static": false,
+          "abstract": false,
+          "final": false,
+          "genericArity": 0,
+          "returnType": "boolean",
+          "parameters": [
+            {
+              "name": "obj",
+              "type": "java.lang.Object",
+              "out": false,
+              "optional": false
+            }
+          ]
+        },
+        {
+          "kind": "method",
+          "name": "hashCode",
+          "access": "public",
+          "static": false,
+          "abstract": false,
+          "final": false,
+          "genericArity": 0,
+          "returnType": "int",
+          "parameters": []
+        }
       ]
     },
     {
@@ -229,10 +337,50 @@
       "baseType": "java.lang.Object",
       "interfaces": [],
       "members": [
-        {"kind": "method", "name": "getSucceeded", "access": "public", "static": false, "abstract": false, "final": false, "genericArity": 0, "returnType": "boolean", "parameters": []},
-        {"kind": "method", "name": "getScale", "access": "public", "static": false, "abstract": false, "final": false, "genericArity": 0, "returnType": "Microsoft.Xna.Framework.Vector3", "parameters": []},
-        {"kind": "method", "name": "getRotation", "access": "public", "static": false, "abstract": false, "final": false, "genericArity": 0, "returnType": "Microsoft.Xna.Framework.Quaternion", "parameters": []},
-        {"kind": "method", "name": "getTranslation", "access": "public", "static": false, "abstract": false, "final": false, "genericArity": 0, "returnType": "Microsoft.Xna.Framework.Vector3", "parameters": []}
+        {
+          "kind": "method",
+          "name": "getSucceeded",
+          "access": "public",
+          "static": false,
+          "abstract": false,
+          "final": false,
+          "genericArity": 0,
+          "returnType": "boolean",
+          "parameters": []
+        },
+        {
+          "kind": "method",
+          "name": "getScale",
+          "access": "public",
+          "static": false,
+          "abstract": false,
+          "final": false,
+          "genericArity": 0,
+          "returnType": "Microsoft.Xna.Framework.Vector3",
+          "parameters": []
+        },
+        {
+          "kind": "method",
+          "name": "getRotation",
+          "access": "public",
+          "static": false,
+          "abstract": false,
+          "final": false,
+          "genericArity": 0,
+          "returnType": "Microsoft.Xna.Framework.Quaternion",
+          "parameters": []
+        },
+        {
+          "kind": "method",
+          "name": "getTranslation",
+          "access": "public",
+          "static": false,
+          "abstract": false,
+          "final": false,
+          "genericArity": 0,
+          "returnType": "Microsoft.Xna.Framework.Vector3",
+          "parameters": []
+        }
       ]
     },
     {
@@ -245,8 +393,28 @@
       "baseType": "java.lang.Object",
       "interfaces": [],
       "members": [
-        {"kind": "method", "name": "getSucceeded", "access": "public", "static": false, "abstract": false, "final": false, "genericArity": 0, "returnType": "boolean", "parameters": []},
-        {"kind": "method", "name": "getPreviousLocation", "access": "public", "static": false, "abstract": false, "final": false, "genericArity": 0, "returnType": "Microsoft.Xna.Framework.Input.Touch.TouchLocation", "parameters": []}
+        {
+          "kind": "method",
+          "name": "getSucceeded",
+          "access": "public",
+          "static": false,
+          "abstract": false,
+          "final": false,
+          "genericArity": 0,
+          "returnType": "boolean",
+          "parameters": []
+        },
+        {
+          "kind": "method",
+          "name": "getPreviousLocation",
+          "access": "public",
+          "static": false,
+          "abstract": false,
+          "final": false,
+          "genericArity": 0,
+          "returnType": "Microsoft.Xna.Framework.Input.Touch.TouchLocation",
+          "parameters": []
+        }
       ]
     },
     {
@@ -259,8 +427,28 @@
       "baseType": "java.lang.Object",
       "interfaces": [],
       "members": [
-        {"kind": "method", "name": "getSucceeded", "access": "public", "static": false, "abstract": false, "final": false, "genericArity": 0, "returnType": "boolean", "parameters": []},
-        {"kind": "method", "name": "getTouchLocation", "access": "public", "static": false, "abstract": false, "final": false, "genericArity": 0, "returnType": "Microsoft.Xna.Framework.Input.Touch.TouchLocation", "parameters": []}
+        {
+          "kind": "method",
+          "name": "getSucceeded",
+          "access": "public",
+          "static": false,
+          "abstract": false,
+          "final": false,
+          "genericArity": 0,
+          "returnType": "boolean",
+          "parameters": []
+        },
+        {
+          "kind": "method",
+          "name": "getTouchLocation",
+          "access": "public",
+          "static": false,
+          "abstract": false,
+          "final": false,
+          "genericArity": 0,
+          "returnType": "Microsoft.Xna.Framework.Input.Touch.TouchLocation",
+          "parameters": []
+        }
       ]
     },
     {
@@ -273,12 +461,58 @@
       "baseType": "java.lang.Object",
       "interfaces": [],
       "members": [
-        {"kind": "method", "name": "getExactMatch", "access": "public", "static": false, "abstract": false, "final": false, "genericArity": 0, "returnType": "boolean", "parameters": []},
-        {"kind": "method", "name": "getSelectedFormat", "access": "public", "static": false, "abstract": false, "final": false, "genericArity": 0, "returnType": "Microsoft.Xna.Framework.Graphics.SurfaceFormat", "parameters": []},
-        {"kind": "method", "name": "getSelectedDepthFormat", "access": "public", "static": false, "abstract": false, "final": false, "genericArity": 0, "returnType": "Microsoft.Xna.Framework.Graphics.DepthFormat", "parameters": []},
-        {"kind": "method", "name": "getSelectedMultiSampleCount", "access": "public", "static": false, "abstract": false, "final": false, "genericArity": 0, "returnType": "int", "parameters": []}
+        {
+          "kind": "method",
+          "name": "getExactMatch",
+          "access": "public",
+          "static": false,
+          "abstract": false,
+          "final": false,
+          "genericArity": 0,
+          "returnType": "boolean",
+          "parameters": []
+        },
+        {
+          "kind": "method",
+          "name": "getSelectedFormat",
+          "access": "public",
+          "static": false,
+          "abstract": false,
+          "final": false,
+          "genericArity": 0,
+          "returnType": "Microsoft.Xna.Framework.Graphics.SurfaceFormat",
+          "parameters": []
+        },
+        {
+          "kind": "method",
+          "name": "getSelectedDepthFormat",
+          "access": "public",
+          "static": false,
+          "abstract": false,
+          "final": false,
+          "genericArity": 0,
+          "returnType": "Microsoft.Xna.Framework.Graphics.DepthFormat",
+          "parameters": []
+        },
+        {
+          "kind": "method",
+          "name": "getSelectedMultiSampleCount",
+          "access": "public",
+          "static": false,
+          "abstract": false,
+          "final": false,
+          "genericArity": 0,
+          "returnType": "int",
+          "parameters": []
+        }
       ]
     }
   ],
-  "allowlist": []
+  "allowlist": [],
+  "objectContractMembers": {
+    "Equals": "equals",
+    "GetHashCode": "hashCode",
+    "ToString": "toString",
+    "note": "The only members lowered away from XNA spelling. java.lang.Object already declares them, so an XNA-cased twin would not override them and collections, hashing and printing would use the inherited implementation."
+  }
 }

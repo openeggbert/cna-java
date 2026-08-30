@@ -91,7 +91,11 @@ public final class ModelBoneCollection extends AbstractList<ModelBone> {
             return true;
         }
 
+        public void Dispose() {
+        }
+
         public void close() {
+            Dispose();
         }
 
         @Override

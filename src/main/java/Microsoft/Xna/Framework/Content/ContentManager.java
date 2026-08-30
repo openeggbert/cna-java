@@ -203,12 +203,16 @@ public class ContentManager implements AutoCloseable {
         }
     }
 
-    @Override
-    public final void close() {
+    public final void Dispose() {
         if (closed) {
             return;
         }
         Dispose(true);
+    }
+
+    @Override
+    public final void close() {
+        Dispose();
     }
 
     protected void Dispose(boolean disposing) {

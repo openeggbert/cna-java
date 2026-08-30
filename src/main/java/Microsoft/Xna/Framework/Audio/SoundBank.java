@@ -63,7 +63,8 @@ public class SoundBank implements AutoCloseable {
     public final boolean getIsInUse() { return NativeAudio.getBankBoolean(requireHandle(), 0, true); }
 
     protected void Dispose(boolean disposing) { closeInternal(disposing); }
-    @Override public final void close() { Dispose(true); }
+    public final void Dispose() { Dispose(true); }
+    @Override public final void close() { Dispose(); }
 
     final void cueClosed(Cue cue) { synchronized (lock) { cues.remove(cue); } }
 

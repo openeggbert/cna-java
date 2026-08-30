@@ -16,6 +16,7 @@ public final class PictureAlbumCollection implements Iterable<PictureAlbum>, Aut
     public boolean getIsDisposed() { return core.isDisposed(); }
     public Iterator<PictureAlbum> GetEnumerator() { return core.iterator(); }
     @Override public Iterator<PictureAlbum> iterator() { return GetEnumerator(); }
-    @Override public void close() { core.close(); }
+    public void Dispose() { core.close(); }
+    @Override public void close() { Dispose(); }
     void releaseHandleOnly() { core.releaseHandleOnly(); }
 }

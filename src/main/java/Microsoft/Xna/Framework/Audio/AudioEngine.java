@@ -132,8 +132,8 @@ public class AudioEngine implements AutoCloseable {
         rethrow(failure);
     }
 
-    @Override
-    public final void close() { Dispose(true); }
+    public final void Dispose() { Dispose(true); }
+    @Override public final void close() { Dispose(); }
 
     final long requireHandle() {
         synchronized (lock) {

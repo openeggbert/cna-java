@@ -66,7 +66,11 @@ public final class ModelMeshPartCollection extends AbstractList<ModelMeshPart> {
             return true;
         }
 
+        public void Dispose() {
+        }
+
         public void close() {
+            Dispose();
         }
 
         @Override

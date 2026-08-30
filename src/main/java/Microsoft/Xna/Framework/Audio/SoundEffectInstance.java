@@ -101,9 +101,13 @@ public class SoundEffectInstance implements AutoCloseable {
         closeInternal();
     }
 
+    public final void Dispose() {
+        Dispose(true);
+    }
+
     @Override
     public final void close() {
-        Dispose(true);
+        Dispose();
     }
 
     final long requireHandle() {

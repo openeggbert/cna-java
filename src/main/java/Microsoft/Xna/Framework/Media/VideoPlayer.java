@@ -95,12 +95,17 @@ public final class VideoPlayer implements AutoCloseable {
         return frameTexture;
     }
 
-    @Override public final synchronized void close() {
+    public final synchronized void Dispose() {
         if (handle == 0L) return;
         invalidateFrameTexture();
         NativeMedia.closeVideoPlayer(handle);
         handle = 0L;
         NativeMedia.unregisterVideoPlayer(this);
+    }
+
+    @Override
+    public final void close() {
+        Dispose();
     }
 
     private void operation(int operation) {

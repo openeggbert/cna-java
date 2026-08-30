@@ -93,7 +93,7 @@ public final class MediaLibrary implements AutoCloseable {
         }
     }
 
-    @Override public final synchronized void close() {
+    public final synchronized void Dispose() {
         if (handle == 0L) return;
         Throwable failure = null;
         AutoCloseable[] values = children.values().stream()
@@ -114,6 +114,11 @@ public final class MediaLibrary implements AutoCloseable {
             catch (Throwable exception) { failure = exception; }
         }
         MediaObjectCoreFailure.rethrow(failure, "MediaLibrary");
+    }
+
+    @Override
+    public final void close() {
+        Dispose();
     }
 
     private Picture save(String name, byte[] bytes) {

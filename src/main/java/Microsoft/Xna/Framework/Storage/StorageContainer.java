@@ -118,7 +118,7 @@ public class StorageContainer implements AutoCloseable {
                 Objects.requireNonNull(fileShare, "fileShare").getValue()));
     }
 
-    @Override public final void close() {
+    public final void Dispose() {
         Throwable failure = closeStreams();
         if (failure != null) StorageDevice.rethrow(failure, "StorageContainer streams");
 
@@ -163,6 +163,11 @@ public class StorageContainer implements AutoCloseable {
             }
         }
         StorageDevice.rethrow(failure, "StorageContainer.close");
+    }
+
+    @Override
+    public final void close() {
+        Dispose();
     }
 
     /** JNI callback target: records native delivery without invoking user code in the C frame. */

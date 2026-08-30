@@ -409,10 +409,12 @@ def mapped_members(type_contract: dict[str, Any], rules: dict[str, Any], mapping
                                                    expected="explicit conversion rule", actual="unclassified conversion"))
                 continue
             name = OPERATOR_METHODS.get(name, name)
-            if name == "Dispose" and not member.get("parameters"):
-                name = "close"
-            else:
-                name = {"Equals": "equals", "GetHashCode": "hashCode", "ToString": "toString"}.get(name, name)
+            # `Dispose()` keeps its XNA name. Java has no reserved meaning for it, and the
+            # project's own identity rule is that an XNA member keeps its spelling whenever
+            # Java syntax permits. `close()` is added separately as the AutoCloseable bridge,
+            # so try-with-resources still works and both names are the same operation.
+            name = {"Equals": "equals", "GetHashCode": "hashCode",
+                    "ToString": "toString"}.get(name, name)
             if type_name == "Microsoft.Xna.Framework.Content.ContentManager" \
                     and name in ("Load", "ReadAsset") \
                     and member.get("genericArity") == 1:
@@ -478,12 +480,22 @@ def mapped_members(type_contract: dict[str, Any], rules: dict[str, Any], mapping
             map_member_parameters(type_name, member, rules),
             map_type(member["returnType"])))
 
-    if "System.IDisposable" in type_contract.get("interfaces", []) \
+    # Every disposable type also carries the Java `close()` bridge, whether it reaches
+    # IDisposable directly or through IEnumerator<T>, and whether its CLR Dispose is public
+    # or an explicit interface implementation. `close()` and `Dispose()` are the same
+    # operation; `close()` exists so the type is a real java.lang.AutoCloseable.
+    disposable = any(value == "System.IDisposable"
+                     or value.startswith("System.Collections.Generic.IEnumerator`1")
+                     for value in type_contract.get("interfaces", []))
+    if disposable \
             and not any(value["kind"] == "method" and value["name"] == "close"
                         and not value.get("parameters") for value in expected):
-        source = {"access": "public", "static": False,
-                  "abstract": bool(type_contract.get("abstract")),
-                  "final": not bool(type_contract.get("abstract")), "genericArity": 0}
+        # The bridge is concrete wherever a concrete Dispose exists to delegate to, which
+        # is every disposable class: XNA's own Dispose() is `virtual final`. Only a
+        # disposable interface leaves it abstract.
+        interface = type_contract["kind"] == "interface"
+        source = {"access": "public", "static": False, "abstract": interface,
+                  "final": not interface, "genericArity": 0}
         expected.append(callable_member("method", "close", source, [], "void"))
 
     base = split_generic(type_contract.get("baseType") or "")

@@ -71,7 +71,11 @@ public final class ModelEffectCollection extends AbstractList<Effect> {
             return true;
         }
 
+        public void Dispose() {
+        }
+
         public void close() {
+            Dispose();
         }
 
         @Override

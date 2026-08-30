@@ -174,8 +174,7 @@ public final class SoundEffect implements AutoCloseable {
         synchronized (lock) { NativeAudio.setSoundEffectName(requireHandle(), value); }
     }
 
-    @Override
-    public void close() {
+    public void Dispose() {
         List<SoundEffectInstance> closing;
         long closingHandle;
         synchronized (lock) {
@@ -203,6 +202,11 @@ public final class SoundEffect implements AutoCloseable {
             }
         }
         AudioEngine.rethrow(failure);
+    }
+
+    @Override
+    public void close() {
+        Dispose();
     }
 
     final long requireHandle() {

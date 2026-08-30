@@ -224,6 +224,74 @@ class VerifyTests(unittest.TestCase):
         self.assertEqual("public", close["access"])
         self.assertTrue(close["final"])
 
+    def test_public_dispose_keeps_its_xna_name_and_gains_a_close_bridge(self) -> None:
+        contract = {
+            "name": "Microsoft.Xna.Framework.DisposableProbe",
+            "kind": "class", "abstract": False,
+            "interfaces": ["System.IDisposable"],
+            "members": [{
+                "kind": "method", "name": "Dispose", "access": "public", "static": False,
+                "abstract": False, "final": True, "virtual": True, "genericArity": 0,
+                "returnType": "System.Void", "parameters": [],
+            }],
+        }
+        members = VERIFY.mapped_members(contract, self.rules, [])
+        dispose = next(value for value in members if value["name"] == "Dispose")
+        self.assertEqual("public", dispose["access"])
+        self.assertTrue(dispose["final"])
+        self.assertEqual("void", dispose["returnType"])
+        close = next(value for value in members if value["name"] == "close")
+        self.assertEqual("public", close["access"])
+        self.assertTrue(close["final"])
+        self.assertFalse(close["abstract"])
+
+    def test_enumerator_disposable_reaches_the_close_bridge_through_ienumerator(self) -> None:
+        contract = {
+            "name": "Microsoft.Xna.Framework.EnumeratorProbe",
+            "kind": "struct", "abstract": False,
+            "interfaces": ["System.Collections.Generic.IEnumerator`1[System.Int32]"],
+            "members": [{
+                "kind": "method", "name": "Dispose", "access": "public", "static": False,
+                "abstract": False, "final": True, "virtual": True, "genericArity": 0,
+                "returnType": "System.Void", "parameters": [],
+            }],
+        }
+        members = VERIFY.mapped_members(contract, self.rules, [])
+        self.assertTrue(any(value["name"] == "Dispose" for value in members))
+        self.assertTrue(any(value["name"] == "close" for value in members))
+
+    def test_disposable_interface_leaves_the_close_bridge_abstract(self) -> None:
+        contract = {
+            "name": "Microsoft.Xna.Framework.IDisposableProbe",
+            "kind": "interface", "abstract": True,
+            "interfaces": ["System.IDisposable"], "members": [],
+        }
+        members = VERIFY.mapped_members(contract, self.rules, [])
+        close = next(value for value in members if value["name"] == "close")
+        self.assertTrue(close["abstract"])
+        self.assertFalse(close["final"])
+
+    def test_object_contract_members_are_still_lowered(self) -> None:
+        contract = {
+            "name": "Microsoft.Xna.Framework.ObjectProbe",
+            "kind": "class", "abstract": False, "interfaces": [],
+            "members": [
+                {"kind": "method", "name": name, "access": "public", "static": False,
+                 "abstract": False, "final": False, "virtual": True, "genericArity": 0,
+                 "returnType": returns, "parameters": parameters}
+                for name, returns, parameters in (
+                    ("ToString", "System.String", []),
+                    ("GetHashCode", "System.Int32", []),
+                    ("Equals", "System.Boolean",
+                     [{"name": "obj", "type": "System.Object", "out": False}]),
+                )
+            ],
+        }
+        names = {value["name"] for value in VERIFY.mapped_members(contract, self.rules, [])}
+        # Java's Object already declares these three; an XNA-cased twin would not
+        # override them, so collections and printing would silently use the wrong one.
+        self.assertEqual({"toString", "hashCode", "equals"}, names)
+
     def test_clr_collection_projects_iterator_and_required_java_collection_bridges(self) -> None:
         contract = {
             "name": "Microsoft.Xna.Framework.CurveKeyCollection",

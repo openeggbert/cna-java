@@ -690,9 +690,13 @@ public class GraphicsDevice implements AutoCloseable {
         clearListeners();
     }
 
+    public final void Dispose() {
+        Dispose(true);
+    }
+
     @Override
     public final void close() {
-        Dispose(true);
+        Dispose();
     }
 
     @SuppressWarnings("unused")

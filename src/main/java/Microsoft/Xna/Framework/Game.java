@@ -353,8 +353,7 @@ public class Game implements AutoCloseable {
     }
 
     /** Repeated calls are harmless; native ownership is released at most once. */
-    @Override
-    public final void close() {
+    public final void Dispose() {
         if (closed) {
             return;
         }
@@ -383,6 +382,11 @@ public class Game implements AutoCloseable {
         if (failure != null) {
             throw failure;
         }
+    }
+
+    @Override
+    public final void close() {
+        Dispose();
     }
 
     final void attachGraphicsManager(GraphicsDeviceManager manager) {

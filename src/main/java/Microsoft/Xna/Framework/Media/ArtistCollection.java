@@ -16,6 +16,7 @@ public final class ArtistCollection implements Iterable<Artist>, AutoCloseable {
     public boolean getIsDisposed() { return core.isDisposed(); }
     public Iterator<Artist> GetEnumerator() { return core.iterator(); }
     @Override public Iterator<Artist> iterator() { return GetEnumerator(); }
-    @Override public void close() { core.close(); }
+    public void Dispose() { core.close(); }
+    @Override public void close() { Dispose(); }
     void releaseHandleOnly() { core.releaseHandleOnly(); }
 }

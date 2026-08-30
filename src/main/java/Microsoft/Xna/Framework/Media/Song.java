@@ -30,9 +30,14 @@ public final class Song implements AutoCloseable {
     @Override public boolean equals(Object obj) { return obj instanceof Song other && equals(other); }
     @Override public int hashCode() { return NativeMedia.objectHash(core.value(), core.kind()); }
     @Override public String toString() { return getName(); }
-    @Override public final void close() {
+    public final void Dispose() {
         core.close();
         NativeMedia.unregisterMediaOwner(this);
+    }
+
+    @Override
+    public final void close() {
+        Dispose();
     }
     void releaseHandleOnly() { core.releaseHandleOnly(); }
     long nativeHandle() { return core.value(); }

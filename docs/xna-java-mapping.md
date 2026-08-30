@@ -121,12 +121,28 @@ The four Model collection enumerator value types likewise retain `MoveNext()`, `
 their no-op mapped `close()` member while implementing Java Iterator through explicit `hasNext()`
 and `next()` bridges. The bridge does not make the read-only owning collection mutable.
 
-The parameterless `IDisposable.Dispose()` contract maps to `close()`. A distinct protected
-`Dispose(boolean)` lifetime hook keeps its XNA name as `Dispose(boolean)`. CLR finalization is not
-projected: Java explicit cleanup is normative and deprecated Java finalization must not be added.
-When CLR implements `IDisposable.Dispose` explicitly, Java still requires a public `close()` to
-implement `AutoCloseable`; the verifier synthesizes that member deterministically and checks it as
-non-overridable for a concrete implementation.
+A public parameterless CLR `Dispose()` keeps its XNA name as `Dispose()`, with the CLR member's
+own accessibility and overridability. Java attaches no reserved meaning to that identifier, so the
+project's identity rule -- an XNA member keeps its spelling whenever Java syntax permits -- applies
+to it like any other method. Every disposable type additionally declares `public final void
+close()`, which delegates to `Dispose()`; the two names are one operation, and `close()` exists so
+the type is a real `java.lang.AutoCloseable` and works in try-with-resources.
+
+The `close()` bridge is synthesized for a type that reaches `IDisposable` directly and for one that
+reaches it through `IEnumerator<T>`. It is concrete and non-overridable for a class, because XNA's
+own `Dispose()` is `virtual final`, and abstract only on an interface. When CLR implements
+`IDisposable.Dispose` explicitly rather than publicly -- `GraphicsDeviceManager` is the one such
+type -- there is no public `Dispose()` in the CLR contract either, so Java projects `close()` alone.
+
+A distinct protected `Dispose(boolean)` lifetime hook keeps its XNA name as `Dispose(boolean)` and
+remains the overridable subclass extension point. CLR finalization is not projected: Java explicit
+cleanup is normative and deprecated Java finalization must not be added.
+
+`Equals`, `GetHashCode` and `ToString` are the reviewed exception to the identity rule and are
+lowered to `equals`, `hashCode` and `toString`. `java.lang.Object` already declares all three, so
+an XNA-cased twin would not override them: collections, hashing and printing would silently use
+the inherited implementation instead. Java syntax does not permit both spellings to mean one
+member, so the Java contract wins here and only here.
 
 ## CLR and framework types
 
@@ -146,6 +162,7 @@ System.Type                                              -> java.lang.Class<?>
 System.IntPtr                                            -> Microsoft.Xna.Framework.WindowHandle
 System.TimeSpan                                          -> java.time.Duration (100 ns precision)
 System.IDisposable                                       -> java.lang.AutoCloseable
+                                                            (Dispose() retained, close() bridges)
 System.Collections.Generic.IEnumerable<T>                -> java.lang.Iterable<T>
 System.Collections.Generic.IEnumerator<T>                -> java.util.Iterator<T>
 System.Collections.Generic.ICollection<T>                -> java.util.Collection<T>
@@ -318,7 +335,8 @@ types, and implementation adapters are not part of a value type's public contrac
 
 ## Lifetime and unsupported behavior
 
-`IDisposable` maps to `AutoCloseable`; `close()` is idempotent for CNA-owned resources. Owned,
+`IDisposable` maps to `AutoCloseable`; `Dispose()` and its `close()` bridge are idempotent for
+CNA-owned resources. Owned,
 borrowed, parent-owned, and adopted handles are distinct internal states. Explicit cleanup is the
 contract; no Java finalizer is used. A Cleaner may only be a safety net.
 

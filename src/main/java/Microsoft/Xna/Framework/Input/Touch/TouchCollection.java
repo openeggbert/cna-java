@@ -344,7 +344,11 @@ public final class TouchCollection implements List<TouchLocation> {
             return true;
         }
 
+        public void Dispose() {
+        }
+
         public void close() {
+            Dispose();
         }
 
         @Override

@@ -65,8 +65,8 @@ public final class Cue implements AutoCloseable {
     public boolean getIsStopping() { return info(7); }
     public String getName() { requireHandle(); return name; }
 
-    @Override
-    public void close() { closeInternal(true); }
+    public void Dispose() { closeInternal(true); }
+    @Override public void close() { Dispose(); }
 
     private boolean info(int index) {
         return NativeAudio.getCueInfo(requireHandle())[index] != 0;

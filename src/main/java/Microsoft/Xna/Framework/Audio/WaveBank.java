@@ -53,7 +53,8 @@ public class WaveBank implements AutoCloseable {
     public final boolean getIsPrepared() { return NativeAudio.getBankBoolean(requireHandle(), 1, false); }
 
     protected void Dispose(boolean disposing) { closeInternal(disposing); }
-    @Override public final void close() { Dispose(true); }
+    public final void Dispose() { Dispose(true); }
+    @Override public final void close() { Dispose(); }
 
     private void closeInternal(boolean disposing) {
         long closing;

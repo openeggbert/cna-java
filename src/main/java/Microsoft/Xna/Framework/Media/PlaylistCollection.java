@@ -16,6 +16,7 @@ public final class PlaylistCollection implements Iterable<Playlist>, AutoCloseab
     public boolean getIsDisposed() { return core.isDisposed(); }
     public Iterator<Playlist> GetEnumerator() { return core.iterator(); }
     @Override public Iterator<Playlist> iterator() { return GetEnumerator(); }
-    @Override public void close() { core.close(); }
+    public void Dispose() { core.close(); }
+    @Override public void close() { Dispose(); }
     void releaseHandleOnly() { core.releaseHandleOnly(); }
 }

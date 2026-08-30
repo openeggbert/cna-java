@@ -91,7 +91,11 @@ public final class ModelMeshCollection extends AbstractList<ModelMesh> {
             return true;
         }
 
+        public void Dispose() {
+        }
+
         public void close() {
+            Dispose();
         }
 
         @Override

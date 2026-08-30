@@ -16,7 +16,8 @@ public final class AlbumCollection implements Iterable<Album>, AutoCloseable {
     public boolean getIsDisposed() { return core.isDisposed(); }
     public Iterator<Album> GetEnumerator() { return core.iterator(); }
     @Override public Iterator<Album> iterator() { return GetEnumerator(); }
-    @Override public void close() { core.close(); }
+    public void Dispose() { core.close(); }
+    @Override public void close() { Dispose(); }
     void releaseHandleOnly() { core.releaseHandleOnly(); }
     long nativeHandle() { return core.value(); }
 }

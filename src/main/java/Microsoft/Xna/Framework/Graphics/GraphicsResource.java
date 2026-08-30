@@ -59,8 +59,7 @@ public abstract class GraphicsResource implements AutoCloseable {
     protected void Dispose(boolean arg0) {
     }
 
-    @Override
-    public final void close() {
+    public final void Dispose() {
         if (disposed) {
             return;
         }
@@ -91,6 +90,11 @@ public abstract class GraphicsResource implements AutoCloseable {
         if (failure != null) {
             rethrow(failure);
         }
+    }
+
+    @Override
+    public final void close() {
+        Dispose();
     }
 
     @Override

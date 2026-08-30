@@ -103,8 +103,7 @@ public class GameComponent implements IGameComponent, IUpdateable, AutoCloseable
     protected void Dispose(boolean disposing) {
     }
 
-    @Override
-    public final void close() {
+    public final void Dispose() {
         if (disposed) {
             return;
         }
@@ -134,6 +133,11 @@ public class GameComponent implements IGameComponent, IUpdateable, AutoCloseable
         if (failure != null) {
             throw failure;
         }
+    }
+
+    @Override
+    public final void close() {
+        Dispose();
     }
 
     private void ensureOpen() {
