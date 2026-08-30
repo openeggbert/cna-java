@@ -129,6 +129,27 @@ public final class NativeGamerServices {
             int player, byte[] title, byte[] text, byte[] firstButton, byte[] secondButton,
             int buttonCount, int focusButton, int icon);
 
+    /** Subscribes the three process-wide gamer-service events. */
+    static native int nativeSubscribeGamerEvents(long[] outRegistrations);
+
+    /** Releases the three process-wide gamer-service registrations. */
+    static native int nativeUnsubscribeGamerEvents(long[] registrations);
+
+    /** Subscribes one session's nine events plus the static accepted-invite event. */
+    static native int nativeSubscribeSessionEvents(long session, long[] outRegistrations);
+
+    /** Releases one session's ten registrations, in reverse subscription order. */
+    static native int nativeUnsubscribeSessionEvents(long[] registrations);
+
+    /** Drains one queued event into {@code record}; false when the queue is empty. */
+    static native boolean nativePollEvent(long[] record);
+
+    /** Returns how many events were dropped because the queue was full. */
+    static native long nativeDroppedEventCount();
+
+    /** Discards every queued event. */
+    static native void nativeResetEvents();
+
     public static long clrTicks(Instant instant) {
         return Math.addExact(
                 Math.addExact(Math.multiplyExact(instant.getEpochSecond(), TICKS_PER_SECOND),

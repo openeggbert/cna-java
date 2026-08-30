@@ -5,6 +5,7 @@ import Microsoft.Xna.Framework.GamerServices.GamerCollection;
 import Microsoft.Xna.Framework.GamerServices.InviteAcceptedEventArgs;
 import Microsoft.Xna.Framework.GamerServices.SignedInGamer;
 import org.openeggbert.cna.internal.CompletedAsyncResult;
+import org.openeggbert.cna.internal.GamerEventPump;
 import org.openeggbert.cna.internal.GamerHandles;
 import org.openeggbert.cna.internal.NativeGamerServices;
 import org.openeggbert.cna.internal.generated.NativeNetworkRoutes;
@@ -15,6 +16,8 @@ import java.time.Duration;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
+import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.CopyOnWriteArrayList;
 
 /**
@@ -41,8 +44,28 @@ public final class NetworkSession implements AutoCloseable {
     private static final int ROSTER_REMOTE = 2;
     private static final int ROSTER_PREVIOUS = 3;
 
+    /** The event kinds CNA raises for a session, matching the JNI adapter's numbering. */
+    private static final int KIND_GAME_ENDED = 10;
+    private static final int KIND_GAME_STARTED = 11;
+    private static final int KIND_GAMER_JOINED = 12;
+    private static final int KIND_GAMER_LEFT = 13;
+    private static final int KIND_HOST_CHANGED = 14;
+    private static final int KIND_SESSION_ENDED = 15;
+    private static final int KIND_WRITE_ARBITRATED = 16;
+    private static final int KIND_WRITE_TRUE_SKILL = 17;
+    private static final int KIND_WRITE_UNARBITRATED = 18;
+    private static final int KIND_INVITE_ACCEPTED = 19;
+
     private static final List<EventHandler<InviteAcceptedEventArgs>> INVITE_ACCEPTED =
             new CopyOnWriteArrayList<>();
+
+    /** Every live session, so a queued event reaches the one it belongs to. */
+    private static final Map<Long, NetworkSession> LIVE = new ConcurrentHashMap<>();
+
+    static {
+        // The listeners live in this package, so the pump's session handler does too.
+        GamerEventPump.setSessionHandler(NetworkSession::dispatch);
+    }
 
     private final List<EventHandler<GameEndedEventArgs>> gameEnded = new CopyOnWriteArrayList<>();
     private final List<EventHandler<GameStartedEventArgs>> gameStarted =
@@ -63,15 +86,23 @@ public final class NetworkSession implements AutoCloseable {
 
     private final long handle;
     private final boolean owned;
+    private long[] registrations;
     private boolean disposed;
 
     private NetworkSession(long handle, boolean owned) {
         this.handle = handle;
         this.owned = owned;
+        if (owned) {
+            // A session subscribes on creation and unsubscribes on disposal, so its events have
+            // a producer for exactly as long as the session exists.
+            registrations = GamerEventPump.subscribeSession(handle);
+            LIVE.put(handle, this);
+        }
     }
 
     static NetworkSession borrowed(long handle) {
-        return new NetworkSession(handle, false);
+        NetworkSession live = LIVE.get(handle);
+        return live != null ? live : new NetworkSession(handle, false);
     }
 
     public void addGameEndedListener(EventHandler<GameEndedEventArgs> listener) {
@@ -251,6 +282,13 @@ public final class NetworkSession implements AutoCloseable {
             }
             disposed = true;
         }
+        if (registrations != null) {
+            // Release the subscriptions before the session they belong to, so no callback can
+            // arrive for a session that is being torn down.
+            LIVE.remove(handle, this);
+            GamerEventPump.unsubscribeSession(registrations);
+            registrations = null;
+        }
         NativeGamerServices.check("NetworkSession.Dispose",
                 NativeNetworkRoutes.networkSessionDispose(handle));
         if (owned) {
@@ -350,10 +388,16 @@ public final class NetworkSession implements AutoCloseable {
                 NativeNetworkRoutes.networkSessionStartGame(handle));
     }
 
-    /** Pumps the session: queued state changes take effect and queued events are raised. */
+    /**
+     * Pumps the session: queued state changes take effect and queued events are raised.
+     *
+     * <p>Draining here is what puts a joined gamer, a host change or a game start on the game
+     * thread during {@code Update}, which is where XNA raises them.
+     */
     public void Update() {
         NativeGamerServices.check("NetworkSession.Update",
                 NativeNetworkRoutes.networkSessionUpdate(handle));
+        GamerEventPump.drain();
     }
 
     public GamerCollection<NetworkGamer> getAllGamers() {
@@ -488,6 +532,88 @@ public final class NetworkSession implements AutoCloseable {
     public void setSimulatedPacketLoss(float value) {
         NativeGamerServices.check("NetworkSession.SimulatedPacketLoss",
                 NativeNetworkRoutes.networkSessionSetSimulatedPacketLoss(handle, value));
+    }
+
+    private static void dispatch(long kind, long session, long first, long second, long flag) {
+        if ((int) kind == KIND_INVITE_ACCEPTED) {
+            InviteAcceptedEventArgs args = new InviteAcceptedEventArgs(
+                    first == 0L ? null : (SignedInGamer) org.openeggbert.cna.internal
+                            .GamerFactories.createSignedInGamer(first),
+                    flag != 0L);
+            for (EventHandler<InviteAcceptedEventArgs> listener : INVITE_ACCEPTED) {
+                listener.invoke(null, args);
+            }
+            return;
+        }
+        NetworkSession owner = LIVE.get(session);
+        if (owner == null) {
+            // The session was disposed between CNA raising the event and this drain. XNA would
+            // have no object to raise it on either.
+            return;
+        }
+        owner.raise((int) kind, first, second, flag);
+    }
+
+    private void raise(int kind, long first, long second, long flag) {
+        switch (kind) {
+            case KIND_GAME_ENDED -> {
+                GameEndedEventArgs args = new GameEndedEventArgs();
+                for (EventHandler<GameEndedEventArgs> listener : gameEnded) {
+                    listener.invoke(this, args);
+                }
+            }
+            case KIND_GAME_STARTED -> {
+                GameStartedEventArgs args = new GameStartedEventArgs();
+                for (EventHandler<GameStartedEventArgs> listener : gameStarted) {
+                    listener.invoke(this, args);
+                }
+            }
+            case KIND_GAMER_JOINED -> {
+                GamerJoinedEventArgs args = new GamerJoinedEventArgs(gamer(first));
+                for (EventHandler<GamerJoinedEventArgs> listener : gamerJoined) {
+                    listener.invoke(this, args);
+                }
+            }
+            case KIND_GAMER_LEFT -> {
+                GamerLeftEventArgs args = new GamerLeftEventArgs(gamer(first));
+                for (EventHandler<GamerLeftEventArgs> listener : gamerLeft) {
+                    listener.invoke(this, args);
+                }
+            }
+            case KIND_HOST_CHANGED -> {
+                HostChangedEventArgs args =
+                        new HostChangedEventArgs(gamer(first), gamer(second));
+                for (EventHandler<HostChangedEventArgs> listener : hostChanged) {
+                    listener.invoke(this, args);
+                }
+            }
+            case KIND_SESSION_ENDED -> {
+                NetworkSessionEndedEventArgs args = new NetworkSessionEndedEventArgs(
+                        NetworkSessionEndReason.values()[(int) flag]);
+                for (EventHandler<NetworkSessionEndedEventArgs> listener : sessionEnded) {
+                    listener.invoke(this, args);
+                }
+            }
+            case KIND_WRITE_ARBITRATED -> writeLeaderboards(writeArbitrated, first, flag);
+            case KIND_WRITE_TRUE_SKILL -> writeLeaderboards(writeTrueSkill, first, flag);
+            case KIND_WRITE_UNARBITRATED -> writeLeaderboards(writeUnarbitrated, first, flag);
+            default -> {
+                // A kind this projection does not know is ignored rather than guessed at.
+            }
+        }
+    }
+
+    private void writeLeaderboards(
+            List<EventHandler<WriteLeaderboardsEventArgs>> listeners, long first, long flag) {
+        WriteLeaderboardsEventArgs args =
+                new WriteLeaderboardsEventArgs(gamer(first), flag != 0L);
+        for (EventHandler<WriteLeaderboardsEventArgs> listener : listeners) {
+            listener.invoke(this, args);
+        }
+    }
+
+    private static NetworkGamer gamer(long handle) {
+        return handle == 0L ? null : new NetworkGamer(handle);
     }
 
     private GamerCollection<NetworkGamer> roster(int roster) {

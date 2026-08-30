@@ -1,9 +1,22 @@
 {
   "abiVersion": "0.20.0",
   "boundButUnreached": [
+    "cna_gamer_services_dispatcher_subscribe_installing_title_update_ext",
+    "cna_network_session_subscribe_game_ended",
+    "cna_network_session_subscribe_game_started",
+    "cna_network_session_subscribe_gamer_joined",
+    "cna_network_session_subscribe_gamer_left",
+    "cna_network_session_subscribe_host_changed",
+    "cna_network_session_subscribe_invite_accepted",
+    "cna_network_session_subscribe_session_ended",
+    "cna_network_session_subscribe_write_arbitrated_leaderboard",
+    "cna_network_session_subscribe_write_true_skill",
+    "cna_network_session_subscribe_write_unarbitrated_leaderboard",
+    "cna_signed_in_gamer_subscribe_signed_in_ext",
+    "cna_signed_in_gamer_subscribe_signed_out_ext",
     "cna_vertex_buffer_set_data_raw"
   ],
-  "boundFunctions": 1160,
+  "boundFunctions": 1173,
   "byHeader": {
     "abi.h": {
       "XNA_BACKING": 1,
@@ -65,8 +78,8 @@
       "total": 857
     },
     "gamer_services.h": {
-      "DEFERRED_RUNTIME": 5,
-      "JAVA_INTERNAL_ONLY": 82,
+      "DEFERRED_RUNTIME": 2,
+      "JAVA_INTERNAL_ONLY": 85,
       "XNA_BACKING": 163,
       "total": 250
     },
@@ -188,8 +201,8 @@
       "total": 33
     },
     "net_sessions.h": {
-      "DEFERRED_RUNTIME": 21,
-      "JAVA_INTERNAL_ONLY": 25,
+      "DEFERRED_RUNTIME": 11,
+      "JAVA_INTERNAL_ONLY": 35,
       "XNA_BACKING": 57,
       "total": 103
     },
@@ -277,8 +290,8 @@
   "canonicalFunctions": 4051,
   "classificationCounts": {
     "CNA_EXTENSION_CANDIDATE": 1733,
-    "DEFERRED_RUNTIME": 692,
-    "JAVA_INTERNAL_ONLY": 173,
+    "DEFERRED_RUNTIME": 679,
+    "JAVA_INTERNAL_ONLY": 186,
     "NOT_USEFUL_IN_JAVA": 496,
     "XNA_BACKING": 957
   },
@@ -298,8 +311,8 @@
     "JAVA-NATIVE-021": 8,
     "JAVA-NATIVE-022": 132,
     "JAVA-NATIVE-023": 41,
-    "JAVA-XNA-001": 5,
-    "JAVA-XNA-002": 21
+    "JAVA-XNA-001": 2,
+    "JAVA-XNA-002": 11
   },
   "fullMatrixCommand": "python3 tools/native-abi/coverage.py --cna-root <cna> --output build/cna-c-api-coverage.json",
   "internalOnly": [
@@ -358,6 +371,7 @@
     "cna_gamer_presence_init",
     "cna_gamer_services_component_create",
     "cna_gamer_services_dispatcher_get_freed_gamer_count_ext",
+    "cna_gamer_services_dispatcher_subscribe_installing_title_update_ext",
     "cna_gamer_services_dispatcher_update_async",
     "cna_gamer_set_signed_in_gamers_ext",
     "cna_gamer_signed_in_contains",
@@ -427,6 +441,16 @@
     "cna_network_session_property_enumerator_move_next",
     "cna_network_session_property_enumerator_reset",
     "cna_network_session_remove_gamer_ext",
+    "cna_network_session_subscribe_game_ended",
+    "cna_network_session_subscribe_game_started",
+    "cna_network_session_subscribe_gamer_joined",
+    "cna_network_session_subscribe_gamer_left",
+    "cna_network_session_subscribe_host_changed",
+    "cna_network_session_subscribe_invite_accepted",
+    "cna_network_session_subscribe_session_ended",
+    "cna_network_session_subscribe_write_arbitrated_leaderboard",
+    "cna_network_session_subscribe_write_true_skill",
+    "cna_network_session_subscribe_write_unarbitrated_leaderboard",
     "cna_network_session_unsubscribe",
     "cna_packet_reader_create",
     "cna_packet_reader_destroy",
@@ -468,6 +492,8 @@
     "cna_signed_in_gamer_destroy",
     "cna_signed_in_gamer_get_gamertag_size",
     "cna_signed_in_gamer_set_presence_mode_string_ext",
+    "cna_signed_in_gamer_subscribe_signed_in_ext",
+    "cna_signed_in_gamer_subscribe_signed_out_ext",
     "cna_touch_panel_enqueue_gesture_ext",
     "cna_touch_panel_raise_touch_event_ext",
     "cna_touch_panel_reset_for_tests_ext",

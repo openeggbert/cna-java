@@ -3923,6 +3923,17 @@
       ]
     },
     {
+      "name": "cna_gamer_services_dispatcher_subscribe_installing_title_update_ext",
+      "header": "gamer_services.h",
+      "ownership": "returns an owned registration; copies the callback and borrows its context",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_GamerAsyncCallback",
+        "void*",
+        "CNA_Handle*"
+      ]
+    },
+    {
       "name": "cna_gamer_services_dispatcher_update",
       "header": "gamer_services.h",
       "ownership": "none; pumps process-wide dispatcher",
@@ -5224,6 +5235,28 @@
       "parameters": [
         "CNA_SignedInGamerHandle",
         "CNA_StringView"
+      ]
+    },
+    {
+      "name": "cna_signed_in_gamer_subscribe_signed_in_ext",
+      "header": "gamer_services.h",
+      "ownership": "returns an owned registration; copies the callback and borrows its context",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_SignedInGamerEventCallback",
+        "void*",
+        "CNA_Handle*"
+      ]
+    },
+    {
+      "name": "cna_signed_in_gamer_subscribe_signed_out_ext",
+      "header": "gamer_services.h",
+      "ownership": "returns an owned registration; copies the callback and borrows its context",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_SignedInGamerEventCallback",
+        "void*",
+        "CNA_Handle*"
       ]
     },
     {
@@ -9926,6 +9959,125 @@
       "returnType": "CNA_Result",
       "parameters": [
         "CNA_NetworkSessionHandle"
+      ]
+    },
+    {
+      "name": "cna_network_session_subscribe_game_ended",
+      "header": "net_sessions.h",
+      "ownership": "returns an owned registration; copies the callback and borrows its context",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_NetworkSessionHandle",
+        "CNA_GameEndedCallback",
+        "void*",
+        "CNA_NetworkSessionEventRegistrationHandle*"
+      ]
+    },
+    {
+      "name": "cna_network_session_subscribe_game_started",
+      "header": "net_sessions.h",
+      "ownership": "returns an owned registration; copies the callback and borrows its context",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_NetworkSessionHandle",
+        "CNA_GameStartedCallback",
+        "void*",
+        "CNA_NetworkSessionEventRegistrationHandle*"
+      ]
+    },
+    {
+      "name": "cna_network_session_subscribe_gamer_joined",
+      "header": "net_sessions.h",
+      "ownership": "returns an owned registration; copies the callback and borrows its context",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_NetworkSessionHandle",
+        "CNA_GamerJoinedCallback",
+        "void*",
+        "CNA_NetworkSessionEventRegistrationHandle*"
+      ]
+    },
+    {
+      "name": "cna_network_session_subscribe_gamer_left",
+      "header": "net_sessions.h",
+      "ownership": "returns an owned registration; copies the callback and borrows its context",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_NetworkSessionHandle",
+        "CNA_GamerLeftCallback",
+        "void*",
+        "CNA_NetworkSessionEventRegistrationHandle*"
+      ]
+    },
+    {
+      "name": "cna_network_session_subscribe_host_changed",
+      "header": "net_sessions.h",
+      "ownership": "returns an owned registration; copies the callback and borrows its context",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_NetworkSessionHandle",
+        "CNA_HostChangedCallback",
+        "void*",
+        "CNA_NetworkSessionEventRegistrationHandle*"
+      ]
+    },
+    {
+      "name": "cna_network_session_subscribe_invite_accepted",
+      "header": "net_sessions.h",
+      "ownership": "returns an owned registration; copies the callback and borrows its context",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_InviteAcceptedCallback",
+        "void*",
+        "CNA_NetworkSessionEventRegistrationHandle*"
+      ]
+    },
+    {
+      "name": "cna_network_session_subscribe_session_ended",
+      "header": "net_sessions.h",
+      "ownership": "returns an owned registration; copies the callback and borrows its context",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_NetworkSessionHandle",
+        "CNA_NetworkSessionEndedCallback",
+        "void*",
+        "CNA_NetworkSessionEventRegistrationHandle*"
+      ]
+    },
+    {
+      "name": "cna_network_session_subscribe_write_arbitrated_leaderboard",
+      "header": "net_sessions.h",
+      "ownership": "returns an owned registration; copies the callback and borrows its context",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_NetworkSessionHandle",
+        "CNA_WriteLeaderboardsCallback",
+        "void*",
+        "CNA_NetworkSessionEventRegistrationHandle*"
+      ]
+    },
+    {
+      "name": "cna_network_session_subscribe_write_true_skill",
+      "header": "net_sessions.h",
+      "ownership": "returns an owned registration; copies the callback and borrows its context",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_NetworkSessionHandle",
+        "CNA_WriteLeaderboardsCallback",
+        "void*",
+        "CNA_NetworkSessionEventRegistrationHandle*"
+      ]
+    },
+    {
+      "name": "cna_network_session_subscribe_write_unarbitrated_leaderboard",
+      "header": "net_sessions.h",
+      "ownership": "returns an owned registration; copies the callback and borrows its context",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_NetworkSessionHandle",
+        "CNA_WriteLeaderboardsCallback",
+        "void*",
+        "CNA_NetworkSessionEventRegistrationHandle*"
       ]
     },
     {

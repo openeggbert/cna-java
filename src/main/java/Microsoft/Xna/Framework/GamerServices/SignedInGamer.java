@@ -25,6 +25,11 @@ public final class SignedInGamer extends Gamer {
         super(handle);
     }
 
+    /** Returns the projected gamer behind one native handle, or null when there is none. */
+    static SignedInGamer of(long handle) {
+        return handle == 0L ? null : new SignedInGamer(handle);
+    }
+
     public static void addSignedInListener(EventHandler<SignedInEventArgs> listener) {
         SIGNED_IN.add(Objects.requireNonNull(listener, "listener"));
     }

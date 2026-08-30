@@ -142,18 +142,19 @@
       "title": "Raise the nine NetworkSession events and the two SignedInGamer events from CNA",
       "family": "Microsoft.Xna.Framework.Net, Microsoft.Xna.Framework.GamerServices",
       "authority": "cna_network_session_subscribe_* and cna_signed_in_gamer_subscribe_*",
-      "currentState": "The event members exist and accept listeners; no native producer raises them, because their CNA routes take a real callback the generator refuses.",
-      "expectedState": "Hand-written JNI callback plumbing that attaches the JVM thread, contains a Java exception, and survives session teardown, so each event has a real producer.",
+      "currentState": "The event members existed and accepted listeners; no native producer raised them.",
+      "expectedState": "Hand-written JNI records each event and Java drains the record right after pumping the dispatcher or the session, so every event arrives on the game thread during Update, as XNA raises it.",
       "blocker": "None. It needs the callback lifetime work that the media and storage families already have, applied to eleven more callbacks.",
       "dependsOn": [
         "JAVA-XNA-001",
         "JAVA-XNA-002"
       ],
       "tests": [
-        "a native event test per event, plus a teardown stress"
+        "NetworkSessionNativeIntegrationTests"
       ],
       "priority": 5,
-      "status": "ready"
+      "status": "done",
+      "note": "Verified end to end for the events a local session raises: GameStarted and GameEnded reach a Java listener. The rest share the same producer and the same drain, but no second machine took part in this qualification, so a real GamerJoined or HostChanged is not observed here."
     },
     {
       "id": "JAVA-XNA-006",
@@ -263,6 +264,17 @@
       ],
       "priority": 7,
       "status": "ready"
+    },
+    {
+      "id": "JAVA-UPSTREAM-002",
+      "title": "NetworkSession.MaxGamers does not report the maximum the creation asked for",
+      "family": "Microsoft.Xna.Framework.Net",
+      "authority": "cna_network_session_create(session_type, max_local_gamers, max_gamers, out_session) and cna_network_session_get_max_gamers",
+      "currentState": "A Local session created with max_gamers = 4 reports MaxGamers = 69. The setter does take effect: setting 8 reads back 8.",
+      "expectedState": "MaxGamers reports the maximum the session was created with, as XNA's does.",
+      "blocker": "cnanext net_sessions: the synchronous creation does not carry max_gamers into the session's own maximum. Java asserts the property is stable and that the setter works, and does not invent the creation value.",
+      "priority": 11,
+      "status": "blocked"
     }
   ]
 }

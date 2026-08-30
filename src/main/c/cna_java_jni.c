@@ -88,6 +88,19 @@ typedef struct CnaFunctions {
     CNA_JNI_ROUTE(cna_framework_dispatcher_update) framework_dispatcher_update;
     CNA_JNI_ROUTE(cna_gamer_services_dispatcher_set_window_handle) gamer_services_dispatcher_set_window_handle;
     CNA_JNI_ROUTE(cna_guide_begin_show_message_box) guide_begin_show_message_box;
+    CNA_JNI_ROUTE(cna_signed_in_gamer_subscribe_signed_in_ext) signed_in_gamer_subscribe_signed_in_ext;
+    CNA_JNI_ROUTE(cna_signed_in_gamer_subscribe_signed_out_ext) signed_in_gamer_subscribe_signed_out_ext;
+    CNA_JNI_ROUTE(cna_gamer_services_dispatcher_subscribe_installing_title_update_ext) gamer_services_dispatcher_subscribe_installing_title_update_ext;
+    CNA_JNI_ROUTE(cna_network_session_subscribe_game_ended) network_session_subscribe_game_ended;
+    CNA_JNI_ROUTE(cna_network_session_subscribe_game_started) network_session_subscribe_game_started;
+    CNA_JNI_ROUTE(cna_network_session_subscribe_gamer_joined) network_session_subscribe_gamer_joined;
+    CNA_JNI_ROUTE(cna_network_session_subscribe_gamer_left) network_session_subscribe_gamer_left;
+    CNA_JNI_ROUTE(cna_network_session_subscribe_host_changed) network_session_subscribe_host_changed;
+    CNA_JNI_ROUTE(cna_network_session_subscribe_session_ended) network_session_subscribe_session_ended;
+    CNA_JNI_ROUTE(cna_network_session_subscribe_write_arbitrated_leaderboard) network_session_subscribe_write_arbitrated_leaderboard;
+    CNA_JNI_ROUTE(cna_network_session_subscribe_write_true_skill) network_session_subscribe_write_true_skill;
+    CNA_JNI_ROUTE(cna_network_session_subscribe_write_unarbitrated_leaderboard) network_session_subscribe_write_unarbitrated_leaderboard;
+    CNA_JNI_ROUTE(cna_network_session_subscribe_invite_accepted) network_session_subscribe_invite_accepted;
     CNA_JNI_ROUTE(cna_gamer_services_dispatcher_initialize) gamer_services_dispatcher_initialize;
     CNA_JNI_ROUTE(cna_gamer_services_dispatcher_update) gamer_services_dispatcher_update;
     CNA_JNI_ROUTE(cna_game_destroy) game_destroy;
@@ -1615,6 +1628,19 @@ JNIEXPORT jint JNICALL Java_org_openeggbert_cna_internal_NativeBindings_nativeLo
     LOAD(gamer_services_dispatcher_set_window_handle,
         "cna_gamer_services_dispatcher_set_window_handle");
     LOAD(guide_begin_show_message_box, "cna_guide_begin_show_message_box");
+    LOAD(signed_in_gamer_subscribe_signed_in_ext, "cna_signed_in_gamer_subscribe_signed_in_ext");
+    LOAD(signed_in_gamer_subscribe_signed_out_ext, "cna_signed_in_gamer_subscribe_signed_out_ext");
+    LOAD(gamer_services_dispatcher_subscribe_installing_title_update_ext, "cna_gamer_services_dispatcher_subscribe_installing_title_update_ext");
+    LOAD(network_session_subscribe_game_ended, "cna_network_session_subscribe_game_ended");
+    LOAD(network_session_subscribe_game_started, "cna_network_session_subscribe_game_started");
+    LOAD(network_session_subscribe_gamer_joined, "cna_network_session_subscribe_gamer_joined");
+    LOAD(network_session_subscribe_gamer_left, "cna_network_session_subscribe_gamer_left");
+    LOAD(network_session_subscribe_host_changed, "cna_network_session_subscribe_host_changed");
+    LOAD(network_session_subscribe_session_ended, "cna_network_session_subscribe_session_ended");
+    LOAD(network_session_subscribe_write_arbitrated_leaderboard, "cna_network_session_subscribe_write_arbitrated_leaderboard");
+    LOAD(network_session_subscribe_write_true_skill, "cna_network_session_subscribe_write_true_skill");
+    LOAD(network_session_subscribe_write_unarbitrated_leaderboard, "cna_network_session_subscribe_write_unarbitrated_leaderboard");
+    LOAD(network_session_subscribe_invite_accepted, "cna_network_session_subscribe_invite_accepted");
     LOAD(gamer_services_dispatcher_initialize,
         "cna_gamer_services_dispatcher_initialize");
     LOAD(gamer_services_dispatcher_update,
@@ -12157,3 +12183,4 @@ Java_org_openeggbert_cna_internal_NativeGamerServices_nativeGuideShowMessageBox(
 #include "generated/NativeNetworkRoutes.inc"
 #include "generated/NativeGraphicsExtensionRoutes.inc"
 #include "generated/NativeRuntimeExtensionRoutes.inc"
+#include "cna_java_jni_events.inc"

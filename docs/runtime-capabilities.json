@@ -138,9 +138,10 @@
       "surface": "SignedInGamer.SignedIn/SignedOut, GamerServicesDispatcher.InstallingTitleUpdate, the nine NetworkSession events",
       "statuses": [
         "STRICT_COMPLETE",
-        "NO_NATIVE_PRODUCER"
+        "NATIVE_VERIFIED",
+        "PLATFORM_PENDING"
       ],
-      "detail": "The event members exist, accept and remove listeners, and dispatch to them. Nothing native raises them yet: their CNA subscribe routes take real callbacks, which the JNI generator refuses by design, so hand-written callback plumbing owns that work. Backlog JAVA-XNA-005. No event is fabricated."
+      "detail": "Every event now has a native producer. The JNI callbacks record each event and Java drains the record right after pumping the dispatcher or the session, so an event arrives on the game thread during Update, as XNA raises it. GameStarted and GameEnded are verified end to end on a local session. The rest share that producer and that drain, but a real GamerJoined, HostChanged or SignedIn needs a second machine or a live sign-in, neither of which took part in this qualification."
     },
     {
       "id": "avatar-family",

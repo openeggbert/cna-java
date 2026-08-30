@@ -4,6 +4,7 @@ import Microsoft.Xna.Framework.EventArgs;
 import Microsoft.Xna.Framework.EventHandler;
 import Microsoft.Xna.Framework.ServiceProvider;
 import Microsoft.Xna.Framework.WindowHandle;
+import org.openeggbert.cna.internal.GamerEventPump;
 import org.openeggbert.cna.internal.NativeBindings;
 import org.openeggbert.cna.internal.NativeGamerServices;
 import org.openeggbert.cna.internal.generated.NativeGamerServicesRoutes;
@@ -25,8 +26,18 @@ import java.util.concurrent.CopyOnWriteArrayList;
  */
 public final class GamerServicesDispatcher {
 
+    /** The event kinds CNA raises outside a session, matching the JNI adapter's numbering. */
+    private static final int KIND_SIGNED_IN = 0;
+    private static final int KIND_SIGNED_OUT = 1;
+    private static final int KIND_INSTALLING_TITLE_UPDATE = 2;
+
     private static final List<EventHandler<EventArgs>> INSTALLING_TITLE_UPDATE =
             new CopyOnWriteArrayList<>();
+
+    static {
+        // The listeners live in this package, so the pump's handler does too.
+        GamerEventPump.setGamerHandler(GamerServicesDispatcher::dispatch);
+    }
 
     private GamerServicesDispatcher() {
     }
@@ -49,10 +60,18 @@ public final class GamerServicesDispatcher {
     public static void Initialize(ServiceProvider serviceProvider) {
         Objects.requireNonNull(serviceProvider, "serviceProvider");
         NativeBindings.initializeGamerServicesDispatcher();
+        GamerEventPump.ensureSubscribed();
     }
 
+    /**
+     * Pumps gamer services and raises whatever CNA queued.
+     *
+     * <p>Draining here is what puts a sign-in or a title update on the game thread during
+     * {@code Update}, which is where XNA raises them.
+     */
     public static void Update() {
         NativeBindings.updateGamerServicesDispatcher();
+        GamerEventPump.drain();
     }
 
     public static boolean getIsInitialized() {
@@ -79,6 +98,17 @@ public final class GamerServicesDispatcher {
     static void raiseInstallingTitleUpdate() {
         for (EventHandler<EventArgs> listener : INSTALLING_TITLE_UPDATE) {
             listener.invoke(null, EventArgs.Empty);
+        }
+    }
+
+    private static void dispatch(long kind, long session, long first, long second, long flag) {
+        switch ((int) kind) {
+            case KIND_SIGNED_IN -> SignedInGamer.raiseSignedIn(SignedInGamer.of(first));
+            case KIND_SIGNED_OUT -> SignedInGamer.raiseSignedOut(SignedInGamer.of(first));
+            case KIND_INSTALLING_TITLE_UPDATE -> raiseInstallingTitleUpdate();
+            default -> {
+                // A kind this package does not own belongs to the session handler.
+            }
         }
     }
 }
