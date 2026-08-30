@@ -1,7 +1,7 @@
 {
   "abiVersion": "0.20.0",
   "boundButUnreached": [],
-  "boundFunctions": 1388,
+  "boundFunctions": 1393,
   "boundWithoutJavaCallSite": [
     "cna_achievement_collection_add",
     "cna_achievement_collection_clear",
@@ -163,7 +163,6 @@
     "cna_signed_in_gamer_destroy",
     "cna_signed_in_gamer_get_gamertag_size",
     "cna_signed_in_gamer_set_presence_mode_string_ext",
-    "cna_text_input_unsubscribe_ext",
     "cna_write_leaderboards_event_info_init"
   ],
   "byHeader": {
@@ -306,8 +305,7 @@
       "total": 20
     },
     "input_text.h": {
-      "CNA_EXTENSION_CANDIDATE": 16,
-      "JAVA_INTERNAL_ONLY": 1,
+      "CNA_EXTENSION_CANDIDATE": 17,
       "total": 17
     },
     "input_touch.h": {
@@ -444,9 +442,9 @@
   },
   "canonicalFunctions": 4051,
   "classificationCounts": {
-    "CNA_EXTENSION_CANDIDATE": 1770,
+    "CNA_EXTENSION_CANDIDATE": 1771,
     "DEFERRED_RUNTIME": 547,
-    "JAVA_INTERNAL_ONLY": 171,
+    "JAVA_INTERNAL_ONLY": 170,
     "NOT_USEFUL_IN_JAVA": 587,
     "XNA_BACKING": 976
   },
@@ -633,7 +631,6 @@
     "cna_signed_in_gamer_destroy",
     "cna_signed_in_gamer_get_gamertag_size",
     "cna_signed_in_gamer_set_presence_mode_string_ext",
-    "cna_text_input_unsubscribe_ext",
     "cna_touch_panel_enqueue_gesture_ext",
     "cna_touch_panel_raise_touch_event_ext",
     "cna_touch_panel_reset_for_tests_ext",

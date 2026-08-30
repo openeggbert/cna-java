@@ -701,6 +701,16 @@ public final class NativeInputExtensionRoutes {
     public static native int textInputIsScreenKeyboardShownExt(long game, boolean[] outShown);
 
     /**
+     * cna_text_input_raise_text_editing_ext (input_text.h).
+     */
+    public static native int textInputRaiseTextEditingExt(long game, byte[] text, int start, int length);
+
+    /**
+     * cna_text_input_raise_text_input_ext (input_text.h).
+     */
+    public static native int textInputRaiseTextInputExt(long game, int codeUnit);
+
+    /**
      * cna_text_input_set_input_rectangle_ext (input_text.h).
      */
     public static native int textInputSetInputRectangleExt(long game, long[] rectangleIntegral);

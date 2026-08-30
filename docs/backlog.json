@@ -316,14 +316,17 @@
       "title": "Project CNA's text composition and candidate events",
       "family": "org.openeggbert.cna.extensions.input",
       "authority": "cna_text_input_subscribe_text_editing_ext and cna_text_input_subscribe_text_editing_candidates_ext",
-      "currentState": "Typed characters are projected; composition text and candidate lists are not. Each event carries a string, and the fixed five-long event record the JNI adapter uses to move an event to Java cannot hold one.",
-      "expectedState": "A transport for a string-carrying event, and TextInput events for composition and candidates on top of it.",
+      "currentState": "Typed characters were projected; composition text and candidate lists were not, because each carries a string the fixed five-long event record cannot hold.",
+      "expectedState": "A second transport that owns heap copies made inside CNA's callback, hands them to Java as byte arrays in one call that frees the record before it returns, and is merged with the numeric queue by a sequence stamped when CNA raised the event, so one order comes out of two queues. TextComposition and TextCandidates sit on top of it in the input extension package.",
       "blocker": "None upstream. It needs a second event transport, not a CNA change.",
       "dependsOn": [
         "JAVA-EXT-002"
       ],
       "priority": 8,
-      "status": "ready"
+      "status": "done",
+      "tests": [
+        "TextCompositionTests"
+      ]
     },
     {
       "id": "JAVA-NATIVE-023",

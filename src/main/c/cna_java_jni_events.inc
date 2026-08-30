@@ -42,6 +42,7 @@
 #define CNA_JAVA_EVENT_MOUSE_CLICKED 37
 
 typedef struct JavaGamerEvent {
+    int64_t sequence;
     int64_t kind;
     int64_t session;
     int64_t first;
@@ -54,6 +55,21 @@ static int java_gamer_event_head;
 static int java_gamer_event_count;
 static int64_t java_gamer_events_dropped;
 static atomic_flag java_gamer_event_lock = ATOMIC_FLAG_INIT;
+
+/*
+ * One counter across both queues.
+ *
+ * The numeric queue and the string queue below hold different record shapes, so they cannot be
+ * one array; but a committed character and the composition update that cleared it are two events
+ * a game must see in the order CNA raised them. Every push stamps a sequence from this counter
+ * and Java drains the two queues merged by it, which keeps one order out of two queues.
+ */
+static _Atomic int64_t java_event_sequence;
+
+static int64_t java_next_sequence(void)
+{
+    return atomic_fetch_add(&java_event_sequence, 1);
+}
 
 static void java_gamer_event_enter(void)
 {
@@ -70,6 +86,7 @@ static void java_gamer_event_leave(void)
 static void java_gamer_event_push(
     int64_t kind, int64_t session, int64_t first, int64_t second, int64_t flag)
 {
+    int64_t sequence = java_next_sequence();
     java_gamer_event_enter();
     if (java_gamer_event_count == CNA_JAVA_EVENT_CAPACITY) {
         java_gamer_event_head = (java_gamer_event_head + 1) % CNA_JAVA_EVENT_CAPACITY;
@@ -77,6 +94,7 @@ static void java_gamer_event_push(
         java_gamer_events_dropped++;
     }
     int index = (java_gamer_event_head + java_gamer_event_count) % CNA_JAVA_EVENT_CAPACITY;
+    java_gamer_events[index].sequence = sequence;
     java_gamer_events[index].kind = kind;
     java_gamer_events[index].session = session;
     java_gamer_events[index].first = first;
@@ -191,6 +209,362 @@ static void java_invite_accepted_callback(
     java_gamer_event_push(CNA_JAVA_EVENT_INVITE_ACCEPTED, 0,
         info == NULL ? 0 : (int64_t)info->gamer, 0,
         info == NULL ? 0 : (int64_t)info->is_current_session);
+}
+
+/*
+ * The string-carrying text events.
+ *
+ * The numeric record cannot hold a string, and CNA's composition and candidate views are
+ * borrowed only for the duration of the callback: the header says in as many words that the
+ * text must be copied before the callback returns. So this queue owns heap copies made inside
+ * the callback, and hands them to Java as byte arrays in one call that frees the record before
+ * it returns. Java never sees a native pointer, and a Java exception on the way out cannot
+ * strand one.
+ *
+ * The copy is UTF-8 bytes with an explicit length, because CNA's views are not NUL-terminated
+ * and a composition may legitimately contain a NUL-free but non-ASCII draft of any length.
+ */
+#define CNA_JAVA_TEXT_EVENT_CAPACITY 64
+
+#define CNA_JAVA_TEXT_EVENT_COMPOSITION 0
+#define CNA_JAVA_TEXT_EVENT_CANDIDATES 1
+
+typedef struct JavaTextEvent {
+    int64_t sequence;
+    int32_t kind;
+    int32_t start;
+    int32_t length;
+    int32_t selected;
+    int32_t horizontal;
+    int32_t count;
+    char** texts;
+    uint64_t* sizes;
+} JavaTextEvent;
+
+static JavaTextEvent java_text_events[CNA_JAVA_TEXT_EVENT_CAPACITY];
+static int java_text_event_head;
+static int java_text_event_count;
+static int64_t java_text_events_dropped;
+static atomic_flag java_text_event_lock = ATOMIC_FLAG_INIT;
+
+static void java_text_event_enter(void)
+{
+    while (atomic_flag_test_and_set(&java_text_event_lock)) {
+        /* As with the numeric queue, the critical section is a handful of stores. */
+    }
+}
+
+static void java_text_event_leave(void)
+{
+    atomic_flag_clear(&java_text_event_lock);
+}
+
+/** Frees one record's owned copies. Safe on a zeroed record. */
+static void java_text_event_release(JavaTextEvent* event)
+{
+    if (event->texts != NULL) {
+        for (int32_t index = 0; index < event->count; ++index) {
+            free(event->texts[index]);
+        }
+        free(event->texts);
+    }
+    free(event->sizes);
+    event->texts = NULL;
+    event->sizes = NULL;
+    event->count = 0;
+}
+
+/**
+ * Copies count borrowed views into a new record and enqueues it.
+ *
+ * Every allocation happens before the lock is taken, so a slow allocator never blocks the
+ * thread CNA raised the event on for longer than it must. A failed allocation drops the event
+ * and counts the drop rather than enqueueing half a record.
+ */
+static void java_text_event_push(
+    int32_t kind, const CNA_StringView* views, int32_t count,
+    int32_t start, int32_t length, int32_t selected, int32_t horizontal)
+{
+    JavaTextEvent event;
+    memset(&event, 0, sizeof event);
+    event.kind = kind;
+    event.start = start;
+    event.length = length;
+    event.selected = selected;
+    event.horizontal = horizontal;
+    event.count = count;
+    if (count > 0) {
+        event.texts = (char**)calloc((size_t)count, sizeof(*event.texts));
+        event.sizes = (uint64_t*)calloc((size_t)count, sizeof(*event.sizes));
+        if (event.texts == NULL || event.sizes == NULL) {
+            java_text_event_release(&event);
+            java_text_event_enter();
+            java_text_events_dropped++;
+            java_text_event_leave();
+            return;
+        }
+        for (int32_t index = 0; index < count; ++index) {
+            uint64_t size = views[index].data == NULL ? 0 : views[index].byte_length;
+            /* One spare byte so an empty view still gets a distinct allocation. */
+            event.texts[index] = (char*)malloc((size_t)size + 1U);
+            if (event.texts[index] == NULL) {
+                event.count = index;
+                java_text_event_release(&event);
+                java_text_event_enter();
+                java_text_events_dropped++;
+                java_text_event_leave();
+                return;
+            }
+            if (size > 0) {
+                memcpy(event.texts[index], views[index].data, (size_t)size);
+            }
+            event.sizes[index] = size;
+        }
+    }
+    event.sequence = java_next_sequence();
+
+    java_text_event_enter();
+    if (java_text_event_count == CNA_JAVA_TEXT_EVENT_CAPACITY) {
+        /* Drop the oldest, and free what it owned: growing without bound in a callback CNA
+         * may raise from any thread would be the wrong trade, and leaking would be worse. */
+        java_text_event_release(&java_text_events[java_text_event_head]);
+        java_text_event_head = (java_text_event_head + 1) % CNA_JAVA_TEXT_EVENT_CAPACITY;
+        java_text_event_count--;
+        java_text_events_dropped++;
+    }
+    int index = (java_text_event_head + java_text_event_count) % CNA_JAVA_TEXT_EVENT_CAPACITY;
+    java_text_events[index] = event;
+    java_text_event_count++;
+    java_text_event_leave();
+}
+
+static void java_text_editing_callback(const CNA_TextEditingEventInfo* info, void* context)
+{
+    (void)context;
+    if (info == NULL) {
+        return;
+    }
+    java_text_event_push(CNA_JAVA_TEXT_EVENT_COMPOSITION, &info->text, 1,
+        info->start, info->length, 0, 0);
+}
+
+static void java_text_editing_candidates_callback(
+    const CNA_TextEditingCandidatesEventInfo* info, void* context)
+{
+    (void)context;
+    if (info == NULL) {
+        return;
+    }
+    int32_t count = info->candidate_count < 0 ? 0 : info->candidate_count;
+    java_text_event_push(CNA_JAVA_TEXT_EVENT_CANDIDATES,
+        count == 0 ? NULL : info->candidates, count,
+        0, 0, info->selected, info->horizontal != CNA_FALSE ? 1 : 0);
+}
+
+/** Subscribes both string-carrying text events, or neither. */
+JNIEXPORT jint JNICALL
+Java_org_openeggbert_cna_internal_NativeGamerServices_nativeSubscribeTextComposition(
+    JNIEnv* environment, jclass type, jlongArray out_registrations)
+{
+    (void)type;
+    CNA_TextInputRegistrationHandle registrations[2];
+    registrations[0] = CNA_INVALID_HANDLE;
+    registrations[1] = CNA_INVALID_HANDLE;
+    CNA_Result result = cna.text_input_subscribe_text_editing_ext(
+        java_text_editing_callback, NULL, &registrations[0]);
+    if (result == CNA_RESULT_SUCCESS) {
+        result = cna.text_input_subscribe_text_editing_candidates_ext(
+            java_text_editing_candidates_callback, NULL, &registrations[1]);
+    }
+    if (result != CNA_RESULT_SUCCESS) {
+        for (int index = 1; index >= 0; --index) {
+            if (registrations[index] != CNA_INVALID_HANDLE) {
+                (void)cna.text_input_unsubscribe_ext(registrations[index]);
+            }
+        }
+        return (jint)result;
+    }
+    jlong values[2] = {(jlong)registrations[0], (jlong)registrations[1]};
+    (*environment)->SetLongArrayRegion(environment, out_registrations, 0, 2, values);
+    return (jint)CNA_RESULT_SUCCESS;
+}
+
+/** Releases both composition registrations, in reverse subscription order. */
+JNIEXPORT jint JNICALL
+Java_org_openeggbert_cna_internal_NativeGamerServices_nativeUnsubscribeTextComposition(
+    JNIEnv* environment, jclass type, jlongArray registrations)
+{
+    (void)type;
+    jlong values[2];
+    (*environment)->GetLongArrayRegion(environment, registrations, 0, 2, values);
+    CNA_Result first = CNA_RESULT_SUCCESS;
+    for (int index = 1; index >= 0; --index) {
+        if (values[index] == 0) {
+            continue;
+        }
+        CNA_Result result = cna.text_input_unsubscribe_ext(
+            (CNA_TextInputRegistrationHandle)values[index]);
+        if (result != CNA_RESULT_SUCCESS && first == CNA_RESULT_SUCCESS) {
+            first = result;
+        }
+    }
+    return (jint)first;
+}
+
+/*
+ * Drains one string-carrying event.
+ *
+ * Returns null when the queue is empty; otherwise an array of UTF-8 byte arrays and a header of
+ * {sequence, kind, start, length, selected, horizontal}. The C record is freed before this
+ * returns whatever happens, so nothing Java does afterwards -- including throwing -- can strand
+ * a copy or leave a pointer Java could reach.
+ */
+JNIEXPORT jobjectArray JNICALL
+Java_org_openeggbert_cna_internal_NativeGamerServices_nativePollTextEvent(
+    JNIEnv* environment, jclass type, jlongArray out_header)
+{
+    (void)type;
+    JavaTextEvent event;
+    java_text_event_enter();
+    if (java_text_event_count == 0) {
+        java_text_event_leave();
+        return NULL;
+    }
+    event = java_text_events[java_text_event_head];
+    memset(&java_text_events[java_text_event_head], 0, sizeof(JavaTextEvent));
+    java_text_event_head = (java_text_event_head + 1) % CNA_JAVA_TEXT_EVENT_CAPACITY;
+    java_text_event_count--;
+    java_text_event_leave();
+
+    jobjectArray payload = NULL;
+    jclass byte_array_class = (*environment)->FindClass(environment, "[B");
+    if (byte_array_class != NULL) {
+        payload = (*environment)->NewObjectArray(
+            environment, (jsize)event.count, byte_array_class, NULL);
+    }
+    for (int32_t index = 0; payload != NULL && index < event.count; ++index) {
+        jbyteArray text = (*environment)->NewByteArray(
+            environment, (jsize)event.sizes[index]);
+        if (text == NULL) {
+            payload = NULL;
+            break;
+        }
+        if (event.sizes[index] > 0) {
+            (*environment)->SetByteArrayRegion(environment, text, 0,
+                (jsize)event.sizes[index], (const jbyte*)event.texts[index]);
+        }
+        (*environment)->SetObjectArrayElement(environment, payload, (jsize)index, text);
+        (*environment)->DeleteLocalRef(environment, text);
+    }
+    java_text_event_release(&event);
+    if (payload == NULL) {
+        /* A failed JVM allocation leaves its own pending exception; the record is already
+         * freed, so the loss is reported to Java rather than hidden. */
+        return NULL;
+    }
+
+    jlong header[] = {event.sequence, event.kind, event.start, event.length,
+        event.selected, event.horizontal};
+    (*environment)->SetLongArrayRegion(environment, out_header, 0, 6, header);
+    return payload;
+}
+
+/*
+ * Raises CNA's candidate-list event from Java.
+ *
+ * The generator refuses this route on purpose: it takes an array of CNA_StringView, and each
+ * view has to point at bytes that stay alive across the call. The views are built here over the
+ * pinned Java arrays and released afterwards, so nothing outlives the dispatch -- which is safe
+ * because CNA documents that it copies every candidate before dispatching.
+ */
+JNIEXPORT jint JNICALL
+Java_org_openeggbert_cna_internal_NativeGamerServices_nativeRaiseTextCandidates(
+    JNIEnv* environment, jclass type, jlong game, jobjectArray candidates,
+    jint selected, jboolean horizontal)
+{
+    (void)type;
+    jsize count = (*environment)->GetArrayLength(environment, candidates);
+    CNA_StringView* views = NULL;
+    jbyteArray* arrays = NULL;
+    jbyte** bytes = NULL;
+    if (count > 0) {
+        views = (CNA_StringView*)calloc((size_t)count, sizeof(*views));
+        arrays = (jbyteArray*)calloc((size_t)count, sizeof(*arrays));
+        bytes = (jbyte**)calloc((size_t)count, sizeof(*bytes));
+        if (views == NULL || arrays == NULL || bytes == NULL) {
+            free(views);
+            free(arrays);
+            free(bytes);
+            return (jint)CNA_RESULT_OUT_OF_MEMORY;
+        }
+    }
+    CNA_Result result = CNA_RESULT_SUCCESS;
+    jsize pinned = 0;
+    for (; pinned < count; ++pinned) {
+        arrays[pinned] = (jbyteArray)(*environment)->GetObjectArrayElement(
+            environment, candidates, pinned);
+        if (arrays[pinned] == NULL) {
+            result = CNA_RESULT_INVALID_ARGUMENT;
+            break;
+        }
+        bytes[pinned] = (*environment)->GetByteArrayElements(environment, arrays[pinned], NULL);
+        if (bytes[pinned] == NULL) {
+            result = CNA_RESULT_OUT_OF_MEMORY;
+            break;
+        }
+        views[pinned].data = (const char*)bytes[pinned];
+        views[pinned].byte_length =
+            (uint64_t)(*environment)->GetArrayLength(environment, arrays[pinned]);
+    }
+    if (result == CNA_RESULT_SUCCESS) {
+        /* The caller already resolved the CNA game handle, exactly as a generated route
+         * receives it, so this takes it directly rather than unwrapping an adapter token. */
+        result = cna.text_input_raise_text_editing_candidates_ext(
+            (CNA_Handle)game, count == 0 ? NULL : views, (int32_t)count,
+            (int32_t)selected, horizontal == JNI_TRUE ? CNA_TRUE : CNA_FALSE);
+    }
+    for (jsize index = 0; index < pinned; ++index) {
+        if (bytes[index] != NULL) {
+            (*environment)->ReleaseByteArrayElements(
+                environment, arrays[index], bytes[index], JNI_ABORT);
+        }
+        (*environment)->DeleteLocalRef(environment, arrays[index]);
+    }
+    free(views);
+    free(arrays);
+    free(bytes);
+    return (jint)result;
+}
+
+/** Returns how many string events were dropped, for diagnostics. */
+JNIEXPORT jlong JNICALL
+Java_org_openeggbert_cna_internal_NativeGamerServices_nativeDroppedTextEventCount(
+    JNIEnv* environment, jclass type)
+{
+    (void)environment;
+    (void)type;
+    java_text_event_enter();
+    int64_t dropped = java_text_events_dropped;
+    java_text_event_leave();
+    return (jlong)dropped;
+}
+
+/** Discards every queued string event, freeing what each one owns. */
+JNIEXPORT void JNICALL
+Java_org_openeggbert_cna_internal_NativeGamerServices_nativeResetTextEvents(
+    JNIEnv* environment, jclass type)
+{
+    (void)environment;
+    (void)type;
+    java_text_event_enter();
+    while (java_text_event_count > 0) {
+        java_text_event_release(&java_text_events[java_text_event_head]);
+        java_text_event_head = (java_text_event_head + 1) % CNA_JAVA_TEXT_EVENT_CAPACITY;
+        java_text_event_count--;
+    }
+    java_text_event_head = 0;
+    java_text_events_dropped = 0;
+    java_text_event_leave();
 }
 
 static void java_text_input_callback(uint16_t code_unit, void* context)
@@ -617,8 +991,9 @@ Java_org_openeggbert_cna_internal_NativeGamerServices_nativePollEvent(
     java_gamer_event_count--;
     java_gamer_event_leave();
 
-    jlong values[] = {event.kind, event.session, event.first, event.second, event.flag};
-    (*environment)->SetLongArrayRegion(environment, out_record, 0, 5, values);
+    jlong values[] = {event.sequence, event.kind, event.session, event.first, event.second,
+        event.flag};
+    (*environment)->SetLongArrayRegion(environment, out_record, 0, 6, values);
     return JNI_TRUE;
 }
 

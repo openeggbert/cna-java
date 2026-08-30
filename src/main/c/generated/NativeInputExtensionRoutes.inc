@@ -1950,6 +1950,33 @@ Java_org_openeggbert_cna_internal_generated_NativeInputExtensionRoutes_textInput
 }
 
 JNIEXPORT jint JNICALL
+Java_org_openeggbert_cna_internal_generated_NativeInputExtensionRoutes_textInputRaiseTextEditingExt(
+    JNIEnv* environment, jclass declaring_class, jlong game, jbyteArray text, jint start, jint length)
+{
+    (void)environment;
+    (void)declaring_class;
+    jsize text_size = (*environment)->GetArrayLength(environment, text);
+    jbyte* text_bytes = (*environment)->GetByteArrayElements(environment, text, NULL);
+    if (text_bytes == NULL) {
+        return (jint)CNA_RESULT_OUT_OF_MEMORY;
+    }
+    CNA_StringView text_view = {(const char*)text_bytes, (uint64_t)text_size};
+    CNA_Result result = cna.text_input_raise_text_editing_ext((CNA_Handle)game, text_view, (int32_t)start, (int32_t)length);
+    (*environment)->ReleaseByteArrayElements(environment, text, text_bytes, JNI_ABORT);
+    return (jint)result;
+}
+
+JNIEXPORT jint JNICALL
+Java_org_openeggbert_cna_internal_generated_NativeInputExtensionRoutes_textInputRaiseTextInputExt(
+    JNIEnv* environment, jclass declaring_class, jlong game, jint code_unit)
+{
+    (void)environment;
+    (void)declaring_class;
+    CNA_Result result = cna.text_input_raise_text_input_ext((CNA_Handle)game, (uint16_t)code_unit);
+    return (jint)result;
+}
+
+JNIEXPORT jint JNICALL
 Java_org_openeggbert_cna_internal_generated_NativeInputExtensionRoutes_textInputSetInputRectangleExt(
     JNIEnv* environment, jclass declaring_class, jlong game, jlongArray rectangleIntegral)
 {

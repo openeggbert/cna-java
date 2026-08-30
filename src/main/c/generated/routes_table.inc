@@ -621,6 +621,8 @@
     CNA_JNI_ROUTE(cna_system_info_get_system_ram_megabytes_ext) system_info_get_system_ram_megabytes_ext;
     CNA_JNI_ROUTE(cna_text_input_is_active_ext) text_input_is_active_ext;
     CNA_JNI_ROUTE(cna_text_input_is_screen_keyboard_shown_ext) text_input_is_screen_keyboard_shown_ext;
+    CNA_JNI_ROUTE(cna_text_input_raise_text_editing_ext) text_input_raise_text_editing_ext;
+    CNA_JNI_ROUTE(cna_text_input_raise_text_input_ext) text_input_raise_text_input_ext;
     CNA_JNI_ROUTE(cna_text_input_set_input_rectangle_ext) text_input_set_input_rectangle_ext;
     CNA_JNI_ROUTE(cna_text_input_start_ext) text_input_start_ext;
     CNA_JNI_ROUTE(cna_text_input_start_with_type_ext) text_input_start_with_type_ext;

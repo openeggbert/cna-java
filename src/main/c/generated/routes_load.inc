@@ -621,6 +621,8 @@
     LOAD(system_info_get_system_ram_megabytes_ext, "cna_system_info_get_system_ram_megabytes_ext");
     LOAD(text_input_is_active_ext, "cna_text_input_is_active_ext");
     LOAD(text_input_is_screen_keyboard_shown_ext, "cna_text_input_is_screen_keyboard_shown_ext");
+    LOAD(text_input_raise_text_editing_ext, "cna_text_input_raise_text_editing_ext");
+    LOAD(text_input_raise_text_input_ext, "cna_text_input_raise_text_input_ext");
     LOAD(text_input_set_input_rectangle_ext, "cna_text_input_set_input_rectangle_ext");
     LOAD(text_input_start_ext, "cna_text_input_start_ext");
     LOAD(text_input_start_with_type_ext, "cna_text_input_start_with_type_ext");

@@ -240,6 +240,16 @@
         "NOT_EXERCISED_NO_HARDWARE"
       ],
       "detail": "The game-pad identity, battery, light bar, trigger motors, touchpad fingers, button labels and on-pad sensors; the keyboard's layout-dependent and layout-independent key naming, scancode translation and modifier state; the mouse's capture, relative mode, desktop position, warp and click event; and mouse-driven touch emulation. The mouse-touch emulation flag and the mouse click event round-trip against the live runtime. No game pad is connected here, so the pad readings report absent rather than zero and were not read from hardware; the keyboard name round trip is asserted only when the headless host names the key at all."
+    },
+    {
+      "id": "extension-text-composition",
+      "surface": "org.openeggbert.cna.extensions.input.TextInput composition and candidate events",
+      "statuses": [
+        "EXTENSION_VERIFIED",
+        "NATIVE_VERIFIED",
+        "NOT_EXERCISED_NO_HARDWARE"
+      ],
+      "detail": "Composition drafts and candidate lists reach a Java listener through a second event transport that copies each borrowed UTF-8 view inside CNA's callback and frees the copy before Java sees it. Verified end to end against the live runtime with accented Latin, CJK and a supplementary code point; with byte offsets mapped to Java string indices, including offsets that land inside a character and are reported as naming nothing; with an empty composition and an empty candidate list delivered as real events; and with 400 raised events over a 64-deep queue, where every one is either delivered intact or counted as dropped. Ordering across the numeric and string transports is proved by a sequence merge, and the assertion fails if the merge is removed. No input method is installed on this host, so the events were raised through CNA's own dispatch rather than by a person typing."
     }
   ]
 }

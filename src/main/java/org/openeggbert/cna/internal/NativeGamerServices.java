@@ -174,6 +174,36 @@ public final class NativeGamerServices {
     /** Releases the mouse-click subscription. */
     static native int nativeUnsubscribeMouseClicked(long registration);
 
+    /** Subscribes CNA's two string-carrying text events. */
+    static native int nativeSubscribeTextComposition(long[] outRegistrations);
+
+    /** Releases both composition registrations. */
+    static native int nativeUnsubscribeTextComposition(long[] registrations);
+
+    /**
+     * Drains one string-carrying event.
+     *
+     * <p>Returns null when the queue is empty, otherwise the UTF-8 payloads with the numeric
+     * header written into {@code outHeader}. The native record is freed before this returns, so
+     * nothing Java holds afterwards refers to native memory.
+     */
+    static native byte[][] nativePollTextEvent(long[] outHeader);
+
+    /** Returns how many string events were dropped because the queue was full. */
+    static native long nativeDroppedTextEventCount();
+
+    /** Discards every queued string event. */
+    static native void nativeResetTextEvents();
+
+    /**
+     * Raises CNA's candidate-list event.
+     *
+     * <p>Hand-written rather than generated: the route takes an array of string views, which the
+     * generator refuses because it cannot prove where the bytes behind them live.
+     */
+    public static native int nativeRaiseTextCandidates(
+            long game, byte[][] candidates, int selected, boolean horizontal);
+
     /** Converts this adapter's game token into the CNA game handle a generated route needs. */
     static native long nativeCnaGameHandle(long game);
 

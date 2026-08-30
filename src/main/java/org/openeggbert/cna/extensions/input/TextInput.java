@@ -3,11 +3,15 @@ package org.openeggbert.cna.extensions.input;
 import Microsoft.Xna.Framework.Rectangle;
 import org.openeggbert.cna.internal.GamerEventPump;
 import org.openeggbert.cna.internal.NativeBindings;
+import org.openeggbert.cna.internal.NativeGamerServices;
 import org.openeggbert.cna.internal.generated.NativeInputExtensionRoutes;
 
+import java.nio.charset.StandardCharsets;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.concurrent.CopyOnWriteArrayList;
+import java.util.function.Consumer;
 import java.util.function.IntConsumer;
 
 /**
@@ -24,15 +28,29 @@ import java.util.function.IntConsumer;
  * <p>A character is delivered as an {@code int} code unit, not a {@code char}: a character
  * outside the basic plane arrives as two surrogate code units, exactly as CNA delivers it, so
  * nothing is lost or silently replaced.
+ *
+ * <p>Two further events describe what an input method is doing before anything is committed: the
+ * draft {@link TextComposition} and the {@link TextCandidates} on offer. Both carry text, which
+ * the numeric event record cannot hold, so they travel over their own transport -- but they are
+ * ordered against the committed characters by a sequence CNA stamped when it raised them, so a
+ * commit and the composition update that cleared it arrive in the order they happened.
  */
 public final class TextInput {
 
     private static final int KIND_TEXT_INPUT = 30;
 
+    private static final int TEXT_KIND_COMPOSITION = 0;
+    private static final int TEXT_KIND_CANDIDATES = 1;
+
     private static final List<IntConsumer> LISTENERS = new CopyOnWriteArrayList<>();
+    private static final List<Consumer<TextComposition>> COMPOSITION_LISTENERS =
+            new CopyOnWriteArrayList<>();
+    private static final List<Consumer<TextCandidates>> CANDIDATE_LISTENERS =
+            new CopyOnWriteArrayList<>();
 
     static {
         GamerEventPump.addInputHandler(TextInput::dispatch);
+        GamerEventPump.addTextHandler(TextInput::dispatchText);
     }
 
     private TextInput() {
@@ -46,6 +64,91 @@ public final class TextInput {
 
     public static void removeTextInputListener(IntConsumer listener) {
         LISTENERS.remove(Objects.requireNonNull(listener, "listener"));
+    }
+
+    /**
+     * Adds a listener for the draft text an input method is composing.
+     *
+     * <p>A composition update replaces the previous draft rather than adding to it, so a game
+     * draws the latest one it was given and nothing else. An update with empty text means the
+     * composition was cancelled or committed.
+     *
+     * @param listener called with each composition update, on the game thread
+     */
+    public static void addCompositionListener(Consumer<TextComposition> listener) {
+        COMPOSITION_LISTENERS.add(Objects.requireNonNull(listener, "listener"));
+        subscribeComposition();
+    }
+
+    /** Removes a composition listener. */
+    public static void removeCompositionListener(Consumer<TextComposition> listener) {
+        COMPOSITION_LISTENERS.remove(Objects.requireNonNull(listener, "listener"));
+    }
+
+    /**
+     * Adds a listener for the candidate list an input method is offering.
+     *
+     * @param listener called with each candidate-list update, on the game thread
+     */
+    public static void addCandidatesListener(Consumer<TextCandidates> listener) {
+        CANDIDATE_LISTENERS.add(Objects.requireNonNull(listener, "listener"));
+        subscribeComposition();
+    }
+
+    /** Removes a candidate-list listener. */
+    public static void removeCandidatesListener(Consumer<TextCandidates> listener) {
+        CANDIDATE_LISTENERS.remove(Objects.requireNonNull(listener, "listener"));
+    }
+
+    /**
+     * Raises the host's own committed-character event.
+     *
+     * <p>CNA's route, not a Java simulation. A code point above the basic plane is committed as
+     * two calls -- a high surrogate then a low one -- which is how a real keyboard layout
+     * delivers it, so a game exercising its text field sees exactly what it would see in play.
+     *
+     * @param codeUnit the UTF-16 code unit to report
+     */
+    public static void RaiseTypedCharacter(char codeUnit) {
+        check("TextInput.RaiseTypedCharacter",
+                NativeInputExtensionRoutes.textInputRaiseTextInputExt(game(), codeUnit));
+    }
+
+    /**
+     * Raises the host's own composition event.
+     *
+     * <p>CNA's route, not a Java simulation: it dispatches the same event an input method
+     * dispatches, which is how a game exercises its composition drawing on a machine with no IME
+     * installed. CNA refuses text that is not valid UTF-8.
+     *
+     * @param text the draft composition
+     * @param byteStart the active region's byte offset, which CNA forwards unchecked
+     * @param byteLength the active region's byte length, which CNA forwards unchecked
+     */
+    public static void RaiseComposition(String text, int byteStart, int byteLength) {
+        Objects.requireNonNull(text, "text");
+        check("TextInput.RaiseComposition",
+                NativeInputExtensionRoutes.textInputRaiseTextEditingExt(game(),
+                        text.getBytes(StandardCharsets.UTF_8), byteStart, byteLength));
+    }
+
+    /**
+     * Raises the host's own candidate-list event.
+     *
+     * @param candidates the words on offer
+     * @param selectedIndex the pre-selected index, or -1 for none
+     * @param horizontal whether the list is laid out horizontally
+     */
+    public static void RaiseCandidates(
+            List<String> candidates, int selectedIndex, boolean horizontal) {
+        Objects.requireNonNull(candidates, "candidates");
+        byte[][] encoded = new byte[candidates.size()][];
+        for (int index = 0; index < encoded.length; index++) {
+            encoded[index] = Objects.requireNonNull(candidates.get(index), "candidate")
+                    .getBytes(StandardCharsets.UTF_8);
+        }
+        check("TextInput.RaiseCandidates", NativeGamerServices.nativeRaiseTextCandidates(
+                game(), encoded, selectedIndex, horizontal));
     }
 
     /** Starts plain text input. */
@@ -94,6 +197,43 @@ public final class TextInput {
     private static void subscribe() {
         NativeBindings.requireAvailable();
         GamerEventPump.ensureTextInputSubscribed();
+    }
+
+    private static void subscribeComposition() {
+        NativeBindings.requireAvailable();
+        GamerEventPump.ensureTextCompositionSubscribed();
+    }
+
+    /**
+     * Turns one string event into its record and hands it to the listeners that want it.
+     *
+     * <p>The payload is UTF-8 the native side copied and freed before Java saw it, so decoding
+     * is a plain {@code new String}: there is no pointer here, and no lifetime to respect.
+     */
+    private static void dispatchText(long kind, long start, long length, long selected,
+            long horizontal, byte[][] payload) {
+        if ((int) kind == TEXT_KIND_COMPOSITION) {
+            String text = payload.length == 0
+                    ? "" : new String(payload[0], StandardCharsets.UTF_8);
+            TextComposition composition =
+                    new TextComposition(text, (int) start, (int) length);
+            for (Consumer<TextComposition> listener : COMPOSITION_LISTENERS) {
+                listener.accept(composition);
+            }
+            return;
+        }
+        if ((int) kind != TEXT_KIND_CANDIDATES) {
+            return;
+        }
+        List<String> candidates = new ArrayList<>(payload.length);
+        for (byte[] candidate : payload) {
+            candidates.add(new String(candidate, StandardCharsets.UTF_8));
+        }
+        TextCandidates event =
+                new TextCandidates(candidates, (int) selected, horizontal != 0L);
+        for (Consumer<TextCandidates> listener : CANDIDATE_LISTENERS) {
+            listener.accept(event);
+        }
     }
 
     private static void dispatch(long kind, long session, long first, long second, long flag) {

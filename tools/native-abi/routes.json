@@ -2362,6 +2362,14 @@
         "symbol": "cna_text_input_is_screen_keyboard_shown_ext"
       },
       {
+        "java": "textInputRaiseTextEditingExt",
+        "symbol": "cna_text_input_raise_text_editing_ext"
+      },
+      {
+        "java": "textInputRaiseTextInputExt",
+        "symbol": "cna_text_input_raise_text_input_ext"
+      },
+      {
         "java": "textInputSetInputRectangleExt",
         "symbol": "cna_text_input_set_input_rectangle_ext"
       },
