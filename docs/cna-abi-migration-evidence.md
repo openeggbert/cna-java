@@ -128,3 +128,9 @@ apiCompatCheck (selected profile)     TOTAL_DIAGNOSTICS=0
 nativeAbiCheck                        all layers PASS
 nativeCoverageCheck                   UNMAPPED_REQUIRES_REVIEW=0
 ```
+
+Those are the figures **at the migration**, which is what this document is about: 723 bound
+routes and 156 tests. The work that followed took them further, and `NEXT.md` carries the
+current ones. The migration facts above do not move with them: no bound route's signature
+changed, the three behaviour contracts are the three that changed, and the ABI policy is the
+policy.
