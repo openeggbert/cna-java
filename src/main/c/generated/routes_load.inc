@@ -110,6 +110,10 @@
     LOAD(depth_effect_set_dither_mode, "cna_depth_effect_set_dither_mode");
     LOAD(depth_effect_set_mode, "cna_depth_effect_set_mode");
     LOAD(desktop_os_get_current, "cna_desktop_os_get_current");
+    LOAD(devices_clipboard_set_text_ext, "cna_devices_clipboard_set_text_ext");
+    LOAD(devices_ext_is_available, "cna_devices_ext_is_available");
+    LOAD(display_info_get_content_scale_ext, "cna_display_info_get_content_scale_ext");
+    LOAD(display_info_get_safe_area_ext, "cna_display_info_get_safe_area_ext");
     LOAD(friend_collection_create_ext, "cna_friend_collection_create_ext");
     LOAD(friend_collection_get_is_disposed, "cna_friend_collection_get_is_disposed");
     LOAD(friend_gamer_copy_presence, "cna_friend_gamer_copy_presence");
@@ -266,6 +270,11 @@
     LOAD(local_network_gamer_send_packet_writer, "cna_local_network_gamer_send_packet_writer");
     LOAD(local_network_gamer_send_packet_writer_to, "cna_local_network_gamer_send_packet_writer_to");
     LOAD(local_network_gamer_send_party_invites, "cna_local_network_gamer_send_party_invites");
+    LOAD(locale_copy_country_at_ext, "cna_locale_copy_country_at_ext");
+    LOAD(locale_copy_language_at_ext, "cna_locale_copy_language_at_ext");
+    LOAD(locale_get_country_size_at_ext, "cna_locale_get_country_size_at_ext");
+    LOAD(locale_get_language_size_at_ext, "cna_locale_get_language_size_at_ext");
+    LOAD(locale_get_preferred_count_ext, "cna_locale_get_preferred_count_ext");
     LOAD(logger_get_minimum_level, "cna_logger_get_minimum_level");
     LOAD(logger_log, "cna_logger_log");
     LOAD(logger_set_minimum_level, "cna_logger_set_minimum_level");
@@ -397,6 +406,9 @@
     LOAD(platform_get_current_name_size_ext, "cna_platform_get_current_name_size_ext");
     LOAD(platform_get_is_apple_ext, "cna_platform_get_is_apple_ext");
     LOAD(platform_get_is_mobile_ext, "cna_platform_get_is_mobile_ext");
+    LOAD(power_get_battery_percent_ext, "cna_power_get_battery_percent_ext");
+    LOAD(power_get_seconds_remaining_ext, "cna_power_get_seconds_remaining_ext");
+    LOAD(power_get_state_ext, "cna_power_get_state_ext");
     LOAD(property_dictionary_clear, "cna_property_dictionary_clear");
     LOAD(property_dictionary_contains_key, "cna_property_dictionary_contains_key");
     LOAD(property_dictionary_copy_key_at, "cna_property_dictionary_copy_key_at");
@@ -449,4 +461,14 @@
     LOAD(signed_in_gamer_set_party_size, "cna_signed_in_gamer_set_party_size");
     LOAD(signed_in_gamer_set_presence, "cna_signed_in_gamer_set_presence");
     LOAD(signed_in_gamer_set_presence_mode_string_ext, "cna_signed_in_gamer_set_presence_mode_string_ext");
+    LOAD(system_info_get_logical_cpu_core_count_ext, "cna_system_info_get_logical_cpu_core_count_ext");
+    LOAD(system_info_get_system_ram_megabytes_ext, "cna_system_info_get_system_ram_megabytes_ext");
+    LOAD(url_launcher_open_ext, "cna_url_launcher_open_ext");
+    LOAD(vibrate_controller_copy_device_name_ext, "cna_vibrate_controller_copy_device_name_ext");
+    LOAD(vibrate_controller_get_device_name_size_ext, "cna_vibrate_controller_get_device_name_size_ext");
+    LOAD(vibrate_controller_get_is_supported_ext, "cna_vibrate_controller_get_is_supported_ext");
+    LOAD(vibrate_controller_start, "cna_vibrate_controller_start");
+    LOAD(vibrate_controller_start_left_right_ext, "cna_vibrate_controller_start_left_right_ext");
+    LOAD(vibrate_controller_start_with_intensity_ext, "cna_vibrate_controller_start_with_intensity_ext");
+    LOAD(vibrate_controller_stop, "cna_vibrate_controller_stop");
     LOAD(write_leaderboards_event_info_init, "cna_write_leaderboards_event_info_init");

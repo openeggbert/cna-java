@@ -110,6 +110,10 @@
     CNA_JNI_ROUTE(cna_depth_effect_set_dither_mode) depth_effect_set_dither_mode;
     CNA_JNI_ROUTE(cna_depth_effect_set_mode) depth_effect_set_mode;
     CNA_JNI_ROUTE(cna_desktop_os_get_current) desktop_os_get_current;
+    CNA_JNI_ROUTE(cna_devices_clipboard_set_text_ext) devices_clipboard_set_text_ext;
+    CNA_JNI_ROUTE(cna_devices_ext_is_available) devices_ext_is_available;
+    CNA_JNI_ROUTE(cna_display_info_get_content_scale_ext) display_info_get_content_scale_ext;
+    CNA_JNI_ROUTE(cna_display_info_get_safe_area_ext) display_info_get_safe_area_ext;
     CNA_JNI_ROUTE(cna_friend_collection_create_ext) friend_collection_create_ext;
     CNA_JNI_ROUTE(cna_friend_collection_get_is_disposed) friend_collection_get_is_disposed;
     CNA_JNI_ROUTE(cna_friend_gamer_copy_presence) friend_gamer_copy_presence;
@@ -266,6 +270,11 @@
     CNA_JNI_ROUTE(cna_local_network_gamer_send_packet_writer) local_network_gamer_send_packet_writer;
     CNA_JNI_ROUTE(cna_local_network_gamer_send_packet_writer_to) local_network_gamer_send_packet_writer_to;
     CNA_JNI_ROUTE(cna_local_network_gamer_send_party_invites) local_network_gamer_send_party_invites;
+    CNA_JNI_ROUTE(cna_locale_copy_country_at_ext) locale_copy_country_at_ext;
+    CNA_JNI_ROUTE(cna_locale_copy_language_at_ext) locale_copy_language_at_ext;
+    CNA_JNI_ROUTE(cna_locale_get_country_size_at_ext) locale_get_country_size_at_ext;
+    CNA_JNI_ROUTE(cna_locale_get_language_size_at_ext) locale_get_language_size_at_ext;
+    CNA_JNI_ROUTE(cna_locale_get_preferred_count_ext) locale_get_preferred_count_ext;
     CNA_JNI_ROUTE(cna_logger_get_minimum_level) logger_get_minimum_level;
     CNA_JNI_ROUTE(cna_logger_log) logger_log;
     CNA_JNI_ROUTE(cna_logger_set_minimum_level) logger_set_minimum_level;
@@ -397,6 +406,9 @@
     CNA_JNI_ROUTE(cna_platform_get_current_name_size_ext) platform_get_current_name_size_ext;
     CNA_JNI_ROUTE(cna_platform_get_is_apple_ext) platform_get_is_apple_ext;
     CNA_JNI_ROUTE(cna_platform_get_is_mobile_ext) platform_get_is_mobile_ext;
+    CNA_JNI_ROUTE(cna_power_get_battery_percent_ext) power_get_battery_percent_ext;
+    CNA_JNI_ROUTE(cna_power_get_seconds_remaining_ext) power_get_seconds_remaining_ext;
+    CNA_JNI_ROUTE(cna_power_get_state_ext) power_get_state_ext;
     CNA_JNI_ROUTE(cna_property_dictionary_clear) property_dictionary_clear;
     CNA_JNI_ROUTE(cna_property_dictionary_contains_key) property_dictionary_contains_key;
     CNA_JNI_ROUTE(cna_property_dictionary_copy_key_at) property_dictionary_copy_key_at;
@@ -449,4 +461,14 @@
     CNA_JNI_ROUTE(cna_signed_in_gamer_set_party_size) signed_in_gamer_set_party_size;
     CNA_JNI_ROUTE(cna_signed_in_gamer_set_presence) signed_in_gamer_set_presence;
     CNA_JNI_ROUTE(cna_signed_in_gamer_set_presence_mode_string_ext) signed_in_gamer_set_presence_mode_string_ext;
+    CNA_JNI_ROUTE(cna_system_info_get_logical_cpu_core_count_ext) system_info_get_logical_cpu_core_count_ext;
+    CNA_JNI_ROUTE(cna_system_info_get_system_ram_megabytes_ext) system_info_get_system_ram_megabytes_ext;
+    CNA_JNI_ROUTE(cna_url_launcher_open_ext) url_launcher_open_ext;
+    CNA_JNI_ROUTE(cna_vibrate_controller_copy_device_name_ext) vibrate_controller_copy_device_name_ext;
+    CNA_JNI_ROUTE(cna_vibrate_controller_get_device_name_size_ext) vibrate_controller_get_device_name_size_ext;
+    CNA_JNI_ROUTE(cna_vibrate_controller_get_is_supported_ext) vibrate_controller_get_is_supported_ext;
+    CNA_JNI_ROUTE(cna_vibrate_controller_start) vibrate_controller_start;
+    CNA_JNI_ROUTE(cna_vibrate_controller_start_left_right_ext) vibrate_controller_start_left_right_ext;
+    CNA_JNI_ROUTE(cna_vibrate_controller_start_with_intensity_ext) vibrate_controller_start_with_intensity_ext;
+    CNA_JNI_ROUTE(cna_vibrate_controller_stop) vibrate_controller_stop;
     CNA_JNI_ROUTE(cna_write_leaderboards_event_info_init) write_leaderboards_event_info_init;

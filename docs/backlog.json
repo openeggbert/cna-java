@@ -181,10 +181,14 @@
       "title": "Expose CNA's runtime and device extensions",
       "family": "org.openeggbert.cna.extensions",
       "authority": "core_ext.h, devices.h, sensors.h, input_haptics.h, input_joystick.h, input_text.h, input_cursor.h, input_devices.h",
-      "currentState": "Classified as extension candidates; none reachable from Java.",
+      "currentState": "The runtime family and the host-device family are projected: platform and renderer identity, CNA's logger, system information, host power, display metrics, the player's locales, the clipboard, opening a URL and controller vibration. Sensors, haptics, raw joysticks, text input, cursors and device enumeration are not.",
       "expectedState": "Typed Java facades under the extension namespace, never inside Microsoft.Xna.Framework.",
       "priority": 7,
-      "status": "ready"
+      "status": "ready",
+      "tests": [
+        "CnaRuntimeTests",
+        "DeviceExtensionTests"
+      ]
     },
     {
       "id": "JAVA-EXT-003",

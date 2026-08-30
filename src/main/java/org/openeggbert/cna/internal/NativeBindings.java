@@ -821,6 +821,17 @@ public final class NativeBindings {
                 knownWindowValue(window, "GamerServicesDispatcher.WindowHandle")));
     }
 
+    /**
+     * Returns the running game's CNA handle, for the CNA extension surface.
+     *
+     * <p>The adapter's own routes take its wrapper token and reach the CNA handle inside it; a
+     * generated route takes the CNA handle directly, so it is converted here rather than
+     * handing CNA a pointer it would reject.
+     */
+    public static long currentGameHandleValue(String owner) {
+        return NativeGamerServices.nativeCnaGameHandle(currentGameValue(owner));
+    }
+
     /** Resolves an opaque native window token back to its registered Java identity. */
     public static WindowHandle windowHandle(long value) {
         return knownWindowHandle(value, "GamerServicesDispatcher.WindowHandle");

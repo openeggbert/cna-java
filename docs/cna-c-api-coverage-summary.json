@@ -1,7 +1,7 @@
 {
   "abiVersion": "0.20.0",
   "boundButUnreached": [],
-  "boundFunctions": 1189,
+  "boundFunctions": 1211,
   "byHeader": {
     "abi.h": {
       "XNA_BACKING": 1,

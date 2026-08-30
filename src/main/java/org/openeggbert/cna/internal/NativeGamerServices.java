@@ -150,6 +150,9 @@ public final class NativeGamerServices {
     /** Discards every queued event. */
     static native void nativeResetEvents();
 
+    /** Converts this adapter's game token into the CNA game handle a generated route needs. */
+    static native long nativeCnaGameHandle(long game);
+
     /** Resolves the CNA graphics-device handle behind one game. */
     static native int nativeGraphicsDeviceHandle(long game, long[] outDevice);
 

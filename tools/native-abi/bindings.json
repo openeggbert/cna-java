@@ -809,6 +809,239 @@
       ]
     },
     {
+      "name": "cna_devices_clipboard_set_text_ext",
+      "header": "devices.h",
+      "ownership": "borrows its inputs; caller output",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_Handle",
+        "CNA_StringView",
+        "CNA_Bool*"
+      ]
+    },
+    {
+      "name": "cna_devices_ext_is_available",
+      "header": "devices.h",
+      "ownership": "borrows its inputs; caller output",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_Bool*"
+      ]
+    },
+    {
+      "name": "cna_display_info_get_content_scale_ext",
+      "header": "devices.h",
+      "ownership": "borrows its inputs; caller output",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_Handle",
+        "float*"
+      ]
+    },
+    {
+      "name": "cna_display_info_get_safe_area_ext",
+      "header": "devices.h",
+      "ownership": "borrows its inputs; caller output",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_Handle",
+        "CNA_Rectangle*"
+      ]
+    },
+    {
+      "name": "cna_locale_copy_country_at_ext",
+      "header": "devices.h",
+      "ownership": "borrows its inputs; caller output",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_Handle",
+        "uint64_t",
+        "char*",
+        "uint64_t",
+        "uint64_t*"
+      ]
+    },
+    {
+      "name": "cna_locale_copy_language_at_ext",
+      "header": "devices.h",
+      "ownership": "borrows its inputs; caller output",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_Handle",
+        "uint64_t",
+        "char*",
+        "uint64_t",
+        "uint64_t*"
+      ]
+    },
+    {
+      "name": "cna_locale_get_country_size_at_ext",
+      "header": "devices.h",
+      "ownership": "borrows its inputs; caller output",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_Handle",
+        "uint64_t",
+        "uint64_t*"
+      ]
+    },
+    {
+      "name": "cna_locale_get_language_size_at_ext",
+      "header": "devices.h",
+      "ownership": "borrows its inputs; caller output",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_Handle",
+        "uint64_t",
+        "uint64_t*"
+      ]
+    },
+    {
+      "name": "cna_locale_get_preferred_count_ext",
+      "header": "devices.h",
+      "ownership": "borrows its inputs; caller output",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_Handle",
+        "uint64_t*"
+      ]
+    },
+    {
+      "name": "cna_power_get_battery_percent_ext",
+      "header": "devices.h",
+      "ownership": "borrows its inputs; caller output",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_Handle",
+        "int32_t*"
+      ]
+    },
+    {
+      "name": "cna_power_get_seconds_remaining_ext",
+      "header": "devices.h",
+      "ownership": "borrows its inputs; caller output",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_Handle",
+        "int32_t*"
+      ]
+    },
+    {
+      "name": "cna_power_get_state_ext",
+      "header": "devices.h",
+      "ownership": "borrows its inputs; caller output",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_Handle",
+        "CNA_PowerState*"
+      ]
+    },
+    {
+      "name": "cna_system_info_get_logical_cpu_core_count_ext",
+      "header": "devices.h",
+      "ownership": "borrows its inputs; caller output",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_Handle",
+        "int32_t*"
+      ]
+    },
+    {
+      "name": "cna_system_info_get_system_ram_megabytes_ext",
+      "header": "devices.h",
+      "ownership": "borrows its inputs; caller output",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_Handle",
+        "int32_t*"
+      ]
+    },
+    {
+      "name": "cna_url_launcher_open_ext",
+      "header": "devices.h",
+      "ownership": "borrows its inputs; caller output",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_Handle",
+        "CNA_StringView",
+        "CNA_Bool*"
+      ]
+    },
+    {
+      "name": "cna_vibrate_controller_copy_device_name_ext",
+      "header": "devices.h",
+      "ownership": "borrows its inputs; caller output",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_Handle",
+        "char*",
+        "uint64_t",
+        "uint64_t*"
+      ]
+    },
+    {
+      "name": "cna_vibrate_controller_get_device_name_size_ext",
+      "header": "devices.h",
+      "ownership": "borrows its inputs; caller output",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_Handle",
+        "uint64_t*"
+      ]
+    },
+    {
+      "name": "cna_vibrate_controller_get_is_supported_ext",
+      "header": "devices.h",
+      "ownership": "borrows its inputs; caller output",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_Handle",
+        "CNA_Bool*"
+      ]
+    },
+    {
+      "name": "cna_vibrate_controller_start",
+      "header": "devices.h",
+      "ownership": "borrows its inputs",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_Handle",
+        "int64_t"
+      ]
+    },
+    {
+      "name": "cna_vibrate_controller_start_left_right_ext",
+      "header": "devices.h",
+      "ownership": "borrows its inputs",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_Handle",
+        "float",
+        "float",
+        "int64_t"
+      ]
+    },
+    {
+      "name": "cna_vibrate_controller_start_with_intensity_ext",
+      "header": "devices.h",
+      "ownership": "borrows its inputs",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_Handle",
+        "int64_t",
+        "float"
+      ]
+    },
+    {
+      "name": "cna_vibrate_controller_stop",
+      "header": "devices.h",
+      "ownership": "borrows its inputs",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_Handle"
+      ]
+    },
+    {
       "name": "cna_graphics_adapter_copy_description",
       "header": "display.h",
       "ownership": "borrows callback-scoped device; caller buffer",

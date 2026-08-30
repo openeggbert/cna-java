@@ -414,3 +414,19 @@ Java_org_openeggbert_cna_internal_NativeGamerServices_nativeGraphicsDeviceHandle
     }
     return (jint)result;
 }
+
+/*
+ * Converts this adapter's game token into the CNA game handle.
+ *
+ * Most JNI entry points here take the adapter's own wrapper pointer and reach the CNA handle
+ * inside it. A generated route takes the CNA handle directly, so the extension surface needs the
+ * conversion rather than passing a pointer CNA would reject.
+ */
+JNIEXPORT jlong JNICALL
+Java_org_openeggbert_cna_internal_NativeGamerServices_nativeCnaGameHandle(
+    JNIEnv* environment, jclass type, jlong game)
+{
+    (void)environment;
+    (void)type;
+    return game == 0 ? 0 : (jlong)java_game(game)->cna_handle;
+}
