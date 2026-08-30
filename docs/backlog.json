@@ -1,6 +1,6 @@
 {
   "schemaVersion": 1,
-  "updated": "2026-08-30",
+  "updated": "2026-08-31",
   "idFamilies": {
     "JAVA-XNA": "A gap between CNA-Java and the original XNA 4.0 contract.",
     "JAVA-NATIVE": "A gap at the CNA C ABI boundary: a route, a shape or a verification.",
@@ -225,10 +225,15 @@
       "title": "Bind the native Model routes behind the managed XNB model graph",
       "family": "Microsoft.Xna.Framework.Graphics.Model",
       "authority": "models.h",
-      "currentState": "127 routes deferred; Load<Model> is managed-only.",
-      "expectedState": "Model, ModelMesh, ModelMeshPart and ModelBone reach CNA, and the skinned, morph and animation routes move to the extension namespace.",
+      "currentState": "127 routes deferred; Load<Model> was managed-only, and the audit asked what native backing would add.",
+      "expectedState": "The XNA Model graph reaches CNA. CnaModel.From(Model) builds CNA's own model over the buffers and effects the XNA model already owns -- retained, not copied, so nothing is uploaded twice -- and CNA then draws it in one call and computes its bone transforms. models.h is fully classified: 184 extension candidates, 31 not useful in Java, and one deferred route, the loader JAVA-UPSTREAM-004 blocks.",
       "priority": 6,
-      "status": "ready"
+      "status": "done",
+      "note": "Load<Model> deliberately stays on the managed XNB reader. XNB records the effect's type and the reader builds the BasicEffect an XNA game casts to; CNA publishes a loaded effect as a handle whose type is only a name, so routing the strict load through CNA would break (BasicEffect) part.getEffect(). The measurement is in CnaModelTests, which reads one authored .xnb through both runtimes and compares their graphs bone for bone.",
+      "tests": [
+        "CnaModelTests",
+        "nativeCoverageCheck"
+      ]
     },
     {
       "id": "JAVA-NATIVE-022",
@@ -342,6 +347,17 @@
       ],
       "priority": 6,
       "status": "ready"
+    },
+    {
+      "id": "JAVA-UPSTREAM-004",
+      "title": "cna_content_manager_load_model produces a model that segfaults during teardown",
+      "family": "Microsoft.Xna.Framework.Graphics.Model, org.openeggbert.cna.extensions.content",
+      "authority": "cna_content_manager_load_model in models.h",
+      "currentState": "Loading any .xnb whose meshes have parts through CNA's own content manager gives a model that crashes when it is released. Reproduced in C with no Java involved: cna_game_create, cna_game_get_graphics_device, cna_content_manager_create, cna_content_manager_load_model(\"cube\") over cnanext's own tests/assets/xnb/monogame/windows/uncompressed/BlenderDefaultCube.xnb, then cna_model_destroy. SIGSEGV in Microsoft::Xna::Framework::Graphics::ModelMeshPart::setTagProperty called from (anonymous namespace)::PartResource::~PartResource. The crash does not need the model to be walked first, and it also happens when the caller never destroys the model and lets the content manager and game tear it down, so there is no calling order that avoids it. A model assembled by hand with cna_model_create_with_parents over a mesh with a part destroys cleanly, so the fault is on the content-load path rather than in the model family.",
+      "expectedState": "A content-loaded model releases without faulting, so a binding can offer CNA's own loader.",
+      "blocker": "cnanext content: PartResource's destructor reaches a ModelMeshPart whose owner is already gone. cnanext's own CApi_ContentSmoke fixtures are models with one bone and no meshes, which is why the path is uncovered upstream.",
+      "priority": 5,
+      "status": "blocked"
     }
   ]
 }

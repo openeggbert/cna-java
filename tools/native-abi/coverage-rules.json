@@ -297,6 +297,120 @@
     },
     {
       "match": {
+        "symbols": [
+          "cna_content_manager_load_model"
+        ]
+      },
+      "classification": "DEFERRED_RUNTIME",
+      "reason": "CNA's own model loader produces a model that segfaults during teardown for any asset with a mesh part, whether the caller destroys it or leaves it to the content manager. Binding it would hand a consumer a route that kills the process, so it stays unbound until CNA is fixed.",
+      "task": "JAVA-UPSTREAM-004"
+    },
+    {
+      "match": {
+        "symbols": [
+          "cna_model_create_default",
+          "cna_model_create",
+          "cna_model_bone_create_default",
+          "cna_model_mesh_part_create_default",
+          "cna_model_mesh_create",
+          "cna_model_bone_collection_create",
+          "cna_model_mesh_collection_create",
+          "cna_model_mesh_part_collection_create"
+        ]
+      },
+      "classification": "NOT_USEFUL_IN_JAVA",
+      "reason": "A narrower constructor than the one the projection takes. CnaModel builds its mirror with cna_model_create_with_parents and cna_model_mesh_create_named, which carry the parent links and names an XNA model has; the defaulted and unnamed forms would lose them, and a collection built by hand would not be the model's."
+    },
+    {
+      "match": {
+        "contains": "_get_tag"
+      },
+      "classification": "NOT_USEFUL_IN_JAVA",
+      "reason": "CNA's model tags are an opaque C-owned pointer or a C-side dictionary. XNA's Tag is a managed object the content reader produced, which the Java projection already carries; handing a Java game a void* would be a handle it cannot use and must not free."
+    },
+    {
+      "match": {
+        "contains": "_set_tag"
+      },
+      "classification": "NOT_USEFUL_IN_JAVA",
+      "reason": "The setter half of CNA's opaque C-owned model tag; see the getter."
+    },
+    {
+      "match": {
+        "symbols": [
+          "cna_model_set_owned_resources",
+          "cna_model_get_content_tag_dictionary_ext",
+          "cna_model_get_content_tag_foreign_object_ext"
+        ]
+      },
+      "classification": "NOT_USEFUL_IN_JAVA",
+      "reason": "A C resource bundle with a release callback, and the two queries that read a C-owned content tag. All three hand a Java caller a void* it cannot own, and the Java model already carries its own Tag from the managed reader."
+    },
+    {
+      "match": {
+        "symbols": [
+          "cna_model_mesh_part_set_num_vertices",
+          "cna_model_mesh_part_set_primitive_count",
+          "cna_model_mesh_part_set_start_index",
+          "cna_model_mesh_part_set_vertex_offset",
+          "cna_model_mesh_part_set_vertex_buffer",
+          "cna_model_mesh_part_set_index_buffer",
+          "cna_model_effect_collection_add",
+          "cna_model_effect_collection_remove",
+          "cna_model_effect_collection_contains",
+          "cna_model_bone_collection_contains",
+          "cna_model_bone_collection_find",
+          "cna_model_mesh_collection_contains",
+          "cna_model_mesh_collection_find",
+          "cna_model_mesh_draw"
+        ]
+      },
+      "classification": "NOT_USEFUL_IN_JAVA",
+      "reason": "Mutating or searching CNA's mirror after it is built. The mirror exists to let CNA draw and pose an XNA model that Java owns, so the XNA graph stays the one source of truth: a part whose vertex count changed only in CNA would describe a model no Java code has. Searching a collection is a Java operation over the snapshot the graph walk already produced."
+    },
+    {
+      "match": {
+        "prefix": "cna_model_get_gltf_import"
+      },
+      "classification": "CNA_EXTENSION_CANDIDATE",
+      "reason": "The glTF importer's diagnostics belong to a model CNA imported, which needs the content loader JAVA-UPSTREAM-004 blocks. A model mirrored from XNB carries none.",
+      "task": "JAVA-UPSTREAM-004"
+    },
+    {
+      "match": {
+        "contains": "gltf_import"
+      },
+      "classification": "CNA_EXTENSION_CANDIDATE",
+      "reason": "The glTF import report and its diagnostics; see the getters.",
+      "task": "JAVA-UPSTREAM-004"
+    },
+    {
+      "match": {
+        "symbols": [
+          "cna_model_add_camera_ext",
+          "cna_model_clear_cameras_ext",
+          "cna_model_add_skin_ext",
+          "cna_model_clear_skins_ext",
+          "cna_model_create_skin_skeleton_handle_ext",
+          "cna_model_apply_clip_to_bones_ext",
+          "cna_model_apply_bind_pose_bone_transforms_ext",
+          "cna_model_mesh_part_get_primitive_type_ext",
+          "cna_model_mesh_part_set_primitive_type_ext",
+          "cna_model_mesh_part_get_sampler_state_ext",
+          "cna_model_mesh_part_set_sampler_state_ext",
+          "cna_model_mesh_part_get_morph_target_data_ext",
+          "cna_model_mesh_part_set_morph_target_data_ext",
+          "cna_model_mesh_part_set_morph_weights_ext",
+          "cna_morph_weight_track_ext_evaluate",
+          "cna_matrix_create_infinite_perspective_field_of_view_ext"
+        ]
+      },
+      "classification": "CNA_EXTENSION_CANDIDATE",
+      "reason": "Authoring cameras and skins, posing a model from an animation clip, and the per-part primitive type, sampler state and morph data are CNA model extensions XNA 4.0 has no member for. They are read-useful only on a model CNA imported, which the blocked content loader is the way to get.",
+      "task": "JAVA-NATIVE-011"
+    },
+    {
+      "match": {
         "header": "models.h"
       },
       "classification": "DEFERRED_RUNTIME",

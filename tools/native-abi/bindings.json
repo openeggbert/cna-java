@@ -2872,6 +2872,18 @@
       ]
     },
     {
+      "name": "cna_effect_copy_type_name",
+      "header": "effects.h",
+      "ownership": "borrows effect; caller buffer",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_EffectHandle",
+        "char*",
+        "uint64_t",
+        "uint64_t*"
+      ]
+    },
+    {
       "name": "cna_effect_create_compiled",
       "header": "effects.h",
       "ownership": "copies compiled bytecode; returns owned Effect",
@@ -3010,6 +3022,16 @@
       "parameters": [
         "CNA_EffectHandle",
         "CNA_EffectTechniqueCollectionHandle*"
+      ]
+    },
+    {
+      "name": "cna_effect_get_type_name_byte_count",
+      "header": "effects.h",
+      "ownership": "borrows effect; caller integer output",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_EffectHandle",
+        "uint64_t*"
       ]
     },
     {
@@ -9084,6 +9106,723 @@
         "CNA_AudioEventCallback",
         "void*",
         "CNA_AudioEventRegistrationHandle*"
+      ]
+    },
+    {
+      "name": "cna_model_bone_add_child",
+      "header": "models.h",
+      "ownership": "borrows both bones; the parent records the child",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_ModelBoneHandle",
+        "CNA_ModelBoneHandle"
+      ]
+    },
+    {
+      "name": "cna_model_bone_collection_destroy",
+      "header": "models.h",
+      "ownership": "releases one owned collection view",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_ModelBoneCollectionHandle"
+      ]
+    },
+    {
+      "name": "cna_model_bone_collection_get_at",
+      "header": "models.h",
+      "ownership": "borrows the collection view; returns an owned bone view",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_ModelBoneCollectionHandle",
+        "uint64_t",
+        "CNA_ModelBoneHandle*"
+      ]
+    },
+    {
+      "name": "cna_model_bone_collection_get_count",
+      "header": "models.h",
+      "ownership": "borrows the collection view; caller integer output",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_ModelBoneCollectionHandle",
+        "uint64_t*"
+      ]
+    },
+    {
+      "name": "cna_model_bone_copy_name",
+      "header": "models.h",
+      "ownership": "borrows the bone view; caller buffer",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_ModelBoneHandle",
+        "char*",
+        "uint64_t",
+        "uint64_t*"
+      ]
+    },
+    {
+      "name": "cna_model_bone_create",
+      "header": "models.h",
+      "ownership": "returns an owned bone handle the caller releases after the model does",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "int32_t",
+        "CNA_StringView",
+        "CNA_ModelBoneHandle*"
+      ]
+    },
+    {
+      "name": "cna_model_bone_destroy",
+      "header": "models.h",
+      "ownership": "releases one owned bone view",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_ModelBoneHandle"
+      ]
+    },
+    {
+      "name": "cna_model_bone_get_children",
+      "header": "models.h",
+      "ownership": "borrows the bone view; returns an owned collection view",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_ModelBoneHandle",
+        "CNA_ModelBoneCollectionHandle*"
+      ]
+    },
+    {
+      "name": "cna_model_bone_get_index",
+      "header": "models.h",
+      "ownership": "borrows the bone view; caller integer output",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_ModelBoneHandle",
+        "int32_t*"
+      ]
+    },
+    {
+      "name": "cna_model_bone_get_name_byte_count",
+      "header": "models.h",
+      "ownership": "borrows the bone view; caller integer output",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_ModelBoneHandle",
+        "uint64_t*"
+      ]
+    },
+    {
+      "name": "cna_model_bone_get_parent",
+      "header": "models.h",
+      "ownership": "borrows the bone view; returns an owned parent view",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_ModelBoneHandle",
+        "CNA_Bool*",
+        "CNA_ModelBoneHandle*"
+      ]
+    },
+    {
+      "name": "cna_model_bone_get_transform",
+      "header": "models.h",
+      "ownership": "borrows the bone view; caller structure output",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_ModelBoneHandle",
+        "CNA_Matrix*"
+      ]
+    },
+    {
+      "name": "cna_model_bone_set_transform",
+      "header": "models.h",
+      "ownership": "borrows the bone view; matrix passed by value",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_ModelBoneHandle",
+        "CNA_Matrix"
+      ]
+    },
+    {
+      "name": "cna_model_copy_absolute_bone_transforms",
+      "header": "models.h",
+      "ownership": "borrows model; caller structure array buffer",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_ModelHandle",
+        "CNA_Matrix*",
+        "uint64_t",
+        "uint64_t*"
+      ]
+    },
+    {
+      "name": "cna_model_copy_bone_transforms",
+      "header": "models.h",
+      "ownership": "borrows model; caller structure array buffer",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_ModelHandle",
+        "CNA_Matrix*",
+        "uint64_t",
+        "uint64_t*"
+      ]
+    },
+    {
+      "name": "cna_model_copy_camera_name_ext",
+      "header": "models.h",
+      "ownership": "borrows model; caller buffer",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_ModelHandle",
+        "uint64_t",
+        "char*",
+        "uint64_t",
+        "uint64_t*"
+      ]
+    },
+    {
+      "name": "cna_model_copy_material_variant_name_ext",
+      "header": "models.h",
+      "ownership": "borrows model; caller buffer",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_ModelHandle",
+        "uint64_t",
+        "char*",
+        "uint64_t",
+        "uint64_t*"
+      ]
+    },
+    {
+      "name": "cna_model_copy_skin_name_ext",
+      "header": "models.h",
+      "ownership": "borrows model; caller buffer",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_ModelHandle",
+        "uint64_t",
+        "char*",
+        "uint64_t",
+        "uint64_t*"
+      ]
+    },
+    {
+      "name": "cna_model_create_with_parents",
+      "header": "models.h",
+      "ownership": "retains the supplied bones and meshes; returns an owned model handle",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_Handle",
+        "const CNA_ModelBoneHandle*",
+        "uint64_t",
+        "const CNA_ModelMeshHandle*",
+        "uint64_t",
+        "const CNA_ModelBoneHandle*",
+        "uint64_t",
+        "uint64_t",
+        "CNA_ModelHandle*"
+      ]
+    },
+    {
+      "name": "cna_model_destroy",
+      "header": "models.h",
+      "ownership": "releases the owned model handle and every view it published",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_ModelHandle"
+      ]
+    },
+    {
+      "name": "cna_model_draw",
+      "header": "models.h",
+      "ownership": "borrows model; matrices passed by value",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_ModelHandle",
+        "CNA_Matrix",
+        "CNA_Matrix",
+        "CNA_Matrix"
+      ]
+    },
+    {
+      "name": "cna_model_effect_collection_destroy",
+      "header": "models.h",
+      "ownership": "releases one owned collection view",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_ModelEffectCollectionHandle"
+      ]
+    },
+    {
+      "name": "cna_model_effect_collection_get_at",
+      "header": "models.h",
+      "ownership": "borrows the collection view; returns a model-owned effect handle",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_ModelEffectCollectionHandle",
+        "uint64_t",
+        "CNA_EffectHandle*"
+      ]
+    },
+    {
+      "name": "cna_model_effect_collection_get_count",
+      "header": "models.h",
+      "ownership": "borrows the collection view; caller integer output",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_ModelEffectCollectionHandle",
+        "uint64_t*"
+      ]
+    },
+    {
+      "name": "cna_model_get_bone_transform_count",
+      "header": "models.h",
+      "ownership": "borrows model; caller integer output",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_ModelHandle",
+        "uint64_t*"
+      ]
+    },
+    {
+      "name": "cna_model_get_bones",
+      "header": "models.h",
+      "ownership": "borrows model; returns an owned immutable collection view",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_ModelHandle",
+        "CNA_ModelBoneCollectionHandle*"
+      ]
+    },
+    {
+      "name": "cna_model_get_bounding_sphere_ext",
+      "header": "models.h",
+      "ownership": "borrows model; caller structure and bool outputs",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_ModelHandle",
+        "CNA_Bool*",
+        "CNA_BoundingSphere*"
+      ]
+    },
+    {
+      "name": "cna_model_get_camera_count_ext",
+      "header": "models.h",
+      "ownership": "borrows model; caller integer output",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_ModelHandle",
+        "uint64_t*"
+      ]
+    },
+    {
+      "name": "cna_model_get_camera_ext",
+      "header": "models.h",
+      "ownership": "borrows model; caller structure output",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_ModelHandle",
+        "uint64_t",
+        "CNA_ModelCameraEXT*"
+      ]
+    },
+    {
+      "name": "cna_model_get_camera_name_byte_count_ext",
+      "header": "models.h",
+      "ownership": "borrows model; caller integer output",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_ModelHandle",
+        "uint64_t",
+        "uint64_t*"
+      ]
+    },
+    {
+      "name": "cna_model_get_material_variant_count_ext",
+      "header": "models.h",
+      "ownership": "borrows model; caller integer output",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_ModelHandle",
+        "uint64_t*"
+      ]
+    },
+    {
+      "name": "cna_model_get_material_variant_ext",
+      "header": "models.h",
+      "ownership": "borrows model; caller integer output",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_ModelHandle",
+        "int32_t*"
+      ]
+    },
+    {
+      "name": "cna_model_get_material_variant_name_byte_count_ext",
+      "header": "models.h",
+      "ownership": "borrows model; caller integer output",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_ModelHandle",
+        "uint64_t",
+        "uint64_t*"
+      ]
+    },
+    {
+      "name": "cna_model_get_meshes",
+      "header": "models.h",
+      "ownership": "borrows model; returns an owned immutable collection view",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_ModelHandle",
+        "CNA_ModelMeshCollectionHandle*"
+      ]
+    },
+    {
+      "name": "cna_model_get_root",
+      "header": "models.h",
+      "ownership": "borrows model; returns an owned bone view",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_ModelHandle",
+        "CNA_Bool*",
+        "CNA_ModelBoneHandle*"
+      ]
+    },
+    {
+      "name": "cna_model_get_skin_count_ext",
+      "header": "models.h",
+      "ownership": "borrows model; caller integer output",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_ModelHandle",
+        "uint64_t*"
+      ]
+    },
+    {
+      "name": "cna_model_get_skin_ext",
+      "header": "models.h",
+      "ownership": "borrows model; caller integer and bool outputs",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_ModelHandle",
+        "uint64_t",
+        "CNA_Bool*",
+        "uint64_t*"
+      ]
+    },
+    {
+      "name": "cna_model_get_skin_mesh_index_ext",
+      "header": "models.h",
+      "ownership": "borrows model; caller integer output",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_ModelHandle",
+        "uint64_t",
+        "uint64_t",
+        "uint64_t*"
+      ]
+    },
+    {
+      "name": "cna_model_get_skin_name_byte_count_ext",
+      "header": "models.h",
+      "ownership": "borrows model; caller integer output",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_ModelHandle",
+        "uint64_t",
+        "uint64_t*"
+      ]
+    },
+    {
+      "name": "cna_model_mesh_collection_destroy",
+      "header": "models.h",
+      "ownership": "releases one owned collection view",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_ModelMeshCollectionHandle"
+      ]
+    },
+    {
+      "name": "cna_model_mesh_collection_get_at",
+      "header": "models.h",
+      "ownership": "borrows the collection view; returns an owned mesh view",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_ModelMeshCollectionHandle",
+        "uint64_t",
+        "CNA_ModelMeshHandle*"
+      ]
+    },
+    {
+      "name": "cna_model_mesh_collection_get_count",
+      "header": "models.h",
+      "ownership": "borrows the collection view; caller integer output",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_ModelMeshCollectionHandle",
+        "uint64_t*"
+      ]
+    },
+    {
+      "name": "cna_model_mesh_copy_name",
+      "header": "models.h",
+      "ownership": "borrows the mesh view; caller buffer",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_ModelMeshHandle",
+        "char*",
+        "uint64_t",
+        "uint64_t*"
+      ]
+    },
+    {
+      "name": "cna_model_mesh_create_named",
+      "header": "models.h",
+      "ownership": "retains the supplied parts; returns an owned mesh handle",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_Handle",
+        "CNA_StringView",
+        "const CNA_ModelMeshPartHandle*",
+        "uint64_t",
+        "CNA_ModelMeshHandle*"
+      ]
+    },
+    {
+      "name": "cna_model_mesh_destroy",
+      "header": "models.h",
+      "ownership": "releases one owned mesh view",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_ModelMeshHandle"
+      ]
+    },
+    {
+      "name": "cna_model_mesh_get_bounding_sphere",
+      "header": "models.h",
+      "ownership": "borrows the mesh view; caller structure output",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_ModelMeshHandle",
+        "CNA_BoundingSphere*"
+      ]
+    },
+    {
+      "name": "cna_model_mesh_get_effects",
+      "header": "models.h",
+      "ownership": "borrows the mesh view; returns an owned collection view",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_ModelMeshHandle",
+        "CNA_ModelEffectCollectionHandle*"
+      ]
+    },
+    {
+      "name": "cna_model_mesh_get_mesh_parts",
+      "header": "models.h",
+      "ownership": "borrows the mesh view; returns an owned collection view",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_ModelMeshHandle",
+        "CNA_ModelMeshPartCollectionHandle*"
+      ]
+    },
+    {
+      "name": "cna_model_mesh_get_name_byte_count",
+      "header": "models.h",
+      "ownership": "borrows the mesh view; caller integer output",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_ModelMeshHandle",
+        "uint64_t*"
+      ]
+    },
+    {
+      "name": "cna_model_mesh_get_parent_bone",
+      "header": "models.h",
+      "ownership": "borrows the mesh view; returns an owned bone view",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_ModelMeshHandle",
+        "CNA_Bool*",
+        "CNA_ModelBoneHandle*"
+      ]
+    },
+    {
+      "name": "cna_model_mesh_part_collection_destroy",
+      "header": "models.h",
+      "ownership": "releases one owned collection view",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_ModelMeshPartCollectionHandle"
+      ]
+    },
+    {
+      "name": "cna_model_mesh_part_collection_get_at",
+      "header": "models.h",
+      "ownership": "borrows the collection view; returns an owned part view",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_ModelMeshPartCollectionHandle",
+        "uint64_t",
+        "CNA_ModelMeshPartHandle*"
+      ]
+    },
+    {
+      "name": "cna_model_mesh_part_collection_get_count",
+      "header": "models.h",
+      "ownership": "borrows the collection view; caller integer output",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_ModelMeshPartCollectionHandle",
+        "uint64_t*"
+      ]
+    },
+    {
+      "name": "cna_model_mesh_part_create",
+      "header": "models.h",
+      "ownership": "retains the supplied buffers; returns an owned part handle",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_VertexBufferHandle",
+        "CNA_IndexBufferHandle",
+        "int32_t",
+        "int32_t",
+        "int32_t",
+        "int32_t",
+        "CNA_ModelMeshPartHandle*"
+      ]
+    },
+    {
+      "name": "cna_model_mesh_part_destroy",
+      "header": "models.h",
+      "ownership": "releases one owned part view",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_ModelMeshPartHandle"
+      ]
+    },
+    {
+      "name": "cna_model_mesh_part_get_effect",
+      "header": "models.h",
+      "ownership": "borrows the part view; returns a model-owned effect handle",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_ModelMeshPartHandle",
+        "CNA_Bool*",
+        "CNA_EffectHandle*"
+      ]
+    },
+    {
+      "name": "cna_model_mesh_part_get_index_buffer",
+      "header": "models.h",
+      "ownership": "borrows the part view; returns a model-owned buffer handle",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_ModelMeshPartHandle",
+        "CNA_Bool*",
+        "CNA_IndexBufferHandle*"
+      ]
+    },
+    {
+      "name": "cna_model_mesh_part_get_num_vertices",
+      "header": "models.h",
+      "ownership": "borrows the part view; caller integer output",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_ModelMeshPartHandle",
+        "int32_t*"
+      ]
+    },
+    {
+      "name": "cna_model_mesh_part_get_primitive_count",
+      "header": "models.h",
+      "ownership": "borrows the part view; caller integer output",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_ModelMeshPartHandle",
+        "int32_t*"
+      ]
+    },
+    {
+      "name": "cna_model_mesh_part_get_start_index",
+      "header": "models.h",
+      "ownership": "borrows the part view; caller integer output",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_ModelMeshPartHandle",
+        "int32_t*"
+      ]
+    },
+    {
+      "name": "cna_model_mesh_part_get_vertex_buffer",
+      "header": "models.h",
+      "ownership": "borrows the part view; returns a model-owned buffer handle",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_ModelMeshPartHandle",
+        "CNA_Bool*",
+        "CNA_VertexBufferHandle*"
+      ]
+    },
+    {
+      "name": "cna_model_mesh_part_get_vertex_offset",
+      "header": "models.h",
+      "ownership": "borrows the part view; caller integer output",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_ModelMeshPartHandle",
+        "int32_t*"
+      ]
+    },
+    {
+      "name": "cna_model_mesh_part_set_effect",
+      "header": "models.h",
+      "ownership": "retains the supplied effect",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_ModelMeshPartHandle",
+        "CNA_EffectHandle"
+      ]
+    },
+    {
+      "name": "cna_model_mesh_set_bounding_sphere",
+      "header": "models.h",
+      "ownership": "borrows the mesh; sphere passed by value",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_ModelMeshHandle",
+        "CNA_BoundingSphere"
+      ]
+    },
+    {
+      "name": "cna_model_mesh_set_parent_bone",
+      "header": "models.h",
+      "ownership": "retains the supplied bone",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_ModelMeshHandle",
+        "CNA_ModelBoneHandle"
+      ]
+    },
+    {
+      "name": "cna_model_set_bone_transforms",
+      "header": "models.h",
+      "ownership": "borrows model; caller structure array input",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_ModelHandle",
+        "const CNA_Matrix*",
+        "uint64_t"
+      ]
+    },
+    {
+      "name": "cna_model_set_material_variant_ext",
+      "header": "models.h",
+      "ownership": "borrows model",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_ModelHandle",
+        "int32_t"
       ]
     },
     {

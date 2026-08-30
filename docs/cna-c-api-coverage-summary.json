@@ -1,7 +1,7 @@
 {
   "abiVersion": "0.20.0",
   "boundButUnreached": [],
-  "boundFunctions": 1393,
+  "boundFunctions": 1462,
   "boundWithoutJavaCallSite": [
     "cna_achievement_collection_add",
     "cna_achievement_collection_clear",
@@ -216,8 +216,8 @@
       "total": 22
     },
     "effects.h": {
-      "CNA_EXTENSION_CANDIDATE": 77,
-      "DEFERRED_RUNTIME": 47,
+      "CNA_EXTENSION_CANDIDATE": 79,
+      "DEFERRED_RUNTIME": 45,
       "XNA_BACKING": 166,
       "total": 290
     },
@@ -251,7 +251,8 @@
       "total": 28
     },
     "graphics_resource.h": {
-      "DEFERRED_RUNTIME": 12,
+      "DEFERRED_RUNTIME": 10,
+      "NOT_USEFUL_IN_JAVA": 2,
       "total": 12
     },
     "graphics_state.h": {
@@ -340,8 +341,9 @@
       "total": 41
     },
     "models.h": {
-      "CNA_EXTENSION_CANDIDATE": 89,
-      "DEFERRED_RUNTIME": 127,
+      "CNA_EXTENSION_CANDIDATE": 184,
+      "DEFERRED_RUNTIME": 1,
+      "NOT_USEFUL_IN_JAVA": 31,
       "total": 216
     },
     "net.h": {
@@ -442,20 +444,20 @@
   },
   "canonicalFunctions": 4051,
   "classificationCounts": {
-    "CNA_EXTENSION_CANDIDATE": 1771,
-    "DEFERRED_RUNTIME": 547,
+    "CNA_EXTENSION_CANDIDATE": 1868,
+    "DEFERRED_RUNTIME": 417,
     "JAVA_INTERNAL_ONLY": 170,
-    "NOT_USEFUL_IN_JAVA": 587,
+    "NOT_USEFUL_IN_JAVA": 620,
     "XNA_BACKING": 976
   },
   "cnaInventorySha256": "e9e0be892dbdce49dedf195dac35f604a9263565a74473195d878ee9e580696d",
   "deferredTasks": {
     "JAVA-NATIVE-010": 8,
-    "JAVA-NATIVE-011": 127,
+    "JAVA-NATIVE-011": 16,
     "JAVA-NATIVE-012": 38,
     "JAVA-NATIVE-013": 25,
-    "JAVA-NATIVE-014": 47,
-    "JAVA-NATIVE-015": 73,
+    "JAVA-NATIVE-014": 45,
+    "JAVA-NATIVE-015": 71,
     "JAVA-NATIVE-016": 25,
     "JAVA-NATIVE-017": 15,
     "JAVA-NATIVE-018": 1,
@@ -463,6 +465,7 @@
     "JAVA-NATIVE-020": 78,
     "JAVA-NATIVE-021": 8,
     "JAVA-NATIVE-023": 41,
+    "JAVA-UPSTREAM-004": 13,
     "JAVA-XNA-001": 2,
     "JAVA-XNA-002": 11
   },

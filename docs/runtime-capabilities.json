@@ -1,6 +1,6 @@
 {
   "schemaVersion": 1,
-  "updated": "2026-08-30",
+  "updated": "2026-08-31",
   "profile": "XNA 4.0 full runtime superset projected to Java 17, plus the CNA extension surface",
   "qualifiedRuntime": {
     "platform": "Linux x86-64",
@@ -250,6 +250,16 @@
         "NOT_EXERCISED_NO_HARDWARE"
       ],
       "detail": "Composition drafts and candidate lists reach a Java listener through a second event transport that copies each borrowed UTF-8 view inside CNA's callback and frees the copy before Java sees it. Verified end to end against the live runtime with accented Latin, CJK and a supplementary code point; with byte offsets mapped to Java string indices, including offsets that land inside a character and are reported as naming nothing; with an empty composition and an empty candidate list delivered as real events; and with 400 raised events over a 64-deep queue, where every one is either delivered intact or counted as dropped. Ordering across the numeric and string transports is proved by a sequence merge, and the assertion fails if the merge is removed. No input method is installed on this host, so the events were raised through CNA's own dispatch rather than by a person typing."
+    },
+    {
+      "id": "extension-cna-model",
+      "surface": "org.openeggbert.cna.extensions.content.CnaModel",
+      "statuses": [
+        "EXTENSION_VERIFIED",
+        "NATIVE_VERIFIED",
+        "UPSTREAM_CNA_BLOCKED"
+      ],
+      "detail": "CnaModel.From(Model) builds CNA's own model over the buffers and effects an XNA model already owns, retained rather than copied, and CNA then draws it in one call and computes its bone transforms. Verified against an authored XNA 4.0 .xnb cube from the sibling CNA checkout: the graph round-trips bone for bone, mesh for mesh and part for part, CNA reports the same BasicEffect identity the managed reader built, its absolute bone transforms match the managed arithmetic exactly, written bone transforms read back, and the native draw is accepted on the headless renderer. Loading through CNA's own content manager is not offered: cna_content_manager_load_model produces a model that segfaults during teardown for any asset with a mesh part, recorded with a C reproduction as JAVA-UPSTREAM-004. The cameras, skins and material variants CnaModel reports are therefore always empty here, because only a CNA-imported model carries them."
     }
   ]
 }

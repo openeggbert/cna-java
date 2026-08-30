@@ -8,6 +8,7 @@ import Microsoft.Xna.Framework.Graphics.SpriteFont;
 import Microsoft.Xna.Framework.Graphics.Texture2D;
 import Microsoft.Xna.Framework.Graphics.Texture3D;
 import Microsoft.Xna.Framework.Graphics.TextureCube;
+import Microsoft.Xna.Framework.Content.ContentManager;
 import Microsoft.Xna.Framework.Content.ContentReader;
 import Microsoft.Xna.Framework.Media.MediaPlayer;
 import Microsoft.Xna.Framework.Media.VisualizationData;
@@ -36,6 +37,7 @@ public final class FacadeFactory {
     private static final Method VISUALIZATION_SET = visualizationMethod();
     private static final Constructor<Video> VIDEO = videoConstructor();
     private static final Method EFFECT_ADOPT_EXTENSION = effectAdoptExtensionMethod();
+    private static final Method CONTENT_MANAGER_DEVICE = contentManagerDeviceMethod();
 
     private FacadeFactory() {
     }
@@ -279,6 +281,39 @@ public final class FacadeFactory {
             throw new IllegalStateException("Cannot construct the extension Effect", exception);
         } catch (InvocationTargetException exception) {
             throw facadeFailure("Extension Effect construction failed", exception);
+        }
+    }
+
+    /**
+     * Returns the graphics device a content manager loads against.
+     *
+     * <p>Reached from {@code org.openeggbert.cna.extensions.content}. XNA's ContentManager has no
+     * public device accessor -- the CLR one reaches its service provider through internal access
+     * -- so widening one would put a member in the strict contract the reference API has no
+     * counterpart for.
+     */
+    public static GraphicsDevice contentManagerGraphicsDevice(ContentManager contentManager) {
+        try {
+            return (GraphicsDevice) CONTENT_MANAGER_DEVICE.invoke(contentManager);
+        } catch (IllegalAccessException exception) {
+            throw new IllegalStateException(
+                    "Cannot reach the ContentManager graphics device", exception);
+        } catch (InvocationTargetException exception) {
+            throw facadeFailure("ContentManager graphics device lookup failed", exception);
+        }
+    }
+
+    private static Method contentManagerDeviceMethod() {
+        try {
+            Method method = ContentManager.class.getDeclaredMethod(
+                    "graphicsDeviceForContentReader");
+            if (!method.trySetAccessible()) {
+                throw new IllegalStateException(
+                        "The runtime denied access to the ContentManager graphics device");
+            }
+            return method;
+        } catch (NoSuchMethodException exception) {
+            throw new ExceptionInInitializerError(exception);
         }
     }
 

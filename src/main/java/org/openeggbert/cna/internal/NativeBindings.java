@@ -3330,6 +3330,19 @@ public final class NativeBindings {
         }
     }
 
+    /**
+     * Returns the CNA content manager behind one Java {@link ContentManager}.
+     *
+     * <p>Reached from {@code org.openeggbert.cna.extensions.content}, which loads CNA's own view
+     * of an asset through the same manager the XNA loads use, so both see one root directory and
+     * one asset cache.
+     */
+    public static long nativeContentManagerHandle(ContentManager manager) {
+        Objects.requireNonNull(manager, "manager");
+        return contentManagerValue(manager,
+                FacadeFactory.contentManagerGraphicsDevice(manager), manager.getRootDirectory());
+    }
+
     private static long contentManagerValue(
             ContentManager manager,
             GraphicsDevice graphicsDevice,
@@ -3561,6 +3574,20 @@ public final class NativeBindings {
      */
     public static long nativeResourceHandle(GraphicsResource resource) {
         return resourceValue(resource);
+    }
+
+    /**
+     * Returns the CNA graphics-device handle behind one Java {@link GraphicsDevice}.
+     *
+     * <p>CNA scopes the device to a frame callback, so this resolves it from the owning game
+     * every time rather than caching a handle that would be stale outside the frame.
+     */
+    public static long nativeGraphicsDeviceValue(GraphicsDevice device) {
+        Game game = deviceGame(device);
+        long[] resolved = new long[1];
+        check("cna_game_get_graphics_device", NativeGamerServices.nativeGraphicsDeviceHandle(
+                gameHandle(game, "CNA extension").requireValue(), resolved));
+        return resolved[0];
     }
 
     /** Returns the live native handle of the game that owns a graphics device. */

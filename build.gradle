@@ -91,6 +91,10 @@ test {
     if (System.getenv('CNA_NATIVE_LIBRARY')) {
         systemProperty 'cna.native.library', System.getenv('CNA_NATIVE_LIBRARY')
     }
+    // The CNA checkout the build already qualifies against. A test that needs an authored
+    // asset -- an XNA 4.0 .xnb no fixture generator can honestly stand in for -- reads it from
+    // there and skips itself when it is absent, rather than copying someone else's asset in.
+    systemProperty 'cna.root', configuredCnaRoot.get()
 }
 
 sourceSets {

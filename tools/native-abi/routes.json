@@ -2591,6 +2591,284 @@
         "java": "sensorsGetNameSizeAt",
         "symbol": "cna_sensors_get_name_size_at"
       }
+    ],
+    "NativeModelExtensionRoutes": [
+      {
+        "java": "effectCopyTypeName",
+        "symbol": "cna_effect_copy_type_name"
+      },
+      {
+        "java": "effectGetTypeNameByteCount",
+        "symbol": "cna_effect_get_type_name_byte_count"
+      },
+      {
+        "java": "modelBoneAddChild",
+        "symbol": "cna_model_bone_add_child"
+      },
+      {
+        "java": "modelBoneCollectionDestroy",
+        "symbol": "cna_model_bone_collection_destroy"
+      },
+      {
+        "java": "modelBoneCollectionGetAt",
+        "symbol": "cna_model_bone_collection_get_at"
+      },
+      {
+        "java": "modelBoneCollectionGetCount",
+        "symbol": "cna_model_bone_collection_get_count"
+      },
+      {
+        "java": "modelBoneCopyName",
+        "symbol": "cna_model_bone_copy_name"
+      },
+      {
+        "java": "modelBoneCreate",
+        "symbol": "cna_model_bone_create"
+      },
+      {
+        "java": "modelBoneDestroy",
+        "symbol": "cna_model_bone_destroy"
+      },
+      {
+        "java": "modelBoneGetChildren",
+        "symbol": "cna_model_bone_get_children"
+      },
+      {
+        "java": "modelBoneGetIndex",
+        "symbol": "cna_model_bone_get_index"
+      },
+      {
+        "java": "modelBoneGetNameByteCount",
+        "symbol": "cna_model_bone_get_name_byte_count"
+      },
+      {
+        "java": "modelBoneGetParent",
+        "symbol": "cna_model_bone_get_parent"
+      },
+      {
+        "java": "modelBoneGetTransform",
+        "symbol": "cna_model_bone_get_transform"
+      },
+      {
+        "java": "modelBoneSetTransform",
+        "symbol": "cna_model_bone_set_transform"
+      },
+      {
+        "java": "modelCopyAbsoluteBoneTransforms",
+        "symbol": "cna_model_copy_absolute_bone_transforms"
+      },
+      {
+        "java": "modelCopyBoneTransforms",
+        "symbol": "cna_model_copy_bone_transforms"
+      },
+      {
+        "java": "modelCopyCameraNameExt",
+        "symbol": "cna_model_copy_camera_name_ext"
+      },
+      {
+        "java": "modelCopyMaterialVariantNameExt",
+        "symbol": "cna_model_copy_material_variant_name_ext"
+      },
+      {
+        "java": "modelCopySkinNameExt",
+        "symbol": "cna_model_copy_skin_name_ext"
+      },
+      {
+        "java": "modelCreateWithParents",
+        "symbol": "cna_model_create_with_parents"
+      },
+      {
+        "java": "modelDestroy",
+        "symbol": "cna_model_destroy"
+      },
+      {
+        "java": "modelDraw",
+        "symbol": "cna_model_draw"
+      },
+      {
+        "java": "modelEffectCollectionDestroy",
+        "symbol": "cna_model_effect_collection_destroy"
+      },
+      {
+        "java": "modelEffectCollectionGetAt",
+        "symbol": "cna_model_effect_collection_get_at"
+      },
+      {
+        "java": "modelEffectCollectionGetCount",
+        "symbol": "cna_model_effect_collection_get_count"
+      },
+      {
+        "java": "modelGetBoneTransformCount",
+        "symbol": "cna_model_get_bone_transform_count"
+      },
+      {
+        "java": "modelGetBones",
+        "symbol": "cna_model_get_bones"
+      },
+      {
+        "java": "modelGetBoundingSphereExt",
+        "symbol": "cna_model_get_bounding_sphere_ext"
+      },
+      {
+        "java": "modelGetCameraCountExt",
+        "symbol": "cna_model_get_camera_count_ext"
+      },
+      {
+        "java": "modelGetCameraExt",
+        "symbol": "cna_model_get_camera_ext"
+      },
+      {
+        "java": "modelGetCameraNameByteCountExt",
+        "symbol": "cna_model_get_camera_name_byte_count_ext"
+      },
+      {
+        "java": "modelGetMaterialVariantCountExt",
+        "symbol": "cna_model_get_material_variant_count_ext"
+      },
+      {
+        "java": "modelGetMaterialVariantExt",
+        "symbol": "cna_model_get_material_variant_ext"
+      },
+      {
+        "java": "modelGetMaterialVariantNameByteCountExt",
+        "symbol": "cna_model_get_material_variant_name_byte_count_ext"
+      },
+      {
+        "java": "modelGetMeshes",
+        "symbol": "cna_model_get_meshes"
+      },
+      {
+        "java": "modelGetRoot",
+        "symbol": "cna_model_get_root"
+      },
+      {
+        "java": "modelGetSkinCountExt",
+        "symbol": "cna_model_get_skin_count_ext"
+      },
+      {
+        "java": "modelGetSkinExt",
+        "symbol": "cna_model_get_skin_ext"
+      },
+      {
+        "java": "modelGetSkinMeshIndexExt",
+        "symbol": "cna_model_get_skin_mesh_index_ext"
+      },
+      {
+        "java": "modelGetSkinNameByteCountExt",
+        "symbol": "cna_model_get_skin_name_byte_count_ext"
+      },
+      {
+        "java": "modelMeshCollectionDestroy",
+        "symbol": "cna_model_mesh_collection_destroy"
+      },
+      {
+        "java": "modelMeshCollectionGetAt",
+        "symbol": "cna_model_mesh_collection_get_at"
+      },
+      {
+        "java": "modelMeshCollectionGetCount",
+        "symbol": "cna_model_mesh_collection_get_count"
+      },
+      {
+        "java": "modelMeshCopyName",
+        "symbol": "cna_model_mesh_copy_name"
+      },
+      {
+        "java": "modelMeshCreateNamed",
+        "symbol": "cna_model_mesh_create_named"
+      },
+      {
+        "java": "modelMeshDestroy",
+        "symbol": "cna_model_mesh_destroy"
+      },
+      {
+        "java": "modelMeshGetBoundingSphere",
+        "symbol": "cna_model_mesh_get_bounding_sphere"
+      },
+      {
+        "java": "modelMeshGetEffects",
+        "symbol": "cna_model_mesh_get_effects"
+      },
+      {
+        "java": "modelMeshGetMeshParts",
+        "symbol": "cna_model_mesh_get_mesh_parts"
+      },
+      {
+        "java": "modelMeshGetNameByteCount",
+        "symbol": "cna_model_mesh_get_name_byte_count"
+      },
+      {
+        "java": "modelMeshGetParentBone",
+        "symbol": "cna_model_mesh_get_parent_bone"
+      },
+      {
+        "java": "modelMeshPartCollectionDestroy",
+        "symbol": "cna_model_mesh_part_collection_destroy"
+      },
+      {
+        "java": "modelMeshPartCollectionGetAt",
+        "symbol": "cna_model_mesh_part_collection_get_at"
+      },
+      {
+        "java": "modelMeshPartCollectionGetCount",
+        "symbol": "cna_model_mesh_part_collection_get_count"
+      },
+      {
+        "java": "modelMeshPartCreate",
+        "symbol": "cna_model_mesh_part_create"
+      },
+      {
+        "java": "modelMeshPartDestroy",
+        "symbol": "cna_model_mesh_part_destroy"
+      },
+      {
+        "java": "modelMeshPartGetEffect",
+        "symbol": "cna_model_mesh_part_get_effect"
+      },
+      {
+        "java": "modelMeshPartGetIndexBuffer",
+        "symbol": "cna_model_mesh_part_get_index_buffer"
+      },
+      {
+        "java": "modelMeshPartGetNumVertices",
+        "symbol": "cna_model_mesh_part_get_num_vertices"
+      },
+      {
+        "java": "modelMeshPartGetPrimitiveCount",
+        "symbol": "cna_model_mesh_part_get_primitive_count"
+      },
+      {
+        "java": "modelMeshPartGetStartIndex",
+        "symbol": "cna_model_mesh_part_get_start_index"
+      },
+      {
+        "java": "modelMeshPartGetVertexBuffer",
+        "symbol": "cna_model_mesh_part_get_vertex_buffer"
+      },
+      {
+        "java": "modelMeshPartGetVertexOffset",
+        "symbol": "cna_model_mesh_part_get_vertex_offset"
+      },
+      {
+        "java": "modelMeshPartSetEffect",
+        "symbol": "cna_model_mesh_part_set_effect"
+      },
+      {
+        "java": "modelMeshSetBoundingSphere",
+        "symbol": "cna_model_mesh_set_bounding_sphere"
+      },
+      {
+        "java": "modelMeshSetParentBone",
+        "symbol": "cna_model_mesh_set_parent_bone"
+      },
+      {
+        "java": "modelSetBoneTransforms",
+        "symbol": "cna_model_set_bone_transforms"
+      },
+      {
+        "java": "modelSetMaterialVariantExt",
+        "symbol": "cna_model_set_material_variant_ext"
+      }
     ]
   }
 }
