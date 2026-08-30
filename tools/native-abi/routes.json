@@ -1687,6 +1687,84 @@
         "java": "renderPipelineSettingsInit",
         "symbol": "cna_render_pipeline_settings_init"
       }
+    ],
+    "NativeRuntimeExtensionRoutes": [
+      {
+        "java": "platformGetCurrent",
+        "symbol": "cna_platform_get_current"
+      },
+      {
+        "java": "platformGetIsMobileExt",
+        "symbol": "cna_platform_get_is_mobile_ext"
+      },
+      {
+        "java": "platformGetIsAppleExt",
+        "symbol": "cna_platform_get_is_apple_ext"
+      },
+      {
+        "java": "platformGetCurrentNameSizeExt",
+        "symbol": "cna_platform_get_current_name_size_ext"
+      },
+      {
+        "java": "platformCopyCurrentNameExt",
+        "symbol": "cna_platform_copy_current_name_ext"
+      },
+      {
+        "java": "desktopOsGetCurrent",
+        "symbol": "cna_desktop_os_get_current"
+      },
+      {
+        "java": "graphicsRendererGetCurrentNameSize",
+        "symbol": "cna_graphics_renderer_get_current_name_size"
+      },
+      {
+        "java": "graphicsRendererCopyCurrentName",
+        "symbol": "cna_graphics_renderer_copy_current_name"
+      },
+      {
+        "java": "graphicsBackendGetCurrentCategory",
+        "symbol": "cna_graphics_backend_get_current_category"
+      },
+      {
+        "java": "graphicsBackendGetCurrentMaturity",
+        "symbol": "cna_graphics_backend_get_current_maturity"
+      },
+      {
+        "java": "graphicsBackendCategoryGetNameSize",
+        "symbol": "cna_graphics_backend_category_get_name_size"
+      },
+      {
+        "java": "graphicsBackendCategoryCopyName",
+        "symbol": "cna_graphics_backend_category_copy_name"
+      },
+      {
+        "java": "graphicsBackendMaturityGetNameSize",
+        "symbol": "cna_graphics_backend_maturity_get_name_size"
+      },
+      {
+        "java": "graphicsBackendMaturityCopyName",
+        "symbol": "cna_graphics_backend_maturity_copy_name"
+      },
+      {
+        "java": "assemblyCopyTitleExt",
+        "symbol": "cna_assembly_copy_title_ext"
+      },
+      {
+        "java": "assemblySetTitleExt",
+        "symbol": "cna_assembly_set_title_ext"
+      },
+      {
+        "java": "loggerGetMinimumLevel",
+        "symbol": "cna_logger_get_minimum_level"
+      },
+      {
+        "java": "loggerSetMinimumLevel",
+        "symbol": "cna_logger_set_minimum_level"
+      },
+      {
+        "java": "loggerLog",
+        "symbol": "cna_logger_log"
+      }
     ]
   }
 }

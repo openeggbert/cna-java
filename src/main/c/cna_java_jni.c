@@ -12156,3 +12156,4 @@ Java_org_openeggbert_cna_internal_NativeGamerServices_nativeGuideShowMessageBox(
 #include "generated/NativeGamerServicesRoutes.inc"
 #include "generated/NativeNetworkRoutes.inc"
 #include "generated/NativeGraphicsExtensionRoutes.inc"
+#include "generated/NativeRuntimeExtensionRoutes.inc"

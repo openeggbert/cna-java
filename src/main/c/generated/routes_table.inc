@@ -34,6 +34,8 @@
     CNA_JNI_ROUTE(cna_ascii_post_process_effect_get_quantize_mode) ascii_post_process_effect_get_quantize_mode;
     CNA_JNI_ROUTE(cna_ascii_post_process_effect_set_cell_size) ascii_post_process_effect_set_cell_size;
     CNA_JNI_ROUTE(cna_ascii_post_process_effect_set_quantize_mode) ascii_post_process_effect_set_quantize_mode;
+    CNA_JNI_ROUTE(cna_assembly_copy_title_ext) assembly_copy_title_ext;
+    CNA_JNI_ROUTE(cna_assembly_set_title_ext) assembly_set_title_ext;
     CNA_JNI_ROUTE(cna_available_network_session_collection_copy_session) available_network_session_collection_copy_session;
     CNA_JNI_ROUTE(cna_available_network_session_collection_create_ext) available_network_session_collection_create_ext;
     CNA_JNI_ROUTE(cna_available_network_session_collection_destroy) available_network_session_collection_destroy;
@@ -91,6 +93,7 @@
     CNA_JNI_ROUTE(cna_avatar_renderer_set_appearance_ext) avatar_renderer_set_appearance_ext;
     CNA_JNI_ROUTE(cna_avatar_renderer_set_lighting) avatar_renderer_set_lighting;
     CNA_JNI_ROUTE(cna_avatar_renderer_set_transforms) avatar_renderer_set_transforms;
+    CNA_JNI_ROUTE(cna_desktop_os_get_current) desktop_os_get_current;
     CNA_JNI_ROUTE(cna_friend_collection_create_ext) friend_collection_create_ext;
     CNA_JNI_ROUTE(cna_friend_collection_get_is_disposed) friend_collection_get_is_disposed;
     CNA_JNI_ROUTE(cna_friend_gamer_copy_presence) friend_gamer_copy_presence;
@@ -154,7 +157,15 @@
     CNA_JNI_ROUTE(cna_gamer_signed_in_contains) gamer_signed_in_contains;
     CNA_JNI_ROUTE(cna_gamer_signed_in_index_of) gamer_signed_in_index_of;
     CNA_JNI_ROUTE(cna_gamer_unsubscribe_ext) gamer_unsubscribe_ext;
+    CNA_JNI_ROUTE(cna_graphics_backend_category_copy_name) graphics_backend_category_copy_name;
+    CNA_JNI_ROUTE(cna_graphics_backend_category_get_name_size) graphics_backend_category_get_name_size;
+    CNA_JNI_ROUTE(cna_graphics_backend_get_current_category) graphics_backend_get_current_category;
+    CNA_JNI_ROUTE(cna_graphics_backend_get_current_maturity) graphics_backend_get_current_maturity;
+    CNA_JNI_ROUTE(cna_graphics_backend_maturity_copy_name) graphics_backend_maturity_copy_name;
+    CNA_JNI_ROUTE(cna_graphics_backend_maturity_get_name_size) graphics_backend_maturity_get_name_size;
     CNA_JNI_ROUTE(cna_graphics_ext_is_available) graphics_ext_is_available;
+    CNA_JNI_ROUTE(cna_graphics_renderer_copy_current_name) graphics_renderer_copy_current_name;
+    CNA_JNI_ROUTE(cna_graphics_renderer_get_current_name_size) graphics_renderer_get_current_name_size;
     CNA_JNI_ROUTE(cna_guide_begin_show_keyboard_input) guide_begin_show_keyboard_input;
     CNA_JNI_ROUTE(cna_guide_copy_pending_keyboard_input_description_ext) guide_copy_pending_keyboard_input_description_ext;
     CNA_JNI_ROUTE(cna_guide_copy_pending_keyboard_input_display_text_ext) guide_copy_pending_keyboard_input_display_text_ext;
@@ -239,6 +250,9 @@
     CNA_JNI_ROUTE(cna_local_network_gamer_send_packet_writer) local_network_gamer_send_packet_writer;
     CNA_JNI_ROUTE(cna_local_network_gamer_send_packet_writer_to) local_network_gamer_send_packet_writer_to;
     CNA_JNI_ROUTE(cna_local_network_gamer_send_party_invites) local_network_gamer_send_party_invites;
+    CNA_JNI_ROUTE(cna_logger_get_minimum_level) logger_get_minimum_level;
+    CNA_JNI_ROUTE(cna_logger_log) logger_log;
+    CNA_JNI_ROUTE(cna_logger_set_minimum_level) logger_set_minimum_level;
     CNA_JNI_ROUTE(cna_net_get_last_join_error) net_get_last_join_error;
     CNA_JNI_ROUTE(cna_network_gamer_copy_machine) network_gamer_copy_machine;
     CNA_JNI_ROUTE(cna_network_gamer_create) network_gamer_create;
@@ -362,6 +376,11 @@
     CNA_JNI_ROUTE(cna_packet_writer_write_vector3) packet_writer_write_vector3;
     CNA_JNI_ROUTE(cna_packet_writer_write_vector4) packet_writer_write_vector4;
     CNA_JNI_ROUTE(cna_pbr_material_init) pbr_material_init;
+    CNA_JNI_ROUTE(cna_platform_copy_current_name_ext) platform_copy_current_name_ext;
+    CNA_JNI_ROUTE(cna_platform_get_current) platform_get_current;
+    CNA_JNI_ROUTE(cna_platform_get_current_name_size_ext) platform_get_current_name_size_ext;
+    CNA_JNI_ROUTE(cna_platform_get_is_apple_ext) platform_get_is_apple_ext;
+    CNA_JNI_ROUTE(cna_platform_get_is_mobile_ext) platform_get_is_mobile_ext;
     CNA_JNI_ROUTE(cna_property_dictionary_clear) property_dictionary_clear;
     CNA_JNI_ROUTE(cna_property_dictionary_contains_key) property_dictionary_contains_key;
     CNA_JNI_ROUTE(cna_property_dictionary_copy_key_at) property_dictionary_copy_key_at;

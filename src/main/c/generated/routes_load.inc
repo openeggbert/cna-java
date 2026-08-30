@@ -34,6 +34,8 @@
     LOAD(ascii_post_process_effect_get_quantize_mode, "cna_ascii_post_process_effect_get_quantize_mode");
     LOAD(ascii_post_process_effect_set_cell_size, "cna_ascii_post_process_effect_set_cell_size");
     LOAD(ascii_post_process_effect_set_quantize_mode, "cna_ascii_post_process_effect_set_quantize_mode");
+    LOAD(assembly_copy_title_ext, "cna_assembly_copy_title_ext");
+    LOAD(assembly_set_title_ext, "cna_assembly_set_title_ext");
     LOAD(available_network_session_collection_copy_session, "cna_available_network_session_collection_copy_session");
     LOAD(available_network_session_collection_create_ext, "cna_available_network_session_collection_create_ext");
     LOAD(available_network_session_collection_destroy, "cna_available_network_session_collection_destroy");
@@ -91,6 +93,7 @@
     LOAD(avatar_renderer_set_appearance_ext, "cna_avatar_renderer_set_appearance_ext");
     LOAD(avatar_renderer_set_lighting, "cna_avatar_renderer_set_lighting");
     LOAD(avatar_renderer_set_transforms, "cna_avatar_renderer_set_transforms");
+    LOAD(desktop_os_get_current, "cna_desktop_os_get_current");
     LOAD(friend_collection_create_ext, "cna_friend_collection_create_ext");
     LOAD(friend_collection_get_is_disposed, "cna_friend_collection_get_is_disposed");
     LOAD(friend_gamer_copy_presence, "cna_friend_gamer_copy_presence");
@@ -154,7 +157,15 @@
     LOAD(gamer_signed_in_contains, "cna_gamer_signed_in_contains");
     LOAD(gamer_signed_in_index_of, "cna_gamer_signed_in_index_of");
     LOAD(gamer_unsubscribe_ext, "cna_gamer_unsubscribe_ext");
+    LOAD(graphics_backend_category_copy_name, "cna_graphics_backend_category_copy_name");
+    LOAD(graphics_backend_category_get_name_size, "cna_graphics_backend_category_get_name_size");
+    LOAD(graphics_backend_get_current_category, "cna_graphics_backend_get_current_category");
+    LOAD(graphics_backend_get_current_maturity, "cna_graphics_backend_get_current_maturity");
+    LOAD(graphics_backend_maturity_copy_name, "cna_graphics_backend_maturity_copy_name");
+    LOAD(graphics_backend_maturity_get_name_size, "cna_graphics_backend_maturity_get_name_size");
     LOAD(graphics_ext_is_available, "cna_graphics_ext_is_available");
+    LOAD(graphics_renderer_copy_current_name, "cna_graphics_renderer_copy_current_name");
+    LOAD(graphics_renderer_get_current_name_size, "cna_graphics_renderer_get_current_name_size");
     LOAD(guide_begin_show_keyboard_input, "cna_guide_begin_show_keyboard_input");
     LOAD(guide_copy_pending_keyboard_input_description_ext, "cna_guide_copy_pending_keyboard_input_description_ext");
     LOAD(guide_copy_pending_keyboard_input_display_text_ext, "cna_guide_copy_pending_keyboard_input_display_text_ext");
@@ -239,6 +250,9 @@
     LOAD(local_network_gamer_send_packet_writer, "cna_local_network_gamer_send_packet_writer");
     LOAD(local_network_gamer_send_packet_writer_to, "cna_local_network_gamer_send_packet_writer_to");
     LOAD(local_network_gamer_send_party_invites, "cna_local_network_gamer_send_party_invites");
+    LOAD(logger_get_minimum_level, "cna_logger_get_minimum_level");
+    LOAD(logger_log, "cna_logger_log");
+    LOAD(logger_set_minimum_level, "cna_logger_set_minimum_level");
     LOAD(net_get_last_join_error, "cna_net_get_last_join_error");
     LOAD(network_gamer_copy_machine, "cna_network_gamer_copy_machine");
     LOAD(network_gamer_create, "cna_network_gamer_create");
@@ -362,6 +376,11 @@
     LOAD(packet_writer_write_vector3, "cna_packet_writer_write_vector3");
     LOAD(packet_writer_write_vector4, "cna_packet_writer_write_vector4");
     LOAD(pbr_material_init, "cna_pbr_material_init");
+    LOAD(platform_copy_current_name_ext, "cna_platform_copy_current_name_ext");
+    LOAD(platform_get_current, "cna_platform_get_current");
+    LOAD(platform_get_current_name_size_ext, "cna_platform_get_current_name_size_ext");
+    LOAD(platform_get_is_apple_ext, "cna_platform_get_is_apple_ext");
+    LOAD(platform_get_is_mobile_ext, "cna_platform_get_is_mobile_ext");
     LOAD(property_dictionary_clear, "cna_property_dictionary_clear");
     LOAD(property_dictionary_contains_key, "cna_property_dictionary_contains_key");
     LOAD(property_dictionary_copy_key_at, "cna_property_dictionary_copy_key_at");

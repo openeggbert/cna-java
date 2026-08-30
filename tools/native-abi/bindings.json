@@ -621,6 +621,194 @@
       ]
     },
     {
+      "name": "cna_assembly_copy_title_ext",
+      "header": "core_ext.h",
+      "ownership": "borrows its inputs; caller output",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "char*",
+        "uint64_t",
+        "uint64_t*"
+      ]
+    },
+    {
+      "name": "cna_assembly_set_title_ext",
+      "header": "core_ext.h",
+      "ownership": "borrows its inputs",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_StringView"
+      ]
+    },
+    {
+      "name": "cna_desktop_os_get_current",
+      "header": "core_ext.h",
+      "ownership": "borrows its inputs; caller output",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_DesktopOS*"
+      ]
+    },
+    {
+      "name": "cna_graphics_backend_category_copy_name",
+      "header": "core_ext.h",
+      "ownership": "borrows its inputs; caller output",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_GraphicsBackendCategory",
+        "char*",
+        "uint64_t",
+        "uint64_t*"
+      ]
+    },
+    {
+      "name": "cna_graphics_backend_category_get_name_size",
+      "header": "core_ext.h",
+      "ownership": "borrows its inputs; caller output",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_GraphicsBackendCategory",
+        "uint64_t*"
+      ]
+    },
+    {
+      "name": "cna_graphics_backend_get_current_category",
+      "header": "core_ext.h",
+      "ownership": "borrows its inputs; caller output",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_GraphicsBackendCategory*"
+      ]
+    },
+    {
+      "name": "cna_graphics_backend_get_current_maturity",
+      "header": "core_ext.h",
+      "ownership": "borrows its inputs; caller output",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_GraphicsBackendMaturity*"
+      ]
+    },
+    {
+      "name": "cna_graphics_backend_maturity_copy_name",
+      "header": "core_ext.h",
+      "ownership": "borrows its inputs; caller output",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_GraphicsBackendMaturity",
+        "char*",
+        "uint64_t",
+        "uint64_t*"
+      ]
+    },
+    {
+      "name": "cna_graphics_backend_maturity_get_name_size",
+      "header": "core_ext.h",
+      "ownership": "borrows its inputs; caller output",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_GraphicsBackendMaturity",
+        "uint64_t*"
+      ]
+    },
+    {
+      "name": "cna_graphics_renderer_copy_current_name",
+      "header": "core_ext.h",
+      "ownership": "borrows its inputs; caller output",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "char*",
+        "uint64_t",
+        "uint64_t*"
+      ]
+    },
+    {
+      "name": "cna_graphics_renderer_get_current_name_size",
+      "header": "core_ext.h",
+      "ownership": "borrows its inputs; caller output",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "uint64_t*"
+      ]
+    },
+    {
+      "name": "cna_logger_get_minimum_level",
+      "header": "core_ext.h",
+      "ownership": "borrows its inputs; caller output",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_LogLevel*"
+      ]
+    },
+    {
+      "name": "cna_logger_log",
+      "header": "core_ext.h",
+      "ownership": "borrows its inputs",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_LogLevel",
+        "CNA_StringView",
+        "CNA_LogCategory",
+        "CNA_Bool"
+      ]
+    },
+    {
+      "name": "cna_logger_set_minimum_level",
+      "header": "core_ext.h",
+      "ownership": "borrows its inputs",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_LogLevel"
+      ]
+    },
+    {
+      "name": "cna_platform_copy_current_name_ext",
+      "header": "core_ext.h",
+      "ownership": "borrows its inputs; caller output",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "char*",
+        "uint64_t",
+        "uint64_t*"
+      ]
+    },
+    {
+      "name": "cna_platform_get_current",
+      "header": "core_ext.h",
+      "ownership": "borrows its inputs; caller output",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_Platform*"
+      ]
+    },
+    {
+      "name": "cna_platform_get_current_name_size_ext",
+      "header": "core_ext.h",
+      "ownership": "borrows its inputs; caller output",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "uint64_t*"
+      ]
+    },
+    {
+      "name": "cna_platform_get_is_apple_ext",
+      "header": "core_ext.h",
+      "ownership": "borrows its inputs; caller output",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_Bool*"
+      ]
+    },
+    {
+      "name": "cna_platform_get_is_mobile_ext",
+      "header": "core_ext.h",
+      "ownership": "borrows its inputs; caller output",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_Bool*"
+      ]
+    },
+    {
       "name": "cna_graphics_adapter_copy_description",
       "header": "display.h",
       "ownership": "borrows callback-scoped device; caller buffer",
