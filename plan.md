@@ -44,7 +44,8 @@ or put non-XNA API inside `Microsoft.Xna.Framework.*`.
 | Canonical C API functions | not measured | 4,051 |
 | Bound native routes | 723 | 1,225 |
 | Unexplained native routes | 3,328 | 0 |
-| Bound routes nothing reaches | 1 | 0 |
+| Bound routes no JNI entry point reaches | 1 | 0 |
+| Bound routes no Java call site reaches | not measurable | 162 |
 | CNA extension packages | 0 | 4 |
 | Tests | 156 | 191 |
 
@@ -119,7 +120,7 @@ JNI_HEADER_DERIVED_SLOT_CHECK=PASS
 LAYOUT_SIGNATURE_PROBE=PASS
 LIBRARY_SYMBOL_CHECK=PASS (1225/1225)
 ABI_POLICY_CHECK=PASS
-NATIVE_TOOL_TESTS=31 passed, 0 failed
+NATIVE_TOOL_TESTS=43 passed, 0 failed
 ```
 
 Every slot is declared `CNA_JNI_ROUTE(symbol)`, so a signature that moves upstream stops the
@@ -130,12 +131,14 @@ than guessing; `generateJniCheck` fails the build when the committed output goes
 ## Coverage
 
 ```text
-XNA_BACKING              975
-JAVA_INTERNAL_ONLY       171
+XNA_BACKING              976
+JAVA_INTERNAL_ONLY       170
 CNA_EXTENSION_CANDIDATE 1730
 DEFERRED_RUNTIME         679
 NOT_USEFUL_IN_JAVA       496
 UNMAPPED_REQUIRES_REVIEW   0
+BOUND_BUT_UNREACHED        0
+BOUND_WITHOUT_JAVA_CALL_SITE 162
 ```
 
 `NOT_USEFUL_IN_JAVA` is dominated by value math -- vectors, matrices, quaternions, geometry,
@@ -149,5 +152,10 @@ add cost and a native failure mode the original API cannot produce.
 device enumeration and the `.cnb` content format. They belong under
 `org.openeggbert.cna.extensions.*`, never inside the strict packages.
 
-Every bound route is reached from Java. That invariant -- `boundButUnreached` empty -- is worth
-keeping: binding a route nothing calls makes the library export a symbol for no reason.
+`boundButUnreached` -- a loaded symbol no JNI entry point reaches -- is empty and `nativeCoverageCheck`
+now fails when it is not. The weaker question, whether a Java source actually *calls* the entry
+point, was previously unanswerable: a `native` declaration names its own method, so the call scan
+counted every generated declaration as its own call site. With that filtered,
+`boundWithoutJavaCallSite` is 162, concentrated in the GamerServices and Net families, and
+`JAVA-NATIVE-023` owns reaching or unbinding each one. Binding a route nothing calls makes the
+library demand a symbol from `libcna_c_api` for no reason.

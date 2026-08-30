@@ -313,6 +313,21 @@
       ],
       "priority": 8,
       "status": "ready"
+    },
+    {
+      "id": "JAVA-NATIVE-023",
+      "title": "Reach or unbind the 162 routes no Java call site touches",
+      "family": "native boundary",
+      "authority": "tools/native-abi/coverage.py boundWithoutJavaCallSite",
+      "currentState": "162 of the 1,225 bound routes have a generated JNI entry point that no Java source calls. The gate could not see them: a `native` declaration names its own method, so the call scan counted every generated declaration as its own call site. With that fixed, boundButUnreached is still 0 but boundWithoutJavaCallSite is 162, concentrated in gamer_services.h (81), net.h (41), net_sessions.h (24) and net_gamers.h (15).",
+      "expectedState": "Every bound route either reaches a Java surface or is unbound with a coverage rule that says why. PacketReader and PacketWriter are the largest slice: 28 routes CNA implements that the Java projection currently does managed. Read-only collection mutators (AchievementCollection.add/clear/insert/remove, GamerCollection.add/remove) are the opposite case and should be unbound, because the Java member throws as XNA's does.",
+      "blocker": "None. It is measurement plus per-family judgement, not an upstream change.",
+      "tests": [
+        "nativeCoverageCheck",
+        "tools/native-abi/test_verify.py"
+      ],
+      "priority": 6,
+      "status": "ready"
     }
   ]
 }

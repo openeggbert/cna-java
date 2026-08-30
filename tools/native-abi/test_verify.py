@@ -18,6 +18,7 @@ import sys
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 import coverage as coverage_tool  # noqa: E402
+import generate_jni as generator_tool  # noqa: E402
 import inventory as inventory_tool  # noqa: E402
 import verify as verify_tool  # noqa: E402
 
@@ -161,6 +162,72 @@ def test_coverage(cna_root: Path) -> None:
     check(all(rule["classification"] in rules["classifications"] for rule in rules["rules"]),
           "every coverage rule uses a declared classification")
 
+    # A `native` declaration names its own method, so an unfiltered call scan reads it
+    # as a call site and every generated route reports itself as reached. That would
+    # make the reachability question unanswerable, which is why it is filtered.
+    declaration = ("class Probe {\n"
+                   "    public static native int probeRoute(long handle, long[] out);\n"
+                   "}\n")
+    check("probeRoute" not in coverage_tool.called_names(
+              coverage_tool.without_native_declarations(declaration)),
+          "a native declaration is not a call site for itself")
+    check("probeRoute" in coverage_tool.called_names(
+              coverage_tool.without_native_declarations(
+                  "class Probe {\n    void use() { probeRoute(0L, null); }\n}\n")),
+          "a real call to a native method is still a call site")
+
+
+def test_generator(live: dict) -> None:
+    """The generated boundary must not silently narrow or silently drop data."""
+
+    def plan(symbol: str) -> dict:
+        return generator_tool.plan({"java": "probe", "symbol": symbol}, live)
+
+    def struct_step(entry: dict) -> dict:
+        return next(step for step in entry["steps"]
+                    if step["shape"] in ("struct", "struct_array", "struct_value"))
+
+    # A C double must travel in its own double[] carrier. Sharing the float one would
+    # narrow every reading silently, which is the failure this separation prevents.
+    compass = plan("cna_compass_get_current_value")
+    reading = struct_step(compass)
+    check([path for path, _ in reading["doubles"]]
+          == ["heading_accuracy", "magnetic_heading", "true_heading"],
+          "a struct's C double leaves travel in their own double carrier")
+    check(all(leaf == "float" for _, leaf in reading["floating"]),
+          "the float carrier holds no double leaf")
+    _, parameters = generator_tool.java_signature(compass)
+    check(any(value.startswith("double[]") for value in parameters),
+          "a struct with double leaves declares a double[] parameter")
+    check("jdoubleArray" in generator_tool.render_c("Probe", [compass]),
+          "the generated adapter reads the double carrier as a jdoubleArray")
+
+    # An output array of structs has to be copied back, or the route returns success
+    # and Java sees nothing. This was a real defect: the only such route bound at the
+    # time never wrote a single element back.
+    copy_to = plan("cna_network_session_properties_copy_to")
+    check(struct_step(copy_to)["shape"] == "struct_array" and not struct_step(copy_to)["input"],
+          "a non-const struct pointer followed by a count is an output struct array")
+    emitted = generator_tool.render_c("Probe", [copy_to])
+    check("SetLongArrayRegion" in emitted,
+          "an output array of structs is copied back to Java")
+    check(emitted.index("SetLongArrayRegion") < emitted.rindex("free(destination_values);"),
+          "the copy back happens before the C buffer is freed")
+
+    # An input struct must not be written back over the caller's data.
+    haptic = plan("cna_haptic_device_get_is_effect_supported")
+    effect = next(step for step in haptic["steps"] if step["shape"] == "struct")
+    check(effect["input"], "a const struct pointer is an input parameter")
+    check("SetLongArrayRegion" not in generator_tool.render_c("Probe", [haptic]),
+          "an input struct is never written back over the caller's array")
+
+    # The generator refuses a shape it cannot prove rather than guessing at it.
+    try:
+        plan("cna_text_input_subscribe_text_input_ext")
+        check(False, "a callback route is refused rather than guessed at")
+    except generator_tool.Unsupported:
+        check(True, "a callback route is refused rather than guessed at")
+
 
 def test_probe(include: Path) -> None:
     try:
@@ -182,6 +249,7 @@ def main() -> int:
     test_jni(live)
     test_policy()
     test_coverage(cna_root)
+    test_generator(live)
     test_probe(include)
 
     print(f"NATIVE_TOOL_TESTS={len(PASSES)} passed, {len(FAILURES)} failed")

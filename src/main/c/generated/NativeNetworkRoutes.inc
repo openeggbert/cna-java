@@ -1908,6 +1908,37 @@ Java_org_openeggbert_cna_internal_generated_NativeNetworkRoutes_networkSessionPr
     }
     uint64_t out_count_value = 0;
     CNA_Result result = cna.network_session_properties_copy_to((CNA_NetworkSessionPropertiesHandle)properties, destination_values, (uint64_t)destination_count, (int32_t)index, &out_count_value);
+    if (result == CNA_RESULT_SUCCESS) {
+        {
+            jbyte* destinationBytes_out = (jbyte*)malloc(
+                ((size_t)destination_count * 3 + 1U) * sizeof(*destinationBytes_out));
+            if (destinationBytes_out != NULL) {
+                for (jsize element = 0; element < destination_count; ++element) {
+                    destinationBytes_out[element * 3 + 0] = (jbyte)destination_values[element].reserved[0];
+                    destinationBytes_out[element * 3 + 1] = (jbyte)destination_values[element].reserved[1];
+                    destinationBytes_out[element * 3 + 2] = (jbyte)destination_values[element].reserved[2];
+                }
+                (*environment)->SetByteArrayRegion(
+                    environment, destinationBytes, 0,
+                    (jsize)(destination_count * 3), destinationBytes_out);
+                free(destinationBytes_out);
+            }
+        }
+        {
+            jlong* destinationIntegral_out = (jlong*)malloc(
+                ((size_t)destination_count * 2 + 1U) * sizeof(*destinationIntegral_out));
+            if (destinationIntegral_out != NULL) {
+                for (jsize element = 0; element < destination_count; ++element) {
+                    destinationIntegral_out[element * 2 + 0] = (jlong)destination_values[element].has_value;
+                    destinationIntegral_out[element * 2 + 1] = (jlong)destination_values[element].value;
+                }
+                (*environment)->SetLongArrayRegion(
+                    environment, destinationIntegral, 0,
+                    (jsize)(destination_count * 2), destinationIntegral_out);
+                free(destinationIntegral_out);
+            }
+        }
+    }
     free(destination_values);
     if (result == CNA_RESULT_SUCCESS) {
         jlong out_count_element = (jlong)out_count_value;

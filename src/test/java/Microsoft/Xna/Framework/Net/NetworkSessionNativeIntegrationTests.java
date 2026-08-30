@@ -12,6 +12,7 @@ import java.util.List;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 /**
@@ -114,9 +115,36 @@ final class NetworkSessionNativeIntegrationTests {
 
                 assertEquals(session.getAllGamers().size(), session.getAllGamers().size());
                 assertNotNull(session.getSessionProperties());
+                sessionProperties();
                 assertEquals(0, org.openeggbert.cna.internal.GamerEventPump.droppedEventCount(),
                         "no event may be dropped in a session this small");
             }
+        }
+
+        /**
+         * Proves CNA's bulk property copy carries the payload, not just a success code.
+         *
+         * <p>{@code toArray} is the Java spelling of XNA's {@code CopyTo} and takes CNA's own
+         * copy route. An adapter that returned success without writing anything back would
+         * leave every slot null here, which is exactly what this asserts against.
+         */
+        private void sessionProperties() {
+            NetworkSessionProperties properties = new NetworkSessionProperties();
+            assertEquals(0, properties.size(), "CNA creates the list empty");
+            assertEquals(0, properties.toArray().length);
+            properties.add(0, 41);
+            properties.add(1, null);
+            properties.add(2, -7);
+            properties.add(3, Integer.MAX_VALUE);
+            Object[] copied = properties.toArray();
+            assertEquals(4, copied.length);
+            assertEquals(41, copied[0]);
+            assertNull(copied[1], "an unset slot stays absent rather than becoming zero");
+            assertEquals(-7, copied[2]);
+            assertEquals(Integer.MAX_VALUE, copied[3]);
+            properties.set(1, 0);
+            assertEquals(0, properties.toArray()[1],
+                    "a slot set to zero is a value, not an absent slot");
         }
     }
 }

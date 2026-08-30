@@ -118,6 +118,17 @@ def flatten_struct(name: str, live: dict, seen: frozenset[str] = frozenset()) ->
 
 VERSION_FIELDS = ("struct_size", "struct_version")
 
+# The Java arrays a flattened structure's leaves travel in. A C ``double`` gets its
+# own carrier rather than sharing the float one: narrowing it to ``jfloat`` would
+# lose precision silently, which is exactly the kind of guess this generator refuses
+# to make elsewhere.
+STRUCT_GROUPS = (
+    ("bytes", "jbyte", "Byte", "byte"),
+    ("integral", "jlong", "Long", "long"),
+    ("floating", "jfloat", "Float", "float"),
+    ("doubles", "jdouble", "Double", "double"),
+)
+
 
 def group_leaves(leaves: list[tuple[str, str]]) -> dict[str, list[tuple[str, str]]]:
     """Split a struct's leaves into the byte, float and integral arrays that carry them.
@@ -130,7 +141,8 @@ def group_leaves(leaves: list[tuple[str, str]]) -> dict[str, list[tuple[str, str
     return {
         "bytes": [(path, leaf) for path, leaf in leaves
                   if leaf in ("char", "uint8_t") and path.endswith("]")],
-        "floating": [(path, leaf) for path, leaf in leaves if leaf in ("float", "double")],
+        "floating": [(path, leaf) for path, leaf in leaves if leaf == "float"],
+        "doubles": [(path, leaf) for path, leaf in leaves if leaf == "double"],
         "integral": [(path, leaf) for path, leaf in leaves
                      if leaf not in ("float", "double")
                      and not (leaf in ("char", "uint8_t") and path.endswith("]"))],
@@ -197,7 +209,7 @@ def plan(route: dict, live: dict) -> dict:
             raw_leaves = flatten_struct(type_name, live)
             groups = group_leaves(raw_leaves)
             versioned = [path for path, _ in raw_leaves if path in VERSION_FIELDS]
-            if not groups["floating"] and not groups["integral"] and not groups["bytes"]:
+            if not any(groups[group] for group, _, _, _ in STRUCT_GROUPS):
                 raise Unsupported(f"{route['symbol']}: empty structure array {type_name}")
             steps.append({"shape": "struct_array", "name": name, "ctype": type_name,
                           "input": constant, "versioned": versioned,
@@ -257,7 +269,7 @@ def java_signature(entry: dict) -> tuple[str, list[str]]:
         elif step["shape"] == "array":
             parameters.append(f"{JAVA_OF_JNI[step['jni']]}[] {java_name(step['name'])}")
         elif step["shape"] in ("struct", "struct_array", "struct_value"):
-            for group, java in (("bytes", "byte"), ("integral", "long"), ("floating", "float")):
+            for group, _, _, java in STRUCT_GROUPS:
                 if step[group]:
                     parameters.append(f"{java}[] {java_name(step['name'])}{group.capitalize()}")
     return "int " + entry["java"], parameters
@@ -287,7 +299,7 @@ def render_java(class_name: str, entries: list[dict]) -> str:
         for step in entry["steps"]:
             if step["shape"] != "struct":
                 continue
-            for group in ("bytes", "integral", "floating"):
+            for group, _, _, _ in STRUCT_GROUPS:
                 if not step[group]:
                     continue
                 lines.append("     *")
@@ -399,9 +411,8 @@ def render_c(class_name: str, entries: list[dict]) -> str:
                     f"        environment, {name}, {name}_elements, "
                     f"{'JNI_ABORT' if step['input'] else '0'});")
             elif shape == "struct_array":
-                groups = [(group, jni, java) for group, jni, java in
-                          (("bytes", "jbyte", "Byte"), ("integral", "jlong", "Long"),
-                           ("floating", "jfloat", "Float")) if step[group]]
+                groups = [(group, jni, java) for group, jni, java, _ in STRUCT_GROUPS
+                          if step[group]]
                 primary = groups[0]
                 for group, jni, java in groups:
                     parameters.append(f"{jni}Array {name}{group.capitalize()}")
@@ -445,6 +456,37 @@ def render_c(class_name: str, entries: list[dict]) -> str:
                     body.append("    }")
                 arguments.append(f"{name}_values")
                 arguments.append(f"(uint64_t){name}_count")
+                if not step["input"]:
+                    # An output array of structs has to be copied back before the C
+                    # buffer is freed, so the write-back belongs in the cleanup
+                    # sequence rather than in the success epilogue. Every element of
+                    # the requested capacity is written: calloc zeroed the tail, and
+                    # the route's own out-count says how much of it CNA filled.
+                    writeback = ["    if (result == CNA_RESULT_SUCCESS) {"]
+                    for group, jni, java in groups:
+                        field = f"{name}{group.capitalize()}"
+                        writeback.append("        {")
+                        writeback.append(f"            {jni}* {field}_out = ({jni}*)malloc(")
+                        writeback.append(f"                ((size_t){name}_count * "
+                                         f"{len(step[group])} + 1U) * sizeof(*{field}_out));")
+                        writeback.append(f"            if ({field}_out != NULL) {{")
+                        writeback.append(f"                for (jsize element = 0; element < "
+                                         f"{name}_count; ++element) {{")
+                        for position, (leaf_path, leaf) in enumerate(step[group]):
+                            writeback.append(
+                                f"                    {field}_out[element * "
+                                f"{len(step[group])} + {position}] = ({jni})"
+                                f"{name}_values[element].{leaf_path};")
+                        writeback.append("                }")
+                        writeback.append(f"                (*environment)->Set{java}ArrayRegion(")
+                        writeback.append(f"                    environment, {field}, 0,")
+                        writeback.append(f"                    (jsize)({name}_count * "
+                                         f"{len(step[group])}), {field}_out);")
+                        writeback.append(f"                free({field}_out);")
+                        writeback.append("            }")
+                        writeback.append("        }")
+                    writeback.append("    }")
+                    cleanup.append("\n".join(writeback))
                 cleanup.append(f"    free({name}_values);")
             elif shape == "struct_value":
                 body.append(f"    {step['ctype']} {name}_value;")
@@ -453,9 +495,7 @@ def render_c(class_name: str, entries: list[dict]) -> str:
                     body.append(f"    {name}_value.struct_size = (uint32_t)(sizeof {name}_value);")
                 if "struct_version" in step["versioned"]:
                     body.append(f"    {name}_value.struct_version = {step['version']};")
-                for group, jni, java in (("bytes", "jbyte", "Byte"),
-                                         ("integral", "jlong", "Long"),
-                                         ("floating", "jfloat", "Float")):
+                for group, jni, java, _ in STRUCT_GROUPS:
                     if not step[group]:
                         continue
                     field = f"{name}{group.capitalize()}"
@@ -477,9 +517,7 @@ def render_c(class_name: str, entries: list[dict]) -> str:
                 if "struct_version" in step["versioned"]:
                     body.append(f"    {name}_value.struct_version = {step['version']};")
                 arguments.append(f"&{name}_value")
-                for group, jni, java in (("bytes", "jbyte", "Byte"),
-                                         ("integral", "jlong", "Long"),
-                                         ("floating", "jfloat", "Float")):
+                for group, jni, java, _ in STRUCT_GROUPS:
                     if not step[group]:
                         continue
                     field = f"{name}{group.capitalize()}"

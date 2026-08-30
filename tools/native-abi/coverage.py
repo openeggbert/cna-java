@@ -281,12 +281,25 @@ def surface_of(package: str) -> str:
     return "other"
 
 
+# A `native` declaration ends at the first semicolon and has no body. Its own name
+# looks exactly like a call site to the call scanner, so it is removed before the
+# scan: counting it would let a bound route report itself as reached and make the
+# bound-but-unreached invariant vacuous for every generated declaration.
+NATIVE_DECLARATION = re.compile(
+    r"\bnative\s+[A-Za-z0-9_$.<>,\[\] ?]+?\s+[A-Za-z0-9_]+\s*\([^;{]*\)\s*;",
+    re.MULTILINE | re.DOTALL)
+
+
+def without_native_declarations(text: str) -> str:
+    return NATIVE_DECLARATION.sub(" ", text)
+
+
 def surface_reach(sources: dict[str, str], routes: dict[str, set[str]]) -> dict[str, set[str]]:
     """Map each native method to the Java packages that can reach it."""
     reach: dict[str, set[str]] = {}
     for relative, text in sources.items():
         package = java_package(relative)
-        for name in called_names(text):
+        for name in called_names(without_native_declarations(text)):
             for native in routes.get(name, ()):
                 reach.setdefault(native, set()).add(package)
     return reach
@@ -428,6 +441,15 @@ def summarize(report: dict) -> dict:
         "boundButUnreached": sorted(
             record["name"] for record in report["functions"]
             if record["bound"] and not record.get("javaNativeMethods")),
+        # A JNI entry point exists, but nothing in src/main/java calls the Java native
+        # method it implements. Such a route makes the library demand a symbol from
+        # libcna_c_api that no consumer can ever use. Kept separate from
+        # boundButUnreached, which is the stronger failure of loading a symbol no JNI
+        # entry point reaches at all.
+        "boundWithoutJavaCallSite": sorted(
+            record["name"] for record in report["functions"]
+            if record["bound"] and record.get("javaNativeMethods")
+            and not record.get("javaSurfaces")),
         "internalOnly": sorted(
             record["name"] for record in report["functions"]
             if record["classification"] == "JAVA_INTERNAL_ONLY"),
@@ -458,7 +480,14 @@ def main() -> int:
     print(f"BOUND_FUNCTIONS={report['boundFunctions']}")
     for code, count in report["classificationCounts"].items():
         print(f"{code}={count}")
+    summary = summarize(report)
+    print(f"BOUND_BUT_UNREACHED={len(summary['boundButUnreached'])}")
+    print(f"BOUND_WITHOUT_JAVA_CALL_SITE={len(summary['boundWithoutJavaCallSite'])}")
     unmapped = report["classificationCounts"].get("UNMAPPED_REQUIRES_REVIEW", 0)
+    if arguments.check and summary["boundButUnreached"]:
+        for name in summary["boundButUnreached"]:
+            print(f"BOUND_BUT_UNREACHED={name}")
+        return 1
     if arguments.check and unmapped:
         for record in report["functions"]:
             if record["classification"] == "UNMAPPED_REQUIRES_REVIEW":

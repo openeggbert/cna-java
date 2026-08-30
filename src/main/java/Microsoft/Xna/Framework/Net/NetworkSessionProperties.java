@@ -96,9 +96,15 @@ public class NetworkSessionProperties implements List<Integer> {
         return view.iterator();
     }
 
+    /**
+     * Copies every slot out in one native call.
+     *
+     * <p>This is the Java spelling of XNA's {@code CopyTo}, so it takes CNA's own bulk copy
+     * rather than reading the slots back one at a time.
+     */
     @Override
     public final Object[] toArray() {
-        return view.toArray();
+        return snapshot();
     }
 
     @Override
@@ -219,5 +225,26 @@ public class NetworkSessionProperties implements List<Integer> {
         NativeGamerServices.check("NetworkSessionProperties.size",
                 NativeNetworkRoutes.networkSessionPropertiesGetCount(handle, count));
         return count[0];
+    }
+
+    /**
+     * Reads every slot through CNA's bulk copy.
+     *
+     * <p>CNA refuses a destination that cannot hold the whole list and writes no partial copy,
+     * so the buffer is sized from the current count first. An unset slot stays null, which is
+     * the distinction {@code int?} carries and {@link Integer} keeps.
+     */
+    private Integer[] snapshot() {
+        int size = count();
+        long[] values = new long[size * 2];
+        long[] copied = new long[1];
+        NativeGamerServices.check("NetworkSessionProperties.toArray",
+                NativeNetworkRoutes.networkSessionPropertiesCopyTo(
+                        handle, new byte[size * 3], values, 0, copied));
+        Integer[] result = new Integer[(int) copied[0]];
+        for (int index = 0; index < result.length; index++) {
+            result[index] = values[index * 2] != 0L ? (int) values[index * 2 + 1] : null;
+        }
+        return result;
     }
 }
