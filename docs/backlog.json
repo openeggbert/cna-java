@@ -172,9 +172,13 @@
       "family": "org.openeggbert.cna.extensions.graphics",
       "authority": "graphics_ext.h, engine_layer.h",
       "currentState": "1,733 routes classified CNA_EXTENSION_CANDIDATE; none reachable from Java.",
-      "expectedState": "A typed Java facade for the canonical concepts, with truthful availability queries and NOT_SUPPORTED preserved rather than downgraded.",
+      "expectedState": "org.openeggbert.cna.extensions.graphics projects the seven identities, the render pipeline settings, the physically based material and the ASCII, CRT and depth post-process effects. Availability is truthful and NOT_SUPPORTED keeps its own identity.",
       "priority": 6,
-      "status": "ready"
+      "status": "done",
+      "tests": [
+        "GraphicsExtensionTests",
+        "PostProcessEffectNativeTests"
+      ]
     },
     {
       "id": "JAVA-EXT-002",
@@ -235,13 +239,17 @@
       "id": "JAVA-TEMPLATE-001",
       "title": "Add a truthful modern-CNA canary to the template",
       "family": "cna-java-template",
-      "currentState": "The template exercises the XNA surface only.",
-      "expectedState": "An opt-in extensions smoke that proves the Java extension facade compiles externally, the JNI route exists, the availability query is truthful, and HEADLESS NOT_SUPPORTED is represented as itself.",
+      "currentState": "The template exercised the XNA surface only.",
+      "expectedState": "--extensions-smoke is an opt-in mode beside HelloGame, run by verify-template.sh between the 60-frame smoke and the 600-frame run. It found a real defect on its first run: the extension entry points did not load the native bridge.",
       "dependsOn": [
         "JAVA-EXT-001"
       ],
       "priority": 7,
-      "status": "ready"
+      "status": "done",
+      "tests": [
+        "scripts/verify-template.sh",
+        "MainTests"
+      ]
     },
     {
       "id": "JAVA-UPSTREAM-001",
