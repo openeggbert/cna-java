@@ -88,12 +88,18 @@ Implemented now:
   signed-in roster, achievements, friends, profiles, privileges, game defaults,
   presence, the Guide, leaderboards, the property dictionary, sessions,
   discovery, rosters, machines and packets, all reaching real CNA routes;
-- a Java 17 JNI adapter for 1,130 CNA ABI 0.20.0 routes whose dispatch-table
+- three CNA extension families outside the strict packages --
+  `org.openeggbert.cna.extensions.graphics`, `.runtime` and `.devices` --
+  covering the extended graphics layer, the runtime's own identity and logger,
+  and the host device capabilities, each preserving `NOT_SUPPORTED` as its own
+  answer rather than downgrading;
+- a Java 17 JNI adapter for 1,211 CNA ABI 0.20.0 routes whose dispatch-table
   slots are declared from the headers themselves, so a signature that moves
   upstream stops the adapter compiling; the mechanical half of that boundary is
   generated from the headers and checked for staleness by the build;
 - a classification for every one of the 4,051 canonical CNA C API functions,
-  with zero unexplained, derived from the JNI call graph and the Java sources;
+  with zero unexplained, derived from the JNI call graph and the Java sources,
+  and with every bound route reached from Java;
 - managed and native integration/ownership tests plus a desktop template canary
   verified for 60-frame smoke and 600-frame stability runs using both raw PNG
   and managed Texture2D XNB paths.

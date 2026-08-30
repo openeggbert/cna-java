@@ -279,6 +279,17 @@
       "blocker": "cnanext net_sessions: the synchronous creation does not carry max_gamers into the session's own maximum. Java asserts the property is stable and that the setter works, and does not invent the creation value.",
       "priority": 11,
       "status": "blocked"
+    },
+    {
+      "id": "JAVA-UPSTREAM-003",
+      "title": "Nine of cnanext's own C API smoke tests fail in the HEADLESS/NULL-audio configuration",
+      "family": "cnanext qualification",
+      "authority": "ctest -R CApi in cnanext/cmake-build-javanext",
+      "currentState": "94 of 103 pass. The nine that fail are CApiCoverageMatrix, CApiLimitations, CApiReleaseGate, CApi_CoreExtSmoke, CApi_ContentSmoke, CApi_DevicesSmoke, CApi_MediaPlayerSmoke, CApi_AudioSmoke and CApi_AudioUnavailableSmoke. They are cnanext's own tests, and CNA-Java changed nothing in that repository, whose worktree is clean.",
+      "expectedState": "Either the suite passes in this configuration, or cnanext records which of its tests require a different platform, renderer or audio backend.",
+      "blocker": "Not investigated here beyond identifying them: they are upstream tests in a read-only repository, and diagnosing them is cnanext's work, not this binding's. AudioUnavailableSmoke expects playback to be unavailable, which suggests a NULL-audio expectation that no longer matches; CoreExtSmoke asserts renderer classifications.",
+      "priority": 10,
+      "status": "blocked"
     }
   ]
 }
