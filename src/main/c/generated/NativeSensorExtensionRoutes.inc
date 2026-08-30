@@ -1,0 +1,688 @@
+/* SPDX-License-Identifier: MS-PL */
+/*
+ * Generated JNI adapter for NativeSensorExtensionRoutes.
+ *
+ * Produced by tools/native-abi/generate_jni.py from the live CNA C headers, and
+ * included by cna_java_jni.c so it shares the one dispatch table. Do not edit.
+ */
+
+JNIEXPORT jint JNICALL
+Java_org_openeggbert_cna_internal_generated_NativeSensorExtensionRoutes_accelerometerCreate(
+    JNIEnv* environment, jclass declaring_class, jlong game, jlongArray out_sensor)
+{
+    (void)environment;
+    (void)declaring_class;
+    CNA_AccelerometerHandle out_sensor_value = 0;
+    CNA_Result result = cna.accelerometer_create((CNA_Handle)game, &out_sensor_value);
+    if (result == CNA_RESULT_SUCCESS) {
+        jlong out_sensor_element = (jlong)out_sensor_value;
+        (*environment)->SetLongArrayRegion(
+            environment, out_sensor, 0, 1, &out_sensor_element);
+    }
+    return (jint)result;
+}
+
+JNIEXPORT jint JNICALL
+Java_org_openeggbert_cna_internal_generated_NativeSensorExtensionRoutes_accelerometerDestroy(
+    JNIEnv* environment, jclass declaring_class, jlong sensor)
+{
+    (void)environment;
+    (void)declaring_class;
+    CNA_Result result = cna.accelerometer_destroy((CNA_AccelerometerHandle)sensor);
+    return (jint)result;
+}
+
+JNIEXPORT jint JNICALL
+Java_org_openeggbert_cna_internal_generated_NativeSensorExtensionRoutes_accelerometerGetCurrentValue(
+    JNIEnv* environment, jclass declaring_class, jlong sensor, jlongArray out_readingIntegral, jfloatArray out_readingFloating)
+{
+    (void)environment;
+    (void)declaring_class;
+    CNA_AccelerometerReading out_reading_value;
+    memset(&out_reading_value, 0, sizeof out_reading_value);
+    out_reading_value.struct_size = (uint32_t)(sizeof out_reading_value);
+    out_reading_value.struct_version = UINT32_C(1);
+    CNA_Result result = cna.accelerometer_get_current_value((CNA_AccelerometerHandle)sensor, &out_reading_value);
+    if (result == CNA_RESULT_SUCCESS) {
+        jlong out_readingIntegral_values[] = {
+            (jlong)out_reading_value.timestamp.ticks,
+            (jlong)out_reading_value.timestamp.offset_ticks
+        };
+        (*environment)->SetLongArrayRegion(environment, out_readingIntegral, 0,
+            (jsize)(sizeof out_readingIntegral_values / sizeof out_readingIntegral_values[0]),
+            out_readingIntegral_values);
+        jfloat out_readingFloating_values[] = {
+            (jfloat)out_reading_value.acceleration.x,
+            (jfloat)out_reading_value.acceleration.y,
+            (jfloat)out_reading_value.acceleration.z
+        };
+        (*environment)->SetFloatArrayRegion(environment, out_readingFloating, 0,
+            (jsize)(sizeof out_readingFloating_values / sizeof out_readingFloating_values[0]),
+            out_readingFloating_values);
+    }
+    return (jint)result;
+}
+
+JNIEXPORT jint JNICALL
+Java_org_openeggbert_cna_internal_generated_NativeSensorExtensionRoutes_accelerometerGetIsDataValid(
+    JNIEnv* environment, jclass declaring_class, jlong sensor, jbooleanArray out_valid)
+{
+    (void)environment;
+    (void)declaring_class;
+    CNA_Bool out_valid_value = 0;
+    CNA_Result result = cna.accelerometer_get_is_data_valid((CNA_AccelerometerHandle)sensor, &out_valid_value);
+    if (result == CNA_RESULT_SUCCESS) {
+        jboolean out_valid_element = (jboolean)out_valid_value;
+        (*environment)->SetBooleanArrayRegion(
+            environment, out_valid, 0, 1, &out_valid_element);
+    }
+    return (jint)result;
+}
+
+JNIEXPORT jint JNICALL
+Java_org_openeggbert_cna_internal_generated_NativeSensorExtensionRoutes_accelerometerGetIsSupported(
+    JNIEnv* environment, jclass declaring_class, jlong game, jbooleanArray out_supported)
+{
+    (void)environment;
+    (void)declaring_class;
+    CNA_Bool out_supported_value = 0;
+    CNA_Result result = cna.accelerometer_get_is_supported((CNA_Handle)game, &out_supported_value);
+    if (result == CNA_RESULT_SUCCESS) {
+        jboolean out_supported_element = (jboolean)out_supported_value;
+        (*environment)->SetBooleanArrayRegion(
+            environment, out_supported, 0, 1, &out_supported_element);
+    }
+    return (jint)result;
+}
+
+JNIEXPORT jint JNICALL
+Java_org_openeggbert_cna_internal_generated_NativeSensorExtensionRoutes_accelerometerGetState(
+    JNIEnv* environment, jclass declaring_class, jlong sensor, jintArray out_state)
+{
+    (void)environment;
+    (void)declaring_class;
+    CNA_SensorState out_state_value = 0;
+    CNA_Result result = cna.accelerometer_get_state((CNA_AccelerometerHandle)sensor, &out_state_value);
+    if (result == CNA_RESULT_SUCCESS) {
+        jint out_state_element = (jint)out_state_value;
+        (*environment)->SetIntArrayRegion(
+            environment, out_state, 0, 1, &out_state_element);
+    }
+    return (jint)result;
+}
+
+JNIEXPORT jint JNICALL
+Java_org_openeggbert_cna_internal_generated_NativeSensorExtensionRoutes_accelerometerGetTimeBetweenUpdatesTicks(
+    JNIEnv* environment, jclass declaring_class, jlong sensor, jlongArray out_ticks)
+{
+    (void)environment;
+    (void)declaring_class;
+    int64_t out_ticks_value = 0;
+    CNA_Result result = cna.accelerometer_get_time_between_updates_ticks((CNA_AccelerometerHandle)sensor, &out_ticks_value);
+    if (result == CNA_RESULT_SUCCESS) {
+        jlong out_ticks_element = (jlong)out_ticks_value;
+        (*environment)->SetLongArrayRegion(
+            environment, out_ticks, 0, 1, &out_ticks_element);
+    }
+    return (jint)result;
+}
+
+JNIEXPORT jint JNICALL
+Java_org_openeggbert_cna_internal_generated_NativeSensorExtensionRoutes_accelerometerSetTimeBetweenUpdatesTicks(
+    JNIEnv* environment, jclass declaring_class, jlong sensor, jlong ticks)
+{
+    (void)environment;
+    (void)declaring_class;
+    CNA_Result result = cna.accelerometer_set_time_between_updates_ticks((CNA_AccelerometerHandle)sensor, (int64_t)ticks);
+    return (jint)result;
+}
+
+JNIEXPORT jint JNICALL
+Java_org_openeggbert_cna_internal_generated_NativeSensorExtensionRoutes_accelerometerStart(
+    JNIEnv* environment, jclass declaring_class, jlong sensor)
+{
+    (void)environment;
+    (void)declaring_class;
+    CNA_Result result = cna.accelerometer_start((CNA_AccelerometerHandle)sensor);
+    return (jint)result;
+}
+
+JNIEXPORT jint JNICALL
+Java_org_openeggbert_cna_internal_generated_NativeSensorExtensionRoutes_accelerometerStop(
+    JNIEnv* environment, jclass declaring_class, jlong sensor)
+{
+    (void)environment;
+    (void)declaring_class;
+    CNA_Result result = cna.accelerometer_stop((CNA_AccelerometerHandle)sensor);
+    return (jint)result;
+}
+
+JNIEXPORT jint JNICALL
+Java_org_openeggbert_cna_internal_generated_NativeSensorExtensionRoutes_compassCreate(
+    JNIEnv* environment, jclass declaring_class, jlong game, jlongArray out_sensor)
+{
+    (void)environment;
+    (void)declaring_class;
+    CNA_CompassHandle out_sensor_value = 0;
+    CNA_Result result = cna.compass_create((CNA_Handle)game, &out_sensor_value);
+    if (result == CNA_RESULT_SUCCESS) {
+        jlong out_sensor_element = (jlong)out_sensor_value;
+        (*environment)->SetLongArrayRegion(
+            environment, out_sensor, 0, 1, &out_sensor_element);
+    }
+    return (jint)result;
+}
+
+JNIEXPORT jint JNICALL
+Java_org_openeggbert_cna_internal_generated_NativeSensorExtensionRoutes_compassDestroy(
+    JNIEnv* environment, jclass declaring_class, jlong sensor)
+{
+    (void)environment;
+    (void)declaring_class;
+    CNA_Result result = cna.compass_destroy((CNA_CompassHandle)sensor);
+    return (jint)result;
+}
+
+JNIEXPORT jint JNICALL
+Java_org_openeggbert_cna_internal_generated_NativeSensorExtensionRoutes_compassGetCurrentValue(
+    JNIEnv* environment, jclass declaring_class, jlong sensor, jlongArray out_readingIntegral, jfloatArray out_readingFloating, jdoubleArray out_readingDoubles)
+{
+    (void)environment;
+    (void)declaring_class;
+    CNA_CompassReading out_reading_value;
+    memset(&out_reading_value, 0, sizeof out_reading_value);
+    out_reading_value.struct_size = (uint32_t)(sizeof out_reading_value);
+    out_reading_value.struct_version = UINT32_C(1);
+    CNA_Result result = cna.compass_get_current_value((CNA_CompassHandle)sensor, &out_reading_value);
+    if (result == CNA_RESULT_SUCCESS) {
+        jlong out_readingIntegral_values[] = {
+            (jlong)out_reading_value.timestamp.ticks,
+            (jlong)out_reading_value.timestamp.offset_ticks
+        };
+        (*environment)->SetLongArrayRegion(environment, out_readingIntegral, 0,
+            (jsize)(sizeof out_readingIntegral_values / sizeof out_readingIntegral_values[0]),
+            out_readingIntegral_values);
+        jfloat out_readingFloating_values[] = {
+            (jfloat)out_reading_value.magnetometer_reading.x,
+            (jfloat)out_reading_value.magnetometer_reading.y,
+            (jfloat)out_reading_value.magnetometer_reading.z
+        };
+        (*environment)->SetFloatArrayRegion(environment, out_readingFloating, 0,
+            (jsize)(sizeof out_readingFloating_values / sizeof out_readingFloating_values[0]),
+            out_readingFloating_values);
+        jdouble out_readingDoubles_values[] = {
+            (jdouble)out_reading_value.heading_accuracy,
+            (jdouble)out_reading_value.magnetic_heading,
+            (jdouble)out_reading_value.true_heading
+        };
+        (*environment)->SetDoubleArrayRegion(environment, out_readingDoubles, 0,
+            (jsize)(sizeof out_readingDoubles_values / sizeof out_readingDoubles_values[0]),
+            out_readingDoubles_values);
+    }
+    return (jint)result;
+}
+
+JNIEXPORT jint JNICALL
+Java_org_openeggbert_cna_internal_generated_NativeSensorExtensionRoutes_compassGetIsDataValid(
+    JNIEnv* environment, jclass declaring_class, jlong sensor, jbooleanArray out_valid)
+{
+    (void)environment;
+    (void)declaring_class;
+    CNA_Bool out_valid_value = 0;
+    CNA_Result result = cna.compass_get_is_data_valid((CNA_CompassHandle)sensor, &out_valid_value);
+    if (result == CNA_RESULT_SUCCESS) {
+        jboolean out_valid_element = (jboolean)out_valid_value;
+        (*environment)->SetBooleanArrayRegion(
+            environment, out_valid, 0, 1, &out_valid_element);
+    }
+    return (jint)result;
+}
+
+JNIEXPORT jint JNICALL
+Java_org_openeggbert_cna_internal_generated_NativeSensorExtensionRoutes_compassGetIsSupported(
+    JNIEnv* environment, jclass declaring_class, jlong game, jbooleanArray out_supported)
+{
+    (void)environment;
+    (void)declaring_class;
+    CNA_Bool out_supported_value = 0;
+    CNA_Result result = cna.compass_get_is_supported((CNA_Handle)game, &out_supported_value);
+    if (result == CNA_RESULT_SUCCESS) {
+        jboolean out_supported_element = (jboolean)out_supported_value;
+        (*environment)->SetBooleanArrayRegion(
+            environment, out_supported, 0, 1, &out_supported_element);
+    }
+    return (jint)result;
+}
+
+JNIEXPORT jint JNICALL
+Java_org_openeggbert_cna_internal_generated_NativeSensorExtensionRoutes_compassGetState(
+    JNIEnv* environment, jclass declaring_class, jlong sensor, jintArray out_state)
+{
+    (void)environment;
+    (void)declaring_class;
+    CNA_SensorState out_state_value = 0;
+    CNA_Result result = cna.compass_get_state((CNA_CompassHandle)sensor, &out_state_value);
+    if (result == CNA_RESULT_SUCCESS) {
+        jint out_state_element = (jint)out_state_value;
+        (*environment)->SetIntArrayRegion(
+            environment, out_state, 0, 1, &out_state_element);
+    }
+    return (jint)result;
+}
+
+JNIEXPORT jint JNICALL
+Java_org_openeggbert_cna_internal_generated_NativeSensorExtensionRoutes_compassGetTimeBetweenUpdatesTicks(
+    JNIEnv* environment, jclass declaring_class, jlong sensor, jlongArray out_ticks)
+{
+    (void)environment;
+    (void)declaring_class;
+    int64_t out_ticks_value = 0;
+    CNA_Result result = cna.compass_get_time_between_updates_ticks((CNA_CompassHandle)sensor, &out_ticks_value);
+    if (result == CNA_RESULT_SUCCESS) {
+        jlong out_ticks_element = (jlong)out_ticks_value;
+        (*environment)->SetLongArrayRegion(
+            environment, out_ticks, 0, 1, &out_ticks_element);
+    }
+    return (jint)result;
+}
+
+JNIEXPORT jint JNICALL
+Java_org_openeggbert_cna_internal_generated_NativeSensorExtensionRoutes_compassSetTimeBetweenUpdatesTicks(
+    JNIEnv* environment, jclass declaring_class, jlong sensor, jlong ticks)
+{
+    (void)environment;
+    (void)declaring_class;
+    CNA_Result result = cna.compass_set_time_between_updates_ticks((CNA_CompassHandle)sensor, (int64_t)ticks);
+    return (jint)result;
+}
+
+JNIEXPORT jint JNICALL
+Java_org_openeggbert_cna_internal_generated_NativeSensorExtensionRoutes_compassStart(
+    JNIEnv* environment, jclass declaring_class, jlong sensor)
+{
+    (void)environment;
+    (void)declaring_class;
+    CNA_Result result = cna.compass_start((CNA_CompassHandle)sensor);
+    return (jint)result;
+}
+
+JNIEXPORT jint JNICALL
+Java_org_openeggbert_cna_internal_generated_NativeSensorExtensionRoutes_compassStop(
+    JNIEnv* environment, jclass declaring_class, jlong sensor)
+{
+    (void)environment;
+    (void)declaring_class;
+    CNA_Result result = cna.compass_stop((CNA_CompassHandle)sensor);
+    return (jint)result;
+}
+
+JNIEXPORT jint JNICALL
+Java_org_openeggbert_cna_internal_generated_NativeSensorExtensionRoutes_gyroscopeCreate(
+    JNIEnv* environment, jclass declaring_class, jlong game, jlongArray out_sensor)
+{
+    (void)environment;
+    (void)declaring_class;
+    CNA_GyroscopeHandle out_sensor_value = 0;
+    CNA_Result result = cna.gyroscope_create((CNA_Handle)game, &out_sensor_value);
+    if (result == CNA_RESULT_SUCCESS) {
+        jlong out_sensor_element = (jlong)out_sensor_value;
+        (*environment)->SetLongArrayRegion(
+            environment, out_sensor, 0, 1, &out_sensor_element);
+    }
+    return (jint)result;
+}
+
+JNIEXPORT jint JNICALL
+Java_org_openeggbert_cna_internal_generated_NativeSensorExtensionRoutes_gyroscopeDestroy(
+    JNIEnv* environment, jclass declaring_class, jlong sensor)
+{
+    (void)environment;
+    (void)declaring_class;
+    CNA_Result result = cna.gyroscope_destroy((CNA_GyroscopeHandle)sensor);
+    return (jint)result;
+}
+
+JNIEXPORT jint JNICALL
+Java_org_openeggbert_cna_internal_generated_NativeSensorExtensionRoutes_gyroscopeGetCurrentValue(
+    JNIEnv* environment, jclass declaring_class, jlong sensor, jlongArray out_readingIntegral, jfloatArray out_readingFloating)
+{
+    (void)environment;
+    (void)declaring_class;
+    CNA_GyroscopeReading out_reading_value;
+    memset(&out_reading_value, 0, sizeof out_reading_value);
+    out_reading_value.struct_size = (uint32_t)(sizeof out_reading_value);
+    out_reading_value.struct_version = UINT32_C(1);
+    CNA_Result result = cna.gyroscope_get_current_value((CNA_GyroscopeHandle)sensor, &out_reading_value);
+    if (result == CNA_RESULT_SUCCESS) {
+        jlong out_readingIntegral_values[] = {
+            (jlong)out_reading_value.timestamp.ticks,
+            (jlong)out_reading_value.timestamp.offset_ticks
+        };
+        (*environment)->SetLongArrayRegion(environment, out_readingIntegral, 0,
+            (jsize)(sizeof out_readingIntegral_values / sizeof out_readingIntegral_values[0]),
+            out_readingIntegral_values);
+        jfloat out_readingFloating_values[] = {
+            (jfloat)out_reading_value.rotation_rate.x,
+            (jfloat)out_reading_value.rotation_rate.y,
+            (jfloat)out_reading_value.rotation_rate.z
+        };
+        (*environment)->SetFloatArrayRegion(environment, out_readingFloating, 0,
+            (jsize)(sizeof out_readingFloating_values / sizeof out_readingFloating_values[0]),
+            out_readingFloating_values);
+    }
+    return (jint)result;
+}
+
+JNIEXPORT jint JNICALL
+Java_org_openeggbert_cna_internal_generated_NativeSensorExtensionRoutes_gyroscopeGetIsDataValid(
+    JNIEnv* environment, jclass declaring_class, jlong sensor, jbooleanArray out_valid)
+{
+    (void)environment;
+    (void)declaring_class;
+    CNA_Bool out_valid_value = 0;
+    CNA_Result result = cna.gyroscope_get_is_data_valid((CNA_GyroscopeHandle)sensor, &out_valid_value);
+    if (result == CNA_RESULT_SUCCESS) {
+        jboolean out_valid_element = (jboolean)out_valid_value;
+        (*environment)->SetBooleanArrayRegion(
+            environment, out_valid, 0, 1, &out_valid_element);
+    }
+    return (jint)result;
+}
+
+JNIEXPORT jint JNICALL
+Java_org_openeggbert_cna_internal_generated_NativeSensorExtensionRoutes_gyroscopeGetIsSupported(
+    JNIEnv* environment, jclass declaring_class, jlong game, jbooleanArray out_supported)
+{
+    (void)environment;
+    (void)declaring_class;
+    CNA_Bool out_supported_value = 0;
+    CNA_Result result = cna.gyroscope_get_is_supported((CNA_Handle)game, &out_supported_value);
+    if (result == CNA_RESULT_SUCCESS) {
+        jboolean out_supported_element = (jboolean)out_supported_value;
+        (*environment)->SetBooleanArrayRegion(
+            environment, out_supported, 0, 1, &out_supported_element);
+    }
+    return (jint)result;
+}
+
+JNIEXPORT jint JNICALL
+Java_org_openeggbert_cna_internal_generated_NativeSensorExtensionRoutes_gyroscopeGetState(
+    JNIEnv* environment, jclass declaring_class, jlong sensor, jintArray out_state)
+{
+    (void)environment;
+    (void)declaring_class;
+    CNA_SensorState out_state_value = 0;
+    CNA_Result result = cna.gyroscope_get_state((CNA_GyroscopeHandle)sensor, &out_state_value);
+    if (result == CNA_RESULT_SUCCESS) {
+        jint out_state_element = (jint)out_state_value;
+        (*environment)->SetIntArrayRegion(
+            environment, out_state, 0, 1, &out_state_element);
+    }
+    return (jint)result;
+}
+
+JNIEXPORT jint JNICALL
+Java_org_openeggbert_cna_internal_generated_NativeSensorExtensionRoutes_gyroscopeGetTimeBetweenUpdatesTicks(
+    JNIEnv* environment, jclass declaring_class, jlong sensor, jlongArray out_ticks)
+{
+    (void)environment;
+    (void)declaring_class;
+    int64_t out_ticks_value = 0;
+    CNA_Result result = cna.gyroscope_get_time_between_updates_ticks((CNA_GyroscopeHandle)sensor, &out_ticks_value);
+    if (result == CNA_RESULT_SUCCESS) {
+        jlong out_ticks_element = (jlong)out_ticks_value;
+        (*environment)->SetLongArrayRegion(
+            environment, out_ticks, 0, 1, &out_ticks_element);
+    }
+    return (jint)result;
+}
+
+JNIEXPORT jint JNICALL
+Java_org_openeggbert_cna_internal_generated_NativeSensorExtensionRoutes_gyroscopeSetTimeBetweenUpdatesTicks(
+    JNIEnv* environment, jclass declaring_class, jlong sensor, jlong ticks)
+{
+    (void)environment;
+    (void)declaring_class;
+    CNA_Result result = cna.gyroscope_set_time_between_updates_ticks((CNA_GyroscopeHandle)sensor, (int64_t)ticks);
+    return (jint)result;
+}
+
+JNIEXPORT jint JNICALL
+Java_org_openeggbert_cna_internal_generated_NativeSensorExtensionRoutes_gyroscopeStart(
+    JNIEnv* environment, jclass declaring_class, jlong sensor)
+{
+    (void)environment;
+    (void)declaring_class;
+    CNA_Result result = cna.gyroscope_start((CNA_GyroscopeHandle)sensor);
+    return (jint)result;
+}
+
+JNIEXPORT jint JNICALL
+Java_org_openeggbert_cna_internal_generated_NativeSensorExtensionRoutes_gyroscopeStop(
+    JNIEnv* environment, jclass declaring_class, jlong sensor)
+{
+    (void)environment;
+    (void)declaring_class;
+    CNA_Result result = cna.gyroscope_stop((CNA_GyroscopeHandle)sensor);
+    return (jint)result;
+}
+
+JNIEXPORT jint JNICALL
+Java_org_openeggbert_cna_internal_generated_NativeSensorExtensionRoutes_motionCreate(
+    JNIEnv* environment, jclass declaring_class, jlong game, jlongArray out_sensor)
+{
+    (void)environment;
+    (void)declaring_class;
+    CNA_MotionHandle out_sensor_value = 0;
+    CNA_Result result = cna.motion_create((CNA_Handle)game, &out_sensor_value);
+    if (result == CNA_RESULT_SUCCESS) {
+        jlong out_sensor_element = (jlong)out_sensor_value;
+        (*environment)->SetLongArrayRegion(
+            environment, out_sensor, 0, 1, &out_sensor_element);
+    }
+    return (jint)result;
+}
+
+JNIEXPORT jint JNICALL
+Java_org_openeggbert_cna_internal_generated_NativeSensorExtensionRoutes_motionDestroy(
+    JNIEnv* environment, jclass declaring_class, jlong sensor)
+{
+    (void)environment;
+    (void)declaring_class;
+    CNA_Result result = cna.motion_destroy((CNA_MotionHandle)sensor);
+    return (jint)result;
+}
+
+JNIEXPORT jint JNICALL
+Java_org_openeggbert_cna_internal_generated_NativeSensorExtensionRoutes_motionGetCurrentValue(
+    JNIEnv* environment, jclass declaring_class, jlong sensor, jlongArray out_readingIntegral, jfloatArray out_readingFloating)
+{
+    (void)environment;
+    (void)declaring_class;
+    CNA_MotionReading out_reading_value;
+    memset(&out_reading_value, 0, sizeof out_reading_value);
+    out_reading_value.struct_size = (uint32_t)(sizeof out_reading_value);
+    out_reading_value.struct_version = UINT32_C(1);
+    out_reading_value.attitude.struct_size = (uint32_t)(sizeof out_reading_value.attitude);
+    out_reading_value.attitude.struct_version = UINT32_C(1);
+    CNA_Result result = cna.motion_get_current_value((CNA_MotionHandle)sensor, &out_reading_value);
+    if (result == CNA_RESULT_SUCCESS) {
+        jlong out_readingIntegral_values[] = {
+            (jlong)out_reading_value.timestamp.ticks,
+            (jlong)out_reading_value.timestamp.offset_ticks,
+            (jlong)out_reading_value.attitude.timestamp.ticks,
+            (jlong)out_reading_value.attitude.timestamp.offset_ticks
+        };
+        (*environment)->SetLongArrayRegion(environment, out_readingIntegral, 0,
+            (jsize)(sizeof out_readingIntegral_values / sizeof out_readingIntegral_values[0]),
+            out_readingIntegral_values);
+        jfloat out_readingFloating_values[] = {
+            (jfloat)out_reading_value.attitude.pitch,
+            (jfloat)out_reading_value.attitude.roll,
+            (jfloat)out_reading_value.attitude.yaw,
+            (jfloat)out_reading_value.attitude.quaternion.x,
+            (jfloat)out_reading_value.attitude.quaternion.y,
+            (jfloat)out_reading_value.attitude.quaternion.z,
+            (jfloat)out_reading_value.attitude.quaternion.w,
+            (jfloat)out_reading_value.attitude.rotation_matrix.m11,
+            (jfloat)out_reading_value.attitude.rotation_matrix.m12,
+            (jfloat)out_reading_value.attitude.rotation_matrix.m13,
+            (jfloat)out_reading_value.attitude.rotation_matrix.m14,
+            (jfloat)out_reading_value.attitude.rotation_matrix.m21,
+            (jfloat)out_reading_value.attitude.rotation_matrix.m22,
+            (jfloat)out_reading_value.attitude.rotation_matrix.m23,
+            (jfloat)out_reading_value.attitude.rotation_matrix.m24,
+            (jfloat)out_reading_value.attitude.rotation_matrix.m31,
+            (jfloat)out_reading_value.attitude.rotation_matrix.m32,
+            (jfloat)out_reading_value.attitude.rotation_matrix.m33,
+            (jfloat)out_reading_value.attitude.rotation_matrix.m34,
+            (jfloat)out_reading_value.attitude.rotation_matrix.m41,
+            (jfloat)out_reading_value.attitude.rotation_matrix.m42,
+            (jfloat)out_reading_value.attitude.rotation_matrix.m43,
+            (jfloat)out_reading_value.attitude.rotation_matrix.m44,
+            (jfloat)out_reading_value.device_acceleration.x,
+            (jfloat)out_reading_value.device_acceleration.y,
+            (jfloat)out_reading_value.device_acceleration.z,
+            (jfloat)out_reading_value.device_rotation_rate.x,
+            (jfloat)out_reading_value.device_rotation_rate.y,
+            (jfloat)out_reading_value.device_rotation_rate.z,
+            (jfloat)out_reading_value.gravity.x,
+            (jfloat)out_reading_value.gravity.y,
+            (jfloat)out_reading_value.gravity.z
+        };
+        (*environment)->SetFloatArrayRegion(environment, out_readingFloating, 0,
+            (jsize)(sizeof out_readingFloating_values / sizeof out_readingFloating_values[0]),
+            out_readingFloating_values);
+    }
+    return (jint)result;
+}
+
+JNIEXPORT jint JNICALL
+Java_org_openeggbert_cna_internal_generated_NativeSensorExtensionRoutes_motionGetIsAttitudeNorthReferencedExt(
+    JNIEnv* environment, jclass declaring_class, jlong sensor, jbooleanArray out_north_referenced)
+{
+    (void)environment;
+    (void)declaring_class;
+    CNA_Bool out_north_referenced_value = 0;
+    CNA_Result result = cna.motion_get_is_attitude_north_referenced_ext((CNA_MotionHandle)sensor, &out_north_referenced_value);
+    if (result == CNA_RESULT_SUCCESS) {
+        jboolean out_north_referenced_element = (jboolean)out_north_referenced_value;
+        (*environment)->SetBooleanArrayRegion(
+            environment, out_north_referenced, 0, 1, &out_north_referenced_element);
+    }
+    return (jint)result;
+}
+
+JNIEXPORT jint JNICALL
+Java_org_openeggbert_cna_internal_generated_NativeSensorExtensionRoutes_motionGetIsDataValid(
+    JNIEnv* environment, jclass declaring_class, jlong sensor, jbooleanArray out_valid)
+{
+    (void)environment;
+    (void)declaring_class;
+    CNA_Bool out_valid_value = 0;
+    CNA_Result result = cna.motion_get_is_data_valid((CNA_MotionHandle)sensor, &out_valid_value);
+    if (result == CNA_RESULT_SUCCESS) {
+        jboolean out_valid_element = (jboolean)out_valid_value;
+        (*environment)->SetBooleanArrayRegion(
+            environment, out_valid, 0, 1, &out_valid_element);
+    }
+    return (jint)result;
+}
+
+JNIEXPORT jint JNICALL
+Java_org_openeggbert_cna_internal_generated_NativeSensorExtensionRoutes_motionGetIsSupported(
+    JNIEnv* environment, jclass declaring_class, jlong game, jbooleanArray out_supported)
+{
+    (void)environment;
+    (void)declaring_class;
+    CNA_Bool out_supported_value = 0;
+    CNA_Result result = cna.motion_get_is_supported((CNA_Handle)game, &out_supported_value);
+    if (result == CNA_RESULT_SUCCESS) {
+        jboolean out_supported_element = (jboolean)out_supported_value;
+        (*environment)->SetBooleanArrayRegion(
+            environment, out_supported, 0, 1, &out_supported_element);
+    }
+    return (jint)result;
+}
+
+JNIEXPORT jint JNICALL
+Java_org_openeggbert_cna_internal_generated_NativeSensorExtensionRoutes_motionGetState(
+    JNIEnv* environment, jclass declaring_class, jlong sensor, jintArray out_state)
+{
+    (void)environment;
+    (void)declaring_class;
+    CNA_SensorState out_state_value = 0;
+    CNA_Result result = cna.motion_get_state((CNA_MotionHandle)sensor, &out_state_value);
+    if (result == CNA_RESULT_SUCCESS) {
+        jint out_state_element = (jint)out_state_value;
+        (*environment)->SetIntArrayRegion(
+            environment, out_state, 0, 1, &out_state_element);
+    }
+    return (jint)result;
+}
+
+JNIEXPORT jint JNICALL
+Java_org_openeggbert_cna_internal_generated_NativeSensorExtensionRoutes_motionGetTimeBetweenUpdatesTicks(
+    JNIEnv* environment, jclass declaring_class, jlong sensor, jlongArray out_ticks)
+{
+    (void)environment;
+    (void)declaring_class;
+    int64_t out_ticks_value = 0;
+    CNA_Result result = cna.motion_get_time_between_updates_ticks((CNA_MotionHandle)sensor, &out_ticks_value);
+    if (result == CNA_RESULT_SUCCESS) {
+        jlong out_ticks_element = (jlong)out_ticks_value;
+        (*environment)->SetLongArrayRegion(
+            environment, out_ticks, 0, 1, &out_ticks_element);
+    }
+    return (jint)result;
+}
+
+JNIEXPORT jint JNICALL
+Java_org_openeggbert_cna_internal_generated_NativeSensorExtensionRoutes_motionSetTimeBetweenUpdatesTicks(
+    JNIEnv* environment, jclass declaring_class, jlong sensor, jlong ticks)
+{
+    (void)environment;
+    (void)declaring_class;
+    CNA_Result result = cna.motion_set_time_between_updates_ticks((CNA_MotionHandle)sensor, (int64_t)ticks);
+    return (jint)result;
+}
+
+JNIEXPORT jint JNICALL
+Java_org_openeggbert_cna_internal_generated_NativeSensorExtensionRoutes_motionStart(
+    JNIEnv* environment, jclass declaring_class, jlong sensor)
+{
+    (void)environment;
+    (void)declaring_class;
+    CNA_Result result = cna.motion_start((CNA_MotionHandle)sensor);
+    return (jint)result;
+}
+
+JNIEXPORT jint JNICALL
+Java_org_openeggbert_cna_internal_generated_NativeSensorExtensionRoutes_motionStop(
+    JNIEnv* environment, jclass declaring_class, jlong sensor)
+{
+    (void)environment;
+    (void)declaring_class;
+    CNA_Result result = cna.motion_stop((CNA_MotionHandle)sensor);
+    return (jint)result;
+}
+
+JNIEXPORT jint JNICALL
+Java_org_openeggbert_cna_internal_generated_NativeSensorExtensionRoutes_sensorsGetLastErrorIdExt(
+    JNIEnv* environment, jclass declaring_class, jintArray out_error_id, jbooleanArray out_has_error_id)
+{
+    (void)environment;
+    (void)declaring_class;
+    int32_t out_error_id_value = 0;
+    CNA_Bool out_has_error_id_value = 0;
+    CNA_Result result = cna.sensors_get_last_error_id_ext(&out_error_id_value, &out_has_error_id_value);
+    if (result == CNA_RESULT_SUCCESS) {
+        jint out_error_id_element = (jint)out_error_id_value;
+        (*environment)->SetIntArrayRegion(
+            environment, out_error_id, 0, 1, &out_error_id_element);
+        jboolean out_has_error_id_element = (jboolean)out_has_error_id_value;
+        (*environment)->SetBooleanArrayRegion(
+            environment, out_has_error_id, 0, 1, &out_has_error_id_element);
+    }
+    return (jint)result;
+}

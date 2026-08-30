@@ -1969,6 +1969,176 @@
         "java": "mouseSetCursorExt",
         "symbol": "cna_mouse_set_cursor_ext"
       }
+    ],
+    "NativeSensorExtensionRoutes": [
+      {
+        "java": "accelerometerCreate",
+        "symbol": "cna_accelerometer_create"
+      },
+      {
+        "java": "accelerometerDestroy",
+        "symbol": "cna_accelerometer_destroy"
+      },
+      {
+        "java": "accelerometerGetCurrentValue",
+        "symbol": "cna_accelerometer_get_current_value"
+      },
+      {
+        "java": "accelerometerGetIsDataValid",
+        "symbol": "cna_accelerometer_get_is_data_valid"
+      },
+      {
+        "java": "accelerometerGetIsSupported",
+        "symbol": "cna_accelerometer_get_is_supported"
+      },
+      {
+        "java": "accelerometerGetState",
+        "symbol": "cna_accelerometer_get_state"
+      },
+      {
+        "java": "accelerometerGetTimeBetweenUpdatesTicks",
+        "symbol": "cna_accelerometer_get_time_between_updates_ticks"
+      },
+      {
+        "java": "accelerometerSetTimeBetweenUpdatesTicks",
+        "symbol": "cna_accelerometer_set_time_between_updates_ticks"
+      },
+      {
+        "java": "accelerometerStart",
+        "symbol": "cna_accelerometer_start"
+      },
+      {
+        "java": "accelerometerStop",
+        "symbol": "cna_accelerometer_stop"
+      },
+      {
+        "java": "compassCreate",
+        "symbol": "cna_compass_create"
+      },
+      {
+        "java": "compassDestroy",
+        "symbol": "cna_compass_destroy"
+      },
+      {
+        "java": "compassGetCurrentValue",
+        "symbol": "cna_compass_get_current_value"
+      },
+      {
+        "java": "compassGetIsDataValid",
+        "symbol": "cna_compass_get_is_data_valid"
+      },
+      {
+        "java": "compassGetIsSupported",
+        "symbol": "cna_compass_get_is_supported"
+      },
+      {
+        "java": "compassGetState",
+        "symbol": "cna_compass_get_state"
+      },
+      {
+        "java": "compassGetTimeBetweenUpdatesTicks",
+        "symbol": "cna_compass_get_time_between_updates_ticks"
+      },
+      {
+        "java": "compassSetTimeBetweenUpdatesTicks",
+        "symbol": "cna_compass_set_time_between_updates_ticks"
+      },
+      {
+        "java": "compassStart",
+        "symbol": "cna_compass_start"
+      },
+      {
+        "java": "compassStop",
+        "symbol": "cna_compass_stop"
+      },
+      {
+        "java": "gyroscopeCreate",
+        "symbol": "cna_gyroscope_create"
+      },
+      {
+        "java": "gyroscopeDestroy",
+        "symbol": "cna_gyroscope_destroy"
+      },
+      {
+        "java": "gyroscopeGetCurrentValue",
+        "symbol": "cna_gyroscope_get_current_value"
+      },
+      {
+        "java": "gyroscopeGetIsDataValid",
+        "symbol": "cna_gyroscope_get_is_data_valid"
+      },
+      {
+        "java": "gyroscopeGetIsSupported",
+        "symbol": "cna_gyroscope_get_is_supported"
+      },
+      {
+        "java": "gyroscopeGetState",
+        "symbol": "cna_gyroscope_get_state"
+      },
+      {
+        "java": "gyroscopeGetTimeBetweenUpdatesTicks",
+        "symbol": "cna_gyroscope_get_time_between_updates_ticks"
+      },
+      {
+        "java": "gyroscopeSetTimeBetweenUpdatesTicks",
+        "symbol": "cna_gyroscope_set_time_between_updates_ticks"
+      },
+      {
+        "java": "gyroscopeStart",
+        "symbol": "cna_gyroscope_start"
+      },
+      {
+        "java": "gyroscopeStop",
+        "symbol": "cna_gyroscope_stop"
+      },
+      {
+        "java": "motionCreate",
+        "symbol": "cna_motion_create"
+      },
+      {
+        "java": "motionDestroy",
+        "symbol": "cna_motion_destroy"
+      },
+      {
+        "java": "motionGetCurrentValue",
+        "symbol": "cna_motion_get_current_value"
+      },
+      {
+        "java": "motionGetIsAttitudeNorthReferencedExt",
+        "symbol": "cna_motion_get_is_attitude_north_referenced_ext"
+      },
+      {
+        "java": "motionGetIsDataValid",
+        "symbol": "cna_motion_get_is_data_valid"
+      },
+      {
+        "java": "motionGetIsSupported",
+        "symbol": "cna_motion_get_is_supported"
+      },
+      {
+        "java": "motionGetState",
+        "symbol": "cna_motion_get_state"
+      },
+      {
+        "java": "motionGetTimeBetweenUpdatesTicks",
+        "symbol": "cna_motion_get_time_between_updates_ticks"
+      },
+      {
+        "java": "motionSetTimeBetweenUpdatesTicks",
+        "symbol": "cna_motion_set_time_between_updates_ticks"
+      },
+      {
+        "java": "motionStart",
+        "symbol": "cna_motion_start"
+      },
+      {
+        "java": "motionStop",
+        "symbol": "cna_motion_stop"
+      },
+      {
+        "java": "sensorsGetLastErrorIdExt",
+        "symbol": "cna_sensors_get_last_error_id_ext"
+      }
     ]
   }
 }

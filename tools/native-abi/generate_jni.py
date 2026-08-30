@@ -130,14 +130,57 @@ STRUCT_GROUPS = (
 )
 
 
+def version_paths(name: str, live: dict, prefix: str = "",
+                  seen: frozenset[str] = frozenset()) -> list[tuple[str, str, str]]:
+    """Return every ``struct_size``/``struct_version`` leaf, nested ones included.
+
+    CNA requires each versioned structure to be stamped from the exact header the
+    caller compiled against, which is a fact C knows and Java does not.  A nested
+    versioned structure needs stamping just as much as the outer one, so the walk
+    is recursive: leaving a nested pair at whatever Java happened to send would
+    hand CNA a structure that says it is zero bytes long.
+    """
+    structure = live["structures"].get(name)
+    if structure is None or name in seen:
+        return []
+    fields = {field["name"] for field in structure["fields"]}
+    found: list[tuple[str, str, str]] = []
+    for version_field in VERSION_FIELDS:
+        if version_field in fields:
+            found.append((prefix + version_field, version_field,
+                          struct_version(name, live)))
+    for field in structure["fields"]:
+        field_type, pointers = bare(field["type"])
+        if pointers or "[" in field_type or field_type not in live["structures"]:
+            continue
+        found.extend(version_paths(field_type, live, f"{prefix}{field['name']}.",
+                                   seen | {name}))
+    return found
+
+
+def stamp_versions(target: str, versions: list[tuple[str, str, str]]) -> list[str]:
+    """Emit the assignments that stamp every versioned structure, nested ones included."""
+    lines: list[str] = []
+    for path, kind, version in versions:
+        member = path.rsplit(".", 1)[0] if "." in path else None
+        subject = f"{target}.{member}" if member else target
+        if kind == "struct_size":
+            lines.append(f"    {target}.{path} = (uint32_t)(sizeof {subject});")
+        else:
+            lines.append(f"    {target}.{path} = {version};")
+    return lines
+
+
 def group_leaves(leaves: list[tuple[str, str]]) -> dict[str, list[tuple[str, str]]]:
     """Split a struct's leaves into the byte, float and integral arrays that carry them.
 
-    ``struct_size`` and ``struct_version`` never cross into Java. CNA requires the
-    caller to set them from the exact header it compiled against, which is a fact C
-    knows and Java does not, so the generated adapter fills them in itself.
+    ``struct_size`` and ``struct_version`` never cross into Java, at any nesting
+    depth. CNA requires the caller to set them from the exact header it compiled
+    against, which is a fact C knows and Java does not, so the generated adapter
+    fills them in itself.
     """
-    leaves = [(path, leaf) for path, leaf in leaves if path not in VERSION_FIELDS]
+    leaves = [(path, leaf) for path, leaf in leaves
+              if path.rsplit(".", 1)[-1] not in VERSION_FIELDS]
     return {
         "bytes": [(path, leaf) for path, leaf in leaves
                   if leaf in ("char", "uint8_t") and path.endswith("]")],
@@ -184,8 +227,7 @@ def plan(route: dict, live: dict) -> dict:
             raw_leaves = flatten_struct(type_name, live)
             groups = group_leaves(raw_leaves)
             steps.append({"shape": "struct_value", "name": name, "ctype": type_name,
-                          "versioned": [path for path, _ in raw_leaves if path in VERSION_FIELDS],
-                          "version": struct_version(type_name, live), **groups})
+                          "versions": version_paths(type_name, live), **groups})
             index += 1
             continue
         if pointers == 0:
@@ -208,22 +250,19 @@ def plan(route: dict, live: dict) -> dict:
             # length divided by the leaves per element gives the count.
             raw_leaves = flatten_struct(type_name, live)
             groups = group_leaves(raw_leaves)
-            versioned = [path for path, _ in raw_leaves if path in VERSION_FIELDS]
             if not any(groups[group] for group, _, _, _ in STRUCT_GROUPS):
                 raise Unsupported(f"{route['symbol']}: empty structure array {type_name}")
             steps.append({"shape": "struct_array", "name": name, "ctype": type_name,
-                          "input": constant, "versioned": versioned,
-                          "version": struct_version(type_name, live),
+                          "input": constant, "versions": version_paths(type_name, live),
                           "count": following["name"] or "count", **groups})
             index += 2
             continue
         if pointers == 1 and type_name in live["structures"]:
             raw_leaves = flatten_struct(type_name, live)
             groups = group_leaves(raw_leaves)
-            versioned = [path for path, _ in raw_leaves if path in VERSION_FIELDS]
             steps.append({"shape": "struct", "name": name, "ctype": type_name,
-                          "input": constant, "versioned": versioned,
-                          "version": struct_version(type_name, live), **groups})
+                          "input": constant, "versions": version_paths(type_name, live),
+                          **groups})
             index += 1
             continue
         if pointers == 1 and following is not None and bare(following["type"]) == ("uint64_t", 0):
@@ -446,13 +485,10 @@ def render_c(class_name: str, entries: list[dict]) -> str:
                     body.append("        }")
                     body.append(f"        free({field}_values);")
                     body.append("    }")
-                if "struct_size" in step["versioned"]:
+                if step["versions"]:
                     body.append(f"    for (jsize element = 0; element < {name}_count; ++element) {{")
-                    body.append(f"        {name}_values[element].struct_size = "
-                                f"(uint32_t)(sizeof {name}_values[element]);")
-                    if "struct_version" in step["versioned"]:
-                        body.append(f"        {name}_values[element].struct_version = "
-                                    f"{step['version']};")
+                    body.extend("    " + line for line in stamp_versions(
+                        f"{name}_values[element]", step["versions"]))
                     body.append("    }")
                 arguments.append(f"{name}_values")
                 arguments.append(f"(uint64_t){name}_count")
@@ -491,10 +527,7 @@ def render_c(class_name: str, entries: list[dict]) -> str:
             elif shape == "struct_value":
                 body.append(f"    {step['ctype']} {name}_value;")
                 body.append(f"    memset(&{name}_value, 0, sizeof {name}_value);")
-                if "struct_size" in step["versioned"]:
-                    body.append(f"    {name}_value.struct_size = (uint32_t)(sizeof {name}_value);")
-                if "struct_version" in step["versioned"]:
-                    body.append(f"    {name}_value.struct_version = {step['version']};")
+                body.extend(stamp_versions(f"{name}_value", step["versions"]))
                 for group, jni, java, _ in STRUCT_GROUPS:
                     if not step[group]:
                         continue
@@ -512,10 +545,7 @@ def render_c(class_name: str, entries: list[dict]) -> str:
             elif shape == "struct":
                 body.append(f"    {step['ctype']} {name}_value;")
                 body.append(f"    memset(&{name}_value, 0, sizeof {name}_value);")
-                if "struct_size" in step["versioned"]:
-                    body.append(f"    {name}_value.struct_size = (uint32_t)(sizeof {name}_value);")
-                if "struct_version" in step["versioned"]:
-                    body.append(f"    {name}_value.struct_version = {step['version']};")
+                body.extend(stamp_versions(f"{name}_value", step["versions"]))
                 arguments.append(f"&{name}_value")
                 for group, jni, java, _ in STRUCT_GROUPS:
                     if not step[group]:

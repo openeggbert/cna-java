@@ -26,3 +26,6 @@ __pycache__/
 *.iml
 .DS_Store
 Thumbs.db
+
+# Throwaway native probes (build-probe is the shared probe directory)
+/build-probe/

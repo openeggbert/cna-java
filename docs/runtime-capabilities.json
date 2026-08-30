@@ -5,12 +5,13 @@
   "qualifiedRuntime": {
     "platform": "Linux x86-64",
     "cnaAbi": "0.20.0",
-    "cnaHead": "72262a33ed5ae7657024c7f1251338748a3feee5",
-    "sharpRuntimeHead": "df1b42abfcdefda030d63e97f16d2f7ea883837f",
+    "cnaHead": "17b5a90a0878f3f44c23bc8e3197d5d30373dc72",
+    "sharpRuntimeHead": "4a49afb0cfe6a41e6e0af0bb62dc5175976731bb",
     "renderer": "HEADLESS",
     "audio": "NULL",
     "extendedGraphicsLayer": true,
-    "devices": true
+    "devices": true,
+    "cnaInventorySha256": "e9e0be892dbdce49dedf195dac35f604a9263565a74473195d878ee9e580696d"
   },
   "statusVocabulary": [
     "ASSET_PENDING",
@@ -189,6 +190,16 @@
         "NATIVE_VERIFIED"
       ],
       "detail": "The platform, desktop operating system, renderer name, backend category and maturity, application title and CNA's logger all reach CNA and are asserted against what this build reports: Desktop, Linux, HEADLESS, Diagnostic, Supported."
+    },
+    {
+      "id": "extension-sensors",
+      "surface": "org.openeggbert.cna.extensions.sensors",
+      "statuses": [
+        "EXTENSION_VERIFIED",
+        "NATIVE_VERIFIED",
+        "HARDWARE_PENDING"
+      ],
+      "detail": "Accelerometer, Gyroscope, Compass and Motion create, report state, round-trip their sampling interval and release their owned handle against the live runtime. This host has none of the four: every one reports NotSupported, getIsDataValid is false, and a reading is refused with IllegalStateException rather than answered with zeros, which is CNA's own contract and what the tests assert. A reading from real hardware is not qualified here."
     }
   ]
 }

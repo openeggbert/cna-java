@@ -53,6 +53,52 @@ _Static_assert(offsetof(CNA_GamePadState, packet_number) == 12U, "CNA_GamePadSta
 _Static_assert(offsetof(CNA_GamePadState, pressed_buttons) == 16U, "CNA_GamePadState.buttons offset");
 _Static_assert(offsetof(CNA_GamePadState, analog) == 24U, "CNA_GamePadState.analog offset");
 _Static_assert(sizeof(CNA_GamePadCapabilities) == 48U, "CNA_GamePadCapabilities layout changed");
+
+/*
+ * The sensor readings. Their field order is what the generated adapter flattens into the
+ * Java carrier arrays, so a reordering upstream would silently change what each index
+ * means; asserting the offsets is what turns that into a build failure.
+ */
+_Static_assert(sizeof(CNA_SensorState) == 4U, "CNA_SensorState must be uint32_t");
+_Static_assert(sizeof(CNA_DateTimeOffset) == 16U, "CNA_DateTimeOffset layout changed");
+_Static_assert(offsetof(CNA_DateTimeOffset, offset_ticks) == 8U,
+    "CNA_DateTimeOffset.offset_ticks offset");
+_Static_assert(sizeof(CNA_AccelerometerReading) == 40U,
+    "CNA_AccelerometerReading layout changed");
+_Static_assert(offsetof(CNA_AccelerometerReading, timestamp) == 8U,
+    "CNA_AccelerometerReading.timestamp offset");
+_Static_assert(offsetof(CNA_AccelerometerReading, acceleration) == 24U,
+    "CNA_AccelerometerReading.acceleration offset");
+_Static_assert(sizeof(CNA_GyroscopeReading) == 40U, "CNA_GyroscopeReading layout changed");
+_Static_assert(offsetof(CNA_GyroscopeReading, timestamp) == 8U,
+    "CNA_GyroscopeReading.timestamp offset");
+_Static_assert(offsetof(CNA_GyroscopeReading, rotation_rate) == 24U,
+    "CNA_GyroscopeReading.rotation_rate offset");
+_Static_assert(sizeof(CNA_AttitudeReading) == 120U, "CNA_AttitudeReading layout changed");
+_Static_assert(offsetof(CNA_AttitudeReading, timestamp) == 8U,
+    "CNA_AttitudeReading.timestamp offset");
+_Static_assert(offsetof(CNA_AttitudeReading, pitch) == 24U,
+    "CNA_AttitudeReading.pitch offset");
+_Static_assert(offsetof(CNA_AttitudeReading, quaternion) == 36U,
+    "CNA_AttitudeReading.quaternion offset");
+_Static_assert(offsetof(CNA_AttitudeReading, rotation_matrix) == 52U,
+    "CNA_AttitudeReading.rotation_matrix offset");
+_Static_assert(sizeof(CNA_CompassReading) == 64U, "CNA_CompassReading layout changed");
+_Static_assert(offsetof(CNA_CompassReading, timestamp) == 8U,
+    "CNA_CompassReading.timestamp offset");
+_Static_assert(offsetof(CNA_CompassReading, heading_accuracy) == 24U,
+    "CNA_CompassReading.heading_accuracy offset");
+_Static_assert(offsetof(CNA_CompassReading, magnetometer_reading) == 48U,
+    "CNA_CompassReading.magnetometer_reading offset");
+_Static_assert(sizeof(CNA_MotionReading) == 184U, "CNA_MotionReading layout changed");
+_Static_assert(offsetof(CNA_MotionReading, timestamp) == 8U,
+    "CNA_MotionReading.timestamp offset");
+_Static_assert(offsetof(CNA_MotionReading, attitude) == 24U,
+    "CNA_MotionReading.attitude offset");
+_Static_assert(offsetof(CNA_MotionReading, device_acceleration) == 144U,
+    "CNA_MotionReading.device_acceleration offset");
+_Static_assert(offsetof(CNA_MotionReading, gravity) == 168U,
+    "CNA_MotionReading.gravity offset");
 _Static_assert(offsetof(CNA_GamePadCapabilities, gamepad_type) == 8U,
     "CNA_GamePadCapabilities.type offset");
 _Static_assert(offsetof(CNA_GamePadCapabilities, is_connected) == 12U,
