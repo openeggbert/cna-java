@@ -150,6 +150,12 @@ public final class NativeGamerServices {
     /** Discards every queued event. */
     static native void nativeResetEvents();
 
+    /** Subscribes CNA's typed-character event. */
+    static native int nativeSubscribeTextInput(long[] outRegistration);
+
+    /** Releases the typed-character subscription. */
+    static native int nativeUnsubscribeTextInput(long registration);
+
     /** Converts this adapter's game token into the CNA game handle a generated route needs. */
     static native long nativeCnaGameHandle(long game);
 

@@ -88,6 +88,8 @@ typedef struct CnaFunctions {
     CNA_JNI_ROUTE(cna_framework_dispatcher_update) framework_dispatcher_update;
     CNA_JNI_ROUTE(cna_gamer_services_dispatcher_set_window_handle) gamer_services_dispatcher_set_window_handle;
     CNA_JNI_ROUTE(cna_guide_begin_show_message_box) guide_begin_show_message_box;
+    CNA_JNI_ROUTE(cna_text_input_subscribe_text_input_ext) text_input_subscribe_text_input_ext;
+    CNA_JNI_ROUTE(cna_text_input_unsubscribe_ext) text_input_unsubscribe_ext;
     CNA_JNI_ROUTE(cna_signed_in_gamer_subscribe_signed_in_ext) signed_in_gamer_subscribe_signed_in_ext;
     CNA_JNI_ROUTE(cna_signed_in_gamer_subscribe_signed_out_ext) signed_in_gamer_subscribe_signed_out_ext;
     CNA_JNI_ROUTE(cna_gamer_services_dispatcher_subscribe_installing_title_update_ext) gamer_services_dispatcher_subscribe_installing_title_update_ext;
@@ -1628,6 +1630,8 @@ JNIEXPORT jint JNICALL Java_org_openeggbert_cna_internal_NativeBindings_nativeLo
     LOAD(gamer_services_dispatcher_set_window_handle,
         "cna_gamer_services_dispatcher_set_window_handle");
     LOAD(guide_begin_show_message_box, "cna_guide_begin_show_message_box");
+    LOAD(text_input_subscribe_text_input_ext, "cna_text_input_subscribe_text_input_ext");
+    LOAD(text_input_unsubscribe_ext, "cna_text_input_unsubscribe_ext");
     LOAD(signed_in_gamer_subscribe_signed_in_ext, "cna_signed_in_gamer_subscribe_signed_in_ext");
     LOAD(signed_in_gamer_subscribe_signed_out_ext, "cna_signed_in_gamer_subscribe_signed_out_ext");
     LOAD(gamer_services_dispatcher_subscribe_installing_title_update_ext, "cna_gamer_services_dispatcher_subscribe_installing_title_update_ext");
@@ -12194,4 +12198,5 @@ Java_org_openeggbert_cna_internal_NativeGamerServices_nativeGuideShowMessageBox(
 #include "generated/NativeGraphicsExtensionRoutes.inc"
 #include "generated/NativeRuntimeExtensionRoutes.inc"
 #include "generated/NativeDeviceExtensionRoutes.inc"
+#include "generated/NativeInputExtensionRoutes.inc"
 #include "cna_java_jni_events.inc"

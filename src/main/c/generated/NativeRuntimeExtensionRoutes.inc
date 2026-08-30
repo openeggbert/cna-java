@@ -8,10 +8,10 @@
 
 JNIEXPORT jint JNICALL
 Java_org_openeggbert_cna_internal_generated_NativeRuntimeExtensionRoutes_assemblyCopyTitleExt(
-    JNIEnv* environment, jclass type, jbyteArray destination, jlongArray out_bytes)
+    JNIEnv* environment, jclass declaring_class, jbyteArray destination, jlongArray out_bytes)
 {
     (void)environment;
-    (void)type;
+    (void)declaring_class;
     jsize destination_size = (*environment)->GetArrayLength(environment, destination);
     jbyte* destination_bytes = (*environment)->GetByteArrayElements(environment, destination, NULL);
     if (destination_bytes == NULL) {
@@ -30,10 +30,10 @@ Java_org_openeggbert_cna_internal_generated_NativeRuntimeExtensionRoutes_assembl
 
 JNIEXPORT jint JNICALL
 Java_org_openeggbert_cna_internal_generated_NativeRuntimeExtensionRoutes_assemblySetTitleExt(
-    JNIEnv* environment, jclass type, jbyteArray title)
+    JNIEnv* environment, jclass declaring_class, jbyteArray title)
 {
     (void)environment;
-    (void)type;
+    (void)declaring_class;
     jsize title_size = (*environment)->GetArrayLength(environment, title);
     jbyte* title_bytes = (*environment)->GetByteArrayElements(environment, title, NULL);
     if (title_bytes == NULL) {
@@ -47,10 +47,10 @@ Java_org_openeggbert_cna_internal_generated_NativeRuntimeExtensionRoutes_assembl
 
 JNIEXPORT jint JNICALL
 Java_org_openeggbert_cna_internal_generated_NativeRuntimeExtensionRoutes_desktopOsGetCurrent(
-    JNIEnv* environment, jclass type, jintArray out_os)
+    JNIEnv* environment, jclass declaring_class, jintArray out_os)
 {
     (void)environment;
-    (void)type;
+    (void)declaring_class;
     CNA_DesktopOS out_os_value = 0;
     CNA_Result result = cna.desktop_os_get_current(&out_os_value);
     if (result == CNA_RESULT_SUCCESS) {
@@ -63,10 +63,10 @@ Java_org_openeggbert_cna_internal_generated_NativeRuntimeExtensionRoutes_desktop
 
 JNIEXPORT jint JNICALL
 Java_org_openeggbert_cna_internal_generated_NativeRuntimeExtensionRoutes_graphicsBackendCategoryCopyName(
-    JNIEnv* environment, jclass type, jint category, jbyteArray destination, jlongArray out_bytes)
+    JNIEnv* environment, jclass declaring_class, jint category, jbyteArray destination, jlongArray out_bytes)
 {
     (void)environment;
-    (void)type;
+    (void)declaring_class;
     jsize destination_size = (*environment)->GetArrayLength(environment, destination);
     jbyte* destination_bytes = (*environment)->GetByteArrayElements(environment, destination, NULL);
     if (destination_bytes == NULL) {
@@ -85,10 +85,10 @@ Java_org_openeggbert_cna_internal_generated_NativeRuntimeExtensionRoutes_graphic
 
 JNIEXPORT jint JNICALL
 Java_org_openeggbert_cna_internal_generated_NativeRuntimeExtensionRoutes_graphicsBackendCategoryGetNameSize(
-    JNIEnv* environment, jclass type, jint category, jlongArray out_bytes)
+    JNIEnv* environment, jclass declaring_class, jint category, jlongArray out_bytes)
 {
     (void)environment;
-    (void)type;
+    (void)declaring_class;
     uint64_t out_bytes_value = 0;
     CNA_Result result = cna.graphics_backend_category_get_name_size((CNA_GraphicsBackendCategory)category, &out_bytes_value);
     if (result == CNA_RESULT_SUCCESS) {
@@ -101,10 +101,10 @@ Java_org_openeggbert_cna_internal_generated_NativeRuntimeExtensionRoutes_graphic
 
 JNIEXPORT jint JNICALL
 Java_org_openeggbert_cna_internal_generated_NativeRuntimeExtensionRoutes_graphicsBackendGetCurrentCategory(
-    JNIEnv* environment, jclass type, jintArray out_category)
+    JNIEnv* environment, jclass declaring_class, jintArray out_category)
 {
     (void)environment;
-    (void)type;
+    (void)declaring_class;
     CNA_GraphicsBackendCategory out_category_value = 0;
     CNA_Result result = cna.graphics_backend_get_current_category(&out_category_value);
     if (result == CNA_RESULT_SUCCESS) {
@@ -117,10 +117,10 @@ Java_org_openeggbert_cna_internal_generated_NativeRuntimeExtensionRoutes_graphic
 
 JNIEXPORT jint JNICALL
 Java_org_openeggbert_cna_internal_generated_NativeRuntimeExtensionRoutes_graphicsBackendGetCurrentMaturity(
-    JNIEnv* environment, jclass type, jintArray out_maturity)
+    JNIEnv* environment, jclass declaring_class, jintArray out_maturity)
 {
     (void)environment;
-    (void)type;
+    (void)declaring_class;
     CNA_GraphicsBackendMaturity out_maturity_value = 0;
     CNA_Result result = cna.graphics_backend_get_current_maturity(&out_maturity_value);
     if (result == CNA_RESULT_SUCCESS) {
@@ -133,10 +133,10 @@ Java_org_openeggbert_cna_internal_generated_NativeRuntimeExtensionRoutes_graphic
 
 JNIEXPORT jint JNICALL
 Java_org_openeggbert_cna_internal_generated_NativeRuntimeExtensionRoutes_graphicsBackendMaturityCopyName(
-    JNIEnv* environment, jclass type, jint maturity, jbyteArray destination, jlongArray out_bytes)
+    JNIEnv* environment, jclass declaring_class, jint maturity, jbyteArray destination, jlongArray out_bytes)
 {
     (void)environment;
-    (void)type;
+    (void)declaring_class;
     jsize destination_size = (*environment)->GetArrayLength(environment, destination);
     jbyte* destination_bytes = (*environment)->GetByteArrayElements(environment, destination, NULL);
     if (destination_bytes == NULL) {
@@ -155,10 +155,10 @@ Java_org_openeggbert_cna_internal_generated_NativeRuntimeExtensionRoutes_graphic
 
 JNIEXPORT jint JNICALL
 Java_org_openeggbert_cna_internal_generated_NativeRuntimeExtensionRoutes_graphicsBackendMaturityGetNameSize(
-    JNIEnv* environment, jclass type, jint maturity, jlongArray out_bytes)
+    JNIEnv* environment, jclass declaring_class, jint maturity, jlongArray out_bytes)
 {
     (void)environment;
-    (void)type;
+    (void)declaring_class;
     uint64_t out_bytes_value = 0;
     CNA_Result result = cna.graphics_backend_maturity_get_name_size((CNA_GraphicsBackendMaturity)maturity, &out_bytes_value);
     if (result == CNA_RESULT_SUCCESS) {
@@ -171,10 +171,10 @@ Java_org_openeggbert_cna_internal_generated_NativeRuntimeExtensionRoutes_graphic
 
 JNIEXPORT jint JNICALL
 Java_org_openeggbert_cna_internal_generated_NativeRuntimeExtensionRoutes_graphicsRendererCopyCurrentName(
-    JNIEnv* environment, jclass type, jbyteArray destination, jlongArray out_bytes)
+    JNIEnv* environment, jclass declaring_class, jbyteArray destination, jlongArray out_bytes)
 {
     (void)environment;
-    (void)type;
+    (void)declaring_class;
     jsize destination_size = (*environment)->GetArrayLength(environment, destination);
     jbyte* destination_bytes = (*environment)->GetByteArrayElements(environment, destination, NULL);
     if (destination_bytes == NULL) {
@@ -193,10 +193,10 @@ Java_org_openeggbert_cna_internal_generated_NativeRuntimeExtensionRoutes_graphic
 
 JNIEXPORT jint JNICALL
 Java_org_openeggbert_cna_internal_generated_NativeRuntimeExtensionRoutes_graphicsRendererGetCurrentNameSize(
-    JNIEnv* environment, jclass type, jlongArray out_bytes)
+    JNIEnv* environment, jclass declaring_class, jlongArray out_bytes)
 {
     (void)environment;
-    (void)type;
+    (void)declaring_class;
     uint64_t out_bytes_value = 0;
     CNA_Result result = cna.graphics_renderer_get_current_name_size(&out_bytes_value);
     if (result == CNA_RESULT_SUCCESS) {
@@ -209,10 +209,10 @@ Java_org_openeggbert_cna_internal_generated_NativeRuntimeExtensionRoutes_graphic
 
 JNIEXPORT jint JNICALL
 Java_org_openeggbert_cna_internal_generated_NativeRuntimeExtensionRoutes_loggerGetMinimumLevel(
-    JNIEnv* environment, jclass type, jintArray out_level)
+    JNIEnv* environment, jclass declaring_class, jintArray out_level)
 {
     (void)environment;
-    (void)type;
+    (void)declaring_class;
     CNA_LogLevel out_level_value = 0;
     CNA_Result result = cna.logger_get_minimum_level(&out_level_value);
     if (result == CNA_RESULT_SUCCESS) {
@@ -225,10 +225,10 @@ Java_org_openeggbert_cna_internal_generated_NativeRuntimeExtensionRoutes_loggerG
 
 JNIEXPORT jint JNICALL
 Java_org_openeggbert_cna_internal_generated_NativeRuntimeExtensionRoutes_loggerLog(
-    JNIEnv* environment, jclass type, jint level, jbyteArray message, jint category, jboolean condition)
+    JNIEnv* environment, jclass declaring_class, jint level, jbyteArray message, jint category, jboolean condition)
 {
     (void)environment;
-    (void)type;
+    (void)declaring_class;
     jsize message_size = (*environment)->GetArrayLength(environment, message);
     jbyte* message_bytes = (*environment)->GetByteArrayElements(environment, message, NULL);
     if (message_bytes == NULL) {
@@ -242,20 +242,20 @@ Java_org_openeggbert_cna_internal_generated_NativeRuntimeExtensionRoutes_loggerL
 
 JNIEXPORT jint JNICALL
 Java_org_openeggbert_cna_internal_generated_NativeRuntimeExtensionRoutes_loggerSetMinimumLevel(
-    JNIEnv* environment, jclass type, jint level)
+    JNIEnv* environment, jclass declaring_class, jint level)
 {
     (void)environment;
-    (void)type;
+    (void)declaring_class;
     CNA_Result result = cna.logger_set_minimum_level((CNA_LogLevel)level);
     return (jint)result;
 }
 
 JNIEXPORT jint JNICALL
 Java_org_openeggbert_cna_internal_generated_NativeRuntimeExtensionRoutes_platformCopyCurrentNameExt(
-    JNIEnv* environment, jclass type, jbyteArray destination, jlongArray out_bytes)
+    JNIEnv* environment, jclass declaring_class, jbyteArray destination, jlongArray out_bytes)
 {
     (void)environment;
-    (void)type;
+    (void)declaring_class;
     jsize destination_size = (*environment)->GetArrayLength(environment, destination);
     jbyte* destination_bytes = (*environment)->GetByteArrayElements(environment, destination, NULL);
     if (destination_bytes == NULL) {
@@ -274,10 +274,10 @@ Java_org_openeggbert_cna_internal_generated_NativeRuntimeExtensionRoutes_platfor
 
 JNIEXPORT jint JNICALL
 Java_org_openeggbert_cna_internal_generated_NativeRuntimeExtensionRoutes_platformGetCurrent(
-    JNIEnv* environment, jclass type, jintArray out_platform)
+    JNIEnv* environment, jclass declaring_class, jintArray out_platform)
 {
     (void)environment;
-    (void)type;
+    (void)declaring_class;
     CNA_Platform out_platform_value = 0;
     CNA_Result result = cna.platform_get_current(&out_platform_value);
     if (result == CNA_RESULT_SUCCESS) {
@@ -290,10 +290,10 @@ Java_org_openeggbert_cna_internal_generated_NativeRuntimeExtensionRoutes_platfor
 
 JNIEXPORT jint JNICALL
 Java_org_openeggbert_cna_internal_generated_NativeRuntimeExtensionRoutes_platformGetCurrentNameSizeExt(
-    JNIEnv* environment, jclass type, jlongArray out_bytes)
+    JNIEnv* environment, jclass declaring_class, jlongArray out_bytes)
 {
     (void)environment;
-    (void)type;
+    (void)declaring_class;
     uint64_t out_bytes_value = 0;
     CNA_Result result = cna.platform_get_current_name_size_ext(&out_bytes_value);
     if (result == CNA_RESULT_SUCCESS) {
@@ -306,10 +306,10 @@ Java_org_openeggbert_cna_internal_generated_NativeRuntimeExtensionRoutes_platfor
 
 JNIEXPORT jint JNICALL
 Java_org_openeggbert_cna_internal_generated_NativeRuntimeExtensionRoutes_platformGetIsAppleExt(
-    JNIEnv* environment, jclass type, jbooleanArray out_apple)
+    JNIEnv* environment, jclass declaring_class, jbooleanArray out_apple)
 {
     (void)environment;
-    (void)type;
+    (void)declaring_class;
     CNA_Bool out_apple_value = 0;
     CNA_Result result = cna.platform_get_is_apple_ext(&out_apple_value);
     if (result == CNA_RESULT_SUCCESS) {
@@ -322,10 +322,10 @@ Java_org_openeggbert_cna_internal_generated_NativeRuntimeExtensionRoutes_platfor
 
 JNIEXPORT jint JNICALL
 Java_org_openeggbert_cna_internal_generated_NativeRuntimeExtensionRoutes_platformGetIsMobileExt(
-    JNIEnv* environment, jclass type, jbooleanArray out_mobile)
+    JNIEnv* environment, jclass declaring_class, jbooleanArray out_mobile)
 {
     (void)environment;
-    (void)type;
+    (void)declaring_class;
     CNA_Bool out_mobile_value = 0;
     CNA_Result result = cna.platform_get_is_mobile_ext(&out_mobile_value);
     if (result == CNA_RESULT_SUCCESS) {

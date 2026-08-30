@@ -8,10 +8,10 @@
 
 JNIEXPORT jint JNICALL
 Java_org_openeggbert_cna_internal_generated_NativeDeviceExtensionRoutes_devicesClipboardSetTextExt(
-    JNIEnv* environment, jclass type, jlong game, jbyteArray text, jbooleanArray out_accepted)
+    JNIEnv* environment, jclass declaring_class, jlong game, jbyteArray text, jbooleanArray out_accepted)
 {
     (void)environment;
-    (void)type;
+    (void)declaring_class;
     jsize text_size = (*environment)->GetArrayLength(environment, text);
     jbyte* text_bytes = (*environment)->GetByteArrayElements(environment, text, NULL);
     if (text_bytes == NULL) {
@@ -31,10 +31,10 @@ Java_org_openeggbert_cna_internal_generated_NativeDeviceExtensionRoutes_devicesC
 
 JNIEXPORT jint JNICALL
 Java_org_openeggbert_cna_internal_generated_NativeDeviceExtensionRoutes_devicesExtIsAvailable(
-    JNIEnv* environment, jclass type, jbooleanArray out_available)
+    JNIEnv* environment, jclass declaring_class, jbooleanArray out_available)
 {
     (void)environment;
-    (void)type;
+    (void)declaring_class;
     CNA_Bool out_available_value = 0;
     CNA_Result result = cna.devices_ext_is_available(&out_available_value);
     if (result == CNA_RESULT_SUCCESS) {
@@ -47,10 +47,10 @@ Java_org_openeggbert_cna_internal_generated_NativeDeviceExtensionRoutes_devicesE
 
 JNIEXPORT jint JNICALL
 Java_org_openeggbert_cna_internal_generated_NativeDeviceExtensionRoutes_displayInfoGetContentScaleExt(
-    JNIEnv* environment, jclass type, jlong game, jfloatArray out_scale)
+    JNIEnv* environment, jclass declaring_class, jlong game, jfloatArray out_scale)
 {
     (void)environment;
-    (void)type;
+    (void)declaring_class;
     float out_scale_value = 0;
     CNA_Result result = cna.display_info_get_content_scale_ext((CNA_Handle)game, &out_scale_value);
     if (result == CNA_RESULT_SUCCESS) {
@@ -63,10 +63,10 @@ Java_org_openeggbert_cna_internal_generated_NativeDeviceExtensionRoutes_displayI
 
 JNIEXPORT jint JNICALL
 Java_org_openeggbert_cna_internal_generated_NativeDeviceExtensionRoutes_displayInfoGetSafeAreaExt(
-    JNIEnv* environment, jclass type, jlong game, jlongArray out_areaIntegral)
+    JNIEnv* environment, jclass declaring_class, jlong game, jlongArray out_areaIntegral)
 {
     (void)environment;
-    (void)type;
+    (void)declaring_class;
     CNA_Rectangle out_area_value;
     memset(&out_area_value, 0, sizeof out_area_value);
     CNA_Result result = cna.display_info_get_safe_area_ext((CNA_Handle)game, &out_area_value);
@@ -86,10 +86,10 @@ Java_org_openeggbert_cna_internal_generated_NativeDeviceExtensionRoutes_displayI
 
 JNIEXPORT jint JNICALL
 Java_org_openeggbert_cna_internal_generated_NativeDeviceExtensionRoutes_localeCopyCountryAtExt(
-    JNIEnv* environment, jclass type, jlong game, jlong index, jbyteArray destination, jlongArray out_bytes)
+    JNIEnv* environment, jclass declaring_class, jlong game, jlong index, jbyteArray destination, jlongArray out_bytes)
 {
     (void)environment;
-    (void)type;
+    (void)declaring_class;
     jsize destination_size = (*environment)->GetArrayLength(environment, destination);
     jbyte* destination_bytes = (*environment)->GetByteArrayElements(environment, destination, NULL);
     if (destination_bytes == NULL) {
@@ -108,10 +108,10 @@ Java_org_openeggbert_cna_internal_generated_NativeDeviceExtensionRoutes_localeCo
 
 JNIEXPORT jint JNICALL
 Java_org_openeggbert_cna_internal_generated_NativeDeviceExtensionRoutes_localeCopyLanguageAtExt(
-    JNIEnv* environment, jclass type, jlong game, jlong index, jbyteArray destination, jlongArray out_bytes)
+    JNIEnv* environment, jclass declaring_class, jlong game, jlong index, jbyteArray destination, jlongArray out_bytes)
 {
     (void)environment;
-    (void)type;
+    (void)declaring_class;
     jsize destination_size = (*environment)->GetArrayLength(environment, destination);
     jbyte* destination_bytes = (*environment)->GetByteArrayElements(environment, destination, NULL);
     if (destination_bytes == NULL) {
@@ -130,10 +130,10 @@ Java_org_openeggbert_cna_internal_generated_NativeDeviceExtensionRoutes_localeCo
 
 JNIEXPORT jint JNICALL
 Java_org_openeggbert_cna_internal_generated_NativeDeviceExtensionRoutes_localeGetCountrySizeAtExt(
-    JNIEnv* environment, jclass type, jlong game, jlong index, jlongArray out_bytes)
+    JNIEnv* environment, jclass declaring_class, jlong game, jlong index, jlongArray out_bytes)
 {
     (void)environment;
-    (void)type;
+    (void)declaring_class;
     uint64_t out_bytes_value = 0;
     CNA_Result result = cna.locale_get_country_size_at_ext((CNA_Handle)game, (uint64_t)index, &out_bytes_value);
     if (result == CNA_RESULT_SUCCESS) {
@@ -146,10 +146,10 @@ Java_org_openeggbert_cna_internal_generated_NativeDeviceExtensionRoutes_localeGe
 
 JNIEXPORT jint JNICALL
 Java_org_openeggbert_cna_internal_generated_NativeDeviceExtensionRoutes_localeGetLanguageSizeAtExt(
-    JNIEnv* environment, jclass type, jlong game, jlong index, jlongArray out_bytes)
+    JNIEnv* environment, jclass declaring_class, jlong game, jlong index, jlongArray out_bytes)
 {
     (void)environment;
-    (void)type;
+    (void)declaring_class;
     uint64_t out_bytes_value = 0;
     CNA_Result result = cna.locale_get_language_size_at_ext((CNA_Handle)game, (uint64_t)index, &out_bytes_value);
     if (result == CNA_RESULT_SUCCESS) {
@@ -162,10 +162,10 @@ Java_org_openeggbert_cna_internal_generated_NativeDeviceExtensionRoutes_localeGe
 
 JNIEXPORT jint JNICALL
 Java_org_openeggbert_cna_internal_generated_NativeDeviceExtensionRoutes_localeGetPreferredCountExt(
-    JNIEnv* environment, jclass type, jlong game, jlongArray out_count)
+    JNIEnv* environment, jclass declaring_class, jlong game, jlongArray out_count)
 {
     (void)environment;
-    (void)type;
+    (void)declaring_class;
     uint64_t out_count_value = 0;
     CNA_Result result = cna.locale_get_preferred_count_ext((CNA_Handle)game, &out_count_value);
     if (result == CNA_RESULT_SUCCESS) {
@@ -178,10 +178,10 @@ Java_org_openeggbert_cna_internal_generated_NativeDeviceExtensionRoutes_localeGe
 
 JNIEXPORT jint JNICALL
 Java_org_openeggbert_cna_internal_generated_NativeDeviceExtensionRoutes_powerGetBatteryPercentExt(
-    JNIEnv* environment, jclass type, jlong game, jintArray out_percent)
+    JNIEnv* environment, jclass declaring_class, jlong game, jintArray out_percent)
 {
     (void)environment;
-    (void)type;
+    (void)declaring_class;
     int32_t out_percent_value = 0;
     CNA_Result result = cna.power_get_battery_percent_ext((CNA_Handle)game, &out_percent_value);
     if (result == CNA_RESULT_SUCCESS) {
@@ -194,10 +194,10 @@ Java_org_openeggbert_cna_internal_generated_NativeDeviceExtensionRoutes_powerGet
 
 JNIEXPORT jint JNICALL
 Java_org_openeggbert_cna_internal_generated_NativeDeviceExtensionRoutes_powerGetSecondsRemainingExt(
-    JNIEnv* environment, jclass type, jlong game, jintArray out_seconds)
+    JNIEnv* environment, jclass declaring_class, jlong game, jintArray out_seconds)
 {
     (void)environment;
-    (void)type;
+    (void)declaring_class;
     int32_t out_seconds_value = 0;
     CNA_Result result = cna.power_get_seconds_remaining_ext((CNA_Handle)game, &out_seconds_value);
     if (result == CNA_RESULT_SUCCESS) {
@@ -210,10 +210,10 @@ Java_org_openeggbert_cna_internal_generated_NativeDeviceExtensionRoutes_powerGet
 
 JNIEXPORT jint JNICALL
 Java_org_openeggbert_cna_internal_generated_NativeDeviceExtensionRoutes_powerGetStateExt(
-    JNIEnv* environment, jclass type, jlong game, jintArray out_state)
+    JNIEnv* environment, jclass declaring_class, jlong game, jintArray out_state)
 {
     (void)environment;
-    (void)type;
+    (void)declaring_class;
     CNA_PowerState out_state_value = 0;
     CNA_Result result = cna.power_get_state_ext((CNA_Handle)game, &out_state_value);
     if (result == CNA_RESULT_SUCCESS) {
@@ -226,10 +226,10 @@ Java_org_openeggbert_cna_internal_generated_NativeDeviceExtensionRoutes_powerGet
 
 JNIEXPORT jint JNICALL
 Java_org_openeggbert_cna_internal_generated_NativeDeviceExtensionRoutes_systemInfoGetLogicalCpuCoreCountExt(
-    JNIEnv* environment, jclass type, jlong game, jintArray out_count)
+    JNIEnv* environment, jclass declaring_class, jlong game, jintArray out_count)
 {
     (void)environment;
-    (void)type;
+    (void)declaring_class;
     int32_t out_count_value = 0;
     CNA_Result result = cna.system_info_get_logical_cpu_core_count_ext((CNA_Handle)game, &out_count_value);
     if (result == CNA_RESULT_SUCCESS) {
@@ -242,10 +242,10 @@ Java_org_openeggbert_cna_internal_generated_NativeDeviceExtensionRoutes_systemIn
 
 JNIEXPORT jint JNICALL
 Java_org_openeggbert_cna_internal_generated_NativeDeviceExtensionRoutes_systemInfoGetSystemRamMegabytesExt(
-    JNIEnv* environment, jclass type, jlong game, jintArray out_megabytes)
+    JNIEnv* environment, jclass declaring_class, jlong game, jintArray out_megabytes)
 {
     (void)environment;
-    (void)type;
+    (void)declaring_class;
     int32_t out_megabytes_value = 0;
     CNA_Result result = cna.system_info_get_system_ram_megabytes_ext((CNA_Handle)game, &out_megabytes_value);
     if (result == CNA_RESULT_SUCCESS) {
@@ -258,10 +258,10 @@ Java_org_openeggbert_cna_internal_generated_NativeDeviceExtensionRoutes_systemIn
 
 JNIEXPORT jint JNICALL
 Java_org_openeggbert_cna_internal_generated_NativeDeviceExtensionRoutes_urlLauncherOpenExt(
-    JNIEnv* environment, jclass type, jlong game, jbyteArray url, jbooleanArray out_opened)
+    JNIEnv* environment, jclass declaring_class, jlong game, jbyteArray url, jbooleanArray out_opened)
 {
     (void)environment;
-    (void)type;
+    (void)declaring_class;
     jsize url_size = (*environment)->GetArrayLength(environment, url);
     jbyte* url_bytes = (*environment)->GetByteArrayElements(environment, url, NULL);
     if (url_bytes == NULL) {
@@ -281,10 +281,10 @@ Java_org_openeggbert_cna_internal_generated_NativeDeviceExtensionRoutes_urlLaunc
 
 JNIEXPORT jint JNICALL
 Java_org_openeggbert_cna_internal_generated_NativeDeviceExtensionRoutes_vibrateControllerCopyDeviceNameExt(
-    JNIEnv* environment, jclass type, jlong game, jbyteArray destination, jlongArray out_bytes)
+    JNIEnv* environment, jclass declaring_class, jlong game, jbyteArray destination, jlongArray out_bytes)
 {
     (void)environment;
-    (void)type;
+    (void)declaring_class;
     jsize destination_size = (*environment)->GetArrayLength(environment, destination);
     jbyte* destination_bytes = (*environment)->GetByteArrayElements(environment, destination, NULL);
     if (destination_bytes == NULL) {
@@ -303,10 +303,10 @@ Java_org_openeggbert_cna_internal_generated_NativeDeviceExtensionRoutes_vibrateC
 
 JNIEXPORT jint JNICALL
 Java_org_openeggbert_cna_internal_generated_NativeDeviceExtensionRoutes_vibrateControllerGetDeviceNameSizeExt(
-    JNIEnv* environment, jclass type, jlong game, jlongArray out_bytes)
+    JNIEnv* environment, jclass declaring_class, jlong game, jlongArray out_bytes)
 {
     (void)environment;
-    (void)type;
+    (void)declaring_class;
     uint64_t out_bytes_value = 0;
     CNA_Result result = cna.vibrate_controller_get_device_name_size_ext((CNA_Handle)game, &out_bytes_value);
     if (result == CNA_RESULT_SUCCESS) {
@@ -319,10 +319,10 @@ Java_org_openeggbert_cna_internal_generated_NativeDeviceExtensionRoutes_vibrateC
 
 JNIEXPORT jint JNICALL
 Java_org_openeggbert_cna_internal_generated_NativeDeviceExtensionRoutes_vibrateControllerGetIsSupportedExt(
-    JNIEnv* environment, jclass type, jlong game, jbooleanArray out_supported)
+    JNIEnv* environment, jclass declaring_class, jlong game, jbooleanArray out_supported)
 {
     (void)environment;
-    (void)type;
+    (void)declaring_class;
     CNA_Bool out_supported_value = 0;
     CNA_Result result = cna.vibrate_controller_get_is_supported_ext((CNA_Handle)game, &out_supported_value);
     if (result == CNA_RESULT_SUCCESS) {
@@ -335,40 +335,40 @@ Java_org_openeggbert_cna_internal_generated_NativeDeviceExtensionRoutes_vibrateC
 
 JNIEXPORT jint JNICALL
 Java_org_openeggbert_cna_internal_generated_NativeDeviceExtensionRoutes_vibrateControllerStart(
-    JNIEnv* environment, jclass type, jlong game, jlong duration_ticks)
+    JNIEnv* environment, jclass declaring_class, jlong game, jlong duration_ticks)
 {
     (void)environment;
-    (void)type;
+    (void)declaring_class;
     CNA_Result result = cna.vibrate_controller_start((CNA_Handle)game, (int64_t)duration_ticks);
     return (jint)result;
 }
 
 JNIEXPORT jint JNICALL
 Java_org_openeggbert_cna_internal_generated_NativeDeviceExtensionRoutes_vibrateControllerStartLeftRightExt(
-    JNIEnv* environment, jclass type, jlong game, jfloat large_motor, jfloat small_motor, jlong duration_ticks)
+    JNIEnv* environment, jclass declaring_class, jlong game, jfloat large_motor, jfloat small_motor, jlong duration_ticks)
 {
     (void)environment;
-    (void)type;
+    (void)declaring_class;
     CNA_Result result = cna.vibrate_controller_start_left_right_ext((CNA_Handle)game, (float)large_motor, (float)small_motor, (int64_t)duration_ticks);
     return (jint)result;
 }
 
 JNIEXPORT jint JNICALL
 Java_org_openeggbert_cna_internal_generated_NativeDeviceExtensionRoutes_vibrateControllerStartWithIntensityExt(
-    JNIEnv* environment, jclass type, jlong game, jlong duration_ticks, jfloat intensity)
+    JNIEnv* environment, jclass declaring_class, jlong game, jlong duration_ticks, jfloat intensity)
 {
     (void)environment;
-    (void)type;
+    (void)declaring_class;
     CNA_Result result = cna.vibrate_controller_start_with_intensity_ext((CNA_Handle)game, (int64_t)duration_ticks, (float)intensity);
     return (jint)result;
 }
 
 JNIEXPORT jint JNICALL
 Java_org_openeggbert_cna_internal_generated_NativeDeviceExtensionRoutes_vibrateControllerStop(
-    JNIEnv* environment, jclass type, jlong game)
+    JNIEnv* environment, jclass declaring_class, jlong game)
 {
     (void)environment;
-    (void)type;
+    (void)declaring_class;
     CNA_Result result = cna.vibrate_controller_stop((CNA_Handle)game);
     return (jint)result;
 }

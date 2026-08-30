@@ -785,6 +785,9 @@ public final class NativeBindings {
                 currentGameHandle("FrameworkDispatcher.Update").requireValue()));
         NativeMedia.dispatchPendingEvents();
         NativeStorage.dispatchPendingEvents();
+        // XNA pumps its framework services here, and CNA's typed-character events are one of
+        // them: a game that never touches gamer services still expects text it typed to arrive.
+        GamerEventPump.drain();
     }
 
     /** Initializes the selected-profile GamerServices component against its owning game. */

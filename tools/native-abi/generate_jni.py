@@ -316,8 +316,10 @@ def render_c(class_name: str, entries: list[dict]) -> str:
     ]
     for entry in entries:
         symbol = entry["symbol"]
-        parameters = ["JNIEnv* environment", "jclass type"]
-        body: list[str] = ["    (void)environment;", "    (void)type;"]
+        # The declaring-class parameter is spelled distinctively: a CNA parameter really is
+        # named `type` in places, and a plain `type` here would collide with it.
+        parameters = ["JNIEnv* environment", "jclass declaring_class"]
+        body: list[str] = ["    (void)environment;", "    (void)declaring_class;"]
         arguments: list[str] = []
         epilogue: list[str] = []
         cleanup: list[str] = []

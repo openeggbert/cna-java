@@ -22,9 +22,14 @@ public final class GamerEventPump {
     /** The lowest event kind that belongs to a network session rather than to gamer services. */
     private static final int FIRST_SESSION_KIND = 10;
 
+    /** The lowest event kind that belongs to the input extensions. */
+    private static final int FIRST_INPUT_KIND = 30;
+
     private static volatile Handler gamerHandler;
     private static volatile Handler sessionHandler;
+    private static volatile Handler inputHandler;
     private static volatile boolean subscribed;
+    private static long textInputRegistration;
 
     private GamerEventPump() {
     }
@@ -40,6 +45,21 @@ public final class GamerEventPump {
 
     public static void setSessionHandler(Handler handler) {
         sessionHandler = Objects.requireNonNull(handler, "handler");
+    }
+
+    public static void setInputHandler(Handler handler) {
+        inputHandler = Objects.requireNonNull(handler, "handler");
+    }
+
+    /** Subscribes CNA's typed-character event once. */
+    public static synchronized void ensureTextInputSubscribed() {
+        if (textInputRegistration != 0L) {
+            return;
+        }
+        long[] registration = new long[1];
+        NativeGamerServices.check("TextInput events",
+                NativeGamerServices.nativeSubscribeTextInput(registration));
+        textInputRegistration = registration[0];
     }
 
     /**
@@ -82,7 +102,14 @@ public final class GamerEventPump {
         long[] record = new long[5];
         RuntimeException failure = null;
         while (NativeGamerServices.nativePollEvent(record)) {
-            Handler handler = record[0] >= FIRST_SESSION_KIND ? sessionHandler : gamerHandler;
+            Handler handler;
+            if (record[0] >= FIRST_INPUT_KIND) {
+                handler = inputHandler;
+            } else if (record[0] >= FIRST_SESSION_KIND) {
+                handler = sessionHandler;
+            } else {
+                handler = gamerHandler;
+            }
             if (handler == null) {
                 continue;
             }

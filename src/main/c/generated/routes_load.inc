@@ -278,6 +278,12 @@
     LOAD(logger_get_minimum_level, "cna_logger_get_minimum_level");
     LOAD(logger_log, "cna_logger_log");
     LOAD(logger_set_minimum_level, "cna_logger_set_minimum_level");
+    LOAD(mouse_cursor_create_ext, "cna_mouse_cursor_create_ext");
+    LOAD(mouse_cursor_create_from_texture2d, "cna_mouse_cursor_create_from_texture2d");
+    LOAD(mouse_cursor_destroy, "cna_mouse_cursor_destroy");
+    LOAD(mouse_cursor_dispose, "cna_mouse_cursor_dispose");
+    LOAD(mouse_cursor_get_stock_ext, "cna_mouse_cursor_get_stock_ext");
+    LOAD(mouse_set_cursor_ext, "cna_mouse_set_cursor_ext");
     LOAD(net_get_last_join_error, "cna_net_get_last_join_error");
     LOAD(network_gamer_copy_machine, "cna_network_gamer_copy_machine");
     LOAD(network_gamer_create, "cna_network_gamer_create");
@@ -463,6 +469,12 @@
     LOAD(signed_in_gamer_set_presence_mode_string_ext, "cna_signed_in_gamer_set_presence_mode_string_ext");
     LOAD(system_info_get_logical_cpu_core_count_ext, "cna_system_info_get_logical_cpu_core_count_ext");
     LOAD(system_info_get_system_ram_megabytes_ext, "cna_system_info_get_system_ram_megabytes_ext");
+    LOAD(text_input_is_active_ext, "cna_text_input_is_active_ext");
+    LOAD(text_input_is_screen_keyboard_shown_ext, "cna_text_input_is_screen_keyboard_shown_ext");
+    LOAD(text_input_set_input_rectangle_ext, "cna_text_input_set_input_rectangle_ext");
+    LOAD(text_input_start_ext, "cna_text_input_start_ext");
+    LOAD(text_input_start_with_type_ext, "cna_text_input_start_with_type_ext");
+    LOAD(text_input_stop_ext, "cna_text_input_stop_ext");
     LOAD(url_launcher_open_ext, "cna_url_launcher_open_ext");
     LOAD(vibrate_controller_copy_device_name_ext, "cna_vibrate_controller_copy_device_name_ext");
     LOAD(vibrate_controller_get_device_name_size_ext, "cna_vibrate_controller_get_device_name_size_ext");

@@ -1919,6 +1919,56 @@
         "java": "vibrateControllerStop",
         "symbol": "cna_vibrate_controller_stop"
       }
+    ],
+    "NativeInputExtensionRoutes": [
+      {
+        "java": "textInputStartExt",
+        "symbol": "cna_text_input_start_ext"
+      },
+      {
+        "java": "textInputStartWithTypeExt",
+        "symbol": "cna_text_input_start_with_type_ext"
+      },
+      {
+        "java": "textInputStopExt",
+        "symbol": "cna_text_input_stop_ext"
+      },
+      {
+        "java": "textInputIsActiveExt",
+        "symbol": "cna_text_input_is_active_ext"
+      },
+      {
+        "java": "textInputIsScreenKeyboardShownExt",
+        "symbol": "cna_text_input_is_screen_keyboard_shown_ext"
+      },
+      {
+        "java": "textInputSetInputRectangleExt",
+        "symbol": "cna_text_input_set_input_rectangle_ext"
+      },
+      {
+        "java": "mouseCursorCreateExt",
+        "symbol": "cna_mouse_cursor_create_ext"
+      },
+      {
+        "java": "mouseCursorCreateFromTexture2d",
+        "symbol": "cna_mouse_cursor_create_from_texture2d"
+      },
+      {
+        "java": "mouseCursorDestroy",
+        "symbol": "cna_mouse_cursor_destroy"
+      },
+      {
+        "java": "mouseCursorDispose",
+        "symbol": "cna_mouse_cursor_dispose"
+      },
+      {
+        "java": "mouseCursorGetStockExt",
+        "symbol": "cna_mouse_cursor_get_stock_ext"
+      },
+      {
+        "java": "mouseSetCursorExt",
+        "symbol": "cna_mouse_set_cursor_ext"
+      }
     ]
   }
 }

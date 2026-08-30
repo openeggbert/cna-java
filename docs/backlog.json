@@ -181,13 +181,14 @@
       "title": "Expose CNA's runtime and device extensions",
       "family": "org.openeggbert.cna.extensions",
       "authority": "core_ext.h, devices.h, sensors.h, input_haptics.h, input_joystick.h, input_text.h, input_cursor.h, input_devices.h",
-      "currentState": "The runtime family and the host-device family are projected: platform and renderer identity, CNA's logger, system information, host power, display metrics, the player's locales, the clipboard, opening a URL and controller vibration. Sensors, haptics, raw joysticks, text input, cursors and device enumeration are not.",
+      "currentState": "Three families are projected: the runtime's own identity and logger, the host devices, and typed text plus the mouse cursor. Sensors, haptics, raw joysticks, text composition and device enumeration are not.",
       "expectedState": "Typed Java facades under the extension namespace, never inside Microsoft.Xna.Framework.",
       "priority": 7,
       "status": "ready",
       "tests": [
         "CnaRuntimeTests",
-        "DeviceExtensionTests"
+        "DeviceExtensionTests",
+        "InputExtensionTests"
       ]
     },
     {
@@ -290,6 +291,20 @@
       "blocker": "Not investigated here beyond identifying them: they are upstream tests in a read-only repository, and diagnosing them is cnanext's work, not this binding's. AudioUnavailableSmoke expects playback to be unavailable, which suggests a NULL-audio expectation that no longer matches; CoreExtSmoke asserts renderer classifications.",
       "priority": 10,
       "status": "blocked"
+    },
+    {
+      "id": "JAVA-EXT-005",
+      "title": "Project CNA's text composition and candidate events",
+      "family": "org.openeggbert.cna.extensions.input",
+      "authority": "cna_text_input_subscribe_text_editing_ext and cna_text_input_subscribe_text_editing_candidates_ext",
+      "currentState": "Typed characters are projected; composition text and candidate lists are not. Each event carries a string, and the fixed five-long event record the JNI adapter uses to move an event to Java cannot hold one.",
+      "expectedState": "A transport for a string-carrying event, and TextInput events for composition and candidates on top of it.",
+      "blocker": "None upstream. It needs a second event transport, not a CNA change.",
+      "dependsOn": [
+        "JAVA-EXT-002"
+      ],
+      "priority": 8,
+      "status": "ready"
     }
   ]
 }

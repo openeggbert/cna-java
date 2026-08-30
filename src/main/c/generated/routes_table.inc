@@ -278,6 +278,12 @@
     CNA_JNI_ROUTE(cna_logger_get_minimum_level) logger_get_minimum_level;
     CNA_JNI_ROUTE(cna_logger_log) logger_log;
     CNA_JNI_ROUTE(cna_logger_set_minimum_level) logger_set_minimum_level;
+    CNA_JNI_ROUTE(cna_mouse_cursor_create_ext) mouse_cursor_create_ext;
+    CNA_JNI_ROUTE(cna_mouse_cursor_create_from_texture2d) mouse_cursor_create_from_texture2d;
+    CNA_JNI_ROUTE(cna_mouse_cursor_destroy) mouse_cursor_destroy;
+    CNA_JNI_ROUTE(cna_mouse_cursor_dispose) mouse_cursor_dispose;
+    CNA_JNI_ROUTE(cna_mouse_cursor_get_stock_ext) mouse_cursor_get_stock_ext;
+    CNA_JNI_ROUTE(cna_mouse_set_cursor_ext) mouse_set_cursor_ext;
     CNA_JNI_ROUTE(cna_net_get_last_join_error) net_get_last_join_error;
     CNA_JNI_ROUTE(cna_network_gamer_copy_machine) network_gamer_copy_machine;
     CNA_JNI_ROUTE(cna_network_gamer_create) network_gamer_create;
@@ -463,6 +469,12 @@
     CNA_JNI_ROUTE(cna_signed_in_gamer_set_presence_mode_string_ext) signed_in_gamer_set_presence_mode_string_ext;
     CNA_JNI_ROUTE(cna_system_info_get_logical_cpu_core_count_ext) system_info_get_logical_cpu_core_count_ext;
     CNA_JNI_ROUTE(cna_system_info_get_system_ram_megabytes_ext) system_info_get_system_ram_megabytes_ext;
+    CNA_JNI_ROUTE(cna_text_input_is_active_ext) text_input_is_active_ext;
+    CNA_JNI_ROUTE(cna_text_input_is_screen_keyboard_shown_ext) text_input_is_screen_keyboard_shown_ext;
+    CNA_JNI_ROUTE(cna_text_input_set_input_rectangle_ext) text_input_set_input_rectangle_ext;
+    CNA_JNI_ROUTE(cna_text_input_start_ext) text_input_start_ext;
+    CNA_JNI_ROUTE(cna_text_input_start_with_type_ext) text_input_start_with_type_ext;
+    CNA_JNI_ROUTE(cna_text_input_stop_ext) text_input_stop_ext;
     CNA_JNI_ROUTE(cna_url_launcher_open_ext) url_launcher_open_ext;
     CNA_JNI_ROUTE(cna_vibrate_controller_copy_device_name_ext) vibrate_controller_copy_device_name_ext;
     CNA_JNI_ROUTE(cna_vibrate_controller_get_device_name_size_ext) vibrate_controller_get_device_name_size_ext;

@@ -6641,6 +6641,67 @@
       ]
     },
     {
+      "name": "cna_mouse_cursor_create_ext",
+      "header": "input_cursor.h",
+      "ownership": "borrows its inputs; returns an owned handle",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_MouseCursorHandle*"
+      ]
+    },
+    {
+      "name": "cna_mouse_cursor_create_from_texture2d",
+      "header": "input_cursor.h",
+      "ownership": "borrows its inputs; returns an owned handle",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_Handle",
+        "CNA_Handle",
+        "int32_t",
+        "int32_t",
+        "CNA_MouseCursorHandle*"
+      ]
+    },
+    {
+      "name": "cna_mouse_cursor_destroy",
+      "header": "input_cursor.h",
+      "ownership": "consumes the owned handle on success",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_MouseCursorHandle"
+      ]
+    },
+    {
+      "name": "cna_mouse_cursor_dispose",
+      "header": "input_cursor.h",
+      "ownership": "consumes the owned handle on success",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_MouseCursorHandle"
+      ]
+    },
+    {
+      "name": "cna_mouse_cursor_get_stock_ext",
+      "header": "input_cursor.h",
+      "ownership": "borrows its inputs; returns an owned handle",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_Handle",
+        "CNA_MouseCursorStock",
+        "CNA_MouseCursorHandle*"
+      ]
+    },
+    {
+      "name": "cna_mouse_set_cursor_ext",
+      "header": "input_cursor.h",
+      "ownership": "borrows its inputs",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_Handle",
+        "CNA_MouseCursorHandle"
+      ]
+    },
+    {
       "name": "cna_gamepad_get_capabilities",
       "header": "input_gamepad.h",
       "ownership": "borrows game; copies versioned capabilities",
@@ -6704,6 +6765,84 @@
       "parameters": [
         "CNA_Handle",
         "uint64_t"
+      ]
+    },
+    {
+      "name": "cna_text_input_is_active_ext",
+      "header": "input_text.h",
+      "ownership": "borrows its inputs; caller output",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_Handle",
+        "CNA_Bool*"
+      ]
+    },
+    {
+      "name": "cna_text_input_is_screen_keyboard_shown_ext",
+      "header": "input_text.h",
+      "ownership": "borrows its inputs; caller output",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_Handle",
+        "CNA_Bool*"
+      ]
+    },
+    {
+      "name": "cna_text_input_set_input_rectangle_ext",
+      "header": "input_text.h",
+      "ownership": "borrows its inputs",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_Handle",
+        "CNA_Rectangle"
+      ]
+    },
+    {
+      "name": "cna_text_input_start_ext",
+      "header": "input_text.h",
+      "ownership": "borrows its inputs",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_Handle"
+      ]
+    },
+    {
+      "name": "cna_text_input_start_with_type_ext",
+      "header": "input_text.h",
+      "ownership": "borrows its inputs",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_Handle",
+        "CNA_TextInputType"
+      ]
+    },
+    {
+      "name": "cna_text_input_stop_ext",
+      "header": "input_text.h",
+      "ownership": "borrows its inputs",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_Handle"
+      ]
+    },
+    {
+      "name": "cna_text_input_subscribe_text_input_ext",
+      "header": "input_text.h",
+      "ownership": "returns an owned registration; copies the callback and borrows its context",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_TextInputCallback",
+        "void*",
+        "CNA_TextInputRegistrationHandle*"
+      ]
+    },
+    {
+      "name": "cna_text_input_unsubscribe_ext",
+      "header": "input_text.h",
+      "ownership": "consumes the owned registration",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_TextInputRegistrationHandle"
       ]
     },
     {

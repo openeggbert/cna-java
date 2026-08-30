@@ -32,6 +32,7 @@
 #define CNA_JAVA_EVENT_WRITE_TRUE_SKILL 17
 #define CNA_JAVA_EVENT_WRITE_UNARBITRATED 18
 #define CNA_JAVA_EVENT_INVITE_ACCEPTED 19
+#define CNA_JAVA_EVENT_TEXT_INPUT 30
 
 typedef struct JavaGamerEvent {
     int64_t kind;
@@ -183,6 +184,46 @@ static void java_invite_accepted_callback(
     java_gamer_event_push(CNA_JAVA_EVENT_INVITE_ACCEPTED, 0,
         info == NULL ? 0 : (int64_t)info->gamer, 0,
         info == NULL ? 0 : (int64_t)info->is_current_session);
+}
+
+static void java_text_input_callback(uint16_t code_unit, void* context)
+{
+    (void)context;
+    java_gamer_event_push(CNA_JAVA_EVENT_TEXT_INPUT, 0, (int64_t)code_unit, 0, 0);
+}
+
+/*
+ * Subscribes CNA's typed-character event.
+ *
+ * Composition text and candidate lists are deliberately not here: each carries a string, which
+ * the fixed event record cannot hold, and inventing a second transport for them belongs with the
+ * work that projects them rather than with this one.
+ */
+JNIEXPORT jint JNICALL
+Java_org_openeggbert_cna_internal_NativeGamerServices_nativeSubscribeTextInput(
+    JNIEnv* environment, jclass type, jlongArray out_registration)
+{
+    (void)type;
+    CNA_TextInputRegistrationHandle registration = CNA_INVALID_HANDLE;
+    CNA_Result result = cna.text_input_subscribe_text_input_ext(
+        java_text_input_callback, NULL, &registration);
+    if (result != CNA_RESULT_SUCCESS) {
+        return (jint)result;
+    }
+    jlong value = (jlong)registration;
+    (*environment)->SetLongArrayRegion(environment, out_registration, 0, 1, &value);
+    return (jint)CNA_RESULT_SUCCESS;
+}
+
+/** Releases the typed-character subscription. */
+JNIEXPORT jint JNICALL
+Java_org_openeggbert_cna_internal_NativeGamerServices_nativeUnsubscribeTextInput(
+    JNIEnv* environment, jclass type, jlong registration)
+{
+    (void)environment;
+    (void)type;
+    return (jint)cna.text_input_unsubscribe_ext(
+        (CNA_TextInputRegistrationHandle)registration);
 }
 
 /*
