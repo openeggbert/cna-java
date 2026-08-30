@@ -40,6 +40,7 @@ ROOT = Path(__file__).resolve().parents[2]
 MANIFEST = ROOT / "tools/native-abi/bindings.json"
 RULES = ROOT / "tools/native-abi/coverage-rules.json"
 JNI_SOURCES = sorted(list((ROOT / "src/main/c").glob("*.c"))
+                     + list((ROOT / "src/main/c").glob("*.inc"))
                      + list((ROOT / "src/main/c/generated").glob("*.inc")))
 MAIN_JAVA = ROOT / "src/main/java"
 TEST_JAVA = ROOT / "src/test/java"

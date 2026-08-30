@@ -202,9 +202,9 @@
       "family": "Microsoft.Xna.Framework.Graphics.VertexBuffer",
       "authority": "cna_vertex_buffer_set_data_raw",
       "currentState": "The route is loaded, so the library must export it, but no JNI entry point reaches it: SetData always takes the windowed form.",
-      "expectedState": "Either the whole-buffer form is used for a whole-buffer upload, or the route is dropped from the manifest.",
+      "expectedState": "An upload that starts at the beginning takes CNA's whole-buffer route; a windowed one takes the windowed route. Both are now reached, and boundButUnreached is empty.",
       "priority": 6,
-      "status": "ready"
+      "status": "done"
     },
     {
       "id": "JAVA-NATIVE-011",

@@ -34,6 +34,7 @@ from inventory import abi_version, inventory  # noqa: E402
 ROOT = Path(__file__).resolve().parents[2]
 MANIFEST = ROOT / "tools/native-abi/bindings.json"
 JNI_SOURCES = sorted(list((ROOT / "src/main/c").glob("*.c"))
+                     + list((ROOT / "src/main/c").glob("*.inc"))
                      + list((ROOT / "src/main/c/generated").glob("*.inc")))
 PROBE = ROOT / "tools/native-abi/probe.c"
 

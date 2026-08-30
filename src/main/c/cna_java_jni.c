@@ -5336,6 +5336,16 @@ JNIEXPORT jint JNICALL Java_org_openeggbert_cna_internal_NativeBindings_nativeSe
                 &transfer, bytes, (uint64_t)(uint32_t)vertex_count);
         } else if (options != (jint)CNA_SET_DATA_NONE) {
             result = CNA_RESULT_NOT_SUPPORTED;
+        } else if (offset_in_bytes == 0) {
+            /*
+             * CNA publishes the raw upload in a whole-buffer form and a windowed one. An upload
+             * that starts at the beginning is the whole-buffer case, so it takes that route
+             * rather than asking for a window that happens to begin at zero.
+             */
+            result = cna.vertex_buffer_set_data_raw(
+                (CNA_VertexBufferHandle)vertex_buffer,
+                bytes, byte_count, (uint64_t)(uint32_t)vertex_count,
+                (uint32_t)vertex_stride);
         } else {
             result = cna.vertex_buffer_set_data_raw_at(
                 (CNA_VertexBufferHandle)vertex_buffer,
