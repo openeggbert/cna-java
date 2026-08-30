@@ -16,7 +16,7 @@ import java.io.InputStream;
  * <p>The counterpart of {@link PacketWriter}, and managed for the same reason: XNA's reader is
  * a {@code BinaryReader} over the received bytes, and keeping it managed gives {@code Position}
  * and {@code Length} exactly XNA's meaning over one cursor. The bytes arrive from CNA once,
- * when {@link LocalNetworkGamer#ReceiveData(PacketReader, NetworkGamer[])} fills the reader.
+ * when {@link LocalNetworkGamer#ReceiveData(PacketReader)} fills the reader.
  *
  * <p>The value overloads read what {@link PacketWriter} wrote, in the same order.
  */

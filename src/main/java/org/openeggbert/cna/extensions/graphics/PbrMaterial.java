@@ -34,6 +34,7 @@ public final class PbrMaterial {
 
     /** Creates the material CNA itself defaults to, with no textures assigned. */
     public PbrMaterial() {
+        GraphicsExtension.requireBackend();
         long[] integers = new long[14];
         float[] floats = new float[5];
         GraphicsExtension.check("PbrMaterial",

@@ -27,6 +27,7 @@ public final class AsciiPostProcessEffect implements AutoCloseable {
      */
     public AsciiPostProcessEffect(GraphicsDevice graphicsDevice) {
         Objects.requireNonNull(graphicsDevice, "graphicsDevice");
+        GraphicsExtension.requireBackend();
         long[] effect = new long[1];
         GraphicsExtension.check("AsciiPostProcessEffect",
                 NativeGraphicsExtensionRoutes.asciiPostProcessEffectCreate(

@@ -20,6 +20,7 @@ public final class CnaRuntime {
 
     /** Returns the platform family CNA was compiled for. */
     public static CnaPlatform getPlatform() {
+        NativeBindings.requireAvailable();
         int[] platform = new int[1];
         check("CnaRuntime.getPlatform",
                 NativeRuntimeExtensionRoutes.platformGetCurrent(platform));
@@ -40,6 +41,7 @@ public final class CnaRuntime {
      *     question there rather than returning a fallback
      */
     public static DesktopOperatingSystem getDesktopOperatingSystem() {
+        NativeBindings.requireAvailable();
         int[] os = new int[1];
         check("CnaRuntime.getDesktopOperatingSystem",
                 NativeRuntimeExtensionRoutes.desktopOsGetCurrent(os));
@@ -47,6 +49,7 @@ public final class CnaRuntime {
     }
 
     public static boolean isMobile() {
+        NativeBindings.requireAvailable();
         boolean[] mobile = new boolean[1];
         check("CnaRuntime.isMobile",
                 NativeRuntimeExtensionRoutes.platformGetIsMobileExt(mobile));
@@ -54,6 +57,7 @@ public final class CnaRuntime {
     }
 
     public static boolean isApple() {
+        NativeBindings.requireAvailable();
         boolean[] apple = new boolean[1];
         check("CnaRuntime.isApple",
                 NativeRuntimeExtensionRoutes.platformGetIsAppleExt(apple));
@@ -69,6 +73,7 @@ public final class CnaRuntime {
 
     /** Returns how the current renderer produces pixels. */
     public static GraphicsBackendCategory getBackendCategory() {
+        NativeBindings.requireAvailable();
         int[] category = new int[1];
         check("CnaRuntime.getBackendCategory",
                 NativeRuntimeExtensionRoutes.graphicsBackendGetCurrentCategory(category));
@@ -77,6 +82,7 @@ public final class CnaRuntime {
 
     /** Returns how far the current renderer has been taken. */
     public static GraphicsBackendMaturity getBackendMaturity() {
+        NativeBindings.requireAvailable();
         int[] maturity = new int[1];
         check("CnaRuntime.getBackendMaturity",
                 NativeRuntimeExtensionRoutes.graphicsBackendGetCurrentMaturity(maturity));
@@ -85,6 +91,7 @@ public final class CnaRuntime {
 
     /** Returns CNA's own name for one backend category. */
     public static String getName(GraphicsBackendCategory category) {
+        NativeBindings.requireAvailable();
         int value = Objects.requireNonNull(category, "category").ordinal();
         return text("CnaRuntime.getName",
                 out -> NativeRuntimeExtensionRoutes.graphicsBackendCategoryGetNameSize(value, out),
@@ -94,6 +101,7 @@ public final class CnaRuntime {
 
     /** Returns CNA's own name for one backend maturity. */
     public static String getName(GraphicsBackendMaturity maturity) {
+        NativeBindings.requireAvailable();
         int value = Objects.requireNonNull(maturity, "maturity").ordinal();
         return text("CnaRuntime.getName",
                 out -> NativeRuntimeExtensionRoutes.graphicsBackendMaturityGetNameSize(value, out),
@@ -108,6 +116,7 @@ public final class CnaRuntime {
      * did not fit, rather than assuming a length.
      */
     public static String getTitle() {
+        NativeBindings.requireAvailable();
         byte[] destination = new byte[256];
         long[] written = new long[1];
         check("CnaRuntime.getTitle",
@@ -122,6 +131,7 @@ public final class CnaRuntime {
     }
 
     public static void setTitle(String value) {
+        NativeBindings.requireAvailable();
         check("CnaRuntime.setTitle", NativeRuntimeExtensionRoutes.assemblySetTitleExt(
                 NativeGamerServices.utf8(Objects.requireNonNull(value, "value"))));
     }
@@ -132,6 +142,13 @@ public final class CnaRuntime {
         return NativeGamerServices.text(operation, size, copy);
     }
 
+    /**
+     * Loads the native bridge and maps one CNA result.
+     *
+     * <p>Loading here rather than at each call site is what lets a game ask CNA about itself
+     * before it has created a {@code Game}: nothing else in this package has loaded the bridge
+     * yet, and an external consumer reaches these routes first.
+     */
     private static void check(String operation, int result) {
         if (result != 0) {
             throw NativeBindings.failure(operation, result);

@@ -38,6 +38,16 @@ public final class GraphicsExtension {
     }
 
     /**
+     * Loads the native bridge, so an external consumer can reach this package first.
+     *
+     * <p>Nothing else in it has loaded the bridge: a game may ask CNA about its extended layer
+     * before it creates a {@code Game}, and every route here would otherwise fail to link.
+     */
+    static void requireBackend() {
+        NativeBindings.requireAvailable();
+    }
+
+    /**
      * Maps one CNA result for the extension surface.
      *
      * <p>{@code NOT_SUPPORTED} keeps its own identity: a build without the extended layer is a

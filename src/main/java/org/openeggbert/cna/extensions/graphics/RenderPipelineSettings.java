@@ -27,6 +27,7 @@ public final class RenderPipelineSettings {
 
     /** Creates the settings CNA itself defaults to. */
     public RenderPipelineSettings() {
+        GraphicsExtension.requireBackend();
         long[] integers = new long[7];
         float[] floats = new float[3];
         GraphicsExtension.check("RenderPipelineSettings",

@@ -47,7 +47,7 @@ python3 "$template_root/scripts/generate_project.py" \
     ./gradlew --no-daemon clean test installDist "-PcnaRepository=$repository"
 )
 
-echo "[4/4] Native execution"
+echo "[4/4] Native execution: 60-frame smoke, CNA extensions smoke, optional 600-frame run"
 if [[ -n "${CNA_NATIVE_LIBRARY:-}" ]]; then
     case "$(uname -s)" in
         Linux*) jni_library="$binding_root/build/native/libcna_java_jni.so" ;;
@@ -59,6 +59,11 @@ if [[ -n "${CNA_NATIVE_LIBRARY:-}" ]]; then
         cd "$template_root"
         CNA_JNI_LIBRARY="$jni_library" ./gradlew --no-daemon :game:run \
             "-PcnaRepository=$repository" --args=--smoke-test
+    )
+    (
+        cd "$template_root"
+        CNA_JNI_LIBRARY="$jni_library" ./gradlew --no-daemon :game:run \
+            "-PcnaRepository=$repository" --args=--extensions-smoke
     )
     if [[ "${CNA_RUN_STABILITY_TEST:-0}" == "1" ]]; then
         (
