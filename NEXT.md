@@ -14,12 +14,19 @@ Writable: this repository and `../cna-java-template`. `../../cnanext` and
 clean. The pre-existing untracked `out` entry is untouched.
 
 ```text
-cnanext HEAD            72262a33ed5ae7657024c7f1251338748a3feee5 (branch next)
-sharp-runtimenext HEAD  df1b42abfcdefda030d63e97f16d2f7ea883837f (branch next)
+cnanext HEAD            17b5a90a0878f3f44c23bc8e3197d5d30373dc72 (branch next)
+sharp-runtimenext HEAD  eebebd862121953538e3b84d43384d70a8a1728d (branch next)
 native artifact         cnanext/cmake-build-javanext/modules/c-api/libcna_c_api.so
 ABI                     0.20.0
+C API inventory SHA-256 e9e0be892dbdce49dedf195dac35f604a9263565a74473195d878ee9e580696d
 platform/renderer/audio HEADLESS / HEADLESS / NULL
+build options           CNA_BUILD_C_API=ON, CNA_CNAEXT=ON, CNA_DEVICES=ON,
+                        CNA_ENABLE_NET=ON, CNA_ENABLE_VIDEO=AUTO
 XNA reference corpus    /rv/data/development/github.com/openeggbert/xna4-decomp/dlls
+
+Both dependency HEADs advanced during this session. The C API did not: 4,051 declarations,
+4,051 exported symbols, ABI 0.20.0, and the same inventory hash before and after. The hash is
+the identity worth checking, because it is what the binding actually depends on.
 ```
 
 `build.gradle` resolves CNA from `../../cnanext` and fails clearly when it is absent. There is

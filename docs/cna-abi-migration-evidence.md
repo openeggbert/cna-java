@@ -11,8 +11,10 @@ header it could not find.
 ## Qualified native dependency
 
 ```text
-cnanext HEAD              72262a33ed5ae7657024c7f1251338748a3feee5 (branch next, clean)
-sharp-runtimenext HEAD    df1b42abfcdefda030d63e97f16d2f7ea883837f (branch next)
+cnanext HEAD              17b5a90a0878f3f44c23bc8e3197d5d30373dc72 (branch next, clean)
+                          72262a33ed5ae7657024c7f1251338748a3feee5 when this was first measured
+sharp-runtimenext HEAD    eebebd862121953538e3b84d43384d70a8a1728d (branch next)
+                          df1b42abfcdefda030d63e97f16d2f7ea883837f when this was first measured
 compiler                  g++ (Debian 14.2.0-19) 14.2.0, C++23, ccache
 build type                Debug, Ninja
 CNA_SHARP_RUNTIME_ROOT    /rv/data/development/github.com/openeggbert/sharp-runtimenext
@@ -27,10 +29,15 @@ CNA_ENABLE_VIDEO          AUTO -> enabled (FFmpeg backend cna_video_ffmpeg)
 CNA_BUILD_TESTS           ON
 CNA_BUILD_EXAMPLES        OFF
 artifact                  cmake-build-javanext/modules/c-api/libcna_c_api.so
-SHA-256                   c67b1750393584a14d33c8030ad731cd3477908040d42353fb907bcdf50d0451
 reported ABI              0.20.0
 exported cna_ symbols     4051
+C API inventory SHA-256   e9e0be892dbdce49dedf195dac35f604a9263565a74473195d878ee9e580696d
 ```
+
+Both dependency HEADs advanced while this work was in progress. The C API did not: the same
+4,051 declarations, the same 4,051 exported symbols, the same ABI and the same inventory hash
+before and after. The library's own SHA-256 changed with the rebuild, which is why the identity
+recorded here is the inventory hash: it is what the binding actually depends on.
 
 The build directory follows `cnanext`'s own mandatory convention -- a stable in-repo
 `cmake-build-<variant>/` directory, matched by that repository's `.gitignore`. `git status` in
