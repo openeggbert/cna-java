@@ -48,8 +48,8 @@ import java.util.WeakHashMap;
 /** JNI entry point for CNA's stable C ABI. This class is not application API. */
 public final class NativeBindings {
 
-    /** CNA C headers used to compile this binding: ABI 0.7.0. */
-    public static final int COMPILED_ABI_VERSION = encodeVersion(0, 7, 0);
+    /** CNA C headers used to compile this binding: ABI 0.20.0. */
+    public static final int COMPILED_ABI_VERSION = encodeVersion(0, 20, 0);
 
     private static boolean bridgeLoaded;
     private static int runtimeAbiVersion;

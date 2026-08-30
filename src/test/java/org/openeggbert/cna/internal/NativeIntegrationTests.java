@@ -974,8 +974,8 @@ final class NativeIntegrationTests {
                           "spacing": 1.5,
                           "defaultCharacter": "?",
                           "glyphs": [
-                            { "char": 65, "source": [0, 0, 16, 24], "crop": [0, 0, 16, 24], "kerning": [1, 14, 1] },
-                            { "char": 63, "source": [0, 0, 16, 24], "crop": [0, 0, 16, 24], "kerning": [1, 14, 1] }
+                            { "char": 63, "source": [0, 0, 16, 24], "crop": [0, 0, 16, 24], "kerning": [1, 14, 1] },
+                            { "char": 65, "source": [0, 0, 16, 24], "crop": [0, 0, 16, 24], "kerning": [1, 14, 1] }
                           ]
                         }
                         """);
@@ -1008,7 +1008,9 @@ final class NativeIntegrationTests {
             assertEquals(24, font.getLineSpacing());
             assertEquals(1.5f, font.getSpacing());
             assertEquals('?', font.getDefaultCharacter());
-            assertEquals(List.of('A', '?'), font.getCharacters());
+            // A SpriteFont's character map is looked up by binary search, so the glyph
+            // table is strictly ascending and Characters reports that order.
+            assertEquals(List.of('?', 'A'), font.getCharacters());
             assertEquals(font.MeasureString("AA"),
                     font.MeasureString(new StringBuilder("AA")));
             assertTrue(font.MeasureString("AA").X > 0.0f);

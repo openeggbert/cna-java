@@ -111,10 +111,13 @@ final class AudioNativeIntegrationTests {
                 assertThrows(IllegalArgumentException.class, () -> first.setPan(Float.NaN));
                 first.Apply3D(new AudioListener(), new AudioEmitter());
                 first.Apply3D(new AudioListener[] {new AudioListener()}, new AudioEmitter());
-                CnaNativeException multipleListeners = assertThrows(CnaNativeException.class,
-                        () -> first.Apply3D(new AudioListener[] {
-                                new AudioListener(), new AudioListener()}, new AudioEmitter()));
-                assertEquals(6, multipleListeners.getResult());
+                // CNA ABI 0.9.0 accepts any positive listener count. That is the
+                // reference behaviour -- XNA's Apply3D(AudioListener[], AudioEmitter)
+                // imposes no count restriction -- so Java must not reintroduce one.
+                // CNA's mixer has a single stereo gain pair, so the listener nearest the
+                // emitter decides the applied attenuation, pan and Doppler.
+                first.Apply3D(new AudioListener[] {new AudioListener(), new AudioListener()},
+                        new AudioEmitter());
                 assertThrows(CnaNativeException.class,
                         () -> first.Apply3D(new AudioListener[0], new AudioEmitter()));
                 first.Play();

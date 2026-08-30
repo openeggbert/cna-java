@@ -130,13 +130,16 @@ final class EffectNativeIntegrationTests {
             transform.M42 = 901.0f;
             batch.End();
 
-            Matrix invalid = Matrix.getIdentity();
-            invalid.M11 = Float.NaN;
-            CnaNativeException invalidTransform = assertThrows(
-                    CnaNativeException.class,
-                    () -> batch.Begin(
-                            SpriteSortMode.Deferred, null, null, null, null, effect, invalid));
-            assertEquals(1, invalidTransform.getResult());
+            // CNA ABI 0.9.0 stopped refusing a non-finite transform component and now
+            // carries it into the vertex path, which is what XNA does: the reference
+            // SpriteBatch validates none of its float inputs. Java therefore must not
+            // reintroduce a rejection the original API never had.
+            Matrix nonFinite = Matrix.getIdentity();
+            nonFinite.M11 = Float.NaN;
+            assertDoesNotThrow(() -> {
+                batch.Begin(SpriteSortMode.Deferred, null, null, null, null, effect, nonFinite);
+                batch.End();
+            });
             assertDoesNotThrow(() -> {
                 batch.Begin(SpriteSortMode.Deferred, null, null, null, null, effect);
                 batch.End();

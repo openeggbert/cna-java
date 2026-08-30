@@ -42,10 +42,20 @@ def hostOs = org.gradle.internal.os.OperatingSystem.current()
 def nativeLibraryName = hostOs.isWindows() ? 'cna_java_jni.dll' :
         (hostOs.isMacOsX() ? 'libcna_java_jni.dylib' : 'libcna_java_jni.so')
 def nativeOutput = layout.buildDirectory.file("native/${nativeLibraryName}")
+// The authoritative native development dependency is the sibling `cnanext` checkout.
+// CNA_ROOT overrides it explicitly; there is deliberately no fallback to an unrelated
+// historical CNA checkout, because qualifying against one would make every ABI, symbol
+// and layout result in this build describe a library nobody ships.
+def cnaNextDirectory = rootProject.file('../../cnanext')
 def configuredCnaRoot = providers.environmentVariable('CNA_ROOT').orElse(
         providers.provider {
-            def directSibling = file('../cna')
-            directSibling.isDirectory() ? directSibling.absolutePath : file('../../cna').absolutePath
+            if (!new File(cnaNextDirectory, 'modules/c-api/include/CNA/C/cna.h').isFile()) {
+                throw new GradleException(
+                        'CNA C API headers not found at ' + cnaNextDirectory.absolutePath +
+                        '. Set CNA_ROOT to a CNA checkout that provides ' +
+                        'modules/c-api/include/CNA/C/cna.h.')
+            }
+            cnaNextDirectory.absolutePath
         })
 
 tasks.register('compileJni', Exec) {
@@ -107,40 +117,89 @@ tasks.register('apiCompatToolTests', Exec) {
 
 def xnaReferenceDirectory = providers.environmentVariable('XNA_REFERENCE_DIR')
 
-tasks.register('apiCompatReport', Exec) {
-    group = 'verification'
-    description = 'Reports strict XNA 4.0 Windows-runtime Java projection differences.'
-    dependsOn tasks.named('classes')
-    doFirst {
-        if (!xnaReferenceDirectory.isPresent()) {
-            throw new GradleException('Set XNA_REFERENCE_DIR to the seven XNA 4.0 reference assemblies.')
+// One task pair per XNA profile. `apiCompat*` keeps naming the selected seven-assembly
+// Windows runtime profile so its zero-diagnostic result stays a regression gate, and
+// `apiCompatFull*` measures the complete original XNA 4.0 runtime superset, including the
+// GamerServices, Net and Avatar assemblies the selected profile omits.
+def registerApiCompatTasks = { String suffix, String profile, String describes ->
+    tasks.register("apiCompat${suffix}Report", Exec) {
+        group = 'verification'
+        description = "Reports ${describes} Java projection differences."
+        dependsOn tasks.named('classes')
+        doFirst {
+            if (!xnaReferenceDirectory.isPresent()) {
+                throw new GradleException('Set XNA_REFERENCE_DIR to the pinned XNA 4.0 reference assemblies.')
+            }
+            commandLine 'python3', 'tools/api-compat/verify.py',
+                    '--profile', profile,
+                    '--reference-dir', xnaReferenceDirectory.get(),
+                    '--target', sourceSets.main.output.classesDirs.asPath,
+                    '--report-only', '--summary-only'
         }
-        commandLine 'python3', 'tools/api-compat/verify.py',
-                '--reference-dir', xnaReferenceDirectory.get(),
-                '--target', sourceSets.main.output.classesDirs.asPath,
-                '--report-only', '--summary-only'
+    }
+    tasks.register("apiCompat${suffix}Check", Exec) {
+        group = 'verification'
+        description = "Strict completeness gate for ${describes}."
+        dependsOn tasks.named('classes')
+        doFirst {
+            if (!xnaReferenceDirectory.isPresent()) {
+                throw new GradleException('Set XNA_REFERENCE_DIR to the pinned XNA 4.0 reference assemblies.')
+            }
+            commandLine 'python3', 'tools/api-compat/verify.py',
+                    '--profile', profile,
+                    '--reference-dir', xnaReferenceDirectory.get(),
+                    '--target', sourceSets.main.output.classesDirs.asPath,
+                    '--summary-only'
+        }
     }
 }
 
-tasks.register('apiCompatCheck', Exec) {
-    group = 'verification'
-    description = 'Strict XNA completeness gate; expected to fail while differences remain.'
-    dependsOn tasks.named('classes')
-    doFirst {
-        if (!xnaReferenceDirectory.isPresent()) {
-            throw new GradleException('Set XNA_REFERENCE_DIR to the seven XNA 4.0 reference assemblies.')
-        }
-        commandLine 'python3', 'tools/api-compat/verify.py',
-                '--reference-dir', xnaReferenceDirectory.get(),
-                '--target', sourceSets.main.output.classesDirs.asPath,
-                '--summary-only'
-    }
-}
+registerApiCompatTasks('', 'tools/api-compat/profiles/xna40-windows-runtime.json',
+        'the selected XNA 4.0 Windows runtime profile')
+registerApiCompatTasks('Full', 'tools/api-compat/profiles/xna40-full-runtime.json',
+        'the complete XNA 4.0 runtime superset')
 
 tasks.register('nativeAbiCheck', Exec) {
     group = 'verification'
-    commandLine 'python3', 'tools/native-abi/verify.py',
-            '--cna-root', configuredCnaRoot.get()
+    description = 'Verifies the bound native surface against the live CNA C headers.'
+    doFirst {
+        def arguments = ['python3', 'tools/native-abi/verify.py',
+                         '--cna-root', configuredCnaRoot.get()]
+        if (System.getenv('CNA_NATIVE_LIBRARY')) {
+            arguments.addAll(['--library', System.getenv('CNA_NATIVE_LIBRARY')])
+        }
+        commandLine arguments
+    }
+}
+
+tasks.register('nativeCoverageCheck', Exec) {
+    group = 'verification'
+    description = 'Requires every canonical CNA C API function to carry an explicit classification.'
+    doFirst {
+        commandLine 'python3', 'tools/native-abi/coverage.py',
+                '--cna-root', configuredCnaRoot.get(),
+                '--check'
+    }
+}
+
+tasks.register('nativeCoverageReport', Exec) {
+    group = 'verification'
+    description = 'Writes the machine-readable CNA C API coverage report.'
+    doFirst {
+        commandLine 'python3', 'tools/native-abi/coverage.py',
+                '--cna-root', configuredCnaRoot.get(),
+                '--output', layout.buildDirectory.file('cna-c-api-coverage.json').get().asFile.absolutePath,
+                '--summary-output', 'docs/cna-c-api-coverage-summary.json'
+    }
+}
+
+tasks.register('nativeAbiToolTests', Exec) {
+    group = 'verification'
+    description = 'Runs native-boundary tool regression and negative-mutation tests.'
+    doFirst {
+        commandLine 'python3', 'tools/native-abi/test_verify.py',
+                '--cna-root', configuredCnaRoot.get()
+    }
 }
 
 check {
@@ -148,6 +207,8 @@ check {
     dependsOn tasks.named('compileCompileProbeJava')
     dependsOn tasks.named('leakGuard')
     dependsOn tasks.named('nativeAbiCheck')
+    dependsOn tasks.named('nativeAbiToolTests')
+    dependsOn tasks.named('nativeCoverageCheck')
 }
 
 publishing {
