@@ -2869,6 +2869,440 @@
         "java": "modelSetMaterialVariantExt",
         "symbol": "cna_model_set_material_variant_ext"
       }
+    ],
+    "NativeCnbRoutes": [
+      {
+        "java": "cnbAssetTypeIdFromName",
+        "symbol": "cna_cnb_asset_type_id_from_name"
+      },
+      {
+        "java": "cnbCheckedAdd",
+        "symbol": "cna_cnb_checked_add"
+      },
+      {
+        "java": "cnbCheckedMultiply",
+        "symbol": "cna_cnb_checked_multiply"
+      },
+      {
+        "java": "cnbChunkEntryIsMandatory",
+        "symbol": "cna_cnb_chunk_entry_is_mandatory"
+      },
+      {
+        "java": "cnbCopyAssetTypeName",
+        "symbol": "cna_cnb_copy_asset_type_name"
+      },
+      {
+        "java": "cnbCopyChunkIdString",
+        "symbol": "cna_cnb_copy_chunk_id_string"
+      },
+      {
+        "java": "cnbCopyCompressed",
+        "symbol": "cna_cnb_copy_compressed"
+      },
+      {
+        "java": "cnbCopyCompressionName",
+        "symbol": "cna_cnb_copy_compression_name"
+      },
+      {
+        "java": "cnbCopyDecompressed",
+        "symbol": "cna_cnb_copy_decompressed"
+      },
+      {
+        "java": "cnbCopyFormatMagic",
+        "symbol": "cna_cnb_copy_format_magic"
+      },
+      {
+        "java": "cnbCopyLogicalNameProblem",
+        "symbol": "cna_cnb_copy_logical_name_problem"
+      },
+      {
+        "java": "cnbCopyTextureFormatName",
+        "symbol": "cna_cnb_copy_texture_format_name"
+      },
+      {
+        "java": "cnbCrc32c",
+        "symbol": "cna_cnb_crc32c"
+      },
+      {
+        "java": "cnbCrc32cContinue",
+        "symbol": "cna_cnb_crc32c_continue"
+      },
+      {
+        "java": "cnbCrc32cPortable",
+        "symbol": "cna_cnb_crc32c_portable"
+      },
+      {
+        "java": "cnbCrc32cUsesHardware",
+        "symbol": "cna_cnb_crc32c_uses_hardware"
+      },
+      {
+        "java": "cnbDecodeTexture2d",
+        "symbol": "cna_cnb_decode_texture2d"
+      },
+      {
+        "java": "cnbDocumentCopyChunkData",
+        "symbol": "cna_cnb_document_copy_chunk_data"
+      },
+      {
+        "java": "cnbDocumentCopyExternalReferenceName",
+        "symbol": "cna_cnb_document_copy_external_reference_name"
+      },
+      {
+        "java": "cnbDocumentCopyMetadataAssetTypeName",
+        "symbol": "cna_cnb_document_copy_metadata_asset_type_name"
+      },
+      {
+        "java": "cnbDocumentCopyMetadataContentName",
+        "symbol": "cna_cnb_document_copy_metadata_content_name"
+      },
+      {
+        "java": "cnbDocumentCopyOrigin",
+        "symbol": "cna_cnb_document_copy_origin"
+      },
+      {
+        "java": "cnbDocumentDestroy",
+        "symbol": "cna_cnb_document_destroy"
+      },
+      {
+        "java": "cnbDocumentFindAll",
+        "symbol": "cna_cnb_document_find_all"
+      },
+      {
+        "java": "cnbDocumentFindSingle",
+        "symbol": "cna_cnb_document_find_single"
+      },
+      {
+        "java": "cnbDocumentGetAssetSchemaVersion",
+        "symbol": "cna_cnb_document_get_asset_schema_version"
+      },
+      {
+        "java": "cnbDocumentGetAssetTypeId",
+        "symbol": "cna_cnb_document_get_asset_type_id"
+      },
+      {
+        "java": "cnbDocumentGetChunk",
+        "symbol": "cna_cnb_document_get_chunk"
+      },
+      {
+        "java": "cnbDocumentGetChunkCount",
+        "symbol": "cna_cnb_document_get_chunk_count"
+      },
+      {
+        "java": "cnbDocumentGetContainerMajor",
+        "symbol": "cna_cnb_document_get_container_major"
+      },
+      {
+        "java": "cnbDocumentGetContainerMinor",
+        "symbol": "cna_cnb_document_get_container_minor"
+      },
+      {
+        "java": "cnbDocumentGetExternalReference",
+        "symbol": "cna_cnb_document_get_external_reference"
+      },
+      {
+        "java": "cnbDocumentGetExternalReferenceCount",
+        "symbol": "cna_cnb_document_get_external_reference_count"
+      },
+      {
+        "java": "cnbDocumentGetExternalReferenceNameSize",
+        "symbol": "cna_cnb_document_get_external_reference_name_size"
+      },
+      {
+        "java": "cnbDocumentGetLimits",
+        "symbol": "cna_cnb_document_get_limits"
+      },
+      {
+        "java": "cnbDocumentGetMetadata",
+        "symbol": "cna_cnb_document_get_metadata"
+      },
+      {
+        "java": "cnbDocumentGetMetadataAssetTypeNameSize",
+        "symbol": "cna_cnb_document_get_metadata_asset_type_name_size"
+      },
+      {
+        "java": "cnbDocumentGetMetadataContentNameSize",
+        "symbol": "cna_cnb_document_get_metadata_content_name_size"
+      },
+      {
+        "java": "cnbDocumentGetOriginSize",
+        "symbol": "cna_cnb_document_get_origin_size"
+      },
+      {
+        "java": "cnbDocumentOpenChunk",
+        "symbol": "cna_cnb_document_open_chunk"
+      },
+      {
+        "java": "cnbDocumentParse",
+        "symbol": "cna_cnb_document_parse"
+      },
+      {
+        "java": "cnbDocumentParseFile",
+        "symbol": "cna_cnb_document_parse_file"
+      },
+      {
+        "java": "cnbDocumentReadEmbeddedTexture2d",
+        "symbol": "cna_cnb_document_read_embedded_texture2d"
+      },
+      {
+        "java": "cnbDocumentRequireAsset",
+        "symbol": "cna_cnb_document_require_asset"
+      },
+      {
+        "java": "cnbDocumentRequireMandatoryChunksUnderstood",
+        "symbol": "cna_cnb_document_require_mandatory_chunks_understood"
+      },
+      {
+        "java": "cnbDocumentRequireSingle",
+        "symbol": "cna_cnb_document_require_single"
+      },
+      {
+        "java": "cnbEncodeTexture2d",
+        "symbol": "cna_cnb_encode_texture2d"
+      },
+      {
+        "java": "cnbGetAssetTypeNameSize",
+        "symbol": "cna_cnb_get_asset_type_name_size"
+      },
+      {
+        "java": "cnbGetChunkIdStringSize",
+        "symbol": "cna_cnb_get_chunk_id_string_size"
+      },
+      {
+        "java": "cnbGetCompressedByteCount",
+        "symbol": "cna_cnb_get_compressed_byte_count"
+      },
+      {
+        "java": "cnbGetCompressionNameSize",
+        "symbol": "cna_cnb_get_compression_name_size"
+      },
+      {
+        "java": "cnbGetLogicalNameProblemSize",
+        "symbol": "cna_cnb_get_logical_name_problem_size"
+      },
+      {
+        "java": "cnbGetTextureFormatNameSize",
+        "symbol": "cna_cnb_get_texture_format_name_size"
+      },
+      {
+        "java": "cnbGetTextureFormatUnitBytes",
+        "symbol": "cna_cnb_get_texture_format_unit_bytes"
+      },
+      {
+        "java": "cnbGetTextureLevelByteSize",
+        "symbol": "cna_cnb_get_texture_level_byte_size"
+      },
+      {
+        "java": "cnbHasMagic",
+        "symbol": "cna_cnb_has_magic"
+      },
+      {
+        "java": "cnbIsBlockCompressedTextureFormat",
+        "symbol": "cna_cnb_is_block_compressed_texture_format"
+      },
+      {
+        "java": "cnbIsCompressionSupported",
+        "symbol": "cna_cnb_is_compression_supported"
+      },
+      {
+        "java": "cnbIsCustomAssetTypeId",
+        "symbol": "cna_cnb_is_custom_asset_type_id"
+      },
+      {
+        "java": "cnbIsKnownTextureFormat",
+        "symbol": "cna_cnb_is_known_texture_format"
+      },
+      {
+        "java": "cnbIsWellFormedChunkId",
+        "symbol": "cna_cnb_is_well_formed_chunk_id"
+      },
+      {
+        "java": "cnbIsWellFormedUtf8",
+        "symbol": "cna_cnb_is_well_formed_utf8"
+      },
+      {
+        "java": "cnbMakeChunkId",
+        "symbol": "cna_cnb_make_chunk_id"
+      },
+      {
+        "java": "cnbReadLimitsInit",
+        "symbol": "cna_cnb_read_limits_init"
+      },
+      {
+        "java": "cnbReaderCopyContext",
+        "symbol": "cna_cnb_reader_copy_context"
+      },
+      {
+        "java": "cnbReaderCopyString",
+        "symbol": "cna_cnb_reader_copy_string"
+      },
+      {
+        "java": "cnbReaderCreate",
+        "symbol": "cna_cnb_reader_create"
+      },
+      {
+        "java": "cnbReaderDestroy",
+        "symbol": "cna_cnb_reader_destroy"
+      },
+      {
+        "java": "cnbReaderGetContextSize",
+        "symbol": "cna_cnb_reader_get_context_size"
+      },
+      {
+        "java": "cnbReaderGetPosition",
+        "symbol": "cna_cnb_reader_get_position"
+      },
+      {
+        "java": "cnbReaderGetRemaining",
+        "symbol": "cna_cnb_reader_get_remaining"
+      },
+      {
+        "java": "cnbReaderGetSize",
+        "symbol": "cna_cnb_reader_get_size"
+      },
+      {
+        "java": "cnbReaderReadBytes",
+        "symbol": "cna_cnb_reader_read_bytes"
+      },
+      {
+        "java": "cnbReaderReadCount",
+        "symbol": "cna_cnb_reader_read_count"
+      },
+      {
+        "java": "cnbReaderReadF32",
+        "symbol": "cna_cnb_reader_read_f32"
+      },
+      {
+        "java": "cnbReaderReadF64",
+        "symbol": "cna_cnb_reader_read_f64"
+      },
+      {
+        "java": "cnbReaderReadI32",
+        "symbol": "cna_cnb_reader_read_i32"
+      },
+      {
+        "java": "cnbReaderReadString",
+        "symbol": "cna_cnb_reader_read_string"
+      },
+      {
+        "java": "cnbReaderReadU16",
+        "symbol": "cna_cnb_reader_read_u16"
+      },
+      {
+        "java": "cnbReaderReadU32",
+        "symbol": "cna_cnb_reader_read_u32"
+      },
+      {
+        "java": "cnbReaderReadU64",
+        "symbol": "cna_cnb_reader_read_u64"
+      },
+      {
+        "java": "cnbReaderReadU8",
+        "symbol": "cna_cnb_reader_read_u8"
+      },
+      {
+        "java": "cnbReaderRequireExhausted",
+        "symbol": "cna_cnb_reader_require_exhausted"
+      },
+      {
+        "java": "cnbReaderSkip",
+        "symbol": "cna_cnb_reader_skip"
+      },
+      {
+        "java": "cnbTextureDataAddRepresentation",
+        "symbol": "cna_cnb_texture_data_add_representation"
+      },
+      {
+        "java": "cnbTextureDataCopyLevel",
+        "symbol": "cna_cnb_texture_data_copy_level"
+      },
+      {
+        "java": "cnbTextureDataCreate",
+        "symbol": "cna_cnb_texture_data_create"
+      },
+      {
+        "java": "cnbTextureDataCreateRgba8",
+        "symbol": "cna_cnb_texture_data_create_rgba8"
+      },
+      {
+        "java": "cnbTextureDataDestroy",
+        "symbol": "cna_cnb_texture_data_destroy"
+      },
+      {
+        "java": "cnbTextureDataGetInfo",
+        "symbol": "cna_cnb_texture_data_get_info"
+      },
+      {
+        "java": "cnbTextureDataGetLevelCount",
+        "symbol": "cna_cnb_texture_data_get_level_count"
+      },
+      {
+        "java": "cnbTextureDataGetLevelDimensions",
+        "symbol": "cna_cnb_texture_data_get_level_dimensions"
+      },
+      {
+        "java": "cnbTextureDataGetRepresentationCount",
+        "symbol": "cna_cnb_texture_data_get_representation_count"
+      },
+      {
+        "java": "cnbTextureDataGetRepresentationFormat",
+        "symbol": "cna_cnb_texture_data_get_representation_format"
+      },
+      {
+        "java": "cnbTextureDataSetLevel",
+        "symbol": "cna_cnb_texture_data_set_level"
+      },
+      {
+        "java": "cnbTextureFormatFromSurfaceFormat",
+        "symbol": "cna_cnb_texture_format_from_surface_format"
+      },
+      {
+        "java": "cnbTextureFormatToSurfaceFormat",
+        "symbol": "cna_cnb_texture_format_to_surface_format"
+      },
+      {
+        "java": "cnbWriterAddChunk",
+        "symbol": "cna_cnb_writer_add_chunk"
+      },
+      {
+        "java": "cnbWriterAppendEmbeddedTexture2d",
+        "symbol": "cna_cnb_writer_append_embedded_texture2d"
+      },
+      {
+        "java": "cnbWriterBuild",
+        "symbol": "cna_cnb_writer_build"
+      },
+      {
+        "java": "cnbWriterCreate",
+        "symbol": "cna_cnb_writer_create"
+      },
+      {
+        "java": "cnbWriterDestroy",
+        "symbol": "cna_cnb_writer_destroy"
+      },
+      {
+        "java": "cnbWriterGetLimits",
+        "symbol": "cna_cnb_writer_get_limits"
+      },
+      {
+        "java": "cnbWriterGetSchemaChunkCount",
+        "symbol": "cna_cnb_writer_get_schema_chunk_count"
+      },
+      {
+        "java": "cnbWriterSetCompression",
+        "symbol": "cna_cnb_writer_set_compression"
+      },
+      {
+        "java": "cnbWriterSetLimits",
+        "symbol": "cna_cnb_writer_set_limits"
+      },
+      {
+        "java": "cnbWriterSetMetadata",
+        "symbol": "cna_cnb_writer_set_metadata"
+      },
+      {
+        "java": "cnbWriterWriteToFile",
+        "symbol": "cna_cnb_writer_write_to_file"
+      }
     ]
   }
 }

@@ -14,7 +14,7 @@ Java_org_openeggbert_cna_internal_generated_NativeSensorExtensionRoutes_accelero
     (void)declaring_class;
     CNA_AccelerometerHandle out_sensor_value = 0;
     CNA_Result result = cna.accelerometer_create((CNA_Handle)game, &out_sensor_value);
-    if (result == CNA_RESULT_SUCCESS) {
+    if (result == CNA_RESULT_SUCCESS || result == CNA_RESULT_BUFFER_TOO_SMALL) {
         jlong out_sensor_element = (jlong)out_sensor_value;
         (*environment)->SetLongArrayRegion(
             environment, out_sensor, 0, 1, &out_sensor_element);
@@ -43,7 +43,7 @@ Java_org_openeggbert_cna_internal_generated_NativeSensorExtensionRoutes_accelero
     out_reading_value.struct_size = (uint32_t)(sizeof out_reading_value);
     out_reading_value.struct_version = UINT32_C(1);
     CNA_Result result = cna.accelerometer_get_current_value((CNA_AccelerometerHandle)sensor, &out_reading_value);
-    if (result == CNA_RESULT_SUCCESS) {
+    if (result == CNA_RESULT_SUCCESS || result == CNA_RESULT_BUFFER_TOO_SMALL) {
         jlong out_readingIntegral_values[] = {
             (jlong)out_reading_value.timestamp.ticks,
             (jlong)out_reading_value.timestamp.offset_ticks
@@ -71,7 +71,7 @@ Java_org_openeggbert_cna_internal_generated_NativeSensorExtensionRoutes_accelero
     (void)declaring_class;
     CNA_Bool out_valid_value = 0;
     CNA_Result result = cna.accelerometer_get_is_data_valid((CNA_AccelerometerHandle)sensor, &out_valid_value);
-    if (result == CNA_RESULT_SUCCESS) {
+    if (result == CNA_RESULT_SUCCESS || result == CNA_RESULT_BUFFER_TOO_SMALL) {
         jboolean out_valid_element = (jboolean)out_valid_value;
         (*environment)->SetBooleanArrayRegion(
             environment, out_valid, 0, 1, &out_valid_element);
@@ -87,7 +87,7 @@ Java_org_openeggbert_cna_internal_generated_NativeSensorExtensionRoutes_accelero
     (void)declaring_class;
     CNA_Bool out_supported_value = 0;
     CNA_Result result = cna.accelerometer_get_is_supported((CNA_Handle)game, &out_supported_value);
-    if (result == CNA_RESULT_SUCCESS) {
+    if (result == CNA_RESULT_SUCCESS || result == CNA_RESULT_BUFFER_TOO_SMALL) {
         jboolean out_supported_element = (jboolean)out_supported_value;
         (*environment)->SetBooleanArrayRegion(
             environment, out_supported, 0, 1, &out_supported_element);
@@ -103,7 +103,7 @@ Java_org_openeggbert_cna_internal_generated_NativeSensorExtensionRoutes_accelero
     (void)declaring_class;
     CNA_SensorState out_state_value = 0;
     CNA_Result result = cna.accelerometer_get_state((CNA_AccelerometerHandle)sensor, &out_state_value);
-    if (result == CNA_RESULT_SUCCESS) {
+    if (result == CNA_RESULT_SUCCESS || result == CNA_RESULT_BUFFER_TOO_SMALL) {
         jint out_state_element = (jint)out_state_value;
         (*environment)->SetIntArrayRegion(
             environment, out_state, 0, 1, &out_state_element);
@@ -119,7 +119,7 @@ Java_org_openeggbert_cna_internal_generated_NativeSensorExtensionRoutes_accelero
     (void)declaring_class;
     int64_t out_ticks_value = 0;
     CNA_Result result = cna.accelerometer_get_time_between_updates_ticks((CNA_AccelerometerHandle)sensor, &out_ticks_value);
-    if (result == CNA_RESULT_SUCCESS) {
+    if (result == CNA_RESULT_SUCCESS || result == CNA_RESULT_BUFFER_TOO_SMALL) {
         jlong out_ticks_element = (jlong)out_ticks_value;
         (*environment)->SetLongArrayRegion(
             environment, out_ticks, 0, 1, &out_ticks_element);
@@ -165,7 +165,7 @@ Java_org_openeggbert_cna_internal_generated_NativeSensorExtensionRoutes_compassC
     (void)declaring_class;
     CNA_CompassHandle out_sensor_value = 0;
     CNA_Result result = cna.compass_create((CNA_Handle)game, &out_sensor_value);
-    if (result == CNA_RESULT_SUCCESS) {
+    if (result == CNA_RESULT_SUCCESS || result == CNA_RESULT_BUFFER_TOO_SMALL) {
         jlong out_sensor_element = (jlong)out_sensor_value;
         (*environment)->SetLongArrayRegion(
             environment, out_sensor, 0, 1, &out_sensor_element);
@@ -194,7 +194,7 @@ Java_org_openeggbert_cna_internal_generated_NativeSensorExtensionRoutes_compassG
     out_reading_value.struct_size = (uint32_t)(sizeof out_reading_value);
     out_reading_value.struct_version = UINT32_C(1);
     CNA_Result result = cna.compass_get_current_value((CNA_CompassHandle)sensor, &out_reading_value);
-    if (result == CNA_RESULT_SUCCESS) {
+    if (result == CNA_RESULT_SUCCESS || result == CNA_RESULT_BUFFER_TOO_SMALL) {
         jlong out_readingIntegral_values[] = {
             (jlong)out_reading_value.timestamp.ticks,
             (jlong)out_reading_value.timestamp.offset_ticks
@@ -230,7 +230,7 @@ Java_org_openeggbert_cna_internal_generated_NativeSensorExtensionRoutes_compassG
     (void)declaring_class;
     CNA_Bool out_valid_value = 0;
     CNA_Result result = cna.compass_get_is_data_valid((CNA_CompassHandle)sensor, &out_valid_value);
-    if (result == CNA_RESULT_SUCCESS) {
+    if (result == CNA_RESULT_SUCCESS || result == CNA_RESULT_BUFFER_TOO_SMALL) {
         jboolean out_valid_element = (jboolean)out_valid_value;
         (*environment)->SetBooleanArrayRegion(
             environment, out_valid, 0, 1, &out_valid_element);
@@ -246,7 +246,7 @@ Java_org_openeggbert_cna_internal_generated_NativeSensorExtensionRoutes_compassG
     (void)declaring_class;
     CNA_Bool out_supported_value = 0;
     CNA_Result result = cna.compass_get_is_supported((CNA_Handle)game, &out_supported_value);
-    if (result == CNA_RESULT_SUCCESS) {
+    if (result == CNA_RESULT_SUCCESS || result == CNA_RESULT_BUFFER_TOO_SMALL) {
         jboolean out_supported_element = (jboolean)out_supported_value;
         (*environment)->SetBooleanArrayRegion(
             environment, out_supported, 0, 1, &out_supported_element);
@@ -262,7 +262,7 @@ Java_org_openeggbert_cna_internal_generated_NativeSensorExtensionRoutes_compassG
     (void)declaring_class;
     CNA_SensorState out_state_value = 0;
     CNA_Result result = cna.compass_get_state((CNA_CompassHandle)sensor, &out_state_value);
-    if (result == CNA_RESULT_SUCCESS) {
+    if (result == CNA_RESULT_SUCCESS || result == CNA_RESULT_BUFFER_TOO_SMALL) {
         jint out_state_element = (jint)out_state_value;
         (*environment)->SetIntArrayRegion(
             environment, out_state, 0, 1, &out_state_element);
@@ -278,7 +278,7 @@ Java_org_openeggbert_cna_internal_generated_NativeSensorExtensionRoutes_compassG
     (void)declaring_class;
     int64_t out_ticks_value = 0;
     CNA_Result result = cna.compass_get_time_between_updates_ticks((CNA_CompassHandle)sensor, &out_ticks_value);
-    if (result == CNA_RESULT_SUCCESS) {
+    if (result == CNA_RESULT_SUCCESS || result == CNA_RESULT_BUFFER_TOO_SMALL) {
         jlong out_ticks_element = (jlong)out_ticks_value;
         (*environment)->SetLongArrayRegion(
             environment, out_ticks, 0, 1, &out_ticks_element);
@@ -324,7 +324,7 @@ Java_org_openeggbert_cna_internal_generated_NativeSensorExtensionRoutes_gyroscop
     (void)declaring_class;
     CNA_GyroscopeHandle out_sensor_value = 0;
     CNA_Result result = cna.gyroscope_create((CNA_Handle)game, &out_sensor_value);
-    if (result == CNA_RESULT_SUCCESS) {
+    if (result == CNA_RESULT_SUCCESS || result == CNA_RESULT_BUFFER_TOO_SMALL) {
         jlong out_sensor_element = (jlong)out_sensor_value;
         (*environment)->SetLongArrayRegion(
             environment, out_sensor, 0, 1, &out_sensor_element);
@@ -353,7 +353,7 @@ Java_org_openeggbert_cna_internal_generated_NativeSensorExtensionRoutes_gyroscop
     out_reading_value.struct_size = (uint32_t)(sizeof out_reading_value);
     out_reading_value.struct_version = UINT32_C(1);
     CNA_Result result = cna.gyroscope_get_current_value((CNA_GyroscopeHandle)sensor, &out_reading_value);
-    if (result == CNA_RESULT_SUCCESS) {
+    if (result == CNA_RESULT_SUCCESS || result == CNA_RESULT_BUFFER_TOO_SMALL) {
         jlong out_readingIntegral_values[] = {
             (jlong)out_reading_value.timestamp.ticks,
             (jlong)out_reading_value.timestamp.offset_ticks
@@ -381,7 +381,7 @@ Java_org_openeggbert_cna_internal_generated_NativeSensorExtensionRoutes_gyroscop
     (void)declaring_class;
     CNA_Bool out_valid_value = 0;
     CNA_Result result = cna.gyroscope_get_is_data_valid((CNA_GyroscopeHandle)sensor, &out_valid_value);
-    if (result == CNA_RESULT_SUCCESS) {
+    if (result == CNA_RESULT_SUCCESS || result == CNA_RESULT_BUFFER_TOO_SMALL) {
         jboolean out_valid_element = (jboolean)out_valid_value;
         (*environment)->SetBooleanArrayRegion(
             environment, out_valid, 0, 1, &out_valid_element);
@@ -397,7 +397,7 @@ Java_org_openeggbert_cna_internal_generated_NativeSensorExtensionRoutes_gyroscop
     (void)declaring_class;
     CNA_Bool out_supported_value = 0;
     CNA_Result result = cna.gyroscope_get_is_supported((CNA_Handle)game, &out_supported_value);
-    if (result == CNA_RESULT_SUCCESS) {
+    if (result == CNA_RESULT_SUCCESS || result == CNA_RESULT_BUFFER_TOO_SMALL) {
         jboolean out_supported_element = (jboolean)out_supported_value;
         (*environment)->SetBooleanArrayRegion(
             environment, out_supported, 0, 1, &out_supported_element);
@@ -413,7 +413,7 @@ Java_org_openeggbert_cna_internal_generated_NativeSensorExtensionRoutes_gyroscop
     (void)declaring_class;
     CNA_SensorState out_state_value = 0;
     CNA_Result result = cna.gyroscope_get_state((CNA_GyroscopeHandle)sensor, &out_state_value);
-    if (result == CNA_RESULT_SUCCESS) {
+    if (result == CNA_RESULT_SUCCESS || result == CNA_RESULT_BUFFER_TOO_SMALL) {
         jint out_state_element = (jint)out_state_value;
         (*environment)->SetIntArrayRegion(
             environment, out_state, 0, 1, &out_state_element);
@@ -429,7 +429,7 @@ Java_org_openeggbert_cna_internal_generated_NativeSensorExtensionRoutes_gyroscop
     (void)declaring_class;
     int64_t out_ticks_value = 0;
     CNA_Result result = cna.gyroscope_get_time_between_updates_ticks((CNA_GyroscopeHandle)sensor, &out_ticks_value);
-    if (result == CNA_RESULT_SUCCESS) {
+    if (result == CNA_RESULT_SUCCESS || result == CNA_RESULT_BUFFER_TOO_SMALL) {
         jlong out_ticks_element = (jlong)out_ticks_value;
         (*environment)->SetLongArrayRegion(
             environment, out_ticks, 0, 1, &out_ticks_element);
@@ -475,7 +475,7 @@ Java_org_openeggbert_cna_internal_generated_NativeSensorExtensionRoutes_motionCr
     (void)declaring_class;
     CNA_MotionHandle out_sensor_value = 0;
     CNA_Result result = cna.motion_create((CNA_Handle)game, &out_sensor_value);
-    if (result == CNA_RESULT_SUCCESS) {
+    if (result == CNA_RESULT_SUCCESS || result == CNA_RESULT_BUFFER_TOO_SMALL) {
         jlong out_sensor_element = (jlong)out_sensor_value;
         (*environment)->SetLongArrayRegion(
             environment, out_sensor, 0, 1, &out_sensor_element);
@@ -506,7 +506,7 @@ Java_org_openeggbert_cna_internal_generated_NativeSensorExtensionRoutes_motionGe
     out_reading_value.attitude.struct_size = (uint32_t)(sizeof out_reading_value.attitude);
     out_reading_value.attitude.struct_version = UINT32_C(1);
     CNA_Result result = cna.motion_get_current_value((CNA_MotionHandle)sensor, &out_reading_value);
-    if (result == CNA_RESULT_SUCCESS) {
+    if (result == CNA_RESULT_SUCCESS || result == CNA_RESULT_BUFFER_TOO_SMALL) {
         jlong out_readingIntegral_values[] = {
             (jlong)out_reading_value.timestamp.ticks,
             (jlong)out_reading_value.timestamp.offset_ticks,
@@ -565,7 +565,7 @@ Java_org_openeggbert_cna_internal_generated_NativeSensorExtensionRoutes_motionGe
     (void)declaring_class;
     CNA_Bool out_north_referenced_value = 0;
     CNA_Result result = cna.motion_get_is_attitude_north_referenced_ext((CNA_MotionHandle)sensor, &out_north_referenced_value);
-    if (result == CNA_RESULT_SUCCESS) {
+    if (result == CNA_RESULT_SUCCESS || result == CNA_RESULT_BUFFER_TOO_SMALL) {
         jboolean out_north_referenced_element = (jboolean)out_north_referenced_value;
         (*environment)->SetBooleanArrayRegion(
             environment, out_north_referenced, 0, 1, &out_north_referenced_element);
@@ -581,7 +581,7 @@ Java_org_openeggbert_cna_internal_generated_NativeSensorExtensionRoutes_motionGe
     (void)declaring_class;
     CNA_Bool out_valid_value = 0;
     CNA_Result result = cna.motion_get_is_data_valid((CNA_MotionHandle)sensor, &out_valid_value);
-    if (result == CNA_RESULT_SUCCESS) {
+    if (result == CNA_RESULT_SUCCESS || result == CNA_RESULT_BUFFER_TOO_SMALL) {
         jboolean out_valid_element = (jboolean)out_valid_value;
         (*environment)->SetBooleanArrayRegion(
             environment, out_valid, 0, 1, &out_valid_element);
@@ -597,7 +597,7 @@ Java_org_openeggbert_cna_internal_generated_NativeSensorExtensionRoutes_motionGe
     (void)declaring_class;
     CNA_Bool out_supported_value = 0;
     CNA_Result result = cna.motion_get_is_supported((CNA_Handle)game, &out_supported_value);
-    if (result == CNA_RESULT_SUCCESS) {
+    if (result == CNA_RESULT_SUCCESS || result == CNA_RESULT_BUFFER_TOO_SMALL) {
         jboolean out_supported_element = (jboolean)out_supported_value;
         (*environment)->SetBooleanArrayRegion(
             environment, out_supported, 0, 1, &out_supported_element);
@@ -613,7 +613,7 @@ Java_org_openeggbert_cna_internal_generated_NativeSensorExtensionRoutes_motionGe
     (void)declaring_class;
     CNA_SensorState out_state_value = 0;
     CNA_Result result = cna.motion_get_state((CNA_MotionHandle)sensor, &out_state_value);
-    if (result == CNA_RESULT_SUCCESS) {
+    if (result == CNA_RESULT_SUCCESS || result == CNA_RESULT_BUFFER_TOO_SMALL) {
         jint out_state_element = (jint)out_state_value;
         (*environment)->SetIntArrayRegion(
             environment, out_state, 0, 1, &out_state_element);
@@ -629,7 +629,7 @@ Java_org_openeggbert_cna_internal_generated_NativeSensorExtensionRoutes_motionGe
     (void)declaring_class;
     int64_t out_ticks_value = 0;
     CNA_Result result = cna.motion_get_time_between_updates_ticks((CNA_MotionHandle)sensor, &out_ticks_value);
-    if (result == CNA_RESULT_SUCCESS) {
+    if (result == CNA_RESULT_SUCCESS || result == CNA_RESULT_BUFFER_TOO_SMALL) {
         jlong out_ticks_element = (jlong)out_ticks_value;
         (*environment)->SetLongArrayRegion(
             environment, out_ticks, 0, 1, &out_ticks_element);
@@ -681,7 +681,7 @@ Java_org_openeggbert_cna_internal_generated_NativeSensorExtensionRoutes_sensorsC
     uint64_t destination_written = 0;
     CNA_Result result = cna.sensors_copy_name_at((CNA_Handle)game, (uint32_t)index, (char*)destination_bytes, (uint64_t)destination_size, &destination_written);
     (*environment)->ReleaseByteArrayElements(environment, destination, destination_bytes, 0);
-    if (result == CNA_RESULT_SUCCESS) {
+    if (result == CNA_RESULT_SUCCESS || result == CNA_RESULT_BUFFER_TOO_SMALL) {
         jlong destination_element = (jlong)destination_written;
         (*environment)->SetLongArrayRegion(
             environment, out_bytes, 0, 1, &destination_element);
@@ -699,7 +699,7 @@ Java_org_openeggbert_cna_internal_generated_NativeSensorExtensionRoutes_sensorsG
     memset(&out_acceleration_value, 0, sizeof out_acceleration_value);
     CNA_Bool out_available_value = 0;
     CNA_Result result = cna.sensors_get_accelerometer((CNA_Handle)game, &out_acceleration_value, &out_available_value);
-    if (result == CNA_RESULT_SUCCESS) {
+    if (result == CNA_RESULT_SUCCESS || result == CNA_RESULT_BUFFER_TOO_SMALL) {
         jfloat out_accelerationFloating_values[] = {
             (jfloat)out_acceleration_value.x,
             (jfloat)out_acceleration_value.y,
@@ -723,7 +723,7 @@ Java_org_openeggbert_cna_internal_generated_NativeSensorExtensionRoutes_sensorsG
     (void)declaring_class;
     uint32_t out_count_value = 0;
     CNA_Result result = cna.sensors_get_count((CNA_Handle)game, &out_count_value);
-    if (result == CNA_RESULT_SUCCESS) {
+    if (result == CNA_RESULT_SUCCESS || result == CNA_RESULT_BUFFER_TOO_SMALL) {
         jint out_count_element = (jint)out_count_value;
         (*environment)->SetIntArrayRegion(
             environment, out_count, 0, 1, &out_count_element);
@@ -741,7 +741,7 @@ Java_org_openeggbert_cna_internal_generated_NativeSensorExtensionRoutes_sensorsG
     memset(&out_angular_velocity_value, 0, sizeof out_angular_velocity_value);
     CNA_Bool out_available_value = 0;
     CNA_Result result = cna.sensors_get_gyroscope((CNA_Handle)game, &out_angular_velocity_value, &out_available_value);
-    if (result == CNA_RESULT_SUCCESS) {
+    if (result == CNA_RESULT_SUCCESS || result == CNA_RESULT_BUFFER_TOO_SMALL) {
         jfloat out_angular_velocityFloating_values[] = {
             (jfloat)out_angular_velocity_value.x,
             (jfloat)out_angular_velocity_value.y,
@@ -768,7 +768,7 @@ Java_org_openeggbert_cna_internal_generated_NativeSensorExtensionRoutes_sensorsG
     out_info_value.struct_size = (uint32_t)(sizeof out_info_value);
     out_info_value.struct_version = UINT32_C(1);
     CNA_Result result = cna.sensors_get_info_at((CNA_Handle)game, (uint32_t)index, &out_info_value);
-    if (result == CNA_RESULT_SUCCESS) {
+    if (result == CNA_RESULT_SUCCESS || result == CNA_RESULT_BUFFER_TOO_SMALL) {
         jlong out_infoIntegral_values[] = {
             (jlong)out_info_value.id,
             (jlong)out_info_value.type
@@ -789,7 +789,7 @@ Java_org_openeggbert_cna_internal_generated_NativeSensorExtensionRoutes_sensorsG
     int32_t out_error_id_value = 0;
     CNA_Bool out_has_error_id_value = 0;
     CNA_Result result = cna.sensors_get_last_error_id_ext(&out_error_id_value, &out_has_error_id_value);
-    if (result == CNA_RESULT_SUCCESS) {
+    if (result == CNA_RESULT_SUCCESS || result == CNA_RESULT_BUFFER_TOO_SMALL) {
         jint out_error_id_element = (jint)out_error_id_value;
         (*environment)->SetIntArrayRegion(
             environment, out_error_id, 0, 1, &out_error_id_element);
@@ -808,7 +808,7 @@ Java_org_openeggbert_cna_internal_generated_NativeSensorExtensionRoutes_sensorsG
     (void)declaring_class;
     uint64_t out_bytes_value = 0;
     CNA_Result result = cna.sensors_get_name_size_at((CNA_Handle)game, (uint32_t)index, &out_bytes_value);
-    if (result == CNA_RESULT_SUCCESS) {
+    if (result == CNA_RESULT_SUCCESS || result == CNA_RESULT_BUFFER_TOO_SMALL) {
         jlong out_bytes_element = (jlong)out_bytes_value;
         (*environment)->SetLongArrayRegion(
             environment, out_bytes, 0, 1, &out_bytes_element);

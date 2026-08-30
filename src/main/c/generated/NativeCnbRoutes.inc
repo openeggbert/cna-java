@@ -1,0 +1,2429 @@
+/* SPDX-License-Identifier: MS-PL */
+/*
+ * Generated JNI adapter for NativeCnbRoutes.
+ *
+ * Produced by tools/native-abi/generate_jni.py from the live CNA C headers, and
+ * included by cna_java_jni.c so it shares the one dispatch table. Do not edit.
+ */
+
+JNIEXPORT jint JNICALL
+Java_org_openeggbert_cna_internal_generated_NativeCnbRoutes_cnbAssetTypeIdFromName(
+    JNIEnv* environment, jclass declaring_class, jbyteArray name, jintArray out_asset_type_id)
+{
+    (void)environment;
+    (void)declaring_class;
+    jsize name_size = (*environment)->GetArrayLength(environment, name);
+    jbyte* name_bytes = (*environment)->GetByteArrayElements(environment, name, NULL);
+    if (name_bytes == NULL) {
+        return (jint)CNA_RESULT_OUT_OF_MEMORY;
+    }
+    CNA_StringView name_view = {(const char*)name_bytes, (uint64_t)name_size};
+    uint32_t out_asset_type_id_value = 0;
+    CNA_Result result = cna.cnb_asset_type_id_from_name(name_view, &out_asset_type_id_value);
+    (*environment)->ReleaseByteArrayElements(environment, name, name_bytes, JNI_ABORT);
+    if (result == CNA_RESULT_SUCCESS || result == CNA_RESULT_BUFFER_TOO_SMALL) {
+        jint out_asset_type_id_element = (jint)out_asset_type_id_value;
+        (*environment)->SetIntArrayRegion(
+            environment, out_asset_type_id, 0, 1, &out_asset_type_id_element);
+    }
+    return (jint)result;
+}
+
+JNIEXPORT jint JNICALL
+Java_org_openeggbert_cna_internal_generated_NativeCnbRoutes_cnbCheckedAdd(
+    JNIEnv* environment, jclass declaring_class, jlong a, jlong b, jlongArray out_sum)
+{
+    (void)environment;
+    (void)declaring_class;
+    uint64_t out_sum_value = 0;
+    CNA_Result result = cna.cnb_checked_add((uint64_t)a, (uint64_t)b, &out_sum_value);
+    if (result == CNA_RESULT_SUCCESS || result == CNA_RESULT_BUFFER_TOO_SMALL) {
+        jlong out_sum_element = (jlong)out_sum_value;
+        (*environment)->SetLongArrayRegion(
+            environment, out_sum, 0, 1, &out_sum_element);
+    }
+    return (jint)result;
+}
+
+JNIEXPORT jint JNICALL
+Java_org_openeggbert_cna_internal_generated_NativeCnbRoutes_cnbCheckedMultiply(
+    JNIEnv* environment, jclass declaring_class, jlong a, jlong b, jlongArray out_product)
+{
+    (void)environment;
+    (void)declaring_class;
+    uint64_t out_product_value = 0;
+    CNA_Result result = cna.cnb_checked_multiply((uint64_t)a, (uint64_t)b, &out_product_value);
+    if (result == CNA_RESULT_SUCCESS || result == CNA_RESULT_BUFFER_TOO_SMALL) {
+        jlong out_product_element = (jlong)out_product_value;
+        (*environment)->SetLongArrayRegion(
+            environment, out_product, 0, 1, &out_product_element);
+    }
+    return (jint)result;
+}
+
+JNIEXPORT jint JNICALL
+Java_org_openeggbert_cna_internal_generated_NativeCnbRoutes_cnbChunkEntryIsMandatory(
+    JNIEnv* environment, jclass declaring_class, jlongArray entryIntegral, jbooleanArray out_mandatory)
+{
+    (void)environment;
+    (void)declaring_class;
+    CNA_CnbChunkEntry entry_value;
+    memset(&entry_value, 0, sizeof entry_value);
+    entry_value.struct_size = (uint32_t)(sizeof entry_value);
+    entry_value.struct_version = CNA_CNB_CHUNK_ENTRY_STRUCT_VERSION;
+    {
+        jlong entryIntegral_values[9];
+        (*environment)->GetLongArrayRegion(environment, entryIntegral, 0, 9, entryIntegral_values);
+        entry_value.offset = (uint64_t)entryIntegral_values[0];
+        entry_value.stored_size = (uint64_t)entryIntegral_values[1];
+        entry_value.uncompressed_size = (uint64_t)entryIntegral_values[2];
+        entry_value.type = (CNA_CnbChunkId)entryIntegral_values[3];
+        entry_value.flags = (uint32_t)entryIntegral_values[4];
+        entry_value.checksum = (uint32_t)entryIntegral_values[5];
+        entry_value.compression = (CNA_CnbCompression)entryIntegral_values[6];
+        entry_value.alignment = (uint32_t)entryIntegral_values[7];
+        entry_value.reserved = (uint32_t)entryIntegral_values[8];
+    }
+    CNA_Bool out_mandatory_value = 0;
+    CNA_Result result = cna.cnb_chunk_entry_is_mandatory(&entry_value, &out_mandatory_value);
+    if (result == CNA_RESULT_SUCCESS || result == CNA_RESULT_BUFFER_TOO_SMALL) {
+        jboolean out_mandatory_element = (jboolean)out_mandatory_value;
+        (*environment)->SetBooleanArrayRegion(
+            environment, out_mandatory, 0, 1, &out_mandatory_element);
+    }
+    return (jint)result;
+}
+
+JNIEXPORT jint JNICALL
+Java_org_openeggbert_cna_internal_generated_NativeCnbRoutes_cnbCopyAssetTypeName(
+    JNIEnv* environment, jclass declaring_class, jint asset_type_id, jbyteArray destination, jlongArray out_byte_count)
+{
+    (void)environment;
+    (void)declaring_class;
+    jsize destination_size = (*environment)->GetArrayLength(environment, destination);
+    jbyte* destination_bytes = (*environment)->GetByteArrayElements(environment, destination, NULL);
+    if (destination_bytes == NULL) {
+        return (jint)CNA_RESULT_OUT_OF_MEMORY;
+    }
+    uint64_t destination_written = 0;
+    CNA_Result result = cna.cnb_copy_asset_type_name((uint32_t)asset_type_id, (char*)destination_bytes, (uint64_t)destination_size, &destination_written);
+    (*environment)->ReleaseByteArrayElements(environment, destination, destination_bytes, 0);
+    if (result == CNA_RESULT_SUCCESS || result == CNA_RESULT_BUFFER_TOO_SMALL) {
+        jlong destination_element = (jlong)destination_written;
+        (*environment)->SetLongArrayRegion(
+            environment, out_byte_count, 0, 1, &destination_element);
+    }
+    return (jint)result;
+}
+
+JNIEXPORT jint JNICALL
+Java_org_openeggbert_cna_internal_generated_NativeCnbRoutes_cnbCopyChunkIdString(
+    JNIEnv* environment, jclass declaring_class, jint id, jbyteArray destination, jlongArray out_byte_count)
+{
+    (void)environment;
+    (void)declaring_class;
+    jsize destination_size = (*environment)->GetArrayLength(environment, destination);
+    jbyte* destination_bytes = (*environment)->GetByteArrayElements(environment, destination, NULL);
+    if (destination_bytes == NULL) {
+        return (jint)CNA_RESULT_OUT_OF_MEMORY;
+    }
+    uint64_t destination_written = 0;
+    CNA_Result result = cna.cnb_copy_chunk_id_string((CNA_CnbChunkId)id, (char*)destination_bytes, (uint64_t)destination_size, &destination_written);
+    (*environment)->ReleaseByteArrayElements(environment, destination, destination_bytes, 0);
+    if (result == CNA_RESULT_SUCCESS || result == CNA_RESULT_BUFFER_TOO_SMALL) {
+        jlong destination_element = (jlong)destination_written;
+        (*environment)->SetLongArrayRegion(
+            environment, out_byte_count, 0, 1, &destination_element);
+    }
+    return (jint)result;
+}
+
+JNIEXPORT jint JNICALL
+Java_org_openeggbert_cna_internal_generated_NativeCnbRoutes_cnbCopyCompressed(
+    JNIEnv* environment, jclass declaring_class, jbyteArray raw, jint codec, jint level, jbyteArray destination, jlongArray out_byte_count)
+{
+    (void)environment;
+    (void)declaring_class;
+    jsize raw_size = (*environment)->GetArrayLength(environment, raw);
+    jbyte* raw_elements = (*environment)->GetByteArrayElements(environment, raw, NULL);
+    if (raw_elements == NULL) {
+        return (jint)CNA_RESULT_OUT_OF_MEMORY;
+    }
+    uint8_t* raw_values = (uint8_t*)malloc(
+        ((size_t)raw_size + 1U) * sizeof(*raw_values));
+    if (raw_values == NULL) {
+        (*environment)->ReleaseByteArrayElements(
+            environment, raw, raw_elements, JNI_ABORT);
+        return (jint)CNA_RESULT_OUT_OF_MEMORY;
+    }
+    for (jsize index = 0; index < raw_size; ++index) {
+        raw_values[index] = (uint8_t)raw_elements[index];
+    }
+    jsize destination_size = (*environment)->GetArrayLength(environment, destination);
+    jbyte* destination_elements = (*environment)->GetByteArrayElements(environment, destination, NULL);
+    if (destination_elements == NULL) {
+        return (jint)CNA_RESULT_OUT_OF_MEMORY;
+    }
+    uint8_t* destination_values = (uint8_t*)malloc(
+        ((size_t)destination_size + 1U) * sizeof(*destination_values));
+    if (destination_values == NULL) {
+        (*environment)->ReleaseByteArrayElements(
+            environment, destination, destination_elements, JNI_ABORT);
+        return (jint)CNA_RESULT_OUT_OF_MEMORY;
+    }
+    for (jsize index = 0; index < destination_size; ++index) {
+        destination_values[index] = (uint8_t)destination_elements[index];
+    }
+    uint64_t out_byte_count_value = 0;
+    CNA_Result result = cna.cnb_copy_compressed(raw_values, (uint64_t)raw_size, (CNA_CnbCompression)codec, (int32_t)level, destination_values, (uint64_t)destination_size, &out_byte_count_value);
+    free(raw_values);
+    (*environment)->ReleaseByteArrayElements(
+        environment, raw, raw_elements, JNI_ABORT);
+    if (result == CNA_RESULT_SUCCESS) {
+        for (jsize index = 0; index < destination_size; ++index) {
+            destination_elements[index] = (jbyte)destination_values[index];
+        }
+    }
+    free(destination_values);
+    (*environment)->ReleaseByteArrayElements(
+        environment, destination, destination_elements, 0);
+    if (result == CNA_RESULT_SUCCESS || result == CNA_RESULT_BUFFER_TOO_SMALL) {
+        jlong out_byte_count_element = (jlong)out_byte_count_value;
+        (*environment)->SetLongArrayRegion(
+            environment, out_byte_count, 0, 1, &out_byte_count_element);
+    }
+    return (jint)result;
+}
+
+JNIEXPORT jint JNICALL
+Java_org_openeggbert_cna_internal_generated_NativeCnbRoutes_cnbCopyCompressionName(
+    JNIEnv* environment, jclass declaring_class, jint codec, jbyteArray destination, jlongArray out_byte_count)
+{
+    (void)environment;
+    (void)declaring_class;
+    jsize destination_size = (*environment)->GetArrayLength(environment, destination);
+    jbyte* destination_bytes = (*environment)->GetByteArrayElements(environment, destination, NULL);
+    if (destination_bytes == NULL) {
+        return (jint)CNA_RESULT_OUT_OF_MEMORY;
+    }
+    uint64_t destination_written = 0;
+    CNA_Result result = cna.cnb_copy_compression_name((CNA_CnbCompression)codec, (char*)destination_bytes, (uint64_t)destination_size, &destination_written);
+    (*environment)->ReleaseByteArrayElements(environment, destination, destination_bytes, 0);
+    if (result == CNA_RESULT_SUCCESS || result == CNA_RESULT_BUFFER_TOO_SMALL) {
+        jlong destination_element = (jlong)destination_written;
+        (*environment)->SetLongArrayRegion(
+            environment, out_byte_count, 0, 1, &destination_element);
+    }
+    return (jint)result;
+}
+
+JNIEXPORT jint JNICALL
+Java_org_openeggbert_cna_internal_generated_NativeCnbRoutes_cnbCopyDecompressed(
+    JNIEnv* environment, jclass declaring_class, jbyteArray stored, jint codec, jlong uncompressed_size, jlong max_uncompressed_size, jbyteArray destination, jlongArray out_byte_count)
+{
+    (void)environment;
+    (void)declaring_class;
+    jsize stored_size = (*environment)->GetArrayLength(environment, stored);
+    jbyte* stored_elements = (*environment)->GetByteArrayElements(environment, stored, NULL);
+    if (stored_elements == NULL) {
+        return (jint)CNA_RESULT_OUT_OF_MEMORY;
+    }
+    uint8_t* stored_values = (uint8_t*)malloc(
+        ((size_t)stored_size + 1U) * sizeof(*stored_values));
+    if (stored_values == NULL) {
+        (*environment)->ReleaseByteArrayElements(
+            environment, stored, stored_elements, JNI_ABORT);
+        return (jint)CNA_RESULT_OUT_OF_MEMORY;
+    }
+    for (jsize index = 0; index < stored_size; ++index) {
+        stored_values[index] = (uint8_t)stored_elements[index];
+    }
+    jsize destination_size = (*environment)->GetArrayLength(environment, destination);
+    jbyte* destination_elements = (*environment)->GetByteArrayElements(environment, destination, NULL);
+    if (destination_elements == NULL) {
+        return (jint)CNA_RESULT_OUT_OF_MEMORY;
+    }
+    uint8_t* destination_values = (uint8_t*)malloc(
+        ((size_t)destination_size + 1U) * sizeof(*destination_values));
+    if (destination_values == NULL) {
+        (*environment)->ReleaseByteArrayElements(
+            environment, destination, destination_elements, JNI_ABORT);
+        return (jint)CNA_RESULT_OUT_OF_MEMORY;
+    }
+    for (jsize index = 0; index < destination_size; ++index) {
+        destination_values[index] = (uint8_t)destination_elements[index];
+    }
+    uint64_t out_byte_count_value = 0;
+    CNA_Result result = cna.cnb_copy_decompressed(stored_values, (uint64_t)stored_size, (CNA_CnbCompression)codec, (uint64_t)uncompressed_size, (uint64_t)max_uncompressed_size, destination_values, (uint64_t)destination_size, &out_byte_count_value);
+    free(stored_values);
+    (*environment)->ReleaseByteArrayElements(
+        environment, stored, stored_elements, JNI_ABORT);
+    if (result == CNA_RESULT_SUCCESS) {
+        for (jsize index = 0; index < destination_size; ++index) {
+            destination_elements[index] = (jbyte)destination_values[index];
+        }
+    }
+    free(destination_values);
+    (*environment)->ReleaseByteArrayElements(
+        environment, destination, destination_elements, 0);
+    if (result == CNA_RESULT_SUCCESS || result == CNA_RESULT_BUFFER_TOO_SMALL) {
+        jlong out_byte_count_element = (jlong)out_byte_count_value;
+        (*environment)->SetLongArrayRegion(
+            environment, out_byte_count, 0, 1, &out_byte_count_element);
+    }
+    return (jint)result;
+}
+
+JNIEXPORT jint JNICALL
+Java_org_openeggbert_cna_internal_generated_NativeCnbRoutes_cnbCopyFormatMagic(
+    JNIEnv* environment, jclass declaring_class, jbyteArray destination, jlongArray out_byte_count)
+{
+    (void)environment;
+    (void)declaring_class;
+    jsize destination_size = (*environment)->GetArrayLength(environment, destination);
+    jbyte* destination_elements = (*environment)->GetByteArrayElements(environment, destination, NULL);
+    if (destination_elements == NULL) {
+        return (jint)CNA_RESULT_OUT_OF_MEMORY;
+    }
+    uint8_t* destination_values = (uint8_t*)malloc(
+        ((size_t)destination_size + 1U) * sizeof(*destination_values));
+    if (destination_values == NULL) {
+        (*environment)->ReleaseByteArrayElements(
+            environment, destination, destination_elements, JNI_ABORT);
+        return (jint)CNA_RESULT_OUT_OF_MEMORY;
+    }
+    for (jsize index = 0; index < destination_size; ++index) {
+        destination_values[index] = (uint8_t)destination_elements[index];
+    }
+    uint64_t out_byte_count_value = 0;
+    CNA_Result result = cna.cnb_copy_format_magic(destination_values, (uint64_t)destination_size, &out_byte_count_value);
+    if (result == CNA_RESULT_SUCCESS) {
+        for (jsize index = 0; index < destination_size; ++index) {
+            destination_elements[index] = (jbyte)destination_values[index];
+        }
+    }
+    free(destination_values);
+    (*environment)->ReleaseByteArrayElements(
+        environment, destination, destination_elements, 0);
+    if (result == CNA_RESULT_SUCCESS || result == CNA_RESULT_BUFFER_TOO_SMALL) {
+        jlong out_byte_count_element = (jlong)out_byte_count_value;
+        (*environment)->SetLongArrayRegion(
+            environment, out_byte_count, 0, 1, &out_byte_count_element);
+    }
+    return (jint)result;
+}
+
+JNIEXPORT jint JNICALL
+Java_org_openeggbert_cna_internal_generated_NativeCnbRoutes_cnbCopyLogicalNameProblem(
+    JNIEnv* environment, jclass declaring_class, jbyteArray logical_name, jbyteArray destination, jlongArray out_byte_count)
+{
+    (void)environment;
+    (void)declaring_class;
+    jsize logical_name_size = (*environment)->GetArrayLength(environment, logical_name);
+    jbyte* logical_name_bytes = (*environment)->GetByteArrayElements(environment, logical_name, NULL);
+    if (logical_name_bytes == NULL) {
+        return (jint)CNA_RESULT_OUT_OF_MEMORY;
+    }
+    CNA_StringView logical_name_view = {(const char*)logical_name_bytes, (uint64_t)logical_name_size};
+    jsize destination_size = (*environment)->GetArrayLength(environment, destination);
+    jbyte* destination_bytes = (*environment)->GetByteArrayElements(environment, destination, NULL);
+    if (destination_bytes == NULL) {
+        return (jint)CNA_RESULT_OUT_OF_MEMORY;
+    }
+    uint64_t destination_written = 0;
+    CNA_Result result = cna.cnb_copy_logical_name_problem(logical_name_view, (char*)destination_bytes, (uint64_t)destination_size, &destination_written);
+    (*environment)->ReleaseByteArrayElements(environment, logical_name, logical_name_bytes, JNI_ABORT);
+    (*environment)->ReleaseByteArrayElements(environment, destination, destination_bytes, 0);
+    if (result == CNA_RESULT_SUCCESS || result == CNA_RESULT_BUFFER_TOO_SMALL) {
+        jlong destination_element = (jlong)destination_written;
+        (*environment)->SetLongArrayRegion(
+            environment, out_byte_count, 0, 1, &destination_element);
+    }
+    return (jint)result;
+}
+
+JNIEXPORT jint JNICALL
+Java_org_openeggbert_cna_internal_generated_NativeCnbRoutes_cnbCopyTextureFormatName(
+    JNIEnv* environment, jclass declaring_class, jint format, jbyteArray destination, jlongArray out_byte_count)
+{
+    (void)environment;
+    (void)declaring_class;
+    jsize destination_size = (*environment)->GetArrayLength(environment, destination);
+    jbyte* destination_bytes = (*environment)->GetByteArrayElements(environment, destination, NULL);
+    if (destination_bytes == NULL) {
+        return (jint)CNA_RESULT_OUT_OF_MEMORY;
+    }
+    uint64_t destination_written = 0;
+    CNA_Result result = cna.cnb_copy_texture_format_name((CNA_CnbTextureFormat)format, (char*)destination_bytes, (uint64_t)destination_size, &destination_written);
+    (*environment)->ReleaseByteArrayElements(environment, destination, destination_bytes, 0);
+    if (result == CNA_RESULT_SUCCESS || result == CNA_RESULT_BUFFER_TOO_SMALL) {
+        jlong destination_element = (jlong)destination_written;
+        (*environment)->SetLongArrayRegion(
+            environment, out_byte_count, 0, 1, &destination_element);
+    }
+    return (jint)result;
+}
+
+JNIEXPORT jint JNICALL
+Java_org_openeggbert_cna_internal_generated_NativeCnbRoutes_cnbCrc32c(
+    JNIEnv* environment, jclass declaring_class, jbyteArray data, jintArray out_checksum)
+{
+    (void)environment;
+    (void)declaring_class;
+    jsize data_size = (*environment)->GetArrayLength(environment, data);
+    jbyte* data_elements = (*environment)->GetByteArrayElements(environment, data, NULL);
+    if (data_elements == NULL) {
+        return (jint)CNA_RESULT_OUT_OF_MEMORY;
+    }
+    uint8_t* data_values = (uint8_t*)malloc(
+        ((size_t)data_size + 1U) * sizeof(*data_values));
+    if (data_values == NULL) {
+        (*environment)->ReleaseByteArrayElements(
+            environment, data, data_elements, JNI_ABORT);
+        return (jint)CNA_RESULT_OUT_OF_MEMORY;
+    }
+    for (jsize index = 0; index < data_size; ++index) {
+        data_values[index] = (uint8_t)data_elements[index];
+    }
+    uint32_t out_checksum_value = 0;
+    CNA_Result result = cna.cnb_crc32c(data_values, (uint64_t)data_size, &out_checksum_value);
+    free(data_values);
+    (*environment)->ReleaseByteArrayElements(
+        environment, data, data_elements, JNI_ABORT);
+    if (result == CNA_RESULT_SUCCESS || result == CNA_RESULT_BUFFER_TOO_SMALL) {
+        jint out_checksum_element = (jint)out_checksum_value;
+        (*environment)->SetIntArrayRegion(
+            environment, out_checksum, 0, 1, &out_checksum_element);
+    }
+    return (jint)result;
+}
+
+JNIEXPORT jint JNICALL
+Java_org_openeggbert_cna_internal_generated_NativeCnbRoutes_cnbCrc32cContinue(
+    JNIEnv* environment, jclass declaring_class, jint previous, jbyteArray data, jintArray out_checksum)
+{
+    (void)environment;
+    (void)declaring_class;
+    jsize data_size = (*environment)->GetArrayLength(environment, data);
+    jbyte* data_elements = (*environment)->GetByteArrayElements(environment, data, NULL);
+    if (data_elements == NULL) {
+        return (jint)CNA_RESULT_OUT_OF_MEMORY;
+    }
+    uint8_t* data_values = (uint8_t*)malloc(
+        ((size_t)data_size + 1U) * sizeof(*data_values));
+    if (data_values == NULL) {
+        (*environment)->ReleaseByteArrayElements(
+            environment, data, data_elements, JNI_ABORT);
+        return (jint)CNA_RESULT_OUT_OF_MEMORY;
+    }
+    for (jsize index = 0; index < data_size; ++index) {
+        data_values[index] = (uint8_t)data_elements[index];
+    }
+    uint32_t out_checksum_value = 0;
+    CNA_Result result = cna.cnb_crc32c_continue((uint32_t)previous, data_values, (uint64_t)data_size, &out_checksum_value);
+    free(data_values);
+    (*environment)->ReleaseByteArrayElements(
+        environment, data, data_elements, JNI_ABORT);
+    if (result == CNA_RESULT_SUCCESS || result == CNA_RESULT_BUFFER_TOO_SMALL) {
+        jint out_checksum_element = (jint)out_checksum_value;
+        (*environment)->SetIntArrayRegion(
+            environment, out_checksum, 0, 1, &out_checksum_element);
+    }
+    return (jint)result;
+}
+
+JNIEXPORT jint JNICALL
+Java_org_openeggbert_cna_internal_generated_NativeCnbRoutes_cnbCrc32cPortable(
+    JNIEnv* environment, jclass declaring_class, jbyteArray data, jintArray out_checksum)
+{
+    (void)environment;
+    (void)declaring_class;
+    jsize data_size = (*environment)->GetArrayLength(environment, data);
+    jbyte* data_elements = (*environment)->GetByteArrayElements(environment, data, NULL);
+    if (data_elements == NULL) {
+        return (jint)CNA_RESULT_OUT_OF_MEMORY;
+    }
+    uint8_t* data_values = (uint8_t*)malloc(
+        ((size_t)data_size + 1U) * sizeof(*data_values));
+    if (data_values == NULL) {
+        (*environment)->ReleaseByteArrayElements(
+            environment, data, data_elements, JNI_ABORT);
+        return (jint)CNA_RESULT_OUT_OF_MEMORY;
+    }
+    for (jsize index = 0; index < data_size; ++index) {
+        data_values[index] = (uint8_t)data_elements[index];
+    }
+    uint32_t out_checksum_value = 0;
+    CNA_Result result = cna.cnb_crc32c_portable(data_values, (uint64_t)data_size, &out_checksum_value);
+    free(data_values);
+    (*environment)->ReleaseByteArrayElements(
+        environment, data, data_elements, JNI_ABORT);
+    if (result == CNA_RESULT_SUCCESS || result == CNA_RESULT_BUFFER_TOO_SMALL) {
+        jint out_checksum_element = (jint)out_checksum_value;
+        (*environment)->SetIntArrayRegion(
+            environment, out_checksum, 0, 1, &out_checksum_element);
+    }
+    return (jint)result;
+}
+
+JNIEXPORT jint JNICALL
+Java_org_openeggbert_cna_internal_generated_NativeCnbRoutes_cnbCrc32cUsesHardware(
+    JNIEnv* environment, jclass declaring_class, jbooleanArray out_uses_hardware)
+{
+    (void)environment;
+    (void)declaring_class;
+    CNA_Bool out_uses_hardware_value = 0;
+    CNA_Result result = cna.cnb_crc32c_uses_hardware(&out_uses_hardware_value);
+    if (result == CNA_RESULT_SUCCESS || result == CNA_RESULT_BUFFER_TOO_SMALL) {
+        jboolean out_uses_hardware_element = (jboolean)out_uses_hardware_value;
+        (*environment)->SetBooleanArrayRegion(
+            environment, out_uses_hardware, 0, 1, &out_uses_hardware_element);
+    }
+    return (jint)result;
+}
+
+JNIEXPORT jint JNICALL
+Java_org_openeggbert_cna_internal_generated_NativeCnbRoutes_cnbDecodeTexture2d(
+    JNIEnv* environment, jclass declaring_class, jlong document, jlongArray out_texture)
+{
+    (void)environment;
+    (void)declaring_class;
+    CNA_CnbTextureDataHandle out_texture_value = 0;
+    CNA_Result result = cna.cnb_decode_texture2d((CNA_CnbDocumentHandle)document, &out_texture_value);
+    if (result == CNA_RESULT_SUCCESS || result == CNA_RESULT_BUFFER_TOO_SMALL) {
+        jlong out_texture_element = (jlong)out_texture_value;
+        (*environment)->SetLongArrayRegion(
+            environment, out_texture, 0, 1, &out_texture_element);
+    }
+    return (jint)result;
+}
+
+JNIEXPORT jint JNICALL
+Java_org_openeggbert_cna_internal_generated_NativeCnbRoutes_cnbDocumentCopyChunkData(
+    JNIEnv* environment, jclass declaring_class, jlong document, jlong index, jbyteArray destination, jlongArray out_byte_count)
+{
+    (void)environment;
+    (void)declaring_class;
+    jsize destination_size = (*environment)->GetArrayLength(environment, destination);
+    jbyte* destination_elements = (*environment)->GetByteArrayElements(environment, destination, NULL);
+    if (destination_elements == NULL) {
+        return (jint)CNA_RESULT_OUT_OF_MEMORY;
+    }
+    uint8_t* destination_values = (uint8_t*)malloc(
+        ((size_t)destination_size + 1U) * sizeof(*destination_values));
+    if (destination_values == NULL) {
+        (*environment)->ReleaseByteArrayElements(
+            environment, destination, destination_elements, JNI_ABORT);
+        return (jint)CNA_RESULT_OUT_OF_MEMORY;
+    }
+    for (jsize index = 0; index < destination_size; ++index) {
+        destination_values[index] = (uint8_t)destination_elements[index];
+    }
+    uint64_t out_byte_count_value = 0;
+    CNA_Result result = cna.cnb_document_copy_chunk_data((CNA_CnbDocumentHandle)document, (uint64_t)index, destination_values, (uint64_t)destination_size, &out_byte_count_value);
+    if (result == CNA_RESULT_SUCCESS) {
+        for (jsize index = 0; index < destination_size; ++index) {
+            destination_elements[index] = (jbyte)destination_values[index];
+        }
+    }
+    free(destination_values);
+    (*environment)->ReleaseByteArrayElements(
+        environment, destination, destination_elements, 0);
+    if (result == CNA_RESULT_SUCCESS || result == CNA_RESULT_BUFFER_TOO_SMALL) {
+        jlong out_byte_count_element = (jlong)out_byte_count_value;
+        (*environment)->SetLongArrayRegion(
+            environment, out_byte_count, 0, 1, &out_byte_count_element);
+    }
+    return (jint)result;
+}
+
+JNIEXPORT jint JNICALL
+Java_org_openeggbert_cna_internal_generated_NativeCnbRoutes_cnbDocumentCopyExternalReferenceName(
+    JNIEnv* environment, jclass declaring_class, jlong document, jlong index, jbyteArray destination, jlongArray out_byte_count)
+{
+    (void)environment;
+    (void)declaring_class;
+    jsize destination_size = (*environment)->GetArrayLength(environment, destination);
+    jbyte* destination_bytes = (*environment)->GetByteArrayElements(environment, destination, NULL);
+    if (destination_bytes == NULL) {
+        return (jint)CNA_RESULT_OUT_OF_MEMORY;
+    }
+    uint64_t destination_written = 0;
+    CNA_Result result = cna.cnb_document_copy_external_reference_name((CNA_CnbDocumentHandle)document, (uint64_t)index, (char*)destination_bytes, (uint64_t)destination_size, &destination_written);
+    (*environment)->ReleaseByteArrayElements(environment, destination, destination_bytes, 0);
+    if (result == CNA_RESULT_SUCCESS || result == CNA_RESULT_BUFFER_TOO_SMALL) {
+        jlong destination_element = (jlong)destination_written;
+        (*environment)->SetLongArrayRegion(
+            environment, out_byte_count, 0, 1, &destination_element);
+    }
+    return (jint)result;
+}
+
+JNIEXPORT jint JNICALL
+Java_org_openeggbert_cna_internal_generated_NativeCnbRoutes_cnbDocumentCopyMetadataAssetTypeName(
+    JNIEnv* environment, jclass declaring_class, jlong document, jbyteArray destination, jlongArray out_byte_count)
+{
+    (void)environment;
+    (void)declaring_class;
+    jsize destination_size = (*environment)->GetArrayLength(environment, destination);
+    jbyte* destination_bytes = (*environment)->GetByteArrayElements(environment, destination, NULL);
+    if (destination_bytes == NULL) {
+        return (jint)CNA_RESULT_OUT_OF_MEMORY;
+    }
+    uint64_t destination_written = 0;
+    CNA_Result result = cna.cnb_document_copy_metadata_asset_type_name((CNA_CnbDocumentHandle)document, (char*)destination_bytes, (uint64_t)destination_size, &destination_written);
+    (*environment)->ReleaseByteArrayElements(environment, destination, destination_bytes, 0);
+    if (result == CNA_RESULT_SUCCESS || result == CNA_RESULT_BUFFER_TOO_SMALL) {
+        jlong destination_element = (jlong)destination_written;
+        (*environment)->SetLongArrayRegion(
+            environment, out_byte_count, 0, 1, &destination_element);
+    }
+    return (jint)result;
+}
+
+JNIEXPORT jint JNICALL
+Java_org_openeggbert_cna_internal_generated_NativeCnbRoutes_cnbDocumentCopyMetadataContentName(
+    JNIEnv* environment, jclass declaring_class, jlong document, jbyteArray destination, jlongArray out_byte_count)
+{
+    (void)environment;
+    (void)declaring_class;
+    jsize destination_size = (*environment)->GetArrayLength(environment, destination);
+    jbyte* destination_bytes = (*environment)->GetByteArrayElements(environment, destination, NULL);
+    if (destination_bytes == NULL) {
+        return (jint)CNA_RESULT_OUT_OF_MEMORY;
+    }
+    uint64_t destination_written = 0;
+    CNA_Result result = cna.cnb_document_copy_metadata_content_name((CNA_CnbDocumentHandle)document, (char*)destination_bytes, (uint64_t)destination_size, &destination_written);
+    (*environment)->ReleaseByteArrayElements(environment, destination, destination_bytes, 0);
+    if (result == CNA_RESULT_SUCCESS || result == CNA_RESULT_BUFFER_TOO_SMALL) {
+        jlong destination_element = (jlong)destination_written;
+        (*environment)->SetLongArrayRegion(
+            environment, out_byte_count, 0, 1, &destination_element);
+    }
+    return (jint)result;
+}
+
+JNIEXPORT jint JNICALL
+Java_org_openeggbert_cna_internal_generated_NativeCnbRoutes_cnbDocumentCopyOrigin(
+    JNIEnv* environment, jclass declaring_class, jlong document, jbyteArray destination, jlongArray out_byte_count)
+{
+    (void)environment;
+    (void)declaring_class;
+    jsize destination_size = (*environment)->GetArrayLength(environment, destination);
+    jbyte* destination_bytes = (*environment)->GetByteArrayElements(environment, destination, NULL);
+    if (destination_bytes == NULL) {
+        return (jint)CNA_RESULT_OUT_OF_MEMORY;
+    }
+    uint64_t destination_written = 0;
+    CNA_Result result = cna.cnb_document_copy_origin((CNA_CnbDocumentHandle)document, (char*)destination_bytes, (uint64_t)destination_size, &destination_written);
+    (*environment)->ReleaseByteArrayElements(environment, destination, destination_bytes, 0);
+    if (result == CNA_RESULT_SUCCESS || result == CNA_RESULT_BUFFER_TOO_SMALL) {
+        jlong destination_element = (jlong)destination_written;
+        (*environment)->SetLongArrayRegion(
+            environment, out_byte_count, 0, 1, &destination_element);
+    }
+    return (jint)result;
+}
+
+JNIEXPORT jint JNICALL
+Java_org_openeggbert_cna_internal_generated_NativeCnbRoutes_cnbDocumentDestroy(
+    JNIEnv* environment, jclass declaring_class, jlong document)
+{
+    (void)environment;
+    (void)declaring_class;
+    CNA_Result result = cna.cnb_document_destroy((CNA_CnbDocumentHandle)document);
+    return (jint)result;
+}
+
+JNIEXPORT jint JNICALL
+Java_org_openeggbert_cna_internal_generated_NativeCnbRoutes_cnbDocumentFindAll(
+    JNIEnv* environment, jclass declaring_class, jlong document, jint type, jlongArray destination, jlongArray out_count)
+{
+    (void)environment;
+    (void)declaring_class;
+    jsize destination_size = (*environment)->GetArrayLength(environment, destination);
+    jlong* destination_elements = (*environment)->GetLongArrayElements(environment, destination, NULL);
+    if (destination_elements == NULL) {
+        return (jint)CNA_RESULT_OUT_OF_MEMORY;
+    }
+    uint64_t* destination_values = (uint64_t*)malloc(
+        ((size_t)destination_size + 1U) * sizeof(*destination_values));
+    if (destination_values == NULL) {
+        (*environment)->ReleaseLongArrayElements(
+            environment, destination, destination_elements, JNI_ABORT);
+        return (jint)CNA_RESULT_OUT_OF_MEMORY;
+    }
+    for (jsize index = 0; index < destination_size; ++index) {
+        destination_values[index] = (uint64_t)destination_elements[index];
+    }
+    uint64_t out_count_value = 0;
+    CNA_Result result = cna.cnb_document_find_all((CNA_CnbDocumentHandle)document, (CNA_CnbChunkId)type, destination_values, (uint64_t)destination_size, &out_count_value);
+    if (result == CNA_RESULT_SUCCESS) {
+        for (jsize index = 0; index < destination_size; ++index) {
+            destination_elements[index] = (jlong)destination_values[index];
+        }
+    }
+    free(destination_values);
+    (*environment)->ReleaseLongArrayElements(
+        environment, destination, destination_elements, 0);
+    if (result == CNA_RESULT_SUCCESS || result == CNA_RESULT_BUFFER_TOO_SMALL) {
+        jlong out_count_element = (jlong)out_count_value;
+        (*environment)->SetLongArrayRegion(
+            environment, out_count, 0, 1, &out_count_element);
+    }
+    return (jint)result;
+}
+
+JNIEXPORT jint JNICALL
+Java_org_openeggbert_cna_internal_generated_NativeCnbRoutes_cnbDocumentFindSingle(
+    JNIEnv* environment, jclass declaring_class, jlong document, jint type, jbooleanArray out_found, jlongArray out_index)
+{
+    (void)environment;
+    (void)declaring_class;
+    CNA_Bool out_found_value = 0;
+    uint64_t out_index_value = 0;
+    CNA_Result result = cna.cnb_document_find_single((CNA_CnbDocumentHandle)document, (CNA_CnbChunkId)type, &out_found_value, &out_index_value);
+    if (result == CNA_RESULT_SUCCESS || result == CNA_RESULT_BUFFER_TOO_SMALL) {
+        jboolean out_found_element = (jboolean)out_found_value;
+        (*environment)->SetBooleanArrayRegion(
+            environment, out_found, 0, 1, &out_found_element);
+        jlong out_index_element = (jlong)out_index_value;
+        (*environment)->SetLongArrayRegion(
+            environment, out_index, 0, 1, &out_index_element);
+    }
+    return (jint)result;
+}
+
+JNIEXPORT jint JNICALL
+Java_org_openeggbert_cna_internal_generated_NativeCnbRoutes_cnbDocumentGetAssetSchemaVersion(
+    JNIEnv* environment, jclass declaring_class, jlong document, jintArray out_schema_version)
+{
+    (void)environment;
+    (void)declaring_class;
+    uint32_t out_schema_version_value = 0;
+    CNA_Result result = cna.cnb_document_get_asset_schema_version((CNA_CnbDocumentHandle)document, &out_schema_version_value);
+    if (result == CNA_RESULT_SUCCESS || result == CNA_RESULT_BUFFER_TOO_SMALL) {
+        jint out_schema_version_element = (jint)out_schema_version_value;
+        (*environment)->SetIntArrayRegion(
+            environment, out_schema_version, 0, 1, &out_schema_version_element);
+    }
+    return (jint)result;
+}
+
+JNIEXPORT jint JNICALL
+Java_org_openeggbert_cna_internal_generated_NativeCnbRoutes_cnbDocumentGetAssetTypeId(
+    JNIEnv* environment, jclass declaring_class, jlong document, jintArray out_asset_type_id)
+{
+    (void)environment;
+    (void)declaring_class;
+    uint32_t out_asset_type_id_value = 0;
+    CNA_Result result = cna.cnb_document_get_asset_type_id((CNA_CnbDocumentHandle)document, &out_asset_type_id_value);
+    if (result == CNA_RESULT_SUCCESS || result == CNA_RESULT_BUFFER_TOO_SMALL) {
+        jint out_asset_type_id_element = (jint)out_asset_type_id_value;
+        (*environment)->SetIntArrayRegion(
+            environment, out_asset_type_id, 0, 1, &out_asset_type_id_element);
+    }
+    return (jint)result;
+}
+
+JNIEXPORT jint JNICALL
+Java_org_openeggbert_cna_internal_generated_NativeCnbRoutes_cnbDocumentGetChunk(
+    JNIEnv* environment, jclass declaring_class, jlong document, jlong index, jlongArray out_entryIntegral)
+{
+    (void)environment;
+    (void)declaring_class;
+    CNA_CnbChunkEntry out_entry_value;
+    memset(&out_entry_value, 0, sizeof out_entry_value);
+    out_entry_value.struct_size = (uint32_t)(sizeof out_entry_value);
+    out_entry_value.struct_version = CNA_CNB_CHUNK_ENTRY_STRUCT_VERSION;
+    CNA_Result result = cna.cnb_document_get_chunk((CNA_CnbDocumentHandle)document, (uint64_t)index, &out_entry_value);
+    if (result == CNA_RESULT_SUCCESS || result == CNA_RESULT_BUFFER_TOO_SMALL) {
+        jlong out_entryIntegral_values[] = {
+            (jlong)out_entry_value.offset,
+            (jlong)out_entry_value.stored_size,
+            (jlong)out_entry_value.uncompressed_size,
+            (jlong)out_entry_value.type,
+            (jlong)out_entry_value.flags,
+            (jlong)out_entry_value.checksum,
+            (jlong)out_entry_value.compression,
+            (jlong)out_entry_value.alignment,
+            (jlong)out_entry_value.reserved
+        };
+        (*environment)->SetLongArrayRegion(environment, out_entryIntegral, 0,
+            (jsize)(sizeof out_entryIntegral_values / sizeof out_entryIntegral_values[0]),
+            out_entryIntegral_values);
+    }
+    return (jint)result;
+}
+
+JNIEXPORT jint JNICALL
+Java_org_openeggbert_cna_internal_generated_NativeCnbRoutes_cnbDocumentGetChunkCount(
+    JNIEnv* environment, jclass declaring_class, jlong document, jlongArray out_count)
+{
+    (void)environment;
+    (void)declaring_class;
+    uint64_t out_count_value = 0;
+    CNA_Result result = cna.cnb_document_get_chunk_count((CNA_CnbDocumentHandle)document, &out_count_value);
+    if (result == CNA_RESULT_SUCCESS || result == CNA_RESULT_BUFFER_TOO_SMALL) {
+        jlong out_count_element = (jlong)out_count_value;
+        (*environment)->SetLongArrayRegion(
+            environment, out_count, 0, 1, &out_count_element);
+    }
+    return (jint)result;
+}
+
+JNIEXPORT jint JNICALL
+Java_org_openeggbert_cna_internal_generated_NativeCnbRoutes_cnbDocumentGetContainerMajor(
+    JNIEnv* environment, jclass declaring_class, jlong document, jintArray out_major)
+{
+    (void)environment;
+    (void)declaring_class;
+    uint16_t out_major_value = 0;
+    CNA_Result result = cna.cnb_document_get_container_major((CNA_CnbDocumentHandle)document, &out_major_value);
+    if (result == CNA_RESULT_SUCCESS || result == CNA_RESULT_BUFFER_TOO_SMALL) {
+        jint out_major_element = (jint)out_major_value;
+        (*environment)->SetIntArrayRegion(
+            environment, out_major, 0, 1, &out_major_element);
+    }
+    return (jint)result;
+}
+
+JNIEXPORT jint JNICALL
+Java_org_openeggbert_cna_internal_generated_NativeCnbRoutes_cnbDocumentGetContainerMinor(
+    JNIEnv* environment, jclass declaring_class, jlong document, jintArray out_minor)
+{
+    (void)environment;
+    (void)declaring_class;
+    uint16_t out_minor_value = 0;
+    CNA_Result result = cna.cnb_document_get_container_minor((CNA_CnbDocumentHandle)document, &out_minor_value);
+    if (result == CNA_RESULT_SUCCESS || result == CNA_RESULT_BUFFER_TOO_SMALL) {
+        jint out_minor_element = (jint)out_minor_value;
+        (*environment)->SetIntArrayRegion(
+            environment, out_minor, 0, 1, &out_minor_element);
+    }
+    return (jint)result;
+}
+
+JNIEXPORT jint JNICALL
+Java_org_openeggbert_cna_internal_generated_NativeCnbRoutes_cnbDocumentGetExternalReference(
+    JNIEnv* environment, jclass declaring_class, jlong document, jlong index, jbyteArray what_for_diagnostics, jlongArray out_referenceIntegral)
+{
+    (void)environment;
+    (void)declaring_class;
+    jsize what_for_diagnostics_size = (*environment)->GetArrayLength(environment, what_for_diagnostics);
+    jbyte* what_for_diagnostics_bytes = (*environment)->GetByteArrayElements(environment, what_for_diagnostics, NULL);
+    if (what_for_diagnostics_bytes == NULL) {
+        return (jint)CNA_RESULT_OUT_OF_MEMORY;
+    }
+    CNA_StringView what_for_diagnostics_view = {(const char*)what_for_diagnostics_bytes, (uint64_t)what_for_diagnostics_size};
+    CNA_CnbExternalReference out_reference_value;
+    memset(&out_reference_value, 0, sizeof out_reference_value);
+    out_reference_value.struct_size = (uint32_t)(sizeof out_reference_value);
+    out_reference_value.struct_version = CNA_CNB_EXTERNAL_REFERENCE_STRUCT_VERSION;
+    CNA_Result result = cna.cnb_document_get_external_reference((CNA_CnbDocumentHandle)document, (uint64_t)index, what_for_diagnostics_view, &out_reference_value);
+    (*environment)->ReleaseByteArrayElements(environment, what_for_diagnostics, what_for_diagnostics_bytes, JNI_ABORT);
+    if (result == CNA_RESULT_SUCCESS || result == CNA_RESULT_BUFFER_TOO_SMALL) {
+        jlong out_referenceIntegral_values[] = {
+            (jlong)out_reference_value.flags,
+            (jlong)out_reference_value.expected_asset_type_id
+        };
+        (*environment)->SetLongArrayRegion(environment, out_referenceIntegral, 0,
+            (jsize)(sizeof out_referenceIntegral_values / sizeof out_referenceIntegral_values[0]),
+            out_referenceIntegral_values);
+    }
+    return (jint)result;
+}
+
+JNIEXPORT jint JNICALL
+Java_org_openeggbert_cna_internal_generated_NativeCnbRoutes_cnbDocumentGetExternalReferenceCount(
+    JNIEnv* environment, jclass declaring_class, jlong document, jlongArray out_count)
+{
+    (void)environment;
+    (void)declaring_class;
+    uint64_t out_count_value = 0;
+    CNA_Result result = cna.cnb_document_get_external_reference_count((CNA_CnbDocumentHandle)document, &out_count_value);
+    if (result == CNA_RESULT_SUCCESS || result == CNA_RESULT_BUFFER_TOO_SMALL) {
+        jlong out_count_element = (jlong)out_count_value;
+        (*environment)->SetLongArrayRegion(
+            environment, out_count, 0, 1, &out_count_element);
+    }
+    return (jint)result;
+}
+
+JNIEXPORT jint JNICALL
+Java_org_openeggbert_cna_internal_generated_NativeCnbRoutes_cnbDocumentGetExternalReferenceNameSize(
+    JNIEnv* environment, jclass declaring_class, jlong document, jlong index, jlongArray out_byte_count)
+{
+    (void)environment;
+    (void)declaring_class;
+    uint64_t out_byte_count_value = 0;
+    CNA_Result result = cna.cnb_document_get_external_reference_name_size((CNA_CnbDocumentHandle)document, (uint64_t)index, &out_byte_count_value);
+    if (result == CNA_RESULT_SUCCESS || result == CNA_RESULT_BUFFER_TOO_SMALL) {
+        jlong out_byte_count_element = (jlong)out_byte_count_value;
+        (*environment)->SetLongArrayRegion(
+            environment, out_byte_count, 0, 1, &out_byte_count_element);
+    }
+    return (jint)result;
+}
+
+JNIEXPORT jint JNICALL
+Java_org_openeggbert_cna_internal_generated_NativeCnbRoutes_cnbDocumentGetLimits(
+    JNIEnv* environment, jclass declaring_class, jlong document, jlongArray out_limitsIntegral)
+{
+    (void)environment;
+    (void)declaring_class;
+    CNA_CnbReadLimits out_limits_value;
+    memset(&out_limits_value, 0, sizeof out_limits_value);
+    out_limits_value.struct_size = (uint32_t)(sizeof out_limits_value);
+    out_limits_value.struct_version = CNA_CNB_READ_LIMITS_STRUCT_VERSION;
+    CNA_Result result = cna.cnb_document_get_limits((CNA_CnbDocumentHandle)document, &out_limits_value);
+    if (result == CNA_RESULT_SUCCESS || result == CNA_RESULT_BUFFER_TOO_SMALL) {
+        jlong out_limitsIntegral_values[] = {
+            (jlong)out_limits_value.max_file_size,
+            (jlong)out_limits_value.max_chunk_size,
+            (jlong)out_limits_value.max_total_uncompressed_size,
+            (jlong)out_limits_value.max_chunk_count,
+            (jlong)out_limits_value.max_string_bytes,
+            (jlong)out_limits_value.max_array_element_count,
+            (jlong)out_limits_value.max_chunk_alignment
+        };
+        (*environment)->SetLongArrayRegion(environment, out_limitsIntegral, 0,
+            (jsize)(sizeof out_limitsIntegral_values / sizeof out_limitsIntegral_values[0]),
+            out_limitsIntegral_values);
+    }
+    return (jint)result;
+}
+
+JNIEXPORT jint JNICALL
+Java_org_openeggbert_cna_internal_generated_NativeCnbRoutes_cnbDocumentGetMetadata(
+    JNIEnv* environment, jclass declaring_class, jlong document, jbyteArray out_metadataBytes, jlongArray out_metadataIntegral)
+{
+    (void)environment;
+    (void)declaring_class;
+    CNA_CnbMetadata out_metadata_value;
+    memset(&out_metadata_value, 0, sizeof out_metadata_value);
+    out_metadata_value.struct_size = (uint32_t)(sizeof out_metadata_value);
+    out_metadata_value.struct_version = CNA_CNB_METADATA_STRUCT_VERSION;
+    CNA_Result result = cna.cnb_document_get_metadata((CNA_CnbDocumentHandle)document, &out_metadata_value);
+    if (result == CNA_RESULT_SUCCESS || result == CNA_RESULT_BUFFER_TOO_SMALL) {
+        jbyte out_metadataBytes_values[] = {
+            (jbyte)out_metadata_value.reserved[0],
+            (jbyte)out_metadata_value.reserved[1],
+            (jbyte)out_metadata_value.reserved[2]
+        };
+        (*environment)->SetByteArrayRegion(environment, out_metadataBytes, 0,
+            (jsize)(sizeof out_metadataBytes_values / sizeof out_metadataBytes_values[0]),
+            out_metadataBytes_values);
+        jlong out_metadataIntegral_values[] = {
+            (jlong)out_metadata_value.present,
+            (jlong)out_metadata_value.flags
+        };
+        (*environment)->SetLongArrayRegion(environment, out_metadataIntegral, 0,
+            (jsize)(sizeof out_metadataIntegral_values / sizeof out_metadataIntegral_values[0]),
+            out_metadataIntegral_values);
+    }
+    return (jint)result;
+}
+
+JNIEXPORT jint JNICALL
+Java_org_openeggbert_cna_internal_generated_NativeCnbRoutes_cnbDocumentGetMetadataAssetTypeNameSize(
+    JNIEnv* environment, jclass declaring_class, jlong document, jlongArray out_byte_count)
+{
+    (void)environment;
+    (void)declaring_class;
+    uint64_t out_byte_count_value = 0;
+    CNA_Result result = cna.cnb_document_get_metadata_asset_type_name_size((CNA_CnbDocumentHandle)document, &out_byte_count_value);
+    if (result == CNA_RESULT_SUCCESS || result == CNA_RESULT_BUFFER_TOO_SMALL) {
+        jlong out_byte_count_element = (jlong)out_byte_count_value;
+        (*environment)->SetLongArrayRegion(
+            environment, out_byte_count, 0, 1, &out_byte_count_element);
+    }
+    return (jint)result;
+}
+
+JNIEXPORT jint JNICALL
+Java_org_openeggbert_cna_internal_generated_NativeCnbRoutes_cnbDocumentGetMetadataContentNameSize(
+    JNIEnv* environment, jclass declaring_class, jlong document, jlongArray out_byte_count)
+{
+    (void)environment;
+    (void)declaring_class;
+    uint64_t out_byte_count_value = 0;
+    CNA_Result result = cna.cnb_document_get_metadata_content_name_size((CNA_CnbDocumentHandle)document, &out_byte_count_value);
+    if (result == CNA_RESULT_SUCCESS || result == CNA_RESULT_BUFFER_TOO_SMALL) {
+        jlong out_byte_count_element = (jlong)out_byte_count_value;
+        (*environment)->SetLongArrayRegion(
+            environment, out_byte_count, 0, 1, &out_byte_count_element);
+    }
+    return (jint)result;
+}
+
+JNIEXPORT jint JNICALL
+Java_org_openeggbert_cna_internal_generated_NativeCnbRoutes_cnbDocumentGetOriginSize(
+    JNIEnv* environment, jclass declaring_class, jlong document, jlongArray out_byte_count)
+{
+    (void)environment;
+    (void)declaring_class;
+    uint64_t out_byte_count_value = 0;
+    CNA_Result result = cna.cnb_document_get_origin_size((CNA_CnbDocumentHandle)document, &out_byte_count_value);
+    if (result == CNA_RESULT_SUCCESS || result == CNA_RESULT_BUFFER_TOO_SMALL) {
+        jlong out_byte_count_element = (jlong)out_byte_count_value;
+        (*environment)->SetLongArrayRegion(
+            environment, out_byte_count, 0, 1, &out_byte_count_element);
+    }
+    return (jint)result;
+}
+
+JNIEXPORT jint JNICALL
+Java_org_openeggbert_cna_internal_generated_NativeCnbRoutes_cnbDocumentOpenChunk(
+    JNIEnv* environment, jclass declaring_class, jlong document, jlong index, jlongArray out_reader)
+{
+    (void)environment;
+    (void)declaring_class;
+    CNA_CnbReaderHandle out_reader_value = 0;
+    CNA_Result result = cna.cnb_document_open_chunk((CNA_CnbDocumentHandle)document, (uint64_t)index, &out_reader_value);
+    if (result == CNA_RESULT_SUCCESS || result == CNA_RESULT_BUFFER_TOO_SMALL) {
+        jlong out_reader_element = (jlong)out_reader_value;
+        (*environment)->SetLongArrayRegion(
+            environment, out_reader, 0, 1, &out_reader_element);
+    }
+    return (jint)result;
+}
+
+JNIEXPORT jint JNICALL
+Java_org_openeggbert_cna_internal_generated_NativeCnbRoutes_cnbDocumentParse(
+    JNIEnv* environment, jclass declaring_class, jbyteArray bytes, jbyteArray origin, jlongArray limitsIntegral, jlongArray out_document)
+{
+    (void)environment;
+    (void)declaring_class;
+    jsize bytes_size = (*environment)->GetArrayLength(environment, bytes);
+    jbyte* bytes_elements = (*environment)->GetByteArrayElements(environment, bytes, NULL);
+    if (bytes_elements == NULL) {
+        return (jint)CNA_RESULT_OUT_OF_MEMORY;
+    }
+    uint8_t* bytes_values = (uint8_t*)malloc(
+        ((size_t)bytes_size + 1U) * sizeof(*bytes_values));
+    if (bytes_values == NULL) {
+        (*environment)->ReleaseByteArrayElements(
+            environment, bytes, bytes_elements, JNI_ABORT);
+        return (jint)CNA_RESULT_OUT_OF_MEMORY;
+    }
+    for (jsize index = 0; index < bytes_size; ++index) {
+        bytes_values[index] = (uint8_t)bytes_elements[index];
+    }
+    jsize origin_size = (*environment)->GetArrayLength(environment, origin);
+    jbyte* origin_bytes = (*environment)->GetByteArrayElements(environment, origin, NULL);
+    if (origin_bytes == NULL) {
+        return (jint)CNA_RESULT_OUT_OF_MEMORY;
+    }
+    CNA_StringView origin_view = {(const char*)origin_bytes, (uint64_t)origin_size};
+    CNA_CnbReadLimits limits_value;
+    memset(&limits_value, 0, sizeof limits_value);
+    limits_value.struct_size = (uint32_t)(sizeof limits_value);
+    limits_value.struct_version = CNA_CNB_READ_LIMITS_STRUCT_VERSION;
+    {
+        jlong limitsIntegral_values[7];
+        (*environment)->GetLongArrayRegion(environment, limitsIntegral, 0, 7, limitsIntegral_values);
+        limits_value.max_file_size = (uint64_t)limitsIntegral_values[0];
+        limits_value.max_chunk_size = (uint64_t)limitsIntegral_values[1];
+        limits_value.max_total_uncompressed_size = (uint64_t)limitsIntegral_values[2];
+        limits_value.max_chunk_count = (uint32_t)limitsIntegral_values[3];
+        limits_value.max_string_bytes = (uint32_t)limitsIntegral_values[4];
+        limits_value.max_array_element_count = (uint32_t)limitsIntegral_values[5];
+        limits_value.max_chunk_alignment = (uint32_t)limitsIntegral_values[6];
+    }
+    CNA_CnbDocumentHandle out_document_value = 0;
+    CNA_Result result = cna.cnb_document_parse(bytes_values, (uint64_t)bytes_size, origin_view, &limits_value, &out_document_value);
+    free(bytes_values);
+    (*environment)->ReleaseByteArrayElements(
+        environment, bytes, bytes_elements, JNI_ABORT);
+    (*environment)->ReleaseByteArrayElements(environment, origin, origin_bytes, JNI_ABORT);
+    if (result == CNA_RESULT_SUCCESS || result == CNA_RESULT_BUFFER_TOO_SMALL) {
+        jlong out_document_element = (jlong)out_document_value;
+        (*environment)->SetLongArrayRegion(
+            environment, out_document, 0, 1, &out_document_element);
+    }
+    return (jint)result;
+}
+
+JNIEXPORT jint JNICALL
+Java_org_openeggbert_cna_internal_generated_NativeCnbRoutes_cnbDocumentParseFile(
+    JNIEnv* environment, jclass declaring_class, jbyteArray path, jlongArray limitsIntegral, jlongArray out_document)
+{
+    (void)environment;
+    (void)declaring_class;
+    jsize path_size = (*environment)->GetArrayLength(environment, path);
+    jbyte* path_bytes = (*environment)->GetByteArrayElements(environment, path, NULL);
+    if (path_bytes == NULL) {
+        return (jint)CNA_RESULT_OUT_OF_MEMORY;
+    }
+    CNA_StringView path_view = {(const char*)path_bytes, (uint64_t)path_size};
+    CNA_CnbReadLimits limits_value;
+    memset(&limits_value, 0, sizeof limits_value);
+    limits_value.struct_size = (uint32_t)(sizeof limits_value);
+    limits_value.struct_version = CNA_CNB_READ_LIMITS_STRUCT_VERSION;
+    {
+        jlong limitsIntegral_values[7];
+        (*environment)->GetLongArrayRegion(environment, limitsIntegral, 0, 7, limitsIntegral_values);
+        limits_value.max_file_size = (uint64_t)limitsIntegral_values[0];
+        limits_value.max_chunk_size = (uint64_t)limitsIntegral_values[1];
+        limits_value.max_total_uncompressed_size = (uint64_t)limitsIntegral_values[2];
+        limits_value.max_chunk_count = (uint32_t)limitsIntegral_values[3];
+        limits_value.max_string_bytes = (uint32_t)limitsIntegral_values[4];
+        limits_value.max_array_element_count = (uint32_t)limitsIntegral_values[5];
+        limits_value.max_chunk_alignment = (uint32_t)limitsIntegral_values[6];
+    }
+    CNA_CnbDocumentHandle out_document_value = 0;
+    CNA_Result result = cna.cnb_document_parse_file(path_view, &limits_value, &out_document_value);
+    (*environment)->ReleaseByteArrayElements(environment, path, path_bytes, JNI_ABORT);
+    if (result == CNA_RESULT_SUCCESS || result == CNA_RESULT_BUFFER_TOO_SMALL) {
+        jlong out_document_element = (jlong)out_document_value;
+        (*environment)->SetLongArrayRegion(
+            environment, out_document, 0, 1, &out_document_element);
+    }
+    return (jint)result;
+}
+
+JNIEXPORT jint JNICALL
+Java_org_openeggbert_cna_internal_generated_NativeCnbRoutes_cnbDocumentReadEmbeddedTexture2d(
+    JNIEnv* environment, jclass declaring_class, jlong document, jbyteArray label, jlongArray out_texture)
+{
+    (void)environment;
+    (void)declaring_class;
+    jsize label_size = (*environment)->GetArrayLength(environment, label);
+    jbyte* label_bytes = (*environment)->GetByteArrayElements(environment, label, NULL);
+    if (label_bytes == NULL) {
+        return (jint)CNA_RESULT_OUT_OF_MEMORY;
+    }
+    CNA_StringView label_view = {(const char*)label_bytes, (uint64_t)label_size};
+    CNA_CnbTextureDataHandle out_texture_value = 0;
+    CNA_Result result = cna.cnb_document_read_embedded_texture2d((CNA_CnbDocumentHandle)document, label_view, &out_texture_value);
+    (*environment)->ReleaseByteArrayElements(environment, label, label_bytes, JNI_ABORT);
+    if (result == CNA_RESULT_SUCCESS || result == CNA_RESULT_BUFFER_TOO_SMALL) {
+        jlong out_texture_element = (jlong)out_texture_value;
+        (*environment)->SetLongArrayRegion(
+            environment, out_texture, 0, 1, &out_texture_element);
+    }
+    return (jint)result;
+}
+
+JNIEXPORT jint JNICALL
+Java_org_openeggbert_cna_internal_generated_NativeCnbRoutes_cnbDocumentRequireAsset(
+    JNIEnv* environment, jclass declaring_class, jlong document, jint expected_asset_type_id, jint max_schema_version)
+{
+    (void)environment;
+    (void)declaring_class;
+    CNA_Result result = cna.cnb_document_require_asset((CNA_CnbDocumentHandle)document, (uint32_t)expected_asset_type_id, (uint32_t)max_schema_version);
+    return (jint)result;
+}
+
+JNIEXPORT jint JNICALL
+Java_org_openeggbert_cna_internal_generated_NativeCnbRoutes_cnbDocumentRequireMandatoryChunksUnderstood(
+    JNIEnv* environment, jclass declaring_class, jlong document, jintArray known_types)
+{
+    (void)environment;
+    (void)declaring_class;
+    jsize known_types_size = (*environment)->GetArrayLength(environment, known_types);
+    jint* known_types_elements = (*environment)->GetIntArrayElements(environment, known_types, NULL);
+    if (known_types_elements == NULL) {
+        return (jint)CNA_RESULT_OUT_OF_MEMORY;
+    }
+    CNA_CnbChunkId* known_types_values = (CNA_CnbChunkId*)malloc(
+        ((size_t)known_types_size + 1U) * sizeof(*known_types_values));
+    if (known_types_values == NULL) {
+        (*environment)->ReleaseIntArrayElements(
+            environment, known_types, known_types_elements, JNI_ABORT);
+        return (jint)CNA_RESULT_OUT_OF_MEMORY;
+    }
+    for (jsize index = 0; index < known_types_size; ++index) {
+        known_types_values[index] = (CNA_CnbChunkId)known_types_elements[index];
+    }
+    CNA_Result result = cna.cnb_document_require_mandatory_chunks_understood((CNA_CnbDocumentHandle)document, known_types_values, (uint64_t)known_types_size);
+    free(known_types_values);
+    (*environment)->ReleaseIntArrayElements(
+        environment, known_types, known_types_elements, JNI_ABORT);
+    return (jint)result;
+}
+
+JNIEXPORT jint JNICALL
+Java_org_openeggbert_cna_internal_generated_NativeCnbRoutes_cnbDocumentRequireSingle(
+    JNIEnv* environment, jclass declaring_class, jlong document, jint type, jlongArray out_index)
+{
+    (void)environment;
+    (void)declaring_class;
+    uint64_t out_index_value = 0;
+    CNA_Result result = cna.cnb_document_require_single((CNA_CnbDocumentHandle)document, (CNA_CnbChunkId)type, &out_index_value);
+    if (result == CNA_RESULT_SUCCESS || result == CNA_RESULT_BUFFER_TOO_SMALL) {
+        jlong out_index_element = (jlong)out_index_value;
+        (*environment)->SetLongArrayRegion(
+            environment, out_index, 0, 1, &out_index_element);
+    }
+    return (jint)result;
+}
+
+JNIEXPORT jint JNICALL
+Java_org_openeggbert_cna_internal_generated_NativeCnbRoutes_cnbEncodeTexture2d(
+    JNIEnv* environment, jclass declaring_class, jlong texture, jbyteArray content_name, jbyteArray destination, jlongArray out_byte_count)
+{
+    (void)environment;
+    (void)declaring_class;
+    jsize content_name_size = (*environment)->GetArrayLength(environment, content_name);
+    jbyte* content_name_bytes = (*environment)->GetByteArrayElements(environment, content_name, NULL);
+    if (content_name_bytes == NULL) {
+        return (jint)CNA_RESULT_OUT_OF_MEMORY;
+    }
+    CNA_StringView content_name_view = {(const char*)content_name_bytes, (uint64_t)content_name_size};
+    jsize destination_size = (*environment)->GetArrayLength(environment, destination);
+    jbyte* destination_elements = (*environment)->GetByteArrayElements(environment, destination, NULL);
+    if (destination_elements == NULL) {
+        return (jint)CNA_RESULT_OUT_OF_MEMORY;
+    }
+    uint8_t* destination_values = (uint8_t*)malloc(
+        ((size_t)destination_size + 1U) * sizeof(*destination_values));
+    if (destination_values == NULL) {
+        (*environment)->ReleaseByteArrayElements(
+            environment, destination, destination_elements, JNI_ABORT);
+        return (jint)CNA_RESULT_OUT_OF_MEMORY;
+    }
+    for (jsize index = 0; index < destination_size; ++index) {
+        destination_values[index] = (uint8_t)destination_elements[index];
+    }
+    uint64_t out_byte_count_value = 0;
+    CNA_Result result = cna.cnb_encode_texture2d((CNA_CnbTextureDataHandle)texture, content_name_view, destination_values, (uint64_t)destination_size, &out_byte_count_value);
+    (*environment)->ReleaseByteArrayElements(environment, content_name, content_name_bytes, JNI_ABORT);
+    if (result == CNA_RESULT_SUCCESS) {
+        for (jsize index = 0; index < destination_size; ++index) {
+            destination_elements[index] = (jbyte)destination_values[index];
+        }
+    }
+    free(destination_values);
+    (*environment)->ReleaseByteArrayElements(
+        environment, destination, destination_elements, 0);
+    if (result == CNA_RESULT_SUCCESS || result == CNA_RESULT_BUFFER_TOO_SMALL) {
+        jlong out_byte_count_element = (jlong)out_byte_count_value;
+        (*environment)->SetLongArrayRegion(
+            environment, out_byte_count, 0, 1, &out_byte_count_element);
+    }
+    return (jint)result;
+}
+
+JNIEXPORT jint JNICALL
+Java_org_openeggbert_cna_internal_generated_NativeCnbRoutes_cnbGetAssetTypeNameSize(
+    JNIEnv* environment, jclass declaring_class, jint asset_type_id, jlongArray out_byte_count)
+{
+    (void)environment;
+    (void)declaring_class;
+    uint64_t out_byte_count_value = 0;
+    CNA_Result result = cna.cnb_get_asset_type_name_size((uint32_t)asset_type_id, &out_byte_count_value);
+    if (result == CNA_RESULT_SUCCESS || result == CNA_RESULT_BUFFER_TOO_SMALL) {
+        jlong out_byte_count_element = (jlong)out_byte_count_value;
+        (*environment)->SetLongArrayRegion(
+            environment, out_byte_count, 0, 1, &out_byte_count_element);
+    }
+    return (jint)result;
+}
+
+JNIEXPORT jint JNICALL
+Java_org_openeggbert_cna_internal_generated_NativeCnbRoutes_cnbGetChunkIdStringSize(
+    JNIEnv* environment, jclass declaring_class, jint id, jlongArray out_byte_count)
+{
+    (void)environment;
+    (void)declaring_class;
+    uint64_t out_byte_count_value = 0;
+    CNA_Result result = cna.cnb_get_chunk_id_string_size((CNA_CnbChunkId)id, &out_byte_count_value);
+    if (result == CNA_RESULT_SUCCESS || result == CNA_RESULT_BUFFER_TOO_SMALL) {
+        jlong out_byte_count_element = (jlong)out_byte_count_value;
+        (*environment)->SetLongArrayRegion(
+            environment, out_byte_count, 0, 1, &out_byte_count_element);
+    }
+    return (jint)result;
+}
+
+JNIEXPORT jint JNICALL
+Java_org_openeggbert_cna_internal_generated_NativeCnbRoutes_cnbGetCompressedByteCount(
+    JNIEnv* environment, jclass declaring_class, jbyteArray raw, jint codec, jint level, jlongArray out_byte_count)
+{
+    (void)environment;
+    (void)declaring_class;
+    jsize raw_size = (*environment)->GetArrayLength(environment, raw);
+    jbyte* raw_elements = (*environment)->GetByteArrayElements(environment, raw, NULL);
+    if (raw_elements == NULL) {
+        return (jint)CNA_RESULT_OUT_OF_MEMORY;
+    }
+    uint8_t* raw_values = (uint8_t*)malloc(
+        ((size_t)raw_size + 1U) * sizeof(*raw_values));
+    if (raw_values == NULL) {
+        (*environment)->ReleaseByteArrayElements(
+            environment, raw, raw_elements, JNI_ABORT);
+        return (jint)CNA_RESULT_OUT_OF_MEMORY;
+    }
+    for (jsize index = 0; index < raw_size; ++index) {
+        raw_values[index] = (uint8_t)raw_elements[index];
+    }
+    uint64_t out_byte_count_value = 0;
+    CNA_Result result = cna.cnb_get_compressed_byte_count(raw_values, (uint64_t)raw_size, (CNA_CnbCompression)codec, (int32_t)level, &out_byte_count_value);
+    free(raw_values);
+    (*environment)->ReleaseByteArrayElements(
+        environment, raw, raw_elements, JNI_ABORT);
+    if (result == CNA_RESULT_SUCCESS || result == CNA_RESULT_BUFFER_TOO_SMALL) {
+        jlong out_byte_count_element = (jlong)out_byte_count_value;
+        (*environment)->SetLongArrayRegion(
+            environment, out_byte_count, 0, 1, &out_byte_count_element);
+    }
+    return (jint)result;
+}
+
+JNIEXPORT jint JNICALL
+Java_org_openeggbert_cna_internal_generated_NativeCnbRoutes_cnbGetCompressionNameSize(
+    JNIEnv* environment, jclass declaring_class, jint codec, jlongArray out_byte_count)
+{
+    (void)environment;
+    (void)declaring_class;
+    uint64_t out_byte_count_value = 0;
+    CNA_Result result = cna.cnb_get_compression_name_size((CNA_CnbCompression)codec, &out_byte_count_value);
+    if (result == CNA_RESULT_SUCCESS || result == CNA_RESULT_BUFFER_TOO_SMALL) {
+        jlong out_byte_count_element = (jlong)out_byte_count_value;
+        (*environment)->SetLongArrayRegion(
+            environment, out_byte_count, 0, 1, &out_byte_count_element);
+    }
+    return (jint)result;
+}
+
+JNIEXPORT jint JNICALL
+Java_org_openeggbert_cna_internal_generated_NativeCnbRoutes_cnbGetLogicalNameProblemSize(
+    JNIEnv* environment, jclass declaring_class, jbyteArray logical_name, jlongArray out_byte_count)
+{
+    (void)environment;
+    (void)declaring_class;
+    jsize logical_name_size = (*environment)->GetArrayLength(environment, logical_name);
+    jbyte* logical_name_bytes = (*environment)->GetByteArrayElements(environment, logical_name, NULL);
+    if (logical_name_bytes == NULL) {
+        return (jint)CNA_RESULT_OUT_OF_MEMORY;
+    }
+    CNA_StringView logical_name_view = {(const char*)logical_name_bytes, (uint64_t)logical_name_size};
+    uint64_t out_byte_count_value = 0;
+    CNA_Result result = cna.cnb_get_logical_name_problem_size(logical_name_view, &out_byte_count_value);
+    (*environment)->ReleaseByteArrayElements(environment, logical_name, logical_name_bytes, JNI_ABORT);
+    if (result == CNA_RESULT_SUCCESS || result == CNA_RESULT_BUFFER_TOO_SMALL) {
+        jlong out_byte_count_element = (jlong)out_byte_count_value;
+        (*environment)->SetLongArrayRegion(
+            environment, out_byte_count, 0, 1, &out_byte_count_element);
+    }
+    return (jint)result;
+}
+
+JNIEXPORT jint JNICALL
+Java_org_openeggbert_cna_internal_generated_NativeCnbRoutes_cnbGetTextureFormatNameSize(
+    JNIEnv* environment, jclass declaring_class, jint format, jlongArray out_byte_count)
+{
+    (void)environment;
+    (void)declaring_class;
+    uint64_t out_byte_count_value = 0;
+    CNA_Result result = cna.cnb_get_texture_format_name_size((CNA_CnbTextureFormat)format, &out_byte_count_value);
+    if (result == CNA_RESULT_SUCCESS || result == CNA_RESULT_BUFFER_TOO_SMALL) {
+        jlong out_byte_count_element = (jlong)out_byte_count_value;
+        (*environment)->SetLongArrayRegion(
+            environment, out_byte_count, 0, 1, &out_byte_count_element);
+    }
+    return (jint)result;
+}
+
+JNIEXPORT jint JNICALL
+Java_org_openeggbert_cna_internal_generated_NativeCnbRoutes_cnbGetTextureFormatUnitBytes(
+    JNIEnv* environment, jclass declaring_class, jint format, jintArray out_unit_bytes)
+{
+    (void)environment;
+    (void)declaring_class;
+    uint32_t out_unit_bytes_value = 0;
+    CNA_Result result = cna.cnb_get_texture_format_unit_bytes((CNA_CnbTextureFormat)format, &out_unit_bytes_value);
+    if (result == CNA_RESULT_SUCCESS || result == CNA_RESULT_BUFFER_TOO_SMALL) {
+        jint out_unit_bytes_element = (jint)out_unit_bytes_value;
+        (*environment)->SetIntArrayRegion(
+            environment, out_unit_bytes, 0, 1, &out_unit_bytes_element);
+    }
+    return (jint)result;
+}
+
+JNIEXPORT jint JNICALL
+Java_org_openeggbert_cna_internal_generated_NativeCnbRoutes_cnbGetTextureLevelByteSize(
+    JNIEnv* environment, jclass declaring_class, jint format, jint width, jint height, jint depth, jlongArray out_byte_size)
+{
+    (void)environment;
+    (void)declaring_class;
+    uint64_t out_byte_size_value = 0;
+    CNA_Result result = cna.cnb_get_texture_level_byte_size((CNA_CnbTextureFormat)format, (uint32_t)width, (uint32_t)height, (uint32_t)depth, &out_byte_size_value);
+    if (result == CNA_RESULT_SUCCESS || result == CNA_RESULT_BUFFER_TOO_SMALL) {
+        jlong out_byte_size_element = (jlong)out_byte_size_value;
+        (*environment)->SetLongArrayRegion(
+            environment, out_byte_size, 0, 1, &out_byte_size_element);
+    }
+    return (jint)result;
+}
+
+JNIEXPORT jint JNICALL
+Java_org_openeggbert_cna_internal_generated_NativeCnbRoutes_cnbHasMagic(
+    JNIEnv* environment, jclass declaring_class, jbyteArray bytes, jbooleanArray out_has_magic)
+{
+    (void)environment;
+    (void)declaring_class;
+    jsize bytes_size = (*environment)->GetArrayLength(environment, bytes);
+    jbyte* bytes_elements = (*environment)->GetByteArrayElements(environment, bytes, NULL);
+    if (bytes_elements == NULL) {
+        return (jint)CNA_RESULT_OUT_OF_MEMORY;
+    }
+    uint8_t* bytes_values = (uint8_t*)malloc(
+        ((size_t)bytes_size + 1U) * sizeof(*bytes_values));
+    if (bytes_values == NULL) {
+        (*environment)->ReleaseByteArrayElements(
+            environment, bytes, bytes_elements, JNI_ABORT);
+        return (jint)CNA_RESULT_OUT_OF_MEMORY;
+    }
+    for (jsize index = 0; index < bytes_size; ++index) {
+        bytes_values[index] = (uint8_t)bytes_elements[index];
+    }
+    CNA_Bool out_has_magic_value = 0;
+    CNA_Result result = cna.cnb_has_magic(bytes_values, (uint64_t)bytes_size, &out_has_magic_value);
+    free(bytes_values);
+    (*environment)->ReleaseByteArrayElements(
+        environment, bytes, bytes_elements, JNI_ABORT);
+    if (result == CNA_RESULT_SUCCESS || result == CNA_RESULT_BUFFER_TOO_SMALL) {
+        jboolean out_has_magic_element = (jboolean)out_has_magic_value;
+        (*environment)->SetBooleanArrayRegion(
+            environment, out_has_magic, 0, 1, &out_has_magic_element);
+    }
+    return (jint)result;
+}
+
+JNIEXPORT jint JNICALL
+Java_org_openeggbert_cna_internal_generated_NativeCnbRoutes_cnbIsBlockCompressedTextureFormat(
+    JNIEnv* environment, jclass declaring_class, jint format, jbooleanArray out_block_compressed)
+{
+    (void)environment;
+    (void)declaring_class;
+    CNA_Bool out_block_compressed_value = 0;
+    CNA_Result result = cna.cnb_is_block_compressed_texture_format((CNA_CnbTextureFormat)format, &out_block_compressed_value);
+    if (result == CNA_RESULT_SUCCESS || result == CNA_RESULT_BUFFER_TOO_SMALL) {
+        jboolean out_block_compressed_element = (jboolean)out_block_compressed_value;
+        (*environment)->SetBooleanArrayRegion(
+            environment, out_block_compressed, 0, 1, &out_block_compressed_element);
+    }
+    return (jint)result;
+}
+
+JNIEXPORT jint JNICALL
+Java_org_openeggbert_cna_internal_generated_NativeCnbRoutes_cnbIsCompressionSupported(
+    JNIEnv* environment, jclass declaring_class, jint codec, jbooleanArray out_supported)
+{
+    (void)environment;
+    (void)declaring_class;
+    CNA_Bool out_supported_value = 0;
+    CNA_Result result = cna.cnb_is_compression_supported((CNA_CnbCompression)codec, &out_supported_value);
+    if (result == CNA_RESULT_SUCCESS || result == CNA_RESULT_BUFFER_TOO_SMALL) {
+        jboolean out_supported_element = (jboolean)out_supported_value;
+        (*environment)->SetBooleanArrayRegion(
+            environment, out_supported, 0, 1, &out_supported_element);
+    }
+    return (jint)result;
+}
+
+JNIEXPORT jint JNICALL
+Java_org_openeggbert_cna_internal_generated_NativeCnbRoutes_cnbIsCustomAssetTypeId(
+    JNIEnv* environment, jclass declaring_class, jint asset_type_id, jbooleanArray out_custom)
+{
+    (void)environment;
+    (void)declaring_class;
+    CNA_Bool out_custom_value = 0;
+    CNA_Result result = cna.cnb_is_custom_asset_type_id((uint32_t)asset_type_id, &out_custom_value);
+    if (result == CNA_RESULT_SUCCESS || result == CNA_RESULT_BUFFER_TOO_SMALL) {
+        jboolean out_custom_element = (jboolean)out_custom_value;
+        (*environment)->SetBooleanArrayRegion(
+            environment, out_custom, 0, 1, &out_custom_element);
+    }
+    return (jint)result;
+}
+
+JNIEXPORT jint JNICALL
+Java_org_openeggbert_cna_internal_generated_NativeCnbRoutes_cnbIsKnownTextureFormat(
+    JNIEnv* environment, jclass declaring_class, jint value, jbooleanArray out_known)
+{
+    (void)environment;
+    (void)declaring_class;
+    CNA_Bool out_known_value = 0;
+    CNA_Result result = cna.cnb_is_known_texture_format((uint32_t)value, &out_known_value);
+    if (result == CNA_RESULT_SUCCESS || result == CNA_RESULT_BUFFER_TOO_SMALL) {
+        jboolean out_known_element = (jboolean)out_known_value;
+        (*environment)->SetBooleanArrayRegion(
+            environment, out_known, 0, 1, &out_known_element);
+    }
+    return (jint)result;
+}
+
+JNIEXPORT jint JNICALL
+Java_org_openeggbert_cna_internal_generated_NativeCnbRoutes_cnbIsWellFormedChunkId(
+    JNIEnv* environment, jclass declaring_class, jint id, jbooleanArray out_well_formed)
+{
+    (void)environment;
+    (void)declaring_class;
+    CNA_Bool out_well_formed_value = 0;
+    CNA_Result result = cna.cnb_is_well_formed_chunk_id((CNA_CnbChunkId)id, &out_well_formed_value);
+    if (result == CNA_RESULT_SUCCESS || result == CNA_RESULT_BUFFER_TOO_SMALL) {
+        jboolean out_well_formed_element = (jboolean)out_well_formed_value;
+        (*environment)->SetBooleanArrayRegion(
+            environment, out_well_formed, 0, 1, &out_well_formed_element);
+    }
+    return (jint)result;
+}
+
+JNIEXPORT jint JNICALL
+Java_org_openeggbert_cna_internal_generated_NativeCnbRoutes_cnbIsWellFormedUtf8(
+    JNIEnv* environment, jclass declaring_class, jbyteArray text, jbooleanArray out_well_formed)
+{
+    (void)environment;
+    (void)declaring_class;
+    jsize text_size = (*environment)->GetArrayLength(environment, text);
+    jbyte* text_bytes = (*environment)->GetByteArrayElements(environment, text, NULL);
+    if (text_bytes == NULL) {
+        return (jint)CNA_RESULT_OUT_OF_MEMORY;
+    }
+    CNA_StringView text_view = {(const char*)text_bytes, (uint64_t)text_size};
+    CNA_Bool out_well_formed_value = 0;
+    CNA_Result result = cna.cnb_is_well_formed_utf8(text_view, &out_well_formed_value);
+    (*environment)->ReleaseByteArrayElements(environment, text, text_bytes, JNI_ABORT);
+    if (result == CNA_RESULT_SUCCESS || result == CNA_RESULT_BUFFER_TOO_SMALL) {
+        jboolean out_well_formed_element = (jboolean)out_well_formed_value;
+        (*environment)->SetBooleanArrayRegion(
+            environment, out_well_formed, 0, 1, &out_well_formed_element);
+    }
+    return (jint)result;
+}
+
+JNIEXPORT jint JNICALL
+Java_org_openeggbert_cna_internal_generated_NativeCnbRoutes_cnbMakeChunkId(
+    JNIEnv* environment, jclass declaring_class, jbyte a, jbyte b, jbyte c, jbyte d, jintArray out_id)
+{
+    (void)environment;
+    (void)declaring_class;
+    CNA_CnbChunkId out_id_value = 0;
+    CNA_Result result = cna.cnb_make_chunk_id((uint8_t)a, (uint8_t)b, (uint8_t)c, (uint8_t)d, &out_id_value);
+    if (result == CNA_RESULT_SUCCESS || result == CNA_RESULT_BUFFER_TOO_SMALL) {
+        jint out_id_element = (jint)out_id_value;
+        (*environment)->SetIntArrayRegion(
+            environment, out_id, 0, 1, &out_id_element);
+    }
+    return (jint)result;
+}
+
+JNIEXPORT jint JNICALL
+Java_org_openeggbert_cna_internal_generated_NativeCnbRoutes_cnbReadLimitsInit(
+    JNIEnv* environment, jclass declaring_class, jlongArray out_limitsIntegral)
+{
+    (void)environment;
+    (void)declaring_class;
+    CNA_CnbReadLimits out_limits_value;
+    memset(&out_limits_value, 0, sizeof out_limits_value);
+    out_limits_value.struct_size = (uint32_t)(sizeof out_limits_value);
+    out_limits_value.struct_version = CNA_CNB_READ_LIMITS_STRUCT_VERSION;
+    CNA_Result result = cna.cnb_read_limits_init(&out_limits_value);
+    if (result == CNA_RESULT_SUCCESS || result == CNA_RESULT_BUFFER_TOO_SMALL) {
+        jlong out_limitsIntegral_values[] = {
+            (jlong)out_limits_value.max_file_size,
+            (jlong)out_limits_value.max_chunk_size,
+            (jlong)out_limits_value.max_total_uncompressed_size,
+            (jlong)out_limits_value.max_chunk_count,
+            (jlong)out_limits_value.max_string_bytes,
+            (jlong)out_limits_value.max_array_element_count,
+            (jlong)out_limits_value.max_chunk_alignment
+        };
+        (*environment)->SetLongArrayRegion(environment, out_limitsIntegral, 0,
+            (jsize)(sizeof out_limitsIntegral_values / sizeof out_limitsIntegral_values[0]),
+            out_limitsIntegral_values);
+    }
+    return (jint)result;
+}
+
+JNIEXPORT jint JNICALL
+Java_org_openeggbert_cna_internal_generated_NativeCnbRoutes_cnbReaderCopyContext(
+    JNIEnv* environment, jclass declaring_class, jlong reader, jbyteArray destination, jlongArray out_byte_count)
+{
+    (void)environment;
+    (void)declaring_class;
+    jsize destination_size = (*environment)->GetArrayLength(environment, destination);
+    jbyte* destination_bytes = (*environment)->GetByteArrayElements(environment, destination, NULL);
+    if (destination_bytes == NULL) {
+        return (jint)CNA_RESULT_OUT_OF_MEMORY;
+    }
+    uint64_t destination_written = 0;
+    CNA_Result result = cna.cnb_reader_copy_context((CNA_CnbReaderHandle)reader, (char*)destination_bytes, (uint64_t)destination_size, &destination_written);
+    (*environment)->ReleaseByteArrayElements(environment, destination, destination_bytes, 0);
+    if (result == CNA_RESULT_SUCCESS || result == CNA_RESULT_BUFFER_TOO_SMALL) {
+        jlong destination_element = (jlong)destination_written;
+        (*environment)->SetLongArrayRegion(
+            environment, out_byte_count, 0, 1, &destination_element);
+    }
+    return (jint)result;
+}
+
+JNIEXPORT jint JNICALL
+Java_org_openeggbert_cna_internal_generated_NativeCnbRoutes_cnbReaderCopyString(
+    JNIEnv* environment, jclass declaring_class, jlong reader, jbyteArray destination, jlongArray out_byte_count)
+{
+    (void)environment;
+    (void)declaring_class;
+    jsize destination_size = (*environment)->GetArrayLength(environment, destination);
+    jbyte* destination_bytes = (*environment)->GetByteArrayElements(environment, destination, NULL);
+    if (destination_bytes == NULL) {
+        return (jint)CNA_RESULT_OUT_OF_MEMORY;
+    }
+    uint64_t destination_written = 0;
+    CNA_Result result = cna.cnb_reader_copy_string((CNA_CnbReaderHandle)reader, (char*)destination_bytes, (uint64_t)destination_size, &destination_written);
+    (*environment)->ReleaseByteArrayElements(environment, destination, destination_bytes, 0);
+    if (result == CNA_RESULT_SUCCESS || result == CNA_RESULT_BUFFER_TOO_SMALL) {
+        jlong destination_element = (jlong)destination_written;
+        (*environment)->SetLongArrayRegion(
+            environment, out_byte_count, 0, 1, &destination_element);
+    }
+    return (jint)result;
+}
+
+JNIEXPORT jint JNICALL
+Java_org_openeggbert_cna_internal_generated_NativeCnbRoutes_cnbReaderCreate(
+    JNIEnv* environment, jclass declaring_class, jbyteArray data, jbyteArray context, jlongArray limitsIntegral, jlongArray out_reader)
+{
+    (void)environment;
+    (void)declaring_class;
+    jsize data_size = (*environment)->GetArrayLength(environment, data);
+    jbyte* data_elements = (*environment)->GetByteArrayElements(environment, data, NULL);
+    if (data_elements == NULL) {
+        return (jint)CNA_RESULT_OUT_OF_MEMORY;
+    }
+    uint8_t* data_values = (uint8_t*)malloc(
+        ((size_t)data_size + 1U) * sizeof(*data_values));
+    if (data_values == NULL) {
+        (*environment)->ReleaseByteArrayElements(
+            environment, data, data_elements, JNI_ABORT);
+        return (jint)CNA_RESULT_OUT_OF_MEMORY;
+    }
+    for (jsize index = 0; index < data_size; ++index) {
+        data_values[index] = (uint8_t)data_elements[index];
+    }
+    jsize context_size = (*environment)->GetArrayLength(environment, context);
+    jbyte* context_bytes = (*environment)->GetByteArrayElements(environment, context, NULL);
+    if (context_bytes == NULL) {
+        return (jint)CNA_RESULT_OUT_OF_MEMORY;
+    }
+    CNA_StringView context_view = {(const char*)context_bytes, (uint64_t)context_size};
+    CNA_CnbReadLimits limits_value;
+    memset(&limits_value, 0, sizeof limits_value);
+    limits_value.struct_size = (uint32_t)(sizeof limits_value);
+    limits_value.struct_version = CNA_CNB_READ_LIMITS_STRUCT_VERSION;
+    {
+        jlong limitsIntegral_values[7];
+        (*environment)->GetLongArrayRegion(environment, limitsIntegral, 0, 7, limitsIntegral_values);
+        limits_value.max_file_size = (uint64_t)limitsIntegral_values[0];
+        limits_value.max_chunk_size = (uint64_t)limitsIntegral_values[1];
+        limits_value.max_total_uncompressed_size = (uint64_t)limitsIntegral_values[2];
+        limits_value.max_chunk_count = (uint32_t)limitsIntegral_values[3];
+        limits_value.max_string_bytes = (uint32_t)limitsIntegral_values[4];
+        limits_value.max_array_element_count = (uint32_t)limitsIntegral_values[5];
+        limits_value.max_chunk_alignment = (uint32_t)limitsIntegral_values[6];
+    }
+    CNA_CnbReaderHandle out_reader_value = 0;
+    CNA_Result result = cna.cnb_reader_create(data_values, (uint64_t)data_size, context_view, &limits_value, &out_reader_value);
+    free(data_values);
+    (*environment)->ReleaseByteArrayElements(
+        environment, data, data_elements, JNI_ABORT);
+    (*environment)->ReleaseByteArrayElements(environment, context, context_bytes, JNI_ABORT);
+    if (result == CNA_RESULT_SUCCESS || result == CNA_RESULT_BUFFER_TOO_SMALL) {
+        jlong out_reader_element = (jlong)out_reader_value;
+        (*environment)->SetLongArrayRegion(
+            environment, out_reader, 0, 1, &out_reader_element);
+    }
+    return (jint)result;
+}
+
+JNIEXPORT jint JNICALL
+Java_org_openeggbert_cna_internal_generated_NativeCnbRoutes_cnbReaderDestroy(
+    JNIEnv* environment, jclass declaring_class, jlong reader)
+{
+    (void)environment;
+    (void)declaring_class;
+    CNA_Result result = cna.cnb_reader_destroy((CNA_CnbReaderHandle)reader);
+    return (jint)result;
+}
+
+JNIEXPORT jint JNICALL
+Java_org_openeggbert_cna_internal_generated_NativeCnbRoutes_cnbReaderGetContextSize(
+    JNIEnv* environment, jclass declaring_class, jlong reader, jlongArray out_byte_count)
+{
+    (void)environment;
+    (void)declaring_class;
+    uint64_t out_byte_count_value = 0;
+    CNA_Result result = cna.cnb_reader_get_context_size((CNA_CnbReaderHandle)reader, &out_byte_count_value);
+    if (result == CNA_RESULT_SUCCESS || result == CNA_RESULT_BUFFER_TOO_SMALL) {
+        jlong out_byte_count_element = (jlong)out_byte_count_value;
+        (*environment)->SetLongArrayRegion(
+            environment, out_byte_count, 0, 1, &out_byte_count_element);
+    }
+    return (jint)result;
+}
+
+JNIEXPORT jint JNICALL
+Java_org_openeggbert_cna_internal_generated_NativeCnbRoutes_cnbReaderGetPosition(
+    JNIEnv* environment, jclass declaring_class, jlong reader, jlongArray out_position)
+{
+    (void)environment;
+    (void)declaring_class;
+    uint64_t out_position_value = 0;
+    CNA_Result result = cna.cnb_reader_get_position((CNA_CnbReaderHandle)reader, &out_position_value);
+    if (result == CNA_RESULT_SUCCESS || result == CNA_RESULT_BUFFER_TOO_SMALL) {
+        jlong out_position_element = (jlong)out_position_value;
+        (*environment)->SetLongArrayRegion(
+            environment, out_position, 0, 1, &out_position_element);
+    }
+    return (jint)result;
+}
+
+JNIEXPORT jint JNICALL
+Java_org_openeggbert_cna_internal_generated_NativeCnbRoutes_cnbReaderGetRemaining(
+    JNIEnv* environment, jclass declaring_class, jlong reader, jlongArray out_remaining)
+{
+    (void)environment;
+    (void)declaring_class;
+    uint64_t out_remaining_value = 0;
+    CNA_Result result = cna.cnb_reader_get_remaining((CNA_CnbReaderHandle)reader, &out_remaining_value);
+    if (result == CNA_RESULT_SUCCESS || result == CNA_RESULT_BUFFER_TOO_SMALL) {
+        jlong out_remaining_element = (jlong)out_remaining_value;
+        (*environment)->SetLongArrayRegion(
+            environment, out_remaining, 0, 1, &out_remaining_element);
+    }
+    return (jint)result;
+}
+
+JNIEXPORT jint JNICALL
+Java_org_openeggbert_cna_internal_generated_NativeCnbRoutes_cnbReaderGetSize(
+    JNIEnv* environment, jclass declaring_class, jlong reader, jlongArray out_size)
+{
+    (void)environment;
+    (void)declaring_class;
+    uint64_t out_size_value = 0;
+    CNA_Result result = cna.cnb_reader_get_size((CNA_CnbReaderHandle)reader, &out_size_value);
+    if (result == CNA_RESULT_SUCCESS || result == CNA_RESULT_BUFFER_TOO_SMALL) {
+        jlong out_size_element = (jlong)out_size_value;
+        (*environment)->SetLongArrayRegion(
+            environment, out_size, 0, 1, &out_size_element);
+    }
+    return (jint)result;
+}
+
+JNIEXPORT jint JNICALL
+Java_org_openeggbert_cna_internal_generated_NativeCnbRoutes_cnbReaderReadBytes(
+    JNIEnv* environment, jclass declaring_class, jlong reader, jlong byte_count, jbyteArray destination, jlongArray out_byte_count)
+{
+    (void)environment;
+    (void)declaring_class;
+    jsize destination_size = (*environment)->GetArrayLength(environment, destination);
+    jbyte* destination_elements = (*environment)->GetByteArrayElements(environment, destination, NULL);
+    if (destination_elements == NULL) {
+        return (jint)CNA_RESULT_OUT_OF_MEMORY;
+    }
+    uint8_t* destination_values = (uint8_t*)malloc(
+        ((size_t)destination_size + 1U) * sizeof(*destination_values));
+    if (destination_values == NULL) {
+        (*environment)->ReleaseByteArrayElements(
+            environment, destination, destination_elements, JNI_ABORT);
+        return (jint)CNA_RESULT_OUT_OF_MEMORY;
+    }
+    for (jsize index = 0; index < destination_size; ++index) {
+        destination_values[index] = (uint8_t)destination_elements[index];
+    }
+    uint64_t out_byte_count_value = 0;
+    CNA_Result result = cna.cnb_reader_read_bytes((CNA_CnbReaderHandle)reader, (uint64_t)byte_count, destination_values, (uint64_t)destination_size, &out_byte_count_value);
+    if (result == CNA_RESULT_SUCCESS) {
+        for (jsize index = 0; index < destination_size; ++index) {
+            destination_elements[index] = (jbyte)destination_values[index];
+        }
+    }
+    free(destination_values);
+    (*environment)->ReleaseByteArrayElements(
+        environment, destination, destination_elements, 0);
+    if (result == CNA_RESULT_SUCCESS || result == CNA_RESULT_BUFFER_TOO_SMALL) {
+        jlong out_byte_count_element = (jlong)out_byte_count_value;
+        (*environment)->SetLongArrayRegion(
+            environment, out_byte_count, 0, 1, &out_byte_count_element);
+    }
+    return (jint)result;
+}
+
+JNIEXPORT jint JNICALL
+Java_org_openeggbert_cna_internal_generated_NativeCnbRoutes_cnbReaderReadCount(
+    JNIEnv* environment, jclass declaring_class, jlong reader, jlong element_size, jbyteArray what_is_being_counted, jintArray out_count)
+{
+    (void)environment;
+    (void)declaring_class;
+    jsize what_is_being_counted_size = (*environment)->GetArrayLength(environment, what_is_being_counted);
+    jbyte* what_is_being_counted_bytes = (*environment)->GetByteArrayElements(environment, what_is_being_counted, NULL);
+    if (what_is_being_counted_bytes == NULL) {
+        return (jint)CNA_RESULT_OUT_OF_MEMORY;
+    }
+    CNA_StringView what_is_being_counted_view = {(const char*)what_is_being_counted_bytes, (uint64_t)what_is_being_counted_size};
+    uint32_t out_count_value = 0;
+    CNA_Result result = cna.cnb_reader_read_count((CNA_CnbReaderHandle)reader, (uint64_t)element_size, what_is_being_counted_view, &out_count_value);
+    (*environment)->ReleaseByteArrayElements(environment, what_is_being_counted, what_is_being_counted_bytes, JNI_ABORT);
+    if (result == CNA_RESULT_SUCCESS || result == CNA_RESULT_BUFFER_TOO_SMALL) {
+        jint out_count_element = (jint)out_count_value;
+        (*environment)->SetIntArrayRegion(
+            environment, out_count, 0, 1, &out_count_element);
+    }
+    return (jint)result;
+}
+
+JNIEXPORT jint JNICALL
+Java_org_openeggbert_cna_internal_generated_NativeCnbRoutes_cnbReaderReadF32(
+    JNIEnv* environment, jclass declaring_class, jlong reader, jfloatArray out_value)
+{
+    (void)environment;
+    (void)declaring_class;
+    float out_value_value = 0;
+    CNA_Result result = cna.cnb_reader_read_f32((CNA_CnbReaderHandle)reader, &out_value_value);
+    if (result == CNA_RESULT_SUCCESS || result == CNA_RESULT_BUFFER_TOO_SMALL) {
+        jfloat out_value_element = (jfloat)out_value_value;
+        (*environment)->SetFloatArrayRegion(
+            environment, out_value, 0, 1, &out_value_element);
+    }
+    return (jint)result;
+}
+
+JNIEXPORT jint JNICALL
+Java_org_openeggbert_cna_internal_generated_NativeCnbRoutes_cnbReaderReadF64(
+    JNIEnv* environment, jclass declaring_class, jlong reader, jdoubleArray out_value)
+{
+    (void)environment;
+    (void)declaring_class;
+    double out_value_value = 0;
+    CNA_Result result = cna.cnb_reader_read_f64((CNA_CnbReaderHandle)reader, &out_value_value);
+    if (result == CNA_RESULT_SUCCESS || result == CNA_RESULT_BUFFER_TOO_SMALL) {
+        jdouble out_value_element = (jdouble)out_value_value;
+        (*environment)->SetDoubleArrayRegion(
+            environment, out_value, 0, 1, &out_value_element);
+    }
+    return (jint)result;
+}
+
+JNIEXPORT jint JNICALL
+Java_org_openeggbert_cna_internal_generated_NativeCnbRoutes_cnbReaderReadI32(
+    JNIEnv* environment, jclass declaring_class, jlong reader, jintArray out_value)
+{
+    (void)environment;
+    (void)declaring_class;
+    int32_t out_value_value = 0;
+    CNA_Result result = cna.cnb_reader_read_i32((CNA_CnbReaderHandle)reader, &out_value_value);
+    if (result == CNA_RESULT_SUCCESS || result == CNA_RESULT_BUFFER_TOO_SMALL) {
+        jint out_value_element = (jint)out_value_value;
+        (*environment)->SetIntArrayRegion(
+            environment, out_value, 0, 1, &out_value_element);
+    }
+    return (jint)result;
+}
+
+JNIEXPORT jint JNICALL
+Java_org_openeggbert_cna_internal_generated_NativeCnbRoutes_cnbReaderReadString(
+    JNIEnv* environment, jclass declaring_class, jlong reader, jlongArray out_byte_count)
+{
+    (void)environment;
+    (void)declaring_class;
+    uint64_t out_byte_count_value = 0;
+    CNA_Result result = cna.cnb_reader_read_string((CNA_CnbReaderHandle)reader, &out_byte_count_value);
+    if (result == CNA_RESULT_SUCCESS || result == CNA_RESULT_BUFFER_TOO_SMALL) {
+        jlong out_byte_count_element = (jlong)out_byte_count_value;
+        (*environment)->SetLongArrayRegion(
+            environment, out_byte_count, 0, 1, &out_byte_count_element);
+    }
+    return (jint)result;
+}
+
+JNIEXPORT jint JNICALL
+Java_org_openeggbert_cna_internal_generated_NativeCnbRoutes_cnbReaderReadU16(
+    JNIEnv* environment, jclass declaring_class, jlong reader, jintArray out_value)
+{
+    (void)environment;
+    (void)declaring_class;
+    uint16_t out_value_value = 0;
+    CNA_Result result = cna.cnb_reader_read_u16((CNA_CnbReaderHandle)reader, &out_value_value);
+    if (result == CNA_RESULT_SUCCESS || result == CNA_RESULT_BUFFER_TOO_SMALL) {
+        jint out_value_element = (jint)out_value_value;
+        (*environment)->SetIntArrayRegion(
+            environment, out_value, 0, 1, &out_value_element);
+    }
+    return (jint)result;
+}
+
+JNIEXPORT jint JNICALL
+Java_org_openeggbert_cna_internal_generated_NativeCnbRoutes_cnbReaderReadU32(
+    JNIEnv* environment, jclass declaring_class, jlong reader, jintArray out_value)
+{
+    (void)environment;
+    (void)declaring_class;
+    uint32_t out_value_value = 0;
+    CNA_Result result = cna.cnb_reader_read_u32((CNA_CnbReaderHandle)reader, &out_value_value);
+    if (result == CNA_RESULT_SUCCESS || result == CNA_RESULT_BUFFER_TOO_SMALL) {
+        jint out_value_element = (jint)out_value_value;
+        (*environment)->SetIntArrayRegion(
+            environment, out_value, 0, 1, &out_value_element);
+    }
+    return (jint)result;
+}
+
+JNIEXPORT jint JNICALL
+Java_org_openeggbert_cna_internal_generated_NativeCnbRoutes_cnbReaderReadU64(
+    JNIEnv* environment, jclass declaring_class, jlong reader, jlongArray out_value)
+{
+    (void)environment;
+    (void)declaring_class;
+    uint64_t out_value_value = 0;
+    CNA_Result result = cna.cnb_reader_read_u64((CNA_CnbReaderHandle)reader, &out_value_value);
+    if (result == CNA_RESULT_SUCCESS || result == CNA_RESULT_BUFFER_TOO_SMALL) {
+        jlong out_value_element = (jlong)out_value_value;
+        (*environment)->SetLongArrayRegion(
+            environment, out_value, 0, 1, &out_value_element);
+    }
+    return (jint)result;
+}
+
+JNIEXPORT jint JNICALL
+Java_org_openeggbert_cna_internal_generated_NativeCnbRoutes_cnbReaderReadU8(
+    JNIEnv* environment, jclass declaring_class, jlong reader, jbyteArray out_value)
+{
+    (void)environment;
+    (void)declaring_class;
+    uint8_t out_value_value = 0;
+    CNA_Result result = cna.cnb_reader_read_u8((CNA_CnbReaderHandle)reader, &out_value_value);
+    if (result == CNA_RESULT_SUCCESS || result == CNA_RESULT_BUFFER_TOO_SMALL) {
+        jbyte out_value_element = (jbyte)out_value_value;
+        (*environment)->SetByteArrayRegion(
+            environment, out_value, 0, 1, &out_value_element);
+    }
+    return (jint)result;
+}
+
+JNIEXPORT jint JNICALL
+Java_org_openeggbert_cna_internal_generated_NativeCnbRoutes_cnbReaderRequireExhausted(
+    JNIEnv* environment, jclass declaring_class, jlong reader)
+{
+    (void)environment;
+    (void)declaring_class;
+    CNA_Result result = cna.cnb_reader_require_exhausted((CNA_CnbReaderHandle)reader);
+    return (jint)result;
+}
+
+JNIEXPORT jint JNICALL
+Java_org_openeggbert_cna_internal_generated_NativeCnbRoutes_cnbReaderSkip(
+    JNIEnv* environment, jclass declaring_class, jlong reader, jlong byte_count)
+{
+    (void)environment;
+    (void)declaring_class;
+    CNA_Result result = cna.cnb_reader_skip((CNA_CnbReaderHandle)reader, (uint64_t)byte_count);
+    return (jint)result;
+}
+
+JNIEXPORT jint JNICALL
+Java_org_openeggbert_cna_internal_generated_NativeCnbRoutes_cnbTextureDataAddRepresentation(
+    JNIEnv* environment, jclass declaring_class, jlong texture, jint format, jlongArray out_index)
+{
+    (void)environment;
+    (void)declaring_class;
+    uint64_t out_index_value = 0;
+    CNA_Result result = cna.cnb_texture_data_add_representation((CNA_CnbTextureDataHandle)texture, (CNA_CnbTextureFormat)format, &out_index_value);
+    if (result == CNA_RESULT_SUCCESS || result == CNA_RESULT_BUFFER_TOO_SMALL) {
+        jlong out_index_element = (jlong)out_index_value;
+        (*environment)->SetLongArrayRegion(
+            environment, out_index, 0, 1, &out_index_element);
+    }
+    return (jint)result;
+}
+
+JNIEXPORT jint JNICALL
+Java_org_openeggbert_cna_internal_generated_NativeCnbRoutes_cnbTextureDataCopyLevel(
+    JNIEnv* environment, jclass declaring_class, jlong texture, jlong representation, jlong level, jbyteArray destination, jlongArray out_byte_count)
+{
+    (void)environment;
+    (void)declaring_class;
+    jsize destination_size = (*environment)->GetArrayLength(environment, destination);
+    jbyte* destination_elements = (*environment)->GetByteArrayElements(environment, destination, NULL);
+    if (destination_elements == NULL) {
+        return (jint)CNA_RESULT_OUT_OF_MEMORY;
+    }
+    uint8_t* destination_values = (uint8_t*)malloc(
+        ((size_t)destination_size + 1U) * sizeof(*destination_values));
+    if (destination_values == NULL) {
+        (*environment)->ReleaseByteArrayElements(
+            environment, destination, destination_elements, JNI_ABORT);
+        return (jint)CNA_RESULT_OUT_OF_MEMORY;
+    }
+    for (jsize index = 0; index < destination_size; ++index) {
+        destination_values[index] = (uint8_t)destination_elements[index];
+    }
+    uint64_t out_byte_count_value = 0;
+    CNA_Result result = cna.cnb_texture_data_copy_level((CNA_CnbTextureDataHandle)texture, (uint64_t)representation, (uint64_t)level, destination_values, (uint64_t)destination_size, &out_byte_count_value);
+    if (result == CNA_RESULT_SUCCESS) {
+        for (jsize index = 0; index < destination_size; ++index) {
+            destination_elements[index] = (jbyte)destination_values[index];
+        }
+    }
+    free(destination_values);
+    (*environment)->ReleaseByteArrayElements(
+        environment, destination, destination_elements, 0);
+    if (result == CNA_RESULT_SUCCESS || result == CNA_RESULT_BUFFER_TOO_SMALL) {
+        jlong out_byte_count_element = (jlong)out_byte_count_value;
+        (*environment)->SetLongArrayRegion(
+            environment, out_byte_count, 0, 1, &out_byte_count_element);
+    }
+    return (jint)result;
+}
+
+JNIEXPORT jint JNICALL
+Java_org_openeggbert_cna_internal_generated_NativeCnbRoutes_cnbTextureDataCreate(
+    JNIEnv* environment, jclass declaring_class, jint width, jint height, jint depth, jint face_count, jint mip_count, jlongArray out_texture)
+{
+    (void)environment;
+    (void)declaring_class;
+    CNA_CnbTextureDataHandle out_texture_value = 0;
+    CNA_Result result = cna.cnb_texture_data_create((uint32_t)width, (uint32_t)height, (uint32_t)depth, (uint32_t)face_count, (uint32_t)mip_count, &out_texture_value);
+    if (result == CNA_RESULT_SUCCESS || result == CNA_RESULT_BUFFER_TOO_SMALL) {
+        jlong out_texture_element = (jlong)out_texture_value;
+        (*environment)->SetLongArrayRegion(
+            environment, out_texture, 0, 1, &out_texture_element);
+    }
+    return (jint)result;
+}
+
+JNIEXPORT jint JNICALL
+Java_org_openeggbert_cna_internal_generated_NativeCnbRoutes_cnbTextureDataCreateRgba8(
+    JNIEnv* environment, jclass declaring_class, jint width, jint height, jbyteArray rgba, jlongArray out_texture)
+{
+    (void)environment;
+    (void)declaring_class;
+    jsize rgba_size = (*environment)->GetArrayLength(environment, rgba);
+    jbyte* rgba_elements = (*environment)->GetByteArrayElements(environment, rgba, NULL);
+    if (rgba_elements == NULL) {
+        return (jint)CNA_RESULT_OUT_OF_MEMORY;
+    }
+    uint8_t* rgba_values = (uint8_t*)malloc(
+        ((size_t)rgba_size + 1U) * sizeof(*rgba_values));
+    if (rgba_values == NULL) {
+        (*environment)->ReleaseByteArrayElements(
+            environment, rgba, rgba_elements, JNI_ABORT);
+        return (jint)CNA_RESULT_OUT_OF_MEMORY;
+    }
+    for (jsize index = 0; index < rgba_size; ++index) {
+        rgba_values[index] = (uint8_t)rgba_elements[index];
+    }
+    CNA_CnbTextureDataHandle out_texture_value = 0;
+    CNA_Result result = cna.cnb_texture_data_create_rgba8((uint32_t)width, (uint32_t)height, rgba_values, (uint64_t)rgba_size, &out_texture_value);
+    free(rgba_values);
+    (*environment)->ReleaseByteArrayElements(
+        environment, rgba, rgba_elements, JNI_ABORT);
+    if (result == CNA_RESULT_SUCCESS || result == CNA_RESULT_BUFFER_TOO_SMALL) {
+        jlong out_texture_element = (jlong)out_texture_value;
+        (*environment)->SetLongArrayRegion(
+            environment, out_texture, 0, 1, &out_texture_element);
+    }
+    return (jint)result;
+}
+
+JNIEXPORT jint JNICALL
+Java_org_openeggbert_cna_internal_generated_NativeCnbRoutes_cnbTextureDataDestroy(
+    JNIEnv* environment, jclass declaring_class, jlong texture)
+{
+    (void)environment;
+    (void)declaring_class;
+    CNA_Result result = cna.cnb_texture_data_destroy((CNA_CnbTextureDataHandle)texture);
+    return (jint)result;
+}
+
+JNIEXPORT jint JNICALL
+Java_org_openeggbert_cna_internal_generated_NativeCnbRoutes_cnbTextureDataGetInfo(
+    JNIEnv* environment, jclass declaring_class, jlong texture, jlongArray out_infoIntegral)
+{
+    (void)environment;
+    (void)declaring_class;
+    CNA_CnbTextureInfo out_info_value;
+    memset(&out_info_value, 0, sizeof out_info_value);
+    out_info_value.struct_size = (uint32_t)(sizeof out_info_value);
+    out_info_value.struct_version = CNA_CNB_TEXTURE_INFO_STRUCT_VERSION;
+    CNA_Result result = cna.cnb_texture_data_get_info((CNA_CnbTextureDataHandle)texture, &out_info_value);
+    if (result == CNA_RESULT_SUCCESS || result == CNA_RESULT_BUFFER_TOO_SMALL) {
+        jlong out_infoIntegral_values[] = {
+            (jlong)out_info_value.width,
+            (jlong)out_info_value.height,
+            (jlong)out_info_value.depth,
+            (jlong)out_info_value.face_count,
+            (jlong)out_info_value.mip_count,
+            (jlong)out_info_value.representation_count
+        };
+        (*environment)->SetLongArrayRegion(environment, out_infoIntegral, 0,
+            (jsize)(sizeof out_infoIntegral_values / sizeof out_infoIntegral_values[0]),
+            out_infoIntegral_values);
+    }
+    return (jint)result;
+}
+
+JNIEXPORT jint JNICALL
+Java_org_openeggbert_cna_internal_generated_NativeCnbRoutes_cnbTextureDataGetLevelCount(
+    JNIEnv* environment, jclass declaring_class, jlong texture, jlong representation, jlongArray out_count)
+{
+    (void)environment;
+    (void)declaring_class;
+    uint64_t out_count_value = 0;
+    CNA_Result result = cna.cnb_texture_data_get_level_count((CNA_CnbTextureDataHandle)texture, (uint64_t)representation, &out_count_value);
+    if (result == CNA_RESULT_SUCCESS || result == CNA_RESULT_BUFFER_TOO_SMALL) {
+        jlong out_count_element = (jlong)out_count_value;
+        (*environment)->SetLongArrayRegion(
+            environment, out_count, 0, 1, &out_count_element);
+    }
+    return (jint)result;
+}
+
+JNIEXPORT jint JNICALL
+Java_org_openeggbert_cna_internal_generated_NativeCnbRoutes_cnbTextureDataGetLevelDimensions(
+    JNIEnv* environment, jclass declaring_class, jlong texture, jint level, jintArray out_width, jintArray out_height, jintArray out_depth)
+{
+    (void)environment;
+    (void)declaring_class;
+    uint32_t out_width_value = 0;
+    uint32_t out_height_value = 0;
+    uint32_t out_depth_value = 0;
+    CNA_Result result = cna.cnb_texture_data_get_level_dimensions((CNA_CnbTextureDataHandle)texture, (uint32_t)level, &out_width_value, &out_height_value, &out_depth_value);
+    if (result == CNA_RESULT_SUCCESS || result == CNA_RESULT_BUFFER_TOO_SMALL) {
+        jint out_width_element = (jint)out_width_value;
+        (*environment)->SetIntArrayRegion(
+            environment, out_width, 0, 1, &out_width_element);
+        jint out_height_element = (jint)out_height_value;
+        (*environment)->SetIntArrayRegion(
+            environment, out_height, 0, 1, &out_height_element);
+        jint out_depth_element = (jint)out_depth_value;
+        (*environment)->SetIntArrayRegion(
+            environment, out_depth, 0, 1, &out_depth_element);
+    }
+    return (jint)result;
+}
+
+JNIEXPORT jint JNICALL
+Java_org_openeggbert_cna_internal_generated_NativeCnbRoutes_cnbTextureDataGetRepresentationCount(
+    JNIEnv* environment, jclass declaring_class, jlong texture, jlongArray out_count)
+{
+    (void)environment;
+    (void)declaring_class;
+    uint64_t out_count_value = 0;
+    CNA_Result result = cna.cnb_texture_data_get_representation_count((CNA_CnbTextureDataHandle)texture, &out_count_value);
+    if (result == CNA_RESULT_SUCCESS || result == CNA_RESULT_BUFFER_TOO_SMALL) {
+        jlong out_count_element = (jlong)out_count_value;
+        (*environment)->SetLongArrayRegion(
+            environment, out_count, 0, 1, &out_count_element);
+    }
+    return (jint)result;
+}
+
+JNIEXPORT jint JNICALL
+Java_org_openeggbert_cna_internal_generated_NativeCnbRoutes_cnbTextureDataGetRepresentationFormat(
+    JNIEnv* environment, jclass declaring_class, jlong texture, jlong representation, jintArray out_format)
+{
+    (void)environment;
+    (void)declaring_class;
+    CNA_CnbTextureFormat out_format_value = 0;
+    CNA_Result result = cna.cnb_texture_data_get_representation_format((CNA_CnbTextureDataHandle)texture, (uint64_t)representation, &out_format_value);
+    if (result == CNA_RESULT_SUCCESS || result == CNA_RESULT_BUFFER_TOO_SMALL) {
+        jint out_format_element = (jint)out_format_value;
+        (*environment)->SetIntArrayRegion(
+            environment, out_format, 0, 1, &out_format_element);
+    }
+    return (jint)result;
+}
+
+JNIEXPORT jint JNICALL
+Java_org_openeggbert_cna_internal_generated_NativeCnbRoutes_cnbTextureDataSetLevel(
+    JNIEnv* environment, jclass declaring_class, jlong texture, jlong representation, jlong level, jbyteArray bytes)
+{
+    (void)environment;
+    (void)declaring_class;
+    jsize bytes_size = (*environment)->GetArrayLength(environment, bytes);
+    jbyte* bytes_elements = (*environment)->GetByteArrayElements(environment, bytes, NULL);
+    if (bytes_elements == NULL) {
+        return (jint)CNA_RESULT_OUT_OF_MEMORY;
+    }
+    uint8_t* bytes_values = (uint8_t*)malloc(
+        ((size_t)bytes_size + 1U) * sizeof(*bytes_values));
+    if (bytes_values == NULL) {
+        (*environment)->ReleaseByteArrayElements(
+            environment, bytes, bytes_elements, JNI_ABORT);
+        return (jint)CNA_RESULT_OUT_OF_MEMORY;
+    }
+    for (jsize index = 0; index < bytes_size; ++index) {
+        bytes_values[index] = (uint8_t)bytes_elements[index];
+    }
+    CNA_Result result = cna.cnb_texture_data_set_level((CNA_CnbTextureDataHandle)texture, (uint64_t)representation, (uint64_t)level, bytes_values, (uint64_t)bytes_size);
+    free(bytes_values);
+    (*environment)->ReleaseByteArrayElements(
+        environment, bytes, bytes_elements, JNI_ABORT);
+    return (jint)result;
+}
+
+JNIEXPORT jint JNICALL
+Java_org_openeggbert_cna_internal_generated_NativeCnbRoutes_cnbTextureFormatFromSurfaceFormat(
+    JNIEnv* environment, jclass declaring_class, jint surface_format, jintArray out_format)
+{
+    (void)environment;
+    (void)declaring_class;
+    CNA_CnbTextureFormat out_format_value = 0;
+    CNA_Result result = cna.cnb_texture_format_from_surface_format((CNA_SurfaceFormat)surface_format, &out_format_value);
+    if (result == CNA_RESULT_SUCCESS || result == CNA_RESULT_BUFFER_TOO_SMALL) {
+        jint out_format_element = (jint)out_format_value;
+        (*environment)->SetIntArrayRegion(
+            environment, out_format, 0, 1, &out_format_element);
+    }
+    return (jint)result;
+}
+
+JNIEXPORT jint JNICALL
+Java_org_openeggbert_cna_internal_generated_NativeCnbRoutes_cnbTextureFormatToSurfaceFormat(
+    JNIEnv* environment, jclass declaring_class, jint format, jintArray out_surface_format)
+{
+    (void)environment;
+    (void)declaring_class;
+    CNA_SurfaceFormat out_surface_format_value = 0;
+    CNA_Result result = cna.cnb_texture_format_to_surface_format((CNA_CnbTextureFormat)format, &out_surface_format_value);
+    if (result == CNA_RESULT_SUCCESS || result == CNA_RESULT_BUFFER_TOO_SMALL) {
+        jint out_surface_format_element = (jint)out_surface_format_value;
+        (*environment)->SetIntArrayRegion(
+            environment, out_surface_format, 0, 1, &out_surface_format_element);
+    }
+    return (jint)result;
+}
+
+JNIEXPORT jint JNICALL
+Java_org_openeggbert_cna_internal_generated_NativeCnbRoutes_cnbWriterAddChunk(
+    JNIEnv* environment, jclass declaring_class, jlong writer, jint type, jbyteArray data, jint flags, jint alignment)
+{
+    (void)environment;
+    (void)declaring_class;
+    jsize data_size = (*environment)->GetArrayLength(environment, data);
+    jbyte* data_elements = (*environment)->GetByteArrayElements(environment, data, NULL);
+    if (data_elements == NULL) {
+        return (jint)CNA_RESULT_OUT_OF_MEMORY;
+    }
+    uint8_t* data_values = (uint8_t*)malloc(
+        ((size_t)data_size + 1U) * sizeof(*data_values));
+    if (data_values == NULL) {
+        (*environment)->ReleaseByteArrayElements(
+            environment, data, data_elements, JNI_ABORT);
+        return (jint)CNA_RESULT_OUT_OF_MEMORY;
+    }
+    for (jsize index = 0; index < data_size; ++index) {
+        data_values[index] = (uint8_t)data_elements[index];
+    }
+    CNA_Result result = cna.cnb_writer_add_chunk((CNA_CnbWriterHandle)writer, (CNA_CnbChunkId)type, data_values, (uint64_t)data_size, (uint32_t)flags, (uint32_t)alignment);
+    free(data_values);
+    (*environment)->ReleaseByteArrayElements(
+        environment, data, data_elements, JNI_ABORT);
+    return (jint)result;
+}
+
+JNIEXPORT jint JNICALL
+Java_org_openeggbert_cna_internal_generated_NativeCnbRoutes_cnbWriterAppendEmbeddedTexture2d(
+    JNIEnv* environment, jclass declaring_class, jlong writer, jlong texture, jbyteArray label)
+{
+    (void)environment;
+    (void)declaring_class;
+    jsize label_size = (*environment)->GetArrayLength(environment, label);
+    jbyte* label_bytes = (*environment)->GetByteArrayElements(environment, label, NULL);
+    if (label_bytes == NULL) {
+        return (jint)CNA_RESULT_OUT_OF_MEMORY;
+    }
+    CNA_StringView label_view = {(const char*)label_bytes, (uint64_t)label_size};
+    CNA_Result result = cna.cnb_writer_append_embedded_texture2d((CNA_CnbWriterHandle)writer, (CNA_CnbTextureDataHandle)texture, label_view);
+    (*environment)->ReleaseByteArrayElements(environment, label, label_bytes, JNI_ABORT);
+    return (jint)result;
+}
+
+JNIEXPORT jint JNICALL
+Java_org_openeggbert_cna_internal_generated_NativeCnbRoutes_cnbWriterBuild(
+    JNIEnv* environment, jclass declaring_class, jlong writer, jbyteArray destination, jlongArray out_byte_count)
+{
+    (void)environment;
+    (void)declaring_class;
+    jsize destination_size = (*environment)->GetArrayLength(environment, destination);
+    jbyte* destination_elements = (*environment)->GetByteArrayElements(environment, destination, NULL);
+    if (destination_elements == NULL) {
+        return (jint)CNA_RESULT_OUT_OF_MEMORY;
+    }
+    uint8_t* destination_values = (uint8_t*)malloc(
+        ((size_t)destination_size + 1U) * sizeof(*destination_values));
+    if (destination_values == NULL) {
+        (*environment)->ReleaseByteArrayElements(
+            environment, destination, destination_elements, JNI_ABORT);
+        return (jint)CNA_RESULT_OUT_OF_MEMORY;
+    }
+    for (jsize index = 0; index < destination_size; ++index) {
+        destination_values[index] = (uint8_t)destination_elements[index];
+    }
+    uint64_t out_byte_count_value = 0;
+    CNA_Result result = cna.cnb_writer_build((CNA_CnbWriterHandle)writer, destination_values, (uint64_t)destination_size, &out_byte_count_value);
+    if (result == CNA_RESULT_SUCCESS) {
+        for (jsize index = 0; index < destination_size; ++index) {
+            destination_elements[index] = (jbyte)destination_values[index];
+        }
+    }
+    free(destination_values);
+    (*environment)->ReleaseByteArrayElements(
+        environment, destination, destination_elements, 0);
+    if (result == CNA_RESULT_SUCCESS || result == CNA_RESULT_BUFFER_TOO_SMALL) {
+        jlong out_byte_count_element = (jlong)out_byte_count_value;
+        (*environment)->SetLongArrayRegion(
+            environment, out_byte_count, 0, 1, &out_byte_count_element);
+    }
+    return (jint)result;
+}
+
+JNIEXPORT jint JNICALL
+Java_org_openeggbert_cna_internal_generated_NativeCnbRoutes_cnbWriterCreate(
+    JNIEnv* environment, jclass declaring_class, jint asset_type_id, jint asset_schema_version, jlongArray out_writer)
+{
+    (void)environment;
+    (void)declaring_class;
+    CNA_CnbWriterHandle out_writer_value = 0;
+    CNA_Result result = cna.cnb_writer_create((uint32_t)asset_type_id, (uint32_t)asset_schema_version, &out_writer_value);
+    if (result == CNA_RESULT_SUCCESS || result == CNA_RESULT_BUFFER_TOO_SMALL) {
+        jlong out_writer_element = (jlong)out_writer_value;
+        (*environment)->SetLongArrayRegion(
+            environment, out_writer, 0, 1, &out_writer_element);
+    }
+    return (jint)result;
+}
+
+JNIEXPORT jint JNICALL
+Java_org_openeggbert_cna_internal_generated_NativeCnbRoutes_cnbWriterDestroy(
+    JNIEnv* environment, jclass declaring_class, jlong writer)
+{
+    (void)environment;
+    (void)declaring_class;
+    CNA_Result result = cna.cnb_writer_destroy((CNA_CnbWriterHandle)writer);
+    return (jint)result;
+}
+
+JNIEXPORT jint JNICALL
+Java_org_openeggbert_cna_internal_generated_NativeCnbRoutes_cnbWriterGetLimits(
+    JNIEnv* environment, jclass declaring_class, jlong writer, jlongArray out_limitsIntegral)
+{
+    (void)environment;
+    (void)declaring_class;
+    CNA_CnbReadLimits out_limits_value;
+    memset(&out_limits_value, 0, sizeof out_limits_value);
+    out_limits_value.struct_size = (uint32_t)(sizeof out_limits_value);
+    out_limits_value.struct_version = CNA_CNB_READ_LIMITS_STRUCT_VERSION;
+    CNA_Result result = cna.cnb_writer_get_limits((CNA_CnbWriterHandle)writer, &out_limits_value);
+    if (result == CNA_RESULT_SUCCESS || result == CNA_RESULT_BUFFER_TOO_SMALL) {
+        jlong out_limitsIntegral_values[] = {
+            (jlong)out_limits_value.max_file_size,
+            (jlong)out_limits_value.max_chunk_size,
+            (jlong)out_limits_value.max_total_uncompressed_size,
+            (jlong)out_limits_value.max_chunk_count,
+            (jlong)out_limits_value.max_string_bytes,
+            (jlong)out_limits_value.max_array_element_count,
+            (jlong)out_limits_value.max_chunk_alignment
+        };
+        (*environment)->SetLongArrayRegion(environment, out_limitsIntegral, 0,
+            (jsize)(sizeof out_limitsIntegral_values / sizeof out_limitsIntegral_values[0]),
+            out_limitsIntegral_values);
+    }
+    return (jint)result;
+}
+
+JNIEXPORT jint JNICALL
+Java_org_openeggbert_cna_internal_generated_NativeCnbRoutes_cnbWriterGetSchemaChunkCount(
+    JNIEnv* environment, jclass declaring_class, jlong writer, jlongArray out_count)
+{
+    (void)environment;
+    (void)declaring_class;
+    uint64_t out_count_value = 0;
+    CNA_Result result = cna.cnb_writer_get_schema_chunk_count((CNA_CnbWriterHandle)writer, &out_count_value);
+    if (result == CNA_RESULT_SUCCESS || result == CNA_RESULT_BUFFER_TOO_SMALL) {
+        jlong out_count_element = (jlong)out_count_value;
+        (*environment)->SetLongArrayRegion(
+            environment, out_count, 0, 1, &out_count_element);
+    }
+    return (jint)result;
+}
+
+JNIEXPORT jint JNICALL
+Java_org_openeggbert_cna_internal_generated_NativeCnbRoutes_cnbWriterSetCompression(
+    JNIEnv* environment, jclass declaring_class, jlong writer, jint codec, jint level)
+{
+    (void)environment;
+    (void)declaring_class;
+    CNA_Result result = cna.cnb_writer_set_compression((CNA_CnbWriterHandle)writer, (CNA_CnbCompression)codec, (int32_t)level);
+    return (jint)result;
+}
+
+JNIEXPORT jint JNICALL
+Java_org_openeggbert_cna_internal_generated_NativeCnbRoutes_cnbWriterSetLimits(
+    JNIEnv* environment, jclass declaring_class, jlong writer, jlongArray limitsIntegral)
+{
+    (void)environment;
+    (void)declaring_class;
+    CNA_CnbReadLimits limits_value;
+    memset(&limits_value, 0, sizeof limits_value);
+    limits_value.struct_size = (uint32_t)(sizeof limits_value);
+    limits_value.struct_version = CNA_CNB_READ_LIMITS_STRUCT_VERSION;
+    {
+        jlong limitsIntegral_values[7];
+        (*environment)->GetLongArrayRegion(environment, limitsIntegral, 0, 7, limitsIntegral_values);
+        limits_value.max_file_size = (uint64_t)limitsIntegral_values[0];
+        limits_value.max_chunk_size = (uint64_t)limitsIntegral_values[1];
+        limits_value.max_total_uncompressed_size = (uint64_t)limitsIntegral_values[2];
+        limits_value.max_chunk_count = (uint32_t)limitsIntegral_values[3];
+        limits_value.max_string_bytes = (uint32_t)limitsIntegral_values[4];
+        limits_value.max_array_element_count = (uint32_t)limitsIntegral_values[5];
+        limits_value.max_chunk_alignment = (uint32_t)limitsIntegral_values[6];
+    }
+    CNA_Result result = cna.cnb_writer_set_limits((CNA_CnbWriterHandle)writer, &limits_value);
+    return (jint)result;
+}
+
+JNIEXPORT jint JNICALL
+Java_org_openeggbert_cna_internal_generated_NativeCnbRoutes_cnbWriterSetMetadata(
+    JNIEnv* environment, jclass declaring_class, jlong writer, jbyteArray asset_type_name, jbyteArray content_name)
+{
+    (void)environment;
+    (void)declaring_class;
+    jsize asset_type_name_size = (*environment)->GetArrayLength(environment, asset_type_name);
+    jbyte* asset_type_name_bytes = (*environment)->GetByteArrayElements(environment, asset_type_name, NULL);
+    if (asset_type_name_bytes == NULL) {
+        return (jint)CNA_RESULT_OUT_OF_MEMORY;
+    }
+    CNA_StringView asset_type_name_view = {(const char*)asset_type_name_bytes, (uint64_t)asset_type_name_size};
+    jsize content_name_size = (*environment)->GetArrayLength(environment, content_name);
+    jbyte* content_name_bytes = (*environment)->GetByteArrayElements(environment, content_name, NULL);
+    if (content_name_bytes == NULL) {
+        return (jint)CNA_RESULT_OUT_OF_MEMORY;
+    }
+    CNA_StringView content_name_view = {(const char*)content_name_bytes, (uint64_t)content_name_size};
+    CNA_Result result = cna.cnb_writer_set_metadata((CNA_CnbWriterHandle)writer, asset_type_name_view, content_name_view);
+    (*environment)->ReleaseByteArrayElements(environment, asset_type_name, asset_type_name_bytes, JNI_ABORT);
+    (*environment)->ReleaseByteArrayElements(environment, content_name, content_name_bytes, JNI_ABORT);
+    return (jint)result;
+}
+
+JNIEXPORT jint JNICALL
+Java_org_openeggbert_cna_internal_generated_NativeCnbRoutes_cnbWriterWriteToFile(
+    JNIEnv* environment, jclass declaring_class, jlong writer, jbyteArray path)
+{
+    (void)environment;
+    (void)declaring_class;
+    jsize path_size = (*environment)->GetArrayLength(environment, path);
+    jbyte* path_bytes = (*environment)->GetByteArrayElements(environment, path, NULL);
+    if (path_bytes == NULL) {
+        return (jint)CNA_RESULT_OUT_OF_MEMORY;
+    }
+    CNA_StringView path_view = {(const char*)path_bytes, (uint64_t)path_size};
+    CNA_Result result = cna.cnb_writer_write_to_file((CNA_CnbWriterHandle)writer, path_view);
+    (*environment)->ReleaseByteArrayElements(environment, path, path_bytes, JNI_ABORT);
+    return (jint)result;
+}

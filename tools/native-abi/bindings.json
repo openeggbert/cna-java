@@ -1985,6 +1985,1192 @@
       ]
     },
     {
+      "name": "cna_cnb_asset_type_id_from_name",
+      "header": "cnb.h",
+      "ownership": "no handle; caller integer output",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_StringView",
+        "uint32_t*"
+      ]
+    },
+    {
+      "name": "cna_cnb_checked_add",
+      "header": "cnb.h",
+      "ownership": "no handle; caller integer output",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "uint64_t",
+        "uint64_t",
+        "uint64_t*"
+      ]
+    },
+    {
+      "name": "cna_cnb_checked_multiply",
+      "header": "cnb.h",
+      "ownership": "no handle; caller integer output",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "uint64_t",
+        "uint64_t",
+        "uint64_t*"
+      ]
+    },
+    {
+      "name": "cna_cnb_chunk_entry_is_mandatory",
+      "header": "cnb.h",
+      "ownership": "no handle; caller structure input and bool output",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "const CNA_CnbChunkEntry*",
+        "CNA_Bool*"
+      ]
+    },
+    {
+      "name": "cna_cnb_copy_asset_type_name",
+      "header": "cnb.h",
+      "ownership": "no handle; caller buffer",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "uint32_t",
+        "char*",
+        "uint64_t",
+        "uint64_t*"
+      ]
+    },
+    {
+      "name": "cna_cnb_copy_chunk_id_string",
+      "header": "cnb.h",
+      "ownership": "no handle; caller buffer",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_CnbChunkId",
+        "char*",
+        "uint64_t",
+        "uint64_t*"
+      ]
+    },
+    {
+      "name": "cna_cnb_copy_compressed",
+      "header": "cnb.h",
+      "ownership": "no handle; caller bytes and buffer",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "const uint8_t*",
+        "uint64_t",
+        "CNA_CnbCompression",
+        "int32_t",
+        "uint8_t*",
+        "uint64_t",
+        "uint64_t*"
+      ]
+    },
+    {
+      "name": "cna_cnb_copy_compression_name",
+      "header": "cnb.h",
+      "ownership": "no handle; caller buffer",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_CnbCompression",
+        "char*",
+        "uint64_t",
+        "uint64_t*"
+      ]
+    },
+    {
+      "name": "cna_cnb_copy_decompressed",
+      "header": "cnb.h",
+      "ownership": "no handle; caller bytes and buffer",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "const uint8_t*",
+        "uint64_t",
+        "CNA_CnbCompression",
+        "uint64_t",
+        "uint64_t",
+        "uint8_t*",
+        "uint64_t",
+        "uint64_t*"
+      ]
+    },
+    {
+      "name": "cna_cnb_copy_format_magic",
+      "header": "cnb.h",
+      "ownership": "no handle; caller buffer",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "uint8_t*",
+        "uint64_t",
+        "uint64_t*"
+      ]
+    },
+    {
+      "name": "cna_cnb_copy_logical_name_problem",
+      "header": "cnb.h",
+      "ownership": "no handle; caller buffer",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_StringView",
+        "char*",
+        "uint64_t",
+        "uint64_t*"
+      ]
+    },
+    {
+      "name": "cna_cnb_copy_texture_format_name",
+      "header": "cnb.h",
+      "ownership": "no handle; caller buffer",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_CnbTextureFormat",
+        "char*",
+        "uint64_t",
+        "uint64_t*"
+      ]
+    },
+    {
+      "name": "cna_cnb_crc32c",
+      "header": "cnb.h",
+      "ownership": "no handle; caller bytes and integer output",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "const uint8_t*",
+        "uint64_t",
+        "uint32_t*"
+      ]
+    },
+    {
+      "name": "cna_cnb_crc32c_continue",
+      "header": "cnb.h",
+      "ownership": "no handle; caller bytes and integer output",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "uint32_t",
+        "const uint8_t*",
+        "uint64_t",
+        "uint32_t*"
+      ]
+    },
+    {
+      "name": "cna_cnb_crc32c_portable",
+      "header": "cnb.h",
+      "ownership": "no handle; caller bytes and integer output",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "const uint8_t*",
+        "uint64_t",
+        "uint32_t*"
+      ]
+    },
+    {
+      "name": "cna_cnb_crc32c_uses_hardware",
+      "header": "cnb.h",
+      "ownership": "no handle; caller bool output",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_Bool*"
+      ]
+    },
+    {
+      "name": "cna_cnb_decode_texture2d",
+      "header": "cnb.h",
+      "ownership": "borrows document; returns an owned texture-data handle",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_CnbDocumentHandle",
+        "CNA_CnbTextureDataHandle*"
+      ]
+    },
+    {
+      "name": "cna_cnb_document_copy_chunk_data",
+      "header": "cnb.h",
+      "ownership": "borrows document; caller buffer",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_CnbDocumentHandle",
+        "uint64_t",
+        "uint8_t*",
+        "uint64_t",
+        "uint64_t*"
+      ]
+    },
+    {
+      "name": "cna_cnb_document_copy_external_reference_name",
+      "header": "cnb.h",
+      "ownership": "borrows document; caller buffer",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_CnbDocumentHandle",
+        "uint64_t",
+        "char*",
+        "uint64_t",
+        "uint64_t*"
+      ]
+    },
+    {
+      "name": "cna_cnb_document_copy_metadata_asset_type_name",
+      "header": "cnb.h",
+      "ownership": "borrows document; caller buffer",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_CnbDocumentHandle",
+        "char*",
+        "uint64_t",
+        "uint64_t*"
+      ]
+    },
+    {
+      "name": "cna_cnb_document_copy_metadata_content_name",
+      "header": "cnb.h",
+      "ownership": "borrows document; caller buffer",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_CnbDocumentHandle",
+        "char*",
+        "uint64_t",
+        "uint64_t*"
+      ]
+    },
+    {
+      "name": "cna_cnb_document_copy_origin",
+      "header": "cnb.h",
+      "ownership": "borrows document; caller buffer",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_CnbDocumentHandle",
+        "char*",
+        "uint64_t",
+        "uint64_t*"
+      ]
+    },
+    {
+      "name": "cna_cnb_document_destroy",
+      "header": "cnb.h",
+      "ownership": "releases the owned document handle",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_CnbDocumentHandle"
+      ]
+    },
+    {
+      "name": "cna_cnb_document_find_all",
+      "header": "cnb.h",
+      "ownership": "borrows document; caller buffer",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_CnbDocumentHandle",
+        "CNA_CnbChunkId",
+        "uint64_t*",
+        "uint64_t",
+        "uint64_t*"
+      ]
+    },
+    {
+      "name": "cna_cnb_document_find_single",
+      "header": "cnb.h",
+      "ownership": "borrows document; caller bool and integer outputs",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_CnbDocumentHandle",
+        "CNA_CnbChunkId",
+        "CNA_Bool*",
+        "uint64_t*"
+      ]
+    },
+    {
+      "name": "cna_cnb_document_get_asset_schema_version",
+      "header": "cnb.h",
+      "ownership": "borrows document; caller integer output",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_CnbDocumentHandle",
+        "uint32_t*"
+      ]
+    },
+    {
+      "name": "cna_cnb_document_get_asset_type_id",
+      "header": "cnb.h",
+      "ownership": "borrows document; caller integer output",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_CnbDocumentHandle",
+        "uint32_t*"
+      ]
+    },
+    {
+      "name": "cna_cnb_document_get_chunk",
+      "header": "cnb.h",
+      "ownership": "borrows document; caller structure output",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_CnbDocumentHandle",
+        "uint64_t",
+        "CNA_CnbChunkEntry*"
+      ]
+    },
+    {
+      "name": "cna_cnb_document_get_chunk_count",
+      "header": "cnb.h",
+      "ownership": "borrows document; caller integer output",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_CnbDocumentHandle",
+        "uint64_t*"
+      ]
+    },
+    {
+      "name": "cna_cnb_document_get_container_major",
+      "header": "cnb.h",
+      "ownership": "borrows document; caller integer output",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_CnbDocumentHandle",
+        "uint16_t*"
+      ]
+    },
+    {
+      "name": "cna_cnb_document_get_container_minor",
+      "header": "cnb.h",
+      "ownership": "borrows document; caller integer output",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_CnbDocumentHandle",
+        "uint16_t*"
+      ]
+    },
+    {
+      "name": "cna_cnb_document_get_external_reference",
+      "header": "cnb.h",
+      "ownership": "borrows document; caller structure output",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_CnbDocumentHandle",
+        "uint64_t",
+        "CNA_StringView",
+        "CNA_CnbExternalReference*"
+      ]
+    },
+    {
+      "name": "cna_cnb_document_get_external_reference_count",
+      "header": "cnb.h",
+      "ownership": "borrows document; caller integer output",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_CnbDocumentHandle",
+        "uint64_t*"
+      ]
+    },
+    {
+      "name": "cna_cnb_document_get_external_reference_name_size",
+      "header": "cnb.h",
+      "ownership": "borrows document; caller integer output",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_CnbDocumentHandle",
+        "uint64_t",
+        "uint64_t*"
+      ]
+    },
+    {
+      "name": "cna_cnb_document_get_limits",
+      "header": "cnb.h",
+      "ownership": "borrows document; caller structure output",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_CnbDocumentHandle",
+        "CNA_CnbReadLimits*"
+      ]
+    },
+    {
+      "name": "cna_cnb_document_get_metadata",
+      "header": "cnb.h",
+      "ownership": "borrows document; caller structure output",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_CnbDocumentHandle",
+        "CNA_CnbMetadata*"
+      ]
+    },
+    {
+      "name": "cna_cnb_document_get_metadata_asset_type_name_size",
+      "header": "cnb.h",
+      "ownership": "borrows document; caller integer output",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_CnbDocumentHandle",
+        "uint64_t*"
+      ]
+    },
+    {
+      "name": "cna_cnb_document_get_metadata_content_name_size",
+      "header": "cnb.h",
+      "ownership": "borrows document; caller integer output",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_CnbDocumentHandle",
+        "uint64_t*"
+      ]
+    },
+    {
+      "name": "cna_cnb_document_get_origin_size",
+      "header": "cnb.h",
+      "ownership": "borrows document; caller integer output",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_CnbDocumentHandle",
+        "uint64_t*"
+      ]
+    },
+    {
+      "name": "cna_cnb_document_open_chunk",
+      "header": "cnb.h",
+      "ownership": "borrows document; returns an owned reader handle",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_CnbDocumentHandle",
+        "uint64_t",
+        "CNA_CnbReaderHandle*"
+      ]
+    },
+    {
+      "name": "cna_cnb_document_parse",
+      "header": "cnb.h",
+      "ownership": "no handle; returns an owned document handle over copied bytes",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "const uint8_t*",
+        "uint64_t",
+        "CNA_StringView",
+        "const CNA_CnbReadLimits*",
+        "CNA_CnbDocumentHandle*"
+      ]
+    },
+    {
+      "name": "cna_cnb_document_parse_file",
+      "header": "cnb.h",
+      "ownership": "no handle; returns an owned document handle",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_StringView",
+        "const CNA_CnbReadLimits*",
+        "CNA_CnbDocumentHandle*"
+      ]
+    },
+    {
+      "name": "cna_cnb_document_read_embedded_texture2d",
+      "header": "cnb.h",
+      "ownership": "borrows document; returns an owned texture-data handle",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_CnbDocumentHandle",
+        "CNA_StringView",
+        "CNA_CnbTextureDataHandle*"
+      ]
+    },
+    {
+      "name": "cna_cnb_document_require_asset",
+      "header": "cnb.h",
+      "ownership": "borrows document",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_CnbDocumentHandle",
+        "uint32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "cna_cnb_document_require_mandatory_chunks_understood",
+      "header": "cnb.h",
+      "ownership": "borrows document; caller identity array input",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_CnbDocumentHandle",
+        "const CNA_CnbChunkId*",
+        "uint64_t"
+      ]
+    },
+    {
+      "name": "cna_cnb_document_require_single",
+      "header": "cnb.h",
+      "ownership": "borrows document; caller integer output",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_CnbDocumentHandle",
+        "CNA_CnbChunkId",
+        "uint64_t*"
+      ]
+    },
+    {
+      "name": "cna_cnb_encode_texture2d",
+      "header": "cnb.h",
+      "ownership": "borrows texture data; caller buffer",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_CnbTextureDataHandle",
+        "CNA_StringView",
+        "uint8_t*",
+        "uint64_t",
+        "uint64_t*"
+      ]
+    },
+    {
+      "name": "cna_cnb_get_asset_type_name_size",
+      "header": "cnb.h",
+      "ownership": "no handle; caller integer output",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "uint32_t",
+        "uint64_t*"
+      ]
+    },
+    {
+      "name": "cna_cnb_get_chunk_id_string_size",
+      "header": "cnb.h",
+      "ownership": "no handle; caller integer output",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_CnbChunkId",
+        "uint64_t*"
+      ]
+    },
+    {
+      "name": "cna_cnb_get_compressed_byte_count",
+      "header": "cnb.h",
+      "ownership": "no handle; caller bytes and integer output",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "const uint8_t*",
+        "uint64_t",
+        "CNA_CnbCompression",
+        "int32_t",
+        "uint64_t*"
+      ]
+    },
+    {
+      "name": "cna_cnb_get_compression_name_size",
+      "header": "cnb.h",
+      "ownership": "no handle; caller integer output",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_CnbCompression",
+        "uint64_t*"
+      ]
+    },
+    {
+      "name": "cna_cnb_get_logical_name_problem_size",
+      "header": "cnb.h",
+      "ownership": "no handle; caller integer output",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_StringView",
+        "uint64_t*"
+      ]
+    },
+    {
+      "name": "cna_cnb_get_texture_format_name_size",
+      "header": "cnb.h",
+      "ownership": "no handle; caller integer output",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_CnbTextureFormat",
+        "uint64_t*"
+      ]
+    },
+    {
+      "name": "cna_cnb_get_texture_format_unit_bytes",
+      "header": "cnb.h",
+      "ownership": "no handle; caller integer output",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_CnbTextureFormat",
+        "uint32_t*"
+      ]
+    },
+    {
+      "name": "cna_cnb_get_texture_level_byte_size",
+      "header": "cnb.h",
+      "ownership": "no handle; caller integer output",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_CnbTextureFormat",
+        "uint32_t",
+        "uint32_t",
+        "uint32_t",
+        "uint64_t*"
+      ]
+    },
+    {
+      "name": "cna_cnb_has_magic",
+      "header": "cnb.h",
+      "ownership": "no handle; caller bytes and bool output",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "const uint8_t*",
+        "uint64_t",
+        "CNA_Bool*"
+      ]
+    },
+    {
+      "name": "cna_cnb_is_block_compressed_texture_format",
+      "header": "cnb.h",
+      "ownership": "no handle; caller bool output",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_CnbTextureFormat",
+        "CNA_Bool*"
+      ]
+    },
+    {
+      "name": "cna_cnb_is_compression_supported",
+      "header": "cnb.h",
+      "ownership": "no handle; caller bool output",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_CnbCompression",
+        "CNA_Bool*"
+      ]
+    },
+    {
+      "name": "cna_cnb_is_custom_asset_type_id",
+      "header": "cnb.h",
+      "ownership": "no handle; caller bool output",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "uint32_t",
+        "CNA_Bool*"
+      ]
+    },
+    {
+      "name": "cna_cnb_is_known_texture_format",
+      "header": "cnb.h",
+      "ownership": "no handle; caller bool output",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "uint32_t",
+        "CNA_Bool*"
+      ]
+    },
+    {
+      "name": "cna_cnb_is_well_formed_chunk_id",
+      "header": "cnb.h",
+      "ownership": "no handle; caller bool output",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_CnbChunkId",
+        "CNA_Bool*"
+      ]
+    },
+    {
+      "name": "cna_cnb_is_well_formed_utf8",
+      "header": "cnb.h",
+      "ownership": "no handle; caller bool output",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_StringView",
+        "CNA_Bool*"
+      ]
+    },
+    {
+      "name": "cna_cnb_make_chunk_id",
+      "header": "cnb.h",
+      "ownership": "no handle; caller identity output",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "uint8_t",
+        "uint8_t",
+        "uint8_t",
+        "uint8_t",
+        "CNA_CnbChunkId*"
+      ]
+    },
+    {
+      "name": "cna_cnb_read_limits_init",
+      "header": "cnb.h",
+      "ownership": "no handle; caller structure output",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_CnbReadLimits*"
+      ]
+    },
+    {
+      "name": "cna_cnb_reader_copy_context",
+      "header": "cnb.h",
+      "ownership": "borrows reader; caller buffer",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_CnbReaderHandle",
+        "char*",
+        "uint64_t",
+        "uint64_t*"
+      ]
+    },
+    {
+      "name": "cna_cnb_reader_copy_string",
+      "header": "cnb.h",
+      "ownership": "borrows reader; caller buffer",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_CnbReaderHandle",
+        "char*",
+        "uint64_t",
+        "uint64_t*"
+      ]
+    },
+    {
+      "name": "cna_cnb_reader_create",
+      "header": "cnb.h",
+      "ownership": "no handle; returns an owned reader handle over caller bytes",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "const uint8_t*",
+        "uint64_t",
+        "CNA_StringView",
+        "const CNA_CnbReadLimits*",
+        "CNA_CnbReaderHandle*"
+      ]
+    },
+    {
+      "name": "cna_cnb_reader_destroy",
+      "header": "cnb.h",
+      "ownership": "releases the owned reader handle",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_CnbReaderHandle"
+      ]
+    },
+    {
+      "name": "cna_cnb_reader_get_context_size",
+      "header": "cnb.h",
+      "ownership": "borrows reader; caller integer output",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_CnbReaderHandle",
+        "uint64_t*"
+      ]
+    },
+    {
+      "name": "cna_cnb_reader_get_position",
+      "header": "cnb.h",
+      "ownership": "borrows reader; caller integer output",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_CnbReaderHandle",
+        "uint64_t*"
+      ]
+    },
+    {
+      "name": "cna_cnb_reader_get_remaining",
+      "header": "cnb.h",
+      "ownership": "borrows reader; caller integer output",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_CnbReaderHandle",
+        "uint64_t*"
+      ]
+    },
+    {
+      "name": "cna_cnb_reader_get_size",
+      "header": "cnb.h",
+      "ownership": "borrows reader; caller integer output",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_CnbReaderHandle",
+        "uint64_t*"
+      ]
+    },
+    {
+      "name": "cna_cnb_reader_read_bytes",
+      "header": "cnb.h",
+      "ownership": "borrows reader; caller buffer",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_CnbReaderHandle",
+        "uint64_t",
+        "uint8_t*",
+        "uint64_t",
+        "uint64_t*"
+      ]
+    },
+    {
+      "name": "cna_cnb_reader_read_count",
+      "header": "cnb.h",
+      "ownership": "borrows reader; caller integer output",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_CnbReaderHandle",
+        "uint64_t",
+        "CNA_StringView",
+        "uint32_t*"
+      ]
+    },
+    {
+      "name": "cna_cnb_reader_read_f32",
+      "header": "cnb.h",
+      "ownership": "borrows reader; caller float output",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_CnbReaderHandle",
+        "float*"
+      ]
+    },
+    {
+      "name": "cna_cnb_reader_read_f64",
+      "header": "cnb.h",
+      "ownership": "borrows reader; caller double output",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_CnbReaderHandle",
+        "double*"
+      ]
+    },
+    {
+      "name": "cna_cnb_reader_read_i32",
+      "header": "cnb.h",
+      "ownership": "borrows reader; caller integer output",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_CnbReaderHandle",
+        "int32_t*"
+      ]
+    },
+    {
+      "name": "cna_cnb_reader_read_string",
+      "header": "cnb.h",
+      "ownership": "borrows reader; caller integer output",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_CnbReaderHandle",
+        "uint64_t*"
+      ]
+    },
+    {
+      "name": "cna_cnb_reader_read_u16",
+      "header": "cnb.h",
+      "ownership": "borrows reader; caller integer output",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_CnbReaderHandle",
+        "uint16_t*"
+      ]
+    },
+    {
+      "name": "cna_cnb_reader_read_u32",
+      "header": "cnb.h",
+      "ownership": "borrows reader; caller integer output",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_CnbReaderHandle",
+        "uint32_t*"
+      ]
+    },
+    {
+      "name": "cna_cnb_reader_read_u64",
+      "header": "cnb.h",
+      "ownership": "borrows reader; caller integer output",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_CnbReaderHandle",
+        "uint64_t*"
+      ]
+    },
+    {
+      "name": "cna_cnb_reader_read_u8",
+      "header": "cnb.h",
+      "ownership": "borrows reader; caller integer output",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_CnbReaderHandle",
+        "uint8_t*"
+      ]
+    },
+    {
+      "name": "cna_cnb_reader_require_exhausted",
+      "header": "cnb.h",
+      "ownership": "borrows reader",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_CnbReaderHandle"
+      ]
+    },
+    {
+      "name": "cna_cnb_reader_skip",
+      "header": "cnb.h",
+      "ownership": "borrows reader",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_CnbReaderHandle",
+        "uint64_t"
+      ]
+    },
+    {
+      "name": "cna_cnb_texture_data_add_representation",
+      "header": "cnb.h",
+      "ownership": "borrows texture data; caller integer output",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_CnbTextureDataHandle",
+        "CNA_CnbTextureFormat",
+        "uint64_t*"
+      ]
+    },
+    {
+      "name": "cna_cnb_texture_data_copy_level",
+      "header": "cnb.h",
+      "ownership": "borrows texture data; caller buffer",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_CnbTextureDataHandle",
+        "uint64_t",
+        "uint64_t",
+        "uint8_t*",
+        "uint64_t",
+        "uint64_t*"
+      ]
+    },
+    {
+      "name": "cna_cnb_texture_data_create",
+      "header": "cnb.h",
+      "ownership": "no handle; returns an owned texture-data handle",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "uint32_t",
+        "uint32_t",
+        "uint32_t",
+        "uint32_t",
+        "uint32_t",
+        "CNA_CnbTextureDataHandle*"
+      ]
+    },
+    {
+      "name": "cna_cnb_texture_data_create_rgba8",
+      "header": "cnb.h",
+      "ownership": "no handle; returns an owned texture-data handle over copied bytes",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "uint32_t",
+        "uint32_t",
+        "const uint8_t*",
+        "uint64_t",
+        "CNA_CnbTextureDataHandle*"
+      ]
+    },
+    {
+      "name": "cna_cnb_texture_data_destroy",
+      "header": "cnb.h",
+      "ownership": "releases the owned texture-data handle",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_CnbTextureDataHandle"
+      ]
+    },
+    {
+      "name": "cna_cnb_texture_data_get_info",
+      "header": "cnb.h",
+      "ownership": "borrows texture data; caller structure output",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_CnbTextureDataHandle",
+        "CNA_CnbTextureInfo*"
+      ]
+    },
+    {
+      "name": "cna_cnb_texture_data_get_level_count",
+      "header": "cnb.h",
+      "ownership": "borrows texture data; caller integer output",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_CnbTextureDataHandle",
+        "uint64_t",
+        "uint64_t*"
+      ]
+    },
+    {
+      "name": "cna_cnb_texture_data_get_level_dimensions",
+      "header": "cnb.h",
+      "ownership": "borrows texture data; caller integer outputs",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_CnbTextureDataHandle",
+        "uint32_t",
+        "uint32_t*",
+        "uint32_t*",
+        "uint32_t*"
+      ]
+    },
+    {
+      "name": "cna_cnb_texture_data_get_representation_count",
+      "header": "cnb.h",
+      "ownership": "borrows texture data; caller integer output",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_CnbTextureDataHandle",
+        "uint64_t*"
+      ]
+    },
+    {
+      "name": "cna_cnb_texture_data_get_representation_format",
+      "header": "cnb.h",
+      "ownership": "borrows texture data; caller identity output",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_CnbTextureDataHandle",
+        "uint64_t",
+        "CNA_CnbTextureFormat*"
+      ]
+    },
+    {
+      "name": "cna_cnb_texture_data_set_level",
+      "header": "cnb.h",
+      "ownership": "borrows texture data; copies the caller's bytes",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_CnbTextureDataHandle",
+        "uint64_t",
+        "uint64_t",
+        "const uint8_t*",
+        "uint64_t"
+      ]
+    },
+    {
+      "name": "cna_cnb_texture_format_from_surface_format",
+      "header": "cnb.h",
+      "ownership": "no handle; caller identity output",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_SurfaceFormat",
+        "CNA_CnbTextureFormat*"
+      ]
+    },
+    {
+      "name": "cna_cnb_texture_format_to_surface_format",
+      "header": "cnb.h",
+      "ownership": "no handle; caller identity output",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_CnbTextureFormat",
+        "CNA_SurfaceFormat*"
+      ]
+    },
+    {
+      "name": "cna_cnb_writer_add_chunk",
+      "header": "cnb.h",
+      "ownership": "borrows writer; copies the caller's bytes",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_CnbWriterHandle",
+        "CNA_CnbChunkId",
+        "const uint8_t*",
+        "uint64_t",
+        "uint32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "cna_cnb_writer_append_embedded_texture2d",
+      "header": "cnb.h",
+      "ownership": "borrows writer and texture data; copies both",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_CnbWriterHandle",
+        "CNA_CnbTextureDataHandle",
+        "CNA_StringView"
+      ]
+    },
+    {
+      "name": "cna_cnb_writer_build",
+      "header": "cnb.h",
+      "ownership": "borrows writer; caller buffer",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_CnbWriterHandle",
+        "uint8_t*",
+        "uint64_t",
+        "uint64_t*"
+      ]
+    },
+    {
+      "name": "cna_cnb_writer_create",
+      "header": "cnb.h",
+      "ownership": "no handle; returns an owned writer handle",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "uint32_t",
+        "uint32_t",
+        "CNA_CnbWriterHandle*"
+      ]
+    },
+    {
+      "name": "cna_cnb_writer_destroy",
+      "header": "cnb.h",
+      "ownership": "releases the owned writer handle",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_CnbWriterHandle"
+      ]
+    },
+    {
+      "name": "cna_cnb_writer_get_limits",
+      "header": "cnb.h",
+      "ownership": "borrows writer; caller structure output",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_CnbWriterHandle",
+        "CNA_CnbReadLimits*"
+      ]
+    },
+    {
+      "name": "cna_cnb_writer_get_schema_chunk_count",
+      "header": "cnb.h",
+      "ownership": "borrows writer; caller integer output",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_CnbWriterHandle",
+        "uint64_t*"
+      ]
+    },
+    {
+      "name": "cna_cnb_writer_set_compression",
+      "header": "cnb.h",
+      "ownership": "borrows writer",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_CnbWriterHandle",
+        "CNA_CnbCompression",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "cna_cnb_writer_set_limits",
+      "header": "cnb.h",
+      "ownership": "borrows writer; caller structure input",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_CnbWriterHandle",
+        "const CNA_CnbReadLimits*"
+      ]
+    },
+    {
+      "name": "cna_cnb_writer_set_metadata",
+      "header": "cnb.h",
+      "ownership": "borrows writer; copies both names",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_CnbWriterHandle",
+        "CNA_StringView",
+        "CNA_StringView"
+      ]
+    },
+    {
+      "name": "cna_cnb_writer_write_to_file",
+      "header": "cnb.h",
+      "ownership": "borrows writer",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_CnbWriterHandle",
+        "CNA_StringView"
+      ]
+    },
+    {
       "name": "cna_compass_create",
       "header": "sensors.h",
       "ownership": "borrows game; returns an owned sensor handle",

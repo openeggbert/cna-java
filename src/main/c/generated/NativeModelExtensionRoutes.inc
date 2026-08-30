@@ -20,7 +20,7 @@ Java_org_openeggbert_cna_internal_generated_NativeModelExtensionRoutes_effectCop
     uint64_t destination_written = 0;
     CNA_Result result = cna.effect_copy_type_name((CNA_EffectHandle)effect, (char*)destination_bytes, (uint64_t)destination_size, &destination_written);
     (*environment)->ReleaseByteArrayElements(environment, destination, destination_bytes, 0);
-    if (result == CNA_RESULT_SUCCESS) {
+    if (result == CNA_RESULT_SUCCESS || result == CNA_RESULT_BUFFER_TOO_SMALL) {
         jlong destination_element = (jlong)destination_written;
         (*environment)->SetLongArrayRegion(
             environment, out_byte_count, 0, 1, &destination_element);
@@ -36,7 +36,7 @@ Java_org_openeggbert_cna_internal_generated_NativeModelExtensionRoutes_effectGet
     (void)declaring_class;
     uint64_t out_byte_count_value = 0;
     CNA_Result result = cna.effect_get_type_name_byte_count((CNA_EffectHandle)effect, &out_byte_count_value);
-    if (result == CNA_RESULT_SUCCESS) {
+    if (result == CNA_RESULT_SUCCESS || result == CNA_RESULT_BUFFER_TOO_SMALL) {
         jlong out_byte_count_element = (jlong)out_byte_count_value;
         (*environment)->SetLongArrayRegion(
             environment, out_byte_count, 0, 1, &out_byte_count_element);
@@ -72,7 +72,7 @@ Java_org_openeggbert_cna_internal_generated_NativeModelExtensionRoutes_modelBone
     (void)declaring_class;
     CNA_ModelBoneHandle out_bone_value = 0;
     CNA_Result result = cna.model_bone_collection_get_at((CNA_ModelBoneCollectionHandle)collection, (uint64_t)index, &out_bone_value);
-    if (result == CNA_RESULT_SUCCESS) {
+    if (result == CNA_RESULT_SUCCESS || result == CNA_RESULT_BUFFER_TOO_SMALL) {
         jlong out_bone_element = (jlong)out_bone_value;
         (*environment)->SetLongArrayRegion(
             environment, out_bone, 0, 1, &out_bone_element);
@@ -88,7 +88,7 @@ Java_org_openeggbert_cna_internal_generated_NativeModelExtensionRoutes_modelBone
     (void)declaring_class;
     uint64_t out_count_value = 0;
     CNA_Result result = cna.model_bone_collection_get_count((CNA_ModelBoneCollectionHandle)collection, &out_count_value);
-    if (result == CNA_RESULT_SUCCESS) {
+    if (result == CNA_RESULT_SUCCESS || result == CNA_RESULT_BUFFER_TOO_SMALL) {
         jlong out_count_element = (jlong)out_count_value;
         (*environment)->SetLongArrayRegion(
             environment, out_count, 0, 1, &out_count_element);
@@ -110,7 +110,7 @@ Java_org_openeggbert_cna_internal_generated_NativeModelExtensionRoutes_modelBone
     uint64_t destination_written = 0;
     CNA_Result result = cna.model_bone_copy_name((CNA_ModelBoneHandle)bone, (char*)destination_bytes, (uint64_t)destination_size, &destination_written);
     (*environment)->ReleaseByteArrayElements(environment, destination, destination_bytes, 0);
-    if (result == CNA_RESULT_SUCCESS) {
+    if (result == CNA_RESULT_SUCCESS || result == CNA_RESULT_BUFFER_TOO_SMALL) {
         jlong destination_element = (jlong)destination_written;
         (*environment)->SetLongArrayRegion(
             environment, out_byte_count, 0, 1, &destination_element);
@@ -133,7 +133,7 @@ Java_org_openeggbert_cna_internal_generated_NativeModelExtensionRoutes_modelBone
     CNA_ModelBoneHandle out_bone_value = 0;
     CNA_Result result = cna.model_bone_create((int32_t)index, name_view, &out_bone_value);
     (*environment)->ReleaseByteArrayElements(environment, name, name_bytes, JNI_ABORT);
-    if (result == CNA_RESULT_SUCCESS) {
+    if (result == CNA_RESULT_SUCCESS || result == CNA_RESULT_BUFFER_TOO_SMALL) {
         jlong out_bone_element = (jlong)out_bone_value;
         (*environment)->SetLongArrayRegion(
             environment, out_bone, 0, 1, &out_bone_element);
@@ -159,7 +159,7 @@ Java_org_openeggbert_cna_internal_generated_NativeModelExtensionRoutes_modelBone
     (void)declaring_class;
     CNA_ModelBoneCollectionHandle out_children_value = 0;
     CNA_Result result = cna.model_bone_get_children((CNA_ModelBoneHandle)bone, &out_children_value);
-    if (result == CNA_RESULT_SUCCESS) {
+    if (result == CNA_RESULT_SUCCESS || result == CNA_RESULT_BUFFER_TOO_SMALL) {
         jlong out_children_element = (jlong)out_children_value;
         (*environment)->SetLongArrayRegion(
             environment, out_children, 0, 1, &out_children_element);
@@ -175,7 +175,7 @@ Java_org_openeggbert_cna_internal_generated_NativeModelExtensionRoutes_modelBone
     (void)declaring_class;
     int32_t out_index_value = 0;
     CNA_Result result = cna.model_bone_get_index((CNA_ModelBoneHandle)bone, &out_index_value);
-    if (result == CNA_RESULT_SUCCESS) {
+    if (result == CNA_RESULT_SUCCESS || result == CNA_RESULT_BUFFER_TOO_SMALL) {
         jint out_index_element = (jint)out_index_value;
         (*environment)->SetIntArrayRegion(
             environment, out_index, 0, 1, &out_index_element);
@@ -191,7 +191,7 @@ Java_org_openeggbert_cna_internal_generated_NativeModelExtensionRoutes_modelBone
     (void)declaring_class;
     uint64_t out_byte_count_value = 0;
     CNA_Result result = cna.model_bone_get_name_byte_count((CNA_ModelBoneHandle)bone, &out_byte_count_value);
-    if (result == CNA_RESULT_SUCCESS) {
+    if (result == CNA_RESULT_SUCCESS || result == CNA_RESULT_BUFFER_TOO_SMALL) {
         jlong out_byte_count_element = (jlong)out_byte_count_value;
         (*environment)->SetLongArrayRegion(
             environment, out_byte_count, 0, 1, &out_byte_count_element);
@@ -208,7 +208,7 @@ Java_org_openeggbert_cna_internal_generated_NativeModelExtensionRoutes_modelBone
     CNA_Bool out_has_parent_value = 0;
     CNA_ModelBoneHandle out_parent_value = 0;
     CNA_Result result = cna.model_bone_get_parent((CNA_ModelBoneHandle)bone, &out_has_parent_value, &out_parent_value);
-    if (result == CNA_RESULT_SUCCESS) {
+    if (result == CNA_RESULT_SUCCESS || result == CNA_RESULT_BUFFER_TOO_SMALL) {
         jboolean out_has_parent_element = (jboolean)out_has_parent_value;
         (*environment)->SetBooleanArrayRegion(
             environment, out_has_parent, 0, 1, &out_has_parent_element);
@@ -228,7 +228,7 @@ Java_org_openeggbert_cna_internal_generated_NativeModelExtensionRoutes_modelBone
     CNA_Matrix out_transform_value;
     memset(&out_transform_value, 0, sizeof out_transform_value);
     CNA_Result result = cna.model_bone_get_transform((CNA_ModelBoneHandle)bone, &out_transform_value);
-    if (result == CNA_RESULT_SUCCESS) {
+    if (result == CNA_RESULT_SUCCESS || result == CNA_RESULT_BUFFER_TOO_SMALL) {
         jfloat out_transformFloating_values[] = {
             (jfloat)out_transform_value.m11,
             (jfloat)out_transform_value.m12,
@@ -360,7 +360,7 @@ Java_org_openeggbert_cna_internal_generated_NativeModelExtensionRoutes_modelCopy
         }
     }
     free(destination_values);
-    if (result == CNA_RESULT_SUCCESS) {
+    if (result == CNA_RESULT_SUCCESS || result == CNA_RESULT_BUFFER_TOO_SMALL) {
         jlong out_count_element = (jlong)out_count_value;
         (*environment)->SetLongArrayRegion(
             environment, out_count, 0, 1, &out_count_element);
@@ -442,7 +442,7 @@ Java_org_openeggbert_cna_internal_generated_NativeModelExtensionRoutes_modelCopy
         }
     }
     free(destination_values);
-    if (result == CNA_RESULT_SUCCESS) {
+    if (result == CNA_RESULT_SUCCESS || result == CNA_RESULT_BUFFER_TOO_SMALL) {
         jlong out_count_element = (jlong)out_count_value;
         (*environment)->SetLongArrayRegion(
             environment, out_count, 0, 1, &out_count_element);
@@ -464,7 +464,7 @@ Java_org_openeggbert_cna_internal_generated_NativeModelExtensionRoutes_modelCopy
     uint64_t destination_written = 0;
     CNA_Result result = cna.model_copy_camera_name_ext((CNA_ModelHandle)model, (uint64_t)index, (char*)destination_bytes, (uint64_t)destination_size, &destination_written);
     (*environment)->ReleaseByteArrayElements(environment, destination, destination_bytes, 0);
-    if (result == CNA_RESULT_SUCCESS) {
+    if (result == CNA_RESULT_SUCCESS || result == CNA_RESULT_BUFFER_TOO_SMALL) {
         jlong destination_element = (jlong)destination_written;
         (*environment)->SetLongArrayRegion(
             environment, out_byte_count, 0, 1, &destination_element);
@@ -486,7 +486,7 @@ Java_org_openeggbert_cna_internal_generated_NativeModelExtensionRoutes_modelCopy
     uint64_t destination_written = 0;
     CNA_Result result = cna.model_copy_material_variant_name_ext((CNA_ModelHandle)model, (uint64_t)index, (char*)destination_bytes, (uint64_t)destination_size, &destination_written);
     (*environment)->ReleaseByteArrayElements(environment, destination, destination_bytes, 0);
-    if (result == CNA_RESULT_SUCCESS) {
+    if (result == CNA_RESULT_SUCCESS || result == CNA_RESULT_BUFFER_TOO_SMALL) {
         jlong destination_element = (jlong)destination_written;
         (*environment)->SetLongArrayRegion(
             environment, out_byte_count, 0, 1, &destination_element);
@@ -508,7 +508,7 @@ Java_org_openeggbert_cna_internal_generated_NativeModelExtensionRoutes_modelCopy
     uint64_t destination_written = 0;
     CNA_Result result = cna.model_copy_skin_name_ext((CNA_ModelHandle)model, (uint64_t)index, (char*)destination_bytes, (uint64_t)destination_size, &destination_written);
     (*environment)->ReleaseByteArrayElements(environment, destination, destination_bytes, 0);
-    if (result == CNA_RESULT_SUCCESS) {
+    if (result == CNA_RESULT_SUCCESS || result == CNA_RESULT_BUFFER_TOO_SMALL) {
         jlong destination_element = (jlong)destination_written;
         (*environment)->SetLongArrayRegion(
             environment, out_byte_count, 0, 1, &destination_element);
@@ -578,7 +578,7 @@ Java_org_openeggbert_cna_internal_generated_NativeModelExtensionRoutes_modelCrea
     free(mesh_parents_values);
     (*environment)->ReleaseLongArrayElements(
         environment, mesh_parents, mesh_parents_elements, JNI_ABORT);
-    if (result == CNA_RESULT_SUCCESS) {
+    if (result == CNA_RESULT_SUCCESS || result == CNA_RESULT_BUFFER_TOO_SMALL) {
         jlong out_model_element = (jlong)out_model_value;
         (*environment)->SetLongArrayRegion(
             environment, out_model, 0, 1, &out_model_element);
@@ -690,7 +690,7 @@ Java_org_openeggbert_cna_internal_generated_NativeModelExtensionRoutes_modelEffe
     (void)declaring_class;
     CNA_EffectHandle out_effect_value = 0;
     CNA_Result result = cna.model_effect_collection_get_at((CNA_ModelEffectCollectionHandle)collection, (uint64_t)index, &out_effect_value);
-    if (result == CNA_RESULT_SUCCESS) {
+    if (result == CNA_RESULT_SUCCESS || result == CNA_RESULT_BUFFER_TOO_SMALL) {
         jlong out_effect_element = (jlong)out_effect_value;
         (*environment)->SetLongArrayRegion(
             environment, out_effect, 0, 1, &out_effect_element);
@@ -706,7 +706,7 @@ Java_org_openeggbert_cna_internal_generated_NativeModelExtensionRoutes_modelEffe
     (void)declaring_class;
     uint64_t out_count_value = 0;
     CNA_Result result = cna.model_effect_collection_get_count((CNA_ModelEffectCollectionHandle)collection, &out_count_value);
-    if (result == CNA_RESULT_SUCCESS) {
+    if (result == CNA_RESULT_SUCCESS || result == CNA_RESULT_BUFFER_TOO_SMALL) {
         jlong out_count_element = (jlong)out_count_value;
         (*environment)->SetLongArrayRegion(
             environment, out_count, 0, 1, &out_count_element);
@@ -722,7 +722,7 @@ Java_org_openeggbert_cna_internal_generated_NativeModelExtensionRoutes_modelGetB
     (void)declaring_class;
     uint64_t out_count_value = 0;
     CNA_Result result = cna.model_get_bone_transform_count((CNA_ModelHandle)model, &out_count_value);
-    if (result == CNA_RESULT_SUCCESS) {
+    if (result == CNA_RESULT_SUCCESS || result == CNA_RESULT_BUFFER_TOO_SMALL) {
         jlong out_count_element = (jlong)out_count_value;
         (*environment)->SetLongArrayRegion(
             environment, out_count, 0, 1, &out_count_element);
@@ -738,7 +738,7 @@ Java_org_openeggbert_cna_internal_generated_NativeModelExtensionRoutes_modelGetB
     (void)declaring_class;
     CNA_ModelBoneCollectionHandle out_bones_value = 0;
     CNA_Result result = cna.model_get_bones((CNA_ModelHandle)model, &out_bones_value);
-    if (result == CNA_RESULT_SUCCESS) {
+    if (result == CNA_RESULT_SUCCESS || result == CNA_RESULT_BUFFER_TOO_SMALL) {
         jlong out_bones_element = (jlong)out_bones_value;
         (*environment)->SetLongArrayRegion(
             environment, out_bones, 0, 1, &out_bones_element);
@@ -756,7 +756,7 @@ Java_org_openeggbert_cna_internal_generated_NativeModelExtensionRoutes_modelGetB
     CNA_BoundingSphere out_sphere_value;
     memset(&out_sphere_value, 0, sizeof out_sphere_value);
     CNA_Result result = cna.model_get_bounding_sphere_ext((CNA_ModelHandle)model, &out_has_value_value, &out_sphere_value);
-    if (result == CNA_RESULT_SUCCESS) {
+    if (result == CNA_RESULT_SUCCESS || result == CNA_RESULT_BUFFER_TOO_SMALL) {
         jboolean out_has_value_element = (jboolean)out_has_value_value;
         (*environment)->SetBooleanArrayRegion(
             environment, out_has_value, 0, 1, &out_has_value_element);
@@ -781,7 +781,7 @@ Java_org_openeggbert_cna_internal_generated_NativeModelExtensionRoutes_modelGetC
     (void)declaring_class;
     uint64_t out_count_value = 0;
     CNA_Result result = cna.model_get_camera_count_ext((CNA_ModelHandle)model, &out_count_value);
-    if (result == CNA_RESULT_SUCCESS) {
+    if (result == CNA_RESULT_SUCCESS || result == CNA_RESULT_BUFFER_TOO_SMALL) {
         jlong out_count_element = (jlong)out_count_value;
         (*environment)->SetLongArrayRegion(
             environment, out_count, 0, 1, &out_count_element);
@@ -800,7 +800,7 @@ Java_org_openeggbert_cna_internal_generated_NativeModelExtensionRoutes_modelGetC
     out_camera_value.struct_size = (uint32_t)(sizeof out_camera_value);
     out_camera_value.struct_version = UINT32_C(1);
     CNA_Result result = cna.model_get_camera_ext((CNA_ModelHandle)model, (uint64_t)index, &out_camera_value);
-    if (result == CNA_RESULT_SUCCESS) {
+    if (result == CNA_RESULT_SUCCESS || result == CNA_RESULT_BUFFER_TOO_SMALL) {
         jlong out_cameraIntegral_values[] = {
             (jlong)out_camera_value.scene_node_index,
             (jlong)out_camera_value.is_perspective,
@@ -863,7 +863,7 @@ Java_org_openeggbert_cna_internal_generated_NativeModelExtensionRoutes_modelGetC
     (void)declaring_class;
     uint64_t out_byte_count_value = 0;
     CNA_Result result = cna.model_get_camera_name_byte_count_ext((CNA_ModelHandle)model, (uint64_t)index, &out_byte_count_value);
-    if (result == CNA_RESULT_SUCCESS) {
+    if (result == CNA_RESULT_SUCCESS || result == CNA_RESULT_BUFFER_TOO_SMALL) {
         jlong out_byte_count_element = (jlong)out_byte_count_value;
         (*environment)->SetLongArrayRegion(
             environment, out_byte_count, 0, 1, &out_byte_count_element);
@@ -879,7 +879,7 @@ Java_org_openeggbert_cna_internal_generated_NativeModelExtensionRoutes_modelGetM
     (void)declaring_class;
     uint64_t out_count_value = 0;
     CNA_Result result = cna.model_get_material_variant_count_ext((CNA_ModelHandle)model, &out_count_value);
-    if (result == CNA_RESULT_SUCCESS) {
+    if (result == CNA_RESULT_SUCCESS || result == CNA_RESULT_BUFFER_TOO_SMALL) {
         jlong out_count_element = (jlong)out_count_value;
         (*environment)->SetLongArrayRegion(
             environment, out_count, 0, 1, &out_count_element);
@@ -895,7 +895,7 @@ Java_org_openeggbert_cna_internal_generated_NativeModelExtensionRoutes_modelGetM
     (void)declaring_class;
     int32_t out_value_value = 0;
     CNA_Result result = cna.model_get_material_variant_ext((CNA_ModelHandle)model, &out_value_value);
-    if (result == CNA_RESULT_SUCCESS) {
+    if (result == CNA_RESULT_SUCCESS || result == CNA_RESULT_BUFFER_TOO_SMALL) {
         jint out_value_element = (jint)out_value_value;
         (*environment)->SetIntArrayRegion(
             environment, out_value, 0, 1, &out_value_element);
@@ -911,7 +911,7 @@ Java_org_openeggbert_cna_internal_generated_NativeModelExtensionRoutes_modelGetM
     (void)declaring_class;
     uint64_t out_byte_count_value = 0;
     CNA_Result result = cna.model_get_material_variant_name_byte_count_ext((CNA_ModelHandle)model, (uint64_t)index, &out_byte_count_value);
-    if (result == CNA_RESULT_SUCCESS) {
+    if (result == CNA_RESULT_SUCCESS || result == CNA_RESULT_BUFFER_TOO_SMALL) {
         jlong out_byte_count_element = (jlong)out_byte_count_value;
         (*environment)->SetLongArrayRegion(
             environment, out_byte_count, 0, 1, &out_byte_count_element);
@@ -927,7 +927,7 @@ Java_org_openeggbert_cna_internal_generated_NativeModelExtensionRoutes_modelGetM
     (void)declaring_class;
     CNA_ModelMeshCollectionHandle out_meshes_value = 0;
     CNA_Result result = cna.model_get_meshes((CNA_ModelHandle)model, &out_meshes_value);
-    if (result == CNA_RESULT_SUCCESS) {
+    if (result == CNA_RESULT_SUCCESS || result == CNA_RESULT_BUFFER_TOO_SMALL) {
         jlong out_meshes_element = (jlong)out_meshes_value;
         (*environment)->SetLongArrayRegion(
             environment, out_meshes, 0, 1, &out_meshes_element);
@@ -944,7 +944,7 @@ Java_org_openeggbert_cna_internal_generated_NativeModelExtensionRoutes_modelGetR
     CNA_Bool out_has_root_value = 0;
     CNA_ModelBoneHandle out_root_value = 0;
     CNA_Result result = cna.model_get_root((CNA_ModelHandle)model, &out_has_root_value, &out_root_value);
-    if (result == CNA_RESULT_SUCCESS) {
+    if (result == CNA_RESULT_SUCCESS || result == CNA_RESULT_BUFFER_TOO_SMALL) {
         jboolean out_has_root_element = (jboolean)out_has_root_value;
         (*environment)->SetBooleanArrayRegion(
             environment, out_has_root, 0, 1, &out_has_root_element);
@@ -963,7 +963,7 @@ Java_org_openeggbert_cna_internal_generated_NativeModelExtensionRoutes_modelGetS
     (void)declaring_class;
     uint64_t out_count_value = 0;
     CNA_Result result = cna.model_get_skin_count_ext((CNA_ModelHandle)model, &out_count_value);
-    if (result == CNA_RESULT_SUCCESS) {
+    if (result == CNA_RESULT_SUCCESS || result == CNA_RESULT_BUFFER_TOO_SMALL) {
         jlong out_count_element = (jlong)out_count_value;
         (*environment)->SetLongArrayRegion(
             environment, out_count, 0, 1, &out_count_element);
@@ -980,7 +980,7 @@ Java_org_openeggbert_cna_internal_generated_NativeModelExtensionRoutes_modelGetS
     CNA_Bool out_has_data_value = 0;
     uint64_t out_mesh_count_value = 0;
     CNA_Result result = cna.model_get_skin_ext((CNA_ModelHandle)model, (uint64_t)index, &out_has_data_value, &out_mesh_count_value);
-    if (result == CNA_RESULT_SUCCESS) {
+    if (result == CNA_RESULT_SUCCESS || result == CNA_RESULT_BUFFER_TOO_SMALL) {
         jboolean out_has_data_element = (jboolean)out_has_data_value;
         (*environment)->SetBooleanArrayRegion(
             environment, out_has_data, 0, 1, &out_has_data_element);
@@ -999,7 +999,7 @@ Java_org_openeggbert_cna_internal_generated_NativeModelExtensionRoutes_modelGetS
     (void)declaring_class;
     uint64_t out_model_mesh_index_value = 0;
     CNA_Result result = cna.model_get_skin_mesh_index_ext((CNA_ModelHandle)model, (uint64_t)index, (uint64_t)mesh_index, &out_model_mesh_index_value);
-    if (result == CNA_RESULT_SUCCESS) {
+    if (result == CNA_RESULT_SUCCESS || result == CNA_RESULT_BUFFER_TOO_SMALL) {
         jlong out_model_mesh_index_element = (jlong)out_model_mesh_index_value;
         (*environment)->SetLongArrayRegion(
             environment, out_model_mesh_index, 0, 1, &out_model_mesh_index_element);
@@ -1015,7 +1015,7 @@ Java_org_openeggbert_cna_internal_generated_NativeModelExtensionRoutes_modelGetS
     (void)declaring_class;
     uint64_t out_byte_count_value = 0;
     CNA_Result result = cna.model_get_skin_name_byte_count_ext((CNA_ModelHandle)model, (uint64_t)index, &out_byte_count_value);
-    if (result == CNA_RESULT_SUCCESS) {
+    if (result == CNA_RESULT_SUCCESS || result == CNA_RESULT_BUFFER_TOO_SMALL) {
         jlong out_byte_count_element = (jlong)out_byte_count_value;
         (*environment)->SetLongArrayRegion(
             environment, out_byte_count, 0, 1, &out_byte_count_element);
@@ -1041,7 +1041,7 @@ Java_org_openeggbert_cna_internal_generated_NativeModelExtensionRoutes_modelMesh
     (void)declaring_class;
     CNA_ModelMeshHandle out_mesh_value = 0;
     CNA_Result result = cna.model_mesh_collection_get_at((CNA_ModelMeshCollectionHandle)collection, (uint64_t)index, &out_mesh_value);
-    if (result == CNA_RESULT_SUCCESS) {
+    if (result == CNA_RESULT_SUCCESS || result == CNA_RESULT_BUFFER_TOO_SMALL) {
         jlong out_mesh_element = (jlong)out_mesh_value;
         (*environment)->SetLongArrayRegion(
             environment, out_mesh, 0, 1, &out_mesh_element);
@@ -1057,7 +1057,7 @@ Java_org_openeggbert_cna_internal_generated_NativeModelExtensionRoutes_modelMesh
     (void)declaring_class;
     uint64_t out_count_value = 0;
     CNA_Result result = cna.model_mesh_collection_get_count((CNA_ModelMeshCollectionHandle)collection, &out_count_value);
-    if (result == CNA_RESULT_SUCCESS) {
+    if (result == CNA_RESULT_SUCCESS || result == CNA_RESULT_BUFFER_TOO_SMALL) {
         jlong out_count_element = (jlong)out_count_value;
         (*environment)->SetLongArrayRegion(
             environment, out_count, 0, 1, &out_count_element);
@@ -1079,7 +1079,7 @@ Java_org_openeggbert_cna_internal_generated_NativeModelExtensionRoutes_modelMesh
     uint64_t destination_written = 0;
     CNA_Result result = cna.model_mesh_copy_name((CNA_ModelMeshHandle)mesh, (char*)destination_bytes, (uint64_t)destination_size, &destination_written);
     (*environment)->ReleaseByteArrayElements(environment, destination, destination_bytes, 0);
-    if (result == CNA_RESULT_SUCCESS) {
+    if (result == CNA_RESULT_SUCCESS || result == CNA_RESULT_BUFFER_TOO_SMALL) {
         jlong destination_element = (jlong)destination_written;
         (*environment)->SetLongArrayRegion(
             environment, out_byte_count, 0, 1, &destination_element);
@@ -1120,7 +1120,7 @@ Java_org_openeggbert_cna_internal_generated_NativeModelExtensionRoutes_modelMesh
     free(parts_values);
     (*environment)->ReleaseLongArrayElements(
         environment, parts, parts_elements, JNI_ABORT);
-    if (result == CNA_RESULT_SUCCESS) {
+    if (result == CNA_RESULT_SUCCESS || result == CNA_RESULT_BUFFER_TOO_SMALL) {
         jlong out_mesh_element = (jlong)out_mesh_value;
         (*environment)->SetLongArrayRegion(
             environment, out_mesh, 0, 1, &out_mesh_element);
@@ -1147,7 +1147,7 @@ Java_org_openeggbert_cna_internal_generated_NativeModelExtensionRoutes_modelMesh
     CNA_BoundingSphere out_value_value;
     memset(&out_value_value, 0, sizeof out_value_value);
     CNA_Result result = cna.model_mesh_get_bounding_sphere((CNA_ModelMeshHandle)mesh, &out_value_value);
-    if (result == CNA_RESULT_SUCCESS) {
+    if (result == CNA_RESULT_SUCCESS || result == CNA_RESULT_BUFFER_TOO_SMALL) {
         jfloat out_valueFloating_values[] = {
             (jfloat)out_value_value.center.x,
             (jfloat)out_value_value.center.y,
@@ -1169,7 +1169,7 @@ Java_org_openeggbert_cna_internal_generated_NativeModelExtensionRoutes_modelMesh
     (void)declaring_class;
     CNA_ModelEffectCollectionHandle out_effects_value = 0;
     CNA_Result result = cna.model_mesh_get_effects((CNA_ModelMeshHandle)mesh, &out_effects_value);
-    if (result == CNA_RESULT_SUCCESS) {
+    if (result == CNA_RESULT_SUCCESS || result == CNA_RESULT_BUFFER_TOO_SMALL) {
         jlong out_effects_element = (jlong)out_effects_value;
         (*environment)->SetLongArrayRegion(
             environment, out_effects, 0, 1, &out_effects_element);
@@ -1185,7 +1185,7 @@ Java_org_openeggbert_cna_internal_generated_NativeModelExtensionRoutes_modelMesh
     (void)declaring_class;
     CNA_ModelMeshPartCollectionHandle out_parts_value = 0;
     CNA_Result result = cna.model_mesh_get_mesh_parts((CNA_ModelMeshHandle)mesh, &out_parts_value);
-    if (result == CNA_RESULT_SUCCESS) {
+    if (result == CNA_RESULT_SUCCESS || result == CNA_RESULT_BUFFER_TOO_SMALL) {
         jlong out_parts_element = (jlong)out_parts_value;
         (*environment)->SetLongArrayRegion(
             environment, out_parts, 0, 1, &out_parts_element);
@@ -1201,7 +1201,7 @@ Java_org_openeggbert_cna_internal_generated_NativeModelExtensionRoutes_modelMesh
     (void)declaring_class;
     uint64_t out_byte_count_value = 0;
     CNA_Result result = cna.model_mesh_get_name_byte_count((CNA_ModelMeshHandle)mesh, &out_byte_count_value);
-    if (result == CNA_RESULT_SUCCESS) {
+    if (result == CNA_RESULT_SUCCESS || result == CNA_RESULT_BUFFER_TOO_SMALL) {
         jlong out_byte_count_element = (jlong)out_byte_count_value;
         (*environment)->SetLongArrayRegion(
             environment, out_byte_count, 0, 1, &out_byte_count_element);
@@ -1218,7 +1218,7 @@ Java_org_openeggbert_cna_internal_generated_NativeModelExtensionRoutes_modelMesh
     CNA_Bool out_has_parent_value = 0;
     CNA_ModelBoneHandle out_parent_value = 0;
     CNA_Result result = cna.model_mesh_get_parent_bone((CNA_ModelMeshHandle)mesh, &out_has_parent_value, &out_parent_value);
-    if (result == CNA_RESULT_SUCCESS) {
+    if (result == CNA_RESULT_SUCCESS || result == CNA_RESULT_BUFFER_TOO_SMALL) {
         jboolean out_has_parent_element = (jboolean)out_has_parent_value;
         (*environment)->SetBooleanArrayRegion(
             environment, out_has_parent, 0, 1, &out_has_parent_element);
@@ -1247,7 +1247,7 @@ Java_org_openeggbert_cna_internal_generated_NativeModelExtensionRoutes_modelMesh
     (void)declaring_class;
     CNA_ModelMeshPartHandle out_part_value = 0;
     CNA_Result result = cna.model_mesh_part_collection_get_at((CNA_ModelMeshPartCollectionHandle)collection, (uint64_t)index, &out_part_value);
-    if (result == CNA_RESULT_SUCCESS) {
+    if (result == CNA_RESULT_SUCCESS || result == CNA_RESULT_BUFFER_TOO_SMALL) {
         jlong out_part_element = (jlong)out_part_value;
         (*environment)->SetLongArrayRegion(
             environment, out_part, 0, 1, &out_part_element);
@@ -1263,7 +1263,7 @@ Java_org_openeggbert_cna_internal_generated_NativeModelExtensionRoutes_modelMesh
     (void)declaring_class;
     uint64_t out_count_value = 0;
     CNA_Result result = cna.model_mesh_part_collection_get_count((CNA_ModelMeshPartCollectionHandle)collection, &out_count_value);
-    if (result == CNA_RESULT_SUCCESS) {
+    if (result == CNA_RESULT_SUCCESS || result == CNA_RESULT_BUFFER_TOO_SMALL) {
         jlong out_count_element = (jlong)out_count_value;
         (*environment)->SetLongArrayRegion(
             environment, out_count, 0, 1, &out_count_element);
@@ -1279,7 +1279,7 @@ Java_org_openeggbert_cna_internal_generated_NativeModelExtensionRoutes_modelMesh
     (void)declaring_class;
     CNA_ModelMeshPartHandle out_part_value = 0;
     CNA_Result result = cna.model_mesh_part_create((CNA_VertexBufferHandle)vertex_buffer, (CNA_IndexBufferHandle)index_buffer, (int32_t)num_vertices, (int32_t)primitive_count, (int32_t)start_index, (int32_t)vertex_offset, &out_part_value);
-    if (result == CNA_RESULT_SUCCESS) {
+    if (result == CNA_RESULT_SUCCESS || result == CNA_RESULT_BUFFER_TOO_SMALL) {
         jlong out_part_element = (jlong)out_part_value;
         (*environment)->SetLongArrayRegion(
             environment, out_part, 0, 1, &out_part_element);
@@ -1306,7 +1306,7 @@ Java_org_openeggbert_cna_internal_generated_NativeModelExtensionRoutes_modelMesh
     CNA_Bool out_has_effect_value = 0;
     CNA_EffectHandle out_effect_value = 0;
     CNA_Result result = cna.model_mesh_part_get_effect((CNA_ModelMeshPartHandle)part, &out_has_effect_value, &out_effect_value);
-    if (result == CNA_RESULT_SUCCESS) {
+    if (result == CNA_RESULT_SUCCESS || result == CNA_RESULT_BUFFER_TOO_SMALL) {
         jboolean out_has_effect_element = (jboolean)out_has_effect_value;
         (*environment)->SetBooleanArrayRegion(
             environment, out_has_effect, 0, 1, &out_has_effect_element);
@@ -1326,7 +1326,7 @@ Java_org_openeggbert_cna_internal_generated_NativeModelExtensionRoutes_modelMesh
     CNA_Bool out_has_buffer_value = 0;
     CNA_IndexBufferHandle out_buffer_value = 0;
     CNA_Result result = cna.model_mesh_part_get_index_buffer((CNA_ModelMeshPartHandle)part, &out_has_buffer_value, &out_buffer_value);
-    if (result == CNA_RESULT_SUCCESS) {
+    if (result == CNA_RESULT_SUCCESS || result == CNA_RESULT_BUFFER_TOO_SMALL) {
         jboolean out_has_buffer_element = (jboolean)out_has_buffer_value;
         (*environment)->SetBooleanArrayRegion(
             environment, out_has_buffer, 0, 1, &out_has_buffer_element);
@@ -1345,7 +1345,7 @@ Java_org_openeggbert_cna_internal_generated_NativeModelExtensionRoutes_modelMesh
     (void)declaring_class;
     int32_t out_value_value = 0;
     CNA_Result result = cna.model_mesh_part_get_num_vertices((CNA_ModelMeshPartHandle)part, &out_value_value);
-    if (result == CNA_RESULT_SUCCESS) {
+    if (result == CNA_RESULT_SUCCESS || result == CNA_RESULT_BUFFER_TOO_SMALL) {
         jint out_value_element = (jint)out_value_value;
         (*environment)->SetIntArrayRegion(
             environment, out_value, 0, 1, &out_value_element);
@@ -1361,7 +1361,7 @@ Java_org_openeggbert_cna_internal_generated_NativeModelExtensionRoutes_modelMesh
     (void)declaring_class;
     int32_t out_value_value = 0;
     CNA_Result result = cna.model_mesh_part_get_primitive_count((CNA_ModelMeshPartHandle)part, &out_value_value);
-    if (result == CNA_RESULT_SUCCESS) {
+    if (result == CNA_RESULT_SUCCESS || result == CNA_RESULT_BUFFER_TOO_SMALL) {
         jint out_value_element = (jint)out_value_value;
         (*environment)->SetIntArrayRegion(
             environment, out_value, 0, 1, &out_value_element);
@@ -1377,7 +1377,7 @@ Java_org_openeggbert_cna_internal_generated_NativeModelExtensionRoutes_modelMesh
     (void)declaring_class;
     int32_t out_value_value = 0;
     CNA_Result result = cna.model_mesh_part_get_start_index((CNA_ModelMeshPartHandle)part, &out_value_value);
-    if (result == CNA_RESULT_SUCCESS) {
+    if (result == CNA_RESULT_SUCCESS || result == CNA_RESULT_BUFFER_TOO_SMALL) {
         jint out_value_element = (jint)out_value_value;
         (*environment)->SetIntArrayRegion(
             environment, out_value, 0, 1, &out_value_element);
@@ -1394,7 +1394,7 @@ Java_org_openeggbert_cna_internal_generated_NativeModelExtensionRoutes_modelMesh
     CNA_Bool out_has_buffer_value = 0;
     CNA_VertexBufferHandle out_buffer_value = 0;
     CNA_Result result = cna.model_mesh_part_get_vertex_buffer((CNA_ModelMeshPartHandle)part, &out_has_buffer_value, &out_buffer_value);
-    if (result == CNA_RESULT_SUCCESS) {
+    if (result == CNA_RESULT_SUCCESS || result == CNA_RESULT_BUFFER_TOO_SMALL) {
         jboolean out_has_buffer_element = (jboolean)out_has_buffer_value;
         (*environment)->SetBooleanArrayRegion(
             environment, out_has_buffer, 0, 1, &out_has_buffer_element);
@@ -1413,7 +1413,7 @@ Java_org_openeggbert_cna_internal_generated_NativeModelExtensionRoutes_modelMesh
     (void)declaring_class;
     int32_t out_value_value = 0;
     CNA_Result result = cna.model_mesh_part_get_vertex_offset((CNA_ModelMeshPartHandle)part, &out_value_value);
-    if (result == CNA_RESULT_SUCCESS) {
+    if (result == CNA_RESULT_SUCCESS || result == CNA_RESULT_BUFFER_TOO_SMALL) {
         jint out_value_element = (jint)out_value_value;
         (*environment)->SetIntArrayRegion(
             environment, out_value, 0, 1, &out_value_element);

@@ -573,7 +573,14 @@ def render_c(class_name: str, entries: list[dict]) -> str:
         body.append(f"    CNA_Result result = cna.{slot_of(symbol)}({', '.join(arguments)});")
         body.extend(cleanup)
         if epilogue:
-            body.append("    if (result == CNA_RESULT_SUCCESS) {")
+            # Scalar and structure outputs are also copied back on BUFFER_TOO_SMALL. CNA
+            # documents the required byte count of a copy-out route as "always written on a
+            # valid output", and that is the whole two-call protocol: ask with no buffer, be
+            # told the size, ask again. Writing outputs only on success would leave the caller
+            # with a zero and no way to size the buffer. The buffer itself is untouched, because
+            # CNA performs no partial write, so only these outputs cross.
+            body.append("    if (result == CNA_RESULT_SUCCESS "
+                        "|| result == CNA_RESULT_BUFFER_TOO_SMALL) {")
             body.extend(epilogue)
             body.append("    }")
         body.append("    return (jint)result;")

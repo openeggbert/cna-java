@@ -1,7 +1,7 @@
 {
   "abiVersion": "0.20.0",
   "boundButUnreached": [],
-  "boundFunctions": 1462,
+  "boundFunctions": 1570,
   "boundWithoutJavaCallSite": [
     "cna_achievement_collection_add",
     "cna_achievement_collection_clear",

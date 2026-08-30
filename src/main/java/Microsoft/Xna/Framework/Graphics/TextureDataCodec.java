@@ -280,6 +280,24 @@ enum TextureDataCodec {
         }
     }
 
+    /**
+     * Returns the one codec that carries a surface format, whatever element type a caller has.
+     *
+     * <p>{@link #select(Class, SurfaceFormat)} answers the game's question -- may these elements
+     * become this format -- and this answers the content format's: what does this format's byte
+     * layout actually look like.
+     */
+    static TextureDataCodec forFormat(SurfaceFormat format) {
+        Objects.requireNonNull(format, "format");
+        for (TextureDataCodec codec : values()) {
+            if (codec.supports(format)) {
+                return codec;
+            }
+        }
+        throw new UnsupportedOperationException(
+                "No CNA texture transfer carries SurfaceFormat." + format);
+    }
+
     static TextureDataCodec select(Class<?> componentType, SurfaceFormat format) {
         Objects.requireNonNull(componentType, "componentType");
         Objects.requireNonNull(format, "format");

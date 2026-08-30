@@ -38,6 +38,7 @@ public final class FacadeFactory {
     private static final Constructor<Video> VIDEO = videoConstructor();
     private static final Method EFFECT_ADOPT_EXTENSION = effectAdoptExtensionMethod();
     private static final Method CONTENT_MANAGER_DEVICE = contentManagerDeviceMethod();
+    private static final Method TEXTURE_2D_LEVEL_BYTES = texture2DLevelBytesMethod();
 
     private FacadeFactory() {
     }
@@ -300,6 +301,37 @@ public final class FacadeFactory {
                     "Cannot reach the ContentManager graphics device", exception);
         } catch (InvocationTargetException exception) {
             throw facadeFailure("ContentManager graphics device lookup failed", exception);
+        }
+    }
+
+    /**
+     * Uploads one mip level's bytes to a texture exactly as a content format stored them.
+     *
+     * <p>Reached from {@code org.openeggbert.cna.extensions.content}. XNA declares only the
+     * generic element-typed {@code SetData}, so widening a raw-byte overload would put a member
+     * in the strict contract that the reference API has no counterpart for.
+     */
+    public static void setTexture2DLevelBytes(Texture2D texture, int level, byte[] bytes) {
+        try {
+            TEXTURE_2D_LEVEL_BYTES.invoke(texture, level, bytes);
+        } catch (IllegalAccessException exception) {
+            throw new IllegalStateException("Cannot upload the texture level", exception);
+        } catch (InvocationTargetException exception) {
+            throw facadeFailure("Texture level upload failed", exception);
+        }
+    }
+
+    private static Method texture2DLevelBytesMethod() {
+        try {
+            Method method = Texture2D.class.getDeclaredMethod(
+                    "setLevelBytes", int.class, byte[].class);
+            if (!method.trySetAccessible()) {
+                throw new IllegalStateException(
+                        "The runtime denied access to the raw texture level upload");
+            }
+            return method;
+        } catch (NoSuchMethodException exception) {
+            throw new ExceptionInInitializerError(exception);
         }
     }
 

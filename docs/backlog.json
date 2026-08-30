@@ -205,10 +205,14 @@
       "title": "Expose the .cnb content format",
       "family": "org.openeggbert.cna.extensions.content",
       "authority": "cnb.h",
-      "currentState": "272 routes, none bound.",
-      "expectedState": "A Java facade over the container, its schemas and its loader registry.",
+      "currentState": "108 of the 272 routes are bound and reached: the container layer, the document, the checked byte reader, the texture data, the writer and the Texture2D encoder and decoder. A game can read a .cnb file, walk its chunks, verify their checksums, decode a texture and upload it as an XNA Texture2D, and a Java build step can write a .cnb file of its own schema. The remaining 164 are the model, sprite-font, sound, song, video, curve, animation-clip and .cnj families, plus the loader registry.",
+      "expectedState": "The remaining asset families projected as they earn a consumer. The loader registry is the one part that needs a design decision rather than more binding: cna_cnb_loader_invoke hands back a void* the callback produced, which has no Java meaning, so a Java loader registry has to be a Java-side dispatch over the document rather than a projection of CNA's.",
       "priority": 8,
-      "status": "ready"
+      "status": "ready",
+      "tests": [
+        "CnbTests"
+      ],
+      "note": "Every fixture is produced by CNA's own encoder and writer and read back by CNA's own parser, so a successful read means the file is a real one rather than that two hand-written halves share a misunderstanding."
     },
     {
       "id": "JAVA-NATIVE-006",

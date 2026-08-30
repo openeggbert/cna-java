@@ -14,7 +14,7 @@ Java_org_openeggbert_cna_internal_generated_NativeNetworkRoutes_availableNetwork
     (void)declaring_class;
     CNA_AvailableNetworkSessionHandle out_session_value = 0;
     CNA_Result result = cna.available_network_session_collection_copy_session((CNA_AvailableNetworkSessionCollectionHandle)collection, (int32_t)index, &out_session_value);
-    if (result == CNA_RESULT_SUCCESS) {
+    if (result == CNA_RESULT_SUCCESS || result == CNA_RESULT_BUFFER_TOO_SMALL) {
         jlong out_session_element = (jlong)out_session_value;
         (*environment)->SetLongArrayRegion(
             environment, out_session, 0, 1, &out_session_element);
@@ -48,7 +48,7 @@ Java_org_openeggbert_cna_internal_generated_NativeNetworkRoutes_availableNetwork
     free(sessions_values);
     (*environment)->ReleaseLongArrayElements(
         environment, sessions, sessions_elements, JNI_ABORT);
-    if (result == CNA_RESULT_SUCCESS) {
+    if (result == CNA_RESULT_SUCCESS || result == CNA_RESULT_BUFFER_TOO_SMALL) {
         jlong out_collection_element = (jlong)out_collection_value;
         (*environment)->SetLongArrayRegion(
             environment, out_collection, 0, 1, &out_collection_element);
@@ -84,7 +84,7 @@ Java_org_openeggbert_cna_internal_generated_NativeNetworkRoutes_availableNetwork
     (void)declaring_class;
     int32_t out_count_value = 0;
     CNA_Result result = cna.available_network_session_collection_get_count((CNA_AvailableNetworkSessionCollectionHandle)collection, &out_count_value);
-    if (result == CNA_RESULT_SUCCESS) {
+    if (result == CNA_RESULT_SUCCESS || result == CNA_RESULT_BUFFER_TOO_SMALL) {
         jint out_count_element = (jint)out_count_value;
         (*environment)->SetIntArrayRegion(
             environment, out_count, 0, 1, &out_count_element);
@@ -100,7 +100,7 @@ Java_org_openeggbert_cna_internal_generated_NativeNetworkRoutes_availableNetwork
     (void)declaring_class;
     CNA_Bool out_is_disposed_value = 0;
     CNA_Result result = cna.available_network_session_collection_get_is_disposed((CNA_AvailableNetworkSessionCollectionHandle)collection, &out_is_disposed_value);
-    if (result == CNA_RESULT_SUCCESS) {
+    if (result == CNA_RESULT_SUCCESS || result == CNA_RESULT_BUFFER_TOO_SMALL) {
         jboolean out_is_disposed_element = (jboolean)out_is_disposed_value;
         (*environment)->SetBooleanArrayRegion(
             environment, out_is_disposed, 0, 1, &out_is_disposed_element);
@@ -122,7 +122,7 @@ Java_org_openeggbert_cna_internal_generated_NativeNetworkRoutes_availableNetwork
     uint64_t destination_written = 0;
     CNA_Result result = cna.available_network_session_copy_connect_address_ext((CNA_AvailableNetworkSessionHandle)session, (char*)destination_bytes, (uint64_t)destination_size, &destination_written);
     (*environment)->ReleaseByteArrayElements(environment, destination, destination_bytes, 0);
-    if (result == CNA_RESULT_SUCCESS) {
+    if (result == CNA_RESULT_SUCCESS || result == CNA_RESULT_BUFFER_TOO_SMALL) {
         jlong destination_element = (jlong)destination_written;
         (*environment)->SetLongArrayRegion(
             environment, out_bytes, 0, 1, &destination_element);
@@ -144,7 +144,7 @@ Java_org_openeggbert_cna_internal_generated_NativeNetworkRoutes_availableNetwork
     uint64_t destination_written = 0;
     CNA_Result result = cna.available_network_session_copy_host_gamertag((CNA_AvailableNetworkSessionHandle)session, (char*)destination_bytes, (uint64_t)destination_size, &destination_written);
     (*environment)->ReleaseByteArrayElements(environment, destination, destination_bytes, 0);
-    if (result == CNA_RESULT_SUCCESS) {
+    if (result == CNA_RESULT_SUCCESS || result == CNA_RESULT_BUFFER_TOO_SMALL) {
         jlong destination_element = (jlong)destination_written;
         (*environment)->SetLongArrayRegion(
             environment, out_bytes, 0, 1, &destination_element);
@@ -160,7 +160,7 @@ Java_org_openeggbert_cna_internal_generated_NativeNetworkRoutes_availableNetwork
     (void)declaring_class;
     CNA_NetworkSessionPropertiesHandle out_properties_value = 0;
     CNA_Result result = cna.available_network_session_copy_session_properties((CNA_AvailableNetworkSessionHandle)session, &out_properties_value);
-    if (result == CNA_RESULT_SUCCESS) {
+    if (result == CNA_RESULT_SUCCESS || result == CNA_RESULT_BUFFER_TOO_SMALL) {
         jlong out_properties_element = (jlong)out_properties_value;
         (*environment)->SetLongArrayRegion(
             environment, out_properties, 0, 1, &out_properties_element);
@@ -186,7 +186,7 @@ Java_org_openeggbert_cna_internal_generated_NativeNetworkRoutes_availableNetwork
     (void)declaring_class;
     CNA_Bool out_equal_value = 0;
     CNA_Result result = cna.available_network_session_equals((CNA_AvailableNetworkSessionHandle)left, (CNA_AvailableNetworkSessionHandle)right, &out_equal_value);
-    if (result == CNA_RESULT_SUCCESS) {
+    if (result == CNA_RESULT_SUCCESS || result == CNA_RESULT_BUFFER_TOO_SMALL) {
         jboolean out_equal_element = (jboolean)out_equal_value;
         (*environment)->SetBooleanArrayRegion(
             environment, out_equal, 0, 1, &out_equal_element);
@@ -202,7 +202,7 @@ Java_org_openeggbert_cna_internal_generated_NativeNetworkRoutes_availableNetwork
     (void)declaring_class;
     uint64_t out_bytes_value = 0;
     CNA_Result result = cna.available_network_session_get_connect_address_size_ext((CNA_AvailableNetworkSessionHandle)session, &out_bytes_value);
-    if (result == CNA_RESULT_SUCCESS) {
+    if (result == CNA_RESULT_SUCCESS || result == CNA_RESULT_BUFFER_TOO_SMALL) {
         jlong out_bytes_element = (jlong)out_bytes_value;
         (*environment)->SetLongArrayRegion(
             environment, out_bytes, 0, 1, &out_bytes_element);
@@ -218,7 +218,7 @@ Java_org_openeggbert_cna_internal_generated_NativeNetworkRoutes_availableNetwork
     (void)declaring_class;
     uint16_t out_value_value = 0;
     CNA_Result result = cna.available_network_session_get_connect_port_ext((CNA_AvailableNetworkSessionHandle)session, &out_value_value);
-    if (result == CNA_RESULT_SUCCESS) {
+    if (result == CNA_RESULT_SUCCESS || result == CNA_RESULT_BUFFER_TOO_SMALL) {
         jint out_value_element = (jint)out_value_value;
         (*environment)->SetIntArrayRegion(
             environment, out_value, 0, 1, &out_value_element);
@@ -234,7 +234,7 @@ Java_org_openeggbert_cna_internal_generated_NativeNetworkRoutes_availableNetwork
     (void)declaring_class;
     int32_t out_value_value = 0;
     CNA_Result result = cna.available_network_session_get_current_gamer_count((CNA_AvailableNetworkSessionHandle)session, &out_value_value);
-    if (result == CNA_RESULT_SUCCESS) {
+    if (result == CNA_RESULT_SUCCESS || result == CNA_RESULT_BUFFER_TOO_SMALL) {
         jint out_value_element = (jint)out_value_value;
         (*environment)->SetIntArrayRegion(
             environment, out_value, 0, 1, &out_value_element);
@@ -250,7 +250,7 @@ Java_org_openeggbert_cna_internal_generated_NativeNetworkRoutes_availableNetwork
     (void)declaring_class;
     uint64_t out_bytes_value = 0;
     CNA_Result result = cna.available_network_session_get_host_gamertag_size((CNA_AvailableNetworkSessionHandle)session, &out_bytes_value);
-    if (result == CNA_RESULT_SUCCESS) {
+    if (result == CNA_RESULT_SUCCESS || result == CNA_RESULT_BUFFER_TOO_SMALL) {
         jlong out_bytes_element = (jlong)out_bytes_value;
         (*environment)->SetLongArrayRegion(
             environment, out_bytes, 0, 1, &out_bytes_element);
@@ -266,7 +266,7 @@ Java_org_openeggbert_cna_internal_generated_NativeNetworkRoutes_availableNetwork
     (void)declaring_class;
     int32_t out_value_value = 0;
     CNA_Result result = cna.available_network_session_get_open_private_gamer_slots((CNA_AvailableNetworkSessionHandle)session, &out_value_value);
-    if (result == CNA_RESULT_SUCCESS) {
+    if (result == CNA_RESULT_SUCCESS || result == CNA_RESULT_BUFFER_TOO_SMALL) {
         jint out_value_element = (jint)out_value_value;
         (*environment)->SetIntArrayRegion(
             environment, out_value, 0, 1, &out_value_element);
@@ -282,7 +282,7 @@ Java_org_openeggbert_cna_internal_generated_NativeNetworkRoutes_availableNetwork
     (void)declaring_class;
     int32_t out_value_value = 0;
     CNA_Result result = cna.available_network_session_get_open_public_gamer_slots((CNA_AvailableNetworkSessionHandle)session, &out_value_value);
-    if (result == CNA_RESULT_SUCCESS) {
+    if (result == CNA_RESULT_SUCCESS || result == CNA_RESULT_BUFFER_TOO_SMALL) {
         jint out_value_element = (jint)out_value_value;
         (*environment)->SetIntArrayRegion(
             environment, out_value, 0, 1, &out_value_element);
@@ -301,7 +301,7 @@ Java_org_openeggbert_cna_internal_generated_NativeNetworkRoutes_availableNetwork
     out_value_value.struct_size = (uint32_t)(sizeof out_value_value);
     out_value_value.struct_version = UINT32_C(1);
     CNA_Result result = cna.available_network_session_get_quality_of_service((CNA_AvailableNetworkSessionHandle)session, &out_value_value);
-    if (result == CNA_RESULT_SUCCESS) {
+    if (result == CNA_RESULT_SUCCESS || result == CNA_RESULT_BUFFER_TOO_SMALL) {
         jbyte out_valueBytes_values[] = {
             (jbyte)out_value_value.reserved[0],
             (jbyte)out_value_value.reserved[1],
@@ -336,7 +336,7 @@ Java_org_openeggbert_cna_internal_generated_NativeNetworkRoutes_availableNetwork
     (void)declaring_class;
     CNA_NetworkSessionType out_value_value = 0;
     CNA_Result result = cna.available_network_session_get_session_type_ext((CNA_AvailableNetworkSessionHandle)session, &out_value_value);
-    if (result == CNA_RESULT_SUCCESS) {
+    if (result == CNA_RESULT_SUCCESS || result == CNA_RESULT_BUFFER_TOO_SMALL) {
         jint out_value_element = (jint)out_value_value;
         (*environment)->SetIntArrayRegion(
             environment, out_value, 0, 1, &out_value_element);
@@ -352,7 +352,7 @@ Java_org_openeggbert_cna_internal_generated_NativeNetworkRoutes_availableNetwork
     (void)declaring_class;
     CNA_Bool out_not_equal_value = 0;
     CNA_Result result = cna.available_network_session_not_equals((CNA_AvailableNetworkSessionHandle)left, (CNA_AvailableNetworkSessionHandle)right, &out_not_equal_value);
-    if (result == CNA_RESULT_SUCCESS) {
+    if (result == CNA_RESULT_SUCCESS || result == CNA_RESULT_BUFFER_TOO_SMALL) {
         jboolean out_not_equal_element = (jboolean)out_not_equal_value;
         (*environment)->SetBooleanArrayRegion(
             environment, out_not_equal, 0, 1, &out_not_equal_element);
@@ -399,7 +399,7 @@ Java_org_openeggbert_cna_internal_generated_NativeNetworkRoutes_gamerJoinedEvent
     out_info_value.struct_size = (uint32_t)(sizeof out_info_value);
     out_info_value.struct_version = UINT32_C(1);
     CNA_Result result = cna.gamer_joined_event_info_init((CNA_NetworkGamerHandle)gamer, &out_info_value);
-    if (result == CNA_RESULT_SUCCESS) {
+    if (result == CNA_RESULT_SUCCESS || result == CNA_RESULT_BUFFER_TOO_SMALL) {
         jlong out_infoIntegral_values[] = {
             (jlong)out_info_value.gamer
         };
@@ -421,7 +421,7 @@ Java_org_openeggbert_cna_internal_generated_NativeNetworkRoutes_gamerLeftEventIn
     out_info_value.struct_size = (uint32_t)(sizeof out_info_value);
     out_info_value.struct_version = UINT32_C(1);
     CNA_Result result = cna.gamer_left_event_info_init((CNA_NetworkGamerHandle)gamer, &out_info_value);
-    if (result == CNA_RESULT_SUCCESS) {
+    if (result == CNA_RESULT_SUCCESS || result == CNA_RESULT_BUFFER_TOO_SMALL) {
         jlong out_infoIntegral_values[] = {
             (jlong)out_info_value.gamer
         };
@@ -443,7 +443,7 @@ Java_org_openeggbert_cna_internal_generated_NativeNetworkRoutes_hostChangedEvent
     out_info_value.struct_size = (uint32_t)(sizeof out_info_value);
     out_info_value.struct_version = UINT32_C(1);
     CNA_Result result = cna.host_changed_event_info_init((CNA_NetworkGamerHandle)old_host, (CNA_NetworkGamerHandle)new_host, &out_info_value);
-    if (result == CNA_RESULT_SUCCESS) {
+    if (result == CNA_RESULT_SUCCESS || result == CNA_RESULT_BUFFER_TOO_SMALL) {
         jlong out_infoIntegral_values[] = {
             (jlong)out_info_value.old_host,
             (jlong)out_info_value.new_host
@@ -473,7 +473,7 @@ Java_org_openeggbert_cna_internal_generated_NativeNetworkRoutes_localNetworkGame
     (void)declaring_class;
     CNA_NetworkGamerHandle out_gamer_value = 0;
     CNA_Result result = cna.local_network_gamer_create_ext((CNA_SignedInGamerHandle)signed_in_gamer, (CNA_NetworkSessionHandle)session, &out_gamer_value);
-    if (result == CNA_RESULT_SUCCESS) {
+    if (result == CNA_RESULT_SUCCESS || result == CNA_RESULT_BUFFER_TOO_SMALL) {
         jlong out_gamer_element = (jlong)out_gamer_value;
         (*environment)->SetLongArrayRegion(
             environment, out_gamer, 0, 1, &out_gamer_element);
@@ -499,7 +499,7 @@ Java_org_openeggbert_cna_internal_generated_NativeNetworkRoutes_localNetworkGame
     (void)declaring_class;
     CNA_Bool out_value_value = 0;
     CNA_Result result = cna.local_network_gamer_get_is_data_available((CNA_NetworkGamerHandle)gamer, &out_value_value);
-    if (result == CNA_RESULT_SUCCESS) {
+    if (result == CNA_RESULT_SUCCESS || result == CNA_RESULT_BUFFER_TOO_SMALL) {
         jboolean out_value_element = (jboolean)out_value_value;
         (*environment)->SetBooleanArrayRegion(
             environment, out_value, 0, 1, &out_value_element);
@@ -515,7 +515,7 @@ Java_org_openeggbert_cna_internal_generated_NativeNetworkRoutes_localNetworkGame
     (void)declaring_class;
     CNA_SignedInGamerHandle out_signed_in_gamer_value = 0;
     CNA_Result result = cna.local_network_gamer_get_signed_in_gamer((CNA_NetworkGamerHandle)gamer, &out_signed_in_gamer_value);
-    if (result == CNA_RESULT_SUCCESS) {
+    if (result == CNA_RESULT_SUCCESS || result == CNA_RESULT_BUFFER_TOO_SMALL) {
         jlong out_signed_in_gamer_element = (jlong)out_signed_in_gamer_value;
         (*environment)->SetLongArrayRegion(
             environment, out_signed_in_gamer, 0, 1, &out_signed_in_gamer_element);
@@ -555,7 +555,7 @@ Java_org_openeggbert_cna_internal_generated_NativeNetworkRoutes_localNetworkGame
     free(destination_values);
     (*environment)->ReleaseByteArrayElements(
         environment, destination, destination_elements, 0);
-    if (result == CNA_RESULT_SUCCESS) {
+    if (result == CNA_RESULT_SUCCESS || result == CNA_RESULT_BUFFER_TOO_SMALL) {
         jlong out_sender_element = (jlong)out_sender_value;
         (*environment)->SetLongArrayRegion(
             environment, out_sender, 0, 1, &out_sender_element);
@@ -598,7 +598,7 @@ Java_org_openeggbert_cna_internal_generated_NativeNetworkRoutes_localNetworkGame
     free(destination_values);
     (*environment)->ReleaseByteArrayElements(
         environment, destination, destination_elements, 0);
-    if (result == CNA_RESULT_SUCCESS) {
+    if (result == CNA_RESULT_SUCCESS || result == CNA_RESULT_BUFFER_TOO_SMALL) {
         jlong out_sender_element = (jlong)out_sender_value;
         (*environment)->SetLongArrayRegion(
             environment, out_sender, 0, 1, &out_sender_element);
@@ -618,7 +618,7 @@ Java_org_openeggbert_cna_internal_generated_NativeNetworkRoutes_localNetworkGame
     CNA_NetworkGamerHandle out_sender_value = 0;
     uint64_t out_received_value = 0;
     CNA_Result result = cna.local_network_gamer_receive_data_into_packet_reader((CNA_NetworkGamerHandle)gamer, (CNA_PacketReaderHandle)reader, &out_sender_value, &out_received_value);
-    if (result == CNA_RESULT_SUCCESS) {
+    if (result == CNA_RESULT_SUCCESS || result == CNA_RESULT_BUFFER_TOO_SMALL) {
         jlong out_sender_element = (jlong)out_sender_value;
         (*environment)->SetLongArrayRegion(
             environment, out_sender, 0, 1, &out_sender_element);
@@ -780,7 +780,7 @@ Java_org_openeggbert_cna_internal_generated_NativeNetworkRoutes_netGetLastJoinEr
     CNA_NetworkSessionJoinError out_join_error_value = 0;
     CNA_Bool out_has_join_error_value = 0;
     CNA_Result result = cna.net_get_last_join_error(&out_join_error_value, &out_has_join_error_value);
-    if (result == CNA_RESULT_SUCCESS) {
+    if (result == CNA_RESULT_SUCCESS || result == CNA_RESULT_BUFFER_TOO_SMALL) {
         jint out_join_error_element = (jint)out_join_error_value;
         (*environment)->SetIntArrayRegion(
             environment, out_join_error, 0, 1, &out_join_error_element);
@@ -799,7 +799,7 @@ Java_org_openeggbert_cna_internal_generated_NativeNetworkRoutes_networkGamerCopy
     (void)declaring_class;
     CNA_NetworkMachineHandle out_machine_value = 0;
     CNA_Result result = cna.network_gamer_copy_machine((CNA_NetworkGamerHandle)gamer, &out_machine_value);
-    if (result == CNA_RESULT_SUCCESS) {
+    if (result == CNA_RESULT_SUCCESS || result == CNA_RESULT_BUFFER_TOO_SMALL) {
         jlong out_machine_element = (jlong)out_machine_value;
         (*environment)->SetLongArrayRegion(
             environment, out_machine, 0, 1, &out_machine_element);
@@ -822,7 +822,7 @@ Java_org_openeggbert_cna_internal_generated_NativeNetworkRoutes_networkGamerCrea
     CNA_NetworkGamerHandle out_gamer_value = 0;
     CNA_Result result = cna.network_gamer_create((CNA_Handle)session, gamertag_view, &out_gamer_value);
     (*environment)->ReleaseByteArrayElements(environment, gamertag, gamertag_bytes, JNI_ABORT);
-    if (result == CNA_RESULT_SUCCESS) {
+    if (result == CNA_RESULT_SUCCESS || result == CNA_RESULT_BUFFER_TOO_SMALL) {
         jlong out_gamer_element = (jlong)out_gamer_value;
         (*environment)->SetLongArrayRegion(
             environment, out_gamer, 0, 1, &out_gamer_element);
@@ -848,7 +848,7 @@ Java_org_openeggbert_cna_internal_generated_NativeNetworkRoutes_networkGamerGetH
     (void)declaring_class;
     CNA_Bool out_value_value = 0;
     CNA_Result result = cna.network_gamer_get_has_left_session((CNA_NetworkGamerHandle)gamer, &out_value_value);
-    if (result == CNA_RESULT_SUCCESS) {
+    if (result == CNA_RESULT_SUCCESS || result == CNA_RESULT_BUFFER_TOO_SMALL) {
         jboolean out_value_element = (jboolean)out_value_value;
         (*environment)->SetBooleanArrayRegion(
             environment, out_value, 0, 1, &out_value_element);
@@ -864,7 +864,7 @@ Java_org_openeggbert_cna_internal_generated_NativeNetworkRoutes_networkGamerGetH
     (void)declaring_class;
     CNA_Bool out_value_value = 0;
     CNA_Result result = cna.network_gamer_get_has_voice((CNA_NetworkGamerHandle)gamer, &out_value_value);
-    if (result == CNA_RESULT_SUCCESS) {
+    if (result == CNA_RESULT_SUCCESS || result == CNA_RESULT_BUFFER_TOO_SMALL) {
         jboolean out_value_element = (jboolean)out_value_value;
         (*environment)->SetBooleanArrayRegion(
             environment, out_value, 0, 1, &out_value_element);
@@ -880,7 +880,7 @@ Java_org_openeggbert_cna_internal_generated_NativeNetworkRoutes_networkGamerGetI
     (void)declaring_class;
     uint8_t out_value_value = 0;
     CNA_Result result = cna.network_gamer_get_id((CNA_NetworkGamerHandle)gamer, &out_value_value);
-    if (result == CNA_RESULT_SUCCESS) {
+    if (result == CNA_RESULT_SUCCESS || result == CNA_RESULT_BUFFER_TOO_SMALL) {
         jbyte out_value_element = (jbyte)out_value_value;
         (*environment)->SetByteArrayRegion(
             environment, out_value, 0, 1, &out_value_element);
@@ -896,7 +896,7 @@ Java_org_openeggbert_cna_internal_generated_NativeNetworkRoutes_networkGamerGetI
     (void)declaring_class;
     CNA_Bool out_value_value = 0;
     CNA_Result result = cna.network_gamer_get_is_guest((CNA_NetworkGamerHandle)gamer, &out_value_value);
-    if (result == CNA_RESULT_SUCCESS) {
+    if (result == CNA_RESULT_SUCCESS || result == CNA_RESULT_BUFFER_TOO_SMALL) {
         jboolean out_value_element = (jboolean)out_value_value;
         (*environment)->SetBooleanArrayRegion(
             environment, out_value, 0, 1, &out_value_element);
@@ -912,7 +912,7 @@ Java_org_openeggbert_cna_internal_generated_NativeNetworkRoutes_networkGamerGetI
     (void)declaring_class;
     CNA_Bool out_value_value = 0;
     CNA_Result result = cna.network_gamer_get_is_host((CNA_NetworkGamerHandle)gamer, &out_value_value);
-    if (result == CNA_RESULT_SUCCESS) {
+    if (result == CNA_RESULT_SUCCESS || result == CNA_RESULT_BUFFER_TOO_SMALL) {
         jboolean out_value_element = (jboolean)out_value_value;
         (*environment)->SetBooleanArrayRegion(
             environment, out_value, 0, 1, &out_value_element);
@@ -928,7 +928,7 @@ Java_org_openeggbert_cna_internal_generated_NativeNetworkRoutes_networkGamerGetI
     (void)declaring_class;
     CNA_Bool out_value_value = 0;
     CNA_Result result = cna.network_gamer_get_is_local((CNA_NetworkGamerHandle)gamer, &out_value_value);
-    if (result == CNA_RESULT_SUCCESS) {
+    if (result == CNA_RESULT_SUCCESS || result == CNA_RESULT_BUFFER_TOO_SMALL) {
         jboolean out_value_element = (jboolean)out_value_value;
         (*environment)->SetBooleanArrayRegion(
             environment, out_value, 0, 1, &out_value_element);
@@ -944,7 +944,7 @@ Java_org_openeggbert_cna_internal_generated_NativeNetworkRoutes_networkGamerGetI
     (void)declaring_class;
     CNA_Bool out_value_value = 0;
     CNA_Result result = cna.network_gamer_get_is_muted_by_local_user((CNA_NetworkGamerHandle)gamer, &out_value_value);
-    if (result == CNA_RESULT_SUCCESS) {
+    if (result == CNA_RESULT_SUCCESS || result == CNA_RESULT_BUFFER_TOO_SMALL) {
         jboolean out_value_element = (jboolean)out_value_value;
         (*environment)->SetBooleanArrayRegion(
             environment, out_value, 0, 1, &out_value_element);
@@ -960,7 +960,7 @@ Java_org_openeggbert_cna_internal_generated_NativeNetworkRoutes_networkGamerGetI
     (void)declaring_class;
     CNA_Bool out_value_value = 0;
     CNA_Result result = cna.network_gamer_get_is_private_slot((CNA_NetworkGamerHandle)gamer, &out_value_value);
-    if (result == CNA_RESULT_SUCCESS) {
+    if (result == CNA_RESULT_SUCCESS || result == CNA_RESULT_BUFFER_TOO_SMALL) {
         jboolean out_value_element = (jboolean)out_value_value;
         (*environment)->SetBooleanArrayRegion(
             environment, out_value, 0, 1, &out_value_element);
@@ -976,7 +976,7 @@ Java_org_openeggbert_cna_internal_generated_NativeNetworkRoutes_networkGamerGetI
     (void)declaring_class;
     CNA_Bool out_value_value = 0;
     CNA_Result result = cna.network_gamer_get_is_ready((CNA_NetworkGamerHandle)gamer, &out_value_value);
-    if (result == CNA_RESULT_SUCCESS) {
+    if (result == CNA_RESULT_SUCCESS || result == CNA_RESULT_BUFFER_TOO_SMALL) {
         jboolean out_value_element = (jboolean)out_value_value;
         (*environment)->SetBooleanArrayRegion(
             environment, out_value, 0, 1, &out_value_element);
@@ -992,7 +992,7 @@ Java_org_openeggbert_cna_internal_generated_NativeNetworkRoutes_networkGamerGetI
     (void)declaring_class;
     CNA_Bool out_value_value = 0;
     CNA_Result result = cna.network_gamer_get_is_talking((CNA_NetworkGamerHandle)gamer, &out_value_value);
-    if (result == CNA_RESULT_SUCCESS) {
+    if (result == CNA_RESULT_SUCCESS || result == CNA_RESULT_BUFFER_TOO_SMALL) {
         jboolean out_value_element = (jboolean)out_value_value;
         (*environment)->SetBooleanArrayRegion(
             environment, out_value, 0, 1, &out_value_element);
@@ -1008,7 +1008,7 @@ Java_org_openeggbert_cna_internal_generated_NativeNetworkRoutes_networkGamerGetR
     (void)declaring_class;
     int64_t out_ticks_value = 0;
     CNA_Result result = cna.network_gamer_get_roundtrip_ticks((CNA_NetworkGamerHandle)gamer, &out_ticks_value);
-    if (result == CNA_RESULT_SUCCESS) {
+    if (result == CNA_RESULT_SUCCESS || result == CNA_RESULT_BUFFER_TOO_SMALL) {
         jlong out_ticks_element = (jlong)out_ticks_value;
         (*environment)->SetLongArrayRegion(
             environment, out_ticks, 0, 1, &out_ticks_element);
@@ -1024,7 +1024,7 @@ Java_org_openeggbert_cna_internal_generated_NativeNetworkRoutes_networkGamerGetS
     (void)declaring_class;
     CNA_Handle out_session_value = 0;
     CNA_Result result = cna.network_gamer_get_session((CNA_NetworkGamerHandle)gamer, &out_session_value);
-    if (result == CNA_RESULT_SUCCESS) {
+    if (result == CNA_RESULT_SUCCESS || result == CNA_RESULT_BUFFER_TOO_SMALL) {
         jlong out_session_element = (jlong)out_session_value;
         (*environment)->SetLongArrayRegion(
             environment, out_session, 0, 1, &out_session_element);
@@ -1100,7 +1100,7 @@ Java_org_openeggbert_cna_internal_generated_NativeNetworkRoutes_networkMachineCr
     (void)declaring_class;
     CNA_NetworkMachineHandle out_machine_value = 0;
     CNA_Result result = cna.network_machine_create(&out_machine_value);
-    if (result == CNA_RESULT_SUCCESS) {
+    if (result == CNA_RESULT_SUCCESS || result == CNA_RESULT_BUFFER_TOO_SMALL) {
         jlong out_machine_element = (jlong)out_machine_value;
         (*environment)->SetLongArrayRegion(
             environment, out_machine, 0, 1, &out_machine_element);
@@ -1126,7 +1126,7 @@ Java_org_openeggbert_cna_internal_generated_NativeNetworkRoutes_networkMachineGe
     (void)declaring_class;
     CNA_NetworkGamerHandle out_gamer_value = 0;
     CNA_Result result = cna.network_machine_get_gamer((CNA_NetworkMachineHandle)machine, (int32_t)index, &out_gamer_value);
-    if (result == CNA_RESULT_SUCCESS) {
+    if (result == CNA_RESULT_SUCCESS || result == CNA_RESULT_BUFFER_TOO_SMALL) {
         jlong out_gamer_element = (jlong)out_gamer_value;
         (*environment)->SetLongArrayRegion(
             environment, out_gamer, 0, 1, &out_gamer_element);
@@ -1142,7 +1142,7 @@ Java_org_openeggbert_cna_internal_generated_NativeNetworkRoutes_networkMachineGe
     (void)declaring_class;
     int32_t out_count_value = 0;
     CNA_Result result = cna.network_machine_get_gamer_count((CNA_NetworkMachineHandle)machine, &out_count_value);
-    if (result == CNA_RESULT_SUCCESS) {
+    if (result == CNA_RESULT_SUCCESS || result == CNA_RESULT_BUFFER_TOO_SMALL) {
         jint out_count_element = (jint)out_count_value;
         (*environment)->SetIntArrayRegion(
             environment, out_count, 0, 1, &out_count_element);
@@ -1188,7 +1188,7 @@ Java_org_openeggbert_cna_internal_generated_NativeNetworkRoutes_networkSessionCo
     (void)declaring_class;
     CNA_NetworkSessionPropertiesHandle out_properties_value = 0;
     CNA_Result result = cna.network_session_copy_session_properties((CNA_NetworkSessionHandle)session, &out_properties_value);
-    if (result == CNA_RESULT_SUCCESS) {
+    if (result == CNA_RESULT_SUCCESS || result == CNA_RESULT_BUFFER_TOO_SMALL) {
         jlong out_properties_element = (jlong)out_properties_value;
         (*environment)->SetLongArrayRegion(
             environment, out_properties, 0, 1, &out_properties_element);
@@ -1210,7 +1210,7 @@ Java_org_openeggbert_cna_internal_generated_NativeNetworkRoutes_networkSessionCo
     uint64_t destination_written = 0;
     CNA_Result result = cna.network_session_copy_type_name((CNA_NetworkSessionHandle)session, (char*)destination_bytes, (uint64_t)destination_size, &destination_written);
     (*environment)->ReleaseByteArrayElements(environment, destination, destination_bytes, 0);
-    if (result == CNA_RESULT_SUCCESS) {
+    if (result == CNA_RESULT_SUCCESS || result == CNA_RESULT_BUFFER_TOO_SMALL) {
         jlong destination_element = (jlong)destination_written;
         (*environment)->SetLongArrayRegion(
             environment, out_bytes, 0, 1, &destination_element);
@@ -1226,7 +1226,7 @@ Java_org_openeggbert_cna_internal_generated_NativeNetworkRoutes_networkSessionCr
     (void)declaring_class;
     CNA_NetworkSessionHandle out_session_value = 0;
     CNA_Result result = cna.network_session_create((CNA_NetworkSessionType)session_type, (int32_t)max_local_gamers, (int32_t)max_gamers, &out_session_value);
-    if (result == CNA_RESULT_SUCCESS) {
+    if (result == CNA_RESULT_SUCCESS || result == CNA_RESULT_BUFFER_TOO_SMALL) {
         jlong out_session_element = (jlong)out_session_value;
         (*environment)->SetLongArrayRegion(
             environment, out_session, 0, 1, &out_session_element);
@@ -1260,7 +1260,7 @@ Java_org_openeggbert_cna_internal_generated_NativeNetworkRoutes_networkSessionCr
     free(local_gamers_values);
     (*environment)->ReleaseLongArrayElements(
         environment, local_gamers, local_gamers_elements, JNI_ABORT);
-    if (result == CNA_RESULT_SUCCESS) {
+    if (result == CNA_RESULT_SUCCESS || result == CNA_RESULT_BUFFER_TOO_SMALL) {
         jlong out_session_element = (jlong)out_session_value;
         (*environment)->SetLongArrayRegion(
             environment, out_session, 0, 1, &out_session_element);
@@ -1276,7 +1276,7 @@ Java_org_openeggbert_cna_internal_generated_NativeNetworkRoutes_networkSessionCr
     (void)declaring_class;
     CNA_NetworkSessionHandle out_session_value = 0;
     CNA_Result result = cna.network_session_create_with_properties((CNA_NetworkSessionType)session_type, (int32_t)max_local_gamers, (int32_t)max_gamers, (int32_t)private_gamer_slots, (CNA_NetworkSessionPropertiesHandle)session_properties, &out_session_value);
-    if (result == CNA_RESULT_SUCCESS) {
+    if (result == CNA_RESULT_SUCCESS || result == CNA_RESULT_BUFFER_TOO_SMALL) {
         jlong out_session_element = (jlong)out_session_value;
         (*environment)->SetLongArrayRegion(
             environment, out_session, 0, 1, &out_session_element);
@@ -1325,7 +1325,7 @@ Java_org_openeggbert_cna_internal_generated_NativeNetworkRoutes_networkSessionEn
     out_info_value.struct_size = (uint32_t)(sizeof out_info_value);
     out_info_value.struct_version = UINT32_C(1);
     CNA_Result result = cna.network_session_ended_event_info_init((CNA_NetworkSessionEndReason)end_reason, &out_info_value);
-    if (result == CNA_RESULT_SUCCESS) {
+    if (result == CNA_RESULT_SUCCESS || result == CNA_RESULT_BUFFER_TOO_SMALL) {
         jbyte out_infoBytes_values[] = {
             (jbyte)out_info_value.reserved[0],
             (jbyte)out_info_value.reserved[1],
@@ -1353,7 +1353,7 @@ Java_org_openeggbert_cna_internal_generated_NativeNetworkRoutes_networkSessionFi
     (void)declaring_class;
     CNA_AvailableNetworkSessionCollectionHandle out_collection_value = 0;
     CNA_Result result = cna.network_session_find((CNA_NetworkSessionType)session_type, (int32_t)max_local_gamers, (CNA_NetworkSessionPropertiesHandle)search_properties, &out_collection_value);
-    if (result == CNA_RESULT_SUCCESS) {
+    if (result == CNA_RESULT_SUCCESS || result == CNA_RESULT_BUFFER_TOO_SMALL) {
         jlong out_collection_element = (jlong)out_collection_value;
         (*environment)->SetLongArrayRegion(
             environment, out_collection, 0, 1, &out_collection_element);
@@ -1369,7 +1369,7 @@ Java_org_openeggbert_cna_internal_generated_NativeNetworkRoutes_networkSessionFi
     (void)declaring_class;
     CNA_NetworkGamerHandle out_gamer_value = 0;
     CNA_Result result = cna.network_session_find_gamer_by_id((CNA_NetworkSessionHandle)session, (uint8_t)gamer_id, &out_gamer_value);
-    if (result == CNA_RESULT_SUCCESS) {
+    if (result == CNA_RESULT_SUCCESS || result == CNA_RESULT_BUFFER_TOO_SMALL) {
         jlong out_gamer_element = (jlong)out_gamer_value;
         (*environment)->SetLongArrayRegion(
             environment, out_gamer, 0, 1, &out_gamer_element);
@@ -1403,7 +1403,7 @@ Java_org_openeggbert_cna_internal_generated_NativeNetworkRoutes_networkSessionFi
     free(local_gamers_values);
     (*environment)->ReleaseLongArrayElements(
         environment, local_gamers, local_gamers_elements, JNI_ABORT);
-    if (result == CNA_RESULT_SUCCESS) {
+    if (result == CNA_RESULT_SUCCESS || result == CNA_RESULT_BUFFER_TOO_SMALL) {
         jlong out_collection_element = (jlong)out_collection_value;
         (*environment)->SetLongArrayRegion(
             environment, out_collection, 0, 1, &out_collection_element);
@@ -1419,7 +1419,7 @@ Java_org_openeggbert_cna_internal_generated_NativeNetworkRoutes_networkSessionGe
     (void)declaring_class;
     int32_t out_count_value = 0;
     CNA_Result result = cna.network_session_get_active_action_count_ext(&out_count_value);
-    if (result == CNA_RESULT_SUCCESS) {
+    if (result == CNA_RESULT_SUCCESS || result == CNA_RESULT_BUFFER_TOO_SMALL) {
         jint out_count_element = (jint)out_count_value;
         (*environment)->SetIntArrayRegion(
             environment, out_count, 0, 1, &out_count_element);
@@ -1435,7 +1435,7 @@ Java_org_openeggbert_cna_internal_generated_NativeNetworkRoutes_networkSessionGe
     (void)declaring_class;
     CNA_Bool out_value_value = 0;
     CNA_Result result = cna.network_session_get_allow_host_migration((CNA_NetworkSessionHandle)session, &out_value_value);
-    if (result == CNA_RESULT_SUCCESS) {
+    if (result == CNA_RESULT_SUCCESS || result == CNA_RESULT_BUFFER_TOO_SMALL) {
         jboolean out_value_element = (jboolean)out_value_value;
         (*environment)->SetBooleanArrayRegion(
             environment, out_value, 0, 1, &out_value_element);
@@ -1451,7 +1451,7 @@ Java_org_openeggbert_cna_internal_generated_NativeNetworkRoutes_networkSessionGe
     (void)declaring_class;
     CNA_Bool out_value_value = 0;
     CNA_Result result = cna.network_session_get_allow_join_in_progress((CNA_NetworkSessionHandle)session, &out_value_value);
-    if (result == CNA_RESULT_SUCCESS) {
+    if (result == CNA_RESULT_SUCCESS || result == CNA_RESULT_BUFFER_TOO_SMALL) {
         jboolean out_value_element = (jboolean)out_value_value;
         (*environment)->SetBooleanArrayRegion(
             environment, out_value, 0, 1, &out_value_element);
@@ -1467,7 +1467,7 @@ Java_org_openeggbert_cna_internal_generated_NativeNetworkRoutes_networkSessionGe
     (void)declaring_class;
     int32_t out_value_value = 0;
     CNA_Result result = cna.network_session_get_bytes_per_second_received((CNA_NetworkSessionHandle)session, &out_value_value);
-    if (result == CNA_RESULT_SUCCESS) {
+    if (result == CNA_RESULT_SUCCESS || result == CNA_RESULT_BUFFER_TOO_SMALL) {
         jint out_value_element = (jint)out_value_value;
         (*environment)->SetIntArrayRegion(
             environment, out_value, 0, 1, &out_value_element);
@@ -1483,7 +1483,7 @@ Java_org_openeggbert_cna_internal_generated_NativeNetworkRoutes_networkSessionGe
     (void)declaring_class;
     int32_t out_value_value = 0;
     CNA_Result result = cna.network_session_get_bytes_per_second_sent((CNA_NetworkSessionHandle)session, &out_value_value);
-    if (result == CNA_RESULT_SUCCESS) {
+    if (result == CNA_RESULT_SUCCESS || result == CNA_RESULT_BUFFER_TOO_SMALL) {
         jint out_value_element = (jint)out_value_value;
         (*environment)->SetIntArrayRegion(
             environment, out_value, 0, 1, &out_value_element);
@@ -1499,7 +1499,7 @@ Java_org_openeggbert_cna_internal_generated_NativeNetworkRoutes_networkSessionGe
     (void)declaring_class;
     CNA_NetworkGamerHandle out_gamer_value = 0;
     CNA_Result result = cna.network_session_get_gamer((CNA_NetworkSessionHandle)session, (uint32_t)roster, (int32_t)index, &out_gamer_value);
-    if (result == CNA_RESULT_SUCCESS) {
+    if (result == CNA_RESULT_SUCCESS || result == CNA_RESULT_BUFFER_TOO_SMALL) {
         jlong out_gamer_element = (jlong)out_gamer_value;
         (*environment)->SetLongArrayRegion(
             environment, out_gamer, 0, 1, &out_gamer_element);
@@ -1515,7 +1515,7 @@ Java_org_openeggbert_cna_internal_generated_NativeNetworkRoutes_networkSessionGe
     (void)declaring_class;
     int32_t out_count_value = 0;
     CNA_Result result = cna.network_session_get_gamer_count((CNA_NetworkSessionHandle)session, (uint32_t)roster, &out_count_value);
-    if (result == CNA_RESULT_SUCCESS) {
+    if (result == CNA_RESULT_SUCCESS || result == CNA_RESULT_BUFFER_TOO_SMALL) {
         jint out_count_element = (jint)out_count_value;
         (*environment)->SetIntArrayRegion(
             environment, out_count, 0, 1, &out_count_element);
@@ -1531,7 +1531,7 @@ Java_org_openeggbert_cna_internal_generated_NativeNetworkRoutes_networkSessionGe
     (void)declaring_class;
     CNA_NetworkGamerHandle out_gamer_value = 0;
     CNA_Result result = cna.network_session_get_host((CNA_NetworkSessionHandle)session, &out_gamer_value);
-    if (result == CNA_RESULT_SUCCESS) {
+    if (result == CNA_RESULT_SUCCESS || result == CNA_RESULT_BUFFER_TOO_SMALL) {
         jlong out_gamer_element = (jlong)out_gamer_value;
         (*environment)->SetLongArrayRegion(
             environment, out_gamer, 0, 1, &out_gamer_element);
@@ -1547,7 +1547,7 @@ Java_org_openeggbert_cna_internal_generated_NativeNetworkRoutes_networkSessionGe
     (void)declaring_class;
     int32_t out_count_value = 0;
     CNA_Result result = cna.network_session_get_instance_count_ext(&out_count_value);
-    if (result == CNA_RESULT_SUCCESS) {
+    if (result == CNA_RESULT_SUCCESS || result == CNA_RESULT_BUFFER_TOO_SMALL) {
         jint out_count_element = (jint)out_count_value;
         (*environment)->SetIntArrayRegion(
             environment, out_count, 0, 1, &out_count_element);
@@ -1563,7 +1563,7 @@ Java_org_openeggbert_cna_internal_generated_NativeNetworkRoutes_networkSessionGe
     (void)declaring_class;
     CNA_Bool out_is_disposed_value = 0;
     CNA_Result result = cna.network_session_get_is_disposed((CNA_NetworkSessionHandle)session, &out_is_disposed_value);
-    if (result == CNA_RESULT_SUCCESS) {
+    if (result == CNA_RESULT_SUCCESS || result == CNA_RESULT_BUFFER_TOO_SMALL) {
         jboolean out_is_disposed_element = (jboolean)out_is_disposed_value;
         (*environment)->SetBooleanArrayRegion(
             environment, out_is_disposed, 0, 1, &out_is_disposed_element);
@@ -1579,7 +1579,7 @@ Java_org_openeggbert_cna_internal_generated_NativeNetworkRoutes_networkSessionGe
     (void)declaring_class;
     CNA_Bool out_value_value = 0;
     CNA_Result result = cna.network_session_get_is_everyone_ready((CNA_NetworkSessionHandle)session, &out_value_value);
-    if (result == CNA_RESULT_SUCCESS) {
+    if (result == CNA_RESULT_SUCCESS || result == CNA_RESULT_BUFFER_TOO_SMALL) {
         jboolean out_value_element = (jboolean)out_value_value;
         (*environment)->SetBooleanArrayRegion(
             environment, out_value, 0, 1, &out_value_element);
@@ -1595,7 +1595,7 @@ Java_org_openeggbert_cna_internal_generated_NativeNetworkRoutes_networkSessionGe
     (void)declaring_class;
     CNA_Bool out_value_value = 0;
     CNA_Result result = cna.network_session_get_is_host((CNA_NetworkSessionHandle)session, &out_value_value);
-    if (result == CNA_RESULT_SUCCESS) {
+    if (result == CNA_RESULT_SUCCESS || result == CNA_RESULT_BUFFER_TOO_SMALL) {
         jboolean out_value_element = (jboolean)out_value_value;
         (*environment)->SetBooleanArrayRegion(
             environment, out_value, 0, 1, &out_value_element);
@@ -1611,7 +1611,7 @@ Java_org_openeggbert_cna_internal_generated_NativeNetworkRoutes_networkSessionGe
     (void)declaring_class;
     int32_t out_value_value = 0;
     CNA_Result result = cna.network_session_get_max_gamers((CNA_NetworkSessionHandle)session, &out_value_value);
-    if (result == CNA_RESULT_SUCCESS) {
+    if (result == CNA_RESULT_SUCCESS || result == CNA_RESULT_BUFFER_TOO_SMALL) {
         jint out_value_element = (jint)out_value_value;
         (*environment)->SetIntArrayRegion(
             environment, out_value, 0, 1, &out_value_element);
@@ -1627,7 +1627,7 @@ Java_org_openeggbert_cna_internal_generated_NativeNetworkRoutes_networkSessionGe
     (void)declaring_class;
     uint64_t out_count_value = 0;
     CNA_Result result = cna.network_session_get_owned_gamer_count_ext((CNA_NetworkSessionHandle)session, &out_count_value);
-    if (result == CNA_RESULT_SUCCESS) {
+    if (result == CNA_RESULT_SUCCESS || result == CNA_RESULT_BUFFER_TOO_SMALL) {
         jlong out_count_element = (jlong)out_count_value;
         (*environment)->SetLongArrayRegion(
             environment, out_count, 0, 1, &out_count_element);
@@ -1643,7 +1643,7 @@ Java_org_openeggbert_cna_internal_generated_NativeNetworkRoutes_networkSessionGe
     (void)declaring_class;
     int32_t out_value_value = 0;
     CNA_Result result = cna.network_session_get_private_gamer_slots((CNA_NetworkSessionHandle)session, &out_value_value);
-    if (result == CNA_RESULT_SUCCESS) {
+    if (result == CNA_RESULT_SUCCESS || result == CNA_RESULT_BUFFER_TOO_SMALL) {
         jint out_value_element = (jint)out_value_value;
         (*environment)->SetIntArrayRegion(
             environment, out_value, 0, 1, &out_value_element);
@@ -1659,7 +1659,7 @@ Java_org_openeggbert_cna_internal_generated_NativeNetworkRoutes_networkSessionGe
     (void)declaring_class;
     CNA_NetworkSessionState out_value_value = 0;
     CNA_Result result = cna.network_session_get_session_state((CNA_NetworkSessionHandle)session, &out_value_value);
-    if (result == CNA_RESULT_SUCCESS) {
+    if (result == CNA_RESULT_SUCCESS || result == CNA_RESULT_BUFFER_TOO_SMALL) {
         jint out_value_element = (jint)out_value_value;
         (*environment)->SetIntArrayRegion(
             environment, out_value, 0, 1, &out_value_element);
@@ -1675,7 +1675,7 @@ Java_org_openeggbert_cna_internal_generated_NativeNetworkRoutes_networkSessionGe
     (void)declaring_class;
     CNA_NetworkSessionType out_value_value = 0;
     CNA_Result result = cna.network_session_get_session_type((CNA_NetworkSessionHandle)session, &out_value_value);
-    if (result == CNA_RESULT_SUCCESS) {
+    if (result == CNA_RESULT_SUCCESS || result == CNA_RESULT_BUFFER_TOO_SMALL) {
         jint out_value_element = (jint)out_value_value;
         (*environment)->SetIntArrayRegion(
             environment, out_value, 0, 1, &out_value_element);
@@ -1691,7 +1691,7 @@ Java_org_openeggbert_cna_internal_generated_NativeNetworkRoutes_networkSessionGe
     (void)declaring_class;
     int64_t out_ticks_value = 0;
     CNA_Result result = cna.network_session_get_simulated_latency_ticks((CNA_NetworkSessionHandle)session, &out_ticks_value);
-    if (result == CNA_RESULT_SUCCESS) {
+    if (result == CNA_RESULT_SUCCESS || result == CNA_RESULT_BUFFER_TOO_SMALL) {
         jlong out_ticks_element = (jlong)out_ticks_value;
         (*environment)->SetLongArrayRegion(
             environment, out_ticks, 0, 1, &out_ticks_element);
@@ -1707,7 +1707,7 @@ Java_org_openeggbert_cna_internal_generated_NativeNetworkRoutes_networkSessionGe
     (void)declaring_class;
     float out_value_value = 0;
     CNA_Result result = cna.network_session_get_simulated_packet_loss((CNA_NetworkSessionHandle)session, &out_value_value);
-    if (result == CNA_RESULT_SUCCESS) {
+    if (result == CNA_RESULT_SUCCESS || result == CNA_RESULT_BUFFER_TOO_SMALL) {
         jfloat out_value_element = (jfloat)out_value_value;
         (*environment)->SetFloatArrayRegion(
             environment, out_value, 0, 1, &out_value_element);
@@ -1723,7 +1723,7 @@ Java_org_openeggbert_cna_internal_generated_NativeNetworkRoutes_networkSessionGe
     (void)declaring_class;
     uint64_t out_bytes_value = 0;
     CNA_Result result = cna.network_session_get_type_name_size((CNA_NetworkSessionHandle)session, &out_bytes_value);
-    if (result == CNA_RESULT_SUCCESS) {
+    if (result == CNA_RESULT_SUCCESS || result == CNA_RESULT_BUFFER_TOO_SMALL) {
         jlong out_bytes_element = (jlong)out_bytes_value;
         (*environment)->SetLongArrayRegion(
             environment, out_bytes, 0, 1, &out_bytes_element);
@@ -1739,7 +1739,7 @@ Java_org_openeggbert_cna_internal_generated_NativeNetworkRoutes_networkSessionJo
     (void)declaring_class;
     CNA_NetworkSessionHandle out_session_value = 0;
     CNA_Result result = cna.network_session_join((CNA_AvailableNetworkSessionHandle)available_session, &out_session_value);
-    if (result == CNA_RESULT_SUCCESS) {
+    if (result == CNA_RESULT_SUCCESS || result == CNA_RESULT_BUFFER_TOO_SMALL) {
         jlong out_session_element = (jlong)out_session_value;
         (*environment)->SetLongArrayRegion(
             environment, out_session, 0, 1, &out_session_element);
@@ -1755,7 +1755,7 @@ Java_org_openeggbert_cna_internal_generated_NativeNetworkRoutes_networkSessionJo
     (void)declaring_class;
     CNA_NetworkSessionHandle out_session_value = 0;
     CNA_Result result = cna.network_session_join_invited((int32_t)max_local_gamers, &out_session_value);
-    if (result == CNA_RESULT_SUCCESS) {
+    if (result == CNA_RESULT_SUCCESS || result == CNA_RESULT_BUFFER_TOO_SMALL) {
         jlong out_session_element = (jlong)out_session_value;
         (*environment)->SetLongArrayRegion(
             environment, out_session, 0, 1, &out_session_element);
@@ -1789,7 +1789,7 @@ Java_org_openeggbert_cna_internal_generated_NativeNetworkRoutes_networkSessionJo
     free(local_gamers_values);
     (*environment)->ReleaseLongArrayElements(
         environment, local_gamers, local_gamers_elements, JNI_ABORT);
-    if (result == CNA_RESULT_SUCCESS) {
+    if (result == CNA_RESULT_SUCCESS || result == CNA_RESULT_BUFFER_TOO_SMALL) {
         jlong out_session_element = (jlong)out_session_value;
         (*environment)->SetLongArrayRegion(
             environment, out_session, 0, 1, &out_session_element);
@@ -1855,7 +1855,7 @@ Java_org_openeggbert_cna_internal_generated_NativeNetworkRoutes_networkSessionPr
     }
     CNA_Bool out_contains_value = 0;
     CNA_Result result = cna.network_session_properties_contains((CNA_NetworkSessionPropertiesHandle)properties, value_value, &out_contains_value);
-    if (result == CNA_RESULT_SUCCESS) {
+    if (result == CNA_RESULT_SUCCESS || result == CNA_RESULT_BUFFER_TOO_SMALL) {
         jboolean out_contains_element = (jboolean)out_contains_value;
         (*environment)->SetBooleanArrayRegion(
             environment, out_contains, 0, 1, &out_contains_element);
@@ -1940,7 +1940,7 @@ Java_org_openeggbert_cna_internal_generated_NativeNetworkRoutes_networkSessionPr
         }
     }
     free(destination_values);
-    if (result == CNA_RESULT_SUCCESS) {
+    if (result == CNA_RESULT_SUCCESS || result == CNA_RESULT_BUFFER_TOO_SMALL) {
         jlong out_count_element = (jlong)out_count_value;
         (*environment)->SetLongArrayRegion(
             environment, out_count, 0, 1, &out_count_element);
@@ -1956,7 +1956,7 @@ Java_org_openeggbert_cna_internal_generated_NativeNetworkRoutes_networkSessionPr
     (void)declaring_class;
     CNA_NetworkSessionPropertiesHandle out_properties_value = 0;
     CNA_Result result = cna.network_session_properties_create(&out_properties_value);
-    if (result == CNA_RESULT_SUCCESS) {
+    if (result == CNA_RESULT_SUCCESS || result == CNA_RESULT_BUFFER_TOO_SMALL) {
         jlong out_properties_element = (jlong)out_properties_value;
         (*environment)->SetLongArrayRegion(
             environment, out_properties, 0, 1, &out_properties_element);
@@ -1972,7 +1972,7 @@ Java_org_openeggbert_cna_internal_generated_NativeNetworkRoutes_networkSessionPr
     (void)declaring_class;
     CNA_NetworkSessionPropertyEnumeratorHandle out_enumerator_value = 0;
     CNA_Result result = cna.network_session_properties_create_enumerator((CNA_NetworkSessionPropertiesHandle)properties, &out_enumerator_value);
-    if (result == CNA_RESULT_SUCCESS) {
+    if (result == CNA_RESULT_SUCCESS || result == CNA_RESULT_BUFFER_TOO_SMALL) {
         jlong out_enumerator_element = (jlong)out_enumerator_value;
         (*environment)->SetLongArrayRegion(
             environment, out_enumerator, 0, 1, &out_enumerator_element);
@@ -1998,7 +1998,7 @@ Java_org_openeggbert_cna_internal_generated_NativeNetworkRoutes_networkSessionPr
     (void)declaring_class;
     int32_t out_count_value = 0;
     CNA_Result result = cna.network_session_properties_get_count((CNA_NetworkSessionPropertiesHandle)properties, &out_count_value);
-    if (result == CNA_RESULT_SUCCESS) {
+    if (result == CNA_RESULT_SUCCESS || result == CNA_RESULT_BUFFER_TOO_SMALL) {
         jint out_count_element = (jint)out_count_value;
         (*environment)->SetIntArrayRegion(
             environment, out_count, 0, 1, &out_count_element);
@@ -2014,7 +2014,7 @@ Java_org_openeggbert_cna_internal_generated_NativeNetworkRoutes_networkSessionPr
     (void)declaring_class;
     CNA_Bool out_is_read_only_value = 0;
     CNA_Result result = cna.network_session_properties_get_is_read_only((CNA_NetworkSessionPropertiesHandle)properties, &out_is_read_only_value);
-    if (result == CNA_RESULT_SUCCESS) {
+    if (result == CNA_RESULT_SUCCESS || result == CNA_RESULT_BUFFER_TOO_SMALL) {
         jboolean out_is_read_only_element = (jboolean)out_is_read_only_value;
         (*environment)->SetBooleanArrayRegion(
             environment, out_is_read_only, 0, 1, &out_is_read_only_element);
@@ -2031,7 +2031,7 @@ Java_org_openeggbert_cna_internal_generated_NativeNetworkRoutes_networkSessionPr
     CNA_OptionalInt32 out_value_value;
     memset(&out_value_value, 0, sizeof out_value_value);
     CNA_Result result = cna.network_session_properties_get_item((CNA_NetworkSessionPropertiesHandle)properties, (int32_t)index, &out_value_value);
-    if (result == CNA_RESULT_SUCCESS) {
+    if (result == CNA_RESULT_SUCCESS || result == CNA_RESULT_BUFFER_TOO_SMALL) {
         jbyte out_valueBytes_values[] = {
             (jbyte)out_value_value.reserved[0],
             (jbyte)out_value_value.reserved[1],
@@ -2074,7 +2074,7 @@ Java_org_openeggbert_cna_internal_generated_NativeNetworkRoutes_networkSessionPr
     }
     int32_t out_index_value = 0;
     CNA_Result result = cna.network_session_properties_index_of((CNA_NetworkSessionPropertiesHandle)properties, value_value, &out_index_value);
-    if (result == CNA_RESULT_SUCCESS) {
+    if (result == CNA_RESULT_SUCCESS || result == CNA_RESULT_BUFFER_TOO_SMALL) {
         jint out_index_element = (jint)out_index_value;
         (*environment)->SetIntArrayRegion(
             environment, out_index, 0, 1, &out_index_element);
@@ -2130,7 +2130,7 @@ Java_org_openeggbert_cna_internal_generated_NativeNetworkRoutes_networkSessionPr
     }
     CNA_Bool out_removed_value = 0;
     CNA_Result result = cna.network_session_properties_remove((CNA_NetworkSessionPropertiesHandle)properties, value_value, &out_removed_value);
-    if (result == CNA_RESULT_SUCCESS) {
+    if (result == CNA_RESULT_SUCCESS || result == CNA_RESULT_BUFFER_TOO_SMALL) {
         jboolean out_removed_element = (jboolean)out_removed_value;
         (*environment)->SetBooleanArrayRegion(
             environment, out_removed, 0, 1, &out_removed_element);
@@ -2192,7 +2192,7 @@ Java_org_openeggbert_cna_internal_generated_NativeNetworkRoutes_networkSessionPr
     CNA_OptionalInt32 out_value_value;
     memset(&out_value_value, 0, sizeof out_value_value);
     CNA_Result result = cna.network_session_property_enumerator_get_current((CNA_NetworkSessionPropertyEnumeratorHandle)enumerator, &out_value_value);
-    if (result == CNA_RESULT_SUCCESS) {
+    if (result == CNA_RESULT_SUCCESS || result == CNA_RESULT_BUFFER_TOO_SMALL) {
         jbyte out_valueBytes_values[] = {
             (jbyte)out_value_value.reserved[0],
             (jbyte)out_value_value.reserved[1],
@@ -2220,7 +2220,7 @@ Java_org_openeggbert_cna_internal_generated_NativeNetworkRoutes_networkSessionPr
     (void)declaring_class;
     CNA_Bool out_has_current_value = 0;
     CNA_Result result = cna.network_session_property_enumerator_move_next((CNA_NetworkSessionPropertyEnumeratorHandle)enumerator, &out_has_current_value);
-    if (result == CNA_RESULT_SUCCESS) {
+    if (result == CNA_RESULT_SUCCESS || result == CNA_RESULT_BUFFER_TOO_SMALL) {
         jboolean out_has_current_element = (jboolean)out_has_current_value;
         (*environment)->SetBooleanArrayRegion(
             environment, out_has_current, 0, 1, &out_has_current_element);
@@ -2356,7 +2356,7 @@ Java_org_openeggbert_cna_internal_generated_NativeNetworkRoutes_packetReaderCrea
     (void)declaring_class;
     CNA_PacketReaderHandle out_reader_value = 0;
     CNA_Result result = cna.packet_reader_create((int32_t)capacity, &out_reader_value);
-    if (result == CNA_RESULT_SUCCESS) {
+    if (result == CNA_RESULT_SUCCESS || result == CNA_RESULT_BUFFER_TOO_SMALL) {
         jlong out_reader_element = (jlong)out_reader_value;
         (*environment)->SetLongArrayRegion(
             environment, out_reader, 0, 1, &out_reader_element);
@@ -2382,7 +2382,7 @@ Java_org_openeggbert_cna_internal_generated_NativeNetworkRoutes_packetReaderGetL
     (void)declaring_class;
     int32_t out_length_value = 0;
     CNA_Result result = cna.packet_reader_get_length((CNA_PacketReaderHandle)reader, &out_length_value);
-    if (result == CNA_RESULT_SUCCESS) {
+    if (result == CNA_RESULT_SUCCESS || result == CNA_RESULT_BUFFER_TOO_SMALL) {
         jint out_length_element = (jint)out_length_value;
         (*environment)->SetIntArrayRegion(
             environment, out_length, 0, 1, &out_length_element);
@@ -2398,7 +2398,7 @@ Java_org_openeggbert_cna_internal_generated_NativeNetworkRoutes_packetReaderGetP
     (void)declaring_class;
     int32_t out_position_value = 0;
     CNA_Result result = cna.packet_reader_get_position((CNA_PacketReaderHandle)reader, &out_position_value);
-    if (result == CNA_RESULT_SUCCESS) {
+    if (result == CNA_RESULT_SUCCESS || result == CNA_RESULT_BUFFER_TOO_SMALL) {
         jint out_position_element = (jint)out_position_value;
         (*environment)->SetIntArrayRegion(
             environment, out_position, 0, 1, &out_position_element);
@@ -2415,7 +2415,7 @@ Java_org_openeggbert_cna_internal_generated_NativeNetworkRoutes_packetReaderRead
     CNA_Color out_value_value;
     memset(&out_value_value, 0, sizeof out_value_value);
     CNA_Result result = cna.packet_reader_read_color((CNA_PacketReaderHandle)reader, &out_value_value);
-    if (result == CNA_RESULT_SUCCESS) {
+    if (result == CNA_RESULT_SUCCESS || result == CNA_RESULT_BUFFER_TOO_SMALL) {
         jlong out_valueIntegral_values[] = {
             (jlong)out_value_value.r,
             (jlong)out_value_value.g,
@@ -2437,7 +2437,7 @@ Java_org_openeggbert_cna_internal_generated_NativeNetworkRoutes_packetReaderRead
     (void)declaring_class;
     double out_value_value = 0;
     CNA_Result result = cna.packet_reader_read_double((CNA_PacketReaderHandle)reader, &out_value_value);
-    if (result == CNA_RESULT_SUCCESS) {
+    if (result == CNA_RESULT_SUCCESS || result == CNA_RESULT_BUFFER_TOO_SMALL) {
         jdouble out_value_element = (jdouble)out_value_value;
         (*environment)->SetDoubleArrayRegion(
             environment, out_value, 0, 1, &out_value_element);
@@ -2454,7 +2454,7 @@ Java_org_openeggbert_cna_internal_generated_NativeNetworkRoutes_packetReaderRead
     CNA_Matrix out_value_value;
     memset(&out_value_value, 0, sizeof out_value_value);
     CNA_Result result = cna.packet_reader_read_matrix((CNA_PacketReaderHandle)reader, &out_value_value);
-    if (result == CNA_RESULT_SUCCESS) {
+    if (result == CNA_RESULT_SUCCESS || result == CNA_RESULT_BUFFER_TOO_SMALL) {
         jfloat out_valueFloating_values[] = {
             (jfloat)out_value_value.m11,
             (jfloat)out_value_value.m12,
@@ -2489,7 +2489,7 @@ Java_org_openeggbert_cna_internal_generated_NativeNetworkRoutes_packetReaderRead
     CNA_Quaternion out_value_value;
     memset(&out_value_value, 0, sizeof out_value_value);
     CNA_Result result = cna.packet_reader_read_quaternion((CNA_PacketReaderHandle)reader, &out_value_value);
-    if (result == CNA_RESULT_SUCCESS) {
+    if (result == CNA_RESULT_SUCCESS || result == CNA_RESULT_BUFFER_TOO_SMALL) {
         jfloat out_valueFloating_values[] = {
             (jfloat)out_value_value.x,
             (jfloat)out_value_value.y,
@@ -2511,7 +2511,7 @@ Java_org_openeggbert_cna_internal_generated_NativeNetworkRoutes_packetReaderRead
     (void)declaring_class;
     float out_value_value = 0;
     CNA_Result result = cna.packet_reader_read_single((CNA_PacketReaderHandle)reader, &out_value_value);
-    if (result == CNA_RESULT_SUCCESS) {
+    if (result == CNA_RESULT_SUCCESS || result == CNA_RESULT_BUFFER_TOO_SMALL) {
         jfloat out_value_element = (jfloat)out_value_value;
         (*environment)->SetFloatArrayRegion(
             environment, out_value, 0, 1, &out_value_element);
@@ -2528,7 +2528,7 @@ Java_org_openeggbert_cna_internal_generated_NativeNetworkRoutes_packetReaderRead
     CNA_Vector2 out_value_value;
     memset(&out_value_value, 0, sizeof out_value_value);
     CNA_Result result = cna.packet_reader_read_vector2((CNA_PacketReaderHandle)reader, &out_value_value);
-    if (result == CNA_RESULT_SUCCESS) {
+    if (result == CNA_RESULT_SUCCESS || result == CNA_RESULT_BUFFER_TOO_SMALL) {
         jfloat out_valueFloating_values[] = {
             (jfloat)out_value_value.x,
             (jfloat)out_value_value.y
@@ -2549,7 +2549,7 @@ Java_org_openeggbert_cna_internal_generated_NativeNetworkRoutes_packetReaderRead
     CNA_Vector3 out_value_value;
     memset(&out_value_value, 0, sizeof out_value_value);
     CNA_Result result = cna.packet_reader_read_vector3((CNA_PacketReaderHandle)reader, &out_value_value);
-    if (result == CNA_RESULT_SUCCESS) {
+    if (result == CNA_RESULT_SUCCESS || result == CNA_RESULT_BUFFER_TOO_SMALL) {
         jfloat out_valueFloating_values[] = {
             (jfloat)out_value_value.x,
             (jfloat)out_value_value.y,
@@ -2571,7 +2571,7 @@ Java_org_openeggbert_cna_internal_generated_NativeNetworkRoutes_packetReaderRead
     CNA_Vector4 out_value_value;
     memset(&out_value_value, 0, sizeof out_value_value);
     CNA_Result result = cna.packet_reader_read_vector4((CNA_PacketReaderHandle)reader, &out_value_value);
-    if (result == CNA_RESULT_SUCCESS) {
+    if (result == CNA_RESULT_SUCCESS || result == CNA_RESULT_BUFFER_TOO_SMALL) {
         jfloat out_valueFloating_values[] = {
             (jfloat)out_value_value.x,
             (jfloat)out_value_value.y,
@@ -2654,7 +2654,7 @@ Java_org_openeggbert_cna_internal_generated_NativeNetworkRoutes_packetWriterCopy
     free(destination_values);
     (*environment)->ReleaseByteArrayElements(
         environment, destination, destination_elements, 0);
-    if (result == CNA_RESULT_SUCCESS) {
+    if (result == CNA_RESULT_SUCCESS || result == CNA_RESULT_BUFFER_TOO_SMALL) {
         jlong out_bytes_element = (jlong)out_bytes_value;
         (*environment)->SetLongArrayRegion(
             environment, out_bytes, 0, 1, &out_bytes_element);
@@ -2670,7 +2670,7 @@ Java_org_openeggbert_cna_internal_generated_NativeNetworkRoutes_packetWriterCrea
     (void)declaring_class;
     CNA_PacketWriterHandle out_writer_value = 0;
     CNA_Result result = cna.packet_writer_create((int32_t)capacity, &out_writer_value);
-    if (result == CNA_RESULT_SUCCESS) {
+    if (result == CNA_RESULT_SUCCESS || result == CNA_RESULT_BUFFER_TOO_SMALL) {
         jlong out_writer_element = (jlong)out_writer_value;
         (*environment)->SetLongArrayRegion(
             environment, out_writer, 0, 1, &out_writer_element);
@@ -2696,7 +2696,7 @@ Java_org_openeggbert_cna_internal_generated_NativeNetworkRoutes_packetWriterGetL
     (void)declaring_class;
     int32_t out_length_value = 0;
     CNA_Result result = cna.packet_writer_get_length((CNA_PacketWriterHandle)writer, &out_length_value);
-    if (result == CNA_RESULT_SUCCESS) {
+    if (result == CNA_RESULT_SUCCESS || result == CNA_RESULT_BUFFER_TOO_SMALL) {
         jint out_length_element = (jint)out_length_value;
         (*environment)->SetIntArrayRegion(
             environment, out_length, 0, 1, &out_length_element);
@@ -2712,7 +2712,7 @@ Java_org_openeggbert_cna_internal_generated_NativeNetworkRoutes_packetWriterGetP
     (void)declaring_class;
     int32_t out_position_value = 0;
     CNA_Result result = cna.packet_writer_get_position((CNA_PacketWriterHandle)writer, &out_position_value);
-    if (result == CNA_RESULT_SUCCESS) {
+    if (result == CNA_RESULT_SUCCESS || result == CNA_RESULT_BUFFER_TOO_SMALL) {
         jint out_position_element = (jint)out_position_value;
         (*environment)->SetIntArrayRegion(
             environment, out_position, 0, 1, &out_position_element);
@@ -2890,7 +2890,7 @@ Java_org_openeggbert_cna_internal_generated_NativeNetworkRoutes_qualityOfService
     out_value_value.struct_size = (uint32_t)(sizeof out_value_value);
     out_value_value.struct_version = UINT32_C(1);
     CNA_Result result = cna.quality_of_service_init(&out_value_value);
-    if (result == CNA_RESULT_SUCCESS) {
+    if (result == CNA_RESULT_SUCCESS || result == CNA_RESULT_BUFFER_TOO_SMALL) {
         jbyte out_valueBytes_values[] = {
             (jbyte)out_value_value.reserved[0],
             (jbyte)out_value_value.reserved[1],
@@ -2928,7 +2928,7 @@ Java_org_openeggbert_cna_internal_generated_NativeNetworkRoutes_qualityOfService
     out_value_value.struct_size = (uint32_t)(sizeof out_value_value);
     out_value_value.struct_version = UINT32_C(1);
     CNA_Result result = cna.quality_of_service_init_measured((int64_t)roundtrip_ticks, &out_value_value);
-    if (result == CNA_RESULT_SUCCESS) {
+    if (result == CNA_RESULT_SUCCESS || result == CNA_RESULT_BUFFER_TOO_SMALL) {
         jbyte out_valueBytes_values[] = {
             (jbyte)out_value_value.reserved[0],
             (jbyte)out_value_value.reserved[1],
@@ -2966,7 +2966,7 @@ Java_org_openeggbert_cna_internal_generated_NativeNetworkRoutes_writeLeaderboard
     out_info_value.struct_size = (uint32_t)(sizeof out_info_value);
     out_info_value.struct_version = UINT32_C(1);
     CNA_Result result = cna.write_leaderboards_event_info_init((CNA_NetworkGamerHandle)gamer, (CNA_Bool)is_leaving, &out_info_value);
-    if (result == CNA_RESULT_SUCCESS) {
+    if (result == CNA_RESULT_SUCCESS || result == CNA_RESULT_BUFFER_TOO_SMALL) {
         jbyte out_infoBytes_values[] = {
             (jbyte)out_info_value.reserved[0],
             (jbyte)out_info_value.reserved[1],

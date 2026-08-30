@@ -221,6 +221,16 @@ def test_generator(live: dict) -> None:
     check("SetLongArrayRegion" not in generator_tool.render_c("Probe", [haptic]),
           "an input struct is never written back over the caller's array")
 
+    # A required-size output has to cross even when the buffer was too small, or the two-call
+    # size protocol -- ask with no buffer, be told the size, ask again -- can never work.
+    encode = plan("cna_cnb_encode_texture2d")
+    emitted = generator_tool.render_c("Probe", [encode])
+    check("result == CNA_RESULT_BUFFER_TOO_SMALL" in emitted,
+          "an output is copied back when the caller's buffer was too small")
+    check(emitted.count("if (result == CNA_RESULT_SUCCESS)") == 1,
+          "the array write-back still happens only on success, because a refused copy wrote "
+          "nothing into the buffer")
+
     # The generator refuses a shape it cannot prove rather than guessing at it.
     try:
         plan("cna_text_input_subscribe_text_input_ext")

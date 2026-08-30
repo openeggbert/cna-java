@@ -96,6 +96,30 @@ public class Texture2D extends Texture {
                 startIndex, elementCount, snapshot);
     }
 
+    /**
+     * Uploads one mip level's bytes exactly as a content format stored them.
+     *
+     * <p>Package-private, and reached only from {@code org.openeggbert.cna.extensions.content}
+     * through the internal facade. XNA's own {@code SetData} is generic over the element type a
+     * game chose, which is right for a game that has a {@code Color[]}; a content format has
+     * bytes, and re-boxing them into elements only to have XNA encode them straight back would
+     * be a second conversion that can only lose. The transfer still goes through the codec this
+     * surface format declares, so nothing about what CNA receives changes.
+     */
+    final void setLevelBytes(int level, byte[] bytes) {
+        ensureNotDisposed();
+        Objects.requireNonNull(bytes, "bytes");
+        TextureDataCodec codec = TextureDataCodec.forFormat(getFormat());
+        int elementSize = codec.elementSize();
+        if (bytes.length % elementSize != 0) {
+            throw new IllegalArgumentException(
+                    "A " + getFormat() + " level is a whole number of " + elementSize
+                    + "-byte elements; got " + bytes.length + " bytes");
+        }
+        NativeBindings.setTexture2DData(this, codec.dataType(), level, null,
+                0, bytes.length / elementSize, bytes);
+    }
+
     public final <T> void GetData(T[] data) {
         Objects.requireNonNull(data, "data");
         GetData(0, null, data, 0, data.length);
