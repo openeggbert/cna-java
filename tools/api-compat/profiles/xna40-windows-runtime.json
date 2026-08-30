@@ -21,5 +21,7 @@
   },
   "namespacePrefixes": [
     "Microsoft.Xna.Framework"
-  ]
+  ],
+  "supersetProfile": "xna40-full-runtime.json",
+  "supersetProfileReason": "This profile is a subset gate over the seven Windows runtime assemblies. CNA-Java also projects the wider runtime superset, so a type the superset declares is not an unexpected type here."
 }

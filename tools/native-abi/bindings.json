@@ -2985,6 +2985,18 @@
       ]
     },
     {
+      "name": "cna_avatar_description_get_from_gamer",
+      "header": "gamer_services.h",
+      "ownership": "borrows its inputs; returns an owned handle",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_GamerHandle",
+        "CNA_GamerAsyncCallback",
+        "void*",
+        "CNA_AvatarDescriptionHandle*"
+      ]
+    },
+    {
       "name": "cna_avatar_description_get_info",
       "header": "gamer_services.h",
       "ownership": "borrows its inputs; caller output",
@@ -3235,6 +3247,44 @@
       "returnType": "CNA_Result",
       "parameters": [
         "CNA_GameDefaults*"
+      ]
+    },
+    {
+      "name": "cna_gamer_begin_get_from_gamertag",
+      "header": "gamer_services.h",
+      "ownership": "borrows its inputs; returns an owned handle",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_StringView",
+        "CNA_GamerAsyncCallback",
+        "void*",
+        "CNA_GamerHandle*"
+      ]
+    },
+    {
+      "name": "cna_gamer_begin_get_partner_token",
+      "header": "gamer_services.h",
+      "ownership": "borrows its inputs; caller output",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_StringView",
+        "CNA_GamerAsyncCallback",
+        "void*",
+        "char*",
+        "uint64_t",
+        "uint64_t*"
+      ]
+    },
+    {
+      "name": "cna_gamer_begin_get_profile",
+      "header": "gamer_services.h",
+      "ownership": "borrows its inputs; returns an owned handle",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_GamerHandle",
+        "CNA_GamerAsyncCallback",
+        "void*",
+        "CNA_GamerProfileHandle*"
       ]
     },
     {
@@ -3760,6 +3810,38 @@
       ]
     },
     {
+      "name": "cna_guide_begin_show_keyboard_input",
+      "header": "gamer_services.h",
+      "ownership": "borrows its inputs",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_PlayerIndex",
+        "CNA_StringView",
+        "CNA_StringView",
+        "CNA_StringView",
+        "CNA_Bool",
+        "CNA_GamerAsyncCallback",
+        "void*"
+      ]
+    },
+    {
+      "name": "cna_guide_begin_show_message_box",
+      "header": "gamer_services.h",
+      "ownership": "borrows its inputs and the button views; completes synchronously and invokes no callback",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_PlayerIndex",
+        "CNA_StringView",
+        "CNA_StringView",
+        "const CNA_StringView*",
+        "uint64_t",
+        "int32_t",
+        "CNA_MessageBoxIcon",
+        "CNA_GamerAsyncCallback",
+        "void*"
+      ]
+    },
+    {
       "name": "cna_guide_copy_pending_keyboard_input_description_ext",
       "header": "gamer_services.h",
       "ownership": "borrows its inputs; caller output",
@@ -4269,6 +4351,72 @@
       ]
     },
     {
+      "name": "cna_leaderboard_reader_begin_page_down",
+      "header": "gamer_services.h",
+      "ownership": "borrows its inputs",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_LeaderboardReaderHandle",
+        "CNA_GamerAsyncCallback",
+        "void*"
+      ]
+    },
+    {
+      "name": "cna_leaderboard_reader_begin_page_up",
+      "header": "gamer_services.h",
+      "ownership": "borrows its inputs",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_LeaderboardReaderHandle",
+        "CNA_GamerAsyncCallback",
+        "void*"
+      ]
+    },
+    {
+      "name": "cna_leaderboard_reader_begin_read",
+      "header": "gamer_services.h",
+      "ownership": "borrows its inputs; returns an owned handle",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "const CNA_LeaderboardIdentity*",
+        "int32_t",
+        "int32_t",
+        "CNA_GamerAsyncCallback",
+        "void*",
+        "CNA_LeaderboardReaderHandle*"
+      ]
+    },
+    {
+      "name": "cna_leaderboard_reader_begin_read_from_gamers",
+      "header": "gamer_services.h",
+      "ownership": "borrows its inputs; returns an owned handle",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "const CNA_LeaderboardIdentity*",
+        "const CNA_GamerHandle*",
+        "uint64_t",
+        "CNA_GamerHandle",
+        "int32_t",
+        "CNA_GamerAsyncCallback",
+        "void*",
+        "CNA_LeaderboardReaderHandle*"
+      ]
+    },
+    {
+      "name": "cna_leaderboard_reader_begin_read_from_pivot",
+      "header": "gamer_services.h",
+      "ownership": "borrows its inputs; returns an owned handle",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "const CNA_LeaderboardIdentity*",
+        "CNA_GamerHandle",
+        "int32_t",
+        "CNA_GamerAsyncCallback",
+        "void*",
+        "CNA_LeaderboardReaderHandle*"
+      ]
+    },
+    {
       "name": "cna_leaderboard_reader_destroy",
       "header": "gamer_services.h",
       "ownership": "consumes the owned handle on success",
@@ -4678,6 +4826,30 @@
       "parameters": [
         "CNA_SignedInGamerHandle",
         "CNA_StringView"
+      ]
+    },
+    {
+      "name": "cna_signed_in_gamer_begin_award_achievement",
+      "header": "gamer_services.h",
+      "ownership": "borrows its inputs",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_SignedInGamerHandle",
+        "CNA_StringView",
+        "CNA_GamerAsyncCallback",
+        "void*"
+      ]
+    },
+    {
+      "name": "cna_signed_in_gamer_begin_get_achievements",
+      "header": "gamer_services.h",
+      "ownership": "borrows its inputs; returns an owned handle",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_SignedInGamerHandle",
+        "CNA_GamerAsyncCallback",
+        "void*",
+        "CNA_AchievementCollectionHandle*"
       ]
     },
     {

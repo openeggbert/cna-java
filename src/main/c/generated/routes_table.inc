@@ -46,6 +46,7 @@
     CNA_JNI_ROUTE(cna_avatar_description_create_random) avatar_description_create_random;
     CNA_JNI_ROUTE(cna_avatar_description_create_random_for_body_type) avatar_description_create_random_for_body_type;
     CNA_JNI_ROUTE(cna_avatar_description_destroy) avatar_description_destroy;
+    CNA_JNI_ROUTE(cna_avatar_description_get_from_gamer) avatar_description_get_from_gamer;
     CNA_JNI_ROUTE(cna_avatar_description_get_info) avatar_description_get_info;
     CNA_JNI_ROUTE(cna_avatar_expression_init) avatar_expression_init;
     CNA_JNI_ROUTE(cna_avatar_renderer_create) avatar_renderer_create;
@@ -69,6 +70,9 @@
     CNA_JNI_ROUTE(cna_friend_gamer_get_info) friend_gamer_get_info;
     CNA_JNI_ROUTE(cna_friend_gamer_get_presence_size) friend_gamer_get_presence_size;
     CNA_JNI_ROUTE(cna_game_defaults_init) game_defaults_init;
+    CNA_JNI_ROUTE(cna_gamer_begin_get_from_gamertag) gamer_begin_get_from_gamertag;
+    CNA_JNI_ROUTE(cna_gamer_begin_get_partner_token) gamer_begin_get_partner_token;
+    CNA_JNI_ROUTE(cna_gamer_begin_get_profile) gamer_begin_get_profile;
     CNA_JNI_ROUTE(cna_gamer_collection_add) gamer_collection_add;
     CNA_JNI_ROUTE(cna_gamer_collection_clear) gamer_collection_clear;
     CNA_JNI_ROUTE(cna_gamer_collection_contains) gamer_collection_contains;
@@ -118,6 +122,7 @@
     CNA_JNI_ROUTE(cna_gamer_signed_in_contains) gamer_signed_in_contains;
     CNA_JNI_ROUTE(cna_gamer_signed_in_index_of) gamer_signed_in_index_of;
     CNA_JNI_ROUTE(cna_gamer_unsubscribe_ext) gamer_unsubscribe_ext;
+    CNA_JNI_ROUTE(cna_guide_begin_show_keyboard_input) guide_begin_show_keyboard_input;
     CNA_JNI_ROUTE(cna_guide_copy_pending_keyboard_input_description_ext) guide_copy_pending_keyboard_input_description_ext;
     CNA_JNI_ROUTE(cna_guide_copy_pending_keyboard_input_display_text_ext) guide_copy_pending_keyboard_input_display_text_ext;
     CNA_JNI_ROUTE(cna_guide_copy_pending_keyboard_input_title_ext) guide_copy_pending_keyboard_input_title_ext;
@@ -171,6 +176,11 @@
     CNA_JNI_ROUTE(cna_leaderboard_entry_get_info) leaderboard_entry_get_info;
     CNA_JNI_ROUTE(cna_leaderboard_entry_set_rating) leaderboard_entry_set_rating;
     CNA_JNI_ROUTE(cna_leaderboard_identity_init) leaderboard_identity_init;
+    CNA_JNI_ROUTE(cna_leaderboard_reader_begin_page_down) leaderboard_reader_begin_page_down;
+    CNA_JNI_ROUTE(cna_leaderboard_reader_begin_page_up) leaderboard_reader_begin_page_up;
+    CNA_JNI_ROUTE(cna_leaderboard_reader_begin_read) leaderboard_reader_begin_read;
+    CNA_JNI_ROUTE(cna_leaderboard_reader_begin_read_from_gamers) leaderboard_reader_begin_read_from_gamers;
+    CNA_JNI_ROUTE(cna_leaderboard_reader_begin_read_from_pivot) leaderboard_reader_begin_read_from_pivot;
     CNA_JNI_ROUTE(cna_leaderboard_reader_destroy) leaderboard_reader_destroy;
     CNA_JNI_ROUTE(cna_leaderboard_reader_get_entry_at) leaderboard_reader_get_entry_at;
     CNA_JNI_ROUTE(cna_leaderboard_reader_get_identity) leaderboard_reader_get_identity;
@@ -209,6 +219,8 @@
     CNA_JNI_ROUTE(cna_property_dictionary_set_time_span_ticks) property_dictionary_set_time_span_ticks;
     CNA_JNI_ROUTE(cna_property_dictionary_try_get_value_kind_ext) property_dictionary_try_get_value_kind_ext;
     CNA_JNI_ROUTE(cna_signed_in_gamer_award_achievement) signed_in_gamer_award_achievement;
+    CNA_JNI_ROUTE(cna_signed_in_gamer_begin_award_achievement) signed_in_gamer_begin_award_achievement;
+    CNA_JNI_ROUTE(cna_signed_in_gamer_begin_get_achievements) signed_in_gamer_begin_get_achievements;
     CNA_JNI_ROUTE(cna_signed_in_gamer_copy_gamertag) signed_in_gamer_copy_gamertag;
     CNA_JNI_ROUTE(cna_signed_in_gamer_create_ext) signed_in_gamer_create_ext;
     CNA_JNI_ROUTE(cna_signed_in_gamer_destroy) signed_in_gamer_destroy;

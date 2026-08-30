@@ -87,6 +87,7 @@ typedef struct CnaFunctions {
     CNA_JNI_ROUTE(cna_game_tick) game_tick;
     CNA_JNI_ROUTE(cna_framework_dispatcher_update) framework_dispatcher_update;
     CNA_JNI_ROUTE(cna_gamer_services_dispatcher_set_window_handle) gamer_services_dispatcher_set_window_handle;
+    CNA_JNI_ROUTE(cna_guide_begin_show_message_box) guide_begin_show_message_box;
     CNA_JNI_ROUTE(cna_gamer_services_dispatcher_initialize) gamer_services_dispatcher_initialize;
     CNA_JNI_ROUTE(cna_gamer_services_dispatcher_update) gamer_services_dispatcher_update;
     CNA_JNI_ROUTE(cna_game_destroy) game_destroy;
@@ -1613,6 +1614,7 @@ JNIEXPORT jint JNICALL Java_org_openeggbert_cna_internal_NativeBindings_nativeLo
     LOAD(framework_dispatcher_update, "cna_framework_dispatcher_update");
     LOAD(gamer_services_dispatcher_set_window_handle,
         "cna_gamer_services_dispatcher_set_window_handle");
+    LOAD(guide_begin_show_message_box, "cna_guide_begin_show_message_box");
     LOAD(gamer_services_dispatcher_initialize,
         "cna_gamer_services_dispatcher_initialize");
     LOAD(gamer_services_dispatcher_update,
@@ -12089,6 +12091,62 @@ JNIEXPORT jint JNICALL Java_org_openeggbert_cna_internal_NativeStorage_nativeSub
     }
     storage_device_events = event;
     return (jint)CNA_RESULT_SUCCESS;
+}
+
+/*
+ * The Guide's message box is the one gamer-services route the generator refuses: CNA takes an
+ * array of CNA_StringView, which has no scalar projection. XNA's own contract allows one or two
+ * buttons, so the Java declaration carries them as two UTF-8 arrays plus the count actually used.
+ */
+JNIEXPORT jint JNICALL
+Java_org_openeggbert_cna_internal_NativeGamerServices_nativeGuideShowMessageBox(
+    JNIEnv* environment, jclass type, jint player, jbyteArray title, jbyteArray text,
+    jbyteArray first_button, jbyteArray second_button, jint button_count, jint focus_button,
+    jint icon)
+{
+    (void)type;
+    jbyte* title_bytes = (*environment)->GetByteArrayElements(environment, title, NULL);
+    jbyte* text_bytes = (*environment)->GetByteArrayElements(environment, text, NULL);
+    jbyte* first_bytes = (*environment)->GetByteArrayElements(environment, first_button, NULL);
+    jbyte* second_bytes = (*environment)->GetByteArrayElements(environment, second_button, NULL);
+    if (title_bytes == NULL || text_bytes == NULL || first_bytes == NULL || second_bytes == NULL) {
+        if (title_bytes != NULL) {
+            (*environment)->ReleaseByteArrayElements(environment, title, title_bytes, JNI_ABORT);
+        }
+        if (text_bytes != NULL) {
+            (*environment)->ReleaseByteArrayElements(environment, text, text_bytes, JNI_ABORT);
+        }
+        if (first_bytes != NULL) {
+            (*environment)->ReleaseByteArrayElements(
+                environment, first_button, first_bytes, JNI_ABORT);
+        }
+        if (second_bytes != NULL) {
+            (*environment)->ReleaseByteArrayElements(
+                environment, second_button, second_bytes, JNI_ABORT);
+        }
+        return (jint)CNA_RESULT_OUT_OF_MEMORY;
+    }
+    CNA_StringView buttons[2];
+    buttons[0].data = (const char*)first_bytes;
+    buttons[0].byte_length =
+        (uint64_t)(*environment)->GetArrayLength(environment, first_button);
+    buttons[1].data = (const char*)second_bytes;
+    buttons[1].byte_length =
+        (uint64_t)(*environment)->GetArrayLength(environment, second_button);
+    CNA_StringView title_view = {
+        (const char*)title_bytes,
+        (uint64_t)(*environment)->GetArrayLength(environment, title)};
+    CNA_StringView text_view = {
+        (const char*)text_bytes,
+        (uint64_t)(*environment)->GetArrayLength(environment, text)};
+    CNA_Result result = cna.guide_begin_show_message_box(
+        (CNA_PlayerIndex)player, title_view, text_view, buttons, (uint64_t)button_count,
+        (int32_t)focus_button, (CNA_MessageBoxIcon)icon, NULL, NULL);
+    (*environment)->ReleaseByteArrayElements(environment, title, title_bytes, JNI_ABORT);
+    (*environment)->ReleaseByteArrayElements(environment, text, text_bytes, JNI_ABORT);
+    (*environment)->ReleaseByteArrayElements(environment, first_button, first_bytes, JNI_ABORT);
+    (*environment)->ReleaseByteArrayElements(environment, second_button, second_bytes, JNI_ABORT);
+    return (jint)result;
 }
 
 /*

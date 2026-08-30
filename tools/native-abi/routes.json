@@ -196,6 +196,11 @@
         "symbol": "cna_avatar_description_destroy"
       },
       {
+        "java": "avatarDescriptionGetFromGamer",
+        "symbol": "cna_avatar_description_get_from_gamer",
+        "nullCallback": true
+      },
+      {
         "java": "avatarDescriptionGetInfo",
         "symbol": "cna_avatar_description_get_info"
       },
@@ -286,6 +291,21 @@
       {
         "java": "gameDefaultsInit",
         "symbol": "cna_game_defaults_init"
+      },
+      {
+        "java": "gamerBeginGetFromGamertag",
+        "symbol": "cna_gamer_begin_get_from_gamertag",
+        "nullCallback": true
+      },
+      {
+        "java": "gamerBeginGetPartnerToken",
+        "symbol": "cna_gamer_begin_get_partner_token",
+        "nullCallback": true
+      },
+      {
+        "java": "gamerBeginGetProfile",
+        "symbol": "cna_gamer_begin_get_profile",
+        "nullCallback": true
       },
       {
         "java": "gamerCollectionAdd",
@@ -482,6 +502,11 @@
       {
         "java": "gamerUnsubscribeExt",
         "symbol": "cna_gamer_unsubscribe_ext"
+      },
+      {
+        "java": "guideBeginShowKeyboardInput",
+        "symbol": "cna_guide_begin_show_keyboard_input",
+        "nullCallback": true
       },
       {
         "java": "guideCopyPendingKeyboardInputDescriptionExt",
@@ -696,6 +721,31 @@
         "symbol": "cna_leaderboard_identity_init"
       },
       {
+        "java": "leaderboardReaderBeginPageDown",
+        "symbol": "cna_leaderboard_reader_begin_page_down",
+        "nullCallback": true
+      },
+      {
+        "java": "leaderboardReaderBeginPageUp",
+        "symbol": "cna_leaderboard_reader_begin_page_up",
+        "nullCallback": true
+      },
+      {
+        "java": "leaderboardReaderBeginRead",
+        "symbol": "cna_leaderboard_reader_begin_read",
+        "nullCallback": true
+      },
+      {
+        "java": "leaderboardReaderBeginReadFromGamers",
+        "symbol": "cna_leaderboard_reader_begin_read_from_gamers",
+        "nullCallback": true
+      },
+      {
+        "java": "leaderboardReaderBeginReadFromPivot",
+        "symbol": "cna_leaderboard_reader_begin_read_from_pivot",
+        "nullCallback": true
+      },
+      {
         "java": "leaderboardReaderDestroy",
         "symbol": "cna_leaderboard_reader_destroy"
       },
@@ -846,6 +896,16 @@
       {
         "java": "signedInGamerAwardAchievement",
         "symbol": "cna_signed_in_gamer_award_achievement"
+      },
+      {
+        "java": "signedInGamerBeginAwardAchievement",
+        "symbol": "cna_signed_in_gamer_begin_award_achievement",
+        "nullCallback": true
+      },
+      {
+        "java": "signedInGamerBeginGetAchievements",
+        "symbol": "cna_signed_in_gamer_begin_get_achievements",
+        "nullCallback": true
       },
       {
         "java": "signedInGamerCopyGamertag",

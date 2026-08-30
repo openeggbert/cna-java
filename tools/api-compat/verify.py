@@ -326,9 +326,15 @@ def mapped_members(type_contract: dict[str, Any], rules: dict[str, Any], mapping
         return mapped_enum_members(type_contract)
     if type_contract["kind"] == "struct":
         empty = {"access": "public", "static": False, "abstract": False, "final": False, "genericArity": 0}
+        # A struct's copy constructor takes its own type. For a generic struct that is the
+        # type's own parameterization, which is the only form Java can write without a raw type.
+        arity = type_contract.get("genericArity", 0)
+        own = map_type(type_name) or type_name
+        if arity:
+            own += "<" + ",".join("T" if index == 0 else f"T{index}" for index in range(arity)) + ">"
         expected.append(callable_member("constructor", ".ctor", empty, [], None))
         expected.append(callable_member("constructor", ".ctor", empty,
-                                        [parameter("value", map_type(type_name) or type_name)], None))
+                                        [parameter("value", own)], None))
 
     ordinary_methods = [value for value in type_contract["members"]
                         if value["kind"] == "method"
@@ -635,9 +641,12 @@ def mapped_members(type_contract: dict[str, Any], rules: dict[str, Any], mapping
                             value_type),
             callable_member("method", "remove", bridge,
                             [parameter("key", "java.lang.Object")], value_type),
+            # javac writes `? extends java.lang.Object` as the unbounded `?`, so the expected
+            # signature has to spell it the same way the class file will.
             callable_member("method", "putAll", bridge,
                             [parameter("map", f"java.util.Map<? extends {key_type},"
-                                              f"? extends {value_type}>")], "void"),
+                                              + ("?" if value_type == "java.lang.Object"
+                                                 else f"? extends {value_type}") + ">")], "void"),
             callable_member("method", "clear", bridge, [], "void"),
             callable_member("method", "keySet", bridge, [], f"java.util.Set<{key_type}>"),
             callable_member("method", "values", bridge, [],
@@ -700,7 +709,8 @@ def effective_member_final(member: dict[str, Any], declaring_type_final: bool) -
     )
 
 
-def compare(reference: dict[str, Any], target: dict[str, Any], rules: dict[str, Any]) -> list[dict[str, Any]]:
+def compare(reference: dict[str, Any], target: dict[str, Any], rules: dict[str, Any],
+            superset: set[str] | None = None) -> list[dict[str, Any]]:
     findings: list[dict[str, Any]] = []
     expected_types = {map_type(value["name"], identity=True): value for value in reference["types"]}
     for synthetic in rules.get("syntheticTypes", []):
@@ -710,6 +720,11 @@ def compare(reference: dict[str, Any], target: dict[str, Any], rules: dict[str, 
     for name in sorted(expected_types.keys() - actual_types.keys()):
         findings.append(diagnostic("MISSING_TYPE", name))
     for name in sorted(actual_types.keys() - expected_types.keys()):
+        # A narrower profile is a subset gate, not an exclusivity claim: a type that a wider
+        # profile of the same corpus declares is not an unexpected type here, it simply belongs
+        # to a family this profile does not measure.
+        if superset is not None and name in superset:
+            continue
         findings.append(diagnostic("UNEXPECTED_TYPE", name))
 
     for name in sorted(expected_types.keys() & actual_types.keys()):
@@ -745,6 +760,12 @@ def compare(reference: dict[str, Any], target: dict[str, Any], rules: dict[str, 
             value for value in expected_interfaces
             if value.startswith("java.") or value.split("<", 1)[0] in expected_types
         }
+        # Java forbids one class from implementing two parameterizations of one interface.
+        # Where CLR declares a covariant duplicate -- GamerCollection<T> adds
+        # IEnumerable<Gamer> beside the IEnumerable<T> its base already gives -- the rules
+        # file records which parameterization Java keeps and why.
+        for omitted in rules.get("omittedCovariantInterfaces", {}).get(name, []):
+            expected_interfaces.discard(omitted)
         actual_interfaces = set(actual_type.get("interfaces", []))
         if expected_interfaces != actual_interfaces:
             findings.append(diagnostic("INTERFACE_MISMATCH", name, sorted(expected_interfaces), sorted(actual_interfaces)))
@@ -906,7 +927,15 @@ def main() -> int:
                 print("XNA_REFERENCE_PATH or --reference-dir is required for the strict verifier", file=sys.stderr)
                 return 2
             reference = read_reference(arguments.reference_dir, profile, temporary)
-            findings = compare(reference, target, rules)
+            superset = None
+            if profile.get("supersetProfile"):
+                wider = json.loads(
+                    (Path(arguments.profile).parent / profile["supersetProfile"])
+                    .read_text(encoding="utf-8"))
+                wider_reference = read_reference(arguments.reference_dir, wider, temporary)
+                superset = {map_type(value["name"], identity=True)
+                            for value in wider_reference["types"]}
+            findings = compare(reference, target, rules, superset)
             report = make_report(profile, reference, target, findings, rules)
 
     if arguments.summary_only:

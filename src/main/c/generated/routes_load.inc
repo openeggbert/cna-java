@@ -46,6 +46,7 @@
     LOAD(avatar_description_create_random, "cna_avatar_description_create_random");
     LOAD(avatar_description_create_random_for_body_type, "cna_avatar_description_create_random_for_body_type");
     LOAD(avatar_description_destroy, "cna_avatar_description_destroy");
+    LOAD(avatar_description_get_from_gamer, "cna_avatar_description_get_from_gamer");
     LOAD(avatar_description_get_info, "cna_avatar_description_get_info");
     LOAD(avatar_expression_init, "cna_avatar_expression_init");
     LOAD(avatar_renderer_create, "cna_avatar_renderer_create");
@@ -69,6 +70,9 @@
     LOAD(friend_gamer_get_info, "cna_friend_gamer_get_info");
     LOAD(friend_gamer_get_presence_size, "cna_friend_gamer_get_presence_size");
     LOAD(game_defaults_init, "cna_game_defaults_init");
+    LOAD(gamer_begin_get_from_gamertag, "cna_gamer_begin_get_from_gamertag");
+    LOAD(gamer_begin_get_partner_token, "cna_gamer_begin_get_partner_token");
+    LOAD(gamer_begin_get_profile, "cna_gamer_begin_get_profile");
     LOAD(gamer_collection_add, "cna_gamer_collection_add");
     LOAD(gamer_collection_clear, "cna_gamer_collection_clear");
     LOAD(gamer_collection_contains, "cna_gamer_collection_contains");
@@ -118,6 +122,7 @@
     LOAD(gamer_signed_in_contains, "cna_gamer_signed_in_contains");
     LOAD(gamer_signed_in_index_of, "cna_gamer_signed_in_index_of");
     LOAD(gamer_unsubscribe_ext, "cna_gamer_unsubscribe_ext");
+    LOAD(guide_begin_show_keyboard_input, "cna_guide_begin_show_keyboard_input");
     LOAD(guide_copy_pending_keyboard_input_description_ext, "cna_guide_copy_pending_keyboard_input_description_ext");
     LOAD(guide_copy_pending_keyboard_input_display_text_ext, "cna_guide_copy_pending_keyboard_input_display_text_ext");
     LOAD(guide_copy_pending_keyboard_input_title_ext, "cna_guide_copy_pending_keyboard_input_title_ext");
@@ -171,6 +176,11 @@
     LOAD(leaderboard_entry_get_info, "cna_leaderboard_entry_get_info");
     LOAD(leaderboard_entry_set_rating, "cna_leaderboard_entry_set_rating");
     LOAD(leaderboard_identity_init, "cna_leaderboard_identity_init");
+    LOAD(leaderboard_reader_begin_page_down, "cna_leaderboard_reader_begin_page_down");
+    LOAD(leaderboard_reader_begin_page_up, "cna_leaderboard_reader_begin_page_up");
+    LOAD(leaderboard_reader_begin_read, "cna_leaderboard_reader_begin_read");
+    LOAD(leaderboard_reader_begin_read_from_gamers, "cna_leaderboard_reader_begin_read_from_gamers");
+    LOAD(leaderboard_reader_begin_read_from_pivot, "cna_leaderboard_reader_begin_read_from_pivot");
     LOAD(leaderboard_reader_destroy, "cna_leaderboard_reader_destroy");
     LOAD(leaderboard_reader_get_entry_at, "cna_leaderboard_reader_get_entry_at");
     LOAD(leaderboard_reader_get_identity, "cna_leaderboard_reader_get_identity");
@@ -209,6 +219,8 @@
     LOAD(property_dictionary_set_time_span_ticks, "cna_property_dictionary_set_time_span_ticks");
     LOAD(property_dictionary_try_get_value_kind_ext, "cna_property_dictionary_try_get_value_kind_ext");
     LOAD(signed_in_gamer_award_achievement, "cna_signed_in_gamer_award_achievement");
+    LOAD(signed_in_gamer_begin_award_achievement, "cna_signed_in_gamer_begin_award_achievement");
+    LOAD(signed_in_gamer_begin_get_achievements, "cna_signed_in_gamer_begin_get_achievements");
     LOAD(signed_in_gamer_copy_gamertag, "cna_signed_in_gamer_copy_gamertag");
     LOAD(signed_in_gamer_create_ext, "cna_signed_in_gamer_create_ext");
     LOAD(signed_in_gamer_destroy, "cna_signed_in_gamer_destroy");

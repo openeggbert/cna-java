@@ -950,6 +950,22 @@ Java_org_openeggbert_cna_internal_generated_NativeGamerServicesRoutes_avatarDesc
 }
 
 JNIEXPORT jint JNICALL
+Java_org_openeggbert_cna_internal_generated_NativeGamerServicesRoutes_avatarDescriptionGetFromGamer(
+    JNIEnv* environment, jclass type, jlong gamer, jlongArray out_description)
+{
+    (void)environment;
+    (void)type;
+    CNA_AvatarDescriptionHandle out_description_value = 0;
+    CNA_Result result = cna.avatar_description_get_from_gamer((CNA_GamerHandle)gamer, NULL, NULL, &out_description_value);
+    if (result == CNA_RESULT_SUCCESS) {
+        jlong out_description_element = (jlong)out_description_value;
+        (*environment)->SetLongArrayRegion(
+            environment, out_description, 0, 1, &out_description_element);
+    }
+    return (jint)result;
+}
+
+JNIEXPORT jint JNICALL
 Java_org_openeggbert_cna_internal_generated_NativeGamerServicesRoutes_avatarDescriptionGetInfo(
     JNIEnv* environment, jclass type, jlong description, jbyteArray out_infoBytes, jlongArray out_infoIntegral, jfloatArray out_infoFloating)
 {
@@ -1055,31 +1071,44 @@ Java_org_openeggbert_cna_internal_generated_NativeGamerServicesRoutes_avatarRend
 
 JNIEXPORT jint JNICALL
 Java_org_openeggbert_cna_internal_generated_NativeGamerServicesRoutes_avatarRendererDrawBones(
-    JNIEnv* environment, jclass type, jlong renderer, jfloatArray bonesFloating, jlong bone_count, jlongArray expressionIntegral)
+    JNIEnv* environment, jclass type, jlong renderer, jfloatArray bonesFloating, jlongArray expressionIntegral)
 {
     (void)environment;
     (void)type;
-    CNA_Matrix bones_value;
-    memset(&bones_value, 0, sizeof bones_value);
+    jsize bones_count = (*environment)->GetArrayLength(environment, bonesFloating) / 16;
+    CNA_Matrix* bones_values = (CNA_Matrix*)calloc(
+        (size_t)bones_count + 1U, sizeof(*bones_values));
+    if (bones_values == NULL) {
+        return (jint)CNA_RESULT_OUT_OF_MEMORY;
+    }
     {
-        jfloat bonesFloating_values[16];
-        (*environment)->GetFloatArrayRegion(environment, bonesFloating, 0, 16, bonesFloating_values);
-        bones_value.m11 = (float)bonesFloating_values[0];
-        bones_value.m12 = (float)bonesFloating_values[1];
-        bones_value.m13 = (float)bonesFloating_values[2];
-        bones_value.m14 = (float)bonesFloating_values[3];
-        bones_value.m21 = (float)bonesFloating_values[4];
-        bones_value.m22 = (float)bonesFloating_values[5];
-        bones_value.m23 = (float)bonesFloating_values[6];
-        bones_value.m24 = (float)bonesFloating_values[7];
-        bones_value.m31 = (float)bonesFloating_values[8];
-        bones_value.m32 = (float)bonesFloating_values[9];
-        bones_value.m33 = (float)bonesFloating_values[10];
-        bones_value.m34 = (float)bonesFloating_values[11];
-        bones_value.m41 = (float)bonesFloating_values[12];
-        bones_value.m42 = (float)bonesFloating_values[13];
-        bones_value.m43 = (float)bonesFloating_values[14];
-        bones_value.m44 = (float)bonesFloating_values[15];
+        jsize bonesFloating_length = (*environment)->GetArrayLength(environment, bonesFloating);
+        jfloat* bonesFloating_values = (jfloat*)malloc(
+            ((size_t)bonesFloating_length + 1U) * sizeof(*bonesFloating_values));
+        if (bonesFloating_values == NULL) {
+            free(bones_values);
+            return (jint)CNA_RESULT_OUT_OF_MEMORY;
+        }
+        (*environment)->GetFloatArrayRegion(environment, bonesFloating, 0, bonesFloating_length, bonesFloating_values);
+        for (jsize element = 0; element < bones_count; ++element) {
+            bones_values[element].m11 = (float)bonesFloating_values[element * 16 + 0];
+            bones_values[element].m12 = (float)bonesFloating_values[element * 16 + 1];
+            bones_values[element].m13 = (float)bonesFloating_values[element * 16 + 2];
+            bones_values[element].m14 = (float)bonesFloating_values[element * 16 + 3];
+            bones_values[element].m21 = (float)bonesFloating_values[element * 16 + 4];
+            bones_values[element].m22 = (float)bonesFloating_values[element * 16 + 5];
+            bones_values[element].m23 = (float)bonesFloating_values[element * 16 + 6];
+            bones_values[element].m24 = (float)bonesFloating_values[element * 16 + 7];
+            bones_values[element].m31 = (float)bonesFloating_values[element * 16 + 8];
+            bones_values[element].m32 = (float)bonesFloating_values[element * 16 + 9];
+            bones_values[element].m33 = (float)bonesFloating_values[element * 16 + 10];
+            bones_values[element].m34 = (float)bonesFloating_values[element * 16 + 11];
+            bones_values[element].m41 = (float)bonesFloating_values[element * 16 + 12];
+            bones_values[element].m42 = (float)bonesFloating_values[element * 16 + 13];
+            bones_values[element].m43 = (float)bonesFloating_values[element * 16 + 14];
+            bones_values[element].m44 = (float)bonesFloating_values[element * 16 + 15];
+        }
+        free(bonesFloating_values);
     }
     CNA_AvatarExpression expression_value;
     memset(&expression_value, 0, sizeof expression_value);
@@ -1094,7 +1123,8 @@ Java_org_openeggbert_cna_internal_generated_NativeGamerServicesRoutes_avatarRend
         expression_value.left_eyebrow = (CNA_AvatarEyebrow)expressionIntegral_values[3];
         expression_value.right_eyebrow = (CNA_AvatarEyebrow)expressionIntegral_values[4];
     }
-    CNA_Result result = cna.avatar_renderer_draw_bones((CNA_AvatarRendererHandle)renderer, &bones_value, (uint64_t)bone_count, &expression_value);
+    CNA_Result result = cna.avatar_renderer_draw_bones((CNA_AvatarRendererHandle)renderer, bones_values, (uint64_t)bones_count, &expression_value);
+    free(bones_values);
     return (jint)result;
 }
 
@@ -1686,6 +1716,74 @@ Java_org_openeggbert_cna_internal_generated_NativeGamerServicesRoutes_gameDefaul
         (*environment)->SetLongArrayRegion(environment, out_defaultsIntegral, 0,
             (jsize)(sizeof out_defaultsIntegral_values / sizeof out_defaultsIntegral_values[0]),
             out_defaultsIntegral_values);
+    }
+    return (jint)result;
+}
+
+JNIEXPORT jint JNICALL
+Java_org_openeggbert_cna_internal_generated_NativeGamerServicesRoutes_gamerBeginGetFromGamertag(
+    JNIEnv* environment, jclass type, jbyteArray gamertag, jlongArray out_gamer)
+{
+    (void)environment;
+    (void)type;
+    jsize gamertag_size = (*environment)->GetArrayLength(environment, gamertag);
+    jbyte* gamertag_bytes = (*environment)->GetByteArrayElements(environment, gamertag, NULL);
+    if (gamertag_bytes == NULL) {
+        return (jint)CNA_RESULT_OUT_OF_MEMORY;
+    }
+    CNA_StringView gamertag_view = {(const char*)gamertag_bytes, (uint64_t)gamertag_size};
+    CNA_GamerHandle out_gamer_value = 0;
+    CNA_Result result = cna.gamer_begin_get_from_gamertag(gamertag_view, NULL, NULL, &out_gamer_value);
+    (*environment)->ReleaseByteArrayElements(environment, gamertag, gamertag_bytes, JNI_ABORT);
+    if (result == CNA_RESULT_SUCCESS) {
+        jlong out_gamer_element = (jlong)out_gamer_value;
+        (*environment)->SetLongArrayRegion(
+            environment, out_gamer, 0, 1, &out_gamer_element);
+    }
+    return (jint)result;
+}
+
+JNIEXPORT jint JNICALL
+Java_org_openeggbert_cna_internal_generated_NativeGamerServicesRoutes_gamerBeginGetPartnerToken(
+    JNIEnv* environment, jclass type, jbyteArray audience_uri, jbyteArray destination, jlongArray out_bytes)
+{
+    (void)environment;
+    (void)type;
+    jsize audience_uri_size = (*environment)->GetArrayLength(environment, audience_uri);
+    jbyte* audience_uri_bytes = (*environment)->GetByteArrayElements(environment, audience_uri, NULL);
+    if (audience_uri_bytes == NULL) {
+        return (jint)CNA_RESULT_OUT_OF_MEMORY;
+    }
+    CNA_StringView audience_uri_view = {(const char*)audience_uri_bytes, (uint64_t)audience_uri_size};
+    jsize destination_size = (*environment)->GetArrayLength(environment, destination);
+    jbyte* destination_bytes = (*environment)->GetByteArrayElements(environment, destination, NULL);
+    if (destination_bytes == NULL) {
+        return (jint)CNA_RESULT_OUT_OF_MEMORY;
+    }
+    uint64_t destination_written = 0;
+    CNA_Result result = cna.gamer_begin_get_partner_token(audience_uri_view, NULL, NULL, (char*)destination_bytes, (uint64_t)destination_size, &destination_written);
+    (*environment)->ReleaseByteArrayElements(environment, audience_uri, audience_uri_bytes, JNI_ABORT);
+    (*environment)->ReleaseByteArrayElements(environment, destination, destination_bytes, 0);
+    if (result == CNA_RESULT_SUCCESS) {
+        jlong destination_element = (jlong)destination_written;
+        (*environment)->SetLongArrayRegion(
+            environment, out_bytes, 0, 1, &destination_element);
+    }
+    return (jint)result;
+}
+
+JNIEXPORT jint JNICALL
+Java_org_openeggbert_cna_internal_generated_NativeGamerServicesRoutes_gamerBeginGetProfile(
+    JNIEnv* environment, jclass type, jlong gamer, jlongArray out_profile)
+{
+    (void)environment;
+    (void)type;
+    CNA_GamerProfileHandle out_profile_value = 0;
+    CNA_Result result = cna.gamer_begin_get_profile((CNA_GamerHandle)gamer, NULL, NULL, &out_profile_value);
+    if (result == CNA_RESULT_SUCCESS) {
+        jlong out_profile_element = (jlong)out_profile_value;
+        (*environment)->SetLongArrayRegion(
+            environment, out_profile, 0, 1, &out_profile_element);
     }
     return (jint)result;
 }
@@ -2543,6 +2641,37 @@ Java_org_openeggbert_cna_internal_generated_NativeGamerServicesRoutes_gamerUnsub
     (void)environment;
     (void)type;
     CNA_Result result = cna.gamer_unsubscribe_ext((CNA_Handle)registration);
+    return (jint)result;
+}
+
+JNIEXPORT jint JNICALL
+Java_org_openeggbert_cna_internal_generated_NativeGamerServicesRoutes_guideBeginShowKeyboardInput(
+    JNIEnv* environment, jclass type, jint player, jbyteArray title, jbyteArray description, jbyteArray default_text, jboolean use_password_mode)
+{
+    (void)environment;
+    (void)type;
+    jsize title_size = (*environment)->GetArrayLength(environment, title);
+    jbyte* title_bytes = (*environment)->GetByteArrayElements(environment, title, NULL);
+    if (title_bytes == NULL) {
+        return (jint)CNA_RESULT_OUT_OF_MEMORY;
+    }
+    CNA_StringView title_view = {(const char*)title_bytes, (uint64_t)title_size};
+    jsize description_size = (*environment)->GetArrayLength(environment, description);
+    jbyte* description_bytes = (*environment)->GetByteArrayElements(environment, description, NULL);
+    if (description_bytes == NULL) {
+        return (jint)CNA_RESULT_OUT_OF_MEMORY;
+    }
+    CNA_StringView description_view = {(const char*)description_bytes, (uint64_t)description_size};
+    jsize default_text_size = (*environment)->GetArrayLength(environment, default_text);
+    jbyte* default_text_bytes = (*environment)->GetByteArrayElements(environment, default_text, NULL);
+    if (default_text_bytes == NULL) {
+        return (jint)CNA_RESULT_OUT_OF_MEMORY;
+    }
+    CNA_StringView default_text_view = {(const char*)default_text_bytes, (uint64_t)default_text_size};
+    CNA_Result result = cna.guide_begin_show_keyboard_input((CNA_PlayerIndex)player, title_view, description_view, default_text_view, (CNA_Bool)use_password_mode, NULL, NULL);
+    (*environment)->ReleaseByteArrayElements(environment, title, title_bytes, JNI_ABORT);
+    (*environment)->ReleaseByteArrayElements(environment, description, description_bytes, JNI_ABORT);
+    (*environment)->ReleaseByteArrayElements(environment, default_text, default_text_bytes, JNI_ABORT);
     return (jint)result;
 }
 
@@ -3414,6 +3543,323 @@ Java_org_openeggbert_cna_internal_generated_NativeGamerServicesRoutes_leaderboar
         (*environment)->SetLongArrayRegion(environment, out_identityIntegral, 0,
             (jsize)(sizeof out_identityIntegral_values / sizeof out_identityIntegral_values[0]),
             out_identityIntegral_values);
+    }
+    return (jint)result;
+}
+
+JNIEXPORT jint JNICALL
+Java_org_openeggbert_cna_internal_generated_NativeGamerServicesRoutes_leaderboardReaderBeginPageDown(
+    JNIEnv* environment, jclass type, jlong reader)
+{
+    (void)environment;
+    (void)type;
+    CNA_Result result = cna.leaderboard_reader_begin_page_down((CNA_LeaderboardReaderHandle)reader, NULL, NULL);
+    return (jint)result;
+}
+
+JNIEXPORT jint JNICALL
+Java_org_openeggbert_cna_internal_generated_NativeGamerServicesRoutes_leaderboardReaderBeginPageUp(
+    JNIEnv* environment, jclass type, jlong reader)
+{
+    (void)environment;
+    (void)type;
+    CNA_Result result = cna.leaderboard_reader_begin_page_up((CNA_LeaderboardReaderHandle)reader, NULL, NULL);
+    return (jint)result;
+}
+
+JNIEXPORT jint JNICALL
+Java_org_openeggbert_cna_internal_generated_NativeGamerServicesRoutes_leaderboardReaderBeginRead(
+    JNIEnv* environment, jclass type, jbyteArray identityBytes, jlongArray identityIntegral, jint page_start, jint page_size, jlongArray out_reader)
+{
+    (void)environment;
+    (void)type;
+    CNA_LeaderboardIdentity identity_value;
+    memset(&identity_value, 0, sizeof identity_value);
+    identity_value.struct_size = (uint32_t)(sizeof identity_value);
+    identity_value.struct_version = UINT32_C(1);
+    {
+        jbyte identityBytes_values[64];
+        (*environment)->GetByteArrayRegion(environment, identityBytes, 0, 64, identityBytes_values);
+        identity_value.key[0] = (char)identityBytes_values[0];
+        identity_value.key[1] = (char)identityBytes_values[1];
+        identity_value.key[2] = (char)identityBytes_values[2];
+        identity_value.key[3] = (char)identityBytes_values[3];
+        identity_value.key[4] = (char)identityBytes_values[4];
+        identity_value.key[5] = (char)identityBytes_values[5];
+        identity_value.key[6] = (char)identityBytes_values[6];
+        identity_value.key[7] = (char)identityBytes_values[7];
+        identity_value.key[8] = (char)identityBytes_values[8];
+        identity_value.key[9] = (char)identityBytes_values[9];
+        identity_value.key[10] = (char)identityBytes_values[10];
+        identity_value.key[11] = (char)identityBytes_values[11];
+        identity_value.key[12] = (char)identityBytes_values[12];
+        identity_value.key[13] = (char)identityBytes_values[13];
+        identity_value.key[14] = (char)identityBytes_values[14];
+        identity_value.key[15] = (char)identityBytes_values[15];
+        identity_value.key[16] = (char)identityBytes_values[16];
+        identity_value.key[17] = (char)identityBytes_values[17];
+        identity_value.key[18] = (char)identityBytes_values[18];
+        identity_value.key[19] = (char)identityBytes_values[19];
+        identity_value.key[20] = (char)identityBytes_values[20];
+        identity_value.key[21] = (char)identityBytes_values[21];
+        identity_value.key[22] = (char)identityBytes_values[22];
+        identity_value.key[23] = (char)identityBytes_values[23];
+        identity_value.key[24] = (char)identityBytes_values[24];
+        identity_value.key[25] = (char)identityBytes_values[25];
+        identity_value.key[26] = (char)identityBytes_values[26];
+        identity_value.key[27] = (char)identityBytes_values[27];
+        identity_value.key[28] = (char)identityBytes_values[28];
+        identity_value.key[29] = (char)identityBytes_values[29];
+        identity_value.key[30] = (char)identityBytes_values[30];
+        identity_value.key[31] = (char)identityBytes_values[31];
+        identity_value.key[32] = (char)identityBytes_values[32];
+        identity_value.key[33] = (char)identityBytes_values[33];
+        identity_value.key[34] = (char)identityBytes_values[34];
+        identity_value.key[35] = (char)identityBytes_values[35];
+        identity_value.key[36] = (char)identityBytes_values[36];
+        identity_value.key[37] = (char)identityBytes_values[37];
+        identity_value.key[38] = (char)identityBytes_values[38];
+        identity_value.key[39] = (char)identityBytes_values[39];
+        identity_value.key[40] = (char)identityBytes_values[40];
+        identity_value.key[41] = (char)identityBytes_values[41];
+        identity_value.key[42] = (char)identityBytes_values[42];
+        identity_value.key[43] = (char)identityBytes_values[43];
+        identity_value.key[44] = (char)identityBytes_values[44];
+        identity_value.key[45] = (char)identityBytes_values[45];
+        identity_value.key[46] = (char)identityBytes_values[46];
+        identity_value.key[47] = (char)identityBytes_values[47];
+        identity_value.key[48] = (char)identityBytes_values[48];
+        identity_value.key[49] = (char)identityBytes_values[49];
+        identity_value.key[50] = (char)identityBytes_values[50];
+        identity_value.key[51] = (char)identityBytes_values[51];
+        identity_value.key[52] = (char)identityBytes_values[52];
+        identity_value.key[53] = (char)identityBytes_values[53];
+        identity_value.key[54] = (char)identityBytes_values[54];
+        identity_value.key[55] = (char)identityBytes_values[55];
+        identity_value.key[56] = (char)identityBytes_values[56];
+        identity_value.key[57] = (char)identityBytes_values[57];
+        identity_value.key[58] = (char)identityBytes_values[58];
+        identity_value.key[59] = (char)identityBytes_values[59];
+        identity_value.key[60] = (char)identityBytes_values[60];
+        identity_value.key[61] = (char)identityBytes_values[61];
+        identity_value.key[62] = (char)identityBytes_values[62];
+        identity_value.key[63] = (char)identityBytes_values[63];
+    }
+    {
+        jlong identityIntegral_values[1];
+        (*environment)->GetLongArrayRegion(environment, identityIntegral, 0, 1, identityIntegral_values);
+        identity_value.game_mode = (int32_t)identityIntegral_values[0];
+    }
+    CNA_LeaderboardReaderHandle out_reader_value = 0;
+    CNA_Result result = cna.leaderboard_reader_begin_read(&identity_value, (int32_t)page_start, (int32_t)page_size, NULL, NULL, &out_reader_value);
+    if (result == CNA_RESULT_SUCCESS) {
+        jlong out_reader_element = (jlong)out_reader_value;
+        (*environment)->SetLongArrayRegion(
+            environment, out_reader, 0, 1, &out_reader_element);
+    }
+    return (jint)result;
+}
+
+JNIEXPORT jint JNICALL
+Java_org_openeggbert_cna_internal_generated_NativeGamerServicesRoutes_leaderboardReaderBeginReadFromGamers(
+    JNIEnv* environment, jclass type, jbyteArray identityBytes, jlongArray identityIntegral, jlongArray gamers, jlong pivot_gamer, jint page_size, jlongArray out_reader)
+{
+    (void)environment;
+    (void)type;
+    CNA_LeaderboardIdentity identity_value;
+    memset(&identity_value, 0, sizeof identity_value);
+    identity_value.struct_size = (uint32_t)(sizeof identity_value);
+    identity_value.struct_version = UINT32_C(1);
+    {
+        jbyte identityBytes_values[64];
+        (*environment)->GetByteArrayRegion(environment, identityBytes, 0, 64, identityBytes_values);
+        identity_value.key[0] = (char)identityBytes_values[0];
+        identity_value.key[1] = (char)identityBytes_values[1];
+        identity_value.key[2] = (char)identityBytes_values[2];
+        identity_value.key[3] = (char)identityBytes_values[3];
+        identity_value.key[4] = (char)identityBytes_values[4];
+        identity_value.key[5] = (char)identityBytes_values[5];
+        identity_value.key[6] = (char)identityBytes_values[6];
+        identity_value.key[7] = (char)identityBytes_values[7];
+        identity_value.key[8] = (char)identityBytes_values[8];
+        identity_value.key[9] = (char)identityBytes_values[9];
+        identity_value.key[10] = (char)identityBytes_values[10];
+        identity_value.key[11] = (char)identityBytes_values[11];
+        identity_value.key[12] = (char)identityBytes_values[12];
+        identity_value.key[13] = (char)identityBytes_values[13];
+        identity_value.key[14] = (char)identityBytes_values[14];
+        identity_value.key[15] = (char)identityBytes_values[15];
+        identity_value.key[16] = (char)identityBytes_values[16];
+        identity_value.key[17] = (char)identityBytes_values[17];
+        identity_value.key[18] = (char)identityBytes_values[18];
+        identity_value.key[19] = (char)identityBytes_values[19];
+        identity_value.key[20] = (char)identityBytes_values[20];
+        identity_value.key[21] = (char)identityBytes_values[21];
+        identity_value.key[22] = (char)identityBytes_values[22];
+        identity_value.key[23] = (char)identityBytes_values[23];
+        identity_value.key[24] = (char)identityBytes_values[24];
+        identity_value.key[25] = (char)identityBytes_values[25];
+        identity_value.key[26] = (char)identityBytes_values[26];
+        identity_value.key[27] = (char)identityBytes_values[27];
+        identity_value.key[28] = (char)identityBytes_values[28];
+        identity_value.key[29] = (char)identityBytes_values[29];
+        identity_value.key[30] = (char)identityBytes_values[30];
+        identity_value.key[31] = (char)identityBytes_values[31];
+        identity_value.key[32] = (char)identityBytes_values[32];
+        identity_value.key[33] = (char)identityBytes_values[33];
+        identity_value.key[34] = (char)identityBytes_values[34];
+        identity_value.key[35] = (char)identityBytes_values[35];
+        identity_value.key[36] = (char)identityBytes_values[36];
+        identity_value.key[37] = (char)identityBytes_values[37];
+        identity_value.key[38] = (char)identityBytes_values[38];
+        identity_value.key[39] = (char)identityBytes_values[39];
+        identity_value.key[40] = (char)identityBytes_values[40];
+        identity_value.key[41] = (char)identityBytes_values[41];
+        identity_value.key[42] = (char)identityBytes_values[42];
+        identity_value.key[43] = (char)identityBytes_values[43];
+        identity_value.key[44] = (char)identityBytes_values[44];
+        identity_value.key[45] = (char)identityBytes_values[45];
+        identity_value.key[46] = (char)identityBytes_values[46];
+        identity_value.key[47] = (char)identityBytes_values[47];
+        identity_value.key[48] = (char)identityBytes_values[48];
+        identity_value.key[49] = (char)identityBytes_values[49];
+        identity_value.key[50] = (char)identityBytes_values[50];
+        identity_value.key[51] = (char)identityBytes_values[51];
+        identity_value.key[52] = (char)identityBytes_values[52];
+        identity_value.key[53] = (char)identityBytes_values[53];
+        identity_value.key[54] = (char)identityBytes_values[54];
+        identity_value.key[55] = (char)identityBytes_values[55];
+        identity_value.key[56] = (char)identityBytes_values[56];
+        identity_value.key[57] = (char)identityBytes_values[57];
+        identity_value.key[58] = (char)identityBytes_values[58];
+        identity_value.key[59] = (char)identityBytes_values[59];
+        identity_value.key[60] = (char)identityBytes_values[60];
+        identity_value.key[61] = (char)identityBytes_values[61];
+        identity_value.key[62] = (char)identityBytes_values[62];
+        identity_value.key[63] = (char)identityBytes_values[63];
+    }
+    {
+        jlong identityIntegral_values[1];
+        (*environment)->GetLongArrayRegion(environment, identityIntegral, 0, 1, identityIntegral_values);
+        identity_value.game_mode = (int32_t)identityIntegral_values[0];
+    }
+    jsize gamers_size = (*environment)->GetArrayLength(environment, gamers);
+    jlong* gamers_elements = (*environment)->GetLongArrayElements(environment, gamers, NULL);
+    if (gamers_elements == NULL) {
+        return (jint)CNA_RESULT_OUT_OF_MEMORY;
+    }
+    CNA_GamerHandle* gamers_values = (CNA_GamerHandle*)malloc(
+        ((size_t)gamers_size + 1U) * sizeof(*gamers_values));
+    if (gamers_values == NULL) {
+        (*environment)->ReleaseLongArrayElements(
+            environment, gamers, gamers_elements, JNI_ABORT);
+        return (jint)CNA_RESULT_OUT_OF_MEMORY;
+    }
+    for (jsize index = 0; index < gamers_size; ++index) {
+        gamers_values[index] = (CNA_GamerHandle)gamers_elements[index];
+    }
+    CNA_LeaderboardReaderHandle out_reader_value = 0;
+    CNA_Result result = cna.leaderboard_reader_begin_read_from_gamers(&identity_value, gamers_values, (uint64_t)gamers_size, (CNA_GamerHandle)pivot_gamer, (int32_t)page_size, NULL, NULL, &out_reader_value);
+    free(gamers_values);
+    (*environment)->ReleaseLongArrayElements(
+        environment, gamers, gamers_elements, JNI_ABORT);
+    if (result == CNA_RESULT_SUCCESS) {
+        jlong out_reader_element = (jlong)out_reader_value;
+        (*environment)->SetLongArrayRegion(
+            environment, out_reader, 0, 1, &out_reader_element);
+    }
+    return (jint)result;
+}
+
+JNIEXPORT jint JNICALL
+Java_org_openeggbert_cna_internal_generated_NativeGamerServicesRoutes_leaderboardReaderBeginReadFromPivot(
+    JNIEnv* environment, jclass type, jbyteArray identityBytes, jlongArray identityIntegral, jlong pivot_gamer, jint page_size, jlongArray out_reader)
+{
+    (void)environment;
+    (void)type;
+    CNA_LeaderboardIdentity identity_value;
+    memset(&identity_value, 0, sizeof identity_value);
+    identity_value.struct_size = (uint32_t)(sizeof identity_value);
+    identity_value.struct_version = UINT32_C(1);
+    {
+        jbyte identityBytes_values[64];
+        (*environment)->GetByteArrayRegion(environment, identityBytes, 0, 64, identityBytes_values);
+        identity_value.key[0] = (char)identityBytes_values[0];
+        identity_value.key[1] = (char)identityBytes_values[1];
+        identity_value.key[2] = (char)identityBytes_values[2];
+        identity_value.key[3] = (char)identityBytes_values[3];
+        identity_value.key[4] = (char)identityBytes_values[4];
+        identity_value.key[5] = (char)identityBytes_values[5];
+        identity_value.key[6] = (char)identityBytes_values[6];
+        identity_value.key[7] = (char)identityBytes_values[7];
+        identity_value.key[8] = (char)identityBytes_values[8];
+        identity_value.key[9] = (char)identityBytes_values[9];
+        identity_value.key[10] = (char)identityBytes_values[10];
+        identity_value.key[11] = (char)identityBytes_values[11];
+        identity_value.key[12] = (char)identityBytes_values[12];
+        identity_value.key[13] = (char)identityBytes_values[13];
+        identity_value.key[14] = (char)identityBytes_values[14];
+        identity_value.key[15] = (char)identityBytes_values[15];
+        identity_value.key[16] = (char)identityBytes_values[16];
+        identity_value.key[17] = (char)identityBytes_values[17];
+        identity_value.key[18] = (char)identityBytes_values[18];
+        identity_value.key[19] = (char)identityBytes_values[19];
+        identity_value.key[20] = (char)identityBytes_values[20];
+        identity_value.key[21] = (char)identityBytes_values[21];
+        identity_value.key[22] = (char)identityBytes_values[22];
+        identity_value.key[23] = (char)identityBytes_values[23];
+        identity_value.key[24] = (char)identityBytes_values[24];
+        identity_value.key[25] = (char)identityBytes_values[25];
+        identity_value.key[26] = (char)identityBytes_values[26];
+        identity_value.key[27] = (char)identityBytes_values[27];
+        identity_value.key[28] = (char)identityBytes_values[28];
+        identity_value.key[29] = (char)identityBytes_values[29];
+        identity_value.key[30] = (char)identityBytes_values[30];
+        identity_value.key[31] = (char)identityBytes_values[31];
+        identity_value.key[32] = (char)identityBytes_values[32];
+        identity_value.key[33] = (char)identityBytes_values[33];
+        identity_value.key[34] = (char)identityBytes_values[34];
+        identity_value.key[35] = (char)identityBytes_values[35];
+        identity_value.key[36] = (char)identityBytes_values[36];
+        identity_value.key[37] = (char)identityBytes_values[37];
+        identity_value.key[38] = (char)identityBytes_values[38];
+        identity_value.key[39] = (char)identityBytes_values[39];
+        identity_value.key[40] = (char)identityBytes_values[40];
+        identity_value.key[41] = (char)identityBytes_values[41];
+        identity_value.key[42] = (char)identityBytes_values[42];
+        identity_value.key[43] = (char)identityBytes_values[43];
+        identity_value.key[44] = (char)identityBytes_values[44];
+        identity_value.key[45] = (char)identityBytes_values[45];
+        identity_value.key[46] = (char)identityBytes_values[46];
+        identity_value.key[47] = (char)identityBytes_values[47];
+        identity_value.key[48] = (char)identityBytes_values[48];
+        identity_value.key[49] = (char)identityBytes_values[49];
+        identity_value.key[50] = (char)identityBytes_values[50];
+        identity_value.key[51] = (char)identityBytes_values[51];
+        identity_value.key[52] = (char)identityBytes_values[52];
+        identity_value.key[53] = (char)identityBytes_values[53];
+        identity_value.key[54] = (char)identityBytes_values[54];
+        identity_value.key[55] = (char)identityBytes_values[55];
+        identity_value.key[56] = (char)identityBytes_values[56];
+        identity_value.key[57] = (char)identityBytes_values[57];
+        identity_value.key[58] = (char)identityBytes_values[58];
+        identity_value.key[59] = (char)identityBytes_values[59];
+        identity_value.key[60] = (char)identityBytes_values[60];
+        identity_value.key[61] = (char)identityBytes_values[61];
+        identity_value.key[62] = (char)identityBytes_values[62];
+        identity_value.key[63] = (char)identityBytes_values[63];
+    }
+    {
+        jlong identityIntegral_values[1];
+        (*environment)->GetLongArrayRegion(environment, identityIntegral, 0, 1, identityIntegral_values);
+        identity_value.game_mode = (int32_t)identityIntegral_values[0];
+    }
+    CNA_LeaderboardReaderHandle out_reader_value = 0;
+    CNA_Result result = cna.leaderboard_reader_begin_read_from_pivot(&identity_value, (CNA_GamerHandle)pivot_gamer, (int32_t)page_size, NULL, NULL, &out_reader_value);
+    if (result == CNA_RESULT_SUCCESS) {
+        jlong out_reader_element = (jlong)out_reader_value;
+        (*environment)->SetLongArrayRegion(
+            environment, out_reader, 0, 1, &out_reader_element);
     }
     return (jint)result;
 }
@@ -4456,6 +4902,39 @@ Java_org_openeggbert_cna_internal_generated_NativeGamerServicesRoutes_signedInGa
     CNA_StringView achievement_key_view = {(const char*)achievement_key_bytes, (uint64_t)achievement_key_size};
     CNA_Result result = cna.signed_in_gamer_award_achievement((CNA_SignedInGamerHandle)gamer, achievement_key_view);
     (*environment)->ReleaseByteArrayElements(environment, achievement_key, achievement_key_bytes, JNI_ABORT);
+    return (jint)result;
+}
+
+JNIEXPORT jint JNICALL
+Java_org_openeggbert_cna_internal_generated_NativeGamerServicesRoutes_signedInGamerBeginAwardAchievement(
+    JNIEnv* environment, jclass type, jlong gamer, jbyteArray achievement_key)
+{
+    (void)environment;
+    (void)type;
+    jsize achievement_key_size = (*environment)->GetArrayLength(environment, achievement_key);
+    jbyte* achievement_key_bytes = (*environment)->GetByteArrayElements(environment, achievement_key, NULL);
+    if (achievement_key_bytes == NULL) {
+        return (jint)CNA_RESULT_OUT_OF_MEMORY;
+    }
+    CNA_StringView achievement_key_view = {(const char*)achievement_key_bytes, (uint64_t)achievement_key_size};
+    CNA_Result result = cna.signed_in_gamer_begin_award_achievement((CNA_SignedInGamerHandle)gamer, achievement_key_view, NULL, NULL);
+    (*environment)->ReleaseByteArrayElements(environment, achievement_key, achievement_key_bytes, JNI_ABORT);
+    return (jint)result;
+}
+
+JNIEXPORT jint JNICALL
+Java_org_openeggbert_cna_internal_generated_NativeGamerServicesRoutes_signedInGamerBeginGetAchievements(
+    JNIEnv* environment, jclass type, jlong gamer, jlongArray out_achievements)
+{
+    (void)environment;
+    (void)type;
+    CNA_AchievementCollectionHandle out_achievements_value = 0;
+    CNA_Result result = cna.signed_in_gamer_begin_get_achievements((CNA_SignedInGamerHandle)gamer, NULL, NULL, &out_achievements_value);
+    if (result == CNA_RESULT_SUCCESS) {
+        jlong out_achievements_element = (jlong)out_achievements_value;
+        (*environment)->SetLongArrayRegion(
+            environment, out_achievements, 0, 1, &out_achievements_element);
+    }
     return (jint)result;
 }
 

@@ -156,6 +156,14 @@ def plan(route: dict, live: dict) -> dict:
         name = parameter["name"] or f"argument{index}"
         following = parameters[index + 1] if index + 1 < len(parameters) else None
 
+        if (route.get("nullCallback") and following is not None
+                and type_name in live["callbacks"] and bare(following["type"])[0] == "void"):
+            # CNA's asynchronous routes complete synchronously and document the callback as
+            # optional, so a route explicitly marked nullCallback in routes.json passes a null
+            # callback and null context and reads its result from the out-parameters.
+            steps.append({"shape": "null_callback", "name": name, "ctype": type_name})
+            index += 2
+            continue
         if pointers == 0 and type_name == "CNA_StringView":
             steps.append({"shape": "string", "name": name})
             index += 1
@@ -173,6 +181,22 @@ def plan(route: dict, live: dict) -> dict:
                 index += 3
                 continue
             raise Unsupported(f"{route['symbol']}: char* is not a count/copy triple")
+        if (pointers == 1 and type_name in live["structures"] and following is not None
+                and bare(following["type"]) == ("uint64_t", 0)):
+            # A pointer to a struct followed by a count is an array of structs, not one
+            # struct. Each element's leaves are laid out end to end, so the Java array's
+            # length divided by the leaves per element gives the count.
+            raw_leaves = flatten_struct(type_name, live)
+            groups = group_leaves(raw_leaves)
+            versioned = [path for path, _ in raw_leaves if path in VERSION_FIELDS]
+            if not groups["floating"] and not groups["integral"] and not groups["bytes"]:
+                raise Unsupported(f"{route['symbol']}: empty structure array {type_name}")
+            steps.append({"shape": "struct_array", "name": name, "ctype": type_name,
+                          "input": constant, "versioned": versioned,
+                          "version": struct_version(type_name, live),
+                          "count": following["name"] or "count", **groups})
+            index += 2
+            continue
         if pointers == 1 and type_name in live["structures"]:
             raw_leaves = flatten_struct(type_name, live)
             groups = group_leaves(raw_leaves)
@@ -224,7 +248,7 @@ def java_signature(entry: dict) -> tuple[str, list[str]]:
                 parameters.append(f"long[] {java_name(step['written'])}")
         elif step["shape"] == "array":
             parameters.append(f"{JAVA_OF_JNI[step['jni']]}[] {java_name(step['name'])}")
-        elif step["shape"] == "struct":
+        elif step["shape"] in ("struct", "struct_array"):
             for group, java in (("bytes", "byte"), ("integral", "long"), ("floating", "float")):
                 if step[group]:
                     parameters.append(f"{java}[] {java_name(step['name'])}{group.capitalize()}")
@@ -250,7 +274,22 @@ def render_java(class_name: str, entries: list[dict]) -> str:
     for entry in entries:
         signature, parameters = java_signature(entry)
         lines.append("")
-        lines.append(f"    /** {entry['symbol']} ({entry['header']}) */")
+        lines.append("    /**")
+        lines.append(f"     * {entry['symbol']} ({entry['header']}).")
+        for step in entry["steps"]:
+            if step["shape"] != "struct":
+                continue
+            for group in ("bytes", "integral", "floating"):
+                if not step[group]:
+                    continue
+                lines.append("     *")
+                lines.append(f"     * <p>{java_name(step['name'])}{group.capitalize()} carries "
+                             f"{step['ctype']} in this order:")
+                lines.append("     * <ol start=\"0\">")
+                for path, leaf in step[group]:
+                    lines.append(f"     *   <li>{{@code {path}}} ({leaf})</li>")
+                lines.append("     * </ol>")
+        lines.append("     */")
         lines.append(f"    public static native {signature}({', '.join(parameters)});")
     lines.append("}")
     return "\n".join(lines) + "\n"
@@ -277,7 +316,10 @@ def render_c(class_name: str, entries: list[dict]) -> str:
         for step in entry["steps"]:
             name = step["name"]
             shape = step["shape"]
-            if shape == "value":
+            if shape == "null_callback":
+                arguments.append("NULL")
+                arguments.append("NULL")
+            elif shape == "value":
                 parameters.append(f"{step['jni']} {name}")
                 arguments.append(f"({step['ctype']}){name}")
             elif shape == "out":
@@ -346,6 +388,54 @@ def render_c(class_name: str, entries: list[dict]) -> str:
                     f"    (*environment)->Release{element}ArrayElements(\n"
                     f"        environment, {name}, {name}_elements, "
                     f"{'JNI_ABORT' if step['input'] else '0'});")
+            elif shape == "struct_array":
+                groups = [(group, jni, java) for group, jni, java in
+                          (("bytes", "jbyte", "Byte"), ("integral", "jlong", "Long"),
+                           ("floating", "jfloat", "Float")) if step[group]]
+                primary = groups[0]
+                for group, jni, java in groups:
+                    parameters.append(f"{jni}Array {name}{group.capitalize()}")
+                body.append(f"    jsize {name}_count = (*environment)->GetArrayLength("
+                            f"environment, {name}{primary[0].capitalize()}) / "
+                            f"{len(step[primary[0]])};")
+                body.append(f"    {step['ctype']}* {name}_values = ({step['ctype']}*)calloc(")
+                body.append(f"        (size_t){name}_count + 1U, sizeof(*{name}_values));")
+                body.append(f"    if ({name}_values == NULL) {{")
+                body.append("        return (jint)CNA_RESULT_OUT_OF_MEMORY;")
+                body.append("    }")
+                for group, jni, java in groups:
+                    field = f"{name}{group.capitalize()}"
+                    body.append(f"    {{")
+                    body.append(f"        jsize {field}_length = "
+                                f"(*environment)->GetArrayLength(environment, {field});")
+                    body.append(f"        {jni}* {field}_values = ({jni}*)malloc(")
+                    body.append(f"            ((size_t){field}_length + 1U) * "
+                                f"sizeof(*{field}_values));")
+                    body.append(f"        if ({field}_values == NULL) {{")
+                    body.append(f"            free({name}_values);")
+                    body.append("            return (jint)CNA_RESULT_OUT_OF_MEMORY;")
+                    body.append("        }")
+                    body.append(f"        (*environment)->Get{java}ArrayRegion(environment, "
+                                f"{field}, 0, {field}_length, {field}_values);")
+                    body.append(f"        for (jsize element = 0; element < {name}_count; "
+                                f"++element) {{")
+                    for position, (path, leaf) in enumerate(step[group]):
+                        body.append(f"            {name}_values[element].{path} = ({leaf})"
+                                    f"{field}_values[element * {len(step[group])} + {position}];")
+                    body.append("        }")
+                    body.append(f"        free({field}_values);")
+                    body.append("    }")
+                if "struct_size" in step["versioned"]:
+                    body.append(f"    for (jsize element = 0; element < {name}_count; ++element) {{")
+                    body.append(f"        {name}_values[element].struct_size = "
+                                f"(uint32_t)(sizeof {name}_values[element]);")
+                    if "struct_version" in step["versioned"]:
+                        body.append(f"        {name}_values[element].struct_version = "
+                                    f"{step['version']};")
+                    body.append("    }")
+                arguments.append(f"{name}_values")
+                arguments.append(f"(uint64_t){name}_count")
+                cleanup.append(f"    free({name}_values);")
             elif shape == "struct":
                 body.append(f"    {step['ctype']} {name}_value;")
                 body.append(f"    memset(&{name}_value, 0, sizeof {name}_value);")

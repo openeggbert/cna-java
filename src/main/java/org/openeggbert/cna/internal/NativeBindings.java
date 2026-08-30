@@ -804,6 +804,28 @@ public final class NativeBindings {
         check("cna_gamer_services_dispatcher_update", nativeUpdateGamerServices());
     }
 
+    /** Initializes the process-wide GamerServices dispatcher against the running game. */
+    public static void initializeGamerServicesDispatcher() {
+        check("cna_gamer_services_dispatcher_initialize", nativeInitializeGamerServices(
+                currentGameHandle("GamerServicesDispatcher.Initialize").requireValue()));
+    }
+
+    /** Pumps the process-wide GamerServices dispatcher. */
+    public static void updateGamerServicesDispatcher() {
+        check("cna_gamer_services_dispatcher_update", nativeUpdateGamerServices());
+    }
+
+    /** Publishes the window token the Guide draws over. */
+    public static void setGamerServicesWindowHandle(WindowHandle window) {
+        check("cna_gamer_services_dispatcher_set_window_handle", nativeSetGamerServicesWindowHandle(
+                knownWindowValue(window, "GamerServicesDispatcher.WindowHandle")));
+    }
+
+    /** Resolves an opaque native window token back to its registered Java identity. */
+    public static WindowHandle windowHandle(long value) {
+        return knownWindowHandle(value, "GamerServicesDispatcher.WindowHandle");
+    }
+
     /** Creates a non-owning facade for a VideoPlayer-owned transient frame texture. */
     public static Texture2D createBorrowedVideoTexture(
             GraphicsDevice graphicsDevice, long nativeTexture) {
