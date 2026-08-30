@@ -42,11 +42,11 @@ or put non-XNA API inside `Microsoft.Xna.Framework.*`.
 | Allowlist entries | 0 | 0 |
 | CNA C ABI | 0.7.0 | 0.20.0 |
 | Canonical C API functions | not measured | 4,051 |
-| Bound native routes | 723 | 1,211 |
+| Bound native routes | 723 | 1,225 |
 | Unexplained native routes | 3,328 | 0 |
 | Bound routes nothing reaches | 1 | 0 |
-| CNA extension packages | 0 | 3 |
-| Tests | 156 | 188 |
+| CNA extension packages | 0 | 4 |
+| Tests | 156 | 191 |
 
 ## Milestones reached this session
 
@@ -73,9 +73,9 @@ document now says why that is the one reviewed exception.
 **J7, the full-profile families.** GamerServices, Avatar and Net are projected in full, backed by
 CNA rather than staged, taking the full profile from 74 missing types to zero.
 
-**J9 through J11, the CNA extension surface.** Three families outside the strict packages --
-`extensions.graphics`, `extensions.runtime` and `extensions.devices` -- reach 34 routes CNA has
-and XNA never did. `NOT_SUPPORTED` keeps its own identity in all of them: a build without a layer
+**J9 through J11, the CNA extension surface.** Four families outside the strict packages --
+`extensions.graphics`, `extensions.runtime`, `extensions.devices` and `extensions.input` --
+reach 64 routes CNA has and XNA never did. `NOT_SUPPORTED` keeps its own identity in all of them: a build without a layer
 says so rather than downgrading, and an absent host fact is absent rather than zero. The template
 gained an opt-in `--extensions-smoke` that proves an external consumer can reach them, and it
 found a real defect on its first run.
@@ -112,12 +112,12 @@ explicitly reviewed full signature, never a suppression:
 ```text
 HEADER_ABI=0.20.0
 CANONICAL_FUNCTIONS=4051
-BOUND_FUNCTIONS=1211
+BOUND_FUNCTIONS=1225
 MANIFEST_SIGNATURE_CHECK=PASS
 MANIFEST_JNI_BINDING_CHECK=PASS
 JNI_HEADER_DERIVED_SLOT_CHECK=PASS
 LAYOUT_SIGNATURE_PROBE=PASS
-LIBRARY_SYMBOL_CHECK=PASS (1211/1211)
+LIBRARY_SYMBOL_CHECK=PASS (1225/1225)
 ABI_POLICY_CHECK=PASS
 NATIVE_TOOL_TESTS=31 passed, 0 failed
 ```
@@ -131,8 +131,8 @@ than guessing; `generateJniCheck` fails the build when the committed output goes
 
 ```text
 XNA_BACKING              975
-JAVA_INTERNAL_ONLY       170
-CNA_EXTENSION_CANDIDATE 1731
+JAVA_INTERNAL_ONLY       171
+CNA_EXTENSION_CANDIDATE 1730
 DEFERRED_RUNTIME         679
 NOT_USEFUL_IN_JAVA       496
 UNMAPPED_REQUIRES_REVIEW   0
@@ -146,7 +146,7 @@ add cost and a native failure mode the original API cannot produce.
 
 `docs/backlog.json` is the machine-readable backlog. The largest remaining gap is the roughly
 1,700 extension candidates still unreached: CNA's engine layer, sensors, haptics, raw joysticks,
-text input, cursors, device enumeration and the `.cnb` content format. They belong under
+device enumeration and the `.cnb` content format. They belong under
 `org.openeggbert.cna.extensions.*`, never inside the strict packages.
 
 Every bound route is reached from Java. That invariant -- `boundButUnreached` empty -- is worth
