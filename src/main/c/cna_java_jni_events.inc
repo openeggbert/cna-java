@@ -33,6 +33,10 @@
 #define CNA_JAVA_EVENT_WRITE_UNARBITRATED 18
 #define CNA_JAVA_EVENT_INVITE_ACCEPTED 19
 #define CNA_JAVA_EVENT_TEXT_INPUT 30
+#define CNA_JAVA_EVENT_MOUSE_CONNECTED 31
+#define CNA_JAVA_EVENT_MOUSE_DISCONNECTED 32
+#define CNA_JAVA_EVENT_KEYBOARD_CONNECTED 33
+#define CNA_JAVA_EVENT_KEYBOARD_DISCONNECTED 34
 
 typedef struct JavaGamerEvent {
     int64_t kind;
@@ -190,6 +194,105 @@ static void java_text_input_callback(uint16_t code_unit, void* context)
 {
     (void)context;
     java_gamer_event_push(CNA_JAVA_EVENT_TEXT_INPUT, 0, (int64_t)code_unit, 0, 0);
+}
+
+/*
+ * The four mouse and keyboard hot-plug callbacks.
+ *
+ * CNA's hot-plug events are static, so these subscriptions belong to the process rather than to a
+ * game, and the identifier each one carries is the only payload. That fits the numeric event
+ * record exactly, so they ride the same queue and the same drain as every other event here and
+ * arrive on the game thread during Update.
+ */
+static void java_mouse_connected_callback(uint32_t device_id, void* context)
+{
+    (void)context;
+    java_gamer_event_push(CNA_JAVA_EVENT_MOUSE_CONNECTED, 0, (int64_t)device_id, 0, 0);
+}
+
+static void java_mouse_disconnected_callback(uint32_t device_id, void* context)
+{
+    (void)context;
+    java_gamer_event_push(CNA_JAVA_EVENT_MOUSE_DISCONNECTED, 0, (int64_t)device_id, 0, 0);
+}
+
+static void java_keyboard_connected_callback(uint32_t device_id, void* context)
+{
+    (void)context;
+    java_gamer_event_push(CNA_JAVA_EVENT_KEYBOARD_CONNECTED, 0, (int64_t)device_id, 0, 0);
+}
+
+static void java_keyboard_disconnected_callback(uint32_t device_id, void* context)
+{
+    (void)context;
+    java_gamer_event_push(CNA_JAVA_EVENT_KEYBOARD_DISCONNECTED, 0, (int64_t)device_id, 0, 0);
+}
+
+/*
+ * Subscribes the four mouse and keyboard hot-plug events, returning their registrations.
+ *
+ * All four or none, for the same reason the session events are all or none: a caller that got
+ * some of them could not tell which it was missing.
+ */
+JNIEXPORT jint JNICALL
+Java_org_openeggbert_cna_internal_NativeGamerServices_nativeSubscribeInputDeviceEvents(
+    JNIEnv* environment, jclass type, jlongArray out_registrations)
+{
+    (void)type;
+    CNA_InputDeviceEventRegistrationHandle registrations[4];
+    for (int index = 0; index < 4; ++index) {
+        registrations[index] = CNA_INVALID_HANDLE;
+    }
+    CNA_Result result = cna.input_devices_subscribe_mouse_connected_ext(
+        java_mouse_connected_callback, NULL, &registrations[0]);
+    if (result == CNA_RESULT_SUCCESS) {
+        result = cna.input_devices_subscribe_mouse_disconnected_ext(
+            java_mouse_disconnected_callback, NULL, &registrations[1]);
+    }
+    if (result == CNA_RESULT_SUCCESS) {
+        result = cna.input_devices_subscribe_keyboard_connected_ext(
+            java_keyboard_connected_callback, NULL, &registrations[2]);
+    }
+    if (result == CNA_RESULT_SUCCESS) {
+        result = cna.input_devices_subscribe_keyboard_disconnected_ext(
+            java_keyboard_disconnected_callback, NULL, &registrations[3]);
+    }
+    if (result != CNA_RESULT_SUCCESS) {
+        for (int index = 3; index >= 0; --index) {
+            if (registrations[index] != CNA_INVALID_HANDLE) {
+                (void)cna.input_devices_unsubscribe_ext(registrations[index]);
+            }
+        }
+        return (jint)result;
+    }
+    jlong values[4];
+    for (int index = 0; index < 4; ++index) {
+        values[index] = (jlong)registrations[index];
+    }
+    (*environment)->SetLongArrayRegion(environment, out_registrations, 0, 4, values);
+    return (jint)CNA_RESULT_SUCCESS;
+}
+
+/** Releases the four hot-plug registrations, in reverse subscription order. */
+JNIEXPORT jint JNICALL
+Java_org_openeggbert_cna_internal_NativeGamerServices_nativeUnsubscribeInputDeviceEvents(
+    JNIEnv* environment, jclass type, jlongArray registrations)
+{
+    (void)type;
+    jlong values[4];
+    (*environment)->GetLongArrayRegion(environment, registrations, 0, 4, values);
+    CNA_Result first = CNA_RESULT_SUCCESS;
+    for (int index = 3; index >= 0; --index) {
+        if (values[index] == 0) {
+            continue;
+        }
+        CNA_Result result = cna.input_devices_unsubscribe_ext(
+            (CNA_InputDeviceEventRegistrationHandle)values[index]);
+        if (result != CNA_RESULT_SUCCESS && first == CNA_RESULT_SUCCESS) {
+            first = result;
+        }
+    }
+    return (jint)first;
 }
 
 /*

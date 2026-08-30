@@ -668,6 +668,119 @@ Java_org_openeggbert_cna_internal_generated_NativeSensorExtensionRoutes_motionSt
 }
 
 JNIEXPORT jint JNICALL
+Java_org_openeggbert_cna_internal_generated_NativeSensorExtensionRoutes_sensorsCopyNameAt(
+    JNIEnv* environment, jclass declaring_class, jlong game, jint index, jbyteArray destination, jlongArray out_bytes)
+{
+    (void)environment;
+    (void)declaring_class;
+    jsize destination_size = (*environment)->GetArrayLength(environment, destination);
+    jbyte* destination_bytes = (*environment)->GetByteArrayElements(environment, destination, NULL);
+    if (destination_bytes == NULL) {
+        return (jint)CNA_RESULT_OUT_OF_MEMORY;
+    }
+    uint64_t destination_written = 0;
+    CNA_Result result = cna.sensors_copy_name_at((CNA_Handle)game, (uint32_t)index, (char*)destination_bytes, (uint64_t)destination_size, &destination_written);
+    (*environment)->ReleaseByteArrayElements(environment, destination, destination_bytes, 0);
+    if (result == CNA_RESULT_SUCCESS) {
+        jlong destination_element = (jlong)destination_written;
+        (*environment)->SetLongArrayRegion(
+            environment, out_bytes, 0, 1, &destination_element);
+    }
+    return (jint)result;
+}
+
+JNIEXPORT jint JNICALL
+Java_org_openeggbert_cna_internal_generated_NativeSensorExtensionRoutes_sensorsGetAccelerometer(
+    JNIEnv* environment, jclass declaring_class, jlong game, jfloatArray out_accelerationFloating, jbooleanArray out_available)
+{
+    (void)environment;
+    (void)declaring_class;
+    CNA_Vector3 out_acceleration_value;
+    memset(&out_acceleration_value, 0, sizeof out_acceleration_value);
+    CNA_Bool out_available_value = 0;
+    CNA_Result result = cna.sensors_get_accelerometer((CNA_Handle)game, &out_acceleration_value, &out_available_value);
+    if (result == CNA_RESULT_SUCCESS) {
+        jfloat out_accelerationFloating_values[] = {
+            (jfloat)out_acceleration_value.x,
+            (jfloat)out_acceleration_value.y,
+            (jfloat)out_acceleration_value.z
+        };
+        (*environment)->SetFloatArrayRegion(environment, out_accelerationFloating, 0,
+            (jsize)(sizeof out_accelerationFloating_values / sizeof out_accelerationFloating_values[0]),
+            out_accelerationFloating_values);
+        jboolean out_available_element = (jboolean)out_available_value;
+        (*environment)->SetBooleanArrayRegion(
+            environment, out_available, 0, 1, &out_available_element);
+    }
+    return (jint)result;
+}
+
+JNIEXPORT jint JNICALL
+Java_org_openeggbert_cna_internal_generated_NativeSensorExtensionRoutes_sensorsGetCount(
+    JNIEnv* environment, jclass declaring_class, jlong game, jintArray out_count)
+{
+    (void)environment;
+    (void)declaring_class;
+    uint32_t out_count_value = 0;
+    CNA_Result result = cna.sensors_get_count((CNA_Handle)game, &out_count_value);
+    if (result == CNA_RESULT_SUCCESS) {
+        jint out_count_element = (jint)out_count_value;
+        (*environment)->SetIntArrayRegion(
+            environment, out_count, 0, 1, &out_count_element);
+    }
+    return (jint)result;
+}
+
+JNIEXPORT jint JNICALL
+Java_org_openeggbert_cna_internal_generated_NativeSensorExtensionRoutes_sensorsGetGyroscope(
+    JNIEnv* environment, jclass declaring_class, jlong game, jfloatArray out_angular_velocityFloating, jbooleanArray out_available)
+{
+    (void)environment;
+    (void)declaring_class;
+    CNA_Vector3 out_angular_velocity_value;
+    memset(&out_angular_velocity_value, 0, sizeof out_angular_velocity_value);
+    CNA_Bool out_available_value = 0;
+    CNA_Result result = cna.sensors_get_gyroscope((CNA_Handle)game, &out_angular_velocity_value, &out_available_value);
+    if (result == CNA_RESULT_SUCCESS) {
+        jfloat out_angular_velocityFloating_values[] = {
+            (jfloat)out_angular_velocity_value.x,
+            (jfloat)out_angular_velocity_value.y,
+            (jfloat)out_angular_velocity_value.z
+        };
+        (*environment)->SetFloatArrayRegion(environment, out_angular_velocityFloating, 0,
+            (jsize)(sizeof out_angular_velocityFloating_values / sizeof out_angular_velocityFloating_values[0]),
+            out_angular_velocityFloating_values);
+        jboolean out_available_element = (jboolean)out_available_value;
+        (*environment)->SetBooleanArrayRegion(
+            environment, out_available, 0, 1, &out_available_element);
+    }
+    return (jint)result;
+}
+
+JNIEXPORT jint JNICALL
+Java_org_openeggbert_cna_internal_generated_NativeSensorExtensionRoutes_sensorsGetInfoAt(
+    JNIEnv* environment, jclass declaring_class, jlong game, jint index, jlongArray out_infoIntegral)
+{
+    (void)environment;
+    (void)declaring_class;
+    CNA_SensorInfo out_info_value;
+    memset(&out_info_value, 0, sizeof out_info_value);
+    out_info_value.struct_size = (uint32_t)(sizeof out_info_value);
+    out_info_value.struct_version = UINT32_C(1);
+    CNA_Result result = cna.sensors_get_info_at((CNA_Handle)game, (uint32_t)index, &out_info_value);
+    if (result == CNA_RESULT_SUCCESS) {
+        jlong out_infoIntegral_values[] = {
+            (jlong)out_info_value.id,
+            (jlong)out_info_value.type
+        };
+        (*environment)->SetLongArrayRegion(environment, out_infoIntegral, 0,
+            (jsize)(sizeof out_infoIntegral_values / sizeof out_infoIntegral_values[0]),
+            out_infoIntegral_values);
+    }
+    return (jint)result;
+}
+
+JNIEXPORT jint JNICALL
 Java_org_openeggbert_cna_internal_generated_NativeSensorExtensionRoutes_sensorsGetLastErrorIdExt(
     JNIEnv* environment, jclass declaring_class, jintArray out_error_id, jbooleanArray out_has_error_id)
 {
@@ -683,6 +796,22 @@ Java_org_openeggbert_cna_internal_generated_NativeSensorExtensionRoutes_sensorsG
         jboolean out_has_error_id_element = (jboolean)out_has_error_id_value;
         (*environment)->SetBooleanArrayRegion(
             environment, out_has_error_id, 0, 1, &out_has_error_id_element);
+    }
+    return (jint)result;
+}
+
+JNIEXPORT jint JNICALL
+Java_org_openeggbert_cna_internal_generated_NativeSensorExtensionRoutes_sensorsGetNameSizeAt(
+    JNIEnv* environment, jclass declaring_class, jlong game, jint index, jlongArray out_bytes)
+{
+    (void)environment;
+    (void)declaring_class;
+    uint64_t out_bytes_value = 0;
+    CNA_Result result = cna.sensors_get_name_size_at((CNA_Handle)game, (uint32_t)index, &out_bytes_value);
+    if (result == CNA_RESULT_SUCCESS) {
+        jlong out_bytes_element = (jlong)out_bytes_value;
+        (*environment)->SetLongArrayRegion(
+            environment, out_bytes, 0, 1, &out_bytes_element);
     }
     return (jint)result;
 }

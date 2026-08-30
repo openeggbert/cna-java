@@ -156,6 +156,12 @@ public final class NativeGamerServices {
     /** Releases the typed-character subscription. */
     static native int nativeUnsubscribeTextInput(long registration);
 
+    /** Subscribes the four process-wide mouse and keyboard hot-plug events. */
+    static native int nativeSubscribeInputDeviceEvents(long[] outRegistrations);
+
+    /** Releases the four mouse and keyboard hot-plug registrations. */
+    static native int nativeUnsubscribeInputDeviceEvents(long[] registrations);
+
     /** Converts this adapter's game token into the CNA game handle a generated route needs. */
     static native long nativeCnaGameHandle(long game);
 

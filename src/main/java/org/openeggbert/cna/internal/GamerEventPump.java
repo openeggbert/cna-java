@@ -1,6 +1,8 @@
 package org.openeggbert.cna.internal;
 
+import java.util.List;
 import java.util.Objects;
+import java.util.concurrent.CopyOnWriteArrayList;
 
 /**
  * Delivers CNA's gamer-service and network-session events to the Java types that own them.
@@ -9,11 +11,14 @@ import java.util.Objects;
  * into the JVM. Java drains the record immediately after pumping the dispatcher or the session,
  * which puts every event on the game thread during {@code Update} -- where XNA raises it too.
  *
- * <p>The two handlers are installed by the packages that own the listeners:
+ * <p>The gamer and session handlers are installed by the packages that own the listeners:
  * {@code Microsoft.Xna.Framework.GamerServices} and {@code Microsoft.Xna.Framework.Net}. CLR
  * reaches across those namespaces through assembly-internal access, which Java has no
  * equivalent for. Installing at class initialization is safe because a handler is only needed
  * once one of that package's types exists.
+ *
+ * <p>The input range is shared: several CNA extension families raise events there, so it takes a
+ * list of handlers and each filters on the kinds it owns.
  *
  * <p>This class is not application API.
  */
@@ -27,9 +32,12 @@ public final class GamerEventPump {
 
     private static volatile Handler gamerHandler;
     private static volatile Handler sessionHandler;
-    private static volatile Handler inputHandler;
+    // Several extension families share the input kind range, and each filters on the kind it
+    // owns, so this is a list rather than the single handler the other two ranges use.
+    private static final List<Handler> INPUT_HANDLERS = new CopyOnWriteArrayList<>();
     private static volatile boolean subscribed;
     private static long textInputRegistration;
+    private static long[] inputDeviceRegistrations;
 
     private GamerEventPump() {
     }
@@ -47,8 +55,42 @@ public final class GamerEventPump {
         sessionHandler = Objects.requireNonNull(handler, "handler");
     }
 
-    public static void setInputHandler(Handler handler) {
-        inputHandler = Objects.requireNonNull(handler, "handler");
+    /**
+     * Adds a handler for the input kind range.
+     *
+     * <p>Registering the same handler twice would deliver every event twice, so a family
+     * installs its handler once from its own class initializer.
+     */
+    public static void addInputHandler(Handler handler) {
+        INPUT_HANDLERS.add(Objects.requireNonNull(handler, "handler"));
+    }
+
+    /**
+     * Subscribes CNA's four mouse and keyboard hot-plug events once.
+     *
+     * <p>They are static CNA events, so the registrations belong to the process rather than to a
+     * game and outlive any one game. Subscribing twice would deliver every event twice, so the
+     * decision lives here rather than at each call site.
+     */
+    public static synchronized void ensureInputDevicesSubscribed() {
+        if (inputDeviceRegistrations != null) {
+            return;
+        }
+        long[] registrations = new long[4];
+        NativeGamerServices.check("Input device hot-plug events",
+                NativeGamerServices.nativeSubscribeInputDeviceEvents(registrations));
+        inputDeviceRegistrations = registrations;
+    }
+
+    /** Releases the hot-plug registrations, for a test that needs to prove they can be released. */
+    public static synchronized void releaseInputDevices() {
+        if (inputDeviceRegistrations == null) {
+            return;
+        }
+        long[] registrations = inputDeviceRegistrations;
+        inputDeviceRegistrations = null;
+        NativeGamerServices.check("Input device hot-plug events",
+                NativeGamerServices.nativeUnsubscribeInputDeviceEvents(registrations));
     }
 
     /** Subscribes CNA's typed-character event once. */
@@ -102,30 +144,33 @@ public final class GamerEventPump {
         long[] record = new long[5];
         RuntimeException failure = null;
         while (NativeGamerServices.nativePollEvent(record)) {
-            Handler handler;
+            Iterable<Handler> handlers;
             if (record[0] >= FIRST_INPUT_KIND) {
-                handler = inputHandler;
+                handlers = INPUT_HANDLERS;
             } else if (record[0] >= FIRST_SESSION_KIND) {
-                handler = sessionHandler;
+                handlers = single(sessionHandler);
             } else {
-                handler = gamerHandler;
+                handlers = single(gamerHandler);
             }
-            if (handler == null) {
-                continue;
-            }
-            try {
-                handler.handle(record[0], record[1], record[2], record[3], record[4]);
-            } catch (RuntimeException exception) {
-                if (failure == null) {
-                    failure = exception;
-                } else {
-                    failure.addSuppressed(exception);
+            for (Handler handler : handlers) {
+                try {
+                    handler.handle(record[0], record[1], record[2], record[3], record[4]);
+                } catch (RuntimeException exception) {
+                    if (failure == null) {
+                        failure = exception;
+                    } else {
+                        failure.addSuppressed(exception);
+                    }
                 }
             }
         }
         if (failure != null) {
             throw failure;
         }
+    }
+
+    private static Iterable<Handler> single(Handler handler) {
+        return handler == null ? List.of() : List.of(handler);
     }
 
     /** Returns how many events CNA raised that the queue could not hold. */

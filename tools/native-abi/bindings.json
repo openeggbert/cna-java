@@ -6673,6 +6673,234 @@
       ]
     },
     {
+      "name": "cna_input_devices_copy_keyboard_name_at",
+      "header": "input_devices.h",
+      "ownership": "borrows game; caller buffer",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_Handle",
+        "uint32_t",
+        "char*",
+        "uint64_t",
+        "uint64_t*"
+      ]
+    },
+    {
+      "name": "cna_input_devices_copy_mouse_name_at",
+      "header": "input_devices.h",
+      "ownership": "borrows game; caller buffer",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_Handle",
+        "uint32_t",
+        "char*",
+        "uint64_t",
+        "uint64_t*"
+      ]
+    },
+    {
+      "name": "cna_input_devices_copy_touch_device_name_at",
+      "header": "input_devices.h",
+      "ownership": "borrows game; caller buffer",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_Handle",
+        "uint32_t",
+        "char*",
+        "uint64_t",
+        "uint64_t*"
+      ]
+    },
+    {
+      "name": "cna_input_devices_get_keyboard_count",
+      "header": "input_devices.h",
+      "ownership": "borrows game; caller integer output",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_Handle",
+        "uint32_t*"
+      ]
+    },
+    {
+      "name": "cna_input_devices_get_keyboard_info_at",
+      "header": "input_devices.h",
+      "ownership": "borrows game; caller structure output",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_Handle",
+        "uint32_t",
+        "CNA_InputDeviceInfo*"
+      ]
+    },
+    {
+      "name": "cna_input_devices_get_keyboard_name_size_at",
+      "header": "input_devices.h",
+      "ownership": "borrows game; caller integer output",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_Handle",
+        "uint32_t",
+        "uint64_t*"
+      ]
+    },
+    {
+      "name": "cna_input_devices_get_mouse_count",
+      "header": "input_devices.h",
+      "ownership": "borrows game; caller integer output",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_Handle",
+        "uint32_t*"
+      ]
+    },
+    {
+      "name": "cna_input_devices_get_mouse_info_at",
+      "header": "input_devices.h",
+      "ownership": "borrows game; caller structure output",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_Handle",
+        "uint32_t",
+        "CNA_InputDeviceInfo*"
+      ]
+    },
+    {
+      "name": "cna_input_devices_get_mouse_name_size_at",
+      "header": "input_devices.h",
+      "ownership": "borrows game; caller integer output",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_Handle",
+        "uint32_t",
+        "uint64_t*"
+      ]
+    },
+    {
+      "name": "cna_input_devices_get_touch_device_count",
+      "header": "input_devices.h",
+      "ownership": "borrows game; caller integer output",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_Handle",
+        "uint32_t*"
+      ]
+    },
+    {
+      "name": "cna_input_devices_get_touch_device_info_at",
+      "header": "input_devices.h",
+      "ownership": "borrows game; caller structure output",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_Handle",
+        "uint32_t",
+        "CNA_InputDeviceInfo*"
+      ]
+    },
+    {
+      "name": "cna_input_devices_get_touch_device_name_size_at",
+      "header": "input_devices.h",
+      "ownership": "borrows game; caller integer output",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_Handle",
+        "uint32_t",
+        "uint64_t*"
+      ]
+    },
+    {
+      "name": "cna_input_devices_raise_keyboard_connected_ext",
+      "header": "input_devices.h",
+      "ownership": "borrows game; invokes the process-wide hot-plug event",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_Handle",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "cna_input_devices_raise_keyboard_disconnected_ext",
+      "header": "input_devices.h",
+      "ownership": "borrows game; invokes the process-wide hot-plug event",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_Handle",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "cna_input_devices_raise_mouse_connected_ext",
+      "header": "input_devices.h",
+      "ownership": "borrows game; invokes the process-wide hot-plug event",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_Handle",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "cna_input_devices_raise_mouse_disconnected_ext",
+      "header": "input_devices.h",
+      "ownership": "borrows game; invokes the process-wide hot-plug event",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_Handle",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "cna_input_devices_subscribe_keyboard_connected_ext",
+      "header": "input_devices.h",
+      "ownership": "no handle; returns an owned process-wide registration handle",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_InputDeviceHotplugCallback",
+        "void*",
+        "CNA_InputDeviceEventRegistrationHandle*"
+      ]
+    },
+    {
+      "name": "cna_input_devices_subscribe_keyboard_disconnected_ext",
+      "header": "input_devices.h",
+      "ownership": "no handle; returns an owned process-wide registration handle",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_InputDeviceHotplugCallback",
+        "void*",
+        "CNA_InputDeviceEventRegistrationHandle*"
+      ]
+    },
+    {
+      "name": "cna_input_devices_subscribe_mouse_connected_ext",
+      "header": "input_devices.h",
+      "ownership": "no handle; returns an owned process-wide registration handle",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_InputDeviceHotplugCallback",
+        "void*",
+        "CNA_InputDeviceEventRegistrationHandle*"
+      ]
+    },
+    {
+      "name": "cna_input_devices_subscribe_mouse_disconnected_ext",
+      "header": "input_devices.h",
+      "ownership": "no handle; returns an owned process-wide registration handle",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_InputDeviceHotplugCallback",
+        "void*",
+        "CNA_InputDeviceEventRegistrationHandle*"
+      ]
+    },
+    {
+      "name": "cna_input_devices_unsubscribe_ext",
+      "header": "input_devices.h",
+      "ownership": "releases one owned registration handle",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_InputDeviceEventRegistrationHandle"
+      ]
+    },
+    {
       "name": "cna_invite_accepted_event_info_init",
       "header": "gamer_services.h",
       "ownership": "borrows its inputs; caller output",
@@ -10507,6 +10735,62 @@
       ]
     },
     {
+      "name": "cna_sensors_copy_name_at",
+      "header": "input_devices.h",
+      "ownership": "borrows game; caller buffer",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_Handle",
+        "uint32_t",
+        "char*",
+        "uint64_t",
+        "uint64_t*"
+      ]
+    },
+    {
+      "name": "cna_sensors_get_accelerometer",
+      "header": "input_devices.h",
+      "ownership": "borrows game; caller structure and bool outputs",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_Handle",
+        "CNA_Vector3*",
+        "CNA_Bool*"
+      ]
+    },
+    {
+      "name": "cna_sensors_get_count",
+      "header": "input_devices.h",
+      "ownership": "borrows game; caller integer output",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_Handle",
+        "uint32_t*"
+      ]
+    },
+    {
+      "name": "cna_sensors_get_gyroscope",
+      "header": "input_devices.h",
+      "ownership": "borrows game; caller structure and bool outputs",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_Handle",
+        "CNA_Vector3*",
+        "CNA_Bool*"
+      ]
+    },
+    {
+      "name": "cna_sensors_get_info_at",
+      "header": "input_devices.h",
+      "ownership": "borrows game; caller structure output",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_Handle",
+        "uint32_t",
+        "CNA_SensorInfo*"
+      ]
+    },
+    {
       "name": "cna_sensors_get_last_error_id_ext",
       "header": "sensors.h",
       "ownership": "no handle; caller integer outputs",
@@ -10514,6 +10798,17 @@
       "parameters": [
         "int32_t*",
         "CNA_Bool*"
+      ]
+    },
+    {
+      "name": "cna_sensors_get_name_size_at",
+      "header": "input_devices.h",
+      "ownership": "borrows game; caller integer output",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_Handle",
+        "uint32_t",
+        "uint64_t*"
       ]
     },
     {

@@ -1832,28 +1832,12 @@
     ],
     "NativeDeviceExtensionRoutes": [
       {
+        "java": "devicesClipboardSetTextExt",
+        "symbol": "cna_devices_clipboard_set_text_ext"
+      },
+      {
         "java": "devicesExtIsAvailable",
         "symbol": "cna_devices_ext_is_available"
-      },
-      {
-        "java": "systemInfoGetLogicalCpuCoreCountExt",
-        "symbol": "cna_system_info_get_logical_cpu_core_count_ext"
-      },
-      {
-        "java": "systemInfoGetSystemRamMegabytesExt",
-        "symbol": "cna_system_info_get_system_ram_megabytes_ext"
-      },
-      {
-        "java": "powerGetStateExt",
-        "symbol": "cna_power_get_state_ext"
-      },
-      {
-        "java": "powerGetBatteryPercentExt",
-        "symbol": "cna_power_get_battery_percent_ext"
-      },
-      {
-        "java": "powerGetSecondsRemainingExt",
-        "symbol": "cna_power_get_seconds_remaining_ext"
       },
       {
         "java": "displayInfoGetContentScaleExt",
@@ -1864,12 +1848,72 @@
         "symbol": "cna_display_info_get_safe_area_ext"
       },
       {
-        "java": "localeGetPreferredCountExt",
-        "symbol": "cna_locale_get_preferred_count_ext"
+        "java": "inputDevicesCopyKeyboardNameAt",
+        "symbol": "cna_input_devices_copy_keyboard_name_at"
       },
       {
-        "java": "localeGetLanguageSizeAtExt",
-        "symbol": "cna_locale_get_language_size_at_ext"
+        "java": "inputDevicesCopyMouseNameAt",
+        "symbol": "cna_input_devices_copy_mouse_name_at"
+      },
+      {
+        "java": "inputDevicesCopyTouchDeviceNameAt",
+        "symbol": "cna_input_devices_copy_touch_device_name_at"
+      },
+      {
+        "java": "inputDevicesGetKeyboardCount",
+        "symbol": "cna_input_devices_get_keyboard_count"
+      },
+      {
+        "java": "inputDevicesGetKeyboardInfoAt",
+        "symbol": "cna_input_devices_get_keyboard_info_at"
+      },
+      {
+        "java": "inputDevicesGetKeyboardNameSizeAt",
+        "symbol": "cna_input_devices_get_keyboard_name_size_at"
+      },
+      {
+        "java": "inputDevicesGetMouseCount",
+        "symbol": "cna_input_devices_get_mouse_count"
+      },
+      {
+        "java": "inputDevicesGetMouseInfoAt",
+        "symbol": "cna_input_devices_get_mouse_info_at"
+      },
+      {
+        "java": "inputDevicesGetMouseNameSizeAt",
+        "symbol": "cna_input_devices_get_mouse_name_size_at"
+      },
+      {
+        "java": "inputDevicesGetTouchDeviceCount",
+        "symbol": "cna_input_devices_get_touch_device_count"
+      },
+      {
+        "java": "inputDevicesGetTouchDeviceInfoAt",
+        "symbol": "cna_input_devices_get_touch_device_info_at"
+      },
+      {
+        "java": "inputDevicesGetTouchDeviceNameSizeAt",
+        "symbol": "cna_input_devices_get_touch_device_name_size_at"
+      },
+      {
+        "java": "inputDevicesRaiseKeyboardConnectedExt",
+        "symbol": "cna_input_devices_raise_keyboard_connected_ext"
+      },
+      {
+        "java": "inputDevicesRaiseKeyboardDisconnectedExt",
+        "symbol": "cna_input_devices_raise_keyboard_disconnected_ext"
+      },
+      {
+        "java": "inputDevicesRaiseMouseConnectedExt",
+        "symbol": "cna_input_devices_raise_mouse_connected_ext"
+      },
+      {
+        "java": "inputDevicesRaiseMouseDisconnectedExt",
+        "symbol": "cna_input_devices_raise_mouse_disconnected_ext"
+      },
+      {
+        "java": "localeCopyCountryAtExt",
+        "symbol": "cna_locale_copy_country_at_ext"
       },
       {
         "java": "localeCopyLanguageAtExt",
@@ -1880,40 +1924,60 @@
         "symbol": "cna_locale_get_country_size_at_ext"
       },
       {
-        "java": "localeCopyCountryAtExt",
-        "symbol": "cna_locale_copy_country_at_ext"
+        "java": "localeGetLanguageSizeAtExt",
+        "symbol": "cna_locale_get_language_size_at_ext"
+      },
+      {
+        "java": "localeGetPreferredCountExt",
+        "symbol": "cna_locale_get_preferred_count_ext"
+      },
+      {
+        "java": "powerGetBatteryPercentExt",
+        "symbol": "cna_power_get_battery_percent_ext"
+      },
+      {
+        "java": "powerGetSecondsRemainingExt",
+        "symbol": "cna_power_get_seconds_remaining_ext"
+      },
+      {
+        "java": "powerGetStateExt",
+        "symbol": "cna_power_get_state_ext"
+      },
+      {
+        "java": "systemInfoGetLogicalCpuCoreCountExt",
+        "symbol": "cna_system_info_get_logical_cpu_core_count_ext"
+      },
+      {
+        "java": "systemInfoGetSystemRamMegabytesExt",
+        "symbol": "cna_system_info_get_system_ram_megabytes_ext"
       },
       {
         "java": "urlLauncherOpenExt",
         "symbol": "cna_url_launcher_open_ext"
       },
       {
-        "java": "devicesClipboardSetTextExt",
-        "symbol": "cna_devices_clipboard_set_text_ext"
-      },
-      {
-        "java": "vibrateControllerGetIsSupportedExt",
-        "symbol": "cna_vibrate_controller_get_is_supported_ext"
+        "java": "vibrateControllerCopyDeviceNameExt",
+        "symbol": "cna_vibrate_controller_copy_device_name_ext"
       },
       {
         "java": "vibrateControllerGetDeviceNameSizeExt",
         "symbol": "cna_vibrate_controller_get_device_name_size_ext"
       },
       {
-        "java": "vibrateControllerCopyDeviceNameExt",
-        "symbol": "cna_vibrate_controller_copy_device_name_ext"
+        "java": "vibrateControllerGetIsSupportedExt",
+        "symbol": "cna_vibrate_controller_get_is_supported_ext"
       },
       {
         "java": "vibrateControllerStart",
         "symbol": "cna_vibrate_controller_start"
       },
       {
-        "java": "vibrateControllerStartWithIntensityExt",
-        "symbol": "cna_vibrate_controller_start_with_intensity_ext"
-      },
-      {
         "java": "vibrateControllerStartLeftRightExt",
         "symbol": "cna_vibrate_controller_start_left_right_ext"
+      },
+      {
+        "java": "vibrateControllerStartWithIntensityExt",
+        "symbol": "cna_vibrate_controller_start_with_intensity_ext"
       },
       {
         "java": "vibrateControllerStop",
@@ -2136,8 +2200,32 @@
         "symbol": "cna_motion_stop"
       },
       {
+        "java": "sensorsCopyNameAt",
+        "symbol": "cna_sensors_copy_name_at"
+      },
+      {
+        "java": "sensorsGetAccelerometer",
+        "symbol": "cna_sensors_get_accelerometer"
+      },
+      {
+        "java": "sensorsGetCount",
+        "symbol": "cna_sensors_get_count"
+      },
+      {
+        "java": "sensorsGetGyroscope",
+        "symbol": "cna_sensors_get_gyroscope"
+      },
+      {
+        "java": "sensorsGetInfoAt",
+        "symbol": "cna_sensors_get_info_at"
+      },
+      {
         "java": "sensorsGetLastErrorIdExt",
         "symbol": "cna_sensors_get_last_error_id_ext"
+      },
+      {
+        "java": "sensorsGetNameSizeAt",
+        "symbol": "cna_sensors_get_name_size_at"
       }
     ]
   }

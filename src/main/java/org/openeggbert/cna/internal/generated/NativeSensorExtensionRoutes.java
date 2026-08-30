@@ -308,7 +308,57 @@ public final class NativeSensorExtensionRoutes {
     public static native int motionStop(long sensor);
 
     /**
+     * cna_sensors_copy_name_at (input_devices.h).
+     */
+    public static native int sensorsCopyNameAt(long game, int index, byte[] destination, long[] outBytes);
+
+    /**
+     * cna_sensors_get_accelerometer (input_devices.h).
+     *
+     * <p>outAccelerationFloating carries CNA_Vector3 in this order:
+     * <ol start="0">
+     *   <li>{@code x} (float)</li>
+     *   <li>{@code y} (float)</li>
+     *   <li>{@code z} (float)</li>
+     * </ol>
+     */
+    public static native int sensorsGetAccelerometer(long game, float[] outAccelerationFloating, boolean[] outAvailable);
+
+    /**
+     * cna_sensors_get_count (input_devices.h).
+     */
+    public static native int sensorsGetCount(long game, int[] outCount);
+
+    /**
+     * cna_sensors_get_gyroscope (input_devices.h).
+     *
+     * <p>outAngularVelocityFloating carries CNA_Vector3 in this order:
+     * <ol start="0">
+     *   <li>{@code x} (float)</li>
+     *   <li>{@code y} (float)</li>
+     *   <li>{@code z} (float)</li>
+     * </ol>
+     */
+    public static native int sensorsGetGyroscope(long game, float[] outAngularVelocityFloating, boolean[] outAvailable);
+
+    /**
+     * cna_sensors_get_info_at (input_devices.h).
+     *
+     * <p>outInfoIntegral carries CNA_SensorInfo in this order:
+     * <ol start="0">
+     *   <li>{@code id} (uint32_t)</li>
+     *   <li>{@code type} (CNA_SensorType)</li>
+     * </ol>
+     */
+    public static native int sensorsGetInfoAt(long game, int index, long[] outInfoIntegral);
+
+    /**
      * cna_sensors_get_last_error_id_ext (sensors.h).
      */
     public static native int sensorsGetLastErrorIdExt(int[] outErrorId, boolean[] outHasErrorId);
+
+    /**
+     * cna_sensors_get_name_size_at (input_devices.h).
+     */
+    public static native int sensorsGetNameSizeAt(long game, int index, long[] outBytes);
 }

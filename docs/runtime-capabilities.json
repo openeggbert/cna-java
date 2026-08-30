@@ -200,6 +200,16 @@
         "HARDWARE_PENDING"
       ],
       "detail": "Accelerometer, Gyroscope, Compass and Motion create, report state, round-trip their sampling interval and release their owned handle against the live runtime. This host has none of the four: every one reports NotSupported, getIsDataValid is false, and a reading is refused with IllegalStateException rather than answered with zeros, which is CNA's own contract and what the tests assert. A reading from real hardware is not qualified here."
+    },
+    {
+      "id": "extension-input-devices",
+      "surface": "org.openeggbert.cna.extensions.devices.InputDevices, org.openeggbert.cna.extensions.sensors.SensorDevices",
+      "statuses": [
+        "EXTENSION_VERIFIED",
+        "NATIVE_VERIFIED",
+        "HARDWARE_PENDING"
+      ],
+      "detail": "Mice, keyboards, touch devices and host motion sensors enumerate as immutable snapshots with the host's own identifier and name; zero devices is an ordinary answer on this headless host. Hot plug is verified end to end without hardware, because CNA exposes the same event its platform layer raises: a raised connection reaches a Java listener on the game thread during FrameworkDispatcher.Update, in raise order, and stops when the listener or the native subscription is released. The registrations are process-wide and were proved to survive one game being destroyed and another created. Real hardware being plugged in was not exercised."
     }
   ]
 }

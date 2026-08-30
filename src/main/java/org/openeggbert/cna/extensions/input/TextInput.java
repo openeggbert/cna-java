@@ -32,7 +32,7 @@ public final class TextInput {
     private static final List<IntConsumer> LISTENERS = new CopyOnWriteArrayList<>();
 
     static {
-        GamerEventPump.setInputHandler(TextInput::dispatch);
+        GamerEventPump.addInputHandler(TextInput::dispatch);
     }
 
     private TextInput() {

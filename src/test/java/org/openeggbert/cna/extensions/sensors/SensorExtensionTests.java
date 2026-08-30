@@ -14,6 +14,7 @@ import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
@@ -135,6 +136,37 @@ final class SensorExtensionTests {
                 // drifting yet", which is why it is reported rather than interpreted.
                 assertDoesNotThrow(motion::getIsAttitudeNorthReferenced);
             }
+
+            // The machine's own sensors, enumerated. Zero is an ordinary answer here, and the
+            // two quick reads report absent rather than a zero vector -- a zero acceleration
+            // vector would mean free fall, which is a measurement, not a missing sensor.
+            assertNotNull(SensorDevices.enumerate());
+            for (SensorDeviceInfo sensor : SensorDevices.enumerate()) {
+                assertNotNull(sensor.Type());
+                assertNotNull(sensor.Name());
+            }
+            assertThrows(UnsupportedOperationException.class,
+                    () -> SensorDevices.enumerate().add(
+                            new SensorDeviceInfo(1, SensorType.Unknown, "x")));
+            // The quick reads and the enumeration are the same subsystem, so they have to
+            // agree: a host that lists no accelerometer cannot produce an acceleration.
+            boolean listsAccelerometer = SensorDevices.enumerate().stream().anyMatch(
+                    sensor -> sensor.Type() == SensorType.Accelerometer
+                            || sensor.Type() == SensorType.AccelerometerLeft
+                            || sensor.Type() == SensorType.AccelerometerRight);
+            if (!listsAccelerometer) {
+                assertNull(SensorDevices.getAcceleration(),
+                        "no enumerated accelerometer, so no reading may be produced");
+            }
+            boolean listsGyroscope = SensorDevices.enumerate().stream().anyMatch(
+                    sensor -> sensor.Type() == SensorType.Gyroscope
+                            || sensor.Type() == SensorType.GyroscopeLeft
+                            || sensor.Type() == SensorType.GyroscopeRight);
+            if (!listsGyroscope) {
+                assertNull(SensorDevices.getAngularVelocity(),
+                        "no enumerated gyroscope, so no reading may be produced");
+            }
+            assertEquals(7, SensorType.values().length);
 
             // Closing releases the owned handle. A second close is a no-op even though CNA
             // refuses a second disposal, and every other member refuses afterwards.

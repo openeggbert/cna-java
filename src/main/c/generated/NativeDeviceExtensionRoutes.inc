@@ -85,6 +85,274 @@ Java_org_openeggbert_cna_internal_generated_NativeDeviceExtensionRoutes_displayI
 }
 
 JNIEXPORT jint JNICALL
+Java_org_openeggbert_cna_internal_generated_NativeDeviceExtensionRoutes_inputDevicesCopyKeyboardNameAt(
+    JNIEnv* environment, jclass declaring_class, jlong game, jint index, jbyteArray destination, jlongArray out_bytes)
+{
+    (void)environment;
+    (void)declaring_class;
+    jsize destination_size = (*environment)->GetArrayLength(environment, destination);
+    jbyte* destination_bytes = (*environment)->GetByteArrayElements(environment, destination, NULL);
+    if (destination_bytes == NULL) {
+        return (jint)CNA_RESULT_OUT_OF_MEMORY;
+    }
+    uint64_t destination_written = 0;
+    CNA_Result result = cna.input_devices_copy_keyboard_name_at((CNA_Handle)game, (uint32_t)index, (char*)destination_bytes, (uint64_t)destination_size, &destination_written);
+    (*environment)->ReleaseByteArrayElements(environment, destination, destination_bytes, 0);
+    if (result == CNA_RESULT_SUCCESS) {
+        jlong destination_element = (jlong)destination_written;
+        (*environment)->SetLongArrayRegion(
+            environment, out_bytes, 0, 1, &destination_element);
+    }
+    return (jint)result;
+}
+
+JNIEXPORT jint JNICALL
+Java_org_openeggbert_cna_internal_generated_NativeDeviceExtensionRoutes_inputDevicesCopyMouseNameAt(
+    JNIEnv* environment, jclass declaring_class, jlong game, jint index, jbyteArray destination, jlongArray out_bytes)
+{
+    (void)environment;
+    (void)declaring_class;
+    jsize destination_size = (*environment)->GetArrayLength(environment, destination);
+    jbyte* destination_bytes = (*environment)->GetByteArrayElements(environment, destination, NULL);
+    if (destination_bytes == NULL) {
+        return (jint)CNA_RESULT_OUT_OF_MEMORY;
+    }
+    uint64_t destination_written = 0;
+    CNA_Result result = cna.input_devices_copy_mouse_name_at((CNA_Handle)game, (uint32_t)index, (char*)destination_bytes, (uint64_t)destination_size, &destination_written);
+    (*environment)->ReleaseByteArrayElements(environment, destination, destination_bytes, 0);
+    if (result == CNA_RESULT_SUCCESS) {
+        jlong destination_element = (jlong)destination_written;
+        (*environment)->SetLongArrayRegion(
+            environment, out_bytes, 0, 1, &destination_element);
+    }
+    return (jint)result;
+}
+
+JNIEXPORT jint JNICALL
+Java_org_openeggbert_cna_internal_generated_NativeDeviceExtensionRoutes_inputDevicesCopyTouchDeviceNameAt(
+    JNIEnv* environment, jclass declaring_class, jlong game, jint index, jbyteArray destination, jlongArray out_bytes)
+{
+    (void)environment;
+    (void)declaring_class;
+    jsize destination_size = (*environment)->GetArrayLength(environment, destination);
+    jbyte* destination_bytes = (*environment)->GetByteArrayElements(environment, destination, NULL);
+    if (destination_bytes == NULL) {
+        return (jint)CNA_RESULT_OUT_OF_MEMORY;
+    }
+    uint64_t destination_written = 0;
+    CNA_Result result = cna.input_devices_copy_touch_device_name_at((CNA_Handle)game, (uint32_t)index, (char*)destination_bytes, (uint64_t)destination_size, &destination_written);
+    (*environment)->ReleaseByteArrayElements(environment, destination, destination_bytes, 0);
+    if (result == CNA_RESULT_SUCCESS) {
+        jlong destination_element = (jlong)destination_written;
+        (*environment)->SetLongArrayRegion(
+            environment, out_bytes, 0, 1, &destination_element);
+    }
+    return (jint)result;
+}
+
+JNIEXPORT jint JNICALL
+Java_org_openeggbert_cna_internal_generated_NativeDeviceExtensionRoutes_inputDevicesGetKeyboardCount(
+    JNIEnv* environment, jclass declaring_class, jlong game, jintArray out_count)
+{
+    (void)environment;
+    (void)declaring_class;
+    uint32_t out_count_value = 0;
+    CNA_Result result = cna.input_devices_get_keyboard_count((CNA_Handle)game, &out_count_value);
+    if (result == CNA_RESULT_SUCCESS) {
+        jint out_count_element = (jint)out_count_value;
+        (*environment)->SetIntArrayRegion(
+            environment, out_count, 0, 1, &out_count_element);
+    }
+    return (jint)result;
+}
+
+JNIEXPORT jint JNICALL
+Java_org_openeggbert_cna_internal_generated_NativeDeviceExtensionRoutes_inputDevicesGetKeyboardInfoAt(
+    JNIEnv* environment, jclass declaring_class, jlong game, jint index, jlongArray out_infoIntegral)
+{
+    (void)environment;
+    (void)declaring_class;
+    CNA_InputDeviceInfo out_info_value;
+    memset(&out_info_value, 0, sizeof out_info_value);
+    out_info_value.struct_size = (uint32_t)(sizeof out_info_value);
+    out_info_value.struct_version = UINT32_C(1);
+    CNA_Result result = cna.input_devices_get_keyboard_info_at((CNA_Handle)game, (uint32_t)index, &out_info_value);
+    if (result == CNA_RESULT_SUCCESS) {
+        jlong out_infoIntegral_values[] = {
+            (jlong)out_info_value.id
+        };
+        (*environment)->SetLongArrayRegion(environment, out_infoIntegral, 0,
+            (jsize)(sizeof out_infoIntegral_values / sizeof out_infoIntegral_values[0]),
+            out_infoIntegral_values);
+    }
+    return (jint)result;
+}
+
+JNIEXPORT jint JNICALL
+Java_org_openeggbert_cna_internal_generated_NativeDeviceExtensionRoutes_inputDevicesGetKeyboardNameSizeAt(
+    JNIEnv* environment, jclass declaring_class, jlong game, jint index, jlongArray out_bytes)
+{
+    (void)environment;
+    (void)declaring_class;
+    uint64_t out_bytes_value = 0;
+    CNA_Result result = cna.input_devices_get_keyboard_name_size_at((CNA_Handle)game, (uint32_t)index, &out_bytes_value);
+    if (result == CNA_RESULT_SUCCESS) {
+        jlong out_bytes_element = (jlong)out_bytes_value;
+        (*environment)->SetLongArrayRegion(
+            environment, out_bytes, 0, 1, &out_bytes_element);
+    }
+    return (jint)result;
+}
+
+JNIEXPORT jint JNICALL
+Java_org_openeggbert_cna_internal_generated_NativeDeviceExtensionRoutes_inputDevicesGetMouseCount(
+    JNIEnv* environment, jclass declaring_class, jlong game, jintArray out_count)
+{
+    (void)environment;
+    (void)declaring_class;
+    uint32_t out_count_value = 0;
+    CNA_Result result = cna.input_devices_get_mouse_count((CNA_Handle)game, &out_count_value);
+    if (result == CNA_RESULT_SUCCESS) {
+        jint out_count_element = (jint)out_count_value;
+        (*environment)->SetIntArrayRegion(
+            environment, out_count, 0, 1, &out_count_element);
+    }
+    return (jint)result;
+}
+
+JNIEXPORT jint JNICALL
+Java_org_openeggbert_cna_internal_generated_NativeDeviceExtensionRoutes_inputDevicesGetMouseInfoAt(
+    JNIEnv* environment, jclass declaring_class, jlong game, jint index, jlongArray out_infoIntegral)
+{
+    (void)environment;
+    (void)declaring_class;
+    CNA_InputDeviceInfo out_info_value;
+    memset(&out_info_value, 0, sizeof out_info_value);
+    out_info_value.struct_size = (uint32_t)(sizeof out_info_value);
+    out_info_value.struct_version = UINT32_C(1);
+    CNA_Result result = cna.input_devices_get_mouse_info_at((CNA_Handle)game, (uint32_t)index, &out_info_value);
+    if (result == CNA_RESULT_SUCCESS) {
+        jlong out_infoIntegral_values[] = {
+            (jlong)out_info_value.id
+        };
+        (*environment)->SetLongArrayRegion(environment, out_infoIntegral, 0,
+            (jsize)(sizeof out_infoIntegral_values / sizeof out_infoIntegral_values[0]),
+            out_infoIntegral_values);
+    }
+    return (jint)result;
+}
+
+JNIEXPORT jint JNICALL
+Java_org_openeggbert_cna_internal_generated_NativeDeviceExtensionRoutes_inputDevicesGetMouseNameSizeAt(
+    JNIEnv* environment, jclass declaring_class, jlong game, jint index, jlongArray out_bytes)
+{
+    (void)environment;
+    (void)declaring_class;
+    uint64_t out_bytes_value = 0;
+    CNA_Result result = cna.input_devices_get_mouse_name_size_at((CNA_Handle)game, (uint32_t)index, &out_bytes_value);
+    if (result == CNA_RESULT_SUCCESS) {
+        jlong out_bytes_element = (jlong)out_bytes_value;
+        (*environment)->SetLongArrayRegion(
+            environment, out_bytes, 0, 1, &out_bytes_element);
+    }
+    return (jint)result;
+}
+
+JNIEXPORT jint JNICALL
+Java_org_openeggbert_cna_internal_generated_NativeDeviceExtensionRoutes_inputDevicesGetTouchDeviceCount(
+    JNIEnv* environment, jclass declaring_class, jlong game, jintArray out_count)
+{
+    (void)environment;
+    (void)declaring_class;
+    uint32_t out_count_value = 0;
+    CNA_Result result = cna.input_devices_get_touch_device_count((CNA_Handle)game, &out_count_value);
+    if (result == CNA_RESULT_SUCCESS) {
+        jint out_count_element = (jint)out_count_value;
+        (*environment)->SetIntArrayRegion(
+            environment, out_count, 0, 1, &out_count_element);
+    }
+    return (jint)result;
+}
+
+JNIEXPORT jint JNICALL
+Java_org_openeggbert_cna_internal_generated_NativeDeviceExtensionRoutes_inputDevicesGetTouchDeviceInfoAt(
+    JNIEnv* environment, jclass declaring_class, jlong game, jint index, jlongArray out_infoIntegral)
+{
+    (void)environment;
+    (void)declaring_class;
+    CNA_InputDeviceInfo out_info_value;
+    memset(&out_info_value, 0, sizeof out_info_value);
+    out_info_value.struct_size = (uint32_t)(sizeof out_info_value);
+    out_info_value.struct_version = UINT32_C(1);
+    CNA_Result result = cna.input_devices_get_touch_device_info_at((CNA_Handle)game, (uint32_t)index, &out_info_value);
+    if (result == CNA_RESULT_SUCCESS) {
+        jlong out_infoIntegral_values[] = {
+            (jlong)out_info_value.id
+        };
+        (*environment)->SetLongArrayRegion(environment, out_infoIntegral, 0,
+            (jsize)(sizeof out_infoIntegral_values / sizeof out_infoIntegral_values[0]),
+            out_infoIntegral_values);
+    }
+    return (jint)result;
+}
+
+JNIEXPORT jint JNICALL
+Java_org_openeggbert_cna_internal_generated_NativeDeviceExtensionRoutes_inputDevicesGetTouchDeviceNameSizeAt(
+    JNIEnv* environment, jclass declaring_class, jlong game, jint index, jlongArray out_bytes)
+{
+    (void)environment;
+    (void)declaring_class;
+    uint64_t out_bytes_value = 0;
+    CNA_Result result = cna.input_devices_get_touch_device_name_size_at((CNA_Handle)game, (uint32_t)index, &out_bytes_value);
+    if (result == CNA_RESULT_SUCCESS) {
+        jlong out_bytes_element = (jlong)out_bytes_value;
+        (*environment)->SetLongArrayRegion(
+            environment, out_bytes, 0, 1, &out_bytes_element);
+    }
+    return (jint)result;
+}
+
+JNIEXPORT jint JNICALL
+Java_org_openeggbert_cna_internal_generated_NativeDeviceExtensionRoutes_inputDevicesRaiseKeyboardConnectedExt(
+    JNIEnv* environment, jclass declaring_class, jlong game, jint id)
+{
+    (void)environment;
+    (void)declaring_class;
+    CNA_Result result = cna.input_devices_raise_keyboard_connected_ext((CNA_Handle)game, (uint32_t)id);
+    return (jint)result;
+}
+
+JNIEXPORT jint JNICALL
+Java_org_openeggbert_cna_internal_generated_NativeDeviceExtensionRoutes_inputDevicesRaiseKeyboardDisconnectedExt(
+    JNIEnv* environment, jclass declaring_class, jlong game, jint id)
+{
+    (void)environment;
+    (void)declaring_class;
+    CNA_Result result = cna.input_devices_raise_keyboard_disconnected_ext((CNA_Handle)game, (uint32_t)id);
+    return (jint)result;
+}
+
+JNIEXPORT jint JNICALL
+Java_org_openeggbert_cna_internal_generated_NativeDeviceExtensionRoutes_inputDevicesRaiseMouseConnectedExt(
+    JNIEnv* environment, jclass declaring_class, jlong game, jint id)
+{
+    (void)environment;
+    (void)declaring_class;
+    CNA_Result result = cna.input_devices_raise_mouse_connected_ext((CNA_Handle)game, (uint32_t)id);
+    return (jint)result;
+}
+
+JNIEXPORT jint JNICALL
+Java_org_openeggbert_cna_internal_generated_NativeDeviceExtensionRoutes_inputDevicesRaiseMouseDisconnectedExt(
+    JNIEnv* environment, jclass declaring_class, jlong game, jint id)
+{
+    (void)environment;
+    (void)declaring_class;
+    CNA_Result result = cna.input_devices_raise_mouse_disconnected_ext((CNA_Handle)game, (uint32_t)id);
+    return (jint)result;
+}
+
+JNIEXPORT jint JNICALL
 Java_org_openeggbert_cna_internal_generated_NativeDeviceExtensionRoutes_localeCopyCountryAtExt(
     JNIEnv* environment, jclass declaring_class, jlong game, jlong index, jbyteArray destination, jlongArray out_bytes)
 {

@@ -41,6 +41,101 @@ public final class NativeDeviceExtensionRoutes {
     public static native int displayInfoGetSafeAreaExt(long game, long[] outAreaIntegral);
 
     /**
+     * cna_input_devices_copy_keyboard_name_at (input_devices.h).
+     */
+    public static native int inputDevicesCopyKeyboardNameAt(long game, int index, byte[] destination, long[] outBytes);
+
+    /**
+     * cna_input_devices_copy_mouse_name_at (input_devices.h).
+     */
+    public static native int inputDevicesCopyMouseNameAt(long game, int index, byte[] destination, long[] outBytes);
+
+    /**
+     * cna_input_devices_copy_touch_device_name_at (input_devices.h).
+     */
+    public static native int inputDevicesCopyTouchDeviceNameAt(long game, int index, byte[] destination, long[] outBytes);
+
+    /**
+     * cna_input_devices_get_keyboard_count (input_devices.h).
+     */
+    public static native int inputDevicesGetKeyboardCount(long game, int[] outCount);
+
+    /**
+     * cna_input_devices_get_keyboard_info_at (input_devices.h).
+     *
+     * <p>outInfoIntegral carries CNA_InputDeviceInfo in this order:
+     * <ol start="0">
+     *   <li>{@code id} (uint64_t)</li>
+     * </ol>
+     */
+    public static native int inputDevicesGetKeyboardInfoAt(long game, int index, long[] outInfoIntegral);
+
+    /**
+     * cna_input_devices_get_keyboard_name_size_at (input_devices.h).
+     */
+    public static native int inputDevicesGetKeyboardNameSizeAt(long game, int index, long[] outBytes);
+
+    /**
+     * cna_input_devices_get_mouse_count (input_devices.h).
+     */
+    public static native int inputDevicesGetMouseCount(long game, int[] outCount);
+
+    /**
+     * cna_input_devices_get_mouse_info_at (input_devices.h).
+     *
+     * <p>outInfoIntegral carries CNA_InputDeviceInfo in this order:
+     * <ol start="0">
+     *   <li>{@code id} (uint64_t)</li>
+     * </ol>
+     */
+    public static native int inputDevicesGetMouseInfoAt(long game, int index, long[] outInfoIntegral);
+
+    /**
+     * cna_input_devices_get_mouse_name_size_at (input_devices.h).
+     */
+    public static native int inputDevicesGetMouseNameSizeAt(long game, int index, long[] outBytes);
+
+    /**
+     * cna_input_devices_get_touch_device_count (input_devices.h).
+     */
+    public static native int inputDevicesGetTouchDeviceCount(long game, int[] outCount);
+
+    /**
+     * cna_input_devices_get_touch_device_info_at (input_devices.h).
+     *
+     * <p>outInfoIntegral carries CNA_InputDeviceInfo in this order:
+     * <ol start="0">
+     *   <li>{@code id} (uint64_t)</li>
+     * </ol>
+     */
+    public static native int inputDevicesGetTouchDeviceInfoAt(long game, int index, long[] outInfoIntegral);
+
+    /**
+     * cna_input_devices_get_touch_device_name_size_at (input_devices.h).
+     */
+    public static native int inputDevicesGetTouchDeviceNameSizeAt(long game, int index, long[] outBytes);
+
+    /**
+     * cna_input_devices_raise_keyboard_connected_ext (input_devices.h).
+     */
+    public static native int inputDevicesRaiseKeyboardConnectedExt(long game, int id);
+
+    /**
+     * cna_input_devices_raise_keyboard_disconnected_ext (input_devices.h).
+     */
+    public static native int inputDevicesRaiseKeyboardDisconnectedExt(long game, int id);
+
+    /**
+     * cna_input_devices_raise_mouse_connected_ext (input_devices.h).
+     */
+    public static native int inputDevicesRaiseMouseConnectedExt(long game, int id);
+
+    /**
+     * cna_input_devices_raise_mouse_disconnected_ext (input_devices.h).
+     */
+    public static native int inputDevicesRaiseMouseDisconnectedExt(long game, int id);
+
+    /**
      * cna_locale_copy_country_at_ext (devices.h).
      */
     public static native int localeCopyCountryAtExt(long game, long index, byte[] destination, long[] outBytes);
