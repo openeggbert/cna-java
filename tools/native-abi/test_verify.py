@@ -97,7 +97,8 @@ def test_jni(live: dict) -> None:
     check(prefixed(verify_tool.check_jni(mutated), "JNI_SYMBOL_MISSING_FROM_MANIFEST"),
           "a JNI symbol absent from the manifest is rejected")
 
-    source = verify_tool.JNI_SOURCE.read_text(encoding="utf-8")
+    source = "\n".join(path.read_text(encoding="utf-8")
+                       for path in verify_tool.JNI_SOURCES)
     slots = verify_tool.ROUTE_PATTERN.findall(source)
     check(len(slots) == len(manifest["functions"]),
           "every dispatch-table slot is declared through CNA_JNI_ROUTE")
@@ -138,7 +139,8 @@ def test_coverage(cna_root: Path) -> None:
     check(counts.get("XNA_BACKING", 0) > 0,
           "the strict XNA projection is shown to reach real native routes")
 
-    entries = coverage_tool.c_functions(coverage_tool.JNI_SOURCE.read_text(encoding="utf-8"))
+    entries = coverage_tool.c_functions("\n".join(
+        path.read_text(encoding="utf-8") for path in coverage_tool.JNI_SOURCES))
     check(sum(1 for name in entries if name.startswith("Java_")) > 0,
           "the JNI adapter's entry points are resolved from the C source")
     check("Java_org_openeggbert_cna_internal_NativeAudio_nativeDestroyCue" in entries,

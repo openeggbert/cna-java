@@ -39,7 +39,8 @@ from inventory import abi_version, inventory  # noqa: E402
 ROOT = Path(__file__).resolve().parents[2]
 MANIFEST = ROOT / "tools/native-abi/bindings.json"
 RULES = ROOT / "tools/native-abi/coverage-rules.json"
-JNI_SOURCE = ROOT / "src/main/c/cna_java_jni.c"
+JNI_SOURCES = sorted(list((ROOT / "src/main/c").glob("*.c"))
+                     + list((ROOT / "src/main/c/generated").glob("*.inc")))
 MAIN_JAVA = ROOT / "src/main/java"
 TEST_JAVA = ROOT / "src/test/java"
 
@@ -310,7 +311,7 @@ def build(cna_root: Path) -> dict:
     rules = json.loads(RULES.read_text(encoding="utf-8"))
     bound = {entry["name"]: entry for entry in manifest["functions"]}
 
-    source = JNI_SOURCE.read_text(encoding="utf-8")
+    source = "\n".join(path.read_text(encoding="utf-8") for path in JNI_SOURCES)
     slot_symbol = {field: symbol for field, symbol in LOAD_PATTERN.findall(source)}
     functions = c_functions(source)
     reachable = transitive_slots(functions)

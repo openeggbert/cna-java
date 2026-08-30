@@ -196,6 +196,8 @@ def map_type(value: str | None, *, identity: bool = False) -> str | None:
             "System.Collections.Generic.ICollection`1": "java.util.Collection",
             "System.Collections.Generic.IList`1": "java.util.List",
             "System.Collections.Generic.List`1": "java.util.List",
+            "System.Collections.Generic.IDictionary`2": "java.util.Map",
+            "System.Collections.Generic.KeyValuePair`2": "java.util.Map.Entry",
             "System.Nullable`1": None,
         }
         if base == "System.Nullable`1":
@@ -333,10 +335,18 @@ def mapped_members(type_contract: dict[str, Any], rules: dict[str, Any], mapping
                         and not any(parameter_value["type"].endswith("&")
                                     for parameter_value in value.get("parameters", []))]
 
+    serialization = tuple(rules.get("clrSerializationParameterTypes", []))
     for member in type_contract["members"]:
         kind = member["kind"]
         clr_signature = clr_member_signature(type_name, member)
         if clr_signature in rules.get("excludedClrMembers", []):
+            continue
+        # CLR binary serialization has no Java equivalent, and Java serialization is a
+        # different contract with different security properties. Every member whose whole
+        # parameter list is the (SerializationInfo, StreamingContext) pair is omitted by
+        # one general rule rather than by a per-exception exclusion entry.
+        if serialization and tuple(
+                value["type"] for value in member.get("parameters", [])) == serialization:
             continue
         if kind == "field":
             expected.append({**member, "type": map_type(member["type"])})
@@ -597,6 +607,42 @@ def mapped_members(type_contract: dict[str, Any], rules: dict[str, Any], mapping
                             [parameter("index", "int"),
                              parameter("collection", f"java.util.Collection<? extends {element_type}>")],
                             "boolean"),
+        ])
+
+    if type_name in rules.get("javaMapBridgeTypes", []):
+        dictionary = next(
+            (split_generic(value) for value in type_contract.get("interfaces", [])
+             if value.startswith("System.Collections.Generic.IDictionary`2[")),
+            None)
+        if dictionary is None:
+            raise ValueError(f"Java map bridge type has no IDictionary<K,V>: {type_name}")
+        key_type = boxed(map_type(dictionary[1][0]) or "java.lang.Object")
+        value_type = boxed(map_type(dictionary[1][1]) or "java.lang.Object")
+        entry = f"java.util.Map.Entry<{key_type},{value_type}>"
+        bridge = {"access": "public", "static": False, "abstract": False,
+                  "final": True, "genericArity": 0}
+        expected.extend([
+            callable_member("method", "size", bridge, [], "int"),
+            callable_member("method", "isEmpty", bridge, [], "boolean"),
+            callable_member("method", "containsKey", bridge,
+                            [parameter("key", "java.lang.Object")], "boolean"),
+            callable_member("method", "containsValue", bridge,
+                            [parameter("value", "java.lang.Object")], "boolean"),
+            callable_member("method", "get", bridge,
+                            [parameter("key", "java.lang.Object")], value_type),
+            callable_member("method", "put", bridge,
+                            [parameter("key", key_type), parameter("value", value_type)],
+                            value_type),
+            callable_member("method", "remove", bridge,
+                            [parameter("key", "java.lang.Object")], value_type),
+            callable_member("method", "putAll", bridge,
+                            [parameter("map", f"java.util.Map<? extends {key_type},"
+                                              f"? extends {value_type}>")], "void"),
+            callable_member("method", "clear", bridge, [], "void"),
+            callable_member("method", "keySet", bridge, [], f"java.util.Set<{key_type}>"),
+            callable_member("method", "values", bridge, [],
+                            f"java.util.Collection<{value_type}>"),
+            callable_member("method", "entrySet", bridge, [], f"java.util.Set<{entry}>"),
         ])
 
     if type_name in rules.get("javaIteratorBridgeTypes", []):

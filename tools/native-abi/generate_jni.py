@@ -1,0 +1,494 @@
+#!/usr/bin/env python3
+"""Generates the JNI adapter and Java declarations for scalar CNA C API routes.
+
+The native boundary is large and CNA is still evolving, so the mechanical part
+of it is generated from the live headers instead of hand-written.  A route
+listed in ``routes.json`` names only its Java class, its Java method name and
+its CNA symbol; every JNI type, every marshalling step and the Java ``native``
+declaration are derived from that symbol's declaration in ``CNA/C/*.h``.
+
+What is generated is only the *boundary*.  The public Java API is a semantic
+XNA/CNA facade written by hand; nothing here produces public API.
+
+Supported parameter shapes, all derived from the header:
+
+``value``     a scalar, identity or handle passed by value
+``out``       a scalar, identity or handle out-parameter (its C name starts
+              with ``out_``), projected as a one-element Java array
+``string``    a ``CNA_StringView`` input, projected as a UTF-8 ``byte[]``
+``text``      the ``char* buffer, uint64_t capacity, uint64_t* out_written``
+              triple CNA uses for a copy-out string, projected as one
+              ``byte[]`` whose length supplies the capacity plus a ``long[]``
+``struct``    a flat POD struct out-parameter, flattened to its scalar leaves
+              and projected as a ``long[]`` and/or a ``float[]``
+
+A route whose declaration uses anything else -- a callback, a ``void*``
+context, an array of structs -- is refused with a diagnostic rather than
+guessed at, and stays hand-written.
+"""
+
+from __future__ import annotations
+
+import argparse
+import json
+from pathlib import Path
+import re
+import sys
+
+sys.path.insert(0, str(Path(__file__).resolve().parent))
+from inventory import inventory  # noqa: E402
+
+
+ROOT = Path(__file__).resolve().parents[2]
+ROUTES = ROOT / "tools/native-abi/routes.json"
+GENERATED_C = ROOT / "src/main/c/generated"
+GENERATED_JAVA = ROOT / "src/main/java/org/openeggbert/cna/internal/generated"
+
+INTEGRAL = {
+    "uint8_t": ("jbyte", "int8"), "int8_t": ("jbyte", "int8"),
+    "uint16_t": ("jint", "int32"), "int16_t": ("jshort", "int16"),
+    "uint32_t": ("jint", "int32"), "int32_t": ("jint", "int32"),
+    "uint64_t": ("jlong", "int64"), "int64_t": ("jlong", "int64"),
+    "CNA_Bool": ("jboolean", "bool"),
+}
+JAVA_OF_JNI = {"jbyte": "byte", "jshort": "short", "jint": "int", "jlong": "long",
+               "jfloat": "float", "jdouble": "double", "jboolean": "boolean"}
+
+
+class Unsupported(Exception):
+    pass
+
+
+def bare(type_name: str) -> tuple[str, int]:
+    value = type_name.replace("const ", "").strip()
+    pointers = value.count("*")
+    return value.replace("*", "").strip(), pointers
+
+
+def classify_scalar(name: str, live: dict) -> tuple[str, str]:
+    """Return (jni type, marshalling kind) for one scalar C type."""
+    if name in INTEGRAL:
+        return INTEGRAL[name]
+    if name == "float":
+        return "jfloat", "float"
+    if name == "double":
+        return "jdouble", "double"
+    if name == "CNA_Handle" or name in live["handles"]:
+        return "jlong", "handle"
+    identity = live["identities"].get(name)
+    if identity is not None:
+        return INTEGRAL.get(identity["underlying"], ("jint", "int32"))
+    raise Unsupported(f"not a scalar C type: {name}")
+
+
+def flatten_struct(name: str, live: dict, seen: frozenset[str] = frozenset()) -> list[tuple[str, str]]:
+    """Flatten a POD struct into its scalar leaves as (field path, C type).
+
+    A fixed-size array field expands to one leaf per element, so padding and
+    fixed character buffers cross the boundary exactly as they are laid out
+    rather than forcing the whole route to be hand-written.
+    """
+    if name in seen:
+        raise Unsupported(f"recursive structure: {name}")
+    structure = live["structures"].get(name)
+    if structure is None:
+        raise Unsupported(f"not a known structure: {name}")
+    leaves: list[tuple[str, str]] = []
+    for field in structure["fields"]:
+        field_type, pointers = bare(field["type"])
+        if pointers or not field["name"]:
+            raise Unsupported(f"{name}.{field['name']}: unsupported field type {field['type']}")
+        extent = re.fullmatch(r"(?P<element>[A-Za-z_][A-Za-z0-9_]*)\[(?P<count>\d+)\]", field_type)
+        if extent is not None:
+            element = extent.group("element")
+            classify_scalar(element, live) if element not in ("char",) else None
+            for index in range(int(extent.group("count"))):
+                leaves.append((f"{field['name']}[{index}]", element))
+            continue
+        if "[" in field_type:
+            raise Unsupported(f"{name}.{field['name']}: unsupported field type {field['type']}")
+        if field_type in live["structures"]:
+            for path, leaf in flatten_struct(field_type, live, seen | {name}):
+                leaves.append((f"{field['name']}.{path}", leaf))
+        else:
+            classify_scalar(field_type, live)
+            leaves.append((field["name"], field_type))
+    return leaves
+
+
+VERSION_FIELDS = ("struct_size", "struct_version")
+
+
+def group_leaves(leaves: list[tuple[str, str]]) -> dict[str, list[tuple[str, str]]]:
+    """Split a struct's leaves into the byte, float and integral arrays that carry them.
+
+    ``struct_size`` and ``struct_version`` never cross into Java. CNA requires the
+    caller to set them from the exact header it compiled against, which is a fact C
+    knows and Java does not, so the generated adapter fills them in itself.
+    """
+    leaves = [(path, leaf) for path, leaf in leaves if path not in VERSION_FIELDS]
+    return {
+        "bytes": [(path, leaf) for path, leaf in leaves
+                  if leaf in ("char", "uint8_t") and path.endswith("]")],
+        "floating": [(path, leaf) for path, leaf in leaves if leaf in ("float", "double")],
+        "integral": [(path, leaf) for path, leaf in leaves
+                     if leaf not in ("float", "double")
+                     and not (leaf in ("char", "uint8_t") and path.endswith("]"))],
+    }
+
+
+def plan(route: dict, live: dict) -> dict:
+    """Derive the complete marshalling plan for one route from its declaration."""
+    declaration = live["functions"].get(route["symbol"])
+    if declaration is None:
+        raise Unsupported(f"{route['symbol']}: not declared by the live CNA headers")
+    if declaration["returnType"] != "CNA_Result":
+        raise Unsupported(f"{route['symbol']}: returns {declaration['returnType']}, not CNA_Result")
+
+    parameters = declaration["parameters"]
+    steps: list[dict] = []
+    index = 0
+    while index < len(parameters):
+        parameter = parameters[index]
+        raw = parameter["type"]
+        type_name, pointers = bare(raw)
+        constant = raw.startswith("const ")
+        name = parameter["name"] or f"argument{index}"
+        following = parameters[index + 1] if index + 1 < len(parameters) else None
+
+        if pointers == 0 and type_name == "CNA_StringView":
+            steps.append({"shape": "string", "name": name})
+            index += 1
+            continue
+        if pointers == 0:
+            jni, kind = classify_scalar(type_name, live)
+            steps.append({"shape": "value", "name": name, "jni": jni, "kind": kind,
+                          "ctype": type_name})
+            index += 1
+            continue
+        if pointers == 1 and type_name == "char" and index + 2 < len(parameters):
+            capacity, written = parameters[index + 1], parameters[index + 2]
+            if bare(capacity["type"]) == ("uint64_t", 0) and bare(written["type"]) == ("uint64_t", 1):
+                steps.append({"shape": "text", "name": name, "written": written["name"]})
+                index += 3
+                continue
+            raise Unsupported(f"{route['symbol']}: char* is not a count/copy triple")
+        if pointers == 1 and type_name in live["structures"]:
+            raw_leaves = flatten_struct(type_name, live)
+            groups = group_leaves(raw_leaves)
+            versioned = [path for path, _ in raw_leaves if path in VERSION_FIELDS]
+            steps.append({"shape": "struct", "name": name, "ctype": type_name,
+                          "input": constant, "versioned": versioned,
+                          "version": struct_version(type_name, live), **groups})
+            index += 1
+            continue
+        if pointers == 1 and following is not None and bare(following["type"]) == ("uint64_t", 0):
+            # CNA passes an array as a pointer immediately followed by its element
+            # count or capacity. Java carries the length in the array itself, so the
+            # count parameter disappears from the Java declaration.
+            jni, kind = classify_scalar(type_name, live)
+            steps.append({"shape": "array", "name": name, "jni": jni, "kind": kind,
+                          "ctype": type_name, "input": constant,
+                          "count": following["name"] or "count"})
+            index += 2
+            continue
+        if pointers == 1:
+            jni, kind = classify_scalar(type_name, live)
+            if not name.startswith("out"):
+                raise Unsupported(f"{route['symbol']}: pointer parameter '{name}' is not an output")
+            steps.append({"shape": "out", "name": name, "jni": jni, "kind": kind,
+                          "ctype": type_name})
+            index += 1
+            continue
+        raise Unsupported(f"{route['symbol']}: unsupported parameter '{parameter['type']}'")
+    return {"symbol": route["symbol"], "java": route["java"], "steps": steps,
+            "header": declaration["header"]}
+
+
+def java_name(name: str) -> str:
+    """Convert a C parameter name to the Java spelling used in generated declarations."""
+    pieces = name.split("_")
+    return pieces[0] + "".join(piece[:1].upper() + piece[1:] for piece in pieces[1:])
+
+
+def java_signature(entry: dict) -> tuple[str, list[str]]:
+    parameters: list[str] = []
+    for step in entry["steps"]:
+        if step["shape"] == "value":
+            parameters.append(f"{JAVA_OF_JNI[step['jni']]} {java_name(step['name'])}")
+        elif step["shape"] == "out":
+            parameters.append(f"{JAVA_OF_JNI[step['jni']]}[] {java_name(step['name'])}")
+        elif step["shape"] in ("string", "text"):
+            parameters.append(f"byte[] {java_name(step['name'])}")
+            if step["shape"] == "text":
+                parameters.append(f"long[] {java_name(step['written'])}")
+        elif step["shape"] == "array":
+            parameters.append(f"{JAVA_OF_JNI[step['jni']]}[] {java_name(step['name'])}")
+        elif step["shape"] == "struct":
+            for group, java in (("bytes", "byte"), ("integral", "long"), ("floating", "float")):
+                if step[group]:
+                    parameters.append(f"{java}[] {java_name(step['name'])}{group.capitalize()}")
+    return "int " + entry["java"], parameters
+
+
+def render_java(class_name: str, entries: list[dict]) -> str:
+    lines = [
+        "package org.openeggbert.cna.internal.generated;",
+        "",
+        "/**",
+        f" * Generated CNA C ABI declarations for {class_name}.",
+        " *",
+        " * <p>Produced by {@code tools/native-abi/generate_jni.py} from the live CNA C headers.",
+        " * Do not edit: every signature here is the header's own declaration, and regenerating",
+        " * is how a change upstream reaches Java. This class is not application API.",
+        " */",
+        f"public final class {class_name} {{",
+        "",
+        f"    private {class_name}() {{",
+        "    }",
+    ]
+    for entry in entries:
+        signature, parameters = java_signature(entry)
+        lines.append("")
+        lines.append(f"    /** {entry['symbol']} ({entry['header']}) */")
+        lines.append(f"    public static native {signature}({', '.join(parameters)});")
+    lines.append("}")
+    return "\n".join(lines) + "\n"
+
+
+def render_c(class_name: str, entries: list[dict]) -> str:
+    lines = [
+        "/* SPDX-License-Identifier: MS-PL */",
+        "/*",
+        f" * Generated JNI adapter for {class_name}.",
+        " *",
+        " * Produced by tools/native-abi/generate_jni.py from the live CNA C headers, and",
+        " * included by cna_java_jni.c so it shares the one dispatch table. Do not edit.",
+        " */",
+        "",
+    ]
+    for entry in entries:
+        symbol = entry["symbol"]
+        parameters = ["JNIEnv* environment", "jclass type"]
+        body: list[str] = ["    (void)environment;", "    (void)type;"]
+        arguments: list[str] = []
+        epilogue: list[str] = []
+        cleanup: list[str] = []
+        for step in entry["steps"]:
+            name = step["name"]
+            shape = step["shape"]
+            if shape == "value":
+                parameters.append(f"{step['jni']} {name}")
+                arguments.append(f"({step['ctype']}){name}")
+            elif shape == "out":
+                parameters.append(f"{step['jni']}Array {name}")
+                body.append(f"    {step['ctype']} {name}_value = 0;")
+                arguments.append(f"&{name}_value")
+                epilogue.append(
+                    f"        {step['jni']} {name}_element = ({step['jni']}){name}_value;\n"
+                    f"        (*environment)->Set{jni_array_kind(step['jni'])}ArrayRegion(\n"
+                    f"            environment, {name}, 0, 1, &{name}_element);")
+            elif shape == "string":
+                parameters.append(f"jbyteArray {name}")
+                body.extend(borrow_bytes(name))
+                body.append(f"    CNA_StringView {name}_view = "
+                            f"{{(const char*){name}_bytes, (uint64_t){name}_size}};")
+                arguments.append(f"{name}_view")
+                cleanup.append(release_bytes(name, abort=True))
+            elif shape == "text":
+                parameters.append(f"jbyteArray {name}")
+                parameters.append(f"jlongArray {step['written']}")
+                body.extend(borrow_bytes(name))
+                body.append(f"    uint64_t {name}_written = 0;")
+                arguments.append(f"(char*){name}_bytes")
+                arguments.append(f"(uint64_t){name}_size")
+                arguments.append(f"&{name}_written")
+                cleanup.append(release_bytes(name, abort=False))
+                epilogue.append(
+                    f"        jlong {name}_element = (jlong){name}_written;\n"
+                    f"        (*environment)->SetLongArrayRegion(\n"
+                    f"            environment, {step['written']}, 0, 1, &{name}_element);")
+            elif shape == "array":
+                parameters.append(f"{step['jni']}Array {name}")
+                element = JAVA_OF_JNI[step["jni"]].capitalize()
+                body.append(f"    jsize {name}_size = "
+                            f"(*environment)->GetArrayLength(environment, {name});")
+                body.append(f"    {step['jni']}* {name}_elements = "
+                            f"(*environment)->Get{element}ArrayElements(environment, {name}, NULL);")
+                body.append(f"    if ({name}_elements == NULL) {{")
+                body.append("        return (jint)CNA_RESULT_OUT_OF_MEMORY;")
+                body.append("    }")
+                body.append(f"    {step['ctype']}* {name}_values = ({step['ctype']}*)malloc(")
+                body.append(f"        ((size_t){name}_size + 1U) * sizeof(*{name}_values));")
+                body.append(f"    if ({name}_values == NULL) {{")
+                body.append(f"        (*environment)->Release{element}ArrayElements(")
+                body.append(f"            environment, {name}, {name}_elements, JNI_ABORT);")
+                body.append("        return (jint)CNA_RESULT_OUT_OF_MEMORY;")
+                body.append("    }")
+                body.append(f"    for (jsize index = 0; index < {name}_size; ++index) {{")
+                body.append(f"        {name}_values[index] = ({step['ctype']}){name}_elements[index];")
+                body.append("    }")
+                arguments.append(f"{name}_values")
+                arguments.append(f"(uint64_t){name}_size")
+                writeback = ""
+                if not step["input"]:
+                    # The copy back has to happen before the buffer is released, so it
+                    # belongs in the cleanup sequence rather than in the epilogue.
+                    writeback = (
+                        f"    if (result == CNA_RESULT_SUCCESS) {{\n"
+                        f"        for (jsize index = 0; index < {name}_size; ++index) {{\n"
+                        f"            {name}_elements[index] = ({step['jni']}){name}_values[index];\n"
+                        f"        }}\n"
+                        f"    }}\n")
+                cleanup.append(
+                    writeback
+                    + f"    free({name}_values);\n"
+                    f"    (*environment)->Release{element}ArrayElements(\n"
+                    f"        environment, {name}, {name}_elements, "
+                    f"{'JNI_ABORT' if step['input'] else '0'});")
+            elif shape == "struct":
+                body.append(f"    {step['ctype']} {name}_value;")
+                body.append(f"    memset(&{name}_value, 0, sizeof {name}_value);")
+                if "struct_size" in step["versioned"]:
+                    body.append(f"    {name}_value.struct_size = (uint32_t)(sizeof {name}_value);")
+                if "struct_version" in step["versioned"]:
+                    body.append(f"    {name}_value.struct_version = {step['version']};")
+                arguments.append(f"&{name}_value")
+                for group, jni, java in (("bytes", "jbyte", "Byte"),
+                                         ("integral", "jlong", "Long"),
+                                         ("floating", "jfloat", "Float")):
+                    if not step[group]:
+                        continue
+                    field = f"{name}{group.capitalize()}"
+                    parameters.append(f"{jni}Array {field}")
+                    if step["input"]:
+                        body.append(f"    {{")
+                        body.append(f"        {jni} {field}_values["
+                                    f"{len(step[group])}];")
+                        body.append(f"        (*environment)->Get{java}ArrayRegion(environment, "
+                                    f"{field}, 0, {len(step[group])}, {field}_values);")
+                        for position, (path, leaf) in enumerate(step[group]):
+                            body.append(f"        {name}_value.{path} = "
+                                        f"({leaf}){field}_values[{position}];")
+                        body.append("    }")
+                    else:
+                        values = ",\n            ".join(
+                            f"({jni}){name}_value.{path}" for path, _ in step[group])
+                        epilogue.append(
+                            f"        {jni} {field}_values[] = {{\n            {values}\n        }};\n"
+                            f"        (*environment)->Set{java}ArrayRegion(environment, {field}, 0,\n"
+                            f"            (jsize)(sizeof {field}_values / sizeof {field}_values[0]),\n"
+                            f"            {field}_values);")
+        body.append(f"    CNA_Result result = cna.{slot_of(symbol)}({', '.join(arguments)});")
+        body.extend(cleanup)
+        if epilogue:
+            body.append("    if (result == CNA_RESULT_SUCCESS) {")
+            body.extend(epilogue)
+            body.append("    }")
+        body.append("    return (jint)result;")
+
+        lines.append("JNIEXPORT jint JNICALL")
+        lines.append(f"Java_org_openeggbert_cna_internal_generated_{class_name}_{entry['java']}(")
+        lines.append("    " + ", ".join(parameters) + ")")
+        lines.append("{")
+        lines.extend(body)
+        lines.append("}")
+        lines.append("")
+    return "\n".join(lines)
+
+
+def borrow_bytes(name: str) -> list[str]:
+    return [
+        f"    jsize {name}_size = (*environment)->GetArrayLength(environment, {name});",
+        f"    jbyte* {name}_bytes = "
+        f"(*environment)->GetByteArrayElements(environment, {name}, NULL);",
+        f"    if ({name}_bytes == NULL) {{",
+        "        return (jint)CNA_RESULT_OUT_OF_MEMORY;",
+        "    }",
+    ]
+
+
+def release_bytes(name: str, *, abort: bool) -> str:
+    mode = "JNI_ABORT" if abort else "0"
+    return (f"    (*environment)->ReleaseByteArrayElements("
+            f"environment, {name}, {name}_bytes, {mode});")
+
+
+def jni_array_kind(jni: str) -> str:
+    return {"jbyte": "Byte", "jshort": "Short", "jint": "Int", "jlong": "Long",
+            "jfloat": "Float", "jdouble": "Double", "jboolean": "Boolean"}[jni]
+
+
+def struct_version(name: str, live: dict) -> str:
+    """Return the documented version constant for a versioned structure."""
+    snake = re.sub(r"(?<=[a-z0-9])(?=[A-Z])|(?<=[A-Z])(?=[A-Z][a-z])", "_", name[len("CNA_"):])
+    candidate = "CNA_" + snake.upper() + "_STRUCT_VERSION"
+    return candidate if candidate in live["constants"] else "UINT32_C(1)"
+
+
+def slot_of(symbol: str) -> str:
+    return symbol[len("cna_"):]
+
+
+def render_table(entries: list[dict]) -> tuple[str, str]:
+    slots = sorted({entry["symbol"] for entry in entries})
+    declarations = "\n".join(
+        f"    CNA_JNI_ROUTE({symbol}) {slot_of(symbol)};" for symbol in slots)
+    loads = "\n".join(f"    LOAD({slot_of(symbol)}, \"{symbol}\");" for symbol in slots)
+    return declarations + "\n", loads + "\n"
+
+
+def main() -> int:
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument("--cna-root", required=True)
+    parser.add_argument("--check", action="store_true",
+                        help="fail instead of writing when the generated output would change")
+    arguments = parser.parse_args()
+
+    live = inventory(Path(arguments.cna_root).resolve() / "modules/c-api/include", strict=True)
+    specification = json.loads(ROUTES.read_text(encoding="utf-8"))
+
+    GENERATED_C.mkdir(parents=True, exist_ok=True)
+    GENERATED_JAVA.mkdir(parents=True, exist_ok=True)
+    all_entries: list[dict] = []
+    changed: list[str] = []
+
+    def emit(path: Path, content: str) -> None:
+        previous = path.read_text(encoding="utf-8") if path.is_file() else None
+        if previous == content:
+            return
+        changed.append(str(path.relative_to(ROOT)))
+        if not arguments.check:
+            path.write_text(content, encoding="utf-8")
+
+    for class_name, routes in sorted(specification["classes"].items()):
+        entries = []
+        for route in routes:
+            try:
+                entries.append(plan(route, live))
+            except Unsupported as failure:
+                print(f"UNSUPPORTED_ROUTE={failure}", file=sys.stderr)
+                return 2
+        entries.sort(key=lambda value: value["java"])
+        all_entries.extend(entries)
+        emit(GENERATED_JAVA / f"{class_name}.java", render_java(class_name, entries))
+        emit(GENERATED_C / f"{class_name}.inc", render_c(class_name, entries))
+
+    declarations, loads = render_table(all_entries)
+    emit(GENERATED_C / "routes_table.inc", declarations)
+    emit(GENERATED_C / "routes_load.inc", loads)
+
+    print(f"GENERATED_CLASSES={len(specification['classes'])}")
+    print(f"GENERATED_ROUTES={len(all_entries)}")
+    print(f"CHANGED_FILES={len(changed)}")
+    for path in changed:
+        print(f"CHANGED={path}")
+    if arguments.check and changed:
+        print("generated native boundary is stale; rerun tools/native-abi/generate_jni.py",
+              file=sys.stderr)
+        return 1
+    return 0
+
+
+if __name__ == "__main__":
+    raise SystemExit(main())

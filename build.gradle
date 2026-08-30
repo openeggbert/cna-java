@@ -62,6 +62,7 @@ tasks.register('compileJni', Exec) {
     group = 'build'
     description = 'Builds the Java 17 JNI adapter against CNA stable C headers.'
     inputs.file('src/main/c/cna_java_jni.c')
+    inputs.dir('src/main/c/generated')
     inputs.dir(configuredCnaRoot.map { file("${it}/modules/c-api/include") })
     outputs.file(nativeOutput)
     doFirst {
@@ -193,6 +194,25 @@ tasks.register('nativeCoverageReport', Exec) {
     }
 }
 
+tasks.register('generateJni', Exec) {
+    group = 'build'
+    description = 'Regenerates the JNI adapter and Java declarations from the live CNA C headers.'
+    doFirst {
+        commandLine 'python3', 'tools/native-abi/generate_jni.py',
+                '--cna-root', configuredCnaRoot.get()
+    }
+}
+
+tasks.register('generateJniCheck', Exec) {
+    group = 'verification'
+    description = 'Fails when the committed generated native boundary is stale.'
+    doFirst {
+        commandLine 'python3', 'tools/native-abi/generate_jni.py',
+                '--cna-root', configuredCnaRoot.get(),
+                '--check'
+    }
+}
+
 tasks.register('nativeAbiToolTests', Exec) {
     group = 'verification'
     description = 'Runs native-boundary tool regression and negative-mutation tests.'
@@ -209,6 +229,7 @@ check {
     dependsOn tasks.named('nativeAbiCheck')
     dependsOn tasks.named('nativeAbiToolTests')
     dependsOn tasks.named('nativeCoverageCheck')
+    dependsOn tasks.named('generateJniCheck')
 }
 
 publishing {

@@ -1,0 +1,924 @@
+{
+  "schemaVersion": 1,
+  "description": "Routes whose JNI adapter and Java declarations are generated from the live CNA C headers. Only the symbol and the Java method name are declared here; every type, every marshalling step and the Java native declaration come from the header.",
+  "classes": {
+    "NativeGamerServicesRoutes": [
+      {
+        "java": "achievementCollectionAdd",
+        "symbol": "cna_achievement_collection_add"
+      },
+      {
+        "java": "achievementCollectionClear",
+        "symbol": "cna_achievement_collection_clear"
+      },
+      {
+        "java": "achievementCollectionContains",
+        "symbol": "cna_achievement_collection_contains"
+      },
+      {
+        "java": "achievementCollectionCopyTo",
+        "symbol": "cna_achievement_collection_copy_to"
+      },
+      {
+        "java": "achievementCollectionCreateExt",
+        "symbol": "cna_achievement_collection_create_ext"
+      },
+      {
+        "java": "achievementCollectionDestroy",
+        "symbol": "cna_achievement_collection_destroy"
+      },
+      {
+        "java": "achievementCollectionGetAt",
+        "symbol": "cna_achievement_collection_get_at"
+      },
+      {
+        "java": "achievementCollectionGetByKey",
+        "symbol": "cna_achievement_collection_get_by_key"
+      },
+      {
+        "java": "achievementCollectionGetCount",
+        "symbol": "cna_achievement_collection_get_count"
+      },
+      {
+        "java": "achievementCollectionGetIsDisposed",
+        "symbol": "cna_achievement_collection_get_is_disposed"
+      },
+      {
+        "java": "achievementCollectionGetIsReadOnly",
+        "symbol": "cna_achievement_collection_get_is_read_only"
+      },
+      {
+        "java": "achievementCollectionIndexOf",
+        "symbol": "cna_achievement_collection_index_of"
+      },
+      {
+        "java": "achievementCollectionInsert",
+        "symbol": "cna_achievement_collection_insert"
+      },
+      {
+        "java": "achievementCollectionRemove",
+        "symbol": "cna_achievement_collection_remove"
+      },
+      {
+        "java": "achievementCollectionRemoveAt",
+        "symbol": "cna_achievement_collection_remove_at"
+      },
+      {
+        "java": "achievementCopyDescription",
+        "symbol": "cna_achievement_copy_description"
+      },
+      {
+        "java": "achievementCopyHowToEarn",
+        "symbol": "cna_achievement_copy_how_to_earn"
+      },
+      {
+        "java": "achievementCopyKey",
+        "symbol": "cna_achievement_copy_key"
+      },
+      {
+        "java": "achievementCopyName",
+        "symbol": "cna_achievement_copy_name"
+      },
+      {
+        "java": "achievementCreateExt",
+        "symbol": "cna_achievement_create_ext"
+      },
+      {
+        "java": "achievementDestroy",
+        "symbol": "cna_achievement_destroy"
+      },
+      {
+        "java": "achievementEquals",
+        "symbol": "cna_achievement_equals"
+      },
+      {
+        "java": "achievementGetDescriptionSize",
+        "symbol": "cna_achievement_get_description_size"
+      },
+      {
+        "java": "achievementGetHowToEarnSize",
+        "symbol": "cna_achievement_get_how_to_earn_size"
+      },
+      {
+        "java": "achievementGetInfo",
+        "symbol": "cna_achievement_get_info"
+      },
+      {
+        "java": "achievementGetKeySize",
+        "symbol": "cna_achievement_get_key_size"
+      },
+      {
+        "java": "achievementGetNameSize",
+        "symbol": "cna_achievement_get_name_size"
+      },
+      {
+        "java": "achievementGetPictureSize",
+        "symbol": "cna_achievement_get_picture_size"
+      },
+      {
+        "java": "avatarAnimationCopyRealClipNameExt",
+        "symbol": "cna_avatar_animation_copy_real_clip_name_ext"
+      },
+      {
+        "java": "avatarAnimationCreate",
+        "symbol": "cna_avatar_animation_create"
+      },
+      {
+        "java": "avatarAnimationDestroy",
+        "symbol": "cna_avatar_animation_destroy"
+      },
+      {
+        "java": "avatarAnimationGetBoneTransformAt",
+        "symbol": "cna_avatar_animation_get_bone_transform_at"
+      },
+      {
+        "java": "avatarAnimationGetExpression",
+        "symbol": "cna_avatar_animation_get_expression"
+      },
+      {
+        "java": "avatarAnimationGetInfo",
+        "symbol": "cna_avatar_animation_get_info"
+      },
+      {
+        "java": "avatarAnimationGetRealClipNameSizeExt",
+        "symbol": "cna_avatar_animation_get_real_clip_name_size_ext"
+      },
+      {
+        "java": "avatarAnimationPresetCopyClipNameExt",
+        "symbol": "cna_avatar_animation_preset_copy_clip_name_ext"
+      },
+      {
+        "java": "avatarAnimationPresetGetClipNameSizeExt",
+        "symbol": "cna_avatar_animation_preset_get_clip_name_size_ext"
+      },
+      {
+        "java": "avatarAnimationSetCurrentPosition",
+        "symbol": "cna_avatar_animation_set_current_position"
+      },
+      {
+        "java": "avatarAnimationSetRealClipNameExt",
+        "symbol": "cna_avatar_animation_set_real_clip_name_ext"
+      },
+      {
+        "java": "avatarAnimationUpdate",
+        "symbol": "cna_avatar_animation_update"
+      },
+      {
+        "java": "avatarAppearanceInitExt",
+        "symbol": "cna_avatar_appearance_init_ext"
+      },
+      {
+        "java": "avatarBodyTypeCopyContentNameExt",
+        "symbol": "cna_avatar_body_type_copy_content_name_ext"
+      },
+      {
+        "java": "avatarBodyTypeGetContentNameSizeExt",
+        "symbol": "cna_avatar_body_type_get_content_name_size_ext"
+      },
+      {
+        "java": "avatarDescriptionCopyDescription",
+        "symbol": "cna_avatar_description_copy_description"
+      },
+      {
+        "java": "avatarDescriptionCreate",
+        "symbol": "cna_avatar_description_create"
+      },
+      {
+        "java": "avatarDescriptionCreateRandom",
+        "symbol": "cna_avatar_description_create_random"
+      },
+      {
+        "java": "avatarDescriptionCreateRandomForBodyType",
+        "symbol": "cna_avatar_description_create_random_for_body_type"
+      },
+      {
+        "java": "avatarDescriptionDestroy",
+        "symbol": "cna_avatar_description_destroy"
+      },
+      {
+        "java": "avatarDescriptionGetInfo",
+        "symbol": "cna_avatar_description_get_info"
+      },
+      {
+        "java": "avatarExpressionInit",
+        "symbol": "cna_avatar_expression_init"
+      },
+      {
+        "java": "avatarRendererCreate",
+        "symbol": "cna_avatar_renderer_create"
+      },
+      {
+        "java": "avatarRendererDestroy",
+        "symbol": "cna_avatar_renderer_destroy"
+      },
+      {
+        "java": "avatarRendererDrawAnimation",
+        "symbol": "cna_avatar_renderer_draw_animation"
+      },
+      {
+        "java": "avatarRendererDrawBones",
+        "symbol": "cna_avatar_renderer_draw_bones"
+      },
+      {
+        "java": "avatarRendererDrawRealExt",
+        "symbol": "cna_avatar_renderer_draw_real_ext"
+      },
+      {
+        "java": "avatarRendererEnableRealRenderingExt",
+        "symbol": "cna_avatar_renderer_enable_real_rendering_ext"
+      },
+      {
+        "java": "avatarRendererGetBindPoseAt",
+        "symbol": "cna_avatar_renderer_get_bind_pose_at"
+      },
+      {
+        "java": "avatarRendererGetInfo",
+        "symbol": "cna_avatar_renderer_get_info"
+      },
+      {
+        "java": "avatarRendererGetLighting",
+        "symbol": "cna_avatar_renderer_get_lighting"
+      },
+      {
+        "java": "avatarRendererGetParentBoneAt",
+        "symbol": "cna_avatar_renderer_get_parent_bone_at"
+      },
+      {
+        "java": "avatarRendererGetTransforms",
+        "symbol": "cna_avatar_renderer_get_transforms"
+      },
+      {
+        "java": "avatarRendererSetAppearanceExt",
+        "symbol": "cna_avatar_renderer_set_appearance_ext"
+      },
+      {
+        "java": "avatarRendererSetLighting",
+        "symbol": "cna_avatar_renderer_set_lighting"
+      },
+      {
+        "java": "avatarRendererSetTransforms",
+        "symbol": "cna_avatar_renderer_set_transforms"
+      },
+      {
+        "java": "friendCollectionCreateExt",
+        "symbol": "cna_friend_collection_create_ext"
+      },
+      {
+        "java": "friendCollectionGetIsDisposed",
+        "symbol": "cna_friend_collection_get_is_disposed"
+      },
+      {
+        "java": "friendGamerCopyPresence",
+        "symbol": "cna_friend_gamer_copy_presence"
+      },
+      {
+        "java": "friendGamerCreateExt",
+        "symbol": "cna_friend_gamer_create_ext"
+      },
+      {
+        "java": "friendGamerGetInfo",
+        "symbol": "cna_friend_gamer_get_info"
+      },
+      {
+        "java": "friendGamerGetPresenceSize",
+        "symbol": "cna_friend_gamer_get_presence_size"
+      },
+      {
+        "java": "gameDefaultsInit",
+        "symbol": "cna_game_defaults_init"
+      },
+      {
+        "java": "gamerCollectionAdd",
+        "symbol": "cna_gamer_collection_add"
+      },
+      {
+        "java": "gamerCollectionClear",
+        "symbol": "cna_gamer_collection_clear"
+      },
+      {
+        "java": "gamerCollectionContains",
+        "symbol": "cna_gamer_collection_contains"
+      },
+      {
+        "java": "gamerCollectionCopyTo",
+        "symbol": "cna_gamer_collection_copy_to"
+      },
+      {
+        "java": "gamerCollectionCreateEnumerator",
+        "symbol": "cna_gamer_collection_create_enumerator"
+      },
+      {
+        "java": "gamerCollectionDestroy",
+        "symbol": "cna_gamer_collection_destroy"
+      },
+      {
+        "java": "gamerCollectionGetAt",
+        "symbol": "cna_gamer_collection_get_at"
+      },
+      {
+        "java": "gamerCollectionGetCount",
+        "symbol": "cna_gamer_collection_get_count"
+      },
+      {
+        "java": "gamerCollectionIndexOf",
+        "symbol": "cna_gamer_collection_index_of"
+      },
+      {
+        "java": "gamerCollectionRemove",
+        "symbol": "cna_gamer_collection_remove"
+      },
+      {
+        "java": "gamerCopyDisplayName",
+        "symbol": "cna_gamer_copy_display_name"
+      },
+      {
+        "java": "gamerCopyGamertag",
+        "symbol": "cna_gamer_copy_gamertag"
+      },
+      {
+        "java": "gamerCopyPartnerToken",
+        "symbol": "cna_gamer_copy_partner_token"
+      },
+      {
+        "java": "gamerCopyText",
+        "symbol": "cna_gamer_copy_text"
+      },
+      {
+        "java": "gamerDestroy",
+        "symbol": "cna_gamer_destroy"
+      },
+      {
+        "java": "gamerEnumeratorDestroy",
+        "symbol": "cna_gamer_enumerator_destroy"
+      },
+      {
+        "java": "gamerEnumeratorGetCurrent",
+        "symbol": "cna_gamer_enumerator_get_current"
+      },
+      {
+        "java": "gamerEnumeratorMoveNext",
+        "symbol": "cna_gamer_enumerator_move_next"
+      },
+      {
+        "java": "gamerEnumeratorReset",
+        "symbol": "cna_gamer_enumerator_reset"
+      },
+      {
+        "java": "gamerGetDisplayNameSize",
+        "symbol": "cna_gamer_get_display_name_size"
+      },
+      {
+        "java": "gamerGetFromGamertag",
+        "symbol": "cna_gamer_get_from_gamertag"
+      },
+      {
+        "java": "gamerGetGamertagSize",
+        "symbol": "cna_gamer_get_gamertag_size"
+      },
+      {
+        "java": "gamerGetIsDisposed",
+        "symbol": "cna_gamer_get_is_disposed"
+      },
+      {
+        "java": "gamerGetPartnerTokenSize",
+        "symbol": "cna_gamer_get_partner_token_size"
+      },
+      {
+        "java": "gamerGetProfile",
+        "symbol": "cna_gamer_get_profile"
+      },
+      {
+        "java": "gamerGetSignedInGamerAt",
+        "symbol": "cna_gamer_get_signed_in_gamer_at"
+      },
+      {
+        "java": "gamerGetSignedInGamerAtPlayerIndex",
+        "symbol": "cna_gamer_get_signed_in_gamer_at_player_index"
+      },
+      {
+        "java": "gamerGetSignedInGamerCount",
+        "symbol": "cna_gamer_get_signed_in_gamer_count"
+      },
+      {
+        "java": "gamerGetTag",
+        "symbol": "cna_gamer_get_tag"
+      },
+      {
+        "java": "gamerGetTextSize",
+        "symbol": "cna_gamer_get_text_size"
+      },
+      {
+        "java": "gamerPresenceInit",
+        "symbol": "cna_gamer_presence_init"
+      },
+      {
+        "java": "gamerProfileCopyMotto",
+        "symbol": "cna_gamer_profile_copy_motto"
+      },
+      {
+        "java": "gamerProfileCopyRegionName",
+        "symbol": "cna_gamer_profile_copy_region_name"
+      },
+      {
+        "java": "gamerProfileDestroy",
+        "symbol": "cna_gamer_profile_destroy"
+      },
+      {
+        "java": "gamerProfileGetInfo",
+        "symbol": "cna_gamer_profile_get_info"
+      },
+      {
+        "java": "gamerProfileGetMottoSize",
+        "symbol": "cna_gamer_profile_get_motto_size"
+      },
+      {
+        "java": "gamerProfileGetPictureSize",
+        "symbol": "cna_gamer_profile_get_picture_size"
+      },
+      {
+        "java": "gamerProfileGetRegionNameSize",
+        "symbol": "cna_gamer_profile_get_region_name_size"
+      },
+      {
+        "java": "gamerServicesComponentCreate",
+        "symbol": "cna_gamer_services_component_create"
+      },
+      {
+        "java": "gamerServicesDispatcherGetFreedGamerCountExt",
+        "symbol": "cna_gamer_services_dispatcher_get_freed_gamer_count_ext"
+      },
+      {
+        "java": "gamerServicesDispatcherGetIsInitialized",
+        "symbol": "cna_gamer_services_dispatcher_get_is_initialized"
+      },
+      {
+        "java": "gamerServicesDispatcherGetWindowHandle",
+        "symbol": "cna_gamer_services_dispatcher_get_window_handle"
+      },
+      {
+        "java": "gamerServicesDispatcherUpdateAsync",
+        "symbol": "cna_gamer_services_dispatcher_update_async"
+      },
+      {
+        "java": "gamerSetDisplayName",
+        "symbol": "cna_gamer_set_display_name"
+      },
+      {
+        "java": "gamerSetSignedInGamersExt",
+        "symbol": "cna_gamer_set_signed_in_gamers_ext"
+      },
+      {
+        "java": "gamerSetTag",
+        "symbol": "cna_gamer_set_tag"
+      },
+      {
+        "java": "gamerSignedInContains",
+        "symbol": "cna_gamer_signed_in_contains"
+      },
+      {
+        "java": "gamerSignedInIndexOf",
+        "symbol": "cna_gamer_signed_in_index_of"
+      },
+      {
+        "java": "gamerUnsubscribeExt",
+        "symbol": "cna_gamer_unsubscribe_ext"
+      },
+      {
+        "java": "guideCopyPendingKeyboardInputDescriptionExt",
+        "symbol": "cna_guide_copy_pending_keyboard_input_description_ext"
+      },
+      {
+        "java": "guideCopyPendingKeyboardInputDisplayTextExt",
+        "symbol": "cna_guide_copy_pending_keyboard_input_display_text_ext"
+      },
+      {
+        "java": "guideCopyPendingKeyboardInputTitleExt",
+        "symbol": "cna_guide_copy_pending_keyboard_input_title_ext"
+      },
+      {
+        "java": "guideDelayNotifications",
+        "symbol": "cna_guide_delay_notifications"
+      },
+      {
+        "java": "guideEndShowKeyboardInput",
+        "symbol": "cna_guide_end_show_keyboard_input"
+      },
+      {
+        "java": "guideEndShowKeyboardInputSize",
+        "symbol": "cna_guide_end_show_keyboard_input_size"
+      },
+      {
+        "java": "guideEndShowMessageBox",
+        "symbol": "cna_guide_end_show_message_box"
+      },
+      {
+        "java": "guideGetHasPendingKeyboardInputExt",
+        "symbol": "cna_guide_get_has_pending_keyboard_input_ext"
+      },
+      {
+        "java": "guideGetHasPendingMessageBoxExt",
+        "symbol": "cna_guide_get_has_pending_message_box_ext"
+      },
+      {
+        "java": "guideGetIsScreenSaverEnabled",
+        "symbol": "cna_guide_get_is_screen_saver_enabled"
+      },
+      {
+        "java": "guideGetIsTrialMode",
+        "symbol": "cna_guide_get_is_trial_mode"
+      },
+      {
+        "java": "guideGetIsVisible",
+        "symbol": "cna_guide_get_is_visible"
+      },
+      {
+        "java": "guideGetNotificationPosition",
+        "symbol": "cna_guide_get_notification_position"
+      },
+      {
+        "java": "guideGetPendingKeyboardInputDescriptionSizeExt",
+        "symbol": "cna_guide_get_pending_keyboard_input_description_size_ext"
+      },
+      {
+        "java": "guideGetPendingKeyboardInputDisplayTextSizeExt",
+        "symbol": "cna_guide_get_pending_keyboard_input_display_text_size_ext"
+      },
+      {
+        "java": "guideGetPendingKeyboardInputTitleSizeExt",
+        "symbol": "cna_guide_get_pending_keyboard_input_title_size_ext"
+      },
+      {
+        "java": "guideGetPendingMessageBoxFocusButtonExt",
+        "symbol": "cna_guide_get_pending_message_box_focus_button_ext"
+      },
+      {
+        "java": "guideGetSimulateTrialMode",
+        "symbol": "cna_guide_get_simulate_trial_mode"
+      },
+      {
+        "java": "guideRenderPendingKeyboardInputExt",
+        "symbol": "cna_guide_render_pending_keyboard_input_ext"
+      },
+      {
+        "java": "guideRenderPendingMessageBoxExt",
+        "symbol": "cna_guide_render_pending_message_box_ext"
+      },
+      {
+        "java": "guideResetPendingKeyboardInputExt",
+        "symbol": "cna_guide_reset_pending_keyboard_input_ext"
+      },
+      {
+        "java": "guideResetPendingMessageBoxExt",
+        "symbol": "cna_guide_reset_pending_message_box_ext"
+      },
+      {
+        "java": "guideSetIsScreenSaverEnabled",
+        "symbol": "cna_guide_set_is_screen_saver_enabled"
+      },
+      {
+        "java": "guideSetIsTrialMode",
+        "symbol": "cna_guide_set_is_trial_mode"
+      },
+      {
+        "java": "guideSetIsVisible",
+        "symbol": "cna_guide_set_is_visible"
+      },
+      {
+        "java": "guideSetNotificationPosition",
+        "symbol": "cna_guide_set_notification_position"
+      },
+      {
+        "java": "guideSetSimulateTrialMode",
+        "symbol": "cna_guide_set_simulate_trial_mode"
+      },
+      {
+        "java": "guideShowAchievementsExt",
+        "symbol": "cna_guide_show_achievements_ext"
+      },
+      {
+        "java": "guideShowComposeMessage",
+        "symbol": "cna_guide_show_compose_message"
+      },
+      {
+        "java": "guideShowFriendRequest",
+        "symbol": "cna_guide_show_friend_request"
+      },
+      {
+        "java": "guideShowFriends",
+        "symbol": "cna_guide_show_friends"
+      },
+      {
+        "java": "guideShowGameInvite",
+        "symbol": "cna_guide_show_game_invite"
+      },
+      {
+        "java": "guideShowGameInviteForSession",
+        "symbol": "cna_guide_show_game_invite_for_session"
+      },
+      {
+        "java": "guideShowGamerCard",
+        "symbol": "cna_guide_show_gamer_card"
+      },
+      {
+        "java": "guideShowMarketplace",
+        "symbol": "cna_guide_show_marketplace"
+      },
+      {
+        "java": "guideShowMessages",
+        "symbol": "cna_guide_show_messages"
+      },
+      {
+        "java": "guideShowParty",
+        "symbol": "cna_guide_show_party"
+      },
+      {
+        "java": "guideShowPartySessions",
+        "symbol": "cna_guide_show_party_sessions"
+      },
+      {
+        "java": "guideShowPlayerReview",
+        "symbol": "cna_guide_show_player_review"
+      },
+      {
+        "java": "guideShowPlayers",
+        "symbol": "cna_guide_show_players"
+      },
+      {
+        "java": "guideShowSignIn",
+        "symbol": "cna_guide_show_sign_in"
+      },
+      {
+        "java": "guideSimulateKeyboardInputCancelExt",
+        "symbol": "cna_guide_simulate_keyboard_input_cancel_ext"
+      },
+      {
+        "java": "guideSimulateMessageBoxClickExt",
+        "symbol": "cna_guide_simulate_message_box_click_ext"
+      },
+      {
+        "java": "guideWasKeyboardInputCanceledExt",
+        "symbol": "cna_guide_was_keyboard_input_canceled_ext"
+      },
+      {
+        "java": "inviteAcceptedEventInfoInit",
+        "symbol": "cna_invite_accepted_event_info_init"
+      },
+      {
+        "java": "leaderboardEntryCreateExt",
+        "symbol": "cna_leaderboard_entry_create_ext"
+      },
+      {
+        "java": "leaderboardEntryDestroy",
+        "symbol": "cna_leaderboard_entry_destroy"
+      },
+      {
+        "java": "leaderboardEntryEquals",
+        "symbol": "cna_leaderboard_entry_equals"
+      },
+      {
+        "java": "leaderboardEntryGetColumns",
+        "symbol": "cna_leaderboard_entry_get_columns"
+      },
+      {
+        "java": "leaderboardEntryGetGamer",
+        "symbol": "cna_leaderboard_entry_get_gamer"
+      },
+      {
+        "java": "leaderboardEntryGetInfo",
+        "symbol": "cna_leaderboard_entry_get_info"
+      },
+      {
+        "java": "leaderboardEntrySetRating",
+        "symbol": "cna_leaderboard_entry_set_rating"
+      },
+      {
+        "java": "leaderboardIdentityInit",
+        "symbol": "cna_leaderboard_identity_init"
+      },
+      {
+        "java": "leaderboardReaderDestroy",
+        "symbol": "cna_leaderboard_reader_destroy"
+      },
+      {
+        "java": "leaderboardReaderGetEntryAt",
+        "symbol": "cna_leaderboard_reader_get_entry_at"
+      },
+      {
+        "java": "leaderboardReaderGetIdentity",
+        "symbol": "cna_leaderboard_reader_get_identity"
+      },
+      {
+        "java": "leaderboardReaderGetInfo",
+        "symbol": "cna_leaderboard_reader_get_info"
+      },
+      {
+        "java": "leaderboardReaderPageDown",
+        "symbol": "cna_leaderboard_reader_page_down"
+      },
+      {
+        "java": "leaderboardReaderPageUp",
+        "symbol": "cna_leaderboard_reader_page_up"
+      },
+      {
+        "java": "leaderboardReaderRead",
+        "symbol": "cna_leaderboard_reader_read"
+      },
+      {
+        "java": "leaderboardReaderReadFromGamers",
+        "symbol": "cna_leaderboard_reader_read_from_gamers"
+      },
+      {
+        "java": "leaderboardReaderReadFromPivot",
+        "symbol": "cna_leaderboard_reader_read_from_pivot"
+      },
+      {
+        "java": "propertyDictionaryClear",
+        "symbol": "cna_property_dictionary_clear"
+      },
+      {
+        "java": "propertyDictionaryContainsKey",
+        "symbol": "cna_property_dictionary_contains_key"
+      },
+      {
+        "java": "propertyDictionaryCopyKeyAt",
+        "symbol": "cna_property_dictionary_copy_key_at"
+      },
+      {
+        "java": "propertyDictionaryCopyString",
+        "symbol": "cna_property_dictionary_copy_string"
+      },
+      {
+        "java": "propertyDictionaryCreateExt",
+        "symbol": "cna_property_dictionary_create_ext"
+      },
+      {
+        "java": "propertyDictionaryDestroy",
+        "symbol": "cna_property_dictionary_destroy"
+      },
+      {
+        "java": "propertyDictionaryGetCount",
+        "symbol": "cna_property_dictionary_get_count"
+      },
+      {
+        "java": "propertyDictionaryGetDateTimeTicks",
+        "symbol": "cna_property_dictionary_get_date_time_ticks"
+      },
+      {
+        "java": "propertyDictionaryGetDouble",
+        "symbol": "cna_property_dictionary_get_double"
+      },
+      {
+        "java": "propertyDictionaryGetInt32",
+        "symbol": "cna_property_dictionary_get_int32"
+      },
+      {
+        "java": "propertyDictionaryGetInt64",
+        "symbol": "cna_property_dictionary_get_int64"
+      },
+      {
+        "java": "propertyDictionaryGetIsReadOnly",
+        "symbol": "cna_property_dictionary_get_is_read_only"
+      },
+      {
+        "java": "propertyDictionaryGetKeySizeAt",
+        "symbol": "cna_property_dictionary_get_key_size_at"
+      },
+      {
+        "java": "propertyDictionaryGetOutcome",
+        "symbol": "cna_property_dictionary_get_outcome"
+      },
+      {
+        "java": "propertyDictionaryGetSingle",
+        "symbol": "cna_property_dictionary_get_single"
+      },
+      {
+        "java": "propertyDictionaryGetStreamSizeExt",
+        "symbol": "cna_property_dictionary_get_stream_size_ext"
+      },
+      {
+        "java": "propertyDictionaryGetStringSize",
+        "symbol": "cna_property_dictionary_get_string_size"
+      },
+      {
+        "java": "propertyDictionaryGetTimeSpanTicks",
+        "symbol": "cna_property_dictionary_get_time_span_ticks"
+      },
+      {
+        "java": "propertyDictionaryRemove",
+        "symbol": "cna_property_dictionary_remove"
+      },
+      {
+        "java": "propertyDictionarySetDateTimeTicks",
+        "symbol": "cna_property_dictionary_set_date_time_ticks"
+      },
+      {
+        "java": "propertyDictionarySetDouble",
+        "symbol": "cna_property_dictionary_set_double"
+      },
+      {
+        "java": "propertyDictionarySetInt32",
+        "symbol": "cna_property_dictionary_set_int32"
+      },
+      {
+        "java": "propertyDictionarySetInt64",
+        "symbol": "cna_property_dictionary_set_int64"
+      },
+      {
+        "java": "propertyDictionarySetOutcome",
+        "symbol": "cna_property_dictionary_set_outcome"
+      },
+      {
+        "java": "propertyDictionarySetSingle",
+        "symbol": "cna_property_dictionary_set_single"
+      },
+      {
+        "java": "propertyDictionarySetString",
+        "symbol": "cna_property_dictionary_set_string"
+      },
+      {
+        "java": "propertyDictionarySetTimeSpanTicks",
+        "symbol": "cna_property_dictionary_set_time_span_ticks"
+      },
+      {
+        "java": "propertyDictionaryTryGetValueKindExt",
+        "symbol": "cna_property_dictionary_try_get_value_kind_ext"
+      },
+      {
+        "java": "signedInGamerAwardAchievement",
+        "symbol": "cna_signed_in_gamer_award_achievement"
+      },
+      {
+        "java": "signedInGamerCopyGamertag",
+        "symbol": "cna_signed_in_gamer_copy_gamertag"
+      },
+      {
+        "java": "signedInGamerCreateExt",
+        "symbol": "cna_signed_in_gamer_create_ext"
+      },
+      {
+        "java": "signedInGamerDestroy",
+        "symbol": "cna_signed_in_gamer_destroy"
+      },
+      {
+        "java": "signedInGamerGetAchievements",
+        "symbol": "cna_signed_in_gamer_get_achievements"
+      },
+      {
+        "java": "signedInGamerGetFriends",
+        "symbol": "cna_signed_in_gamer_get_friends"
+      },
+      {
+        "java": "signedInGamerGetGameDefaults",
+        "symbol": "cna_signed_in_gamer_get_game_defaults"
+      },
+      {
+        "java": "signedInGamerGetGamertagSize",
+        "symbol": "cna_signed_in_gamer_get_gamertag_size"
+      },
+      {
+        "java": "signedInGamerGetIsGuest",
+        "symbol": "cna_signed_in_gamer_get_is_guest"
+      },
+      {
+        "java": "signedInGamerGetIsSignedInToLive",
+        "symbol": "cna_signed_in_gamer_get_is_signed_in_to_live"
+      },
+      {
+        "java": "signedInGamerGetPartySize",
+        "symbol": "cna_signed_in_gamer_get_party_size"
+      },
+      {
+        "java": "signedInGamerGetPlayerIndex",
+        "symbol": "cna_signed_in_gamer_get_player_index"
+      },
+      {
+        "java": "signedInGamerGetPresence",
+        "symbol": "cna_signed_in_gamer_get_presence"
+      },
+      {
+        "java": "signedInGamerGetPrivileges",
+        "symbol": "cna_signed_in_gamer_get_privileges"
+      },
+      {
+        "java": "signedInGamerIsFriend",
+        "symbol": "cna_signed_in_gamer_is_friend"
+      },
+      {
+        "java": "signedInGamerIsHeadset",
+        "symbol": "cna_signed_in_gamer_is_headset"
+      },
+      {
+        "java": "signedInGamerSetPartySize",
+        "symbol": "cna_signed_in_gamer_set_party_size"
+      },
+      {
+        "java": "signedInGamerSetPresence",
+        "symbol": "cna_signed_in_gamer_set_presence"
+      },
+      {
+        "java": "signedInGamerSetPresenceModeStringExt",
+        "symbol": "cna_signed_in_gamer_set_presence_mode_string_ext"
+      }
+    ]
+  }
+}

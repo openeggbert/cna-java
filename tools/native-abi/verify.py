@@ -33,7 +33,8 @@ from inventory import abi_version, inventory  # noqa: E402
 
 ROOT = Path(__file__).resolve().parents[2]
 MANIFEST = ROOT / "tools/native-abi/bindings.json"
-JNI_SOURCE = ROOT / "src/main/c/cna_java_jni.c"
+JNI_SOURCES = sorted(list((ROOT / "src/main/c").glob("*.c"))
+                     + list((ROOT / "src/main/c/generated").glob("*.inc")))
 PROBE = ROOT / "tools/native-abi/probe.c"
 
 LOAD_PATTERN = re.compile(r'LOAD\(\s*([A-Za-z0-9_]+)\s*,\s*"(cna_[A-Za-z0-9_]+)"\s*\)')
@@ -75,7 +76,7 @@ def check_manifest(manifest: dict, live: dict) -> list[str]:
 
 def check_jni(manifest: dict) -> list[str]:
     failures: list[str] = []
-    source = JNI_SOURCE.read_text(encoding="utf-8")
+    source = "\n".join(path.read_text(encoding="utf-8") for path in JNI_SOURCES)
     loaded = dict((field, symbol) for field, symbol in LOAD_PATTERN.findall(source))
     routes = dict((field, symbol) for symbol, field in ROUTE_PATTERN.findall(source))
     declared = {entry["name"] for entry in manifest["functions"]}

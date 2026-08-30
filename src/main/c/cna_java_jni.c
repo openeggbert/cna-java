@@ -797,6 +797,9 @@ typedef struct CnaFunctions {
     CNA_JNI_ROUTE(cna_storage_stream_get_can_seek) storage_stream_get_can_seek;
     CNA_JNI_ROUTE(cna_storage_stream_flush) storage_stream_flush;
     CNA_JNI_ROUTE(cna_storage_stream_close) storage_stream_close;
+
+    /* Slots for the routes whose adapter is generated from the CNA headers. */
+#include "generated/routes_table.inc"
 } CnaFunctions;
 
 typedef struct JavaGameContext {
@@ -2495,6 +2498,9 @@ JNIEXPORT jint JNICALL Java_org_openeggbert_cna_internal_NativeBindings_nativeLo
     LOAD(storage_stream_get_can_seek, "cna_storage_stream_get_can_seek");
     LOAD(storage_stream_flush, "cna_storage_stream_flush");
     LOAD(storage_stream_close, "cna_storage_stream_close");
+
+    /* Loads for the routes whose adapter is generated from the CNA headers. */
+#include "generated/routes_load.inc"
 #undef LOAD
 
     return (jint)cna.get_abi_version();
@@ -12084,3 +12090,9 @@ JNIEXPORT jint JNICALL Java_org_openeggbert_cna_internal_NativeStorage_nativeSub
     storage_device_events = event;
     return (jint)CNA_RESULT_SUCCESS;
 }
+
+/*
+ * Generated JNI entry points. They are included rather than compiled separately so that
+ * they share this translation unit's single dispatch table and its helpers.
+ */
+#include "generated/NativeGamerServicesRoutes.inc"

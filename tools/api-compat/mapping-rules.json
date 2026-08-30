@@ -32,13 +32,18 @@
     "System.Collections.ObjectModel.Collection`1": "java.util.AbstractList",
     "System.Collections.ObjectModel.ReadOnlyCollection`1": "java.util.List",
     "System.Collections.Generic.Dictionary`2": "java.util.LinkedHashMap",
-    "System.Text.StringBuilder": "java.lang.StringBuilder"
+    "System.Text.StringBuilder": "java.lang.StringBuilder",
+    "System.Globalization.RegionInfo": "java.util.Locale",
+    "System.Collections.Generic.IDictionary`2": "java.util.Map",
+    "System.Collections.Generic.KeyValuePair`2": "java.util.Map.Entry"
   },
   "typeBaseTypeMappings": {
     "Microsoft.Xna.Framework.Graphics.ModelBoneCollection": "java.util.AbstractList<Microsoft.Xna.Framework.Graphics.ModelBone>",
     "Microsoft.Xna.Framework.Graphics.ModelEffectCollection": "java.util.AbstractList<Microsoft.Xna.Framework.Graphics.Effect>",
     "Microsoft.Xna.Framework.Graphics.ModelMeshCollection": "java.util.AbstractList<Microsoft.Xna.Framework.Graphics.ModelMesh>",
-    "Microsoft.Xna.Framework.Graphics.ModelMeshPartCollection": "java.util.AbstractList<Microsoft.Xna.Framework.Graphics.ModelMeshPart>"
+    "Microsoft.Xna.Framework.Graphics.ModelMeshPartCollection": "java.util.AbstractList<Microsoft.Xna.Framework.Graphics.ModelMeshPart>",
+    "Microsoft.Xna.Framework.GamerServices.GamerCollection": "java.util.AbstractList<T>",
+    "Microsoft.Xna.Framework.Net.AvailableNetworkSessionCollection": "java.util.AbstractList<Microsoft.Xna.Framework.Net.AvailableNetworkSession>"
   },
   "memberParameterTypeMappings": {
     "Microsoft.Xna.Framework.Graphics.Texture2D.FromStream(Microsoft.Xna.Framework.Graphics.GraphicsDevice,System.IO.Stream)": {
@@ -122,10 +127,7 @@
   "excludedClrMethods": [
     "System.Object.Finalize"
   ],
-  "excludedClrMembers": [
-    "Microsoft.Xna.Framework.Content.ContentLoadException..ctor(System.Runtime.Serialization.SerializationInfo,System.Runtime.Serialization.StreamingContext)",
-    "Microsoft.Xna.Framework.Storage.StorageDeviceNotConnectedException..ctor(System.Runtime.Serialization.SerializationInfo,System.Runtime.Serialization.StreamingContext)"
-  ],
+  "excludedClrMembers": [],
   "genericTypeRenames": {
     "Microsoft.Xna.Framework.Content.ContentTypeReader`1": "Microsoft.Xna.Framework.Content.ContentTypeReaderOfT",
     "Microsoft.Xna.Framework.Graphics.PackedVector.IPackedVector`1": "Microsoft.Xna.Framework.Graphics.PackedVector.IPackedVectorOfT"
@@ -138,10 +140,14 @@
   ],
   "javaCollectionBridgeTypes": [
     "Microsoft.Xna.Framework.CurveKeyCollection",
-    "Microsoft.Xna.Framework.Input.Touch.TouchCollection"
+    "Microsoft.Xna.Framework.GamerServices.AchievementCollection",
+    "Microsoft.Xna.Framework.Input.Touch.TouchCollection",
+    "Microsoft.Xna.Framework.Net.NetworkSessionProperties"
   ],
   "javaListBridgeTypes": [
-    "Microsoft.Xna.Framework.Input.Touch.TouchCollection"
+    "Microsoft.Xna.Framework.GamerServices.AchievementCollection",
+    "Microsoft.Xna.Framework.Input.Touch.TouchCollection",
+    "Microsoft.Xna.Framework.Net.NetworkSessionProperties"
   ],
   "javaIteratorBridgeTypes": [
     "Microsoft.Xna.Framework.Input.Touch.TouchCollection+Enumerator",
@@ -514,5 +520,12 @@
     "GetHashCode": "hashCode",
     "ToString": "toString",
     "note": "The only members lowered away from XNA spelling. java.lang.Object already declares them, so an XNA-cased twin would not override them and collections, hashing and printing would use the inherited implementation."
-  }
+  },
+  "clrSerializationParameterTypes": [
+    "System.Runtime.Serialization.SerializationInfo",
+    "System.Runtime.Serialization.StreamingContext"
+  ],
+  "javaMapBridgeTypes": [
+    "Microsoft.Xna.Framework.GamerServices.PropertyDictionary"
+  ]
 }
