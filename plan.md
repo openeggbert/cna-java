@@ -42,12 +42,13 @@ or put non-XNA API inside `Microsoft.Xna.Framework.*`.
 | Allowlist entries | 0 | 0 |
 | CNA C ABI | 0.7.0 | 0.20.0 |
 | Canonical C API functions | not measured | 4,051 |
-| Bound native routes | 723 | 1,225 |
+| Bound native routes | 723 | 1,393 |
 | Unexplained native routes | 3,328 | 0 |
 | Bound routes no JNI entry point reaches | 1 | 0 |
-| Bound routes no Java call site reaches | not measurable | 162 |
-| CNA extension packages | 0 | 4 |
-| Tests | 156 | 191 |
+| Bound routes no Java call site reaches | not measurable | 161 |
+| Deferred input routes | 132 | 0 |
+| CNA extension packages | 0 | 5 |
+| Tests | 156 | 209 |
 
 ## Milestones reached this session
 
@@ -81,6 +82,20 @@ says so rather than downgrading, and an absent host fact is absent rather than z
 gained an opt-in `--extensions-smoke` that proves an external consumer can reach them, and it
 found a real defect on its first run.
 
+**J12, the input and device frontier.** `JAVA-EXT-002` and `JAVA-NATIVE-022` are done and no
+input route is deferred. The audit found that none of the 132 deferred input routes was an
+XNA-shaped route lacking backing -- the whole XNA input surface was already bound. 39 were CNA
+capabilities XNA has no shape for and are now projected; the other 92 are value operations on
+XNA's input structs, managed in XNA and managed here. The new families are the four host motion
+sensors, device and sensor enumeration with hot plug, raw joysticks, force feedback with a sealed
+typed effect family, and the modern game pad, keyboard, mouse and touch panel.
+
+**J13, the string-carrying events.** `JAVA-EXT-005`. Composition drafts and candidate lists
+travel over a second transport that copies each borrowed UTF-8 view inside CNA's callback and
+frees it before Java sees it, and the two queues are merged by a sequence stamped when CNA raised
+the event, so a committed character and the composition update that cleared it reach the game in
+the order they happened.
+
 **J8, the native inventory.** Every one of the 4,051 canonical C API functions carries an explicit
 classification with zero unexplained, and the public surface that reaches each bound route is
 derived from the JNI call graph and the Java sources rather than declared by hand.
@@ -113,12 +128,12 @@ explicitly reviewed full signature, never a suppression:
 ```text
 HEADER_ABI=0.20.0
 CANONICAL_FUNCTIONS=4051
-BOUND_FUNCTIONS=1225
+BOUND_FUNCTIONS=1393
 MANIFEST_SIGNATURE_CHECK=PASS
 MANIFEST_JNI_BINDING_CHECK=PASS
 JNI_HEADER_DERIVED_SLOT_CHECK=PASS
 LAYOUT_SIGNATURE_PROBE=PASS
-LIBRARY_SYMBOL_CHECK=PASS (1225/1225)
+LIBRARY_SYMBOL_CHECK=PASS (1393/1393)
 ABI_POLICY_CHECK=PASS
 NATIVE_TOOL_TESTS=43 passed, 0 failed
 ```
@@ -133,12 +148,12 @@ than guessing; `generateJniCheck` fails the build when the committed output goes
 ```text
 XNA_BACKING              976
 JAVA_INTERNAL_ONLY       170
-CNA_EXTENSION_CANDIDATE 1730
-DEFERRED_RUNTIME         679
-NOT_USEFUL_IN_JAVA       496
+CNA_EXTENSION_CANDIDATE 1771
+DEFERRED_RUNTIME         547
+NOT_USEFUL_IN_JAVA       587
 UNMAPPED_REQUIRES_REVIEW   0
 BOUND_BUT_UNREACHED        0
-BOUND_WITHOUT_JAVA_CALL_SITE 162
+BOUND_WITHOUT_JAVA_CALL_SITE 161
 ```
 
 `NOT_USEFUL_IN_JAVA` is dominated by value math -- vectors, matrices, quaternions, geometry,
@@ -147,9 +162,11 @@ add cost and a native failure mode the original API cannot produce.
 
 ## Next
 
-`docs/backlog.json` is the machine-readable backlog. The largest remaining gap is the roughly
-1,700 extension candidates still unreached: CNA's engine layer, sensors, haptics, raw joysticks,
-device enumeration and the `.cnb` content format. They belong under
+`docs/backlog.json` is the machine-readable backlog. The largest remaining gaps are the 127
+deferred Model routes behind a managed-only `Load<Model>` (`JAVA-NATIVE-011`), the 272 unbound
+`.cnb` content routes (`JAVA-EXT-003`), the 161 bound routes no Java call site reaches
+(`JAVA-NATIVE-023`), and the Content Pipeline product decision (`JAVA-XNA-006`). CNA's engine
+layer is the bulk of what is left classified as an extension candidate; it belongs under
 `org.openeggbert.cna.extensions.*`, never inside the strict packages.
 
 `boundButUnreached` -- a loaded symbol no JNI entry point reaches -- is empty and `nativeCoverageCheck`

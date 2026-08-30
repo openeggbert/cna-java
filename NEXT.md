@@ -15,7 +15,7 @@ clean. The pre-existing untracked `out` entry is untouched.
 
 ```text
 cnanext HEAD            17b5a90a0878f3f44c23bc8e3197d5d30373dc72 (branch next)
-sharp-runtimenext HEAD  eebebd862121953538e3b84d43384d70a8a1728d (branch next)
+sharp-runtimenext HEAD  4a49afb0cfe6a41e6e0af0bb62dc5175976731bb (branch next)
 native artifact         cnanext/cmake-build-javanext/modules/c-api/libcna_c_api.so
 ABI                     0.20.0
 C API inventory SHA-256 e9e0be892dbdce49dedf195dac35f604a9263565a74473195d878ee9e580696d
@@ -48,18 +48,25 @@ TARGET_TYPES=340     TARGET_MEMBERS=4022
 TOTAL_DIAGNOSTICS=0  ALLOWLIST_ENTRIES=0
 
 NATIVE
-CANONICAL_FUNCTIONS=4051   BOUND_FUNCTIONS=1225
-XNA_BACKING=975  JAVA_INTERNAL_ONLY=171  CNA_EXTENSION_CANDIDATE=1730
-DEFERRED_RUNTIME=679  NOT_USEFUL_IN_JAVA=496  UNEXPLAINED=0
-BOUND_BUT_UNREACHED=0
+CANONICAL_FUNCTIONS=4051   BOUND_FUNCTIONS=1393
+XNA_BACKING=976  JAVA_INTERNAL_ONLY=170  CNA_EXTENSION_CANDIDATE=1771
+DEFERRED_RUNTIME=547  NOT_USEFUL_IN_JAVA=587  UNEXPLAINED=0
+BOUND_BUT_UNREACHED=0  BOUND_WITHOUT_JAVA_CALL_SITE=161
 
 CNA EXTENSIONS
 org.openeggbert.cna.extensions.graphics   pipeline settings, PBR material, ASCII/CRT/depth effects
 org.openeggbert.cna.extensions.runtime    platform, renderer, backend category and maturity, logger
-org.openeggbert.cna.extensions.devices    system info, power, display, locales, clipboard, URL, vibration
-org.openeggbert.cna.extensions.input      typed characters, text input control, mouse cursors
+org.openeggbert.cna.extensions.devices    system info, power, display, locales, clipboard, URL,
+                                          vibration, input-device enumeration and hot plug
+org.openeggbert.cna.extensions.input      typed characters, composition drafts and candidate
+                                          lists, text input control, mouse cursors, raw
+                                          joysticks, force feedback, the modern game pad,
+                                          keyboard naming and scancodes, mouse capture and
+                                          relative mode, touch emulation
+org.openeggbert.cna.extensions.sensors    accelerometer, gyroscope, compass, fused motion,
+                                          and the host's sensor enumeration
 
-TESTS=191 SUITES=42 FAILURES=0 ERRORS=0 SKIPPED=0
+TESTS=209 SUITES=48 FAILURES=0 ERRORS=0 SKIPPED=0
 ```
 
 The selected profile is now a **subset gate**: a type the wider profile declares is not an
@@ -102,16 +109,30 @@ unexpected type in the narrower one, so its zero still means what it always mean
 - Everything in `docs/runtime-capabilities.json` still holds for the previously measured
   families.
 
+## What changed after that
+
+7. `JAVA-EXT-002` and `JAVA-NATIVE-022` are done, and no input route is deferred. The audit
+   found that none of the 132 deferred input routes was an XNA-shaped route lacking backing;
+   39 were CNA capabilities XNA has no shape for, and the other 92 are value operations on
+   XNA's input structs, managed in XNA and managed here.
+8. `JAVA-EXT-005` is done: a second event transport carries the string-bearing composition and
+   candidate events, and a shared sequence keeps one order out of two queues.
+9. Three native-boundary defects were fixed and are covered by new tool tests: an output array
+   of structs was never copied back, a C `double` was narrowed to `jfloat`, and a nested
+   versioned structure was left unstamped. The reachability question was also unanswerable
+   because a `native` declaration counted as its own call site; with that fixed,
+   `boundWithoutJavaCallSite` is 161 and `JAVA-NATIVE-023` owns getting it to zero.
+
 ## Next work, in dependency order
 
 `docs/backlog.json` is the machine-readable source. The highest-value ready tasks are:
 
-1. `JAVA-EXT-002` — the rest of the device and input extensions: sensors, haptics, raw
-   joysticks and device enumeration. About 1,700 routes are still classified as extension
-   candidates, which is the largest single gap left.
+1. `JAVA-NATIVE-011` — bind the native Model routes behind the managed XNB model graph, so
+   `Load<Model>` stops being managed-only. 127 routes.
 2. `JAVA-EXT-003` — the `.cnb` content format, 272 routes.
-3. `JAVA-NATIVE-011` — bind the native Model routes behind the managed XNB model graph, so
-   `Load<Model>` stops being managed-only.
+3. `JAVA-NATIVE-023` — reach or unbind the 161 routes no Java call site touches, concentrated
+   in the GamerServices and Net families. PacketReader and PacketWriter are the largest slice:
+   28 routes CNA implements that the Java projection currently does managed.
 4. `JAVA-XNA-006` — measure the Content Pipeline build-time profile and decide whether a Java
    content pipeline belongs in this binding.
 
