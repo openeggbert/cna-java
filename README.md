@@ -10,34 +10,37 @@ Microsoft.Xna.Framework.*       strict XNA Java projection
     ↓
 org.openeggbert.cna.internal.*  private implementation/JNI
     ↓
-CNA stable C ABI 0.7.0
+CNA stable C ABI 0.20.0
     ↓
-CNA C++
+CNA C++ / SharpRuntime
 ```
 
 ## Honest status
 
-The selected XNA 4.0 Windows runtime projection is structurally strict-complete. This means every
-formally mapped type and member matches; it does not mean every historical XNA profile or every
-platform-dependent runtime capability is complete.
-
-The current strict measurement is:
+The **complete XNA 4.0 runtime superset** is structurally at zero diagnostics. That means every
+formally mapped type and member matches the ten original, SHA-256-pinned Microsoft runtime
+assemblies. It does not mean every runtime capability is present; the capability inventory and
+`NEXT.md` record what is not.
 
 ```text
+Selected Windows runtime profile (7 assemblies)
 XNA reference:        257 types / 2,964 members
-Mapped Java contract: 265 types / 3,206 members
-Java target:          265 strict types / 3,206 members
+Mapped Java contract: 265 types / 3,242 members
+Total diagnostics:      0
+
+Full runtime superset (10 assemblies, adding GamerServices, Net and Avatar)
+XNA reference:        331 types / 3,640 members
+Mapped Java contract: 340 types / 4,022 members
+Java target:          340 types / 4,022 members
 Missing types:          0
 Missing members:        0
 Total diagnostics:      0
-Mapping drift:          0
-Allowlist:               0
-Strict leaks:            0
+Allowlist:              0
+Strict leaks:           0
 ```
 
-The exact diagnostic breakdown and remaining family distribution are recorded
-in [plan.md](plan.md) and [NEXT.md](NEXT.md). No completeness claim is inferred
-from source counts.
+The narrower profile is a subset gate: a type the wider profile declares is not an unexpected
+type in it. The exact breakdown is in [plan.md](plan.md) and [NEXT.md](NEXT.md).
 
 Implemented now:
 
@@ -80,10 +83,17 @@ Implemented now:
 - all 13 Design converters as a managed Java conversion subsystem, with an explicit compact
   TypeConverter language mapping, XNA-ordered property decomposition, constructor reconstruction,
   and culture-aware integer, byte, and binary32 text behavior;
-- the selected `GamerServicesComponent` lifecycle through three canonical ABI 0.7 dispatcher
-  routes, without projecting or fabricating the separate Gamer/Guide/Avatar/Network profiles;
-- a Java 17 JNI adapter for 723 reviewed CNA ABI 0.7.0 functions, with header,
-  manifest, layout/signature, and native-symbol verification;
+- the complete `Microsoft.Xna.Framework.GamerServices` and
+  `Microsoft.Xna.Framework.Net` families, including the Avatar types: gamers, the
+  signed-in roster, achievements, friends, profiles, privileges, game defaults,
+  presence, the Guide, leaderboards, the property dictionary, sessions,
+  discovery, rosters, machines and packets, all reaching real CNA routes;
+- a Java 17 JNI adapter for 1,130 CNA ABI 0.20.0 routes whose dispatch-table
+  slots are declared from the headers themselves, so a signature that moves
+  upstream stops the adapter compiling; the mechanical half of that boundary is
+  generated from the headers and checked for staleness by the build;
+- a classification for every one of the 4,051 canonical CNA C API functions,
+  with zero unexplained, derived from the JNI call graph and the Java sources;
 - managed and native integration/ownership tests plus a desktop template canary
   verified for 60-frame smoke and 600-frame stability runs using both raw PNG
   and managed Texture2D XNB paths.
@@ -96,14 +106,16 @@ compressed data is never reinterpreted as RGBA. SpriteFont is consequently
 verified with an uncompressed Color atlas. The Model path is verified for a
 synthetic graph using VertexDeclaration, VertexBuffer, IndexBuffer, and
 BasicEffect readers; reader families not in that graph remain explicit load
-errors. Graphics, Audio/XACT, Media/Video, Storage, Design, and the selected GamerServices
-component are all at zero missing types. Remaining runtime boundaries are kept separately in the
+errors. Graphics, Audio/XACT, Media/Video, Storage, Design, GamerServices, Avatar and Net
+are all at zero missing types. Remaining runtime boundaries are kept separately in the
 machine-readable capability inventory rather than hidden by the strict score.
 
 ## Build and verify
 
-Use the pinned Gradle 8.12 Wrapper with JDK 17 or newer. CNA headers are found
-through `CNA_ROOT`, then the known sibling checkout layouts.
+Use the pinned Gradle 8.12 Wrapper with JDK 17 or newer. CNA headers come from
+`CNA_ROOT`, or from the sibling `../../cnanext` checkout. There is deliberately
+no fallback to another CNA checkout: qualifying against one would make every
+ABI, symbol and layout result describe a library nobody ships.
 
 ```bash
 ./gradlew clean check
@@ -118,14 +130,16 @@ can be overridden with `CNA_JNI_LIBRARY`.
 CNA_NATIVE_LIBRARY=/path/to/libcna_c_api.so ./gradlew clean check
 ```
 
-Run the report-only API measurement with the legally available seven XNA 4.0
-Windows runtime assemblies:
+Run the report-only API measurement with the legally available original XNA 4.0
+assemblies:
 
 ```bash
-XNA_REFERENCE_DIR=/path/to/xna4/windows ./gradlew apiCompatReport
+XNA_REFERENCE_DIR=/path/to/xna4 ./gradlew apiCompatReport      # selected profile
+XNA_REFERENCE_DIR=/path/to/xna4 ./gradlew apiCompatFullReport  # full superset
 ```
 
-`apiCompatCheck` is the strict completeness gate and now passes at zero diagnostics.
+`apiCompatCheck` and `apiCompatFullCheck` are the completeness gates; both pass at
+zero diagnostics.
 The leak guard and native ABI shape checks remain part of the green `check` gate.
 
 To verify this binding, the sibling template, and a freshly generated external
@@ -152,13 +166,17 @@ Read [the normative mapping](docs/xna-java-mapping.md), [the architecture](docs/
 [the Storage evidence](docs/storage-evidence.md),
 [the Design evidence](docs/design-evidence.md),
 [the GamerServices component evidence](docs/gamerservices-evidence.md),
-[the runtime capability inventory](docs/runtime-capabilities.json), and
+[the runtime capability inventory](docs/runtime-capabilities.json),
+[the CNA C API coverage summary](docs/cna-c-api-coverage-summary.json),
+[the ABI migration evidence](docs/cna-abi-migration-evidence.md),
+[the backlog](docs/backlog.json), and
 [the measured engineering plan](plan.md) before expanding the surface.
 
 ## Platform evidence
 
-Only Linux x86-64 with CNA HEADLESS/NULL-audio has runtime evidence in this
-checkout. Windows and macOS desktop are planned. Android is planned but has no
+Only Linux x86-64 with CNA HEADLESS platform, HEADLESS renderer and NULL audio,
+built from the sibling `cnanext` against the sibling `sharp-runtimenext`, has
+runtime evidence in this checkout. Windows and macOS desktop are planned. Android is planned but has no
 backend/package. iOS and browser targets are unsupported. Java source
 portability is not native runtime evidence.
 

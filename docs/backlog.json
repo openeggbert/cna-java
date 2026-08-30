@@ -1,0 +1,217 @@
+{
+  "schemaVersion": 1,
+  "updated": "2026-08-30",
+  "idFamilies": {
+    "JAVA-XNA": "A gap between CNA-Java and the original XNA 4.0 contract.",
+    "JAVA-NATIVE": "A gap at the CNA C ABI boundary: a route, a shape or a verification.",
+    "JAVA-EXT": "A CNA capability outside XNA 4.0, belonging under org.openeggbert.cna.extensions.",
+    "JAVA-TEMPLATE": "Work in the sibling cna-java-template consumer canary.",
+    "JAVA-UPSTREAM": "Blocked on cnanext or sharp-runtimenext. Never worked around in Java."
+  },
+  "statuses": ["done", "ready", "blocked"],
+  "tasks": [
+    {
+      "id": "JAVA-NATIVE-001",
+      "title": "Qualify against the live cnanext built on sharp-runtimenext",
+      "family": "GamerServices/all",
+      "authority": "cnanext HEAD 72262a33, sharp-runtimenext HEAD df1b42ab",
+      "currentState": "Qualified against an unrelated historical CNA checkout and a pinned /tmp artifact at ABI 0.7.0.",
+      "expectedState": "libcna_c_api built out of tree from cnanext against sharp-runtimenext, HEADLESS/HEADLESS/NULL, and every native check run against it.",
+      "tests": ["nativeAbiCheck", "native integration suites"],
+      "priority": 1,
+      "status": "done"
+    },
+    {
+      "id": "JAVA-NATIVE-002",
+      "title": "Migrate the ABI gate from 0.7.0 to the live 0.20.0 policy",
+      "family": "native boundary",
+      "authority": "docs/c-api/ABI_VERSIONING.md",
+      "currentState": "A hardcoded exact-minor check against 0.7 with no stated policy.",
+      "expectedState": "The required version comes from the manifest; major and minor are exact, patch is free, and each rule has a negative-mutation test.",
+      "tests": ["tools/native-abi/test_verify.py"],
+      "priority": 1,
+      "status": "done"
+    },
+    {
+      "id": "JAVA-NATIVE-003",
+      "title": "Make a stale JNI declaration a compile error",
+      "family": "native boundary",
+      "authority": "CNA/C/*.h",
+      "currentState": "426 hand-written function-pointer typedefs that dlsym could never check.",
+      "expectedState": "Every dispatch-table slot declared CNA_JNI_ROUTE(symbol), whose type is the header's own declaration.",
+      "tests": ["compileJni", "tools/native-abi/test_verify.py"],
+      "priority": 1,
+      "status": "done"
+    },
+    {
+      "id": "JAVA-NATIVE-004",
+      "title": "Generate the mechanical half of the native boundary",
+      "family": "native boundary",
+      "authority": "CNA/C/*.h",
+      "currentState": "Every route hand-written, which is where drift came from.",
+      "expectedState": "tools/native-abi/generate_jni.py derives JNI, dispatch slots, LOAD lines and Java declarations from the headers; generateJniCheck fails on stale output.",
+      "tests": ["generateJniCheck", "tools/native-abi/test_verify.py"],
+      "priority": 1,
+      "status": "done"
+    },
+    {
+      "id": "JAVA-NATIVE-005",
+      "title": "Explain every canonical CNA C API function",
+      "family": "native boundary",
+      "authority": "the live header inventory",
+      "currentState": "723 bound routes and 3,328 unexplained ones.",
+      "expectedState": "Every one of the 4,051 canonical functions classified, with zero UNMAPPED_REQUIRES_REVIEW, and the public surface that reaches each bound route derived from the JNI call graph and the Java sources.",
+      "tests": ["nativeCoverageCheck"],
+      "priority": 2,
+      "status": "done"
+    },
+    {
+      "id": "JAVA-XNA-003",
+      "title": "Inventory the complete XNA 4.0 reference corpus",
+      "family": "reference infrastructure",
+      "authority": "the original Microsoft assemblies at xna4-decomp/dlls, SHA-256 pinned",
+      "currentState": "One seven-assembly Windows runtime profile.",
+      "expectedState": "A ten-assembly full runtime superset profile and a separate seven-assembly Content Pipeline build-time profile, both hash-pinned, with the selected profile kept as a subset regression gate.",
+      "tests": ["apiCompatCheck", "apiCompatFullCheck"],
+      "priority": 2,
+      "status": "done"
+    },
+    {
+      "id": "JAVA-XNA-004",
+      "title": "Keep XNA's Dispose() name and add close() as the Java bridge",
+      "family": "mapping",
+      "authority": "36 CLR types declaring a public parameterless Dispose",
+      "currentState": "Dispose() renamed to close(), the one place a legal XNA name was dropped for Java convention.",
+      "expectedState": "Dispose() keeps its name with the CLR member's modifiers; close() delegates to it so every disposable type is still an AutoCloseable.",
+      "compatibility": "Additive. 33 types gained Dispose(); no member was removed and every close() call site still compiles.",
+      "tests": ["tools/api-compat/test_verify.py"],
+      "priority": 3,
+      "status": "done"
+    },
+    {
+      "id": "JAVA-XNA-001",
+      "title": "Project the GamerServices and Avatar families",
+      "family": "Microsoft.Xna.Framework.GamerServices",
+      "authority": "Microsoft.Xna.Framework.GamerServices.dll, Microsoft.Xna.Framework.Avatar.dll",
+      "currentState": "Only GamerServicesComponent existed; 51 types were missing from the full profile.",
+      "expectedState": "The whole namespace projected and backed by CNA's gamer-services routes.",
+      "tests": ["GamerServicesMappingTests", "GamerServicesNativeIntegrationTests"],
+      "priority": 4,
+      "status": "done"
+    },
+    {
+      "id": "JAVA-XNA-002",
+      "title": "Project Microsoft.Xna.Framework.Net",
+      "family": "Microsoft.Xna.Framework.Net",
+      "authority": "Microsoft.Xna.Framework.Net.dll",
+      "currentState": "The whole namespace was missing; 23 types.",
+      "expectedState": "Sessions, discovery, rosters, machines, packets and the nine session events projected, session and gamer state backed by CNA.",
+      "tests": ["NetworkMappingTests"],
+      "priority": 4,
+      "status": "done"
+    },
+    {
+      "id": "JAVA-XNA-005",
+      "title": "Raise the nine NetworkSession events and the two SignedInGamer events from CNA",
+      "family": "Microsoft.Xna.Framework.Net, Microsoft.Xna.Framework.GamerServices",
+      "authority": "cna_network_session_subscribe_* and cna_signed_in_gamer_subscribe_*",
+      "currentState": "The event members exist and accept listeners; no native producer raises them, because their CNA routes take a real callback the generator refuses.",
+      "expectedState": "Hand-written JNI callback plumbing that attaches the JVM thread, contains a Java exception, and survives session teardown, so each event has a real producer.",
+      "blocker": "None. It needs the callback lifetime work that the media and storage families already have, applied to eleven more callbacks.",
+      "dependsOn": ["JAVA-XNA-001", "JAVA-XNA-002"],
+      "tests": ["a native event test per event, plus a teardown stress"],
+      "priority": 5,
+      "status": "ready"
+    },
+    {
+      "id": "JAVA-XNA-006",
+      "title": "Inventory the Content Pipeline build-time profile",
+      "family": "Microsoft.Xna.Framework.Content.Pipeline",
+      "authority": "the seven Content Pipeline assemblies, SHA-256 pinned in xna40-content-pipeline.json",
+      "currentState": "The profile exists and is pinned; nothing is measured against it yet.",
+      "expectedState": "A measured gap report, and a decision recorded on whether a Java content pipeline belongs in this binding at all.",
+      "priority": 9,
+      "status": "ready"
+    },
+    {
+      "id": "JAVA-EXT-001",
+      "title": "Expose CNA's extended graphics layer",
+      "family": "org.openeggbert.cna.extensions.graphics",
+      "authority": "graphics_ext.h, engine_layer.h",
+      "currentState": "1,733 routes classified CNA_EXTENSION_CANDIDATE; none reachable from Java.",
+      "expectedState": "A typed Java facade for the canonical concepts, with truthful availability queries and NOT_SUPPORTED preserved rather than downgraded.",
+      "priority": 6,
+      "status": "ready"
+    },
+    {
+      "id": "JAVA-EXT-002",
+      "title": "Expose CNA's runtime and device extensions",
+      "family": "org.openeggbert.cna.extensions",
+      "authority": "core_ext.h, devices.h, sensors.h, input_haptics.h, input_joystick.h, input_text.h, input_cursor.h, input_devices.h",
+      "currentState": "Classified as extension candidates; none reachable from Java.",
+      "expectedState": "Typed Java facades under the extension namespace, never inside Microsoft.Xna.Framework.",
+      "priority": 7,
+      "status": "ready"
+    },
+    {
+      "id": "JAVA-EXT-003",
+      "title": "Expose the .cnb content format",
+      "family": "org.openeggbert.cna.extensions.content",
+      "authority": "cnb.h",
+      "currentState": "272 routes, none bound.",
+      "expectedState": "A Java facade over the container, its schemas and its loader registry.",
+      "priority": 8,
+      "status": "ready"
+    },
+    {
+      "id": "JAVA-NATIVE-006",
+      "title": "Use the whole-buffer vertex upload route",
+      "family": "Microsoft.Xna.Framework.Graphics.VertexBuffer",
+      "authority": "cna_vertex_buffer_set_data_raw",
+      "currentState": "The route is loaded, so the library must export it, but no JNI entry point reaches it: SetData always takes the windowed form.",
+      "expectedState": "Either the whole-buffer form is used for a whole-buffer upload, or the route is dropped from the manifest.",
+      "priority": 6,
+      "status": "ready"
+    },
+    {
+      "id": "JAVA-NATIVE-011",
+      "title": "Bind the native Model routes behind the managed XNB model graph",
+      "family": "Microsoft.Xna.Framework.Graphics.Model",
+      "authority": "models.h",
+      "currentState": "127 routes deferred; Load<Model> is managed-only.",
+      "expectedState": "Model, ModelMesh, ModelMeshPart and ModelBone reach CNA, and the skinned, morph and animation routes move to the extension namespace.",
+      "priority": 6,
+      "status": "ready"
+    },
+    {
+      "id": "JAVA-NATIVE-022",
+      "title": "Bind the remaining input routes",
+      "family": "Microsoft.Xna.Framework.Input",
+      "authority": "input*.h",
+      "currentState": "132 routes deferred: gamepad capabilities and vibration, keyboard scancodes, mouse capture, touch panel details.",
+      "expectedState": "The XNA-shaped ones bound; the rest reclassified as extension candidates.",
+      "priority": 6,
+      "status": "ready"
+    },
+    {
+      "id": "JAVA-TEMPLATE-001",
+      "title": "Add a truthful modern-CNA canary to the template",
+      "family": "cna-java-template",
+      "currentState": "The template exercises the XNA surface only.",
+      "expectedState": "An opt-in extensions smoke that proves the Java extension facade compiles externally, the JNI route exists, the availability query is truthful, and HEADLESS NOT_SUPPORTED is represented as itself.",
+      "dependsOn": ["JAVA-EXT-001"],
+      "priority": 7,
+      "status": "ready"
+    },
+    {
+      "id": "JAVA-UPSTREAM-001",
+      "title": "Native StorageContainer path containment",
+      "family": "Microsoft.Xna.Framework.Storage",
+      "currentState": "Java enforces XNA's containment before the JNI call; CNA itself accepts parent traversal.",
+      "expectedState": "CNA refuses a path that escapes the container, so the guarantee can be credited to the runtime rather than to the binding.",
+      "blocker": "cnanext storage: cna_storage_container_* accept a path containing parent traversal.",
+      "priority": 12,
+      "status": "blocked"
+    }
+  ]
+}
