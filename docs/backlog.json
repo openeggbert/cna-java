@@ -253,17 +253,17 @@
       "title": "Project CNA's CRT and depth-reduction post-process effects",
       "family": "org.openeggbert.cna.extensions.graphics",
       "authority": "cna_crt_effect_* and cna_depth_effect_* in graphics_ext.h",
-      "currentState": "Not bound. Both routes produce a CNA_EffectHandle, and the Java Effect's adopting constructors are package-private, so a Java facade needs a reviewed cross-package accessor of the kind FacadeFactory already uses for Texture2D and GraphicsDevice.",
-      "expectedState": "CrtEffect and DepthEffect projected as extension types that are real XNA Effects, so SpriteBatch.Begin can take them.",
+      "currentState": "Not bound; the Java Effect's adopting constructors are package-private.",
+      "expectedState": "CrtEffect and DepthEffect expose their typed knobs and hand out the real XNA Effect, which SpriteBatch.Begin takes like any other. The adopting factory goes through FacadeFactory, the same route Texture2D and GraphicsDevice already take, so no native handle enters the strict contract.",
       "blocker": "None upstream. It needs the facade accessor, not a CNA change.",
       "dependsOn": [
         "JAVA-EXT-001"
       ],
       "tests": [
-        "an extension test that creates each effect and round-trips its parameters"
+        "PostProcessEffectNativeTests"
       ],
       "priority": 7,
-      "status": "ready"
+      "status": "done"
     },
     {
       "id": "JAVA-UPSTREAM-002",

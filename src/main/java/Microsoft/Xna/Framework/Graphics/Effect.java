@@ -53,6 +53,26 @@ public class Effect extends GraphicsResource {
         NativeBindings.createEffect(this, graphicsDevice, new byte[0], emptyNativeEffect);
     }
 
+    /**
+     * Adopts an effect CNA's extended graphics layer created.
+     *
+     * <p>Reached from {@code org.openeggbert.cna.extensions.graphics} through the internal
+     * facade factory, which is the same route {@code Texture2D} and {@code GraphicsDevice}
+     * already take. Keeping it package-private is what stops a native handle appearing in this
+     * type's public contract, which XNA has no counterpart for.
+     */
+    static Effect adoptExtensionEffect(GraphicsDevice graphicsDevice, int extensionEffect) {
+        return new Effect(graphicsDevice, extensionEffect, true);
+    }
+
+    private Effect(GraphicsDevice graphicsDevice, int extensionEffect, boolean extension) {
+        super(Objects.requireNonNull(graphicsDevice, "graphicsDevice"));
+        if (!extension) {
+            throw new IllegalArgumentException("The derived Effect route must be an extension");
+        }
+        NativeBindings.createExtensionEffect(this, graphicsDevice, extensionEffect);
+    }
+
     Effect(GraphicsDevice graphicsDevice, String stockEffect) {
         super(Objects.requireNonNull(graphicsDevice, "graphicsDevice"));
         switch (Objects.requireNonNull(stockEffect, "stockEffect")) {

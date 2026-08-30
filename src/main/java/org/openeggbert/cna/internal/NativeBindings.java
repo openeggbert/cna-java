@@ -1492,6 +1492,37 @@ public final class NativeBindings {
         registerResource(game, effect, output[0], NativeBindings::destroyEffect);
     }
 
+    /**
+     * Creates one of CNA's extended-layer effects and registers it against its game.
+     *
+     * <p>The effect is an ordinary graphics resource from here on: the game owns it, disposing
+     * the game disposes it, and {@code SpriteBatch.Begin} takes it like any other effect.
+     */
+    public static void createExtensionEffect(
+            Effect effect, GraphicsDevice graphicsDevice, int extensionEffect) {
+        Objects.requireNonNull(effect, "effect");
+        Game game = deviceGame(graphicsDevice);
+        long[] resolved = new long[1];
+        check("cna_game_get_graphics_device", NativeGamerServices.nativeGraphicsDeviceHandle(
+                gameHandle(game, "CNA extension effect").requireValue(), resolved));
+        long device = resolved[0];
+        long[] output = new long[1];
+        int result = extensionEffect == EXTENSION_EFFECT_CRT
+                ? org.openeggbert.cna.internal.generated.NativeGraphicsExtensionRoutes
+                        .crtEffectCreate(device, output)
+                : org.openeggbert.cna.internal.generated.NativeGraphicsExtensionRoutes
+                        .depthEffectCreate(device, output);
+        check(extensionEffect == EXTENSION_EFFECT_CRT
+                ? "cna_crt_effect_create" : "cna_depth_effect_create", result);
+        registerResource(game, effect, output[0], NativeBindings::destroyEffect);
+    }
+
+    /** The CRT post-process effect of CNA's extended graphics layer. */
+    public static final int EXTENSION_EFFECT_CRT = 0;
+
+    /** The colour-depth reduction effect of CNA's extended graphics layer. */
+    public static final int EXTENSION_EFFECT_DEPTH = 1;
+
     public static void cloneEffect(Effect effect, Effect source) {
         Objects.requireNonNull(effect, "effect");
         long[] output = new long[1];

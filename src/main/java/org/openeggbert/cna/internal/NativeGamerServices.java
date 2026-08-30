@@ -150,6 +150,9 @@ public final class NativeGamerServices {
     /** Discards every queued event. */
     static native void nativeResetEvents();
 
+    /** Resolves the CNA graphics-device handle behind one game. */
+    static native int nativeGraphicsDeviceHandle(long game, long[] outDevice);
+
     public static long clrTicks(Instant instant) {
         return Math.addExact(
                 Math.addExact(Math.multiplyExact(instant.getEpochSecond(), TICKS_PER_SECOND),

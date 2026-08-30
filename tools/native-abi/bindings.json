@@ -5955,6 +5955,166 @@
       ]
     },
     {
+      "name": "cna_crt_effect_create",
+      "header": "graphics_ext.h",
+      "ownership": "borrows its inputs; returns an owned handle",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_Handle",
+        "CNA_EffectHandle*"
+      ]
+    },
+    {
+      "name": "cna_crt_effect_get_curvature",
+      "header": "graphics_ext.h",
+      "ownership": "borrows its inputs; caller output",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_EffectHandle",
+        "float*"
+      ]
+    },
+    {
+      "name": "cna_crt_effect_get_mask_intensity",
+      "header": "graphics_ext.h",
+      "ownership": "borrows its inputs; caller output",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_EffectHandle",
+        "float*"
+      ]
+    },
+    {
+      "name": "cna_crt_effect_get_mask_type",
+      "header": "graphics_ext.h",
+      "ownership": "borrows its inputs; caller output",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_EffectHandle",
+        "CNA_CRTMaskType*"
+      ]
+    },
+    {
+      "name": "cna_crt_effect_get_scanline_intensity",
+      "header": "graphics_ext.h",
+      "ownership": "borrows its inputs; caller output",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_EffectHandle",
+        "float*"
+      ]
+    },
+    {
+      "name": "cna_crt_effect_get_vignette_intensity",
+      "header": "graphics_ext.h",
+      "ownership": "borrows its inputs; caller output",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_EffectHandle",
+        "float*"
+      ]
+    },
+    {
+      "name": "cna_crt_effect_set_curvature",
+      "header": "graphics_ext.h",
+      "ownership": "borrows its inputs",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_EffectHandle",
+        "float"
+      ]
+    },
+    {
+      "name": "cna_crt_effect_set_mask_intensity",
+      "header": "graphics_ext.h",
+      "ownership": "borrows its inputs",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_EffectHandle",
+        "float"
+      ]
+    },
+    {
+      "name": "cna_crt_effect_set_mask_type",
+      "header": "graphics_ext.h",
+      "ownership": "borrows its inputs",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_EffectHandle",
+        "CNA_CRTMaskType"
+      ]
+    },
+    {
+      "name": "cna_crt_effect_set_scanline_intensity",
+      "header": "graphics_ext.h",
+      "ownership": "borrows its inputs",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_EffectHandle",
+        "float"
+      ]
+    },
+    {
+      "name": "cna_crt_effect_set_vignette_intensity",
+      "header": "graphics_ext.h",
+      "ownership": "borrows its inputs",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_EffectHandle",
+        "float"
+      ]
+    },
+    {
+      "name": "cna_depth_effect_create",
+      "header": "graphics_ext.h",
+      "ownership": "borrows its inputs; returns an owned handle",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_Handle",
+        "CNA_EffectHandle*"
+      ]
+    },
+    {
+      "name": "cna_depth_effect_get_dither_mode",
+      "header": "graphics_ext.h",
+      "ownership": "borrows its inputs; caller output",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_EffectHandle",
+        "CNA_DitherMode*"
+      ]
+    },
+    {
+      "name": "cna_depth_effect_get_mode",
+      "header": "graphics_ext.h",
+      "ownership": "borrows its inputs; caller output",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_EffectHandle",
+        "CNA_DepthEffectMode*"
+      ]
+    },
+    {
+      "name": "cna_depth_effect_set_dither_mode",
+      "header": "graphics_ext.h",
+      "ownership": "borrows its inputs",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_EffectHandle",
+        "CNA_DitherMode"
+      ]
+    },
+    {
+      "name": "cna_depth_effect_set_mode",
+      "header": "graphics_ext.h",
+      "ownership": "borrows its inputs",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_EffectHandle",
+        "CNA_DepthEffectMode"
+      ]
+    },
+    {
       "name": "cna_graphics_ext_is_available",
       "header": "graphics_ext.h",
       "ownership": "borrows its inputs; caller output",

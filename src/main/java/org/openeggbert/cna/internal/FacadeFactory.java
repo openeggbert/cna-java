@@ -1,6 +1,7 @@
 package org.openeggbert.cna.internal;
 
 import Microsoft.Xna.Framework.Game;
+import Microsoft.Xna.Framework.Graphics.Effect;
 import Microsoft.Xna.Framework.Graphics.GraphicsDevice;
 import Microsoft.Xna.Framework.Graphics.Model;
 import Microsoft.Xna.Framework.Graphics.SpriteFont;
@@ -34,6 +35,7 @@ public final class FacadeFactory {
             "releaseGameScopedState");
     private static final Method VISUALIZATION_SET = visualizationMethod();
     private static final Constructor<Video> VIDEO = videoConstructor();
+    private static final Method EFFECT_ADOPT_EXTENSION = effectAdoptExtensionMethod();
 
     private FacadeFactory() {
     }
@@ -256,6 +258,37 @@ public final class FacadeFactory {
             if (!method.trySetAccessible()) {
                 throw new IllegalStateException(
                         "The runtime denied access to hidden TextureCube initialization");
+            }
+            return method;
+        } catch (NoSuchMethodException exception) {
+            throw new ExceptionInInitializerError(exception);
+        }
+    }
+
+    /**
+     * Creates one of CNA's extended-layer effects as an ordinary XNA {@link Effect}.
+     *
+     * <p>Reached from {@code org.openeggbert.cna.extensions.graphics}. XNA declares no
+     * constructor for an effect the runtime built, so widening one would put a member in the
+     * strict contract that the reference API has no counterpart for.
+     */
+    public static Effect createExtensionEffect(GraphicsDevice graphicsDevice, int extensionEffect) {
+        try {
+            return (Effect) EFFECT_ADOPT_EXTENSION.invoke(null, graphicsDevice, extensionEffect);
+        } catch (IllegalAccessException exception) {
+            throw new IllegalStateException("Cannot construct the extension Effect", exception);
+        } catch (InvocationTargetException exception) {
+            throw facadeFailure("Extension Effect construction failed", exception);
+        }
+    }
+
+    private static Method effectAdoptExtensionMethod() {
+        try {
+            Method method = Effect.class.getDeclaredMethod(
+                    "adoptExtensionEffect", GraphicsDevice.class, int.class);
+            if (!method.trySetAccessible()) {
+                throw new IllegalStateException(
+                        "The runtime denied access to the hidden Effect extension factory");
             }
             return method;
         } catch (NoSuchMethodException exception) {

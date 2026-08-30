@@ -129,6 +129,220 @@ Java_org_openeggbert_cna_internal_generated_NativeGraphicsExtensionRoutes_asciiP
 }
 
 JNIEXPORT jint JNICALL
+Java_org_openeggbert_cna_internal_generated_NativeGraphicsExtensionRoutes_crtEffectCreate(
+    JNIEnv* environment, jclass type, jlong graphics_device, jlongArray out_effect)
+{
+    (void)environment;
+    (void)type;
+    CNA_EffectHandle out_effect_value = 0;
+    CNA_Result result = cna.crt_effect_create((CNA_Handle)graphics_device, &out_effect_value);
+    if (result == CNA_RESULT_SUCCESS) {
+        jlong out_effect_element = (jlong)out_effect_value;
+        (*environment)->SetLongArrayRegion(
+            environment, out_effect, 0, 1, &out_effect_element);
+    }
+    return (jint)result;
+}
+
+JNIEXPORT jint JNICALL
+Java_org_openeggbert_cna_internal_generated_NativeGraphicsExtensionRoutes_crtEffectGetCurvature(
+    JNIEnv* environment, jclass type, jlong effect, jfloatArray out_value)
+{
+    (void)environment;
+    (void)type;
+    float out_value_value = 0;
+    CNA_Result result = cna.crt_effect_get_curvature((CNA_EffectHandle)effect, &out_value_value);
+    if (result == CNA_RESULT_SUCCESS) {
+        jfloat out_value_element = (jfloat)out_value_value;
+        (*environment)->SetFloatArrayRegion(
+            environment, out_value, 0, 1, &out_value_element);
+    }
+    return (jint)result;
+}
+
+JNIEXPORT jint JNICALL
+Java_org_openeggbert_cna_internal_generated_NativeGraphicsExtensionRoutes_crtEffectGetMaskIntensity(
+    JNIEnv* environment, jclass type, jlong effect, jfloatArray out_value)
+{
+    (void)environment;
+    (void)type;
+    float out_value_value = 0;
+    CNA_Result result = cna.crt_effect_get_mask_intensity((CNA_EffectHandle)effect, &out_value_value);
+    if (result == CNA_RESULT_SUCCESS) {
+        jfloat out_value_element = (jfloat)out_value_value;
+        (*environment)->SetFloatArrayRegion(
+            environment, out_value, 0, 1, &out_value_element);
+    }
+    return (jint)result;
+}
+
+JNIEXPORT jint JNICALL
+Java_org_openeggbert_cna_internal_generated_NativeGraphicsExtensionRoutes_crtEffectGetMaskType(
+    JNIEnv* environment, jclass type, jlong effect, jintArray out_mask_type)
+{
+    (void)environment;
+    (void)type;
+    CNA_CRTMaskType out_mask_type_value = 0;
+    CNA_Result result = cna.crt_effect_get_mask_type((CNA_EffectHandle)effect, &out_mask_type_value);
+    if (result == CNA_RESULT_SUCCESS) {
+        jint out_mask_type_element = (jint)out_mask_type_value;
+        (*environment)->SetIntArrayRegion(
+            environment, out_mask_type, 0, 1, &out_mask_type_element);
+    }
+    return (jint)result;
+}
+
+JNIEXPORT jint JNICALL
+Java_org_openeggbert_cna_internal_generated_NativeGraphicsExtensionRoutes_crtEffectGetScanlineIntensity(
+    JNIEnv* environment, jclass type, jlong effect, jfloatArray out_value)
+{
+    (void)environment;
+    (void)type;
+    float out_value_value = 0;
+    CNA_Result result = cna.crt_effect_get_scanline_intensity((CNA_EffectHandle)effect, &out_value_value);
+    if (result == CNA_RESULT_SUCCESS) {
+        jfloat out_value_element = (jfloat)out_value_value;
+        (*environment)->SetFloatArrayRegion(
+            environment, out_value, 0, 1, &out_value_element);
+    }
+    return (jint)result;
+}
+
+JNIEXPORT jint JNICALL
+Java_org_openeggbert_cna_internal_generated_NativeGraphicsExtensionRoutes_crtEffectGetVignetteIntensity(
+    JNIEnv* environment, jclass type, jlong effect, jfloatArray out_value)
+{
+    (void)environment;
+    (void)type;
+    float out_value_value = 0;
+    CNA_Result result = cna.crt_effect_get_vignette_intensity((CNA_EffectHandle)effect, &out_value_value);
+    if (result == CNA_RESULT_SUCCESS) {
+        jfloat out_value_element = (jfloat)out_value_value;
+        (*environment)->SetFloatArrayRegion(
+            environment, out_value, 0, 1, &out_value_element);
+    }
+    return (jint)result;
+}
+
+JNIEXPORT jint JNICALL
+Java_org_openeggbert_cna_internal_generated_NativeGraphicsExtensionRoutes_crtEffectSetCurvature(
+    JNIEnv* environment, jclass type, jlong effect, jfloat value)
+{
+    (void)environment;
+    (void)type;
+    CNA_Result result = cna.crt_effect_set_curvature((CNA_EffectHandle)effect, (float)value);
+    return (jint)result;
+}
+
+JNIEXPORT jint JNICALL
+Java_org_openeggbert_cna_internal_generated_NativeGraphicsExtensionRoutes_crtEffectSetMaskIntensity(
+    JNIEnv* environment, jclass type, jlong effect, jfloat value)
+{
+    (void)environment;
+    (void)type;
+    CNA_Result result = cna.crt_effect_set_mask_intensity((CNA_EffectHandle)effect, (float)value);
+    return (jint)result;
+}
+
+JNIEXPORT jint JNICALL
+Java_org_openeggbert_cna_internal_generated_NativeGraphicsExtensionRoutes_crtEffectSetMaskType(
+    JNIEnv* environment, jclass type, jlong effect, jint mask_type)
+{
+    (void)environment;
+    (void)type;
+    CNA_Result result = cna.crt_effect_set_mask_type((CNA_EffectHandle)effect, (CNA_CRTMaskType)mask_type);
+    return (jint)result;
+}
+
+JNIEXPORT jint JNICALL
+Java_org_openeggbert_cna_internal_generated_NativeGraphicsExtensionRoutes_crtEffectSetScanlineIntensity(
+    JNIEnv* environment, jclass type, jlong effect, jfloat value)
+{
+    (void)environment;
+    (void)type;
+    CNA_Result result = cna.crt_effect_set_scanline_intensity((CNA_EffectHandle)effect, (float)value);
+    return (jint)result;
+}
+
+JNIEXPORT jint JNICALL
+Java_org_openeggbert_cna_internal_generated_NativeGraphicsExtensionRoutes_crtEffectSetVignetteIntensity(
+    JNIEnv* environment, jclass type, jlong effect, jfloat value)
+{
+    (void)environment;
+    (void)type;
+    CNA_Result result = cna.crt_effect_set_vignette_intensity((CNA_EffectHandle)effect, (float)value);
+    return (jint)result;
+}
+
+JNIEXPORT jint JNICALL
+Java_org_openeggbert_cna_internal_generated_NativeGraphicsExtensionRoutes_depthEffectCreate(
+    JNIEnv* environment, jclass type, jlong graphics_device, jlongArray out_effect)
+{
+    (void)environment;
+    (void)type;
+    CNA_EffectHandle out_effect_value = 0;
+    CNA_Result result = cna.depth_effect_create((CNA_Handle)graphics_device, &out_effect_value);
+    if (result == CNA_RESULT_SUCCESS) {
+        jlong out_effect_element = (jlong)out_effect_value;
+        (*environment)->SetLongArrayRegion(
+            environment, out_effect, 0, 1, &out_effect_element);
+    }
+    return (jint)result;
+}
+
+JNIEXPORT jint JNICALL
+Java_org_openeggbert_cna_internal_generated_NativeGraphicsExtensionRoutes_depthEffectGetDitherMode(
+    JNIEnv* environment, jclass type, jlong effect, jintArray out_dither_mode)
+{
+    (void)environment;
+    (void)type;
+    CNA_DitherMode out_dither_mode_value = 0;
+    CNA_Result result = cna.depth_effect_get_dither_mode((CNA_EffectHandle)effect, &out_dither_mode_value);
+    if (result == CNA_RESULT_SUCCESS) {
+        jint out_dither_mode_element = (jint)out_dither_mode_value;
+        (*environment)->SetIntArrayRegion(
+            environment, out_dither_mode, 0, 1, &out_dither_mode_element);
+    }
+    return (jint)result;
+}
+
+JNIEXPORT jint JNICALL
+Java_org_openeggbert_cna_internal_generated_NativeGraphicsExtensionRoutes_depthEffectGetMode(
+    JNIEnv* environment, jclass type, jlong effect, jintArray out_mode)
+{
+    (void)environment;
+    (void)type;
+    CNA_DepthEffectMode out_mode_value = 0;
+    CNA_Result result = cna.depth_effect_get_mode((CNA_EffectHandle)effect, &out_mode_value);
+    if (result == CNA_RESULT_SUCCESS) {
+        jint out_mode_element = (jint)out_mode_value;
+        (*environment)->SetIntArrayRegion(
+            environment, out_mode, 0, 1, &out_mode_element);
+    }
+    return (jint)result;
+}
+
+JNIEXPORT jint JNICALL
+Java_org_openeggbert_cna_internal_generated_NativeGraphicsExtensionRoutes_depthEffectSetDitherMode(
+    JNIEnv* environment, jclass type, jlong effect, jint dither_mode)
+{
+    (void)environment;
+    (void)type;
+    CNA_Result result = cna.depth_effect_set_dither_mode((CNA_EffectHandle)effect, (CNA_DitherMode)dither_mode);
+    return (jint)result;
+}
+
+JNIEXPORT jint JNICALL
+Java_org_openeggbert_cna_internal_generated_NativeGraphicsExtensionRoutes_depthEffectSetMode(
+    JNIEnv* environment, jclass type, jlong effect, jint mode)
+{
+    (void)environment;
+    (void)type;
+    CNA_Result result = cna.depth_effect_set_mode((CNA_EffectHandle)effect, (CNA_DepthEffectMode)mode);
+    return (jint)result;
+}
+
+JNIEXPORT jint JNICALL
 Java_org_openeggbert_cna_internal_generated_NativeGraphicsExtensionRoutes_graphicsExtIsAvailable(
     JNIEnv* environment, jclass type, jbooleanArray out_available)
 {

@@ -394,3 +394,23 @@ Java_org_openeggbert_cna_internal_NativeGamerServices_nativeResetEvents(
     java_gamer_events_dropped = 0;
     java_gamer_event_leave();
 }
+
+/*
+ * Resolves the CNA graphics-device handle behind one game.
+ *
+ * The extension surface needs it because CNA's extended-layer factories take a device, while
+ * the stock effect factories in this adapter take the game and resolve it themselves.
+ */
+JNIEXPORT jint JNICALL
+Java_org_openeggbert_cna_internal_NativeGamerServices_nativeGraphicsDeviceHandle(
+    JNIEnv* environment, jclass type, jlong game, jlongArray out_device)
+{
+    (void)type;
+    CNA_Handle device = CNA_INVALID_HANDLE;
+    CNA_Result result = graphics_device_from_game(game, &device);
+    if (result == CNA_RESULT_SUCCESS) {
+        jlong value = (jlong)device;
+        (*environment)->SetLongArrayRegion(environment, out_device, 0, 1, &value);
+    }
+    return (jint)result;
+}

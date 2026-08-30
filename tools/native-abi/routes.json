@@ -1676,6 +1676,70 @@
         "symbol": "cna_ascii_post_process_effect_set_quantize_mode"
       },
       {
+        "java": "crtEffectCreate",
+        "symbol": "cna_crt_effect_create"
+      },
+      {
+        "java": "crtEffectGetCurvature",
+        "symbol": "cna_crt_effect_get_curvature"
+      },
+      {
+        "java": "crtEffectGetMaskIntensity",
+        "symbol": "cna_crt_effect_get_mask_intensity"
+      },
+      {
+        "java": "crtEffectGetMaskType",
+        "symbol": "cna_crt_effect_get_mask_type"
+      },
+      {
+        "java": "crtEffectGetScanlineIntensity",
+        "symbol": "cna_crt_effect_get_scanline_intensity"
+      },
+      {
+        "java": "crtEffectGetVignetteIntensity",
+        "symbol": "cna_crt_effect_get_vignette_intensity"
+      },
+      {
+        "java": "crtEffectSetCurvature",
+        "symbol": "cna_crt_effect_set_curvature"
+      },
+      {
+        "java": "crtEffectSetMaskIntensity",
+        "symbol": "cna_crt_effect_set_mask_intensity"
+      },
+      {
+        "java": "crtEffectSetMaskType",
+        "symbol": "cna_crt_effect_set_mask_type"
+      },
+      {
+        "java": "crtEffectSetScanlineIntensity",
+        "symbol": "cna_crt_effect_set_scanline_intensity"
+      },
+      {
+        "java": "crtEffectSetVignetteIntensity",
+        "symbol": "cna_crt_effect_set_vignette_intensity"
+      },
+      {
+        "java": "depthEffectCreate",
+        "symbol": "cna_depth_effect_create"
+      },
+      {
+        "java": "depthEffectGetDitherMode",
+        "symbol": "cna_depth_effect_get_dither_mode"
+      },
+      {
+        "java": "depthEffectGetMode",
+        "symbol": "cna_depth_effect_get_mode"
+      },
+      {
+        "java": "depthEffectSetDitherMode",
+        "symbol": "cna_depth_effect_set_dither_mode"
+      },
+      {
+        "java": "depthEffectSetMode",
+        "symbol": "cna_depth_effect_set_mode"
+      },
+      {
         "java": "graphicsExtIsAvailable",
         "symbol": "cna_graphics_ext_is_available"
       },

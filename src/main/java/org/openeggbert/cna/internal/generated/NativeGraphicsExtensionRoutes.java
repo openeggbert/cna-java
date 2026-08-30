@@ -61,6 +61,86 @@ public final class NativeGraphicsExtensionRoutes {
     public static native int asciiPostProcessEffectSetQuantizeMode(long effect, int mode);
 
     /**
+     * cna_crt_effect_create (graphics_ext.h).
+     */
+    public static native int crtEffectCreate(long graphicsDevice, long[] outEffect);
+
+    /**
+     * cna_crt_effect_get_curvature (graphics_ext.h).
+     */
+    public static native int crtEffectGetCurvature(long effect, float[] outValue);
+
+    /**
+     * cna_crt_effect_get_mask_intensity (graphics_ext.h).
+     */
+    public static native int crtEffectGetMaskIntensity(long effect, float[] outValue);
+
+    /**
+     * cna_crt_effect_get_mask_type (graphics_ext.h).
+     */
+    public static native int crtEffectGetMaskType(long effect, int[] outMaskType);
+
+    /**
+     * cna_crt_effect_get_scanline_intensity (graphics_ext.h).
+     */
+    public static native int crtEffectGetScanlineIntensity(long effect, float[] outValue);
+
+    /**
+     * cna_crt_effect_get_vignette_intensity (graphics_ext.h).
+     */
+    public static native int crtEffectGetVignetteIntensity(long effect, float[] outValue);
+
+    /**
+     * cna_crt_effect_set_curvature (graphics_ext.h).
+     */
+    public static native int crtEffectSetCurvature(long effect, float value);
+
+    /**
+     * cna_crt_effect_set_mask_intensity (graphics_ext.h).
+     */
+    public static native int crtEffectSetMaskIntensity(long effect, float value);
+
+    /**
+     * cna_crt_effect_set_mask_type (graphics_ext.h).
+     */
+    public static native int crtEffectSetMaskType(long effect, int maskType);
+
+    /**
+     * cna_crt_effect_set_scanline_intensity (graphics_ext.h).
+     */
+    public static native int crtEffectSetScanlineIntensity(long effect, float value);
+
+    /**
+     * cna_crt_effect_set_vignette_intensity (graphics_ext.h).
+     */
+    public static native int crtEffectSetVignetteIntensity(long effect, float value);
+
+    /**
+     * cna_depth_effect_create (graphics_ext.h).
+     */
+    public static native int depthEffectCreate(long graphicsDevice, long[] outEffect);
+
+    /**
+     * cna_depth_effect_get_dither_mode (graphics_ext.h).
+     */
+    public static native int depthEffectGetDitherMode(long effect, int[] outDitherMode);
+
+    /**
+     * cna_depth_effect_get_mode (graphics_ext.h).
+     */
+    public static native int depthEffectGetMode(long effect, int[] outMode);
+
+    /**
+     * cna_depth_effect_set_dither_mode (graphics_ext.h).
+     */
+    public static native int depthEffectSetDitherMode(long effect, int ditherMode);
+
+    /**
+     * cna_depth_effect_set_mode (graphics_ext.h).
+     */
+    public static native int depthEffectSetMode(long effect, int mode);
+
+    /**
      * cna_graphics_ext_is_available (graphics_ext.h).
      */
     public static native int graphicsExtIsAvailable(boolean[] outAvailable);

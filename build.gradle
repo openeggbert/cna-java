@@ -61,8 +61,9 @@ def configuredCnaRoot = providers.environmentVariable('CNA_ROOT').orElse(
 tasks.register('compileJni', Exec) {
     group = 'build'
     description = 'Builds the Java 17 JNI adapter against CNA stable C headers.'
-    inputs.file('src/main/c/cna_java_jni.c')
-    inputs.dir('src/main/c/generated')
+    // Every source under src/main/c, not just the translation unit: the adapter includes
+    // hand-written and generated .inc files, and a stale library is worse than a slow rebuild.
+    inputs.dir('src/main/c')
     inputs.dir(configuredCnaRoot.map { file("${it}/modules/c-api/include") })
     outputs.file(nativeOutput)
     doFirst {

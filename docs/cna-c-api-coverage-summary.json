@@ -1,7 +1,7 @@
 {
   "abiVersion": "0.20.0",
   "boundButUnreached": [],
-  "boundFunctions": 1173,
+  "boundFunctions": 1189,
   "byHeader": {
     "abi.h": {
       "XNA_BACKING": 1,
@@ -83,7 +83,8 @@
       "total": 87
     },
     "graphics_ext.h": {
-      "CNA_EXTENSION_CANDIDATE": 28,
+      "CNA_EXTENSION_CANDIDATE": 26,
+      "XNA_BACKING": 2,
       "total": 28
     },
     "graphics_resource.h": {
@@ -273,11 +274,11 @@
   },
   "canonicalFunctions": 4051,
   "classificationCounts": {
-    "CNA_EXTENSION_CANDIDATE": 1733,
+    "CNA_EXTENSION_CANDIDATE": 1731,
     "DEFERRED_RUNTIME": 679,
     "JAVA_INTERNAL_ONLY": 170,
     "NOT_USEFUL_IN_JAVA": 496,
-    "XNA_BACKING": 973
+    "XNA_BACKING": 975
   },
   "cnaInventorySha256": "e9e0be892dbdce49dedf195dac35f604a9263565a74473195d878ee9e580696d",
   "deferredTasks": {
