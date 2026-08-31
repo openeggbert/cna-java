@@ -123,6 +123,15 @@ test {
     if (System.getenv('DISPLAY') && !System.getenv('WAYLAND_DISPLAY')) {
         environment 'WAYLAND_DISPLAY', ''
     }
+    // -PcheckJni turns on the JVM's own JNI checking for the whole suite. It is opt-in rather
+    // than always on because it slows every native call down measurably, and it is a property
+    // rather than a note in a document because the hand-written trampolines -- the transparent
+    // draw list's, the light-probe baker's and the render pipeline's -- are the kind of code
+    // that fails this and nothing else. A run that only ever happens when someone remembers is
+    // a run that stops happening.
+    if (project.hasProperty('checkJni')) {
+        jvmArgs '-Xcheck:jni'
+    }
     // The CNA checkout the build already qualifies against. A test that needs an authored
     // asset -- an XNA 4.0 .xnb no fixture generator can honestly stand in for -- reads it from
     // there and skips itself when it is absent, rather than copying someone else's asset in.

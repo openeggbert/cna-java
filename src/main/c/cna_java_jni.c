@@ -12503,6 +12503,13 @@ Java_org_openeggbert_cna_internal_NativeBindings_nativeLightProbeBakerBakeProbe(
         (CNA_LightProbeBakerHandle)baker, &where, probe_bake_face, &dispatch, &probe);
     probe_bake_active = previous;
 
+    /* A callback that threw leaves the exception pending, and every JNI call made with one
+       pending is undefined -- which is what -Xcheck:jni fails a suite for, and did. The
+       out-parameters describe a bake that did not finish, so there is nothing to write: the
+       exception is the answer and it surfaces at the Java call. */
+    if ((*environment)->ExceptionCheck(environment) == JNI_TRUE) {
+        return (jint)result;
+    }
     const jlong handle = (jlong)probe;
     (*environment)->SetLongArrayRegion(environment, out_probe, 0, 1, &handle);
     const jint faces = (jint)dispatch.faces;
@@ -12531,6 +12538,9 @@ Java_org_openeggbert_cna_internal_NativeBindings_nativeLightProbeBakerBakeLight(
         (CNA_LightProbeBakerHandle)baker, (CNA_LightProbeVolumeHandle)volume, probe_bake_face,
         &dispatch);
     probe_bake_active = previous;
+    if ((*environment)->ExceptionCheck(environment) == JNI_TRUE) {
+        return (jint)result;
+    }
     const jint faces = (jint)dispatch.faces;
     (*environment)->SetIntArrayRegion(environment, out_faces, 0, 1, &faces);
     return (jint)result;
@@ -12557,6 +12567,9 @@ Java_org_openeggbert_cna_internal_NativeBindings_nativeLightProbeBakerBakeVisibi
         (CNA_LightProbeBakerHandle)baker, (CNA_LightProbeVolumeHandle)volume, probe_bake_face,
         &dispatch);
     probe_bake_active = previous;
+    if ((*environment)->ExceptionCheck(environment) == JNI_TRUE) {
+        return (jint)result;
+    }
     const jint faces = (jint)dispatch.faces;
     (*environment)->SetIntArrayRegion(environment, out_faces, 0, 1, &faces);
     return (jint)result;
