@@ -83,15 +83,15 @@ FULL PROFILE       TOTAL_DIAGNOSTICS=0  ALLOWLIST_ENTRIES=0
                    TARGET_TYPES=340     TARGET_MEMBERS=4022
 
 NATIVE
-CANONICAL_FUNCTIONS=4054   BOUND_FUNCTIONS=2525
+CANONICAL_FUNCTIONS=4054   BOUND_FUNCTIONS=2528
 XNA_BACKING=986  JAVA_INTERNAL_ONLY=9  CNA_EXTENSION_CANDIDATE=1927
 DEFERRED_RUNTIME=405  NOT_USEFUL_IN_JAVA=727  UNEXPLAINED=0
 BOUND_BUT_UNREACHED=0  BOUND_WITHOUT_JAVA_CALL_SITE=0
-LIBRARY_SYMBOL_CHECK=PASS (2525/2525)   NATIVE_TOOL_TESTS=146
+LIBRARY_SYMBOL_CHECK=PASS (2528/2528)   NATIVE_TOOL_TESTS=146
 ENGINE LAYER (engine_layer.h)   844 of 857 bound and reached
 EFFECTS (effects.h)             241 of 290 bound and reached
 
-TESTS=514 SUITES=94 FAILURES=0 ERRORS=0 SKIPPED=0
+TESTS=516 SUITES=94 FAILURES=0 ERRORS=0 SKIPPED=0
   -- on each of HEADLESS, SOFTWARE, OPENGL4, OPENGLES3 and OPENGL33
   -- and clean under -Xcheck:jni on all five (./gradlew test -PcheckJni)
 ```
@@ -121,12 +121,16 @@ TESTS=514 SUITES=94 FAILURES=0 ERRORS=0 SKIPPED=0
 9. **The renderer selection family is projected**, which is what this session needed and did not
    have: it was reading the renderer inventory out of `CMakeCache.txt` while
    `cna_graphics_renderer_copy_available_ext` was sitting there unbound. `GraphicsRenderer`
-   answers what this build has, parses a name, and prefers one -- fifteen routes, and pointedly
-   not the five that answer wrong.
-10. **Two more upstream findings, one of them found by being hit.** A sweep named a renderer this
-   library was configured without and the JVM died with `SIGABRT` inside `System.loadLibrary`
-   (`JAVA-UPSTREAM-017`); measuring the family around it turned up five query routes that are
-   write-only (`JAVA-UPSTREAM-018`).
+   answers what this build has, classifies any identity CNA defines, parses a name, prefers one,
+   and names the renderer actually running -- eighteen routes, and pointedly not the four that
+   answer about something else.
+10. **Two more upstream findings, one of them found by being hit and one corrected by being
+   tested.** A sweep named a renderer this library was configured without and the JVM died with
+   `SIGABRT` inside `System.loadLibrary` (`JAVA-UPSTREAM-017`). Measuring the family around it
+   first produced a wrong finding -- five write-only query routes -- because the probe asked them
+   after rearranging the state they report. Asked cleanly, three are correct until a
+   `GraphicsDevice` exists and are reset by creating one, and three more named `current` describe
+   the compile-time default rather than the running renderer (`JAVA-UPSTREAM-018`).
 11. **`ColorGradePass.setVolumeLut` took a `TextureCube` and could never have worked.** CNA wants a
    cubical `Texture3D` and refuses a cube map with `INVALID_HANDLE`. Nothing caught it because no
    test had ever bound a volume table; both are fixed together.
@@ -151,10 +155,15 @@ TESTS=514 SUITES=94 FAILURES=0 ERRORS=0 SKIPPED=0
   is read while `libcna_c_api.so` loads, and a name this build does not have aborts the process
   there -- before `main`, before `System.loadLibrary` returns. `GraphicsRenderer.available()` is a
   mitigation for the next run, not a guard for this one.
-- **Five renderer-selection getters are not projected because they answer wrong**, not because
-  they were missed: the count route says zero, the latch flag is inverted, and three identity
-  getters say `UNKNOWN`. `RendererCapabilities.getRendererName` is the route that answers "which
-  renderer am I on" correctly, and it asks the device rather than the selection.
+- **Four renderer-selection getters are not projected because they answer about something else**,
+  not because they were missed. Three are reset by creating a `GraphicsDevice` -- correct before,
+  wrong after -- and `get_current_type` reports the renderer the build was configured with rather
+  than the one running. `GraphicsRenderer.getActive()` and
+  `RendererCapabilities.getRendererName` are the two that are right, and they are right for
+  different reasons: one asks the selection that happened, the other asks the device in hand.
+- **`CnaRuntime.getBackendCategory()` and `getBackendMaturity()` describe the compile-time
+  default**, not the running renderer, and now say so. On a single-renderer build those coincide;
+  this is a multi-renderer build and they do not.
 - Everything in `docs/runtime-capabilities.json` still holds for the previously measured families.
 
 ## Next work, in dependency order

@@ -741,18 +741,20 @@
     },
     {
       "id": "JAVA-UPSTREAM-018",
-      "title": "Five renderer-selection query routes are write-only: they answer zero, UNKNOWN, or the opposite of what they document",
+      "title": "Creating a graphics device resets three renderer-selection query routes, and three more named \"current\" report the compile-time default",
       "family": "cnanext",
       "authority": "core_ext.h",
       "status": "blocked",
       "priority": 6,
-      "currentState": "On a build with five renderers compiled in: cna_graphics_renderer_get_available_count_ext answers SUCCESS and 0, while cna_graphics_renderer_copy_available_ext(NULL, 0, &n) answers 5 for the same build. cna_graphics_renderer_get_is_latched_ext answers CNA_TRUE before anything is created and CNA_FALSE after a device exists, which is the exact opposite of its declaration, and reset_selection_for_tests_ext flips it back to TRUE. cna_graphics_renderer_get_selected_ext answers UNKNOWN even directly after set_preferred_by_name_ext(\"HEADLESS\") returned SUCCESS. cna_graphics_renderer_get_active_ext answers SUCCESS and UNKNOWN once a renderer exists, while CNA's own log line names HEADLESS. cna_graphics_renderer_get_current_type answers HEADLESS before the selection latches and UNKNOWN after, while its name-copying twin copy_current_name stays correct throughout.",
-      "expectedState": "The query half of the family answers what the setter half was told and what the selection actually did. The setters, the enumeration by copy, the parser and the fallback history are all correct, so this is five routes rather than a family.",
-      "blocker": "Upstream defect in cnanext renderer selection. CNA-Java binds the fifteen routes that work and none of these five: GraphicsRenderer.available() sizes its buffer with the zero-capacity probe rather than the count route, and the active renderer's name comes from RendererCapabilities.getRendererName, which asks the device and is correct.",
+      "currentState": "Measured on a process that touches the selection at all -- an earlier reading of the same family asked these routes after calling set_preferred and reset_selection_for_tests, and so measured its own leftovers. Clean, the picture is narrower and has a trigger. Before the first GraphicsDevice every query route is correct: get_available_count_ext answers 5 for a build with five renderers, get_selected_ext names the renderer the run asked for, get_is_latched_ext says not latched. Creating one device resets three of them: the count becomes 0 while copy_available_ext still answers 5, the selection becomes UNKNOWN, and the latch flag stays \"not latched\" so it never reports the state it exists to report. Separately, cna_graphics_renderer_get_current_type and the two cna_graphics_backend_get_current_* classifiers report the renderer this build was CONFIGURED with rather than the one running: on a build configured HEADLESS with five compiled in, they answer HEADLESS and Diagnostic/Supported while OPENGL33 is what was created. cna_graphics_renderer_copy_current_name answers HEADLESS too, but its declaration says it matches the build option, so that one is honest.",
+      "expectedState": "A device does not reset the routes that describe the selection, and a route named \"current\" describes the renderer that is current. cna_graphics_renderer_get_active_ext and cna_graphics_device_copy_renderer_name both answer correctly and show that the information is there to give.",
+      "blocker": "Upstream defect in cnanext renderer selection. CNA-Java binds get_active_ext, which is correct, and does not bind the three that a device resets. GraphicsRenderer.available() sizes its buffer with the zero-capacity probe rather than the count route, which is what keeps it working once a device exists. GraphicsRenderer.getActive() is documented as the route to trust over anything named \"current\".",
       "tests": [
-        "tools/native-abi/probes/renderer_selection.c"
+        "tools/native-abi/probes/renderer_selection.c",
+        "GraphicsRendererSelectionTests.theActiveRendererIsTheOneTheRunAskedFor",
+        "GraphicsRendererSelectionTests.everyIdentityHasACategoryAndAMaturityWhetherOrNotThisBuildHasIt"
       ],
-      "note": "Found while binding the family for JAVA-EXT-013. The inventory is the useful half and it works: copy_available_ext supports the zero-capacity probe, writes nothing when the buffer is one element short, and lists the renderers in the order CMake was given them."
+      "note": "Found while binding the family for JAVA-EXT-013, and corrected while testing it: a test that compared CnaRuntime.getBackendCategory() against the per-identity classifier for the running renderer failed, and the per-identity route was the one telling the truth. The first version of this finding claimed five write-only routes and was wrong about four of them."
     },
     {
       "id": "JAVA-EXT-013",
@@ -761,13 +763,13 @@
       "authority": "core_ext.h",
       "status": "done",
       "priority": 7,
-      "currentState": "GraphicsRenderer, GraphicsRendererType and GraphicsRendererFallback project fifteen of the twenty-two routes: the inventory, per-identity availability, name parsing, the preference setters, the fallback chain and its history with CNA's own messages and reason names, and the test-only reset. The five broken query routes are not bound (JAVA-UPSTREAM-018), and cna_graphics_renderer_get_current_name_size / _copy_current_name were already bound.",
+      "currentState": "GraphicsRenderer, GraphicsRendererType and GraphicsRendererFallback project eighteen of the family's twenty-two routes: the inventory, per-identity availability, per-identity category and maturity, case-insensitive name parsing, the preference setters, the fallback chain with its history and CNA's own messages and reason names, the active renderer, and the test-only reset. The three routes a device resets are not bound (JAVA-UPSTREAM-018), and the two current-name routes were already bound.",
       "expectedState": "A game reads GraphicsRenderer.available(), decides, and calls setPreferred -- rather than exporting CNA_GRAPHICS_RENDERER and finding out at load time that the renderer is not there (JAVA-UPSTREAM-017).",
       "tests": [
         "GraphicsRendererSelectionTests",
         "tools/native-abi/probes/renderer_selection.c"
       ],
-      "note": "Falsified with three planted defects, all of which failed the suite: a wrong CNA number on one identity (6 of 9 tests), parse() ignoring whether CNA recognised the name (1), and a refused selection treated as an accepted one (2). This projection had been reading the renderer inventory out of CMakeCache.txt; the routes to ask the library were there the whole time."
+      "note": "Falsified with three planted defects, all of which failed the suite: a wrong CNA number on one identity (6 of 9 tests), parse() ignoring whether CNA recognised the name (1), and a refused selection treated as an accepted one (2). This projection had been reading the renderer inventory out of CMakeCache.txt; the routes to ask the library were there the whole time. Binding the per-identity classifiers is what exposed the current-route half of JAVA-UPSTREAM-018 -- a test written to check two routes agreed found that they did not."
     },
     {
       "id": "JAVA-EXT-014",

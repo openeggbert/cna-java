@@ -1,5 +1,7 @@
 package org.openeggbert.cna.extensions.graphics;
 
+import org.openeggbert.cna.extensions.runtime.GraphicsBackendCategory;
+import org.openeggbert.cna.extensions.runtime.GraphicsBackendMaturity;
 import org.openeggbert.cna.internal.generated.NativeRuntimeExtensionRoutes;
 
 import java.nio.charset.StandardCharsets;
@@ -34,15 +36,22 @@ import java.util.Set;
  * recorded as JAVA-UPSTREAM-017. Read {@link #available()} and choose through {@link #setPreferred}
  * instead of letting a user's environment variable reach the loader unchecked.
  *
- * <p><strong>Five of CNA's query routes are not projected here</strong>, because measurement found
- * them write-only: {@code get_available_count_ext} answers zero for a build with five renderers,
- * {@code get_is_latched_ext} answers the exact opposite of what it documents,
- * {@code get_selected_ext} and {@code get_active_ext} answer {@code UNKNOWN} even directly after a
- * successful set, and {@code get_current_type} answers {@code UNKNOWN} once a renderer exists.
- * That is JAVA-UPSTREAM-018, reproduced in {@code tools/native-abi/probes/renderer_selection.c}
- * with no Java in the picture. {@link #available()} therefore sizes its buffer with the
- * zero-capacity probe that every count/copy pair in this API supports, and the active renderer's
- * name comes from {@link RendererCapabilities#getRendererName}, which is correct.
+ * <p><strong>Three of CNA's query routes stop working once a device exists</strong>, which is
+ * JAVA-UPSTREAM-018 and is why they are not projected here. Until the first {@code GraphicsDevice}
+ * they are all correct; creating one resets them. {@code get_available_count_ext} answers five and
+ * then zero for the same build, {@code get_selected_ext} names the chosen renderer and then
+ * {@code UNKNOWN}, and {@code get_is_latched_ext} says "not latched" both before and after, so it
+ * never reports the state it exists to report. {@link #available()} therefore sizes its buffer
+ * with the zero-capacity probe that every count/copy pair in this API supports, rather than
+ * trusting the count, and it keeps working after a device exists because the copy route does.
+ *
+ * <p><strong>{@link #getActive()} is the route to trust for "which renderer am I on".</strong>
+ * CNA also has three routes with {@code current} in their names -- {@code get_current_type} and
+ * the two backend classifiers behind {@link org.openeggbert.cna.extensions.runtime.CnaRuntime} --
+ * and on a multi-renderer build they report the <em>compile-time default</em> rather than the
+ * renderer that was chosen. On the build this was measured on they say {@code HEADLESS} whatever
+ * is running. {@link RendererCapabilities#getRendererName} is the other correct answer, and it is
+ * correct for a different reason: it asks the device rather than the selection.
  */
 public final class GraphicsRenderer {
 
@@ -89,6 +98,30 @@ public final class GraphicsRenderer {
             answer.add(GraphicsRendererType.fromValue(destination[index]));
         }
         return Collections.unmodifiableList(answer);
+    }
+
+    /**
+     * Returns the renderer that was actually created.
+     *
+     * <p>The one route in this family that answers "which renderer am I on" correctly after a
+     * device exists. It equals what {@link #setPreferred} asked for unless a configured fallback
+     * chain substituted another, which {@link #getFallbackHistory} explains.
+     *
+     * @return the running renderer
+     * @throws IllegalStateException while nothing has been created yet -- until then there is no
+     *         honest answer, and CNA refuses rather than guessing
+     * @throws ExtensionNotSupportedException when this build has no extended runtime layer
+     */
+    public static GraphicsRendererType getActive() {
+        GraphicsExtension.requireBackend();
+        int[] type = new int[1];
+        int result = NativeRuntimeExtensionRoutes.graphicsRendererGetActiveExt(type);
+        if (result == RESULT_INVALID_STATE) {
+            throw new IllegalStateException("no renderer has been created yet, so there is no"
+                    + " active one to name");
+        }
+        GraphicsExtension.check("GraphicsRenderer.getActive", result);
+        return GraphicsRendererType.fromValue(type[0]);
     }
 
     /**
@@ -251,6 +284,46 @@ public final class GraphicsRenderer {
      */
     public static Set<GraphicsRendererType> availableSet() {
         return Collections.unmodifiableSet(new LinkedHashSet<>(available()));
+    }
+
+    /**
+     * Returns how one renderer is implemented, whether or not this build has it.
+     *
+     * <p>Native, a translation layer, software, web, or diagnostic. Accepted for any identity CNA
+     * defines rather than only the compiled-in ones, which is what makes it worth pairing with
+     * {@link #available()}: a settings screen listing the choices can say what each one is without
+     * needing the build to contain it.
+     *
+     * @param type the renderer identity
+     * @return its category
+     * @throws ExtensionNotSupportedException when this build has no extended runtime layer
+     */
+    public static GraphicsBackendCategory getCategory(GraphicsRendererType type) {
+        GraphicsExtension.requireBackend();
+        Objects.requireNonNull(type, "type");
+        int[] category = new int[1];
+        GraphicsExtension.check("GraphicsRenderer.getCategory",
+                NativeRuntimeExtensionRoutes.graphicsBackendGetCategory(type.toValue(), category));
+        return GraphicsBackendCategory.values()[category[0]];
+    }
+
+    /**
+     * Returns how far CNA recommends one renderer, whether or not this build has it.
+     *
+     * <p>Production, supported, experimental, deprecated or historical. The reason a game should
+     * not simply offer every identity {@link #available()} returns as an equal choice.
+     *
+     * @param type the renderer identity
+     * @return its maturity
+     * @throws ExtensionNotSupportedException when this build has no extended runtime layer
+     */
+    public static GraphicsBackendMaturity getMaturity(GraphicsRendererType type) {
+        GraphicsExtension.requireBackend();
+        Objects.requireNonNull(type, "type");
+        int[] maturity = new int[1];
+        GraphicsExtension.check("GraphicsRenderer.getMaturity",
+                NativeRuntimeExtensionRoutes.graphicsBackendGetMaturity(type.toValue(), maturity));
+        return GraphicsBackendMaturity.values()[maturity[0]];
     }
 
     /**

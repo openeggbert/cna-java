@@ -12097,6 +12097,16 @@
       ]
     },
     {
+      "name": "cna_graphics_backend_get_category",
+      "header": "core_ext.h",
+      "ownership": "no handle; caller identity output",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_GraphicsRendererType",
+        "CNA_GraphicsBackendCategory*"
+      ]
+    },
+    {
       "name": "cna_graphics_backend_get_current_category",
       "header": "core_ext.h",
       "ownership": "borrows its inputs; caller output",
@@ -12111,6 +12121,16 @@
       "ownership": "borrows its inputs; caller output",
       "returnType": "CNA_Result",
       "parameters": [
+        "CNA_GraphicsBackendMaturity*"
+      ]
+    },
+    {
+      "name": "cna_graphics_backend_get_maturity",
+      "header": "core_ext.h",
+      "ownership": "no handle; caller identity output",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_GraphicsRendererType",
         "CNA_GraphicsBackendMaturity*"
       ]
     },
@@ -13157,6 +13177,15 @@
       "parameters": [
         "CNA_GraphicsRendererFallbackReason",
         "uint64_t*"
+      ]
+    },
+    {
+      "name": "cna_graphics_renderer_get_active_ext",
+      "header": "core_ext.h",
+      "ownership": "no handle; caller identity output",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_GraphicsRendererType*"
       ]
     },
     {

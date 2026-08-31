@@ -1,5 +1,7 @@
 package org.openeggbert.cna.extensions.graphics;
 
+import org.openeggbert.cna.extensions.runtime.GraphicsBackendCategory;
+import org.openeggbert.cna.extensions.runtime.GraphicsBackendMaturity;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.condition.EnabledIfEnvironmentVariable;
 
@@ -10,6 +12,7 @@ import java.util.Set;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNotEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
@@ -143,6 +146,27 @@ final class GraphicsRendererSelectionTests {
     }
 
     @Test
+    void theActiveRendererIsTheOneTheRunAskedFor() {
+        latch();
+        GraphicsRendererType active = GraphicsRenderer.getActive();
+        assertNotNull(active);
+        assertTrue(GraphicsRenderer.available().contains(active),
+                "a renderer that was created is one this build has");
+        String asked = System.getenv("CNA_GRAPHICS_RENDERER");
+        if (asked != null && !asked.isEmpty()) {
+            assertEquals(GraphicsRenderer.parse(asked), active,
+                    "the run asked for " + asked + " and no fallback chain is configured, so that"
+                            + " is what it must be running");
+        }
+        // The routes with "current" in their names answer about the build's compile-time default
+        // instead, which on a multi-renderer build is a different renderer -- JAVA-UPSTREAM-018.
+        // The device-scoped name is the other route that is right, and it agrees with this one.
+        GameProbe.run(probe -> assertEquals(active.name(),
+                RendererCapabilities.getRendererName(probe.device()),
+                "the selection and the device name the same renderer"));
+    }
+
+    @Test
     void theFallbackHistoryIsReadableAndEveryReasonHasCnaSName() {
         latch();
         List<GraphicsRendererFallback> history = GraphicsRenderer.getFallbackHistory();
@@ -165,6 +189,41 @@ final class GraphicsRendererSelectionTests {
         assertEquals("WindowKindConflict",
                 GraphicsRenderer.getReasonName(
                         GraphicsRendererFallback.Reason.WindowKindConflict));
+    }
+
+    @Test
+    void everyIdentityHasACategoryAndAMaturityWhetherOrNotThisBuildHasIt() {
+        latch();
+        // Classified for any identity CNA defines, not only the compiled-in ones -- which is what
+        // makes this pair worth having next to available(): a settings screen can say what a
+        // renderer is, and how far CNA recommends it, without the build containing it.
+        for (GraphicsRendererType type : GraphicsRendererType.values()) {
+            if (type == GraphicsRendererType.UNKNOWN) {
+                assertThrows(RuntimeException.class, () -> GraphicsRenderer.getCategory(type));
+                continue;
+            }
+            assertNotNull(GraphicsRenderer.getCategory(type), type + " has a category");
+            assertNotNull(GraphicsRenderer.getMaturity(type), type + " has a maturity");
+        }
+        // The identities this projection cares most about, stated rather than assumed. A renderer
+        // that turned out to be classified DIAGNOSTIC would be one to stop qualifying against.
+        assertEquals(GraphicsBackendCategory.Diagnostic,
+                GraphicsRenderer.getCategory(GraphicsRendererType.HEADLESS));
+        assertEquals(GraphicsBackendCategory.Software,
+                GraphicsRenderer.getCategory(GraphicsRendererType.SOFTWARE));
+        assertEquals(GraphicsBackendCategory.Native,
+                GraphicsRenderer.getCategory(GraphicsRendererType.OPENGL33));
+        assertNotEquals(GraphicsBackendMaturity.Historical,
+                GraphicsRenderer.getMaturity(GraphicsRendererType.OPENGL33),
+                "the renderer this qualification leans on is not a historical one");
+
+        // And the per-identity answer for the renderer actually running. Deliberately NOT
+        // compared against CnaRuntime.getBackendCategory(), which classifies the compile-time
+        // default rather than the running renderer -- writing that comparison is what found it.
+        GraphicsRendererType active = GraphicsRenderer.getActive();
+        assertEquals(GraphicsRenderer.getCategory(active),
+                GraphicsRenderer.getCategory(GraphicsRenderer.parse(active.name())),
+                "the identity and its name classify the same way");
     }
 
     @Test

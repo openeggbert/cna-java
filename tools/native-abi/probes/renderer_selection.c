@@ -24,13 +24,23 @@
  * and `env` mode exists to show that the process produces no output of its own before dying.
  * Every other case runs in `main` and returns results.
  *
- * The first half of the question is the useful half: cna_graphics_renderer_get_available_count_ext
- * and _copy_available_ext enumerate what is compiled in, which is the answer this session's whole
- * multi-renderer qualification needed and read out of CMakeCache.txt instead.
+ * The first half of the question is the useful half: _copy_available_ext enumerates what is
+ * compiled in, which is the answer this session's whole multi-renderer qualification needed and
+ * read out of CMakeCache.txt instead.
+ *
+ * `identity` mode exists because the first reading of this family was wrong, and wrong in a way
+ * worth keeping the shape of. Run from `main`, the query routes looked uniformly broken -- count
+ * zero, selection UNKNOWN, latch flag inverted -- and the conclusion drawn was "write-only". But
+ * `main` calls set_preferred and reset_selection_for_tests before it asks, so what was being
+ * measured was the probe's own leftovers. `identity` touches the selection not at all, and the
+ * real defect is narrower and sharper: the routes are correct until a GraphicsDevice exists and
+ * three of them are reset by creating one. A probe that mutates the state it is about to measure
+ * will always find something; the finding will just not be the one it reports.
  *
  *   cc renderer_selection.c -lcna_c_api -o renderer_selection
- *   ./renderer_selection            # the API path, and the inventory
- *   ./renderer_selection env NAME   # ask for NAME through the environment and see what happens
+ *   ./renderer_selection             # the API path, and the inventory
+ *   ./renderer_selection identity    # who am I, on a selection nothing has touched
+ *   ./renderer_selection env NAME    # ask for NAME through the environment and see what happens
  */
 #define _POSIX_C_SOURCE 200809L
 
@@ -150,6 +160,82 @@ int main(int argc, char** argv)
         return 0;
     }
 
+    if (argc >= 2 && strcmp(argv[1], "identity") == 0) {
+        /* Who am I, asked the four ways CNA offers, on a process that touches the selection not
+           at all -- the rest of main calls set_preferred, which would make the answer its own
+           doing rather than the environment's. */
+        /* Before the device, on a selection nothing has touched. */
+        CNA_Bool latched_before = CNA_TRUE;
+        CNA_GraphicsRendererType selected_before = CNA_GRAPHICS_RENDERER_UNKNOWN;
+        uint64_t count_before = 0;
+        uint64_t enumerated_before = 0;
+        const CNA_Result got_latched_before =
+            cna_graphics_renderer_get_is_latched_ext(&latched_before);
+        const CNA_Result got_selected_before =
+            cna_graphics_renderer_get_selected_ext(&selected_before);
+        const CNA_Result got_count_before =
+            cna_graphics_renderer_get_available_count_ext(&count_before);
+        cna_graphics_renderer_copy_available_ext(NULL, 0, &enumerated_before);
+        printf("identity, before the device:\n");
+        printf("  get_is_latched_ext             %s %s\n", name_of(got_latched_before),
+               latched_before ? "latched" : "not latched");
+        printf("  get_selected_ext               %s %s\n", name_of(got_selected_before),
+               renderer_name(selected_before));
+        printf("  get_available_count_ext        %s %llu   copy_available says %llu\n",
+               name_of(got_count_before), (unsigned long long)count_before,
+               (unsigned long long)enumerated_before);
+
+        const int frame = latch_a_renderer();
+        CNA_Bool latched_after = CNA_FALSE;
+        CNA_GraphicsRendererType selected_after = CNA_GRAPHICS_RENDERER_UNKNOWN;
+        uint64_t count_after = 0;
+        printf("identity, after the device:\n");
+        printf("  get_is_latched_ext             %s %s\n",
+               name_of(cna_graphics_renderer_get_is_latched_ext(&latched_after)),
+               latched_after ? "latched" : "not latched");
+        printf("  get_selected_ext               %s %s\n",
+               name_of(cna_graphics_renderer_get_selected_ext(&selected_after)),
+               renderer_name(selected_after));
+        printf("  get_available_count_ext        %s %llu\n",
+               name_of(cna_graphics_renderer_get_available_count_ext(&count_after)),
+               (unsigned long long)count_after);
+        char current_name[64];
+        memset(current_name, 0, sizeof current_name);
+        uint64_t bytes = 0;
+        CNA_GraphicsRendererType current = CNA_GRAPHICS_RENDERER_UNKNOWN;
+        CNA_GraphicsRendererType active = CNA_GRAPHICS_RENDERER_UNKNOWN;
+        CNA_GraphicsBackendCategory category = 0;
+        CNA_GraphicsBackendMaturity maturity = 0;
+        const CNA_Result got_name =
+            cna_graphics_renderer_copy_current_name(current_name, sizeof current_name, &bytes);
+        const CNA_Result got_type = cna_graphics_renderer_get_current_type(&current);
+        const CNA_Result got_active = cna_graphics_renderer_get_active_ext(&active);
+        const CNA_Result got_category = cna_graphics_backend_get_current_category(&category);
+        const CNA_Result got_maturity = cna_graphics_backend_get_current_maturity(&maturity);
+        printf("identity: frame ran %d\n", frame);
+        printf("  copy_current_name              %s \"%s\"\n", name_of(got_name), current_name);
+        printf("  get_current_type               %s %s\n", name_of(got_type),
+               renderer_name(current));
+        printf("  get_active_ext                 %s %s\n", name_of(got_active),
+               renderer_name(active));
+        printf("  backend_get_current_category   %s %u\n", name_of(got_category),
+               (unsigned)category);
+        printf("  backend_get_current_maturity   %s %u\n", name_of(got_maturity),
+               (unsigned)maturity);
+        /* And what the per-identity routes say about the renderer the name reports, which is the
+           only one of the five that is right. */
+        CNA_GraphicsRendererType named = CNA_GRAPHICS_RENDERER_UNKNOWN;
+        CNA_Bool recognized = CNA_FALSE;
+        cna_graphics_renderer_try_parse_name_ext(view_of(current_name), &named, &recognized);
+        CNA_GraphicsBackendCategory named_category = 0;
+        CNA_GraphicsBackendMaturity named_maturity = 0;
+        cna_graphics_backend_get_category(named, &named_category);
+        cna_graphics_backend_get_maturity(named, &named_maturity);
+        printf("  per-identity for \"%s\"   category %u  maturity %u\n", current_name,
+               (unsigned)named_category, (unsigned)named_maturity);
+        return 0;
+    }
+
     printf("== before anything is created ==\n");
     {
         CNA_Bool latched = CNA_TRUE;
@@ -236,6 +322,39 @@ int main(int argc, char** argv)
         CNA_Bool there = CNA_FALSE;
         printf("  identity 9999         %s\n",
                name_of(cna_graphics_renderer_get_is_available_ext(9999U, &there)));
+    }
+
+    printf("\n== how CNA classifies each identity it has ==\n");
+    {
+        const CNA_GraphicsRendererType asked[] = {
+            CNA_GRAPHICS_RENDERER_HEADLESS,  CNA_GRAPHICS_RENDERER_SOFTWARE,
+            CNA_GRAPHICS_RENDERER_OPENGL33,  CNA_GRAPHICS_RENDERER_OPENGLES3,
+            CNA_GRAPHICS_RENDERER_OPENGL4,   CNA_GRAPHICS_RENDERER_OPENGLES2,
+            CNA_GRAPHICS_RENDERER_VULKAN,    CNA_GRAPHICS_RENDERER_STUB,
+        };
+        for (size_t i = 0; i < sizeof asked / sizeof asked[0]; i++) {
+            CNA_GraphicsBackendCategory category = 0;
+            CNA_GraphicsBackendMaturity maturity = 0;
+            const CNA_Result got_category =
+                cna_graphics_backend_get_category(asked[i], &category);
+            const CNA_Result got_maturity =
+                cna_graphics_backend_get_maturity(asked[i], &maturity);
+            char category_name[64];
+            char maturity_name[64];
+            memset(category_name, 0, sizeof category_name);
+            memset(maturity_name, 0, sizeof maturity_name);
+            uint64_t bytes = 0;
+            cna_graphics_backend_category_copy_name(category, category_name,
+                                                    sizeof category_name, &bytes);
+            cna_graphics_backend_maturity_copy_name(maturity, maturity_name,
+                                                    sizeof maturity_name, &bytes);
+            printf("  %-14s        %s %-18s %s %s\n", renderer_name(asked[i]),
+                   name_of(got_category), category_name, name_of(got_maturity), maturity_name);
+        }
+        CNA_GraphicsBackendCategory category = 0;
+        printf("  UNKNOWN               %s\n",
+               name_of(cna_graphics_backend_get_category(CNA_GRAPHICS_RENDERER_UNKNOWN,
+                                                          &category)));
     }
 
     printf("\n== try_parse_name ==\n");
@@ -336,6 +455,34 @@ int main(int argc, char** argv)
         printf("  available_count       %s %llu\n",
                name_of(cna_graphics_renderer_get_available_count_ext(&count_again)),
                (unsigned long long)count_again);
+        /* The process-wide classifiers, which say "current" and are the ones a game would reach
+           for first. Compare them against the per-identity answer for the renderer that is
+           actually running. */
+        {
+            CNA_GraphicsBackendCategory current_category = 0;
+            CNA_GraphicsBackendMaturity current_maturity = 0;
+            const CNA_Result gc = cna_graphics_backend_get_current_category(&current_category);
+            const CNA_Result gm = cna_graphics_backend_get_current_maturity(&current_maturity);
+            printf("  current category      %s %u   current maturity %s %u\n", name_of(gc),
+                   (unsigned)current_category, name_of(gm), (unsigned)current_maturity);
+        }
+        /* And the per-identity classifiers again, because get_current_type answers correctly
+           before the selection latches and UNKNOWN after -- so the question is whether these
+           two are the same kind of route or a different one. */
+        {
+            const CNA_GraphicsRendererType asked[] = { CNA_GRAPHICS_RENDERER_HEADLESS,
+                                                       CNA_GRAPHICS_RENDERER_SOFTWARE,
+                                                       CNA_GRAPHICS_RENDERER_OPENGL33 };
+            for (size_t i = 0; i < sizeof asked / sizeof asked[0]; i++) {
+                CNA_GraphicsBackendCategory category = 0;
+                CNA_GraphicsBackendMaturity maturity = 0;
+                const CNA_Result gc = cna_graphics_backend_get_category(asked[i], &category);
+                const CNA_Result gm = cna_graphics_backend_get_maturity(asked[i], &maturity);
+                printf("  %-14s after   %s category=%u  %s maturity=%u\n",
+                       renderer_name(asked[i]), name_of(gc), (unsigned)category, name_of(gm),
+                       (unsigned)maturity);
+            }
+        }
         printf("  set_preferred now     %s\n",
                name_of(cna_graphics_renderer_set_preferred_ext(CNA_GRAPHICS_RENDERER_SOFTWARE)));
         printf("  set_chain now         %s\n",

@@ -71,7 +71,14 @@ public final class CnaRuntime {
                 NativeRuntimeExtensionRoutes::graphicsRendererCopyCurrentName);
     }
 
-    /** Returns how the current renderer produces pixels. */
+    /**
+     * Returns how the renderer this build was configured with produces pixels.
+     *
+     * <p><strong>Not necessarily the renderer that is running.</strong> On a build with several
+     * renderers compiled in, CNA's route behind this answers about the compile-time default rather
+     * than the one chosen at startup -- JAVA-UPSTREAM-018. For the running renderer use
+     * {@code GraphicsRenderer.getCategory(GraphicsRenderer.getActive())}.
+     */
     public static GraphicsBackendCategory getBackendCategory() {
         NativeBindings.requireAvailable();
         int[] category = new int[1];
@@ -80,7 +87,12 @@ public final class CnaRuntime {
         return GraphicsBackendCategory.values()[category[0]];
     }
 
-    /** Returns how far the current renderer has been taken. */
+    /**
+     * Returns how far the renderer this build was configured with has been taken.
+     *
+     * <p>Carries the same caveat as {@link #getBackendCategory()}: on a multi-renderer build this
+     * describes the compile-time default, not the running renderer.
+     */
     public static GraphicsBackendMaturity getBackendMaturity() {
         NativeBindings.requireAvailable();
         int[] maturity = new int[1];

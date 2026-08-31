@@ -40,7 +40,7 @@ or put non-XNA API inside `Microsoft.Xna.Framework.*`.
 | Allowlist entries | 0 | 0 |
 | CNA C ABI | 0.21.0 | 0.21.0 |
 | Canonical C API functions | 4,054 | 4,054 |
-| Bound native routes | 2,410 | 2,525 |
+| Bound native routes | 2,410 | 2,528 |
 | Engine-layer routes bound | 778 of 857 | 844 of 857 |
 | Effects routes bound | 212 of 290 | 241 of 290 |
 | Unexplained native routes | 0 | 0 |
@@ -49,8 +49,8 @@ or put non-XNA API inside `Microsoft.Xna.Framework.*`.
 | Renderers qualified | 1 | 5 |
 | Compute-capable renderers | 0 | 2 |
 | Native tool tests | 125 | 146 |
-| Renderer-selection routes bound | 2 of 22 | 17 of 22 |
-| Tests | 455 | 514 |
+| Renderer-selection routes bound | 2 of 22 | 18 of 22 |
+| Tests | 455 | 516 |
 
 ## Milestones reached this session
 
@@ -151,13 +151,13 @@ probe is what established that rather than the reading that led to it.
 ```text
 HEADER_ABI=0.21.0
 CANONICAL_FUNCTIONS=4054
-BOUND_FUNCTIONS=2525
+BOUND_FUNCTIONS=2528
 MANIFEST_SIGNATURE_CHECK=PASS
 MANIFEST_JNI_BINDING_CHECK=PASS
 JNI_HEADER_DERIVED_SLOT_CHECK=PASS
 LAYOUT_SIGNATURE_PROBE=PASS
 LIBRARY_ABI=0.21.0
-LIBRARY_SYMBOL_CHECK=PASS (2525/2525)
+LIBRARY_SYMBOL_CHECK=PASS (2528/2528)
 ABI_POLICY_CHECK=PASS
 NATIVE_TOOL_TESTS=146 passed, 0 failed
 ENGINE_LAYER_BOUND=844 of 857

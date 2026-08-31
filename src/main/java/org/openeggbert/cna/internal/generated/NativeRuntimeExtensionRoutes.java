@@ -38,6 +38,11 @@ public final class NativeRuntimeExtensionRoutes {
     public static native int graphicsBackendCategoryGetNameSize(int category, long[] outBytes);
 
     /**
+     * cna_graphics_backend_get_category (core_ext.h).
+     */
+    public static native int graphicsBackendGetCategory(int type, int[] outCategory);
+
+    /**
      * cna_graphics_backend_get_current_category (core_ext.h).
      */
     public static native int graphicsBackendGetCurrentCategory(int[] outCategory);
@@ -46,6 +51,11 @@ public final class NativeRuntimeExtensionRoutes {
      * cna_graphics_backend_get_current_maturity (core_ext.h).
      */
     public static native int graphicsBackendGetCurrentMaturity(int[] outMaturity);
+
+    /**
+     * cna_graphics_backend_get_maturity (core_ext.h).
+     */
+    public static native int graphicsBackendGetMaturity(int type, int[] outMaturity);
 
     /**
      * cna_graphics_backend_maturity_copy_name (core_ext.h).
@@ -86,6 +96,11 @@ public final class NativeRuntimeExtensionRoutes {
      * cna_graphics_renderer_fallback_reason_get_name_size_ext (core_ext.h).
      */
     public static native int graphicsRendererFallbackReasonGetNameSizeExt(int reason, long[] outBytes);
+
+    /**
+     * cna_graphics_renderer_get_active_ext (core_ext.h).
+     */
+    public static native int graphicsRendererGetActiveExt(int[] outType);
 
     /**
      * cna_graphics_renderer_get_automatic_fallback_ext (core_ext.h).

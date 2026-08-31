@@ -843,8 +843,10 @@
     CNA_JNI_ROUTE(cna_gpu_timer_poll) gpu_timer_poll;
     CNA_JNI_ROUTE(cna_graphics_backend_category_copy_name) graphics_backend_category_copy_name;
     CNA_JNI_ROUTE(cna_graphics_backend_category_get_name_size) graphics_backend_category_get_name_size;
+    CNA_JNI_ROUTE(cna_graphics_backend_get_category) graphics_backend_get_category;
     CNA_JNI_ROUTE(cna_graphics_backend_get_current_category) graphics_backend_get_current_category;
     CNA_JNI_ROUTE(cna_graphics_backend_get_current_maturity) graphics_backend_get_current_maturity;
+    CNA_JNI_ROUTE(cna_graphics_backend_get_maturity) graphics_backend_get_maturity;
     CNA_JNI_ROUTE(cna_graphics_backend_maturity_copy_name) graphics_backend_maturity_copy_name;
     CNA_JNI_ROUTE(cna_graphics_backend_maturity_get_name_size) graphics_backend_maturity_get_name_size;
     CNA_JNI_ROUTE(cna_graphics_device_copy_capability_report_ext) graphics_device_copy_capability_report_ext;
@@ -862,6 +864,7 @@
     CNA_JNI_ROUTE(cna_graphics_renderer_fallback_get_message_size_ext) graphics_renderer_fallback_get_message_size_ext;
     CNA_JNI_ROUTE(cna_graphics_renderer_fallback_reason_copy_name_ext) graphics_renderer_fallback_reason_copy_name_ext;
     CNA_JNI_ROUTE(cna_graphics_renderer_fallback_reason_get_name_size_ext) graphics_renderer_fallback_reason_get_name_size_ext;
+    CNA_JNI_ROUTE(cna_graphics_renderer_get_active_ext) graphics_renderer_get_active_ext;
     CNA_JNI_ROUTE(cna_graphics_renderer_get_automatic_fallback_ext) graphics_renderer_get_automatic_fallback_ext;
     CNA_JNI_ROUTE(cna_graphics_renderer_get_current_name_size) graphics_renderer_get_current_name_size;
     CNA_JNI_ROUTE(cna_graphics_renderer_get_fallback_at_ext) graphics_renderer_get_fallback_at_ext;

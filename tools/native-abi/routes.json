@@ -1312,6 +1312,10 @@
         "symbol": "cna_graphics_renderer_copy_current_name"
       },
       {
+        "java": "graphicsRendererGetActiveExt",
+        "symbol": "cna_graphics_renderer_get_active_ext"
+      },
+      {
         "java": "graphicsRendererCopyAvailableExt",
         "symbol": "cna_graphics_renderer_copy_available_ext"
       },
@@ -1370,6 +1374,14 @@
       {
         "java": "graphicsRendererResetSelectionForTestsExt",
         "symbol": "cna_graphics_renderer_reset_selection_for_tests_ext"
+      },
+      {
+        "java": "graphicsBackendGetCategory",
+        "symbol": "cna_graphics_backend_get_category"
+      },
+      {
+        "java": "graphicsBackendGetMaturity",
+        "symbol": "cna_graphics_backend_get_maturity"
       },
       {
         "java": "graphicsBackendGetCurrentCategory",

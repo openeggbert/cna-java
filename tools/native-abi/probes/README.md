@@ -1130,15 +1130,52 @@ cleanly:
 failure, and parses names for renderers this build does not have -- which is right: parsing a name
 and having the renderer are different questions.
 
-**Five query routes in the same family are write-only.** `JAVA-UPSTREAM-018`:
+**Creating a device resets three query routes.** `JAVA-UPSTREAM-018`. `identity` mode asks them
+on a process that touches the selection not at all, before and after one `GraphicsDevice`:
 
-| Route | says | should say |
+| Route | before a device | after a device |
 |---|---|---|
-| `get_available_count_ext` | SUCCESS, **0** | 5 -- `copy_available_ext(NULL, 0, &n)` answers 5 for the same build |
-| `get_is_latched_ext` | **`CNA_TRUE` before** anything is created, `CNA_FALSE` after | the exact opposite, per its own declaration |
-| `get_selected_ext` | SUCCESS, `UNKNOWN` | the identity a successful `set_preferred_by_name_ext("HEADLESS")` just set |
-| `get_active_ext` | SUCCESS, `UNKNOWN` once a device exists | `HEADLESS`, which CNA's own log line names |
-| `get_current_type` | `HEADLESS` before the selection latches, **`UNKNOWN` after** | `HEADLESS` throughout; its name-copying twin `copy_current_name` stays right |
+| `get_available_count_ext` | SUCCESS, **5** | SUCCESS, **0** -- while `copy_available_ext` still says 5 |
+| `get_selected_ext` | SUCCESS, **the renderer the run asked for** | SUCCESS, **`UNKNOWN`** |
+| `get_is_latched_ext` | SUCCESS, not latched | SUCCESS, **still not latched** -- it never reports the state it exists to report |
+| `get_active_ext` | `INVALID_STATE`, correctly | SUCCESS, **the running renderer** -- correct |
+| `copy_available_ext` | 5 identities | 5 identities -- correct |
+
+**This corrects an earlier reading of the same family, and the correction is the more useful
+finding.** Asked from `main`, which calls `set_preferred_by_name` and
+`reset_selection_for_tests_ext` before it gets there, every one of these looked broken and the
+conclusion drawn was "write-only". They were being asked after the probe had rearranged the state
+they report. Measured without that, they are correct until a device exists and three of them are
+reset by creating one -- a narrower defect with a specific trigger, rather than five unrelated
+ones. A probe that mutates what it is about to measure will always find something.
+
+**Three routes named `current` report the compile-time default, not the running renderer.** On a
+build configured `CNA_GRAPHICS_RENDERER=HEADLESS` with five renderers compiled in, running under
+`CNA_GRAPHICS_RENDERER=OPENGL33`:
+
+| Route | answers |
+|---|---|
+| `cna_graphics_renderer_copy_current_name` | `"HEADLESS"` -- and its declaration does say it matches the build option, so this one is honest |
+| `cna_graphics_renderer_get_current_type` | `HEADLESS` |
+| `cna_graphics_backend_get_current_category` | `Diagnostic`, HEADLESS's category |
+| `cna_graphics_backend_get_current_maturity` | `Supported`, HEADLESS's maturity |
+| `cna_graphics_renderer_get_active_ext` | **`OPENGL33`** |
+| `cna_graphics_device_copy_renderer_name` | **`"OPENGL33"`** |
+
+The two that are right are the two that ask about something real -- the selection that happened,
+and the device in hand. The word "current" in the other three means "the one this build was
+configured with", which on a single-renderer build is the same thing and on this one is not.
+
+**Per-identity classification works for every identity, compiled in or not:**
+
+| Identity | category | maturity |
+|---|---|---|
+| HEADLESS | Diagnostic | Supported |
+| SOFTWARE | Software | Experimental |
+| OPENGL33, OPENGLES3, OPENGLES2, VULKAN | Native | Production |
+| OPENGL4 | Native | Supported |
+| STUB | Diagnostic | Supported |
+| UNKNOWN | `INVALID_ARGUMENT` | `INVALID_ARGUMENT` |
 
 The enumeration itself is sound: `copy_available_ext` supports the zero-capacity probe, writes no
 partial result when the buffer is one element short, and lists `HEADLESS OPENGLES3 OPENGL33
@@ -1147,10 +1184,9 @@ rather than out of `CMakeCache.txt`. `get_is_available_ext` agrees with it ident
 and refuses `UNKNOWN` and out-of-range values. The four fallback reasons name themselves
 `NotCompiledIn`, `ProbeUnavailable`, `InitializationFailed` and `WindowKindConflict`.
 
-So CNA-Java binds the fifteen routes that work and none of the five that do not, and
+So CNA-Java binds eighteen of the family's twenty-two routes, including `get_active_ext`, and
 `GraphicsRenderer.available()` sizes its buffer with the zero-capacity probe rather than the count
-route. `RendererCapabilities.getRendererName` already answers "which renderer am I on" correctly,
-because it asks the device rather than the selection.
+route -- which is what keeps it working after a device exists.
 
 ## shader_effect_uniform_binding.c
 

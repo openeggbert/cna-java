@@ -100,6 +100,22 @@ Java_org_openeggbert_cna_internal_generated_NativeRuntimeExtensionRoutes_graphic
 }
 
 JNIEXPORT jint JNICALL
+Java_org_openeggbert_cna_internal_generated_NativeRuntimeExtensionRoutes_graphicsBackendGetCategory(
+    JNIEnv* environment, jclass declaring_class, jint type, jintArray out_category)
+{
+    (void)environment;
+    (void)declaring_class;
+    CNA_GraphicsBackendCategory out_category_value = 0;
+    CNA_Result call_result = cna.graphics_backend_get_category((CNA_GraphicsRendererType)type, &out_category_value);
+    if (call_result == CNA_RESULT_SUCCESS || call_result == CNA_RESULT_BUFFER_TOO_SMALL) {
+        jint out_category_element = (jint)out_category_value;
+        (*environment)->SetIntArrayRegion(
+            environment, out_category, 0, 1, &out_category_element);
+    }
+    return (jint)call_result;
+}
+
+JNIEXPORT jint JNICALL
 Java_org_openeggbert_cna_internal_generated_NativeRuntimeExtensionRoutes_graphicsBackendGetCurrentCategory(
     JNIEnv* environment, jclass declaring_class, jintArray out_category)
 {
@@ -123,6 +139,22 @@ Java_org_openeggbert_cna_internal_generated_NativeRuntimeExtensionRoutes_graphic
     (void)declaring_class;
     CNA_GraphicsBackendMaturity out_maturity_value = 0;
     CNA_Result call_result = cna.graphics_backend_get_current_maturity(&out_maturity_value);
+    if (call_result == CNA_RESULT_SUCCESS || call_result == CNA_RESULT_BUFFER_TOO_SMALL) {
+        jint out_maturity_element = (jint)out_maturity_value;
+        (*environment)->SetIntArrayRegion(
+            environment, out_maturity, 0, 1, &out_maturity_element);
+    }
+    return (jint)call_result;
+}
+
+JNIEXPORT jint JNICALL
+Java_org_openeggbert_cna_internal_generated_NativeRuntimeExtensionRoutes_graphicsBackendGetMaturity(
+    JNIEnv* environment, jclass declaring_class, jint type, jintArray out_maturity)
+{
+    (void)environment;
+    (void)declaring_class;
+    CNA_GraphicsBackendMaturity out_maturity_value = 0;
+    CNA_Result call_result = cna.graphics_backend_get_maturity((CNA_GraphicsRendererType)type, &out_maturity_value);
     if (call_result == CNA_RESULT_SUCCESS || call_result == CNA_RESULT_BUFFER_TOO_SMALL) {
         jint out_maturity_element = (jint)out_maturity_value;
         (*environment)->SetIntArrayRegion(
@@ -302,6 +334,22 @@ Java_org_openeggbert_cna_internal_generated_NativeRuntimeExtensionRoutes_graphic
         jlong out_bytes_element = (jlong)out_bytes_value;
         (*environment)->SetLongArrayRegion(
             environment, out_bytes, 0, 1, &out_bytes_element);
+    }
+    return (jint)call_result;
+}
+
+JNIEXPORT jint JNICALL
+Java_org_openeggbert_cna_internal_generated_NativeRuntimeExtensionRoutes_graphicsRendererGetActiveExt(
+    JNIEnv* environment, jclass declaring_class, jintArray out_type)
+{
+    (void)environment;
+    (void)declaring_class;
+    CNA_GraphicsRendererType out_type_value = 0;
+    CNA_Result call_result = cna.graphics_renderer_get_active_ext(&out_type_value);
+    if (call_result == CNA_RESULT_SUCCESS || call_result == CNA_RESULT_BUFFER_TOO_SMALL) {
+        jint out_type_element = (jint)out_type_value;
+        (*environment)->SetIntArrayRegion(
+            environment, out_type, 0, 1, &out_type_element);
     }
     return (jint)call_result;
 }

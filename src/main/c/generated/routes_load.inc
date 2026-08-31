@@ -843,8 +843,10 @@
     LOAD(gpu_timer_poll, "cna_gpu_timer_poll");
     LOAD(graphics_backend_category_copy_name, "cna_graphics_backend_category_copy_name");
     LOAD(graphics_backend_category_get_name_size, "cna_graphics_backend_category_get_name_size");
+    LOAD(graphics_backend_get_category, "cna_graphics_backend_get_category");
     LOAD(graphics_backend_get_current_category, "cna_graphics_backend_get_current_category");
     LOAD(graphics_backend_get_current_maturity, "cna_graphics_backend_get_current_maturity");
+    LOAD(graphics_backend_get_maturity, "cna_graphics_backend_get_maturity");
     LOAD(graphics_backend_maturity_copy_name, "cna_graphics_backend_maturity_copy_name");
     LOAD(graphics_backend_maturity_get_name_size, "cna_graphics_backend_maturity_get_name_size");
     LOAD(graphics_device_copy_capability_report_ext, "cna_graphics_device_copy_capability_report_ext");
@@ -862,6 +864,7 @@
     LOAD(graphics_renderer_fallback_get_message_size_ext, "cna_graphics_renderer_fallback_get_message_size_ext");
     LOAD(graphics_renderer_fallback_reason_copy_name_ext, "cna_graphics_renderer_fallback_reason_copy_name_ext");
     LOAD(graphics_renderer_fallback_reason_get_name_size_ext, "cna_graphics_renderer_fallback_reason_get_name_size_ext");
+    LOAD(graphics_renderer_get_active_ext, "cna_graphics_renderer_get_active_ext");
     LOAD(graphics_renderer_get_automatic_fallback_ext, "cna_graphics_renderer_get_automatic_fallback_ext");
     LOAD(graphics_renderer_get_current_name_size, "cna_graphics_renderer_get_current_name_size");
     LOAD(graphics_renderer_get_fallback_at_ext, "cna_graphics_renderer_get_fallback_at_ext");

@@ -177,6 +177,28 @@
     },
     {
       "match": {
+        "symbols": [
+          "cna_graphics_renderer_get_available_count_ext",
+          "cna_graphics_renderer_get_selected_ext",
+          "cna_graphics_renderer_get_is_latched_ext"
+        ]
+      },
+      "classification": "CNA_EXTENSION_CANDIDATE",
+      "reason": "Correct until a GraphicsDevice exists and reset by creating one: the count answers five and then zero for the same build while copy_available_ext keeps answering five, the selection becomes UNKNOWN, and the latch flag never becomes true. Measured before and after in renderer_selection.c identity mode, on a process that touches the selection at all. GraphicsRenderer.available() uses the zero-capacity probe instead of the count, and getActive() is the route that answers correctly after a device exists.",
+      "task": "JAVA-UPSTREAM-018"
+    },
+    {
+      "match": {
+        "symbols": [
+          "cna_graphics_renderer_get_current_type"
+        ]
+      },
+      "classification": "CNA_EXTENSION_CANDIDATE",
+      "reason": "Reports the renderer this build was CONFIGURED with rather than the one running -- HEADLESS on a build configured HEADLESS, whatever CNA_GRAPHICS_RENDERER selected. Binding it would give Java a route named \"current\" that answers about something else. GraphicsRenderer.getActive() is bound instead and is right, and RendererCapabilities.getRendererName asks the device.",
+      "task": "JAVA-UPSTREAM-018"
+    },
+    {
+      "match": {
         "header": "core_ext.h"
       },
       "classification": "CNA_EXTENSION_CANDIDATE",
