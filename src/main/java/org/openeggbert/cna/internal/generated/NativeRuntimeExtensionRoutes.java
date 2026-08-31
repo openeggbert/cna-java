@@ -58,14 +58,95 @@ public final class NativeRuntimeExtensionRoutes {
     public static native int graphicsBackendMaturityGetNameSize(int maturity, long[] outBytes);
 
     /**
+     * cna_graphics_renderer_copy_available_ext (core_ext.h).
+     */
+    public static native int graphicsRendererCopyAvailableExt(int[] destination, long[] outCount);
+
+    /**
      * cna_graphics_renderer_copy_current_name (core_ext.h).
      */
     public static native int graphicsRendererCopyCurrentName(byte[] destination, long[] outBytes);
 
     /**
+     * cna_graphics_renderer_fallback_copy_message_ext (core_ext.h).
+     */
+    public static native int graphicsRendererFallbackCopyMessageExt(long index, byte[] destination, long[] outBytes);
+
+    /**
+     * cna_graphics_renderer_fallback_get_message_size_ext (core_ext.h).
+     */
+    public static native int graphicsRendererFallbackGetMessageSizeExt(long index, long[] outBytes);
+
+    /**
+     * cna_graphics_renderer_fallback_reason_copy_name_ext (core_ext.h).
+     */
+    public static native int graphicsRendererFallbackReasonCopyNameExt(int reason, byte[] destination, long[] outBytes);
+
+    /**
+     * cna_graphics_renderer_fallback_reason_get_name_size_ext (core_ext.h).
+     */
+    public static native int graphicsRendererFallbackReasonGetNameSizeExt(int reason, long[] outBytes);
+
+    /**
+     * cna_graphics_renderer_get_automatic_fallback_ext (core_ext.h).
+     */
+    public static native int graphicsRendererGetAutomaticFallbackExt(boolean[] outEnabled);
+
+    /**
      * cna_graphics_renderer_get_current_name_size (core_ext.h).
      */
     public static native int graphicsRendererGetCurrentNameSize(long[] outBytes);
+
+    /**
+     * cna_graphics_renderer_get_fallback_at_ext (core_ext.h).
+     *
+     * <p>outRecordIntegral carries CNA_GraphicsRendererFallbackRecord in this order:
+     * <ol start="0">
+     *   <li>{@code type} (CNA_GraphicsRendererType)</li>
+     *   <li>{@code reason} (CNA_GraphicsRendererFallbackReason)</li>
+     * </ol>
+     */
+    public static native int graphicsRendererGetFallbackAtExt(long index, long[] outRecordIntegral);
+
+    /**
+     * cna_graphics_renderer_get_fallback_count_ext (core_ext.h).
+     */
+    public static native int graphicsRendererGetFallbackCountExt(long[] outCount);
+
+    /**
+     * cna_graphics_renderer_get_is_available_ext (core_ext.h).
+     */
+    public static native int graphicsRendererGetIsAvailableExt(int type, boolean[] outAvailable);
+
+    /**
+     * cna_graphics_renderer_reset_selection_for_tests_ext (core_ext.h).
+     */
+    public static native int graphicsRendererResetSelectionForTestsExt();
+
+    /**
+     * cna_graphics_renderer_set_automatic_fallback_ext (core_ext.h).
+     */
+    public static native int graphicsRendererSetAutomaticFallbackExt(boolean enabled);
+
+    /**
+     * cna_graphics_renderer_set_fallback_chain_ext (core_ext.h).
+     */
+    public static native int graphicsRendererSetFallbackChainExt(int[] types);
+
+    /**
+     * cna_graphics_renderer_set_preferred_by_name_ext (core_ext.h).
+     */
+    public static native int graphicsRendererSetPreferredByNameExt(byte[] name);
+
+    /**
+     * cna_graphics_renderer_set_preferred_ext (core_ext.h).
+     */
+    public static native int graphicsRendererSetPreferredExt(int type);
+
+    /**
+     * cna_graphics_renderer_try_parse_name_ext (core_ext.h).
+     */
+    public static native int graphicsRendererTryParseNameExt(byte[] name, int[] outType, boolean[] outRecognized);
 
     /**
      * cna_logger_get_minimum_level (core_ext.h).

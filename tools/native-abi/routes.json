@@ -1312,6 +1312,66 @@
         "symbol": "cna_graphics_renderer_copy_current_name"
       },
       {
+        "java": "graphicsRendererCopyAvailableExt",
+        "symbol": "cna_graphics_renderer_copy_available_ext"
+      },
+      {
+        "java": "graphicsRendererGetIsAvailableExt",
+        "symbol": "cna_graphics_renderer_get_is_available_ext"
+      },
+      {
+        "java": "graphicsRendererTryParseNameExt",
+        "symbol": "cna_graphics_renderer_try_parse_name_ext"
+      },
+      {
+        "java": "graphicsRendererSetPreferredExt",
+        "symbol": "cna_graphics_renderer_set_preferred_ext"
+      },
+      {
+        "java": "graphicsRendererSetPreferredByNameExt",
+        "symbol": "cna_graphics_renderer_set_preferred_by_name_ext"
+      },
+      {
+        "java": "graphicsRendererSetFallbackChainExt",
+        "symbol": "cna_graphics_renderer_set_fallback_chain_ext"
+      },
+      {
+        "java": "graphicsRendererSetAutomaticFallbackExt",
+        "symbol": "cna_graphics_renderer_set_automatic_fallback_ext"
+      },
+      {
+        "java": "graphicsRendererGetAutomaticFallbackExt",
+        "symbol": "cna_graphics_renderer_get_automatic_fallback_ext"
+      },
+      {
+        "java": "graphicsRendererGetFallbackCountExt",
+        "symbol": "cna_graphics_renderer_get_fallback_count_ext"
+      },
+      {
+        "java": "graphicsRendererGetFallbackAtExt",
+        "symbol": "cna_graphics_renderer_get_fallback_at_ext"
+      },
+      {
+        "java": "graphicsRendererFallbackGetMessageSizeExt",
+        "symbol": "cna_graphics_renderer_fallback_get_message_size_ext"
+      },
+      {
+        "java": "graphicsRendererFallbackCopyMessageExt",
+        "symbol": "cna_graphics_renderer_fallback_copy_message_ext"
+      },
+      {
+        "java": "graphicsRendererFallbackReasonGetNameSizeExt",
+        "symbol": "cna_graphics_renderer_fallback_reason_get_name_size_ext"
+      },
+      {
+        "java": "graphicsRendererFallbackReasonCopyNameExt",
+        "symbol": "cna_graphics_renderer_fallback_reason_copy_name_ext"
+      },
+      {
+        "java": "graphicsRendererResetSelectionForTestsExt",
+        "symbol": "cna_graphics_renderer_reset_selection_for_tests_ext"
+      },
+      {
         "java": "graphicsBackendGetCurrentCategory",
         "symbol": "cna_graphics_backend_get_current_category"
       },

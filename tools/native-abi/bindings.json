@@ -13094,6 +13094,17 @@
       ]
     },
     {
+      "name": "cna_graphics_renderer_copy_available_ext",
+      "header": "core_ext.h",
+      "ownership": "no handle; caller-provided array receives the identities compiled into this build",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_GraphicsRendererType*",
+        "uint64_t",
+        "uint64_t*"
+      ]
+    },
+    {
       "name": "cna_graphics_renderer_copy_current_name",
       "header": "core_ext.h",
       "ownership": "borrows its inputs; caller output",
@@ -13105,12 +13116,149 @@
       ]
     },
     {
+      "name": "cna_graphics_renderer_fallback_copy_message_ext",
+      "header": "core_ext.h",
+      "ownership": "no handle; caller-provided buffer receives the message",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "uint64_t",
+        "char*",
+        "uint64_t",
+        "uint64_t*"
+      ]
+    },
+    {
+      "name": "cna_graphics_renderer_fallback_get_message_size_ext",
+      "header": "core_ext.h",
+      "ownership": "no handle; caller integer output",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "uint64_t",
+        "uint64_t*"
+      ]
+    },
+    {
+      "name": "cna_graphics_renderer_fallback_reason_copy_name_ext",
+      "header": "core_ext.h",
+      "ownership": "no handle; caller-provided buffer receives the name",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_GraphicsRendererFallbackReason",
+        "char*",
+        "uint64_t",
+        "uint64_t*"
+      ]
+    },
+    {
+      "name": "cna_graphics_renderer_fallback_reason_get_name_size_ext",
+      "header": "core_ext.h",
+      "ownership": "no handle; caller integer output",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_GraphicsRendererFallbackReason",
+        "uint64_t*"
+      ]
+    },
+    {
+      "name": "cna_graphics_renderer_get_automatic_fallback_ext",
+      "header": "core_ext.h",
+      "ownership": "no handle; caller boolean output",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_Bool*"
+      ]
+    },
+    {
       "name": "cna_graphics_renderer_get_current_name_size",
       "header": "core_ext.h",
       "ownership": "borrows its inputs; caller output",
       "returnType": "CNA_Result",
       "parameters": [
         "uint64_t*"
+      ]
+    },
+    {
+      "name": "cna_graphics_renderer_get_fallback_at_ext",
+      "header": "core_ext.h",
+      "ownership": "no handle; caller-provided versioned record output",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "uint64_t",
+        "CNA_GraphicsRendererFallbackRecord*"
+      ]
+    },
+    {
+      "name": "cna_graphics_renderer_get_fallback_count_ext",
+      "header": "core_ext.h",
+      "ownership": "no handle; caller integer output",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "uint64_t*"
+      ]
+    },
+    {
+      "name": "cna_graphics_renderer_get_is_available_ext",
+      "header": "core_ext.h",
+      "ownership": "no handle; caller integer output",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_GraphicsRendererType",
+        "CNA_Bool*"
+      ]
+    },
+    {
+      "name": "cna_graphics_renderer_reset_selection_for_tests_ext",
+      "header": "core_ext.h",
+      "ownership": "no handle; clears process-wide selection state",
+      "returnType": "CNA_Result",
+      "parameters": []
+    },
+    {
+      "name": "cna_graphics_renderer_set_automatic_fallback_ext",
+      "header": "core_ext.h",
+      "ownership": "no handle; sets process-wide selection state",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_Bool"
+      ]
+    },
+    {
+      "name": "cna_graphics_renderer_set_fallback_chain_ext",
+      "header": "core_ext.h",
+      "ownership": "borrows the array; copies it into process-wide selection state",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "const CNA_GraphicsRendererType*",
+        "uint64_t"
+      ]
+    },
+    {
+      "name": "cna_graphics_renderer_set_preferred_by_name_ext",
+      "header": "core_ext.h",
+      "ownership": "borrows the name; sets process-wide selection state",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_StringView"
+      ]
+    },
+    {
+      "name": "cna_graphics_renderer_set_preferred_ext",
+      "header": "core_ext.h",
+      "ownership": "no handle; sets process-wide selection state",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_GraphicsRendererType"
+      ]
+    },
+    {
+      "name": "cna_graphics_renderer_try_parse_name_ext",
+      "header": "core_ext.h",
+      "ownership": "borrows the name; caller identity and flag outputs",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_StringView",
+        "CNA_GraphicsRendererType*",
+        "CNA_Bool*"
       ]
     },
     {

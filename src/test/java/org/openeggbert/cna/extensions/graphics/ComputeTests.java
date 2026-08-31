@@ -24,8 +24,11 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
  * in Java, and where it does not they check that the refusal is the exact one CNA documents.
  *
  * <p>Select a renderer with the {@code CNA_GRAPHICS_RENDERER} environment variable, which the
- * build forwards into the test JVM. It has to be one the library was built with; CNA refuses a
- * name it does not have rather than substituting quietly.
+ * build forwards into the test JVM. It has to be one the library was built with, and "has to" is
+ * literal: a name this build does not have <strong>aborts the JVM while the native library
+ * loads</strong>, before any test runs, so a mistyped renderer looks like a crash rather than a
+ * refusal (JAVA-UPSTREAM-017). {@link GraphicsRenderer#available()} is how a run finds out what
+ * there is without risking that.
  */
 @EnabledIfEnvironmentVariable(named = "CNA_NATIVE_LIBRARY", matches = ".+")
 final class ComputeTests {
