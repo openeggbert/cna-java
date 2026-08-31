@@ -2,6 +2,7 @@ package org.openeggbert.cna.extensions.content;
 
 import Microsoft.Xna.Framework.Matrix;
 import Microsoft.Xna.Framework.Vector3;
+import Microsoft.Xna.Framework.Vector4;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.condition.EnabledIfEnvironmentVariable;
 
@@ -213,6 +214,110 @@ final class CnbModelTests {
             assertEquals(trianglePart(), model.getPart(0));
             assertEquals("custom", model.getPartName(0));
             assertArrayEquals(vertexBytes(), model.readPartVertexBytes(0));
+        }
+    }
+
+    @Test
+    void aMaterialAndItsEightSlotsSurviveTheContainer() {
+        CnbMaterial material = new CnbMaterial(
+                new Vector4(0.25f, 0.5f, 0.75f, 1.0f),
+                new Vector3(0.125f, 0.0f, 0.0f),
+                new Vector3(0.875f, 0.0f, 0.0f),
+                0.4f, 0.6f, 1.33f, 0.9f, 1.5f, 0.8f, 0.25f,
+                CnbAlphaMode.Blend, true);
+        byte[] file;
+        try (CnbModelData model = buildModel()) {
+            model.setMaterial(0, material);
+            assertEquals(material, model.getMaterial(0));
+
+            // Eight slots, each given its own asset name, coordinate set and transform, so a
+            // slot read from the wrong index cannot round trip.
+            CnbMaterialTextureSlot[] slots = CnbMaterialTextureSlot.values();
+            for (int index = 0; index < slots.length; index++) {
+                model.setMaterialTexture(0, slots[index], "textures/slot" + index);
+            }
+            // The per-slot state is a different index space -- seven entries in the importer's
+            // order, not eight names in CNA's effect order -- which is a trap CNA's own header
+            // warns about and which two Java types make uncompilable.
+            CnbImporterTextureSlot[] importer = CnbImporterTextureSlot.values();
+            for (int index = 0; index < importer.length; index++) {
+                // Zero or one: CNA's vertex layouts carry at most two coordinate
+                // sets, and the decoder refuses a file that names a third.
+                model.setMaterialTextureCoordinateSet(0, importer[index], index % 2);
+                model.setMaterialTextureTransform(0, importer[index], new CnbTextureTransform(
+                        index, index + 0.5f, index + 1.0f, index + 1.5f, index + 2.0f));
+                model.setMaterialSampler(0, importer[index],
+                        new CnbSamplerState(index, index + 1, index + 2, true));
+            }
+            file = Cnb.encodeModel(model, "models/material");
+        }
+
+        try (CnbDocument document = CnbDocument.parse(
+                     file, "material.cnb", CnbReadLimits.standard());
+             CnbModelData decoded = document.decodeModel()) {
+            assertEquals(material, decoded.getMaterial(0));
+            CnbMaterialTextureSlot[] slots = CnbMaterialTextureSlot.values();
+            for (int index = 0; index < slots.length; index++) {
+                assertEquals("textures/slot" + index,
+                        decoded.getMaterialTexture(0, slots[index]));
+            }
+            CnbImporterTextureSlot[] importer = CnbImporterTextureSlot.values();
+            for (int index = 0; index < importer.length; index++) {
+                assertEquals(index % 2,
+                        decoded.getMaterialTextureCoordinateSet(0, importer[index]));
+                assertEquals(new CnbTextureTransform(
+                                index, index + 0.5f, index + 1.0f, index + 1.5f, index + 2.0f),
+                        decoded.getMaterialTextureTransform(0, importer[index]));
+                assertEquals(new CnbSamplerState(index, index + 1, index + 2, true),
+                        decoded.getMaterialSampler(0, importer[index]));
+            }
+        }
+    }
+
+    @Test
+    void anUndeclaredSamplerIsNotTheSameAsADefaultOne() {
+        try (CnbModelData model = CnbModelData.create()) {
+            model.addPart(trianglePart(), "triangle", "");
+            // A part with nothing said about its sampling states nothing, which is what lets a
+            // renderer choose. That is different from a part that explicitly asks for filter 0.
+            assertFalse(model.getMaterialSampler(0, CnbImporterTextureSlot.BaseColor).Declared());
+            model.setMaterialSampler(0, CnbImporterTextureSlot.BaseColor,
+                    new CnbSamplerState(0, 0, 0, true));
+            assertTrue(model.getMaterialSampler(0, CnbImporterTextureSlot.BaseColor).Declared());
+            model.setMaterialSampler(0, CnbImporterTextureSlot.BaseColor,
+                    CnbSamplerState.undeclared());
+            assertFalse(model.getMaterialSampler(0, CnbImporterTextureSlot.BaseColor).Declared());
+
+            // An empty slot names no texture, and clearing one puts it back that way.
+            assertEquals("", model.getMaterialTexture(0, CnbMaterialTextureSlot.Normal));
+            model.setMaterialTexture(0, CnbMaterialTextureSlot.Normal, "textures/bumps");
+            assertEquals("textures/bumps",
+                    model.getMaterialTexture(0, CnbMaterialTextureSlot.Normal));
+            model.setMaterialTexture(0, CnbMaterialTextureSlot.Normal, "");
+            assertEquals("", model.getMaterialTexture(0, CnbMaterialTextureSlot.Normal));
+
+            assertEquals(CnbTextureTransform.identity(),
+                    model.getMaterialTextureTransform(0, CnbImporterTextureSlot.Emissive));
+            assertThrows(IllegalArgumentException.class, () -> model
+                    .setMaterialTextureCoordinateSet(0, CnbImporterTextureSlot.Normal, 256));
+
+            // A coordinate set CNA's vertex layouts cannot carry is stored by the writer and
+            // refused by the reader, which is the container's own layering: the writer records
+            // what it was told, and the file is where the rule is enforced.
+            model.addBone("root", -1, Matrix.getIdentity());
+            model.setPartVertexBytes(0, vertexBytes());
+            model.setPartIndexBytes(0, indexBytes());
+            model.addMesh("body", 0, 0);
+            model.setMaterialTextureCoordinateSet(0, CnbImporterTextureSlot.Normal, 2);
+            byte[] file = Cnb.encodeModel(model, "models/third-set");
+            assertThrows(CnbFormatException.class, () -> {
+                try (CnbDocument document = CnbDocument.parse(
+                             file, "third-set.cnb", CnbReadLimits.standard())) {
+                    document.decodeModel().close();
+                }
+            });
+            assertThrows(NullPointerException.class,
+                    () -> model.getMaterialTexture(0, null));
         }
     }
 

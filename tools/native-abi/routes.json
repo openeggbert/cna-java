@@ -2743,6 +2743,10 @@
         "symbol": "cna_cnb_model_copy_bone_name"
       },
       {
+        "java": "cnbModelCopyMaterialTexture",
+        "symbol": "cna_cnb_model_copy_material_texture"
+      },
+      {
         "java": "cnbModelCopyMeshName",
         "symbol": "cna_cnb_model_copy_mesh_name"
       },
@@ -2799,6 +2803,26 @@
         "symbol": "cna_cnb_model_get_light"
       },
       {
+        "java": "cnbModelGetMaterial",
+        "symbol": "cna_cnb_model_get_material"
+      },
+      {
+        "java": "cnbModelGetMaterialSampler",
+        "symbol": "cna_cnb_model_get_material_sampler"
+      },
+      {
+        "java": "cnbModelGetMaterialTextureCoordinateSet",
+        "symbol": "cna_cnb_model_get_material_texture_coordinate_set"
+      },
+      {
+        "java": "cnbModelGetMaterialTextureSize",
+        "symbol": "cna_cnb_model_get_material_texture_size"
+      },
+      {
+        "java": "cnbModelGetMaterialTextureTransform",
+        "symbol": "cna_cnb_model_get_material_texture_transform"
+      },
+      {
         "java": "cnbModelGetMesh",
         "symbol": "cna_cnb_model_get_mesh"
       },
@@ -2825,6 +2849,26 @@
       {
         "java": "cnbModelSetFlags",
         "symbol": "cna_cnb_model_set_flags"
+      },
+      {
+        "java": "cnbModelSetMaterial",
+        "symbol": "cna_cnb_model_set_material"
+      },
+      {
+        "java": "cnbModelSetMaterialSampler",
+        "symbol": "cna_cnb_model_set_material_sampler"
+      },
+      {
+        "java": "cnbModelSetMaterialTexture",
+        "symbol": "cna_cnb_model_set_material_texture"
+      },
+      {
+        "java": "cnbModelSetMaterialTextureCoordinateSet",
+        "symbol": "cna_cnb_model_set_material_texture_coordinate_set"
+      },
+      {
+        "java": "cnbModelSetMaterialTextureTransform",
+        "symbol": "cna_cnb_model_set_material_texture_transform"
       },
       {
         "java": "cnbModelSetPart",

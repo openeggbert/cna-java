@@ -176,6 +176,7 @@
     CNA_JNI_ROUTE(cna_cnb_model_add_part) cnb_model_add_part;
     CNA_JNI_ROUTE(cna_cnb_model_clear_skeleton) cnb_model_clear_skeleton;
     CNA_JNI_ROUTE(cna_cnb_model_copy_bone_name) cnb_model_copy_bone_name;
+    CNA_JNI_ROUTE(cna_cnb_model_copy_material_texture) cnb_model_copy_material_texture;
     CNA_JNI_ROUTE(cna_cnb_model_copy_mesh_name) cnb_model_copy_mesh_name;
     CNA_JNI_ROUTE(cna_cnb_model_copy_mesh_part_indices) cnb_model_copy_mesh_part_indices;
     CNA_JNI_ROUTE(cna_cnb_model_copy_part_external_effect) cnb_model_copy_part_external_effect;
@@ -190,6 +191,11 @@
     CNA_JNI_ROUTE(cna_cnb_model_get_bone_name_size) cnb_model_get_bone_name_size;
     CNA_JNI_ROUTE(cna_cnb_model_get_info) cnb_model_get_info;
     CNA_JNI_ROUTE(cna_cnb_model_get_light) cnb_model_get_light;
+    CNA_JNI_ROUTE(cna_cnb_model_get_material) cnb_model_get_material;
+    CNA_JNI_ROUTE(cna_cnb_model_get_material_sampler) cnb_model_get_material_sampler;
+    CNA_JNI_ROUTE(cna_cnb_model_get_material_texture_coordinate_set) cnb_model_get_material_texture_coordinate_set;
+    CNA_JNI_ROUTE(cna_cnb_model_get_material_texture_size) cnb_model_get_material_texture_size;
+    CNA_JNI_ROUTE(cna_cnb_model_get_material_texture_transform) cnb_model_get_material_texture_transform;
     CNA_JNI_ROUTE(cna_cnb_model_get_mesh) cnb_model_get_mesh;
     CNA_JNI_ROUTE(cna_cnb_model_get_mesh_name_size) cnb_model_get_mesh_name_size;
     CNA_JNI_ROUTE(cna_cnb_model_get_part) cnb_model_get_part;
@@ -197,6 +203,11 @@
     CNA_JNI_ROUTE(cna_cnb_model_get_part_name_size) cnb_model_get_part_name_size;
     CNA_JNI_ROUTE(cna_cnb_model_get_skeleton) cnb_model_get_skeleton;
     CNA_JNI_ROUTE(cna_cnb_model_set_flags) cnb_model_set_flags;
+    CNA_JNI_ROUTE(cna_cnb_model_set_material) cnb_model_set_material;
+    CNA_JNI_ROUTE(cna_cnb_model_set_material_sampler) cnb_model_set_material_sampler;
+    CNA_JNI_ROUTE(cna_cnb_model_set_material_texture) cnb_model_set_material_texture;
+    CNA_JNI_ROUTE(cna_cnb_model_set_material_texture_coordinate_set) cnb_model_set_material_texture_coordinate_set;
+    CNA_JNI_ROUTE(cna_cnb_model_set_material_texture_transform) cnb_model_set_material_texture_transform;
     CNA_JNI_ROUTE(cna_cnb_model_set_part) cnb_model_set_part;
     CNA_JNI_ROUTE(cna_cnb_model_set_part_index_bytes) cnb_model_set_part_index_bytes;
     CNA_JNI_ROUTE(cna_cnb_model_set_part_vertex_bytes) cnb_model_set_part_vertex_bytes;

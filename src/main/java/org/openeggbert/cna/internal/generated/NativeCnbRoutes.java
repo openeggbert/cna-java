@@ -598,6 +598,11 @@ public final class NativeCnbRoutes {
     public static native int cnbModelCopyBoneName(long model, long index, byte[] destination, long[] outByteCount);
 
     /**
+     * cna_cnb_model_copy_material_texture (cnb.h).
+     */
+    public static native int cnbModelCopyMaterialTexture(long model, long part, int slot, byte[] destination, long[] outByteCount);
+
+    /**
      * cna_cnb_model_copy_mesh_name (cnb.h).
      */
     public static native int cnbModelCopyMeshName(long model, long index, byte[] destination, long[] outByteCount);
@@ -717,6 +722,89 @@ public final class NativeCnbRoutes {
     public static native int cnbModelGetLight(long model, long index, float[] outLightFloating);
 
     /**
+     * cna_cnb_model_get_material (cnb.h).
+     *
+     * <p>outInfoBytes carries CNA_CnbMaterialInfo in this order:
+     * <ol start="0">
+     *   <li>{@code reserved[0]} (uint8_t)</li>
+     *   <li>{@code reserved[1]} (uint8_t)</li>
+     *   <li>{@code reserved[2]} (uint8_t)</li>
+     * </ol>
+     *
+     * <p>outInfoIntegral carries CNA_CnbMaterialInfo in this order:
+     * <ol start="0">
+     *   <li>{@code alpha_mode} (uint32_t)</li>
+     *   <li>{@code double_sided} (CNA_Bool)</li>
+     * </ol>
+     *
+     * <p>outInfoFloating carries CNA_CnbMaterialInfo in this order:
+     * <ol start="0">
+     *   <li>{@code base_color_factor[0]} (float)</li>
+     *   <li>{@code base_color_factor[1]} (float)</li>
+     *   <li>{@code base_color_factor[2]} (float)</li>
+     *   <li>{@code base_color_factor[3]} (float)</li>
+     *   <li>{@code emissive_factor[0]} (float)</li>
+     *   <li>{@code emissive_factor[1]} (float)</li>
+     *   <li>{@code emissive_factor[2]} (float)</li>
+     *   <li>{@code specular_color_factor[0]} (float)</li>
+     *   <li>{@code specular_color_factor[1]} (float)</li>
+     *   <li>{@code specular_color_factor[2]} (float)</li>
+     *   <li>{@code metallic_factor} (float)</li>
+     *   <li>{@code roughness_factor} (float)</li>
+     *   <li>{@code ior} (float)</li>
+     *   <li>{@code specular_factor} (float)</li>
+     *   <li>{@code normal_scale} (float)</li>
+     *   <li>{@code occlusion_strength} (float)</li>
+     *   <li>{@code alpha_cutoff} (float)</li>
+     * </ol>
+     */
+    public static native int cnbModelGetMaterial(long model, long part, byte[] outInfoBytes, long[] outInfoIntegral, float[] outInfoFloating);
+
+    /**
+     * cna_cnb_model_get_material_sampler (cnb.h).
+     *
+     * <p>outSamplerBytes carries CNA_CnbSamplerState in this order:
+     * <ol start="0">
+     *   <li>{@code reserved[0]} (uint8_t)</li>
+     *   <li>{@code reserved[1]} (uint8_t)</li>
+     *   <li>{@code reserved[2]} (uint8_t)</li>
+     * </ol>
+     *
+     * <p>outSamplerIntegral carries CNA_CnbSamplerState in this order:
+     * <ol start="0">
+     *   <li>{@code filter} (uint32_t)</li>
+     *   <li>{@code address_u} (uint32_t)</li>
+     *   <li>{@code address_v} (uint32_t)</li>
+     *   <li>{@code declared} (CNA_Bool)</li>
+     * </ol>
+     */
+    public static native int cnbModelGetMaterialSampler(long model, long part, long slot, byte[] outSamplerBytes, long[] outSamplerIntegral);
+
+    /**
+     * cna_cnb_model_get_material_texture_coordinate_set (cnb.h).
+     */
+    public static native int cnbModelGetMaterialTextureCoordinateSet(long model, long part, long slot, byte[] outSet);
+
+    /**
+     * cna_cnb_model_get_material_texture_size (cnb.h).
+     */
+    public static native int cnbModelGetMaterialTextureSize(long model, long part, int slot, long[] outByteCount);
+
+    /**
+     * cna_cnb_model_get_material_texture_transform (cnb.h).
+     *
+     * <p>outTransformFloating carries CNA_CnbTextureTransform in this order:
+     * <ol start="0">
+     *   <li>{@code offset_x} (float)</li>
+     *   <li>{@code offset_y} (float)</li>
+     *   <li>{@code scale_x} (float)</li>
+     *   <li>{@code scale_y} (float)</li>
+     *   <li>{@code rotation} (float)</li>
+     * </ol>
+     */
+    public static native int cnbModelGetMaterialTextureTransform(long model, long part, long slot, float[] outTransformFloating);
+
+    /**
      * cna_cnb_model_get_mesh (cnb.h).
      *
      * <p>outInfoIntegral carries CNA_CnbMeshInfo in this order:
@@ -793,6 +881,89 @@ public final class NativeCnbRoutes {
      * cna_cnb_model_set_flags (cnb.h).
      */
     public static native int cnbModelSetFlags(long model, boolean appliesGltfLightingPolicy, boolean hasBoneHierarchy);
+
+    /**
+     * cna_cnb_model_set_material (cnb.h).
+     *
+     * <p>infoBytes carries CNA_CnbMaterialInfo in this order:
+     * <ol start="0">
+     *   <li>{@code reserved[0]} (uint8_t)</li>
+     *   <li>{@code reserved[1]} (uint8_t)</li>
+     *   <li>{@code reserved[2]} (uint8_t)</li>
+     * </ol>
+     *
+     * <p>infoIntegral carries CNA_CnbMaterialInfo in this order:
+     * <ol start="0">
+     *   <li>{@code alpha_mode} (uint32_t)</li>
+     *   <li>{@code double_sided} (CNA_Bool)</li>
+     * </ol>
+     *
+     * <p>infoFloating carries CNA_CnbMaterialInfo in this order:
+     * <ol start="0">
+     *   <li>{@code base_color_factor[0]} (float)</li>
+     *   <li>{@code base_color_factor[1]} (float)</li>
+     *   <li>{@code base_color_factor[2]} (float)</li>
+     *   <li>{@code base_color_factor[3]} (float)</li>
+     *   <li>{@code emissive_factor[0]} (float)</li>
+     *   <li>{@code emissive_factor[1]} (float)</li>
+     *   <li>{@code emissive_factor[2]} (float)</li>
+     *   <li>{@code specular_color_factor[0]} (float)</li>
+     *   <li>{@code specular_color_factor[1]} (float)</li>
+     *   <li>{@code specular_color_factor[2]} (float)</li>
+     *   <li>{@code metallic_factor} (float)</li>
+     *   <li>{@code roughness_factor} (float)</li>
+     *   <li>{@code ior} (float)</li>
+     *   <li>{@code specular_factor} (float)</li>
+     *   <li>{@code normal_scale} (float)</li>
+     *   <li>{@code occlusion_strength} (float)</li>
+     *   <li>{@code alpha_cutoff} (float)</li>
+     * </ol>
+     */
+    public static native int cnbModelSetMaterial(long model, long part, byte[] infoBytes, long[] infoIntegral, float[] infoFloating);
+
+    /**
+     * cna_cnb_model_set_material_sampler (cnb.h).
+     *
+     * <p>samplerBytes carries CNA_CnbSamplerState in this order:
+     * <ol start="0">
+     *   <li>{@code reserved[0]} (uint8_t)</li>
+     *   <li>{@code reserved[1]} (uint8_t)</li>
+     *   <li>{@code reserved[2]} (uint8_t)</li>
+     * </ol>
+     *
+     * <p>samplerIntegral carries CNA_CnbSamplerState in this order:
+     * <ol start="0">
+     *   <li>{@code filter} (uint32_t)</li>
+     *   <li>{@code address_u} (uint32_t)</li>
+     *   <li>{@code address_v} (uint32_t)</li>
+     *   <li>{@code declared} (CNA_Bool)</li>
+     * </ol>
+     */
+    public static native int cnbModelSetMaterialSampler(long model, long part, long slot, byte[] samplerBytes, long[] samplerIntegral);
+
+    /**
+     * cna_cnb_model_set_material_texture (cnb.h).
+     */
+    public static native int cnbModelSetMaterialTexture(long model, long part, int slot, byte[] assetName);
+
+    /**
+     * cna_cnb_model_set_material_texture_coordinate_set (cnb.h).
+     */
+    public static native int cnbModelSetMaterialTextureCoordinateSet(long model, long part, long slot, byte coordinateSet);
+
+    /**
+     * cna_cnb_model_set_material_texture_transform (cnb.h).
+     *
+     * <p>transformFloating carries CNA_CnbTextureTransform in this order:
+     * <ol start="0">
+     *   <li>{@code offset_x} (float)</li>
+     *   <li>{@code offset_y} (float)</li>
+     *   <li>{@code scale_x} (float)</li>
+     *   <li>{@code scale_y} (float)</li>
+     *   <li>{@code rotation} (float)</li>
+     * </ol>
+     */
+    public static native int cnbModelSetMaterialTextureTransform(long model, long part, long slot, float[] transformFloating);
 
     /**
      * cna_cnb_model_set_part (cnb.h).

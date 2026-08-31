@@ -2312,6 +2312,28 @@ Java_org_openeggbert_cna_internal_generated_NativeCnbRoutes_cnbModelCopyBoneName
 }
 
 JNIEXPORT jint JNICALL
+Java_org_openeggbert_cna_internal_generated_NativeCnbRoutes_cnbModelCopyMaterialTexture(
+    JNIEnv* environment, jclass declaring_class, jlong model, jlong part, jint slot, jbyteArray destination, jlongArray out_byte_count)
+{
+    (void)environment;
+    (void)declaring_class;
+    jsize destination_size = (*environment)->GetArrayLength(environment, destination);
+    jbyte* destination_bytes = (*environment)->GetByteArrayElements(environment, destination, NULL);
+    if (destination_bytes == NULL) {
+        return (jint)CNA_RESULT_OUT_OF_MEMORY;
+    }
+    uint64_t destination_written = 0;
+    CNA_Result result = cna.cnb_model_copy_material_texture((CNA_CnbModelDataHandle)model, (uint64_t)part, (CNA_CnbMaterialTextureSlot)slot, (char*)destination_bytes, (uint64_t)destination_size, &destination_written);
+    (*environment)->ReleaseByteArrayElements(environment, destination, destination_bytes, 0);
+    if (result == CNA_RESULT_SUCCESS || result == CNA_RESULT_BUFFER_TOO_SMALL) {
+        jlong destination_element = (jlong)destination_written;
+        (*environment)->SetLongArrayRegion(
+            environment, out_byte_count, 0, 1, &destination_element);
+    }
+    return (jint)result;
+}
+
+JNIEXPORT jint JNICALL
 Java_org_openeggbert_cna_internal_generated_NativeCnbRoutes_cnbModelCopyMeshName(
     JNIEnv* environment, jclass declaring_class, jlong model, jlong index, jbyteArray destination, jlongArray out_byte_count)
 {
@@ -2714,6 +2736,146 @@ Java_org_openeggbert_cna_internal_generated_NativeCnbRoutes_cnbModelGetLight(
 }
 
 JNIEXPORT jint JNICALL
+Java_org_openeggbert_cna_internal_generated_NativeCnbRoutes_cnbModelGetMaterial(
+    JNIEnv* environment, jclass declaring_class, jlong model, jlong part, jbyteArray out_infoBytes, jlongArray out_infoIntegral, jfloatArray out_infoFloating)
+{
+    (void)environment;
+    (void)declaring_class;
+    CNA_CnbMaterialInfo out_info_value;
+    memset(&out_info_value, 0, sizeof out_info_value);
+    out_info_value.struct_size = (uint32_t)(sizeof out_info_value);
+    out_info_value.struct_version = CNA_CNB_MATERIAL_INFO_STRUCT_VERSION;
+    CNA_Result result = cna.cnb_model_get_material((CNA_CnbModelDataHandle)model, (uint64_t)part, &out_info_value);
+    if (result == CNA_RESULT_SUCCESS || result == CNA_RESULT_BUFFER_TOO_SMALL) {
+        jbyte out_infoBytes_values[] = {
+            (jbyte)out_info_value.reserved[0],
+            (jbyte)out_info_value.reserved[1],
+            (jbyte)out_info_value.reserved[2]
+        };
+        (*environment)->SetByteArrayRegion(environment, out_infoBytes, 0,
+            (jsize)(sizeof out_infoBytes_values / sizeof out_infoBytes_values[0]),
+            out_infoBytes_values);
+        jlong out_infoIntegral_values[] = {
+            (jlong)out_info_value.alpha_mode,
+            (jlong)out_info_value.double_sided
+        };
+        (*environment)->SetLongArrayRegion(environment, out_infoIntegral, 0,
+            (jsize)(sizeof out_infoIntegral_values / sizeof out_infoIntegral_values[0]),
+            out_infoIntegral_values);
+        jfloat out_infoFloating_values[] = {
+            (jfloat)out_info_value.base_color_factor[0],
+            (jfloat)out_info_value.base_color_factor[1],
+            (jfloat)out_info_value.base_color_factor[2],
+            (jfloat)out_info_value.base_color_factor[3],
+            (jfloat)out_info_value.emissive_factor[0],
+            (jfloat)out_info_value.emissive_factor[1],
+            (jfloat)out_info_value.emissive_factor[2],
+            (jfloat)out_info_value.specular_color_factor[0],
+            (jfloat)out_info_value.specular_color_factor[1],
+            (jfloat)out_info_value.specular_color_factor[2],
+            (jfloat)out_info_value.metallic_factor,
+            (jfloat)out_info_value.roughness_factor,
+            (jfloat)out_info_value.ior,
+            (jfloat)out_info_value.specular_factor,
+            (jfloat)out_info_value.normal_scale,
+            (jfloat)out_info_value.occlusion_strength,
+            (jfloat)out_info_value.alpha_cutoff
+        };
+        (*environment)->SetFloatArrayRegion(environment, out_infoFloating, 0,
+            (jsize)(sizeof out_infoFloating_values / sizeof out_infoFloating_values[0]),
+            out_infoFloating_values);
+    }
+    return (jint)result;
+}
+
+JNIEXPORT jint JNICALL
+Java_org_openeggbert_cna_internal_generated_NativeCnbRoutes_cnbModelGetMaterialSampler(
+    JNIEnv* environment, jclass declaring_class, jlong model, jlong part, jlong slot, jbyteArray out_samplerBytes, jlongArray out_samplerIntegral)
+{
+    (void)environment;
+    (void)declaring_class;
+    CNA_CnbSamplerState out_sampler_value;
+    memset(&out_sampler_value, 0, sizeof out_sampler_value);
+    CNA_Result result = cna.cnb_model_get_material_sampler((CNA_CnbModelDataHandle)model, (uint64_t)part, (uint64_t)slot, &out_sampler_value);
+    if (result == CNA_RESULT_SUCCESS || result == CNA_RESULT_BUFFER_TOO_SMALL) {
+        jbyte out_samplerBytes_values[] = {
+            (jbyte)out_sampler_value.reserved[0],
+            (jbyte)out_sampler_value.reserved[1],
+            (jbyte)out_sampler_value.reserved[2]
+        };
+        (*environment)->SetByteArrayRegion(environment, out_samplerBytes, 0,
+            (jsize)(sizeof out_samplerBytes_values / sizeof out_samplerBytes_values[0]),
+            out_samplerBytes_values);
+        jlong out_samplerIntegral_values[] = {
+            (jlong)out_sampler_value.filter,
+            (jlong)out_sampler_value.address_u,
+            (jlong)out_sampler_value.address_v,
+            (jlong)out_sampler_value.declared
+        };
+        (*environment)->SetLongArrayRegion(environment, out_samplerIntegral, 0,
+            (jsize)(sizeof out_samplerIntegral_values / sizeof out_samplerIntegral_values[0]),
+            out_samplerIntegral_values);
+    }
+    return (jint)result;
+}
+
+JNIEXPORT jint JNICALL
+Java_org_openeggbert_cna_internal_generated_NativeCnbRoutes_cnbModelGetMaterialTextureCoordinateSet(
+    JNIEnv* environment, jclass declaring_class, jlong model, jlong part, jlong slot, jbyteArray out_set)
+{
+    (void)environment;
+    (void)declaring_class;
+    uint8_t out_set_value = 0;
+    CNA_Result result = cna.cnb_model_get_material_texture_coordinate_set((CNA_CnbModelDataHandle)model, (uint64_t)part, (uint64_t)slot, &out_set_value);
+    if (result == CNA_RESULT_SUCCESS || result == CNA_RESULT_BUFFER_TOO_SMALL) {
+        jbyte out_set_element = (jbyte)out_set_value;
+        (*environment)->SetByteArrayRegion(
+            environment, out_set, 0, 1, &out_set_element);
+    }
+    return (jint)result;
+}
+
+JNIEXPORT jint JNICALL
+Java_org_openeggbert_cna_internal_generated_NativeCnbRoutes_cnbModelGetMaterialTextureSize(
+    JNIEnv* environment, jclass declaring_class, jlong model, jlong part, jint slot, jlongArray out_byte_count)
+{
+    (void)environment;
+    (void)declaring_class;
+    uint64_t out_byte_count_value = 0;
+    CNA_Result result = cna.cnb_model_get_material_texture_size((CNA_CnbModelDataHandle)model, (uint64_t)part, (CNA_CnbMaterialTextureSlot)slot, &out_byte_count_value);
+    if (result == CNA_RESULT_SUCCESS || result == CNA_RESULT_BUFFER_TOO_SMALL) {
+        jlong out_byte_count_element = (jlong)out_byte_count_value;
+        (*environment)->SetLongArrayRegion(
+            environment, out_byte_count, 0, 1, &out_byte_count_element);
+    }
+    return (jint)result;
+}
+
+JNIEXPORT jint JNICALL
+Java_org_openeggbert_cna_internal_generated_NativeCnbRoutes_cnbModelGetMaterialTextureTransform(
+    JNIEnv* environment, jclass declaring_class, jlong model, jlong part, jlong slot, jfloatArray out_transformFloating)
+{
+    (void)environment;
+    (void)declaring_class;
+    CNA_CnbTextureTransform out_transform_value;
+    memset(&out_transform_value, 0, sizeof out_transform_value);
+    CNA_Result result = cna.cnb_model_get_material_texture_transform((CNA_CnbModelDataHandle)model, (uint64_t)part, (uint64_t)slot, &out_transform_value);
+    if (result == CNA_RESULT_SUCCESS || result == CNA_RESULT_BUFFER_TOO_SMALL) {
+        jfloat out_transformFloating_values[] = {
+            (jfloat)out_transform_value.offset_x,
+            (jfloat)out_transform_value.offset_y,
+            (jfloat)out_transform_value.scale_x,
+            (jfloat)out_transform_value.scale_y,
+            (jfloat)out_transform_value.rotation
+        };
+        (*environment)->SetFloatArrayRegion(environment, out_transformFloating, 0,
+            (jsize)(sizeof out_transformFloating_values / sizeof out_transformFloating_values[0]),
+            out_transformFloating_values);
+    }
+    return (jint)result;
+}
+
+JNIEXPORT jint JNICALL
 Java_org_openeggbert_cna_internal_generated_NativeCnbRoutes_cnbModelGetMesh(
     JNIEnv* environment, jclass declaring_class, jlong model, jlong index, jlongArray out_infoIntegral)
 {
@@ -2864,6 +3026,129 @@ Java_org_openeggbert_cna_internal_generated_NativeCnbRoutes_cnbModelSetFlags(
     (void)environment;
     (void)declaring_class;
     CNA_Result result = cna.cnb_model_set_flags((CNA_CnbModelDataHandle)model, (CNA_Bool)applies_gltf_lighting_policy, (CNA_Bool)has_bone_hierarchy);
+    return (jint)result;
+}
+
+JNIEXPORT jint JNICALL
+Java_org_openeggbert_cna_internal_generated_NativeCnbRoutes_cnbModelSetMaterial(
+    JNIEnv* environment, jclass declaring_class, jlong model, jlong part, jbyteArray infoBytes, jlongArray infoIntegral, jfloatArray infoFloating)
+{
+    (void)environment;
+    (void)declaring_class;
+    CNA_CnbMaterialInfo info_value;
+    memset(&info_value, 0, sizeof info_value);
+    info_value.struct_size = (uint32_t)(sizeof info_value);
+    info_value.struct_version = CNA_CNB_MATERIAL_INFO_STRUCT_VERSION;
+    {
+        jbyte infoBytes_values[3];
+        (*environment)->GetByteArrayRegion(environment, infoBytes, 0, 3, infoBytes_values);
+        info_value.reserved[0] = (uint8_t)infoBytes_values[0];
+        info_value.reserved[1] = (uint8_t)infoBytes_values[1];
+        info_value.reserved[2] = (uint8_t)infoBytes_values[2];
+    }
+    {
+        jlong infoIntegral_values[2];
+        (*environment)->GetLongArrayRegion(environment, infoIntegral, 0, 2, infoIntegral_values);
+        info_value.alpha_mode = (uint32_t)infoIntegral_values[0];
+        info_value.double_sided = (CNA_Bool)infoIntegral_values[1];
+    }
+    {
+        jfloat infoFloating_values[17];
+        (*environment)->GetFloatArrayRegion(environment, infoFloating, 0, 17, infoFloating_values);
+        info_value.base_color_factor[0] = (float)infoFloating_values[0];
+        info_value.base_color_factor[1] = (float)infoFloating_values[1];
+        info_value.base_color_factor[2] = (float)infoFloating_values[2];
+        info_value.base_color_factor[3] = (float)infoFloating_values[3];
+        info_value.emissive_factor[0] = (float)infoFloating_values[4];
+        info_value.emissive_factor[1] = (float)infoFloating_values[5];
+        info_value.emissive_factor[2] = (float)infoFloating_values[6];
+        info_value.specular_color_factor[0] = (float)infoFloating_values[7];
+        info_value.specular_color_factor[1] = (float)infoFloating_values[8];
+        info_value.specular_color_factor[2] = (float)infoFloating_values[9];
+        info_value.metallic_factor = (float)infoFloating_values[10];
+        info_value.roughness_factor = (float)infoFloating_values[11];
+        info_value.ior = (float)infoFloating_values[12];
+        info_value.specular_factor = (float)infoFloating_values[13];
+        info_value.normal_scale = (float)infoFloating_values[14];
+        info_value.occlusion_strength = (float)infoFloating_values[15];
+        info_value.alpha_cutoff = (float)infoFloating_values[16];
+    }
+    CNA_Result result = cna.cnb_model_set_material((CNA_CnbModelDataHandle)model, (uint64_t)part, &info_value);
+    return (jint)result;
+}
+
+JNIEXPORT jint JNICALL
+Java_org_openeggbert_cna_internal_generated_NativeCnbRoutes_cnbModelSetMaterialSampler(
+    JNIEnv* environment, jclass declaring_class, jlong model, jlong part, jlong slot, jbyteArray samplerBytes, jlongArray samplerIntegral)
+{
+    (void)environment;
+    (void)declaring_class;
+    CNA_CnbSamplerState sampler_value;
+    memset(&sampler_value, 0, sizeof sampler_value);
+    {
+        jbyte samplerBytes_values[3];
+        (*environment)->GetByteArrayRegion(environment, samplerBytes, 0, 3, samplerBytes_values);
+        sampler_value.reserved[0] = (uint8_t)samplerBytes_values[0];
+        sampler_value.reserved[1] = (uint8_t)samplerBytes_values[1];
+        sampler_value.reserved[2] = (uint8_t)samplerBytes_values[2];
+    }
+    {
+        jlong samplerIntegral_values[4];
+        (*environment)->GetLongArrayRegion(environment, samplerIntegral, 0, 4, samplerIntegral_values);
+        sampler_value.filter = (uint32_t)samplerIntegral_values[0];
+        sampler_value.address_u = (uint32_t)samplerIntegral_values[1];
+        sampler_value.address_v = (uint32_t)samplerIntegral_values[2];
+        sampler_value.declared = (CNA_Bool)samplerIntegral_values[3];
+    }
+    CNA_Result result = cna.cnb_model_set_material_sampler((CNA_CnbModelDataHandle)model, (uint64_t)part, (uint64_t)slot, &sampler_value);
+    return (jint)result;
+}
+
+JNIEXPORT jint JNICALL
+Java_org_openeggbert_cna_internal_generated_NativeCnbRoutes_cnbModelSetMaterialTexture(
+    JNIEnv* environment, jclass declaring_class, jlong model, jlong part, jint slot, jbyteArray asset_name)
+{
+    (void)environment;
+    (void)declaring_class;
+    jsize asset_name_size = (*environment)->GetArrayLength(environment, asset_name);
+    jbyte* asset_name_bytes = (*environment)->GetByteArrayElements(environment, asset_name, NULL);
+    if (asset_name_bytes == NULL) {
+        return (jint)CNA_RESULT_OUT_OF_MEMORY;
+    }
+    CNA_StringView asset_name_view = {(const char*)asset_name_bytes, (uint64_t)asset_name_size};
+    CNA_Result result = cna.cnb_model_set_material_texture((CNA_CnbModelDataHandle)model, (uint64_t)part, (CNA_CnbMaterialTextureSlot)slot, asset_name_view);
+    (*environment)->ReleaseByteArrayElements(environment, asset_name, asset_name_bytes, JNI_ABORT);
+    return (jint)result;
+}
+
+JNIEXPORT jint JNICALL
+Java_org_openeggbert_cna_internal_generated_NativeCnbRoutes_cnbModelSetMaterialTextureCoordinateSet(
+    JNIEnv* environment, jclass declaring_class, jlong model, jlong part, jlong slot, jbyte coordinate_set)
+{
+    (void)environment;
+    (void)declaring_class;
+    CNA_Result result = cna.cnb_model_set_material_texture_coordinate_set((CNA_CnbModelDataHandle)model, (uint64_t)part, (uint64_t)slot, (uint8_t)coordinate_set);
+    return (jint)result;
+}
+
+JNIEXPORT jint JNICALL
+Java_org_openeggbert_cna_internal_generated_NativeCnbRoutes_cnbModelSetMaterialTextureTransform(
+    JNIEnv* environment, jclass declaring_class, jlong model, jlong part, jlong slot, jfloatArray transformFloating)
+{
+    (void)environment;
+    (void)declaring_class;
+    CNA_CnbTextureTransform transform_value;
+    memset(&transform_value, 0, sizeof transform_value);
+    {
+        jfloat transformFloating_values[5];
+        (*environment)->GetFloatArrayRegion(environment, transformFloating, 0, 5, transformFloating_values);
+        transform_value.offset_x = (float)transformFloating_values[0];
+        transform_value.offset_y = (float)transformFloating_values[1];
+        transform_value.scale_x = (float)transformFloating_values[2];
+        transform_value.scale_y = (float)transformFloating_values[3];
+        transform_value.rotation = (float)transformFloating_values[4];
+    }
+    CNA_Result result = cna.cnb_model_set_material_texture_transform((CNA_CnbModelDataHandle)model, (uint64_t)part, (uint64_t)slot, &transform_value);
     return (jint)result;
 }
 

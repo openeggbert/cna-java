@@ -2,6 +2,7 @@ package org.openeggbert.cna.extensions.content;
 
 import Microsoft.Xna.Framework.Matrix;
 import Microsoft.Xna.Framework.Vector3;
+import Microsoft.Xna.Framework.Vector4;
 
 import org.openeggbert.cna.internal.generated.NativeCnbRoutes;
 
@@ -376,6 +377,193 @@ public final class CnbModelData implements AutoCloseable {
                 NativeCnbRoutes.cnbModelGetLight(open(), index, values));
         return new CnbModelLight(new Vector3(values[0], values[1], values[2]),
                 new Vector3(values[3], values[4], values[5]));
+    }
+
+    /**
+     * Returns one part's material factors.
+     *
+     * @param part the zero-based part index
+     * @return its factors, without its textures
+     */
+    public CnbMaterial getMaterial(int part) {
+        long[] integral = new long[2];
+        float[] floating = new float[17];
+        CnbExtension.check("CnbModelData.getMaterial", NativeCnbRoutes
+                .cnbModelGetMaterial(open(), part, new byte[3], integral, floating));
+        return new CnbMaterial(
+                new Vector4(floating[0], floating[1], floating[2], floating[3]),
+                new Vector3(floating[4], floating[5], floating[6]),
+                new Vector3(floating[7], floating[8], floating[9]),
+                floating[10], floating[11], floating[12], floating[13], floating[14],
+                floating[15], floating[16],
+                CnbAlphaMode.fromValue(integral[0]), integral[1] != 0);
+    }
+
+    /**
+     * Replaces one part's material factors, leaving its textures alone.
+     *
+     * @param part the zero-based part index
+     * @param material the replacement factors
+     */
+    public void setMaterial(int part, CnbMaterial material) {
+        Objects.requireNonNull(material, "material");
+        Vector4 base = Objects.requireNonNull(
+                material.BaseColorFactor(), "material.BaseColorFactor");
+        Vector3 emissive = Objects.requireNonNull(
+                material.EmissiveFactor(), "material.EmissiveFactor");
+        Vector3 specular = Objects.requireNonNull(
+                material.SpecularColorFactor(), "material.SpecularColorFactor");
+        float[] floating = {
+            base.X, base.Y, base.Z, base.W,
+            emissive.X, emissive.Y, emissive.Z,
+            specular.X, specular.Y, specular.Z,
+            material.MetallicFactor(), material.RoughnessFactor(), material.Ior(),
+            material.SpecularFactor(), material.NormalScale(), material.OcclusionStrength(),
+            material.AlphaCutoff(),
+        };
+        long[] integral = {
+            Objects.requireNonNull(material.AlphaMode(), "material.AlphaMode").ordinal(),
+            material.DoubleSided() ? 1 : 0,
+        };
+        CnbExtension.check("CnbModelData.setMaterial", NativeCnbRoutes
+                .cnbModelSetMaterial(open(), part, new byte[3], integral, floating));
+    }
+
+    /**
+     * Returns the texture asset one material slot names.
+     *
+     * @param part the zero-based part index
+     * @param slot the slot to read
+     * @return the asset name, empty when the slot carries no texture
+     */
+    public String getMaterialTexture(int part, CnbMaterialTextureSlot slot) {
+        long model = open();
+        Objects.requireNonNull(slot, "slot");
+        return CnbExtension.text("CnbModelData.getMaterialTexture",
+                bytes -> NativeCnbRoutes.cnbModelGetMaterialTextureSize(
+                        model, part, slot.ordinal(), bytes),
+                (destination, bytes) -> NativeCnbRoutes.cnbModelCopyMaterialTexture(
+                        model, part, slot.ordinal(), destination, bytes));
+    }
+
+    /**
+     * Names the texture asset one material slot uses.
+     *
+     * @param part the zero-based part index
+     * @param slot the slot to fill
+     * @param assetName the content name of the texture, or empty to clear the slot
+     */
+    public void setMaterialTexture(int part, CnbMaterialTextureSlot slot, String assetName) {
+        Objects.requireNonNull(slot, "slot");
+        Objects.requireNonNull(assetName, "assetName");
+        CnbExtension.check("CnbModelData.setMaterialTexture", NativeCnbRoutes
+                .cnbModelSetMaterialTexture(open(), part, slot.ordinal(),
+                        CnbExtension.utf8(assetName)));
+    }
+
+    /**
+     * Returns which set of texture coordinates one slot samples with.
+     *
+     * <p>Addressed with {@link CnbImporterTextureSlot}, not {@link CnbMaterialTextureSlot}: the
+     * per-slot arrays are seven entries in the importer's order and the names are eight in CNA's
+     * effect order. Confusing them in C silently reads the wrong slot; here they are two types.
+     *
+     * @param part the zero-based part index
+     * @param slot the importer slot to read
+     * @return the coordinate set index, zero for the first
+     */
+    public int getMaterialTextureCoordinateSet(int part, CnbImporterTextureSlot slot) {
+        Objects.requireNonNull(slot, "slot");
+        byte[] value = new byte[1];
+        CnbExtension.check("CnbModelData.getMaterialTextureCoordinateSet", NativeCnbRoutes
+                .cnbModelGetMaterialTextureCoordinateSet(open(), part, slot.ordinal(), value));
+        return value[0] & 0xFF;
+    }
+
+    /**
+     * Sets which set of texture coordinates one slot samples with.
+     *
+     * @param part the zero-based part index
+     * @param slot the slot to change
+     * @param coordinateSet the coordinate set index, zero for the first
+     */
+    public void setMaterialTextureCoordinateSet(
+            int part, CnbImporterTextureSlot slot, int coordinateSet) {
+        Objects.requireNonNull(slot, "slot");
+        if (coordinateSet < 0 || coordinateSet > 0xFF) {
+            throw new IllegalArgumentException(
+                    "a texture coordinate set is one byte, not " + coordinateSet);
+        }
+        CnbExtension.check("CnbModelData.setMaterialTextureCoordinateSet", NativeCnbRoutes
+                .cnbModelSetMaterialTextureCoordinateSet(
+                        open(), part, slot.ordinal(), (byte) coordinateSet));
+    }
+
+    /**
+     * Returns how one slot's texture coordinates are transformed.
+     *
+     * @param part the zero-based part index
+     * @param slot the slot to read
+     * @return the scale, rotation and offset applied before sampling
+     */
+    public CnbTextureTransform getMaterialTextureTransform(
+            int part, CnbImporterTextureSlot slot) {
+        Objects.requireNonNull(slot, "slot");
+        float[] values = new float[5];
+        CnbExtension.check("CnbModelData.getMaterialTextureTransform", NativeCnbRoutes
+                .cnbModelGetMaterialTextureTransform(open(), part, slot.ordinal(), values));
+        return new CnbTextureTransform(values[0], values[1], values[2], values[3], values[4]);
+    }
+
+    /**
+     * Sets how one slot's texture coordinates are transformed.
+     *
+     * @param part the zero-based part index
+     * @param slot the slot to change
+     * @param transform the scale, rotation and offset to apply
+     */
+    public void setMaterialTextureTransform(
+            int part, CnbImporterTextureSlot slot, CnbTextureTransform transform) {
+        Objects.requireNonNull(slot, "slot");
+        Objects.requireNonNull(transform, "transform");
+        CnbExtension.check("CnbModelData.setMaterialTextureTransform", NativeCnbRoutes
+                .cnbModelSetMaterialTextureTransform(open(), part, slot.ordinal(),
+                        new float[] {transform.OffsetX(), transform.OffsetY(),
+                            transform.ScaleX(), transform.ScaleY(), transform.Rotation()}));
+    }
+
+    /**
+     * Returns how one slot is sampled.
+     *
+     * @param part the zero-based part index
+     * @param slot the slot to read
+     * @return its sampler, whose {@code Declared} says whether the file states one at all
+     */
+    public CnbSamplerState getMaterialSampler(int part, CnbImporterTextureSlot slot) {
+        Objects.requireNonNull(slot, "slot");
+        long[] values = new long[4];
+        CnbExtension.check("CnbModelData.getMaterialSampler", NativeCnbRoutes
+                .cnbModelGetMaterialSampler(open(), part, slot.ordinal(), new byte[3], values));
+        return new CnbSamplerState((int) values[0], (int) values[1], (int) values[2],
+                values[3] != 0);
+    }
+
+    /**
+     * Sets how one slot is sampled.
+     *
+     * @param part the zero-based part index
+     * @param slot the slot to change
+     * @param sampler the sampler to record; one with {@code Declared} false states nothing and
+     *        leaves the choice to the renderer
+     */
+    public void setMaterialSampler(
+            int part, CnbImporterTextureSlot slot, CnbSamplerState sampler) {
+        Objects.requireNonNull(slot, "slot");
+        Objects.requireNonNull(sampler, "sampler");
+        CnbExtension.check("CnbModelData.setMaterialSampler", NativeCnbRoutes
+                .cnbModelSetMaterialSampler(open(), part, slot.ordinal(), new byte[3],
+                        new long[] {sampler.Filter(), sampler.AddressU(), sampler.AddressV(),
+                            sampler.Declared() ? 1 : 0}));
     }
 
     long handle() {

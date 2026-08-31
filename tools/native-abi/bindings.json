@@ -2814,6 +2814,20 @@
       ]
     },
     {
+      "name": "cna_cnb_model_copy_material_texture",
+      "header": "cnb.h",
+      "ownership": "borrows model data; caller buffer",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_CnbModelDataHandle",
+        "uint64_t",
+        "CNA_CnbMaterialTextureSlot",
+        "char*",
+        "uint64_t",
+        "uint64_t*"
+      ]
+    },
+    {
       "name": "cna_cnb_model_copy_mesh_name",
       "header": "cnb.h",
       "ownership": "borrows model data; caller buffer",
@@ -2978,6 +2992,65 @@
       ]
     },
     {
+      "name": "cna_cnb_model_get_material",
+      "header": "cnb.h",
+      "ownership": "borrows model data; caller structure output",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_CnbModelDataHandle",
+        "uint64_t",
+        "CNA_CnbMaterialInfo*"
+      ]
+    },
+    {
+      "name": "cna_cnb_model_get_material_sampler",
+      "header": "cnb.h",
+      "ownership": "borrows model data; caller structure output",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_CnbModelDataHandle",
+        "uint64_t",
+        "uint64_t",
+        "CNA_CnbSamplerState*"
+      ]
+    },
+    {
+      "name": "cna_cnb_model_get_material_texture_coordinate_set",
+      "header": "cnb.h",
+      "ownership": "borrows model data; caller integer output",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_CnbModelDataHandle",
+        "uint64_t",
+        "uint64_t",
+        "uint8_t*"
+      ]
+    },
+    {
+      "name": "cna_cnb_model_get_material_texture_size",
+      "header": "cnb.h",
+      "ownership": "borrows model data; caller integer output",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_CnbModelDataHandle",
+        "uint64_t",
+        "CNA_CnbMaterialTextureSlot",
+        "uint64_t*"
+      ]
+    },
+    {
+      "name": "cna_cnb_model_get_material_texture_transform",
+      "header": "cnb.h",
+      "ownership": "borrows model data; caller structure output",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_CnbModelDataHandle",
+        "uint64_t",
+        "uint64_t",
+        "CNA_CnbTextureTransform*"
+      ]
+    },
+    {
       "name": "cna_cnb_model_get_mesh",
       "header": "cnb.h",
       "ownership": "borrows model data; caller structure output",
@@ -3051,6 +3124,65 @@
         "CNA_CnbModelDataHandle",
         "CNA_Bool",
         "CNA_Bool"
+      ]
+    },
+    {
+      "name": "cna_cnb_model_set_material",
+      "header": "cnb.h",
+      "ownership": "borrows model data; reads the caller's structure",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_CnbModelDataHandle",
+        "uint64_t",
+        "const CNA_CnbMaterialInfo*"
+      ]
+    },
+    {
+      "name": "cna_cnb_model_set_material_sampler",
+      "header": "cnb.h",
+      "ownership": "borrows model data; reads the caller's structure",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_CnbModelDataHandle",
+        "uint64_t",
+        "uint64_t",
+        "const CNA_CnbSamplerState*"
+      ]
+    },
+    {
+      "name": "cna_cnb_model_set_material_texture",
+      "header": "cnb.h",
+      "ownership": "borrows model data; copies the caller's string",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_CnbModelDataHandle",
+        "uint64_t",
+        "CNA_CnbMaterialTextureSlot",
+        "CNA_StringView"
+      ]
+    },
+    {
+      "name": "cna_cnb_model_set_material_texture_coordinate_set",
+      "header": "cnb.h",
+      "ownership": "borrows model data; value parameter",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_CnbModelDataHandle",
+        "uint64_t",
+        "uint64_t",
+        "uint8_t"
+      ]
+    },
+    {
+      "name": "cna_cnb_model_set_material_texture_transform",
+      "header": "cnb.h",
+      "ownership": "borrows model data; reads the caller's structure",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_CnbModelDataHandle",
+        "uint64_t",
+        "uint64_t",
+        "const CNA_CnbTextureTransform*"
       ]
     },
     {

@@ -176,6 +176,7 @@
     LOAD(cnb_model_add_part, "cna_cnb_model_add_part");
     LOAD(cnb_model_clear_skeleton, "cna_cnb_model_clear_skeleton");
     LOAD(cnb_model_copy_bone_name, "cna_cnb_model_copy_bone_name");
+    LOAD(cnb_model_copy_material_texture, "cna_cnb_model_copy_material_texture");
     LOAD(cnb_model_copy_mesh_name, "cna_cnb_model_copy_mesh_name");
     LOAD(cnb_model_copy_mesh_part_indices, "cna_cnb_model_copy_mesh_part_indices");
     LOAD(cnb_model_copy_part_external_effect, "cna_cnb_model_copy_part_external_effect");
@@ -190,6 +191,11 @@
     LOAD(cnb_model_get_bone_name_size, "cna_cnb_model_get_bone_name_size");
     LOAD(cnb_model_get_info, "cna_cnb_model_get_info");
     LOAD(cnb_model_get_light, "cna_cnb_model_get_light");
+    LOAD(cnb_model_get_material, "cna_cnb_model_get_material");
+    LOAD(cnb_model_get_material_sampler, "cna_cnb_model_get_material_sampler");
+    LOAD(cnb_model_get_material_texture_coordinate_set, "cna_cnb_model_get_material_texture_coordinate_set");
+    LOAD(cnb_model_get_material_texture_size, "cna_cnb_model_get_material_texture_size");
+    LOAD(cnb_model_get_material_texture_transform, "cna_cnb_model_get_material_texture_transform");
     LOAD(cnb_model_get_mesh, "cna_cnb_model_get_mesh");
     LOAD(cnb_model_get_mesh_name_size, "cna_cnb_model_get_mesh_name_size");
     LOAD(cnb_model_get_part, "cna_cnb_model_get_part");
@@ -197,6 +203,11 @@
     LOAD(cnb_model_get_part_name_size, "cna_cnb_model_get_part_name_size");
     LOAD(cnb_model_get_skeleton, "cna_cnb_model_get_skeleton");
     LOAD(cnb_model_set_flags, "cna_cnb_model_set_flags");
+    LOAD(cnb_model_set_material, "cna_cnb_model_set_material");
+    LOAD(cnb_model_set_material_sampler, "cna_cnb_model_set_material_sampler");
+    LOAD(cnb_model_set_material_texture, "cna_cnb_model_set_material_texture");
+    LOAD(cnb_model_set_material_texture_coordinate_set, "cna_cnb_model_set_material_texture_coordinate_set");
+    LOAD(cnb_model_set_material_texture_transform, "cna_cnb_model_set_material_texture_transform");
     LOAD(cnb_model_set_part, "cna_cnb_model_set_part");
     LOAD(cnb_model_set_part_index_bytes, "cna_cnb_model_set_part_index_bytes");
     LOAD(cnb_model_set_part_vertex_bytes, "cna_cnb_model_set_part_vertex_bytes");
