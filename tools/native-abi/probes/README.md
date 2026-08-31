@@ -473,3 +473,30 @@ The caster and prepass effects come back **invalid** here. The header allows it 
 `CNA_INVALID_HANDLE` when unsupported"* -- and this renderer compiles no shaders, so there is no
 effect to lend. There is nothing to project and nothing a test could say beyond the absence, so the
 group stays unbound with that measurement as the reason.
+
+## pipeline_scene_callbacks.c
+
+Does the render pipeline ever enter the scene callbacks a game registers?
+
+The last open question in the engine layer. Two routes register a callback CNA runs inside the
+frame -- one for transparent geometry, one for shadow casters -- and the transparent draw list had
+already shown that a callback invoked during a call can be projected with a trampoline that leaks
+nothing. These are the harder shape, registered once and invoked later, and that only matters if
+they run at all. On ABI 0.21.0, HEADLESS:
+
+```text
+set transparent scene  0
+set shadow scene       0
+begin                  0
+end                    0
+transparent callback   0 call(s)
+shadow callback        0 call(s)
+clear transparent      0
+clear shadow           0
+```
+
+Both register, both clear, and **neither is entered** by a whole frame. That is consistent with
+everything else here: the pipeline reports zero passes run because this renderer compiles no
+shaders, so there is no transparent pass and no shadow pass to call anyone from. A trampoline for
+either would be code no test in this qualification could execute, which is the same reason the
+light-probe baker's three bake routes are unbound.
