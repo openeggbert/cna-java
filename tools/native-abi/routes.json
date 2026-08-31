@@ -5714,6 +5714,76 @@
         "symbol": "cna_point_light_ext_init"
       },
       {
+        "java": "postProcessChainAddPass",
+        "symbol": "cna_post_process_chain_add_pass"
+      },
+      {
+        "java": "postProcessChainApply",
+        "symbol": "cna_post_process_chain_apply",
+        "structPrefixes": {
+          "context": {
+            "stopBefore": "settings",
+            "sizeConstant": "CNA_POST_PROCESS_CONTEXT_SIZE_V1",
+            "version": 1
+          }
+        }
+      },
+      {
+        "java": "postProcessChainClear",
+        "symbol": "cna_post_process_chain_clear"
+      },
+      {
+        "java": "postProcessChainCopyPassTimingName",
+        "symbol": "cna_post_process_chain_copy_pass_timing_name"
+      },
+      {
+        "java": "postProcessChainCreate",
+        "symbol": "cna_post_process_chain_create"
+      },
+      {
+        "java": "postProcessChainDestroy",
+        "symbol": "cna_post_process_chain_destroy"
+      },
+      {
+        "java": "postProcessChainGetPassCount",
+        "symbol": "cna_post_process_chain_get_pass_count"
+      },
+      {
+        "java": "postProcessChainGetPassTiming",
+        "symbol": "cna_post_process_chain_get_pass_timing"
+      },
+      {
+        "java": "postProcessChainGetPassTimingCount",
+        "symbol": "cna_post_process_chain_get_pass_timing_count"
+      },
+      {
+        "java": "postProcessChainGetTargetPool",
+        "symbol": "cna_post_process_chain_get_target_pool"
+      },
+      {
+        "java": "postProcessChainIsGpuTimingEnabled",
+        "symbol": "cna_post_process_chain_is_gpu_timing_enabled"
+      },
+      {
+        "java": "postProcessChainResetTargets",
+        "symbol": "cna_post_process_chain_reset_targets"
+      },
+      {
+        "java": "postProcessChainSetGpuTimingEnabled",
+        "symbol": "cna_post_process_chain_set_gpu_timing_enabled"
+      },
+      {
+        "java": "postProcessContextInit",
+        "symbol": "cna_post_process_context_init",
+        "structPrefixes": {
+          "out_context": {
+            "stopBefore": "settings",
+            "sizeConstant": "CNA_POST_PROCESS_CONTEXT_SIZE_V1",
+            "version": 1
+          }
+        }
+      },
+      {
         "java": "postProcessEffectPassCreate",
         "symbol": "cna_post_process_effect_pass_create"
       },
@@ -5724,6 +5794,17 @@
       {
         "java": "postProcessEffectPassSetEffect",
         "symbol": "cna_post_process_effect_pass_set_effect"
+      },
+      {
+        "java": "postProcessPassApply",
+        "symbol": "cna_post_process_pass_apply",
+        "structPrefixes": {
+          "context": {
+            "stopBefore": "settings",
+            "sizeConstant": "CNA_POST_PROCESS_CONTEXT_SIZE_V1",
+            "version": 1
+          }
+        }
       },
       {
         "java": "postProcessPassCopyName",

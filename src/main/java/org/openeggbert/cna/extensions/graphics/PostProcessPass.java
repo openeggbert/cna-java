@@ -19,10 +19,9 @@ import java.util.Objects;
  * {@link #isSupported(GraphicsDevice)}, which is a question about the renderer and therefore
  * takes the device rather than being a property of the pass.
  *
- * <p><strong>Where a pass runs.</strong> {@link RenderPipeline#addUserPass} appends it after the
- * built-in ones. Running one by hand needs {@code cna_post_process_pass_apply} and its context,
- * which carries a borrowed pointer to another structure the generated boundary refuses rather
- * than guesses at -- so the pipeline is the path, and it is the one a game wants anyway.
+ * <p><strong>Where a pass runs.</strong> Three places: {@link RenderPipeline#addUserPass} appends
+ * it after the built-in ones, {@link PostProcessChain} runs a sequence of them over a game's own
+ * textures, and {@link #apply} runs this one on its own.
  *
  * <p>The handle is owned; {@link #close()} releases it and closing twice is a no-op.
  */
@@ -200,6 +199,31 @@ public abstract class PostProcessPass implements AutoCloseable {
     @FunctionalInterface
     interface TextRoute {
         int call(byte[] destination, long[] bytes);
+    }
+
+    /**
+     * Runs this pass once, reading and writing the textures the context names.
+     *
+     * <p>The single-pass form of {@link PostProcessChain#apply}: no pool, no ping-pong, and no
+     * chain -- which is what a game wants when it has one effect to apply and its own targets to
+     * apply it between.
+     *
+     * @param context the frame's inputs and destination
+     */
+    public final void apply(PostProcessContext context) {
+        java.util.Objects.requireNonNull(context, "context");
+        GraphicsExtension.check("PostProcessPass.apply",
+                NativeEngineLayerRoutes.postProcessPassApply(open(), context.bytes(),
+                        context.integral(), context.floating()));
+    }
+
+    /**
+     * The live handle, for a chain that is about to take or borrow this pass.
+     *
+     * @return the handle
+     */
+    final long nativeHandle() {
+        return open();
     }
 
     /**

@@ -6400,6 +6400,274 @@ public final class NativeEngineLayerRoutes {
     public static native int pointLightExtInit(byte[] outLightBytes, long[] outLightIntegral, float[] outLightFloating);
 
     /**
+     * cna_post_process_chain_add_pass (engine_layer.h).
+     */
+    public static native int postProcessChainAddPass(long chain, long pass);
+
+    /**
+     * cna_post_process_chain_apply (engine_layer.h).
+     *
+     * <p>contextBytes carries CNA_PostProcessContext in this order:
+     * <ol start="0">
+     *   <li>{@code reserved[0]} (uint8_t)</li>
+     *   <li>{@code reserved[1]} (uint8_t)</li>
+     *   <li>{@code reserved[2]} (uint8_t)</li>
+     * </ol>
+     *
+     * <p>contextIntegral carries CNA_PostProcessContext in this order:
+     * <ol start="0">
+     *   <li>{@code source} (CNA_Handle)</li>
+     *   <li>{@code source_depth} (CNA_Handle)</li>
+     *   <li>{@code source_normals} (CNA_Handle)</li>
+     *   <li>{@code source_velocity} (CNA_Handle)</li>
+     *   <li>{@code destination} (CNA_Handle)</li>
+     *   <li>{@code width} (int32_t)</li>
+     *   <li>{@code height} (int32_t)</li>
+     *   <li>{@code has_previous_frame} (CNA_Bool)</li>
+     * </ol>
+     *
+     * <p>contextFloating carries CNA_PostProcessContext in this order:
+     * <ol start="0">
+     *   <li>{@code elapsed_seconds} (float)</li>
+     *   <li>{@code near_plane} (float)</li>
+     *   <li>{@code far_plane} (float)</li>
+     *   <li>{@code projection.m11} (float)</li>
+     *   <li>{@code projection.m12} (float)</li>
+     *   <li>{@code projection.m13} (float)</li>
+     *   <li>{@code projection.m14} (float)</li>
+     *   <li>{@code projection.m21} (float)</li>
+     *   <li>{@code projection.m22} (float)</li>
+     *   <li>{@code projection.m23} (float)</li>
+     *   <li>{@code projection.m24} (float)</li>
+     *   <li>{@code projection.m31} (float)</li>
+     *   <li>{@code projection.m32} (float)</li>
+     *   <li>{@code projection.m33} (float)</li>
+     *   <li>{@code projection.m34} (float)</li>
+     *   <li>{@code projection.m41} (float)</li>
+     *   <li>{@code projection.m42} (float)</li>
+     *   <li>{@code projection.m43} (float)</li>
+     *   <li>{@code projection.m44} (float)</li>
+     *   <li>{@code inverse_projection.m11} (float)</li>
+     *   <li>{@code inverse_projection.m12} (float)</li>
+     *   <li>{@code inverse_projection.m13} (float)</li>
+     *   <li>{@code inverse_projection.m14} (float)</li>
+     *   <li>{@code inverse_projection.m21} (float)</li>
+     *   <li>{@code inverse_projection.m22} (float)</li>
+     *   <li>{@code inverse_projection.m23} (float)</li>
+     *   <li>{@code inverse_projection.m24} (float)</li>
+     *   <li>{@code inverse_projection.m31} (float)</li>
+     *   <li>{@code inverse_projection.m32} (float)</li>
+     *   <li>{@code inverse_projection.m33} (float)</li>
+     *   <li>{@code inverse_projection.m34} (float)</li>
+     *   <li>{@code inverse_projection.m41} (float)</li>
+     *   <li>{@code inverse_projection.m42} (float)</li>
+     *   <li>{@code inverse_projection.m43} (float)</li>
+     *   <li>{@code inverse_projection.m44} (float)</li>
+     *   <li>{@code inverse_view.m11} (float)</li>
+     *   <li>{@code inverse_view.m12} (float)</li>
+     *   <li>{@code inverse_view.m13} (float)</li>
+     *   <li>{@code inverse_view.m14} (float)</li>
+     *   <li>{@code inverse_view.m21} (float)</li>
+     *   <li>{@code inverse_view.m22} (float)</li>
+     *   <li>{@code inverse_view.m23} (float)</li>
+     *   <li>{@code inverse_view.m24} (float)</li>
+     *   <li>{@code inverse_view.m31} (float)</li>
+     *   <li>{@code inverse_view.m32} (float)</li>
+     *   <li>{@code inverse_view.m33} (float)</li>
+     *   <li>{@code inverse_view.m34} (float)</li>
+     *   <li>{@code inverse_view.m41} (float)</li>
+     *   <li>{@code inverse_view.m42} (float)</li>
+     *   <li>{@code inverse_view.m43} (float)</li>
+     *   <li>{@code inverse_view.m44} (float)</li>
+     *   <li>{@code previous_view_projection.m11} (float)</li>
+     *   <li>{@code previous_view_projection.m12} (float)</li>
+     *   <li>{@code previous_view_projection.m13} (float)</li>
+     *   <li>{@code previous_view_projection.m14} (float)</li>
+     *   <li>{@code previous_view_projection.m21} (float)</li>
+     *   <li>{@code previous_view_projection.m22} (float)</li>
+     *   <li>{@code previous_view_projection.m23} (float)</li>
+     *   <li>{@code previous_view_projection.m24} (float)</li>
+     *   <li>{@code previous_view_projection.m31} (float)</li>
+     *   <li>{@code previous_view_projection.m32} (float)</li>
+     *   <li>{@code previous_view_projection.m33} (float)</li>
+     *   <li>{@code previous_view_projection.m34} (float)</li>
+     *   <li>{@code previous_view_projection.m41} (float)</li>
+     *   <li>{@code previous_view_projection.m42} (float)</li>
+     *   <li>{@code previous_view_projection.m43} (float)</li>
+     *   <li>{@code previous_view_projection.m44} (float)</li>
+     * </ol>
+     */
+    public static native int postProcessChainApply(long chain, byte[] contextBytes, long[] contextIntegral, float[] contextFloating);
+
+    /**
+     * cna_post_process_chain_clear (engine_layer.h).
+     */
+    public static native int postProcessChainClear(long chain);
+
+    /**
+     * cna_post_process_chain_copy_pass_timing_name (engine_layer.h).
+     */
+    public static native int postProcessChainCopyPassTimingName(long chain, long index, byte[] destination, long[] outBytes);
+
+    /**
+     * cna_post_process_chain_create (engine_layer.h).
+     */
+    public static native int postProcessChainCreate(long graphicsDevice, long[] outChain);
+
+    /**
+     * cna_post_process_chain_destroy (engine_layer.h).
+     */
+    public static native int postProcessChainDestroy(long chain);
+
+    /**
+     * cna_post_process_chain_get_pass_count (engine_layer.h).
+     */
+    public static native int postProcessChainGetPassCount(long chain, int[] outCount);
+
+    /**
+     * cna_post_process_chain_get_pass_timing (engine_layer.h).
+     *
+     * <p>outTimingBytes carries CNA_PassTimingEXT in this order:
+     * <ol start="0">
+     *   <li>{@code reserved[0]} (uint8_t)</li>
+     *   <li>{@code reserved[1]} (uint8_t)</li>
+     *   <li>{@code reserved[2]} (uint8_t)</li>
+     *   <li>{@code reserved[3]} (uint8_t)</li>
+     * </ol>
+     *
+     * <p>outTimingIntegral carries CNA_PassTimingEXT in this order:
+     * <ol start="0">
+     *   <li>{@code sample_count} (int32_t)</li>
+     * </ol>
+     *
+     * <p>outTimingDoubles carries CNA_PassTimingEXT in this order:
+     * <ol start="0">
+     *   <li>{@code milliseconds} (double)</li>
+     * </ol>
+     */
+    public static native int postProcessChainGetPassTiming(long chain, long index, byte[] outTimingBytes, long[] outTimingIntegral, double[] outTimingDoubles);
+
+    /**
+     * cna_post_process_chain_get_pass_timing_count (engine_layer.h).
+     */
+    public static native int postProcessChainGetPassTimingCount(long chain, long[] outCount);
+
+    /**
+     * cna_post_process_chain_get_target_pool (engine_layer.h).
+     */
+    public static native int postProcessChainGetTargetPool(long chain, long[] outPool);
+
+    /**
+     * cna_post_process_chain_is_gpu_timing_enabled (engine_layer.h).
+     */
+    public static native int postProcessChainIsGpuTimingEnabled(long chain, boolean[] outEnabled);
+
+    /**
+     * cna_post_process_chain_reset_targets (engine_layer.h).
+     */
+    public static native int postProcessChainResetTargets(long chain);
+
+    /**
+     * cna_post_process_chain_set_gpu_timing_enabled (engine_layer.h).
+     */
+    public static native int postProcessChainSetGpuTimingEnabled(long chain, boolean value);
+
+    /**
+     * cna_post_process_context_init (engine_layer.h).
+     *
+     * <p>outContextBytes carries CNA_PostProcessContext in this order:
+     * <ol start="0">
+     *   <li>{@code reserved[0]} (uint8_t)</li>
+     *   <li>{@code reserved[1]} (uint8_t)</li>
+     *   <li>{@code reserved[2]} (uint8_t)</li>
+     * </ol>
+     *
+     * <p>outContextIntegral carries CNA_PostProcessContext in this order:
+     * <ol start="0">
+     *   <li>{@code source} (CNA_Handle)</li>
+     *   <li>{@code source_depth} (CNA_Handle)</li>
+     *   <li>{@code source_normals} (CNA_Handle)</li>
+     *   <li>{@code source_velocity} (CNA_Handle)</li>
+     *   <li>{@code destination} (CNA_Handle)</li>
+     *   <li>{@code width} (int32_t)</li>
+     *   <li>{@code height} (int32_t)</li>
+     *   <li>{@code has_previous_frame} (CNA_Bool)</li>
+     * </ol>
+     *
+     * <p>outContextFloating carries CNA_PostProcessContext in this order:
+     * <ol start="0">
+     *   <li>{@code elapsed_seconds} (float)</li>
+     *   <li>{@code near_plane} (float)</li>
+     *   <li>{@code far_plane} (float)</li>
+     *   <li>{@code projection.m11} (float)</li>
+     *   <li>{@code projection.m12} (float)</li>
+     *   <li>{@code projection.m13} (float)</li>
+     *   <li>{@code projection.m14} (float)</li>
+     *   <li>{@code projection.m21} (float)</li>
+     *   <li>{@code projection.m22} (float)</li>
+     *   <li>{@code projection.m23} (float)</li>
+     *   <li>{@code projection.m24} (float)</li>
+     *   <li>{@code projection.m31} (float)</li>
+     *   <li>{@code projection.m32} (float)</li>
+     *   <li>{@code projection.m33} (float)</li>
+     *   <li>{@code projection.m34} (float)</li>
+     *   <li>{@code projection.m41} (float)</li>
+     *   <li>{@code projection.m42} (float)</li>
+     *   <li>{@code projection.m43} (float)</li>
+     *   <li>{@code projection.m44} (float)</li>
+     *   <li>{@code inverse_projection.m11} (float)</li>
+     *   <li>{@code inverse_projection.m12} (float)</li>
+     *   <li>{@code inverse_projection.m13} (float)</li>
+     *   <li>{@code inverse_projection.m14} (float)</li>
+     *   <li>{@code inverse_projection.m21} (float)</li>
+     *   <li>{@code inverse_projection.m22} (float)</li>
+     *   <li>{@code inverse_projection.m23} (float)</li>
+     *   <li>{@code inverse_projection.m24} (float)</li>
+     *   <li>{@code inverse_projection.m31} (float)</li>
+     *   <li>{@code inverse_projection.m32} (float)</li>
+     *   <li>{@code inverse_projection.m33} (float)</li>
+     *   <li>{@code inverse_projection.m34} (float)</li>
+     *   <li>{@code inverse_projection.m41} (float)</li>
+     *   <li>{@code inverse_projection.m42} (float)</li>
+     *   <li>{@code inverse_projection.m43} (float)</li>
+     *   <li>{@code inverse_projection.m44} (float)</li>
+     *   <li>{@code inverse_view.m11} (float)</li>
+     *   <li>{@code inverse_view.m12} (float)</li>
+     *   <li>{@code inverse_view.m13} (float)</li>
+     *   <li>{@code inverse_view.m14} (float)</li>
+     *   <li>{@code inverse_view.m21} (float)</li>
+     *   <li>{@code inverse_view.m22} (float)</li>
+     *   <li>{@code inverse_view.m23} (float)</li>
+     *   <li>{@code inverse_view.m24} (float)</li>
+     *   <li>{@code inverse_view.m31} (float)</li>
+     *   <li>{@code inverse_view.m32} (float)</li>
+     *   <li>{@code inverse_view.m33} (float)</li>
+     *   <li>{@code inverse_view.m34} (float)</li>
+     *   <li>{@code inverse_view.m41} (float)</li>
+     *   <li>{@code inverse_view.m42} (float)</li>
+     *   <li>{@code inverse_view.m43} (float)</li>
+     *   <li>{@code inverse_view.m44} (float)</li>
+     *   <li>{@code previous_view_projection.m11} (float)</li>
+     *   <li>{@code previous_view_projection.m12} (float)</li>
+     *   <li>{@code previous_view_projection.m13} (float)</li>
+     *   <li>{@code previous_view_projection.m14} (float)</li>
+     *   <li>{@code previous_view_projection.m21} (float)</li>
+     *   <li>{@code previous_view_projection.m22} (float)</li>
+     *   <li>{@code previous_view_projection.m23} (float)</li>
+     *   <li>{@code previous_view_projection.m24} (float)</li>
+     *   <li>{@code previous_view_projection.m31} (float)</li>
+     *   <li>{@code previous_view_projection.m32} (float)</li>
+     *   <li>{@code previous_view_projection.m33} (float)</li>
+     *   <li>{@code previous_view_projection.m34} (float)</li>
+     *   <li>{@code previous_view_projection.m41} (float)</li>
+     *   <li>{@code previous_view_projection.m42} (float)</li>
+     *   <li>{@code previous_view_projection.m43} (float)</li>
+     *   <li>{@code previous_view_projection.m44} (float)</li>
+     * </ol>
+     */
+    public static native int postProcessContextInit(byte[] outContextBytes, long[] outContextIntegral, float[] outContextFloating);
+
+    /**
      * cna_post_process_effect_pass_create (engine_layer.h).
      */
     public static native int postProcessEffectPassCreate(long graphicsDevice, long effect, byte[] name, long[] outPass);
@@ -6413,6 +6681,101 @@ public final class NativeEngineLayerRoutes {
      * cna_post_process_effect_pass_set_effect (engine_layer.h).
      */
     public static native int postProcessEffectPassSetEffect(long pass, long effect);
+
+    /**
+     * cna_post_process_pass_apply (engine_layer.h).
+     *
+     * <p>contextBytes carries CNA_PostProcessContext in this order:
+     * <ol start="0">
+     *   <li>{@code reserved[0]} (uint8_t)</li>
+     *   <li>{@code reserved[1]} (uint8_t)</li>
+     *   <li>{@code reserved[2]} (uint8_t)</li>
+     * </ol>
+     *
+     * <p>contextIntegral carries CNA_PostProcessContext in this order:
+     * <ol start="0">
+     *   <li>{@code source} (CNA_Handle)</li>
+     *   <li>{@code source_depth} (CNA_Handle)</li>
+     *   <li>{@code source_normals} (CNA_Handle)</li>
+     *   <li>{@code source_velocity} (CNA_Handle)</li>
+     *   <li>{@code destination} (CNA_Handle)</li>
+     *   <li>{@code width} (int32_t)</li>
+     *   <li>{@code height} (int32_t)</li>
+     *   <li>{@code has_previous_frame} (CNA_Bool)</li>
+     * </ol>
+     *
+     * <p>contextFloating carries CNA_PostProcessContext in this order:
+     * <ol start="0">
+     *   <li>{@code elapsed_seconds} (float)</li>
+     *   <li>{@code near_plane} (float)</li>
+     *   <li>{@code far_plane} (float)</li>
+     *   <li>{@code projection.m11} (float)</li>
+     *   <li>{@code projection.m12} (float)</li>
+     *   <li>{@code projection.m13} (float)</li>
+     *   <li>{@code projection.m14} (float)</li>
+     *   <li>{@code projection.m21} (float)</li>
+     *   <li>{@code projection.m22} (float)</li>
+     *   <li>{@code projection.m23} (float)</li>
+     *   <li>{@code projection.m24} (float)</li>
+     *   <li>{@code projection.m31} (float)</li>
+     *   <li>{@code projection.m32} (float)</li>
+     *   <li>{@code projection.m33} (float)</li>
+     *   <li>{@code projection.m34} (float)</li>
+     *   <li>{@code projection.m41} (float)</li>
+     *   <li>{@code projection.m42} (float)</li>
+     *   <li>{@code projection.m43} (float)</li>
+     *   <li>{@code projection.m44} (float)</li>
+     *   <li>{@code inverse_projection.m11} (float)</li>
+     *   <li>{@code inverse_projection.m12} (float)</li>
+     *   <li>{@code inverse_projection.m13} (float)</li>
+     *   <li>{@code inverse_projection.m14} (float)</li>
+     *   <li>{@code inverse_projection.m21} (float)</li>
+     *   <li>{@code inverse_projection.m22} (float)</li>
+     *   <li>{@code inverse_projection.m23} (float)</li>
+     *   <li>{@code inverse_projection.m24} (float)</li>
+     *   <li>{@code inverse_projection.m31} (float)</li>
+     *   <li>{@code inverse_projection.m32} (float)</li>
+     *   <li>{@code inverse_projection.m33} (float)</li>
+     *   <li>{@code inverse_projection.m34} (float)</li>
+     *   <li>{@code inverse_projection.m41} (float)</li>
+     *   <li>{@code inverse_projection.m42} (float)</li>
+     *   <li>{@code inverse_projection.m43} (float)</li>
+     *   <li>{@code inverse_projection.m44} (float)</li>
+     *   <li>{@code inverse_view.m11} (float)</li>
+     *   <li>{@code inverse_view.m12} (float)</li>
+     *   <li>{@code inverse_view.m13} (float)</li>
+     *   <li>{@code inverse_view.m14} (float)</li>
+     *   <li>{@code inverse_view.m21} (float)</li>
+     *   <li>{@code inverse_view.m22} (float)</li>
+     *   <li>{@code inverse_view.m23} (float)</li>
+     *   <li>{@code inverse_view.m24} (float)</li>
+     *   <li>{@code inverse_view.m31} (float)</li>
+     *   <li>{@code inverse_view.m32} (float)</li>
+     *   <li>{@code inverse_view.m33} (float)</li>
+     *   <li>{@code inverse_view.m34} (float)</li>
+     *   <li>{@code inverse_view.m41} (float)</li>
+     *   <li>{@code inverse_view.m42} (float)</li>
+     *   <li>{@code inverse_view.m43} (float)</li>
+     *   <li>{@code inverse_view.m44} (float)</li>
+     *   <li>{@code previous_view_projection.m11} (float)</li>
+     *   <li>{@code previous_view_projection.m12} (float)</li>
+     *   <li>{@code previous_view_projection.m13} (float)</li>
+     *   <li>{@code previous_view_projection.m14} (float)</li>
+     *   <li>{@code previous_view_projection.m21} (float)</li>
+     *   <li>{@code previous_view_projection.m22} (float)</li>
+     *   <li>{@code previous_view_projection.m23} (float)</li>
+     *   <li>{@code previous_view_projection.m24} (float)</li>
+     *   <li>{@code previous_view_projection.m31} (float)</li>
+     *   <li>{@code previous_view_projection.m32} (float)</li>
+     *   <li>{@code previous_view_projection.m33} (float)</li>
+     *   <li>{@code previous_view_projection.m34} (float)</li>
+     *   <li>{@code previous_view_projection.m41} (float)</li>
+     *   <li>{@code previous_view_projection.m42} (float)</li>
+     *   <li>{@code previous_view_projection.m43} (float)</li>
+     *   <li>{@code previous_view_projection.m44} (float)</li>
+     * </ol>
+     */
+    public static native int postProcessPassApply(long pass, byte[] contextBytes, long[] contextIntegral, float[] contextFloating);
 
     /**
      * cna_post_process_pass_copy_name (engine_layer.h).

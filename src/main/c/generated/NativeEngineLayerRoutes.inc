@@ -13468,6 +13468,408 @@ Java_org_openeggbert_cna_internal_generated_NativeEngineLayerRoutes_pointLightEx
 }
 
 JNIEXPORT jint JNICALL
+Java_org_openeggbert_cna_internal_generated_NativeEngineLayerRoutes_postProcessChainAddPass(
+    JNIEnv* environment, jclass declaring_class, jlong chain, jlong pass)
+{
+    (void)environment;
+    (void)declaring_class;
+    CNA_Result call_result = cna.post_process_chain_add_pass((CNA_PostProcessChainHandle)chain, (CNA_PostProcessPassHandle)pass);
+    return (jint)call_result;
+}
+
+JNIEXPORT jint JNICALL
+Java_org_openeggbert_cna_internal_generated_NativeEngineLayerRoutes_postProcessChainApply(
+    JNIEnv* environment, jclass declaring_class, jlong chain, jbyteArray contextBytes, jlongArray contextIntegral, jfloatArray contextFloating)
+{
+    (void)environment;
+    (void)declaring_class;
+    CNA_PostProcessContext context_value;
+    memset(&context_value, 0, sizeof context_value);
+    context_value.struct_size = (uint32_t)(CNA_POST_PROCESS_CONTEXT_SIZE_V1);
+    context_value.struct_version = UINT32_C(1);
+    {
+        jbyte contextBytes_values[3];
+        (*environment)->GetByteArrayRegion(environment, contextBytes, 0, 3, contextBytes_values);
+        context_value.reserved[0] = (uint8_t)contextBytes_values[0];
+        context_value.reserved[1] = (uint8_t)contextBytes_values[1];
+        context_value.reserved[2] = (uint8_t)contextBytes_values[2];
+    }
+    {
+        jlong contextIntegral_values[8];
+        (*environment)->GetLongArrayRegion(environment, contextIntegral, 0, 8, contextIntegral_values);
+        context_value.source = (CNA_Handle)contextIntegral_values[0];
+        context_value.source_depth = (CNA_Handle)contextIntegral_values[1];
+        context_value.source_normals = (CNA_Handle)contextIntegral_values[2];
+        context_value.source_velocity = (CNA_Handle)contextIntegral_values[3];
+        context_value.destination = (CNA_Handle)contextIntegral_values[4];
+        context_value.width = (int32_t)contextIntegral_values[5];
+        context_value.height = (int32_t)contextIntegral_values[6];
+        context_value.has_previous_frame = (CNA_Bool)contextIntegral_values[7];
+    }
+    {
+        jfloat contextFloating_values[67];
+        (*environment)->GetFloatArrayRegion(environment, contextFloating, 0, 67, contextFloating_values);
+        context_value.elapsed_seconds = (float)contextFloating_values[0];
+        context_value.near_plane = (float)contextFloating_values[1];
+        context_value.far_plane = (float)contextFloating_values[2];
+        context_value.projection.m11 = (float)contextFloating_values[3];
+        context_value.projection.m12 = (float)contextFloating_values[4];
+        context_value.projection.m13 = (float)contextFloating_values[5];
+        context_value.projection.m14 = (float)contextFloating_values[6];
+        context_value.projection.m21 = (float)contextFloating_values[7];
+        context_value.projection.m22 = (float)contextFloating_values[8];
+        context_value.projection.m23 = (float)contextFloating_values[9];
+        context_value.projection.m24 = (float)contextFloating_values[10];
+        context_value.projection.m31 = (float)contextFloating_values[11];
+        context_value.projection.m32 = (float)contextFloating_values[12];
+        context_value.projection.m33 = (float)contextFloating_values[13];
+        context_value.projection.m34 = (float)contextFloating_values[14];
+        context_value.projection.m41 = (float)contextFloating_values[15];
+        context_value.projection.m42 = (float)contextFloating_values[16];
+        context_value.projection.m43 = (float)contextFloating_values[17];
+        context_value.projection.m44 = (float)contextFloating_values[18];
+        context_value.inverse_projection.m11 = (float)contextFloating_values[19];
+        context_value.inverse_projection.m12 = (float)contextFloating_values[20];
+        context_value.inverse_projection.m13 = (float)contextFloating_values[21];
+        context_value.inverse_projection.m14 = (float)contextFloating_values[22];
+        context_value.inverse_projection.m21 = (float)contextFloating_values[23];
+        context_value.inverse_projection.m22 = (float)contextFloating_values[24];
+        context_value.inverse_projection.m23 = (float)contextFloating_values[25];
+        context_value.inverse_projection.m24 = (float)contextFloating_values[26];
+        context_value.inverse_projection.m31 = (float)contextFloating_values[27];
+        context_value.inverse_projection.m32 = (float)contextFloating_values[28];
+        context_value.inverse_projection.m33 = (float)contextFloating_values[29];
+        context_value.inverse_projection.m34 = (float)contextFloating_values[30];
+        context_value.inverse_projection.m41 = (float)contextFloating_values[31];
+        context_value.inverse_projection.m42 = (float)contextFloating_values[32];
+        context_value.inverse_projection.m43 = (float)contextFloating_values[33];
+        context_value.inverse_projection.m44 = (float)contextFloating_values[34];
+        context_value.inverse_view.m11 = (float)contextFloating_values[35];
+        context_value.inverse_view.m12 = (float)contextFloating_values[36];
+        context_value.inverse_view.m13 = (float)contextFloating_values[37];
+        context_value.inverse_view.m14 = (float)contextFloating_values[38];
+        context_value.inverse_view.m21 = (float)contextFloating_values[39];
+        context_value.inverse_view.m22 = (float)contextFloating_values[40];
+        context_value.inverse_view.m23 = (float)contextFloating_values[41];
+        context_value.inverse_view.m24 = (float)contextFloating_values[42];
+        context_value.inverse_view.m31 = (float)contextFloating_values[43];
+        context_value.inverse_view.m32 = (float)contextFloating_values[44];
+        context_value.inverse_view.m33 = (float)contextFloating_values[45];
+        context_value.inverse_view.m34 = (float)contextFloating_values[46];
+        context_value.inverse_view.m41 = (float)contextFloating_values[47];
+        context_value.inverse_view.m42 = (float)contextFloating_values[48];
+        context_value.inverse_view.m43 = (float)contextFloating_values[49];
+        context_value.inverse_view.m44 = (float)contextFloating_values[50];
+        context_value.previous_view_projection.m11 = (float)contextFloating_values[51];
+        context_value.previous_view_projection.m12 = (float)contextFloating_values[52];
+        context_value.previous_view_projection.m13 = (float)contextFloating_values[53];
+        context_value.previous_view_projection.m14 = (float)contextFloating_values[54];
+        context_value.previous_view_projection.m21 = (float)contextFloating_values[55];
+        context_value.previous_view_projection.m22 = (float)contextFloating_values[56];
+        context_value.previous_view_projection.m23 = (float)contextFloating_values[57];
+        context_value.previous_view_projection.m24 = (float)contextFloating_values[58];
+        context_value.previous_view_projection.m31 = (float)contextFloating_values[59];
+        context_value.previous_view_projection.m32 = (float)contextFloating_values[60];
+        context_value.previous_view_projection.m33 = (float)contextFloating_values[61];
+        context_value.previous_view_projection.m34 = (float)contextFloating_values[62];
+        context_value.previous_view_projection.m41 = (float)contextFloating_values[63];
+        context_value.previous_view_projection.m42 = (float)contextFloating_values[64];
+        context_value.previous_view_projection.m43 = (float)contextFloating_values[65];
+        context_value.previous_view_projection.m44 = (float)contextFloating_values[66];
+    }
+    CNA_Result call_result = cna.post_process_chain_apply((CNA_PostProcessChainHandle)chain, &context_value);
+    return (jint)call_result;
+}
+
+JNIEXPORT jint JNICALL
+Java_org_openeggbert_cna_internal_generated_NativeEngineLayerRoutes_postProcessChainClear(
+    JNIEnv* environment, jclass declaring_class, jlong chain)
+{
+    (void)environment;
+    (void)declaring_class;
+    CNA_Result call_result = cna.post_process_chain_clear((CNA_PostProcessChainHandle)chain);
+    return (jint)call_result;
+}
+
+JNIEXPORT jint JNICALL
+Java_org_openeggbert_cna_internal_generated_NativeEngineLayerRoutes_postProcessChainCopyPassTimingName(
+    JNIEnv* environment, jclass declaring_class, jlong chain, jlong index, jbyteArray destination, jlongArray out_bytes)
+{
+    (void)environment;
+    (void)declaring_class;
+    jsize destination_size = (*environment)->GetArrayLength(environment, destination);
+    jbyte* destination_bytes = (*environment)->GetByteArrayElements(environment, destination, NULL);
+    if (destination_bytes == NULL) {
+        return (jint)CNA_RESULT_OUT_OF_MEMORY;
+    }
+    uint64_t destination_written = 0;
+    CNA_Result call_result = cna.post_process_chain_copy_pass_timing_name((CNA_PostProcessChainHandle)chain, (uint64_t)index, (char*)destination_bytes, (uint64_t)destination_size, &destination_written);
+    (*environment)->ReleaseByteArrayElements(environment, destination, destination_bytes, 0);
+    if (call_result == CNA_RESULT_SUCCESS || call_result == CNA_RESULT_BUFFER_TOO_SMALL) {
+        jlong destination_element = (jlong)destination_written;
+        (*environment)->SetLongArrayRegion(
+            environment, out_bytes, 0, 1, &destination_element);
+    }
+    return (jint)call_result;
+}
+
+JNIEXPORT jint JNICALL
+Java_org_openeggbert_cna_internal_generated_NativeEngineLayerRoutes_postProcessChainCreate(
+    JNIEnv* environment, jclass declaring_class, jlong graphics_device, jlongArray out_chain)
+{
+    (void)environment;
+    (void)declaring_class;
+    CNA_PostProcessChainHandle out_chain_value = 0;
+    CNA_Result call_result = cna.post_process_chain_create((CNA_Handle)graphics_device, &out_chain_value);
+    if (call_result == CNA_RESULT_SUCCESS || call_result == CNA_RESULT_BUFFER_TOO_SMALL) {
+        jlong out_chain_element = (jlong)out_chain_value;
+        (*environment)->SetLongArrayRegion(
+            environment, out_chain, 0, 1, &out_chain_element);
+    }
+    return (jint)call_result;
+}
+
+JNIEXPORT jint JNICALL
+Java_org_openeggbert_cna_internal_generated_NativeEngineLayerRoutes_postProcessChainDestroy(
+    JNIEnv* environment, jclass declaring_class, jlong chain)
+{
+    (void)environment;
+    (void)declaring_class;
+    CNA_Result call_result = cna.post_process_chain_destroy((CNA_PostProcessChainHandle)chain);
+    return (jint)call_result;
+}
+
+JNIEXPORT jint JNICALL
+Java_org_openeggbert_cna_internal_generated_NativeEngineLayerRoutes_postProcessChainGetPassCount(
+    JNIEnv* environment, jclass declaring_class, jlong chain, jintArray out_count)
+{
+    (void)environment;
+    (void)declaring_class;
+    int32_t out_count_value = 0;
+    CNA_Result call_result = cna.post_process_chain_get_pass_count((CNA_PostProcessChainHandle)chain, &out_count_value);
+    if (call_result == CNA_RESULT_SUCCESS || call_result == CNA_RESULT_BUFFER_TOO_SMALL) {
+        jint out_count_element = (jint)out_count_value;
+        (*environment)->SetIntArrayRegion(
+            environment, out_count, 0, 1, &out_count_element);
+    }
+    return (jint)call_result;
+}
+
+JNIEXPORT jint JNICALL
+Java_org_openeggbert_cna_internal_generated_NativeEngineLayerRoutes_postProcessChainGetPassTiming(
+    JNIEnv* environment, jclass declaring_class, jlong chain, jlong index, jbyteArray out_timingBytes, jlongArray out_timingIntegral, jdoubleArray out_timingDoubles)
+{
+    (void)environment;
+    (void)declaring_class;
+    CNA_PassTimingEXT out_timing_value;
+    memset(&out_timing_value, 0, sizeof out_timing_value);
+    out_timing_value.struct_size = (uint32_t)(sizeof out_timing_value);
+    out_timing_value.struct_version = UINT32_C(1);
+    CNA_Result call_result = cna.post_process_chain_get_pass_timing((CNA_PostProcessChainHandle)chain, (uint64_t)index, &out_timing_value);
+    if (call_result == CNA_RESULT_SUCCESS || call_result == CNA_RESULT_BUFFER_TOO_SMALL) {
+        jbyte out_timingBytes_values[] = {
+            (jbyte)out_timing_value.reserved[0],
+            (jbyte)out_timing_value.reserved[1],
+            (jbyte)out_timing_value.reserved[2],
+            (jbyte)out_timing_value.reserved[3]
+        };
+        (*environment)->SetByteArrayRegion(environment, out_timingBytes, 0,
+            (jsize)(sizeof out_timingBytes_values / sizeof out_timingBytes_values[0]),
+            out_timingBytes_values);
+        jlong out_timingIntegral_values[] = {
+            (jlong)out_timing_value.sample_count
+        };
+        (*environment)->SetLongArrayRegion(environment, out_timingIntegral, 0,
+            (jsize)(sizeof out_timingIntegral_values / sizeof out_timingIntegral_values[0]),
+            out_timingIntegral_values);
+        jdouble out_timingDoubles_values[] = {
+            (jdouble)out_timing_value.milliseconds
+        };
+        (*environment)->SetDoubleArrayRegion(environment, out_timingDoubles, 0,
+            (jsize)(sizeof out_timingDoubles_values / sizeof out_timingDoubles_values[0]),
+            out_timingDoubles_values);
+    }
+    return (jint)call_result;
+}
+
+JNIEXPORT jint JNICALL
+Java_org_openeggbert_cna_internal_generated_NativeEngineLayerRoutes_postProcessChainGetPassTimingCount(
+    JNIEnv* environment, jclass declaring_class, jlong chain, jlongArray out_count)
+{
+    (void)environment;
+    (void)declaring_class;
+    uint64_t out_count_value = 0;
+    CNA_Result call_result = cna.post_process_chain_get_pass_timing_count((CNA_PostProcessChainHandle)chain, &out_count_value);
+    if (call_result == CNA_RESULT_SUCCESS || call_result == CNA_RESULT_BUFFER_TOO_SMALL) {
+        jlong out_count_element = (jlong)out_count_value;
+        (*environment)->SetLongArrayRegion(
+            environment, out_count, 0, 1, &out_count_element);
+    }
+    return (jint)call_result;
+}
+
+JNIEXPORT jint JNICALL
+Java_org_openeggbert_cna_internal_generated_NativeEngineLayerRoutes_postProcessChainGetTargetPool(
+    JNIEnv* environment, jclass declaring_class, jlong chain, jlongArray out_pool)
+{
+    (void)environment;
+    (void)declaring_class;
+    CNA_RenderTargetPoolHandle out_pool_value = 0;
+    CNA_Result call_result = cna.post_process_chain_get_target_pool((CNA_PostProcessChainHandle)chain, &out_pool_value);
+    if (call_result == CNA_RESULT_SUCCESS || call_result == CNA_RESULT_BUFFER_TOO_SMALL) {
+        jlong out_pool_element = (jlong)out_pool_value;
+        (*environment)->SetLongArrayRegion(
+            environment, out_pool, 0, 1, &out_pool_element);
+    }
+    return (jint)call_result;
+}
+
+JNIEXPORT jint JNICALL
+Java_org_openeggbert_cna_internal_generated_NativeEngineLayerRoutes_postProcessChainIsGpuTimingEnabled(
+    JNIEnv* environment, jclass declaring_class, jlong chain, jbooleanArray out_enabled)
+{
+    (void)environment;
+    (void)declaring_class;
+    CNA_Bool out_enabled_value = 0;
+    CNA_Result call_result = cna.post_process_chain_is_gpu_timing_enabled((CNA_PostProcessChainHandle)chain, &out_enabled_value);
+    if (call_result == CNA_RESULT_SUCCESS || call_result == CNA_RESULT_BUFFER_TOO_SMALL) {
+        jboolean out_enabled_element = (jboolean)out_enabled_value;
+        (*environment)->SetBooleanArrayRegion(
+            environment, out_enabled, 0, 1, &out_enabled_element);
+    }
+    return (jint)call_result;
+}
+
+JNIEXPORT jint JNICALL
+Java_org_openeggbert_cna_internal_generated_NativeEngineLayerRoutes_postProcessChainResetTargets(
+    JNIEnv* environment, jclass declaring_class, jlong chain)
+{
+    (void)environment;
+    (void)declaring_class;
+    CNA_Result call_result = cna.post_process_chain_reset_targets((CNA_PostProcessChainHandle)chain);
+    return (jint)call_result;
+}
+
+JNIEXPORT jint JNICALL
+Java_org_openeggbert_cna_internal_generated_NativeEngineLayerRoutes_postProcessChainSetGpuTimingEnabled(
+    JNIEnv* environment, jclass declaring_class, jlong chain, jboolean value)
+{
+    (void)environment;
+    (void)declaring_class;
+    CNA_Result call_result = cna.post_process_chain_set_gpu_timing_enabled((CNA_PostProcessChainHandle)chain, (CNA_Bool)value);
+    return (jint)call_result;
+}
+
+JNIEXPORT jint JNICALL
+Java_org_openeggbert_cna_internal_generated_NativeEngineLayerRoutes_postProcessContextInit(
+    JNIEnv* environment, jclass declaring_class, jbyteArray out_contextBytes, jlongArray out_contextIntegral, jfloatArray out_contextFloating)
+{
+    (void)environment;
+    (void)declaring_class;
+    CNA_PostProcessContext out_context_value;
+    memset(&out_context_value, 0, sizeof out_context_value);
+    out_context_value.struct_size = (uint32_t)(CNA_POST_PROCESS_CONTEXT_SIZE_V1);
+    out_context_value.struct_version = UINT32_C(1);
+    CNA_Result call_result = cna.post_process_context_init(&out_context_value);
+    if (call_result == CNA_RESULT_SUCCESS || call_result == CNA_RESULT_BUFFER_TOO_SMALL) {
+        jbyte out_contextBytes_values[] = {
+            (jbyte)out_context_value.reserved[0],
+            (jbyte)out_context_value.reserved[1],
+            (jbyte)out_context_value.reserved[2]
+        };
+        (*environment)->SetByteArrayRegion(environment, out_contextBytes, 0,
+            (jsize)(sizeof out_contextBytes_values / sizeof out_contextBytes_values[0]),
+            out_contextBytes_values);
+        jlong out_contextIntegral_values[] = {
+            (jlong)out_context_value.source,
+            (jlong)out_context_value.source_depth,
+            (jlong)out_context_value.source_normals,
+            (jlong)out_context_value.source_velocity,
+            (jlong)out_context_value.destination,
+            (jlong)out_context_value.width,
+            (jlong)out_context_value.height,
+            (jlong)out_context_value.has_previous_frame
+        };
+        (*environment)->SetLongArrayRegion(environment, out_contextIntegral, 0,
+            (jsize)(sizeof out_contextIntegral_values / sizeof out_contextIntegral_values[0]),
+            out_contextIntegral_values);
+        jfloat out_contextFloating_values[] = {
+            (jfloat)out_context_value.elapsed_seconds,
+            (jfloat)out_context_value.near_plane,
+            (jfloat)out_context_value.far_plane,
+            (jfloat)out_context_value.projection.m11,
+            (jfloat)out_context_value.projection.m12,
+            (jfloat)out_context_value.projection.m13,
+            (jfloat)out_context_value.projection.m14,
+            (jfloat)out_context_value.projection.m21,
+            (jfloat)out_context_value.projection.m22,
+            (jfloat)out_context_value.projection.m23,
+            (jfloat)out_context_value.projection.m24,
+            (jfloat)out_context_value.projection.m31,
+            (jfloat)out_context_value.projection.m32,
+            (jfloat)out_context_value.projection.m33,
+            (jfloat)out_context_value.projection.m34,
+            (jfloat)out_context_value.projection.m41,
+            (jfloat)out_context_value.projection.m42,
+            (jfloat)out_context_value.projection.m43,
+            (jfloat)out_context_value.projection.m44,
+            (jfloat)out_context_value.inverse_projection.m11,
+            (jfloat)out_context_value.inverse_projection.m12,
+            (jfloat)out_context_value.inverse_projection.m13,
+            (jfloat)out_context_value.inverse_projection.m14,
+            (jfloat)out_context_value.inverse_projection.m21,
+            (jfloat)out_context_value.inverse_projection.m22,
+            (jfloat)out_context_value.inverse_projection.m23,
+            (jfloat)out_context_value.inverse_projection.m24,
+            (jfloat)out_context_value.inverse_projection.m31,
+            (jfloat)out_context_value.inverse_projection.m32,
+            (jfloat)out_context_value.inverse_projection.m33,
+            (jfloat)out_context_value.inverse_projection.m34,
+            (jfloat)out_context_value.inverse_projection.m41,
+            (jfloat)out_context_value.inverse_projection.m42,
+            (jfloat)out_context_value.inverse_projection.m43,
+            (jfloat)out_context_value.inverse_projection.m44,
+            (jfloat)out_context_value.inverse_view.m11,
+            (jfloat)out_context_value.inverse_view.m12,
+            (jfloat)out_context_value.inverse_view.m13,
+            (jfloat)out_context_value.inverse_view.m14,
+            (jfloat)out_context_value.inverse_view.m21,
+            (jfloat)out_context_value.inverse_view.m22,
+            (jfloat)out_context_value.inverse_view.m23,
+            (jfloat)out_context_value.inverse_view.m24,
+            (jfloat)out_context_value.inverse_view.m31,
+            (jfloat)out_context_value.inverse_view.m32,
+            (jfloat)out_context_value.inverse_view.m33,
+            (jfloat)out_context_value.inverse_view.m34,
+            (jfloat)out_context_value.inverse_view.m41,
+            (jfloat)out_context_value.inverse_view.m42,
+            (jfloat)out_context_value.inverse_view.m43,
+            (jfloat)out_context_value.inverse_view.m44,
+            (jfloat)out_context_value.previous_view_projection.m11,
+            (jfloat)out_context_value.previous_view_projection.m12,
+            (jfloat)out_context_value.previous_view_projection.m13,
+            (jfloat)out_context_value.previous_view_projection.m14,
+            (jfloat)out_context_value.previous_view_projection.m21,
+            (jfloat)out_context_value.previous_view_projection.m22,
+            (jfloat)out_context_value.previous_view_projection.m23,
+            (jfloat)out_context_value.previous_view_projection.m24,
+            (jfloat)out_context_value.previous_view_projection.m31,
+            (jfloat)out_context_value.previous_view_projection.m32,
+            (jfloat)out_context_value.previous_view_projection.m33,
+            (jfloat)out_context_value.previous_view_projection.m34,
+            (jfloat)out_context_value.previous_view_projection.m41,
+            (jfloat)out_context_value.previous_view_projection.m42,
+            (jfloat)out_context_value.previous_view_projection.m43,
+            (jfloat)out_context_value.previous_view_projection.m44
+        };
+        (*environment)->SetFloatArrayRegion(environment, out_contextFloating, 0,
+            (jsize)(sizeof out_contextFloating_values / sizeof out_contextFloating_values[0]),
+            out_contextFloating_values);
+    }
+    return (jint)call_result;
+}
+
+JNIEXPORT jint JNICALL
 Java_org_openeggbert_cna_internal_generated_NativeEngineLayerRoutes_postProcessEffectPassCreate(
     JNIEnv* environment, jclass declaring_class, jlong graphics_device, jlong effect, jbyteArray name, jlongArray out_pass)
 {
@@ -13520,6 +13922,110 @@ Java_org_openeggbert_cna_internal_generated_NativeEngineLayerRoutes_postProcessE
     (void)environment;
     (void)declaring_class;
     CNA_Result call_result = cna.post_process_effect_pass_set_effect((CNA_PostProcessPassHandle)pass, (CNA_EffectHandle)effect);
+    return (jint)call_result;
+}
+
+JNIEXPORT jint JNICALL
+Java_org_openeggbert_cna_internal_generated_NativeEngineLayerRoutes_postProcessPassApply(
+    JNIEnv* environment, jclass declaring_class, jlong pass, jbyteArray contextBytes, jlongArray contextIntegral, jfloatArray contextFloating)
+{
+    (void)environment;
+    (void)declaring_class;
+    CNA_PostProcessContext context_value;
+    memset(&context_value, 0, sizeof context_value);
+    context_value.struct_size = (uint32_t)(CNA_POST_PROCESS_CONTEXT_SIZE_V1);
+    context_value.struct_version = UINT32_C(1);
+    {
+        jbyte contextBytes_values[3];
+        (*environment)->GetByteArrayRegion(environment, contextBytes, 0, 3, contextBytes_values);
+        context_value.reserved[0] = (uint8_t)contextBytes_values[0];
+        context_value.reserved[1] = (uint8_t)contextBytes_values[1];
+        context_value.reserved[2] = (uint8_t)contextBytes_values[2];
+    }
+    {
+        jlong contextIntegral_values[8];
+        (*environment)->GetLongArrayRegion(environment, contextIntegral, 0, 8, contextIntegral_values);
+        context_value.source = (CNA_Handle)contextIntegral_values[0];
+        context_value.source_depth = (CNA_Handle)contextIntegral_values[1];
+        context_value.source_normals = (CNA_Handle)contextIntegral_values[2];
+        context_value.source_velocity = (CNA_Handle)contextIntegral_values[3];
+        context_value.destination = (CNA_Handle)contextIntegral_values[4];
+        context_value.width = (int32_t)contextIntegral_values[5];
+        context_value.height = (int32_t)contextIntegral_values[6];
+        context_value.has_previous_frame = (CNA_Bool)contextIntegral_values[7];
+    }
+    {
+        jfloat contextFloating_values[67];
+        (*environment)->GetFloatArrayRegion(environment, contextFloating, 0, 67, contextFloating_values);
+        context_value.elapsed_seconds = (float)contextFloating_values[0];
+        context_value.near_plane = (float)contextFloating_values[1];
+        context_value.far_plane = (float)contextFloating_values[2];
+        context_value.projection.m11 = (float)contextFloating_values[3];
+        context_value.projection.m12 = (float)contextFloating_values[4];
+        context_value.projection.m13 = (float)contextFloating_values[5];
+        context_value.projection.m14 = (float)contextFloating_values[6];
+        context_value.projection.m21 = (float)contextFloating_values[7];
+        context_value.projection.m22 = (float)contextFloating_values[8];
+        context_value.projection.m23 = (float)contextFloating_values[9];
+        context_value.projection.m24 = (float)contextFloating_values[10];
+        context_value.projection.m31 = (float)contextFloating_values[11];
+        context_value.projection.m32 = (float)contextFloating_values[12];
+        context_value.projection.m33 = (float)contextFloating_values[13];
+        context_value.projection.m34 = (float)contextFloating_values[14];
+        context_value.projection.m41 = (float)contextFloating_values[15];
+        context_value.projection.m42 = (float)contextFloating_values[16];
+        context_value.projection.m43 = (float)contextFloating_values[17];
+        context_value.projection.m44 = (float)contextFloating_values[18];
+        context_value.inverse_projection.m11 = (float)contextFloating_values[19];
+        context_value.inverse_projection.m12 = (float)contextFloating_values[20];
+        context_value.inverse_projection.m13 = (float)contextFloating_values[21];
+        context_value.inverse_projection.m14 = (float)contextFloating_values[22];
+        context_value.inverse_projection.m21 = (float)contextFloating_values[23];
+        context_value.inverse_projection.m22 = (float)contextFloating_values[24];
+        context_value.inverse_projection.m23 = (float)contextFloating_values[25];
+        context_value.inverse_projection.m24 = (float)contextFloating_values[26];
+        context_value.inverse_projection.m31 = (float)contextFloating_values[27];
+        context_value.inverse_projection.m32 = (float)contextFloating_values[28];
+        context_value.inverse_projection.m33 = (float)contextFloating_values[29];
+        context_value.inverse_projection.m34 = (float)contextFloating_values[30];
+        context_value.inverse_projection.m41 = (float)contextFloating_values[31];
+        context_value.inverse_projection.m42 = (float)contextFloating_values[32];
+        context_value.inverse_projection.m43 = (float)contextFloating_values[33];
+        context_value.inverse_projection.m44 = (float)contextFloating_values[34];
+        context_value.inverse_view.m11 = (float)contextFloating_values[35];
+        context_value.inverse_view.m12 = (float)contextFloating_values[36];
+        context_value.inverse_view.m13 = (float)contextFloating_values[37];
+        context_value.inverse_view.m14 = (float)contextFloating_values[38];
+        context_value.inverse_view.m21 = (float)contextFloating_values[39];
+        context_value.inverse_view.m22 = (float)contextFloating_values[40];
+        context_value.inverse_view.m23 = (float)contextFloating_values[41];
+        context_value.inverse_view.m24 = (float)contextFloating_values[42];
+        context_value.inverse_view.m31 = (float)contextFloating_values[43];
+        context_value.inverse_view.m32 = (float)contextFloating_values[44];
+        context_value.inverse_view.m33 = (float)contextFloating_values[45];
+        context_value.inverse_view.m34 = (float)contextFloating_values[46];
+        context_value.inverse_view.m41 = (float)contextFloating_values[47];
+        context_value.inverse_view.m42 = (float)contextFloating_values[48];
+        context_value.inverse_view.m43 = (float)contextFloating_values[49];
+        context_value.inverse_view.m44 = (float)contextFloating_values[50];
+        context_value.previous_view_projection.m11 = (float)contextFloating_values[51];
+        context_value.previous_view_projection.m12 = (float)contextFloating_values[52];
+        context_value.previous_view_projection.m13 = (float)contextFloating_values[53];
+        context_value.previous_view_projection.m14 = (float)contextFloating_values[54];
+        context_value.previous_view_projection.m21 = (float)contextFloating_values[55];
+        context_value.previous_view_projection.m22 = (float)contextFloating_values[56];
+        context_value.previous_view_projection.m23 = (float)contextFloating_values[57];
+        context_value.previous_view_projection.m24 = (float)contextFloating_values[58];
+        context_value.previous_view_projection.m31 = (float)contextFloating_values[59];
+        context_value.previous_view_projection.m32 = (float)contextFloating_values[60];
+        context_value.previous_view_projection.m33 = (float)contextFloating_values[61];
+        context_value.previous_view_projection.m34 = (float)contextFloating_values[62];
+        context_value.previous_view_projection.m41 = (float)contextFloating_values[63];
+        context_value.previous_view_projection.m42 = (float)contextFloating_values[64];
+        context_value.previous_view_projection.m43 = (float)contextFloating_values[65];
+        context_value.previous_view_projection.m44 = (float)contextFloating_values[66];
+    }
+    CNA_Result call_result = cna.post_process_pass_apply((CNA_PostProcessPassHandle)pass, &context_value);
     return (jint)call_result;
 }
 

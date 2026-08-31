@@ -511,6 +511,67 @@ def test_generator(live: dict) -> None:
               generator_tool.flatten_struct("CNA_GltfMaterialTexturesEXT", live))["integral"]) == 7,
           "and the structure that uses it carries its seven slots into Java")
 
+    # CNA grows some structures by appending and documents the earlier size as a constant, so a
+    # caller compiled against version one sets struct_size to it and every route still works.
+    # That is the mechanism the post-process context's `settings` pointer is reached past --
+    # a pointer field the generator would otherwise refuse the whole route over.
+    context_prefix = {"stopBefore": "settings",
+                      "sizeConstant": "CNA_POST_PROCESS_CONTEXT_SIZE_V1", "version": 1}
+    full = generator_tool.flatten_struct("CNA_PostProcessContext", live,
+                                         prefix=dict(context_prefix, stopBefore="settings"))
+    check(not any(path.startswith("settings") for path, _ in full),
+          "a declared prefix stops before the field it names")
+    check(any(path.startswith("previous_view_projection") for path, _ in full),
+          "and keeps everything before it")
+    applied = generator_tool.plan(
+        {"java": "probe", "symbol": "cna_post_process_chain_apply",
+         "structPrefixes": {"context": context_prefix}}, live)
+    emitted = generator_tool.render_c("Probe", [applied])
+    check("context_value.struct_size = (uint32_t)(CNA_POST_PROCESS_CONTEXT_SIZE_V1);" in emitted,
+          "the stamped size is CNA's own constant, not sizeof")
+    check("(uint32_t)(sizeof context_value)" not in emitted,
+          "because sizeof would tell CNA the tail was written when it never was")
+
+    # The post-process context is write-only: CNA has no route that reads one back, so nothing at
+    # runtime can catch a Java constant that names the wrong leaf. These pin the layout against
+    # the live header instead, which is the only place the check can honestly live -- and the
+    # numbers here are exactly the offsets PostProcessContext declares.
+    context_leaves = generator_tool.group_leaves(
+        generator_tool.flatten_struct("CNA_PostProcessContext", live, prefix=context_prefix))
+    integral_paths = [path for path, _ in context_leaves["integral"]]
+    check(integral_paths == ["source", "source_depth", "source_normals", "source_velocity",
+                             "destination", "width", "height", "has_previous_frame"],
+          "the context's integral leaves are the eight PostProcessContext writes, in order")
+    floating_paths = [path for path, _ in context_leaves["floating"]]
+    for offset, path in ((0, "elapsed_seconds"), (1, "near_plane"), (2, "far_plane"),
+                         (3, "projection.m11"), (19, "inverse_projection.m11"),
+                         (35, "inverse_view.m11"), (51, "previous_view_projection.m11")):
+        check(floating_paths[offset] == path,
+              f"the context's floating leaf {offset} is {path}")
+    check(len(floating_paths) == 67 and len(context_leaves["bytes"]) == 3,
+          "and the version-1 prefix is sixty-seven floats and three padding bytes")
+
+    # And the declaration is checked against the live headers rather than believed: a field that
+    # does not exist, or a constant CNA does not define, is refused.
+    for broken in ({"stopBefore": "not_a_field", "sizeConstant":
+                    "CNA_POST_PROCESS_CONTEXT_SIZE_V1", "version": 1},
+                   {"stopBefore": "settings", "sizeConstant": "CNA_NOT_A_CONSTANT",
+                    "version": 1}):
+        try:
+            generator_tool.plan({"java": "probe", "symbol": "cna_post_process_chain_apply",
+                                 "structPrefixes": {"context": broken}}, live)
+            check(False, f"a prefix declaration that the headers contradict is refused: {broken}")
+        except generator_tool.Unsupported:
+            check(True, f"a prefix declaration that the headers contradict is refused")
+
+    # Without the declaration the route stays refused, because a borrowed pointer inside a
+    # structure is exactly the shape this generator will not guess at.
+    try:
+        generator_tool.plan({"java": "probe", "symbol": "cna_post_process_chain_apply"}, live)
+        check(False, "a struct carrying a pointer is refused when no prefix is declared")
+    except generator_tool.Unsupported:
+        check(True, "a struct carrying a pointer is refused when no prefix is declared")
+
     # The generator refuses a shape it cannot prove rather than guessing at it.
     try:
         plan("cna_text_input_subscribe_text_input_ext")

@@ -126,6 +126,22 @@ public final class RenderTargetPool implements AutoCloseable {
         }
     }
 
+    /**
+     * Adopts a pool handle the engine layer lent.
+     *
+     * <p>A {@link PostProcessChain} lends its own pool as a <em>counted</em> borrow: destroying
+     * the chain is refused while the borrow is outstanding, and {@link #close()} is what returns
+     * it. The facade is disposed exactly as an owned pool is, and the same call means "give the
+     * borrow back" here and "destroy the pool" there -- which is CNA's own arrangement, not a
+     * conflation invented in Java.
+     *
+     * @param handle the handle CNA just returned
+     * @return the facade, which the caller closes
+     */
+    static RenderTargetPool adopt(long handle) {
+        return new RenderTargetPool(handle);
+    }
+
     private long open() {
         synchronized (this) {
             if (closed) {

@@ -402,3 +402,37 @@ three helpers with nothing to help would be shipping fragments of an API, so the
 as `HARDWARE_PENDING` in `docs/backlog.json` rather than half-projected. It is worth revisiting the
 moment this repository can qualify against a desktop GL 4.3 renderer, where all twenty-five become
 reachable at once.
+
+## chain_owned_pass.c
+
+What does `cna_post_process_chain_add_owned_pass` leave behind?
+
+It is the one route in the engine layer that invalidates a handle a caller still holds, so the Java
+side had to match it exactly. What needed measuring was not the handle -- the header is clear about
+that -- but the game's count of owned children, which every engine object is registered in and
+which `cna_game_destroy` refuses on. Its output on ABI 0.21.0:
+
+```text
+chain create            0
+pass create             0
+add owned               0
+pass count              1
+destroy consumed handle 2
+chain clear             0
+pass count after clear  0
+chain destroy           0
+game destroy            3
+```
+
+The handover works exactly as documented: the pass is in the chain, the old handle is
+`INVALID_HANDLE`, `clear` empties the chain and the chain destroys cleanly. And then the game
+**cannot be destroyed** -- `INVALID_STATE`, *"All owned C child resources must be destroyed before
+the game."* The route releases the handle through `GetRuntimeHandles().Release` without
+decrementing the count `cna_blit_pass_create` incremented, so one hand-over makes the game
+undestroyable for the rest of its life.
+
+Recorded as `JAVA-UPSTREAM-011`, and the reason the route is **not bound**. A chain is fully usable
+without it -- `add_pass` borrows, and the caller closing its own passes is an ordinary thing to
+ask -- so binding a method that quietly makes shutdown impossible would be worse than the absence.
+The Java suite could only ever have seen this as a teardown failure three tests later, which is why
+it was worth asking in C.

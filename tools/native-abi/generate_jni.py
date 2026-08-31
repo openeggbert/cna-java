@@ -139,7 +139,31 @@ def array_extent(where: str, extent: str, live: dict) -> int:
     return count
 
 
-def flatten_struct(name: str, live: dict, seen: frozenset[str] = frozenset()) -> list[tuple[str, str]]:
+def prefix_fields(name: str, live: dict, prefix: dict | None) -> list[dict]:
+    """Return a structure's fields, stopped before the one a declared prefix names.
+
+    CNA grows some of its structures by appending, and documents the earlier
+    size as a constant: a caller compiled against version one sets
+    ``struct_size`` to it and every route still works, because CNA never reads
+    past what ``struct_size`` declares. That is the mechanism this uses, not a
+    truncation invented here -- which is why the declaration has to name both
+    the field to stop before and CNA's own size constant, and why both are
+    checked against the live headers.
+    """
+    fields = live["structures"][name]["fields"]
+    if prefix is None:
+        return fields
+    stop = prefix["stopBefore"]
+    names = [field["name"] for field in fields]
+    if stop not in names:
+        raise Unsupported(f"{name}: no field named {stop} to stop before")
+    if prefix["sizeConstant"] not in live["constants"]:
+        raise Unsupported(f"{name}: {prefix['sizeConstant']} is not a CNA constant")
+    return fields[:names.index(stop)]
+
+
+def flatten_struct(name: str, live: dict, seen: frozenset[str] = frozenset(),
+                   prefix: dict | None = None) -> list[tuple[str, str]]:
     """Flatten a POD struct into its scalar leaves as (field path, C type).
 
     A fixed-size array field expands to one leaf per element, so padding and
@@ -152,7 +176,7 @@ def flatten_struct(name: str, live: dict, seen: frozenset[str] = frozenset()) ->
     if structure is None:
         raise Unsupported(f"not a known structure: {name}")
     leaves: list[tuple[str, str]] = []
-    for field in structure["fields"]:
+    for field in prefix_fields(name, live, prefix):
         field_type, pointers = bare(field["type"])
         if pointers or not field["name"]:
             raise Unsupported(f"{name}.{field['name']}: unsupported field type {field['type']}")
@@ -208,7 +232,8 @@ STRUCT_GROUPS = (
 
 
 def version_paths(name: str, live: dict, prefix: str = "",
-                  seen: frozenset[str] = frozenset()) -> list[tuple[str, str, str]]:
+                  seen: frozenset[str] = frozenset(),
+                  declared: dict | None = None) -> list[tuple[str, str, str]]:
     """Return every ``struct_size``/``struct_version`` leaf, nested ones included.
 
     CNA requires each versioned structure to be stamped from the exact header the
@@ -220,13 +245,24 @@ def version_paths(name: str, live: dict, prefix: str = "",
     structure = live["structures"].get(name)
     if structure is None or name in seen:
         return []
-    fields = {field["name"] for field in structure["fields"]}
+    visible = prefix_fields(name, live, declared)
+    fields = {field["name"] for field in visible}
     found: list[tuple[str, str, str]] = []
     for version_field in VERSION_FIELDS:
         if version_field in fields:
-            found.append((prefix + version_field, version_field,
-                          struct_version(name, live)))
-    for field in structure["fields"]:
+            # A declared prefix says both how big the structure the caller filled in is and
+            # which version that makes it, and CNA names both. Stamping sizeof here instead
+            # would tell CNA the whole structure was written when the tail never was.
+            if version_field == "struct_size" and declared is not None:
+                found.append((prefix + version_field, "declared_size",
+                              declared["sizeConstant"]))
+            elif version_field == "struct_version" and declared is not None:
+                found.append((prefix + version_field, version_field,
+                              f"UINT32_C({declared['version']})"))
+            else:
+                found.append((prefix + version_field, version_field,
+                              struct_version(name, live)))
+    for field in visible:
         field_type, pointers = bare(field["type"])
         if pointers:
             continue
@@ -258,7 +294,9 @@ def stamp_versions(target: str, versions: list[tuple[str, str, str]]) -> list[st
     for path, kind, version in versions:
         member = path.rsplit(".", 1)[0] if "." in path else None
         subject = f"{target}.{member}" if member else target
-        if kind == "struct_size":
+        if kind == "declared_size":
+            lines.append(f"    {target}.{path} = (uint32_t)({version});")
+        elif kind == "struct_size":
             lines.append(f"    {target}.{path} = (uint32_t)(sizeof {subject});")
         else:
             lines.append(f"    {target}.{path} = {version};")
@@ -338,10 +376,12 @@ def plan(route: dict, live: dict) -> dict:
             index += 1
             continue
         if pointers == 0 and type_name in live["structures"]:
-            raw_leaves = flatten_struct(type_name, live)
+            declared = route.get("structPrefixes", {}).get(name)
+            raw_leaves = flatten_struct(type_name, live, prefix=declared)
             groups = group_leaves(raw_leaves)
             steps.append({"shape": "struct_value", "name": name, "ctype": type_name,
-                          "versions": version_paths(type_name, live), **groups})
+                          "versions": version_paths(type_name, live, declared=declared),
+                          **groups})
             index += 1
             continue
         if pointers == 0:
@@ -377,7 +417,8 @@ def plan(route: dict, live: dict) -> dict:
             index += 2
             continue
         if pointers == 1 and type_name in live["structures"]:
-            raw_leaves = flatten_struct(type_name, live)
+            declared = route.get("structPrefixes", {}).get(name)
+            raw_leaves = flatten_struct(type_name, live, prefix=declared)
             groups = group_leaves(raw_leaves)
             declared_extent = route.get("arrayLengths", {}).get(name)
             if declared_extent is not None:
@@ -430,7 +471,8 @@ def plan(route: dict, live: dict) -> dict:
                     "lifetime the declaration does not state")
             steps.append({"shape": "struct", "name": name, "ctype": type_name,
                           "input": constant, "inOut": in_out,
-                          "versions": version_paths(type_name, live), **groups})
+                          "versions": version_paths(type_name, live, declared=declared),
+                          **groups})
             index += 1
             continue
         if pointers == 1 and following is not None and bare(following["type"]) == ("uint64_t", 0):

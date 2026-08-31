@@ -20138,6 +20138,146 @@
       ]
     },
     {
+      "name": "cna_post_process_chain_add_pass",
+      "header": "engine_layer.h",
+      "ownership": "borrows the chain; BORROWS the pass, which the caller keeps alive and releases",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_PostProcessChainHandle",
+        "CNA_PostProcessPassHandle"
+      ]
+    },
+    {
+      "name": "cna_post_process_chain_apply",
+      "header": "engine_layer.h",
+      "ownership": "borrows the chain; the context's textures are borrowed for the call",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_PostProcessChainHandle",
+        "const CNA_PostProcessContext*"
+      ]
+    },
+    {
+      "name": "cna_post_process_chain_clear",
+      "header": "engine_layer.h",
+      "ownership": "borrows the chain; releases the passes it owns and drops the ones it borrowed",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_PostProcessChainHandle"
+      ]
+    },
+    {
+      "name": "cna_post_process_chain_copy_pass_timing_name",
+      "header": "engine_layer.h",
+      "ownership": "borrows the chain; copies into a caller-owned buffer",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_PostProcessChainHandle",
+        "uint64_t",
+        "char*",
+        "uint64_t",
+        "uint64_t*"
+      ]
+    },
+    {
+      "name": "cna_post_process_chain_create",
+      "header": "engine_layer.h",
+      "ownership": "borrows the graphics device; returns an owned chain handle",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_Handle",
+        "CNA_PostProcessChainHandle*"
+      ]
+    },
+    {
+      "name": "cna_post_process_chain_destroy",
+      "header": "engine_layer.h",
+      "ownership": "consumes the chain handle and every pass it owns; refused while its target pool is borrowed",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_PostProcessChainHandle"
+      ]
+    },
+    {
+      "name": "cna_post_process_chain_get_pass_count",
+      "header": "engine_layer.h",
+      "ownership": "borrows the chain; owns nothing",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_PostProcessChainHandle",
+        "int32_t*"
+      ]
+    },
+    {
+      "name": "cna_post_process_chain_get_pass_timing",
+      "header": "engine_layer.h",
+      "ownership": "borrows the chain; copies a value out",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_PostProcessChainHandle",
+        "uint64_t",
+        "CNA_PassTimingEXT*"
+      ]
+    },
+    {
+      "name": "cna_post_process_chain_get_pass_timing_count",
+      "header": "engine_layer.h",
+      "ownership": "borrows the chain; owns nothing",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_PostProcessChainHandle",
+        "uint64_t*"
+      ]
+    },
+    {
+      "name": "cna_post_process_chain_get_target_pool",
+      "header": "engine_layer.h",
+      "ownership": "borrows the chain; returns a COUNTED BORROW of its pool, and destroying the chain is refused while it is outstanding",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_PostProcessChainHandle",
+        "CNA_RenderTargetPoolHandle*"
+      ]
+    },
+    {
+      "name": "cna_post_process_chain_is_gpu_timing_enabled",
+      "header": "engine_layer.h",
+      "ownership": "borrows the chain; owns nothing",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_PostProcessChainHandle",
+        "CNA_Bool*"
+      ]
+    },
+    {
+      "name": "cna_post_process_chain_reset_targets",
+      "header": "engine_layer.h",
+      "ownership": "borrows the chain; releases the pooled targets it owns",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_PostProcessChainHandle"
+      ]
+    },
+    {
+      "name": "cna_post_process_chain_set_gpu_timing_enabled",
+      "header": "engine_layer.h",
+      "ownership": "borrows the chain; owns nothing",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_PostProcessChainHandle",
+        "CNA_Bool"
+      ]
+    },
+    {
+      "name": "cna_post_process_context_init",
+      "header": "engine_layer.h",
+      "ownership": "owns nothing; fills a caller-owned structure",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_PostProcessContext*"
+      ]
+    },
+    {
       "name": "cna_post_process_effect_pass_create",
       "header": "engine_layer.h",
       "ownership": "borrows the graphics device; BORROWS the effect, which must outlive the pass and is left alive when the pass is destroyed; returns an owned pass handle",
@@ -20169,6 +20309,16 @@
       "parameters": [
         "CNA_PostProcessPassHandle",
         "CNA_EffectHandle"
+      ]
+    },
+    {
+      "name": "cna_post_process_pass_apply",
+      "header": "engine_layer.h",
+      "ownership": "borrows the pass; the context's textures are borrowed for the call",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_PostProcessPassHandle",
+        "const CNA_PostProcessContext*"
       ]
     },
     {
