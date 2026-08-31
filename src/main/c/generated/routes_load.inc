@@ -1280,6 +1280,10 @@
     LOAD(model_copy_absolute_bone_transforms, "cna_model_copy_absolute_bone_transforms");
     LOAD(model_copy_bone_transforms, "cna_model_copy_bone_transforms");
     LOAD(model_copy_camera_name_ext, "cna_model_copy_camera_name_ext");
+    LOAD(model_copy_gltf_import_diagnostic_code_ext, "cna_model_copy_gltf_import_diagnostic_code_ext");
+    LOAD(model_copy_gltf_import_diagnostic_detail_ext, "cna_model_copy_gltf_import_diagnostic_detail_ext");
+    LOAD(model_copy_gltf_import_diagnostic_message_ext, "cna_model_copy_gltf_import_diagnostic_message_ext");
+    LOAD(model_copy_gltf_import_diagnostic_subject_ext, "cna_model_copy_gltf_import_diagnostic_subject_ext");
     LOAD(model_copy_material_variant_name_ext, "cna_model_copy_material_variant_name_ext");
     LOAD(model_copy_skin_name_ext, "cna_model_copy_skin_name_ext");
     LOAD(model_create_skin_skeleton_handle_ext, "cna_model_create_skin_skeleton_handle_ext");
@@ -1295,6 +1299,12 @@
     LOAD(model_get_camera_count_ext, "cna_model_get_camera_count_ext");
     LOAD(model_get_camera_ext, "cna_model_get_camera_ext");
     LOAD(model_get_camera_name_byte_count_ext, "cna_model_get_camera_name_byte_count_ext");
+    LOAD(model_get_gltf_import_diagnostic_code_byte_count_ext, "cna_model_get_gltf_import_diagnostic_code_byte_count_ext");
+    LOAD(model_get_gltf_import_diagnostic_detail_byte_count_ext, "cna_model_get_gltf_import_diagnostic_detail_byte_count_ext");
+    LOAD(model_get_gltf_import_diagnostic_ext, "cna_model_get_gltf_import_diagnostic_ext");
+    LOAD(model_get_gltf_import_diagnostic_message_byte_count_ext, "cna_model_get_gltf_import_diagnostic_message_byte_count_ext");
+    LOAD(model_get_gltf_import_diagnostic_subject_byte_count_ext, "cna_model_get_gltf_import_diagnostic_subject_byte_count_ext");
+    LOAD(model_get_gltf_import_report_ext, "cna_model_get_gltf_import_report_ext");
     LOAD(model_get_material_variant_count_ext, "cna_model_get_material_variant_count_ext");
     LOAD(model_get_material_variant_ext, "cna_model_get_material_variant_ext");
     LOAD(model_get_material_variant_name_byte_count_ext, "cna_model_get_material_variant_name_byte_count_ext");
@@ -1338,6 +1348,7 @@
     LOAD(model_mesh_set_bounding_sphere, "cna_model_mesh_set_bounding_sphere");
     LOAD(model_mesh_set_parent_bone, "cna_model_mesh_set_parent_bone");
     LOAD(model_set_bone_transforms, "cna_model_set_bone_transforms");
+    LOAD(model_set_gltf_import_report_ext, "cna_model_set_gltf_import_report_ext");
     LOAD(model_set_material_variant_ext, "cna_model_set_material_variant_ext");
     LOAD(morph_target_data_ext_blend, "cna_morph_target_data_ext_blend");
     LOAD(morph_target_data_ext_copy_base_vertex_bytes, "cna_morph_target_data_ext_copy_base_vertex_bytes");

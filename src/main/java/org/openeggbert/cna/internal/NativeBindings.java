@@ -1501,6 +1501,37 @@ public final class NativeBindings {
             float[] outTangents, boolean stepInterpolation, boolean cubicSpline,
             double timeSeconds, float[] destination, long[] outWeightCount);
 
+    /**
+     * Records one glTF import diagnostic on a model.
+     *
+     * <p>Hand-written for a shape the generator refuses inside a structure rather than beside
+     * one: the descriptor carries two string views, which it handles, and a pointer to an array
+     * of them, which it does not -- those would have to outlive one element's marshalling. Here
+     * they do, and only for the call.
+     *
+     * @param model the native model handle
+     * @param code the stable diagnostic identifier as UTF-8 bytes
+     * @param severity one CNA severity identity
+     * @param kind one CNA diagnostic-kind identity
+     * @param subject what the entry concerns, as UTF-8 bytes; may be empty
+     * @param count how many occurrences the entry represents
+     * @param worstMagnitude the largest measured magnitude, or zero
+     * @param details each affected name as UTF-8 bytes
+     * @param message the human-readable message as UTF-8 bytes
+     * @return CNA's result
+     */
+    public static int modelAddGltfImportDiagnostic(long model, byte[] code, int severity,
+            int kind, byte[] subject, long count, double worstMagnitude, byte[][] details,
+            byte[] message) {
+        requireAvailable();
+        return nativeModelAddGltfImportDiagnostic(model, code, severity, kind, subject, count,
+                worstMagnitude, details, message);
+    }
+
+    private static native int nativeModelAddGltfImportDiagnostic(long model, byte[] code,
+            int severity, int kind, byte[] subject, long count, double worstMagnitude,
+            byte[][] details, byte[] message);
+
 
     /**
      * Releases a texture handle that names a texture without keeping it alive.

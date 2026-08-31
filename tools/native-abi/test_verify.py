@@ -260,6 +260,40 @@ def test_binding_status(report: dict, rules: dict) -> None:
     check(prefixed(mutated(blocker_over_bound), "BLOCKER_RULE_MATCHES_BOUND_ROUTE"),
           "a rule that still names a route something has since bound is refused")
 
+    # 4b. The same staleness one level up, and the one that actually kept happening: a
+    #     prefix or contains rule names no symbol, so check 4 cannot see it, and a
+    #     blocker that no longer decides any route still reads as a live reason not to
+    #     bind. Three families were found blocked that way, each on a reason that had
+    #     been true when it was written.
+    each_decides_one = {index: 1 for index in range(len(rules["rules"]))}
+    check(not prefixed(coverage_tool.rule_problems(rules, bound, each_decides_one),
+                       "STALE_BLOCKER_RULE_DECIDES_NOTHING"),
+          "a blocker that still decides an unbound route is not called stale")
+    live_blocker = next(index for index, rule in enumerate(rules["rules"])
+                        if rule["bindingStatus"].startswith("BLOCKED_"))
+    emptied = dict(each_decides_one)
+    emptied[live_blocker] = 0
+    check(prefixed(coverage_tool.rule_problems(rules, bound, emptied),
+                   "STALE_BLOCKER_RULE_DECIDES_NOTHING"),
+          "a blocker that decides no unbound route is refused, even with others still live")
+    check(not prefixed(coverage_tool.rule_problems(rules, bound),
+                       "STALE_BLOCKER_RULE_DECIDES_NOTHING"),
+          "a caller with no inventory gets no staleness verdict rather than a guess")
+
+    def non_blocker_decides_nothing(value: dict) -> None:
+        for rule in value["rules"]:
+            if rule["bindingStatus"].startswith("BLOCKED_"):
+                rule["bindingStatus"] = "DELIBERATE_NON_BINDING"
+                rule["evidence"] = "Measured; the managed path answers identically."
+    copied = copy.deepcopy(rules)
+    non_blocker_decides_nothing(copied)
+    check(not prefixed(coverage_tool.rule_problems(copied, bound, {}),
+                       "STALE_BLOCKER_RULE_DECIDES_NOTHING"),
+          "only a blocker is stale for deciding nothing: a decision still stands")
+    check(prefixed(coverage_tool.rule_problems(rules, bound, {}),
+                   "STALE_BLOCKER_RULE_DECIDES_NOTHING"),
+          "the same rule set with its blockers intact is refused when none decides anything")
+
     # 5. DEFERRED_TRACKED is the one status that names a backlog task instead of a
     #    measurement, so it is fenced to the purpose that has one.
     def deferral_outside_backlog(value: dict) -> None:

@@ -323,6 +323,26 @@ public final class NativeModelExtensionRoutes {
     public static native int modelCopyCameraNameExt(long model, long index, byte[] destination, long[] outByteCount);
 
     /**
+     * cna_model_copy_gltf_import_diagnostic_code_ext (models.h).
+     */
+    public static native int modelCopyGltfImportDiagnosticCodeExt(long model, long index, byte[] destination, long[] outByteCount);
+
+    /**
+     * cna_model_copy_gltf_import_diagnostic_detail_ext (models.h).
+     */
+    public static native int modelCopyGltfImportDiagnosticDetailExt(long model, long index, long detailIndex, byte[] destination, long[] outByteCount);
+
+    /**
+     * cna_model_copy_gltf_import_diagnostic_message_ext (models.h).
+     */
+    public static native int modelCopyGltfImportDiagnosticMessageExt(long model, long index, byte[] destination, long[] outByteCount);
+
+    /**
+     * cna_model_copy_gltf_import_diagnostic_subject_ext (models.h).
+     */
+    public static native int modelCopyGltfImportDiagnosticSubjectExt(long model, long index, byte[] destination, long[] outByteCount);
+
+    /**
      * cna_model_copy_material_variant_name_ext (models.h).
      */
     public static native int modelCopyMaterialVariantNameExt(long model, long index, byte[] destination, long[] outByteCount);
@@ -452,6 +472,70 @@ public final class NativeModelExtensionRoutes {
      * cna_model_get_camera_name_byte_count_ext (models.h).
      */
     public static native int modelGetCameraNameByteCountExt(long model, long index, long[] outByteCount);
+
+    /**
+     * cna_model_get_gltf_import_diagnostic_code_byte_count_ext (models.h).
+     */
+    public static native int modelGetGltfImportDiagnosticCodeByteCountExt(long model, long index, long[] outByteCount);
+
+    /**
+     * cna_model_get_gltf_import_diagnostic_detail_byte_count_ext (models.h).
+     */
+    public static native int modelGetGltfImportDiagnosticDetailByteCountExt(long model, long index, long detailIndex, long[] outByteCount);
+
+    /**
+     * cna_model_get_gltf_import_diagnostic_ext (models.h).
+     *
+     * <p>outDiagnosticIntegral carries CNA_GltfImportDiagnosticEXT in this order:
+     * <ol start="0">
+     *   <li>{@code severity} (CNA_GltfImportDiagnosticSeverityEXT)</li>
+     *   <li>{@code kind} (CNA_GltfImportDiagnosticKindEXT)</li>
+     *   <li>{@code count} (uint64_t)</li>
+     *   <li>{@code detail_count} (uint64_t)</li>
+     * </ol>
+     *
+     * <p>outDiagnosticDoubles carries CNA_GltfImportDiagnosticEXT in this order:
+     * <ol start="0">
+     *   <li>{@code worst_magnitude} (double)</li>
+     * </ol>
+     */
+    public static native int modelGetGltfImportDiagnosticExt(long model, long index, long[] outDiagnosticIntegral, double[] outDiagnosticDoubles);
+
+    /**
+     * cna_model_get_gltf_import_diagnostic_message_byte_count_ext (models.h).
+     */
+    public static native int modelGetGltfImportDiagnosticMessageByteCountExt(long model, long index, long[] outByteCount);
+
+    /**
+     * cna_model_get_gltf_import_diagnostic_subject_byte_count_ext (models.h).
+     */
+    public static native int modelGetGltfImportDiagnosticSubjectByteCountExt(long model, long index, long[] outByteCount);
+
+    /**
+     * cna_model_get_gltf_import_report_ext (models.h).
+     *
+     * <p>outReportIntegral carries CNA_GltfImportReportEXT in this order:
+     * <ol start="0">
+     *   <li>{@code node_count} (uint64_t)</li>
+     *   <li>{@code mesh_instance_count} (uint64_t)</li>
+     *   <li>{@code distinct_mesh_count} (uint64_t)</li>
+     *   <li>{@code shared_mesh_count} (uint64_t)</li>
+     *   <li>{@code max_node_depth} (uint64_t)</li>
+     *   <li>{@code camera_node_count} (uint64_t)</li>
+     *   <li>{@code light_node_count} (uint64_t)</li>
+     *   <li>{@code imported_light_count} (uint64_t)</li>
+     *   <li>{@code primitive_count} (uint64_t)</li>
+     *   <li>{@code skin_count} (uint64_t)</li>
+     *   <li>{@code animation_count} (uint64_t)</li>
+     *   <li>{@code clip_count} (uint64_t)</li>
+     *   <li>{@code diagnostic_count} (uint64_t)</li>
+     *   <li>{@code warning_count} (uint64_t)</li>
+     *   <li>{@code dropped_feature_count} (uint64_t)</li>
+     *   <li>{@code approximation_count} (uint64_t)</li>
+     *   <li>{@code anything_lost} (CNA_Bool)</li>
+     * </ol>
+     */
+    public static native int modelGetGltfImportReportExt(long model, long[] outReportIntegral);
 
     /**
      * cna_model_get_material_variant_count_ext (models.h).
@@ -707,6 +791,32 @@ public final class NativeModelExtensionRoutes {
      * cna_model_set_bone_transforms (models.h).
      */
     public static native int modelSetBoneTransforms(long model, float[] sourceFloating);
+
+    /**
+     * cna_model_set_gltf_import_report_ext (models.h).
+     *
+     * <p>reportIntegral carries CNA_GltfImportReportEXT in this order:
+     * <ol start="0">
+     *   <li>{@code node_count} (uint64_t)</li>
+     *   <li>{@code mesh_instance_count} (uint64_t)</li>
+     *   <li>{@code distinct_mesh_count} (uint64_t)</li>
+     *   <li>{@code shared_mesh_count} (uint64_t)</li>
+     *   <li>{@code max_node_depth} (uint64_t)</li>
+     *   <li>{@code camera_node_count} (uint64_t)</li>
+     *   <li>{@code light_node_count} (uint64_t)</li>
+     *   <li>{@code imported_light_count} (uint64_t)</li>
+     *   <li>{@code primitive_count} (uint64_t)</li>
+     *   <li>{@code skin_count} (uint64_t)</li>
+     *   <li>{@code animation_count} (uint64_t)</li>
+     *   <li>{@code clip_count} (uint64_t)</li>
+     *   <li>{@code diagnostic_count} (uint64_t)</li>
+     *   <li>{@code warning_count} (uint64_t)</li>
+     *   <li>{@code dropped_feature_count} (uint64_t)</li>
+     *   <li>{@code approximation_count} (uint64_t)</li>
+     *   <li>{@code anything_lost} (CNA_Bool)</li>
+     * </ol>
+     */
+    public static native int modelSetGltfImportReportExt(long model, long[] reportIntegral);
 
     /**
      * cna_model_set_material_variant_ext (models.h).

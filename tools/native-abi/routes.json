@@ -2648,6 +2648,22 @@
         "symbol": "cna_model_copy_camera_name_ext"
       },
       {
+        "java": "modelCopyGltfImportDiagnosticCodeExt",
+        "symbol": "cna_model_copy_gltf_import_diagnostic_code_ext"
+      },
+      {
+        "java": "modelCopyGltfImportDiagnosticDetailExt",
+        "symbol": "cna_model_copy_gltf_import_diagnostic_detail_ext"
+      },
+      {
+        "java": "modelCopyGltfImportDiagnosticMessageExt",
+        "symbol": "cna_model_copy_gltf_import_diagnostic_message_ext"
+      },
+      {
+        "java": "modelCopyGltfImportDiagnosticSubjectExt",
+        "symbol": "cna_model_copy_gltf_import_diagnostic_subject_ext"
+      },
+      {
         "java": "modelCopyMaterialVariantNameExt",
         "symbol": "cna_model_copy_material_variant_name_ext"
       },
@@ -2706,6 +2722,30 @@
       {
         "java": "modelGetCameraNameByteCountExt",
         "symbol": "cna_model_get_camera_name_byte_count_ext"
+      },
+      {
+        "java": "modelGetGltfImportDiagnosticCodeByteCountExt",
+        "symbol": "cna_model_get_gltf_import_diagnostic_code_byte_count_ext"
+      },
+      {
+        "java": "modelGetGltfImportDiagnosticDetailByteCountExt",
+        "symbol": "cna_model_get_gltf_import_diagnostic_detail_byte_count_ext"
+      },
+      {
+        "java": "modelGetGltfImportDiagnosticExt",
+        "symbol": "cna_model_get_gltf_import_diagnostic_ext"
+      },
+      {
+        "java": "modelGetGltfImportDiagnosticMessageByteCountExt",
+        "symbol": "cna_model_get_gltf_import_diagnostic_message_byte_count_ext"
+      },
+      {
+        "java": "modelGetGltfImportDiagnosticSubjectByteCountExt",
+        "symbol": "cna_model_get_gltf_import_diagnostic_subject_byte_count_ext"
+      },
+      {
+        "java": "modelGetGltfImportReportExt",
+        "symbol": "cna_model_get_gltf_import_report_ext"
       },
       {
         "java": "modelGetMaterialVariantCountExt",
@@ -2878,6 +2918,10 @@
       {
         "java": "modelSetBoneTransforms",
         "symbol": "cna_model_set_bone_transforms"
+      },
+      {
+        "java": "modelSetGltfImportReportExt",
+        "symbol": "cna_model_set_gltf_import_report_ext"
       },
       {
         "java": "modelSetMaterialVariantExt",

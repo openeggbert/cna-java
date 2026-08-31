@@ -1280,6 +1280,10 @@
     CNA_JNI_ROUTE(cna_model_copy_absolute_bone_transforms) model_copy_absolute_bone_transforms;
     CNA_JNI_ROUTE(cna_model_copy_bone_transforms) model_copy_bone_transforms;
     CNA_JNI_ROUTE(cna_model_copy_camera_name_ext) model_copy_camera_name_ext;
+    CNA_JNI_ROUTE(cna_model_copy_gltf_import_diagnostic_code_ext) model_copy_gltf_import_diagnostic_code_ext;
+    CNA_JNI_ROUTE(cna_model_copy_gltf_import_diagnostic_detail_ext) model_copy_gltf_import_diagnostic_detail_ext;
+    CNA_JNI_ROUTE(cna_model_copy_gltf_import_diagnostic_message_ext) model_copy_gltf_import_diagnostic_message_ext;
+    CNA_JNI_ROUTE(cna_model_copy_gltf_import_diagnostic_subject_ext) model_copy_gltf_import_diagnostic_subject_ext;
     CNA_JNI_ROUTE(cna_model_copy_material_variant_name_ext) model_copy_material_variant_name_ext;
     CNA_JNI_ROUTE(cna_model_copy_skin_name_ext) model_copy_skin_name_ext;
     CNA_JNI_ROUTE(cna_model_create_skin_skeleton_handle_ext) model_create_skin_skeleton_handle_ext;
@@ -1295,6 +1299,12 @@
     CNA_JNI_ROUTE(cna_model_get_camera_count_ext) model_get_camera_count_ext;
     CNA_JNI_ROUTE(cna_model_get_camera_ext) model_get_camera_ext;
     CNA_JNI_ROUTE(cna_model_get_camera_name_byte_count_ext) model_get_camera_name_byte_count_ext;
+    CNA_JNI_ROUTE(cna_model_get_gltf_import_diagnostic_code_byte_count_ext) model_get_gltf_import_diagnostic_code_byte_count_ext;
+    CNA_JNI_ROUTE(cna_model_get_gltf_import_diagnostic_detail_byte_count_ext) model_get_gltf_import_diagnostic_detail_byte_count_ext;
+    CNA_JNI_ROUTE(cna_model_get_gltf_import_diagnostic_ext) model_get_gltf_import_diagnostic_ext;
+    CNA_JNI_ROUTE(cna_model_get_gltf_import_diagnostic_message_byte_count_ext) model_get_gltf_import_diagnostic_message_byte_count_ext;
+    CNA_JNI_ROUTE(cna_model_get_gltf_import_diagnostic_subject_byte_count_ext) model_get_gltf_import_diagnostic_subject_byte_count_ext;
+    CNA_JNI_ROUTE(cna_model_get_gltf_import_report_ext) model_get_gltf_import_report_ext;
     CNA_JNI_ROUTE(cna_model_get_material_variant_count_ext) model_get_material_variant_count_ext;
     CNA_JNI_ROUTE(cna_model_get_material_variant_ext) model_get_material_variant_ext;
     CNA_JNI_ROUTE(cna_model_get_material_variant_name_byte_count_ext) model_get_material_variant_name_byte_count_ext;
@@ -1338,6 +1348,7 @@
     CNA_JNI_ROUTE(cna_model_mesh_set_bounding_sphere) model_mesh_set_bounding_sphere;
     CNA_JNI_ROUTE(cna_model_mesh_set_parent_bone) model_mesh_set_parent_bone;
     CNA_JNI_ROUTE(cna_model_set_bone_transforms) model_set_bone_transforms;
+    CNA_JNI_ROUTE(cna_model_set_gltf_import_report_ext) model_set_gltf_import_report_ext;
     CNA_JNI_ROUTE(cna_model_set_material_variant_ext) model_set_material_variant_ext;
     CNA_JNI_ROUTE(cna_morph_target_data_ext_blend) morph_target_data_ext_blend;
     CNA_JNI_ROUTE(cna_morph_target_data_ext_copy_base_vertex_bytes) morph_target_data_ext_copy_base_vertex_bytes;

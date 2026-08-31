@@ -1198,6 +1198,94 @@ Java_org_openeggbert_cna_internal_generated_NativeModelExtensionRoutes_modelCopy
 }
 
 JNIEXPORT jint JNICALL
+Java_org_openeggbert_cna_internal_generated_NativeModelExtensionRoutes_modelCopyGltfImportDiagnosticCodeExt(
+    JNIEnv* environment, jclass declaring_class, jlong model, jlong index, jbyteArray destination, jlongArray out_byte_count)
+{
+    (void)environment;
+    (void)declaring_class;
+    jsize destination_size = (*environment)->GetArrayLength(environment, destination);
+    jbyte* destination_bytes = (*environment)->GetByteArrayElements(environment, destination, NULL);
+    if (destination_bytes == NULL) {
+        return (jint)CNA_RESULT_OUT_OF_MEMORY;
+    }
+    uint64_t destination_written = 0;
+    CNA_Result call_result = cna.model_copy_gltf_import_diagnostic_code_ext((CNA_ModelHandle)model, (uint64_t)index, (char*)destination_bytes, (uint64_t)destination_size, &destination_written);
+    (*environment)->ReleaseByteArrayElements(environment, destination, destination_bytes, 0);
+    if (call_result == CNA_RESULT_SUCCESS || call_result == CNA_RESULT_BUFFER_TOO_SMALL) {
+        jlong destination_element = (jlong)destination_written;
+        (*environment)->SetLongArrayRegion(
+            environment, out_byte_count, 0, 1, &destination_element);
+    }
+    return (jint)call_result;
+}
+
+JNIEXPORT jint JNICALL
+Java_org_openeggbert_cna_internal_generated_NativeModelExtensionRoutes_modelCopyGltfImportDiagnosticDetailExt(
+    JNIEnv* environment, jclass declaring_class, jlong model, jlong index, jlong detail_index, jbyteArray destination, jlongArray out_byte_count)
+{
+    (void)environment;
+    (void)declaring_class;
+    jsize destination_size = (*environment)->GetArrayLength(environment, destination);
+    jbyte* destination_bytes = (*environment)->GetByteArrayElements(environment, destination, NULL);
+    if (destination_bytes == NULL) {
+        return (jint)CNA_RESULT_OUT_OF_MEMORY;
+    }
+    uint64_t destination_written = 0;
+    CNA_Result call_result = cna.model_copy_gltf_import_diagnostic_detail_ext((CNA_ModelHandle)model, (uint64_t)index, (uint64_t)detail_index, (char*)destination_bytes, (uint64_t)destination_size, &destination_written);
+    (*environment)->ReleaseByteArrayElements(environment, destination, destination_bytes, 0);
+    if (call_result == CNA_RESULT_SUCCESS || call_result == CNA_RESULT_BUFFER_TOO_SMALL) {
+        jlong destination_element = (jlong)destination_written;
+        (*environment)->SetLongArrayRegion(
+            environment, out_byte_count, 0, 1, &destination_element);
+    }
+    return (jint)call_result;
+}
+
+JNIEXPORT jint JNICALL
+Java_org_openeggbert_cna_internal_generated_NativeModelExtensionRoutes_modelCopyGltfImportDiagnosticMessageExt(
+    JNIEnv* environment, jclass declaring_class, jlong model, jlong index, jbyteArray destination, jlongArray out_byte_count)
+{
+    (void)environment;
+    (void)declaring_class;
+    jsize destination_size = (*environment)->GetArrayLength(environment, destination);
+    jbyte* destination_bytes = (*environment)->GetByteArrayElements(environment, destination, NULL);
+    if (destination_bytes == NULL) {
+        return (jint)CNA_RESULT_OUT_OF_MEMORY;
+    }
+    uint64_t destination_written = 0;
+    CNA_Result call_result = cna.model_copy_gltf_import_diagnostic_message_ext((CNA_ModelHandle)model, (uint64_t)index, (char*)destination_bytes, (uint64_t)destination_size, &destination_written);
+    (*environment)->ReleaseByteArrayElements(environment, destination, destination_bytes, 0);
+    if (call_result == CNA_RESULT_SUCCESS || call_result == CNA_RESULT_BUFFER_TOO_SMALL) {
+        jlong destination_element = (jlong)destination_written;
+        (*environment)->SetLongArrayRegion(
+            environment, out_byte_count, 0, 1, &destination_element);
+    }
+    return (jint)call_result;
+}
+
+JNIEXPORT jint JNICALL
+Java_org_openeggbert_cna_internal_generated_NativeModelExtensionRoutes_modelCopyGltfImportDiagnosticSubjectExt(
+    JNIEnv* environment, jclass declaring_class, jlong model, jlong index, jbyteArray destination, jlongArray out_byte_count)
+{
+    (void)environment;
+    (void)declaring_class;
+    jsize destination_size = (*environment)->GetArrayLength(environment, destination);
+    jbyte* destination_bytes = (*environment)->GetByteArrayElements(environment, destination, NULL);
+    if (destination_bytes == NULL) {
+        return (jint)CNA_RESULT_OUT_OF_MEMORY;
+    }
+    uint64_t destination_written = 0;
+    CNA_Result call_result = cna.model_copy_gltf_import_diagnostic_subject_ext((CNA_ModelHandle)model, (uint64_t)index, (char*)destination_bytes, (uint64_t)destination_size, &destination_written);
+    (*environment)->ReleaseByteArrayElements(environment, destination, destination_bytes, 0);
+    if (call_result == CNA_RESULT_SUCCESS || call_result == CNA_RESULT_BUFFER_TOO_SMALL) {
+        jlong destination_element = (jlong)destination_written;
+        (*environment)->SetLongArrayRegion(
+            environment, out_byte_count, 0, 1, &destination_element);
+    }
+    return (jint)call_result;
+}
+
+JNIEXPORT jint JNICALL
 Java_org_openeggbert_cna_internal_generated_NativeModelExtensionRoutes_modelCopyMaterialVariantNameExt(
     JNIEnv* environment, jclass declaring_class, jlong model, jlong index, jbyteArray destination, jlongArray out_byte_count)
 {
@@ -1632,6 +1720,145 @@ Java_org_openeggbert_cna_internal_generated_NativeModelExtensionRoutes_modelGetC
         jlong out_byte_count_element = (jlong)out_byte_count_value;
         (*environment)->SetLongArrayRegion(
             environment, out_byte_count, 0, 1, &out_byte_count_element);
+    }
+    return (jint)call_result;
+}
+
+JNIEXPORT jint JNICALL
+Java_org_openeggbert_cna_internal_generated_NativeModelExtensionRoutes_modelGetGltfImportDiagnosticCodeByteCountExt(
+    JNIEnv* environment, jclass declaring_class, jlong model, jlong index, jlongArray out_byte_count)
+{
+    (void)environment;
+    (void)declaring_class;
+    uint64_t out_byte_count_value = 0;
+    CNA_Result call_result = cna.model_get_gltf_import_diagnostic_code_byte_count_ext((CNA_ModelHandle)model, (uint64_t)index, &out_byte_count_value);
+    if (call_result == CNA_RESULT_SUCCESS || call_result == CNA_RESULT_BUFFER_TOO_SMALL) {
+        jlong out_byte_count_element = (jlong)out_byte_count_value;
+        (*environment)->SetLongArrayRegion(
+            environment, out_byte_count, 0, 1, &out_byte_count_element);
+    }
+    return (jint)call_result;
+}
+
+JNIEXPORT jint JNICALL
+Java_org_openeggbert_cna_internal_generated_NativeModelExtensionRoutes_modelGetGltfImportDiagnosticDetailByteCountExt(
+    JNIEnv* environment, jclass declaring_class, jlong model, jlong index, jlong detail_index, jlongArray out_byte_count)
+{
+    (void)environment;
+    (void)declaring_class;
+    uint64_t out_byte_count_value = 0;
+    CNA_Result call_result = cna.model_get_gltf_import_diagnostic_detail_byte_count_ext((CNA_ModelHandle)model, (uint64_t)index, (uint64_t)detail_index, &out_byte_count_value);
+    if (call_result == CNA_RESULT_SUCCESS || call_result == CNA_RESULT_BUFFER_TOO_SMALL) {
+        jlong out_byte_count_element = (jlong)out_byte_count_value;
+        (*environment)->SetLongArrayRegion(
+            environment, out_byte_count, 0, 1, &out_byte_count_element);
+    }
+    return (jint)call_result;
+}
+
+JNIEXPORT jint JNICALL
+Java_org_openeggbert_cna_internal_generated_NativeModelExtensionRoutes_modelGetGltfImportDiagnosticExt(
+    JNIEnv* environment, jclass declaring_class, jlong model, jlong index, jlongArray out_diagnosticIntegral, jdoubleArray out_diagnosticDoubles)
+{
+    (void)environment;
+    (void)declaring_class;
+    if (out_diagnosticIntegral == NULL || out_diagnosticDoubles == NULL) {
+        return (jint)CNA_RESULT_INVALID_ARGUMENT;
+    }
+    CNA_GltfImportDiagnosticEXT out_diagnostic_value;
+    memset(&out_diagnostic_value, 0, sizeof out_diagnostic_value);
+    out_diagnostic_value.struct_size = (uint32_t)(sizeof out_diagnostic_value);
+    out_diagnostic_value.struct_version = UINT32_C(1);
+    CNA_Result call_result = cna.model_get_gltf_import_diagnostic_ext((CNA_ModelHandle)model, (uint64_t)index, &out_diagnostic_value);
+    if (call_result == CNA_RESULT_SUCCESS || call_result == CNA_RESULT_BUFFER_TOO_SMALL) {
+        jlong out_diagnosticIntegral_values[] = {
+            (jlong)out_diagnostic_value.severity,
+            (jlong)out_diagnostic_value.kind,
+            (jlong)out_diagnostic_value.count,
+            (jlong)out_diagnostic_value.detail_count
+        };
+        (*environment)->SetLongArrayRegion(environment, out_diagnosticIntegral, 0,
+            (jsize)(sizeof out_diagnosticIntegral_values / sizeof out_diagnosticIntegral_values[0]),
+            out_diagnosticIntegral_values);
+        jdouble out_diagnosticDoubles_values[] = {
+            (jdouble)out_diagnostic_value.worst_magnitude
+        };
+        (*environment)->SetDoubleArrayRegion(environment, out_diagnosticDoubles, 0,
+            (jsize)(sizeof out_diagnosticDoubles_values / sizeof out_diagnosticDoubles_values[0]),
+            out_diagnosticDoubles_values);
+    }
+    return (jint)call_result;
+}
+
+JNIEXPORT jint JNICALL
+Java_org_openeggbert_cna_internal_generated_NativeModelExtensionRoutes_modelGetGltfImportDiagnosticMessageByteCountExt(
+    JNIEnv* environment, jclass declaring_class, jlong model, jlong index, jlongArray out_byte_count)
+{
+    (void)environment;
+    (void)declaring_class;
+    uint64_t out_byte_count_value = 0;
+    CNA_Result call_result = cna.model_get_gltf_import_diagnostic_message_byte_count_ext((CNA_ModelHandle)model, (uint64_t)index, &out_byte_count_value);
+    if (call_result == CNA_RESULT_SUCCESS || call_result == CNA_RESULT_BUFFER_TOO_SMALL) {
+        jlong out_byte_count_element = (jlong)out_byte_count_value;
+        (*environment)->SetLongArrayRegion(
+            environment, out_byte_count, 0, 1, &out_byte_count_element);
+    }
+    return (jint)call_result;
+}
+
+JNIEXPORT jint JNICALL
+Java_org_openeggbert_cna_internal_generated_NativeModelExtensionRoutes_modelGetGltfImportDiagnosticSubjectByteCountExt(
+    JNIEnv* environment, jclass declaring_class, jlong model, jlong index, jlongArray out_byte_count)
+{
+    (void)environment;
+    (void)declaring_class;
+    uint64_t out_byte_count_value = 0;
+    CNA_Result call_result = cna.model_get_gltf_import_diagnostic_subject_byte_count_ext((CNA_ModelHandle)model, (uint64_t)index, &out_byte_count_value);
+    if (call_result == CNA_RESULT_SUCCESS || call_result == CNA_RESULT_BUFFER_TOO_SMALL) {
+        jlong out_byte_count_element = (jlong)out_byte_count_value;
+        (*environment)->SetLongArrayRegion(
+            environment, out_byte_count, 0, 1, &out_byte_count_element);
+    }
+    return (jint)call_result;
+}
+
+JNIEXPORT jint JNICALL
+Java_org_openeggbert_cna_internal_generated_NativeModelExtensionRoutes_modelGetGltfImportReportExt(
+    JNIEnv* environment, jclass declaring_class, jlong model, jlongArray out_reportIntegral)
+{
+    (void)environment;
+    (void)declaring_class;
+    if (out_reportIntegral == NULL) {
+        return (jint)CNA_RESULT_INVALID_ARGUMENT;
+    }
+    CNA_GltfImportReportEXT out_report_value;
+    memset(&out_report_value, 0, sizeof out_report_value);
+    out_report_value.struct_size = (uint32_t)(sizeof out_report_value);
+    out_report_value.struct_version = UINT32_C(1);
+    CNA_Result call_result = cna.model_get_gltf_import_report_ext((CNA_ModelHandle)model, &out_report_value);
+    if (call_result == CNA_RESULT_SUCCESS || call_result == CNA_RESULT_BUFFER_TOO_SMALL) {
+        jlong out_reportIntegral_values[] = {
+            (jlong)out_report_value.node_count,
+            (jlong)out_report_value.mesh_instance_count,
+            (jlong)out_report_value.distinct_mesh_count,
+            (jlong)out_report_value.shared_mesh_count,
+            (jlong)out_report_value.max_node_depth,
+            (jlong)out_report_value.camera_node_count,
+            (jlong)out_report_value.light_node_count,
+            (jlong)out_report_value.imported_light_count,
+            (jlong)out_report_value.primitive_count,
+            (jlong)out_report_value.skin_count,
+            (jlong)out_report_value.animation_count,
+            (jlong)out_report_value.clip_count,
+            (jlong)out_report_value.diagnostic_count,
+            (jlong)out_report_value.warning_count,
+            (jlong)out_report_value.dropped_feature_count,
+            (jlong)out_report_value.approximation_count,
+            (jlong)out_report_value.anything_lost
+        };
+        (*environment)->SetLongArrayRegion(environment, out_reportIntegral, 0,
+            (jsize)(sizeof out_reportIntegral_values / sizeof out_reportIntegral_values[0]),
+            out_reportIntegral_values);
     }
     return (jint)call_result;
 }
@@ -2431,6 +2658,44 @@ Java_org_openeggbert_cna_internal_generated_NativeModelExtensionRoutes_modelSetB
     }
     CNA_Result call_result = cna.model_set_bone_transforms((CNA_ModelHandle)model, source_values, (uint64_t)source_count);
     free(source_values);
+    return (jint)call_result;
+}
+
+JNIEXPORT jint JNICALL
+Java_org_openeggbert_cna_internal_generated_NativeModelExtensionRoutes_modelSetGltfImportReportExt(
+    JNIEnv* environment, jclass declaring_class, jlong model, jlongArray reportIntegral)
+{
+    (void)environment;
+    (void)declaring_class;
+    if (reportIntegral == NULL) {
+        return (jint)CNA_RESULT_INVALID_ARGUMENT;
+    }
+    CNA_GltfImportReportEXT report_value;
+    memset(&report_value, 0, sizeof report_value);
+    report_value.struct_size = (uint32_t)(sizeof report_value);
+    report_value.struct_version = UINT32_C(1);
+    {
+        jlong reportIntegral_values[17];
+        (*environment)->GetLongArrayRegion(environment, reportIntegral, 0, 17, reportIntegral_values);
+        report_value.node_count = (uint64_t)reportIntegral_values[0];
+        report_value.mesh_instance_count = (uint64_t)reportIntegral_values[1];
+        report_value.distinct_mesh_count = (uint64_t)reportIntegral_values[2];
+        report_value.shared_mesh_count = (uint64_t)reportIntegral_values[3];
+        report_value.max_node_depth = (uint64_t)reportIntegral_values[4];
+        report_value.camera_node_count = (uint64_t)reportIntegral_values[5];
+        report_value.light_node_count = (uint64_t)reportIntegral_values[6];
+        report_value.imported_light_count = (uint64_t)reportIntegral_values[7];
+        report_value.primitive_count = (uint64_t)reportIntegral_values[8];
+        report_value.skin_count = (uint64_t)reportIntegral_values[9];
+        report_value.animation_count = (uint64_t)reportIntegral_values[10];
+        report_value.clip_count = (uint64_t)reportIntegral_values[11];
+        report_value.diagnostic_count = (uint64_t)reportIntegral_values[12];
+        report_value.warning_count = (uint64_t)reportIntegral_values[13];
+        report_value.dropped_feature_count = (uint64_t)reportIntegral_values[14];
+        report_value.approximation_count = (uint64_t)reportIntegral_values[15];
+        report_value.anything_lost = (CNA_Bool)reportIntegral_values[16];
+    }
+    CNA_Result call_result = cna.model_set_gltf_import_report_ext((CNA_ModelHandle)model, &report_value);
     return (jint)call_result;
 }
 

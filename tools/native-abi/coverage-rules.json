@@ -1097,28 +1097,6 @@
     },
     {
       "match": {
-        "prefix": "cna_model_get_gltf_import"
-      },
-      "classification": "CNA_EXTENSION_CANDIDATE",
-      "purposeReason": "The glTF importer's diagnostics belong to a model CNA imported, which needs the content loader JAVA-UPSTREAM-004 blocks. A model mirrored from XNB carries none.",
-      "bindingStatus": "BLOCKED_UPSTREAM",
-      "bindingReason": "The glTF importer's diagnostics belong to a model CNA imported, and importing one needs the content loader JAVA-UPSTREAM-004 blocks. A model mirrored from XNB carries none.",
-      "evidence": "JAVA-UPSTREAM-004, still reproduced on the live CNA.",
-      "task": "JAVA-UPSTREAM-004"
-    },
-    {
-      "match": {
-        "contains": "gltf_import"
-      },
-      "classification": "CNA_EXTENSION_CANDIDATE",
-      "purposeReason": "The glTF import report and its diagnostics; see the getters.",
-      "bindingStatus": "BLOCKED_UPSTREAM",
-      "bindingReason": "The glTF importer's diagnostics belong to a model CNA imported, and importing one needs the content loader JAVA-UPSTREAM-004 blocks. A model mirrored from XNB carries none.",
-      "evidence": "JAVA-UPSTREAM-004, still reproduced on the live CNA.",
-      "task": "JAVA-UPSTREAM-004"
-    },
-    {
-      "match": {
         "header": "models.h"
       },
       "classification": "DEFERRED_RUNTIME",

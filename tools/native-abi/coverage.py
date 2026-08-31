@@ -356,11 +356,17 @@ PURPOSES_ALLOWING_DEFERRAL = {"DEFERRED_RUNTIME"}
 CENSUS_PURPOSE = "CNA_EXTENSION_CANDIDATE"
 
 
-def rule_problems(rules: dict, bound: set[str]) -> list[str]:
+def rule_problems(rules: dict, bound: set[str],
+                  blocked_routes: dict[int, int] | None = None) -> list[str]:
     """Report every way a coverage rule fails to answer both questions.
 
     Kept separate from ``build`` so the tool tests can mutate a rule set and see the
     exact diagnostic, rather than inferring it from a count that moved.
+
+    ``blocked_routes`` maps a rule's index to how many unbound routes it is actually the
+    first match for -- the only routes whose binding status it still decides. Omitting it
+    skips the staleness check rather than guessing, so a caller that has no inventory
+    still gets every other diagnostic.
     """
     problems: list[str] = []
     for index, rule in enumerate(rules["rules"]):
@@ -391,6 +397,14 @@ def rule_problems(rules: dict, bound: set[str]) -> list[str]:
         for symbol in rule.get("match", {}).get("symbols", ()):
             if symbol in bound:
                 problems.append(f"BLOCKER_RULE_MATCHES_BOUND_ROUTE {symbol} {where}")
+        # The same staleness one level up, and the one that actually kept slipping
+        # through: a prefix or contains rule names no symbol, so the check above cannot
+        # see it, and once every route it covered became bound its blocker decides
+        # nothing while still reading as a live reason not to bind. Three families were
+        # found blocked on reasons like that; each had been true when written.
+        if blocked_routes is not None and status is not None \
+                and status.startswith("BLOCKED_") and blocked_routes.get(index, 0) == 0:
+            problems.append(f"STALE_BLOCKER_RULE_DECIDES_NOTHING {where}")
     return problems
 
 
@@ -441,6 +455,9 @@ def build(cna_root: Path) -> dict:
             symbol_tests.setdefault(symbol, set()).update(test_reach.get(method, set()))
 
     entries = []
+    # rule index -> unbound routes it is the first match for, which are the only routes
+    # whose binding status it decides. A blocker that decides none has outlived its block.
+    unbound_matches: dict[int, int] = {}
     for name in sorted(live["functions"]):
         declaration = live["functions"][name]
         header = declaration["header"]
@@ -475,7 +492,11 @@ def build(cna_root: Path) -> dict:
             record["bindingReason"] = "Bound; the classification above is derived from what " \
                                       "reaches it, never declared."
         else:
-            rule = next((value for value in rules["rules"] if match_rule(value, name, header)), None)
+            rule = next(((position, value) for position, value in enumerate(rules["rules"])
+                         if match_rule(value, name, header)), None)
+            if rule is not None:
+                index, rule = rule
+                unbound_matches[index] = unbound_matches.get(index, 0) + 1
             if rule is None:
                 record["classification"] = "UNMAPPED_REQUIRES_REVIEW"
                 record["purposeReason"] = "No coverage rule explains this canonical route."
@@ -507,7 +528,7 @@ def build(cna_root: Path) -> dict:
         "boundFunctions": sum(1 for record in entries if record["bound"]),
         "classificationCounts": dict(sorted(counts.items())),
         "bindingStatusCounts": dict(sorted(binding_counts.items())),
-        "ruleProblems": rule_problems(rules, set(bound)),
+        "ruleProblems": rule_problems(rules, set(bound), unbound_matches),
         "functions": entries,
     }
 

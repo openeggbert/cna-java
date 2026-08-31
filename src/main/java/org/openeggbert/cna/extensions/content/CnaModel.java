@@ -471,6 +471,130 @@ public final class CnaModel implements AutoCloseable {
     }
 
     /**
+     * Returns what the importer read and what it did to it.
+     *
+     * <p>A model that came from another content path, or from a document written before CNA
+     * recorded this, reads back {@linkplain GltfImportSourceCounts#EMPTY empty} counts and no
+     * diagnostics -- not an error, and not a missing report.
+     *
+     * @return the report; never null
+     */
+    public GltfImportReport getGltfImportReport() {
+        long[] leaves = new long[GltfImportReport.LEAVES];
+        check("getGltfImportReport",
+                NativeModelExtensionRoutes.modelGetGltfImportReportExt(open(), leaves));
+        return GltfImportReport.of(leaves);
+    }
+
+    /**
+     * Records the shape of the scene this model was imported from, and drops its diagnostics.
+     *
+     * <p>This is the writing half of provenance, and it takes only the counts CNA stores: the
+     * five derived values are recomputed from the diagnostics, and CNA refuses a report that
+     * carries them rather than dropping them silently. Build the diagnostics afterwards with
+     * {@link #addGltfImportDiagnostic}.
+     *
+     * @param counts the shape of the source scene
+     */
+    public void setGltfImportSourceCounts(GltfImportSourceCounts counts) {
+        Objects.requireNonNull(counts, "counts");
+        check("setGltfImportSourceCounts", NativeModelExtensionRoutes
+                .modelSetGltfImportReportExt(open(), GltfImportReport.toLeaves(counts)));
+    }
+
+    /**
+     * Appends one thing the importer noticed.
+     *
+     * <p>The diagnostic's four strings are borrowed for the call and copied by CNA, so nothing
+     * here has to outlive the call.
+     *
+     * @param diagnostic what to record
+     */
+    public void addGltfImportDiagnostic(GltfImportDiagnostic diagnostic) {
+        Objects.requireNonNull(diagnostic, "diagnostic");
+        List<String> details = diagnostic.Details();
+        byte[][] detailBytes = new byte[details.size()][];
+        for (int index = 0; index < detailBytes.length; index++) {
+            detailBytes[index] = utf8(details.get(index));
+        }
+        check("addGltfImportDiagnostic", NativeBindings.modelAddGltfImportDiagnostic(open(),
+                utf8(diagnostic.Code()), diagnostic.Severity().ordinal(),
+                diagnostic.Kind().ordinal(), utf8(diagnostic.Subject()), diagnostic.Count(),
+                diagnostic.WorstMagnitude(), detailBytes, utf8(diagnostic.Message())));
+    }
+
+    /**
+     * Returns the import diagnostics in discovery order.
+     *
+     * @return the diagnostics, empty when the import recorded none
+     */
+    public List<GltfImportDiagnostic> getGltfImportDiagnostics() {
+        long model = open();
+        long count = getGltfImportReport().DiagnosticCount();
+        List<GltfImportDiagnostic> diagnostics = new ArrayList<>((int) count);
+        for (long index = 0; index < count; index++) {
+            long[] integral = new long[DIAGNOSTIC_LEAVES];
+            double[] floating = new double[1];
+            check("getGltfImportDiagnostic", NativeModelExtensionRoutes
+                    .modelGetGltfImportDiagnosticExt(model, index, integral, floating));
+            long detailCount = integral[3];
+            List<String> details = new ArrayList<>((int) detailCount);
+            for (long detail = 0; detail < detailCount; detail++) {
+                details.add(diagnosticDetail(model, index, detail));
+            }
+            diagnostics.add(new GltfImportDiagnostic(
+                    diagnosticText(model, index, DiagnosticText.Code),
+                    GltfImportSeverity.of((int) integral[0]),
+                    GltfImportKind.of((int) integral[1]),
+                    diagnosticText(model, index, DiagnosticText.Subject),
+                    integral[2],
+                    floating[0],
+                    details,
+                    diagnosticText(model, index, DiagnosticText.Message)));
+        }
+        return List.copyOf(diagnostics);
+    }
+
+    /** How many integral leaves CNA_GltfImportDiagnosticEXT declares after its headers. */
+    private static final int DIAGNOSTIC_LEAVES = 4;
+
+    private enum DiagnosticText {
+        Code, Subject, Message
+    }
+
+    private String diagnosticText(long model, long index, DiagnosticText kind) {
+        long[] bytes = new long[1];
+        check("diagnosticTextSize", switch (kind) {
+            case Code -> NativeModelExtensionRoutes
+                    .modelGetGltfImportDiagnosticCodeByteCountExt(model, index, bytes);
+            case Subject -> NativeModelExtensionRoutes
+                    .modelGetGltfImportDiagnosticSubjectByteCountExt(model, index, bytes);
+            case Message -> NativeModelExtensionRoutes
+                    .modelGetGltfImportDiagnosticMessageByteCountExt(model, index, bytes);
+        });
+        byte[] destination = new byte[(int) bytes[0]];
+        check("diagnosticText", switch (kind) {
+            case Code -> NativeModelExtensionRoutes
+                    .modelCopyGltfImportDiagnosticCodeExt(model, index, destination, bytes);
+            case Subject -> NativeModelExtensionRoutes
+                    .modelCopyGltfImportDiagnosticSubjectExt(model, index, destination, bytes);
+            case Message -> NativeModelExtensionRoutes
+                    .modelCopyGltfImportDiagnosticMessageExt(model, index, destination, bytes);
+        });
+        return new String(destination, 0, (int) bytes[0], StandardCharsets.UTF_8);
+    }
+
+    private String diagnosticDetail(long model, long index, long detail) {
+        long[] bytes = new long[1];
+        check("diagnosticDetailSize", NativeModelExtensionRoutes
+                .modelGetGltfImportDiagnosticDetailByteCountExt(model, index, detail, bytes));
+        byte[] destination = new byte[(int) bytes[0]];
+        check("diagnosticDetail", NativeModelExtensionRoutes
+                .modelCopyGltfImportDiagnosticDetailExt(model, index, detail, destination, bytes));
+        return new String(destination, 0, (int) bytes[0], StandardCharsets.UTF_8);
+    }
+
+    /**
      * Releases the model and the bone, part and mesh handles it created.
      *
      * <p>The vertex buffers, index buffers and effects behind it are the XNA model's and are only
@@ -834,7 +958,8 @@ public final class CnaModel implements AutoCloseable {
         values[offset + 15] = matrix.M44;
     }
 
-    private long open() {
+    /** The native handle, package-private so a test can measure the raw route's refusals. */
+    long open() {
         synchronized (this) {
             if (closed) {
                 throw new IllegalStateException("This CnaModel is closed");

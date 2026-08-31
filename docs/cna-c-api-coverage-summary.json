@@ -2,13 +2,13 @@
   "abiVersion": "0.21.0",
   "actionableLocal": [],
   "bindingStatusCounts": {
-    "BLOCKED_UPSTREAM": 33,
-    "BOUND": 2759,
+    "BLOCKED_UPSTREAM": 21,
+    "BOUND": 2771,
     "DEFERRED_TRACKED": 326,
     "DELIBERATE_NON_BINDING": 936
   },
   "boundButUnreached": [],
-  "boundFunctions": 2759,
+  "boundFunctions": 2771,
   "boundWithoutJavaCallSite": [],
   "byHeader": {
     "abi.h": {
@@ -339,7 +339,7 @@
     "JAVA-NATIVE-020": 38,
     "JAVA-NATIVE-021": 6,
     "JAVA-NATIVE-023": 33,
-    "JAVA-UPSTREAM-004": 13,
+    "JAVA-UPSTREAM-004": 1,
     "JAVA-UPSTREAM-011": 1,
     "JAVA-UPSTREAM-018": 4,
     "JAVA-UPSTREAM-019": 15,
@@ -382,9 +382,8 @@
       "total": 1
     },
     "models.h": {
-      "BLOCKED_UPSTREAM": 12,
       "DELIBERATE_NON_BINDING": 4,
-      "total": 16
+      "total": 4
     },
     "sensors.h": {
       "DELIBERATE_NON_BINDING": 2,

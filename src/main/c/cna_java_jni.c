@@ -870,6 +870,9 @@ typedef struct CnaFunctions {
     CNA_JNI_ROUTE(cna_morph_target_data_ext_set_weight_track)
         morph_target_data_ext_set_weight_track;
     CNA_JNI_ROUTE(cna_morph_weight_track_ext_evaluate) morph_weight_track_ext_evaluate;
+    /* And one more: a glTF import diagnostic whose descriptor carries an array of string views,
+       which is a shape inside a structure rather than beside one. */
+    CNA_JNI_ROUTE(cna_model_add_gltf_import_diagnostic_ext) model_add_gltf_import_diagnostic_ext;
 
     /* The seven sensor subscriptions. Each takes a C function pointer with its own reading
        shape, and each registration outlives the call that made it -- a sensor raises its event
@@ -3332,6 +3335,7 @@ JNIEXPORT jint JNICALL Java_org_openeggbert_cna_internal_NativeBindings_nativeLo
     LOAD(morph_target_data_ext_set_weight_track,
          "cna_morph_target_data_ext_set_weight_track");
     LOAD(morph_weight_track_ext_evaluate, "cna_morph_weight_track_ext_evaluate");
+    LOAD(model_add_gltf_import_diagnostic_ext, "cna_model_add_gltf_import_diagnostic_ext");
     LOAD(accelerometer_subscribe_current_value_changed,
          "cna_accelerometer_subscribe_current_value_changed");
     LOAD(accelerometer_subscribe_reading_changed,
@@ -14428,6 +14432,74 @@ Java_org_openeggbert_cna_internal_NativeBindings_nativeMorphWeightTrackEvaluate(
     cna_jni_free_weight_track(&track);
     const jlong count = (jlong)written;
     (*environment)->SetLongArrayRegion(environment, out_weight_count, 0, 1, &count);
+    return (jint)call_result;
+}
+
+/*
+ * One glTF import diagnostic.
+ *
+ * Hand-written for a shape the generator refuses inside a structure rather than beside one: the
+ * descriptor carries two CNA_StringView fields, which the generator does handle, and a pointer to
+ * an ARRAY of them, which it does not -- those views would have to outlive one element's
+ * marshalling. Here they do, and only for the call.
+ */
+JNIEXPORT jint JNICALL
+Java_org_openeggbert_cna_internal_NativeBindings_nativeModelAddGltfImportDiagnostic(
+    JNIEnv* environment,
+    jclass type,
+    jlong model,
+    jbyteArray code,
+    jint severity,
+    jint kind,
+    jbyteArray subject,
+    jlong count,
+    jdouble worst_magnitude,
+    jobjectArray details,
+    jbyteArray message)
+{
+    (void)type;
+    CnaJniStringViews detail_views;
+    const CNA_Result borrowed = cna_jni_borrow_string_views(environment, details, &detail_views);
+    if (borrowed != CNA_RESULT_SUCCESS) {
+        return (jint)borrowed;
+    }
+    jsize code_size = (*environment)->GetArrayLength(environment, code);
+    jbyte* code_bytes = (*environment)->GetByteArrayElements(environment, code, NULL);
+    jsize subject_size = (*environment)->GetArrayLength(environment, subject);
+    jbyte* subject_bytes = (*environment)->GetByteArrayElements(environment, subject, NULL);
+    jsize message_size = (*environment)->GetArrayLength(environment, message);
+    jbyte* message_bytes = (*environment)->GetByteArrayElements(environment, message, NULL);
+    CNA_Result call_result = CNA_RESULT_OUT_OF_MEMORY;
+    if (code_bytes != NULL && subject_bytes != NULL && message_bytes != NULL) {
+        CNA_GltfImportDiagnosticDescriptorEXT descriptor;
+        memset(&descriptor, 0, sizeof descriptor);
+        descriptor.code.data = (const char*)code_bytes;
+        descriptor.code.byte_length = (uint64_t)code_size;
+        descriptor.severity = (CNA_GltfImportDiagnosticSeverityEXT)severity;
+        descriptor.kind = (CNA_GltfImportDiagnosticKindEXT)kind;
+        descriptor.subject.data = (const char*)subject_bytes;
+        descriptor.subject.byte_length = (uint64_t)subject_size;
+        descriptor.count = (uint64_t)count;
+        descriptor.worst_magnitude = (double)worst_magnitude;
+        descriptor.details = detail_views.views;
+        descriptor.detail_count = (uint64_t)detail_views.count;
+        descriptor.message.data = (const char*)message_bytes;
+        descriptor.message.byte_length = (uint64_t)message_size;
+        call_result = cna.model_add_gltf_import_diagnostic_ext(
+            (CNA_ModelHandle)model, &descriptor);
+    }
+    if (message_bytes != NULL) {
+        (*environment)->ReleaseByteArrayElements(
+            environment, message, message_bytes, JNI_ABORT);
+    }
+    if (subject_bytes != NULL) {
+        (*environment)->ReleaseByteArrayElements(
+            environment, subject, subject_bytes, JNI_ABORT);
+    }
+    if (code_bytes != NULL) {
+        (*environment)->ReleaseByteArrayElements(environment, code, code_bytes, JNI_ABORT);
+    }
+    cna_jni_free_string_views(&detail_views);
     return (jint)call_result;
 }
 

@@ -18305,6 +18305,16 @@
       ]
     },
     {
+      "name": "cna_model_add_gltf_import_diagnostic_ext",
+      "header": "models.h",
+      "ownership": "borrows model and the descriptor for the call; the model copies it",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_ModelHandle",
+        "const CNA_GltfImportDiagnosticDescriptorEXT*"
+      ]
+    },
+    {
       "name": "cna_model_add_skin_ext",
       "header": "models.h",
       "ownership": "borrows model, the name and the mesh indices for the call; the model retains the skinning data",
@@ -18629,6 +18639,59 @@
       ]
     },
     {
+      "name": "cna_model_copy_gltf_import_diagnostic_code_ext",
+      "header": "models.h",
+      "ownership": "borrows model; copies into the caller buffer",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_ModelHandle",
+        "uint64_t",
+        "char*",
+        "uint64_t",
+        "uint64_t*"
+      ]
+    },
+    {
+      "name": "cna_model_copy_gltf_import_diagnostic_detail_ext",
+      "header": "models.h",
+      "ownership": "borrows model; copies into the caller buffer",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_ModelHandle",
+        "uint64_t",
+        "uint64_t",
+        "char*",
+        "uint64_t",
+        "uint64_t*"
+      ]
+    },
+    {
+      "name": "cna_model_copy_gltf_import_diagnostic_message_ext",
+      "header": "models.h",
+      "ownership": "borrows model; copies into the caller buffer",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_ModelHandle",
+        "uint64_t",
+        "char*",
+        "uint64_t",
+        "uint64_t*"
+      ]
+    },
+    {
+      "name": "cna_model_copy_gltf_import_diagnostic_subject_ext",
+      "header": "models.h",
+      "ownership": "borrows model; copies into the caller buffer",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_ModelHandle",
+        "uint64_t",
+        "char*",
+        "uint64_t",
+        "uint64_t*"
+      ]
+    },
+    {
       "name": "cna_model_copy_material_variant_name_ext",
       "header": "models.h",
       "ownership": "borrows model; caller buffer",
@@ -18794,6 +18857,72 @@
         "CNA_ModelHandle",
         "uint64_t",
         "uint64_t*"
+      ]
+    },
+    {
+      "name": "cna_model_get_gltf_import_diagnostic_code_byte_count_ext",
+      "header": "models.h",
+      "ownership": "borrows model; returns a value",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_ModelHandle",
+        "uint64_t",
+        "uint64_t*"
+      ]
+    },
+    {
+      "name": "cna_model_get_gltf_import_diagnostic_detail_byte_count_ext",
+      "header": "models.h",
+      "ownership": "borrows model; returns a value",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_ModelHandle",
+        "uint64_t",
+        "uint64_t",
+        "uint64_t*"
+      ]
+    },
+    {
+      "name": "cna_model_get_gltf_import_diagnostic_ext",
+      "header": "models.h",
+      "ownership": "borrows model; fills a caller-provided struct",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_ModelHandle",
+        "uint64_t",
+        "CNA_GltfImportDiagnosticEXT*"
+      ]
+    },
+    {
+      "name": "cna_model_get_gltf_import_diagnostic_message_byte_count_ext",
+      "header": "models.h",
+      "ownership": "borrows model; returns a value",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_ModelHandle",
+        "uint64_t",
+        "uint64_t*"
+      ]
+    },
+    {
+      "name": "cna_model_get_gltf_import_diagnostic_subject_byte_count_ext",
+      "header": "models.h",
+      "ownership": "borrows model; returns a value",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_ModelHandle",
+        "uint64_t",
+        "uint64_t*"
+      ]
+    },
+    {
+      "name": "cna_model_get_gltf_import_report_ext",
+      "header": "models.h",
+      "ownership": "borrows model; fills a caller-provided struct",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_ModelHandle",
+        "CNA_GltfImportReportEXT*"
       ]
     },
     {
@@ -19248,6 +19377,16 @@
         "CNA_ModelHandle",
         "const CNA_Matrix*",
         "uint64_t"
+      ]
+    },
+    {
+      "name": "cna_model_set_gltf_import_report_ext",
+      "header": "models.h",
+      "ownership": "borrows model; copies the report",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_ModelHandle",
+        "const CNA_GltfImportReportEXT*"
       ]
     },
     {
