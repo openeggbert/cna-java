@@ -5,25 +5,45 @@
   "qualifiedRuntime": {
     "platform": "Linux x86-64",
     "cnaAbi": "0.21.0",
-    "cnaHead": "599d14e54e073b566d77b3d6fb30ac52d3d810b7",
+    "cnaHead": "0fd4d4e39e3adcd7531e04eff857defa9233518e",
     "sharpRuntimeHead": "4a49afb0cfe6a41e6e0af0bb62dc5175976731bb",
-    "renderer": "HEADLESS",
+    "cnaPlatformImplementation": "SDL3",
+    "renderers": [
+      "HEADLESS",
+      "SOFTWARE",
+      "OPENGL4",
+      "OPENGLES3",
+      "OPENGL33"
+    ],
+    "defaultRenderer": "HEADLESS",
+    "computeCapableRenderers": [
+      "OPENGLES3",
+      "OPENGL33"
+    ],
+    "glContexts": {
+      "OPENGLES3": "OpenGL ES 3.2 (Mesa 25.0.7)",
+      "OPENGL33": "OpenGL 4.6 core on AMD Radeon 780M, 4.5 core on llvmpipe under Xvfb"
+    },
     "audio": "NULL",
     "extendedGraphicsLayer": true,
     "devices": true,
-    "cnaInventorySha256": "be9a2bf818318002adc100ad1db22949b164726d2d124352f3b29aa3fdc48ea2"
+    "cnaInventorySha256": "b485d17b1df9a86c6099700baedcd435c8a3f07487af8741b01d8c471956bfe7",
+    "note": "A multi-renderer CNA build: five renderers compiled in and one chosen before the first GraphicsDevice through the CNA_GRAPHICS_RENDERER environment variable. The whole suite runs green on each of the five. The platform is SDL3 rather than HEADLESS because a GPU renderer needs a native window; the suite can be pointed at a virtual display, and was."
   },
   "statusVocabulary": [
     "ASSET_PENDING",
     "BACKEND_BLOCKED",
     "EXTENSION_NOT_IN_BUILD",
     "EXTENSION_VERIFIED",
+    "GPU_VERIFIED",
     "HARDWARE_PENDING",
     "LANGUAGE_MAPPING_LIMITATION",
     "MANAGED_VERIFIED",
     "NATIVE_VERIFIED",
     "NO_NATIVE_PRODUCER",
+    "PIXEL_VERIFIED",
     "PLATFORM_PENDING",
+    "RENDERER_PENDING",
     "STRICT_COMPLETE",
     "UPSTREAM_CNA_BLOCKED"
   ],
@@ -299,6 +319,65 @@
       ],
       "detail": "The whole compiled-model graph reads and writes with no graphics device: bones, parts with their vertex and index bytes, meshes, the skinning skeleton with all three matrix sets, baked lights, and the glTF material factors with their eight texture names and seven per-slot states. Probed in C before binding, because JAVA-UPSTREAM-004 found CNA's content-manager model loader segfaulting during teardown; the .cnb path survives a build-encode-decode-destroy cycle cleanly.",
       "limitation": "There is no CnbModelData.toModel(GraphicsDevice). XNA's Model has no public constructor and CNA offers no route that builds one from this description, so this is the tooling side of the file and a game still loads a model through the content manager. Animations are readable but not writable: cna_cnb_model_add_animation takes a nested descriptor graph the JNI generator refuses rather than guesses at, which is the same shape that blocks JAVA-EXT-007."
+    },
+    {
+      "id": "engine-compute",
+      "surface": "org.openeggbert.cna.extensions.graphics.ComputeShader, StorageBuffer, MemoryBarrier, ImageAccess, IndirectDraw, IndirectDrawArguments",
+      "statuses": [
+        "EXTENSION_VERIFIED",
+        "NATIVE_VERIFIED",
+        "GPU_VERIFIED",
+        "UPSTREAM_CNA_BLOCKED"
+      ],
+      "detail": "A compute program runs on the GPU and its output is compared against the same arithmetic done in Java: four integers doubled and offset by a uniform, read back through a storage buffer, exact. Verified on OPENGLES3 and OPENGL33; on HEADLESS, SOFTWARE and OPENGL4 every constructor in the family refuses and that refusal is what is asserted instead. Image binding is a separate question from having compute and the two really do come apart -- ES 3.1 says no, desktop 4.6 core says yes -- so it is asked rather than assumed. The dialect is GLSL ES: every compute program inside CNA own engine layer opens with #version 310 es, which both capable renderers accept, while desktop GLSL compiles only on the one whose context really is desktop GL. UPSTREAM_CNA_BLOCKED is JAVA-UPSTREAM-012: a source that does not compile is reported as an internal failure rather than as a shader carrying a compile error, which makes two documented routes unreachable for the case they exist for."
+    },
+    {
+      "id": "engine-auto-exposure",
+      "surface": "org.openeggbert.cna.extensions.graphics.AutoExposure",
+      "statuses": [
+        "EXTENSION_VERIFIED",
+        "NATIVE_VERIFIED",
+        "GPU_VERIFIED"
+      ],
+      "detail": "The meter reduces a frame to one number on the GPU, and the numbers are checked rather than the calls. A uniform grey of 8/255 measures 0.031373 and one of 240/255 measures 0.941176, both to within a thousandth; adaptation moves the exposure down for the brighter scene and up for the darker one; doubling the key value asks for more exposure from the same scene. Both capable renderers produce the same numbers. Needs compute, so on the other three renderers the constructor refuses and that is what is asserted."
+    },
+    {
+      "id": "engine-light-probe-baking",
+      "surface": "org.openeggbert.cna.extensions.graphics.LightProbeBaker",
+      "statuses": [
+        "EXTENSION_VERIFIED",
+        "NATIVE_VERIFIED",
+        "GPU_VERIFIED"
+      ],
+      "detail": "The three bake routes take a callback CNA runs once per cube face, and on a renderer that can read a capture back it really runs: six faces for one probe and forty-eight for a two-by-two-by-two volume, each with the camera the baker chose for that face. The trampoline takes no global references -- the callback lives only inside the call -- and an exception it throws skips the remaining faces rather than being invoked with one pending, which is undefined in JNI. On HEADLESS the readback is refused, all three routes answer INVALID_STATE and the callback is entered zero times, which is asserted rather than skipped."
+    },
+    {
+      "id": "engine-pipeline-scene-callbacks",
+      "surface": "org.openeggbert.cna.extensions.graphics.RenderPipeline.setTransparentScene, setShadowScene",
+      "statuses": [
+        "EXTENSION_VERIFIED",
+        "NATIVE_VERIFIED"
+      ],
+      "detail": "Registered once and run inside every later frame, so unlike the bake callbacks these are pinned by an explicit native token the pipeline owns and releases. The shadow callback runs first, inside begin; the transparent one second, inside end; once each per frame; and a failing callback result reaches the caller of the call that ran it. They run on every renderer, including HEADLESS -- what gates them is the settings, not the renderer, which corrects an earlier reading that had them blocked on hardware."
+    },
+    {
+      "id": "engine-lent-handles",
+      "surface": "ShadowMap.getCasterEffect and its four siblings, DepthNormalPrepass, ClusteredForwardEffect, WeightedBlendedTransparency, RenderPipeline.getSceneTarget, PbrMaterialExtensions.hasClearcoatTexture and its eight siblings",
+      "statuses": [
+        "EXTENSION_VERIFIED",
+        "NATIVE_VERIFIED",
+        "UPSTREAM_CNA_BLOCKED"
+      ],
+      "detail": "Twenty-one routes lend a handle belonging to something else, on two opposite contracts that one word covered. A counted borrow blocks its lender destruction until it is given back; a retaining one keeps its lender alive and may outlive it. Each was measured in C before a facade was written, and nothing dangles: every lender that permits its own destruction really is retained by what it lent, and the one non-owning view answers INVALID_HANDLE afterwards rather than dereferencing freed memory. UPSTREAM_CNA_BLOCKED is JAVA-UPSTREAM-013, the one shadow map of four that does not count."
+    },
+    {
+      "id": "engine-pixel-readback",
+      "surface": "FullscreenPass sampler, PostProcessContext source/destination/elapsedSeconds",
+      "statuses": [
+        "EXTENSION_VERIFIED",
+        "PIXEL_VERIFIED"
+      ],
+      "detail": "The two values this projection could previously only pin by layout. Both cross into CNA and never come back, and a renderer that draws nothing accepts either without doing anything observable -- a planted swap of the sampler address modes passed every test. On a renderer that draws, a filter is a pixel: a two-by-two checkerboard magnified sixteen times over is hard blocks under point filtering and a gradient under linear, and the same planted swap now fails. The context is verified in three fields rather than all of them: a blit output is decided by its source and destination handles, and film grain is seeded from the elapsed time, so swapping or zeroing those fails -- while swapping the normals and velocity slots still passes, because nothing reachable here reads them. Those leaves stay pinned by the layout gate alone, and that limit is recorded rather than glossed."
     }
   ]
 }

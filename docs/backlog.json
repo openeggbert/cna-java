@@ -365,11 +365,14 @@
       "title": "cna_content_manager_load_model produces a model that segfaults during teardown",
       "family": "Microsoft.Xna.Framework.Graphics.Model, org.openeggbert.cna.extensions.content",
       "authority": "cna_content_manager_load_model in models.h",
-      "currentState": "Loading any .xnb whose meshes have parts through CNA's own content manager gives a model that crashes when it is released. Reproduced in C with no Java involved: cna_game_create, cna_game_get_graphics_device, cna_content_manager_create, cna_content_manager_load_model(\"cube\") over cnanext's own tests/assets/xnb/monogame/windows/uncompressed/BlenderDefaultCube.xnb, then cna_model_destroy. SIGSEGV in Microsoft::Xna::Framework::Graphics::ModelMeshPart::setTagProperty called from (anonymous namespace)::PartResource::~PartResource. The crash does not need the model to be walked first, and it also happens when the caller never destroys the model and lets the content manager and game tear it down, so there is no calling order that avoids it. A model assembled by hand with cna_model_create_with_parents over a mesh with a part destroys cleanly, so the fault is on the content-load path rather than in the model family.",
+      "currentState": "Loading any .xnb whose meshes have parts through CNA's own content manager gives a model that crashes when it is released. Reproduced in C with no Java involved: cna_game_create, cna_game_get_graphics_device, cna_content_manager_create, cna_content_manager_load_model(\"cube\") over cnanext's own tests/assets/xnb/monogame/windows/uncompressed/BlenderDefaultCube.xnb, then cna_model_destroy. SIGSEGV in Microsoft::Xna::Framework::Graphics::ModelMeshPart::setTagProperty called from (anonymous namespace)::PartResource::~PartResource. The crash does not need the model to be walked first, and it also happens when the caller never destroys the model and lets the content manager and game tear it down, so there is no calling order that avoids it. A model assembled by hand with cna_model_create_with_parents over a mesh with a part destroys cleanly, so the fault is on the content-load path rather than in the model family. Revalidated against the live CNA on 2026-08-31, on both HEADLESS and OPENGL33: the model loads and cna_model_destroy still segfaults. The reproducer is a tracked source probe now rather than a note, because still broken has to be retaken against each CNA this repository qualifies against, and a segfault is not something a Java test can report.",
       "expectedState": "A content-loaded model releases without faulting, so a binding can offer CNA's own loader.",
       "blocker": "cnanext content: PartResource's destructor reaches a ModelMeshPart whose owner is already gone. cnanext's own CApi_ContentSmoke fixtures are models with one bone and no meshes, which is why the path is uncovered upstream.",
       "priority": 5,
-      "status": "blocked"
+      "status": "blocked",
+      "tests": [
+        "tools/native-abi/probes/content_manager_model_teardown.c"
+      ]
     },
     {
       "id": "JAVA-NATIVE-024",
@@ -421,7 +424,7 @@
       "authority": "models.h, gamer_services.h",
       "status": "blocked",
       "priority": 8,
-      "currentState": "Measured against the live headers: the generator plans 23 of the 26 cna_skinned_model_ext_* routes and refuses three. cna_skinned_model_ext_create and cna_skinned_model_ext_set_clip take descriptors whose fields are pointers to arrays of descriptors -- clip to tracks to keyframes -- and cna_skinned_model_ext_create additionally carries three arrays governed by one count. The arrayLengths declaration added for the second shape covers set_skeleton; the nested descriptor graph is the one that is not covered.",
+      "currentState": "Measured against the live headers: the generator plans 23 of the 26 cna_skinned_model_ext_* routes and refuses three. cna_skinned_model_ext_create and cna_skinned_model_ext_set_clip take descriptors whose fields are pointers to arrays of descriptors -- clip to tracks to keyframes -- and cna_skinned_model_ext_create additionally carries three arrays governed by one count. The arrayLengths declaration added for the second shape covers set_skeleton; the nested descriptor graph is the one that is not covered. Rechecked on 2026-08-31 against the live headers: cna_skinned_model_ext_set_clip is still the only door a clip can go through, it still takes a CNA_AnimationClipEXTDescriptor pointer graph, and cna_skinning_data_create -- the only other source of clips -- takes a descriptor graph of its own. No new route takes a clip handle.",
       "expectedState": "A SkinnedModel extension type with the skeleton, the clips and the computed bone transforms a game needs. XNA 4.0 has no skeletal animation at all -- Microsoft shipped it as a separate sample -- so this is a capability the reference API never had.",
       "blocker": "set_clip is the only door a clip can go through, and no route takes a clip handle instead. Without it a Java skinned model can have a skeleton and parts but no clips, and compute_bone_transforms has nothing to compute, so the 23 plannable routes do not add up to a usable feature. Either the generator learns nested descriptor graphs -- a marshaller for a variable-depth pointer graph, which is a much larger and less provable step than the two shapes added so far -- or CNA grows a handle-based way to put a clip into a skinned model.",
       "tests": [
@@ -436,7 +439,7 @@
       "authority": "engine_layer.h",
       "status": "done",
       "priority": 7,
-      "currentState": "778 of the 857 routes are bound and reached. On top of the earlier families -- the LOD group, the debug renderer with all six gizmos, the frustum culler, the instanced renderer, the GPU timer, the three light value types, clustered forward lighting, all four shadow maps and light probes -- the render pipeline and sixteen post-process passes are in: bloom, tonemap, FXAA, film grain, chromatic aberration, lens flare, motion blur, light shafts, height fog, volumetric fog, depth of field, SSAO, SSR, contact shadows, aerial perspective and blit, plus the decal projector as its own type the particle system with its emitter settings and per-particle CPU step, the glTF PBR material extensions, the depth/normal prepass every screen-space effect reads, the atmospheric sky, HDR presentation, order-independent transparency, spatial upscaling, the render-target pool, area lights with their BRDF table, the clustered forward effect that reads all of it, the shadow budget policy that decides which lights get a shadow at all, image-based lighting -- the environment processor and the skybox -- GPU instance culling, render-target scopes, thin-film iridescence, two device queries, colour grading with its .cube lookup tables, and the lighting parameters CNA's stock effects take beyond XNA's -- a shadow map with its transform, bias and filter width, a punctual light, and an image-based light -- and the back-to-front transparent draw list, the first family whose entries are C callbacks and so the first with a hand-written JNI trampoline, the light-probe baker's configuration and face cameras, and the named shader-effect cache -- the only way a game reaches a shader of its own at all, since XNA has no route from source to an Effect, and the post-process pass a game supplies its own effect for, which is the layer's one consumed-ownership transfer, and the cascaded-shadow state an effect reads -- the first structure with fixed arrays inside it, which the generator now lays out rather than refuses -- and, across engine_layer.h and effects.h together, the physically-based effect, its skinned form and the glTF material they carry, the bridge that turns a material as a glTF file declares it into one a renderer can draw with, the standalone post-process chain with the frame context it runs over, the screen-filling draw every effect is drawn with, and the ASCII pass. Families are chosen by measurement -- tools/native-abi/probes/engine_layer_families.c. Qualification: the value families and every pass's pure helper VERIFIED_PURE; the pipeline, the passes' settings and the shadow-map state VERIFIED_HEADLESS_GAME; the GPU timer, the clustered compute path, shadow casting and every pass's shader NOT_SUPPORTED_BY_RENDERER, with their refusals qualified rather than skipped.",
+      "currentState": "843 of the engine layer 857 routes are bound and reached, up from 778. The fifty-eight that moved were not waiting on Java: compute and storage buffers, automatic exposure, the light-probe baker three bake routes, the render pipeline two scene callbacks, and twenty-one lent handles, each of which needed a renderer or a measurement rather than more code. Every one of the fourteen still unbound has a written reason that is not a renderer.",
       "expectedState": "Done as far as this runtime can qualify it. 778 of the 857 routes are bound and reached, and each of the remaining 79 has a written reason rather than a plan: 27 are the compute family (JAVA-EXT-012), 13 automatic exposure (JAVA-EXT-011) and 20 lend a handle whose lifetime the declaration does not state or that comes back invalid here (JAVA-EXT-010), all three measured with a real graphics device. The other 19 are named individually -- nine texture getters that mint a fresh handle per call and are answered from a retained Java reference instead, three bake routes and two pipeline scene callbacks this renderer never enters, two initialisers that write zeroes a fresh Java array already has, one route that would make the game undestroyable (JAVA-UPSTREAM-011), cna_lod_group_ext_select which has no mesh part to return because this projection stores none, and cna_effect_get_image_based_light_ext, which ImageBasedLight answers from the textures it retained.",
       "blocker": "None, but most families need a real graphics device. The probe found that debug draw and the particle system both refuse an invalid one, so those tests have to run inside a Game, and anything whose result is a rendered image cannot be checked in a HEADLESS renderer at all -- which has to be stated rather than asserted around.",
       "tests": [
@@ -521,13 +524,13 @@
       "authority": "CNA's own startup log against measured behaviour",
       "status": "blocked",
       "priority": 9,
-      "currentState": "CNA logs \"CNA::Graphics::CubeShadowMap: point shadows are unavailable on this renderer. Face passes still open and close, and the cube keeps meaning nothing occludes, so the frame renders unshadowed rather than failing.\" On the HEADLESS renderer they do not: cna_cube_shadow_map_begin returns CNA_RESULT_INTERNAL (12) with the diagnostic \"HeadlessRenderer::SetViewport: rectangle (0,0,512x512) exceeds the current target's bounds (800x480)\", and the matching end fails too. cna_shadow_map_begin and _end on the same renderer, at the same quality and therefore the same size, both succeed -- so the difference is binding a cube face rather than a 2D target. Measured in C by tools/native-abi/probes/engine_layer_families.c.",
+      "currentState": "Wider than one renderer, and the GPU qualification is what showed it. CNA documents that a cube shadow map face passes still open and close on a renderer that cannot cast, and all three behaviours exist: HEADLESS answers is_supported=no and refuses begin with INTERNAL; SOFTWARE answers no and refuses with NOT_SUPPORTED; OPENGL4 answers no and opens the pass exactly as documented, leaving the target bound until end. OPENGLES3 and OPENGL33 answer yes and both calls succeed, which is the consistent case.",
       "expectedState": "Either the headless renderer binds a cube face the way it binds a 2D target, or the log stops promising that face passes open. As it stands a game that follows CNA's own advice -- run the shadow pass unconditionally and let it do nothing -- crashes on point shadows and not on directional ones.",
       "blocker": "Upstream defect in cnanext's headless renderer; CNA-Java cannot fix it.",
       "tests": [
         "ShadowTests"
       ],
-      "note": "CubeShadowMap's documentation states the difference rather than hiding it, and ShadowTests asserts the current refusal when isSupported() is false -- so an upstream fix shows up as a failing test rather than going unnoticed. The result is CNA_RESULT_INTERNAL again, the same missing std::logic_error arm JAVA-UPSTREAM-006 records."
+      "note": "Found again by a test that never called end() on the OPENGL4 path and was then refused a present with a render target still bound. ShadowTests now covers all three behaviours, so a change in any direction shows up."
     },
     {
       "id": "JAVA-UPSTREAM-008",
@@ -566,7 +569,7 @@
       "authority": "engine_layer.h against modules/c-api/src/CnaCApiEngineLayer.cpp and modules/graphics-ext/src/MaterialBinding.cpp",
       "status": "blocked",
       "priority": 9,
-      "currentState": "cna_pbr_effect_apply_material sets every one of the effect's texture maps -- MaterialBinding.cpp's ApplyTo does it map by map -- but it does so through the canonical setters, which take a raw Texture2D*, so the C API's handle registry never learns that the slot is occupied. Measured in tools/native-abi/probes/pbr_effect_material.c: a texture set through cna_pbr_effect_set_texture comes back from cna_pbr_effect_get_texture as the SAME handle, while the same texture applied through a material makes get_texture report the slot empty and makes cna_pbr_effect_extract_material return CNA_INVALID_HANDLE for it. Both routes leave the native effect correct; only the handle view disagrees.",
+      "currentState": "cna_pbr_effect_apply_material sets every one of the effect's texture maps -- MaterialBinding.cpp's ApplyTo does it map by map -- but it does so through the canonical setters, which take a raw Texture2D*, so the C API's handle registry never learns that the slot is occupied. Measured in tools/native-abi/probes/pbr_effect_material.c: a texture set through cna_pbr_effect_set_texture comes back from cna_pbr_effect_get_texture as the SAME handle, while the same texture applied through a material makes get_texture report the slot empty and makes cna_pbr_effect_extract_material return CNA_INVALID_HANDLE for it. Both routes leave the native effect correct; only the handle view disagrees. Revalidated on 2026-08-31 against OPENGLES3 and OPENGL33 as well as HEADLESS: unchanged on all three, so the workaround stays.",
       "expectedState": "apply_material records each slot's handle the way set_texture does, so that a material extracted from an effect names the textures the effect is actually using. Until then the read-modify-write a game naturally writes -- extract, change one number, apply -- silently unbinds every map, because the extracted material carries no textures to put back.",
       "blocker": "A CNA-side change: the C API would have to resolve and retain each slot handle inside apply_material, or the canonical applyMaterial would have to go through the same path set_texture does. Not fixable in CNA-Java, and this repository must not edit cnanext.",
       "tests": [
@@ -582,7 +585,7 @@
       "authority": "engine_layer.h against modules/c-api/src/CnaCApiEngineLayer.cpp",
       "status": "blocked",
       "priority": 9,
-      "currentState": "cna_post_process_chain_add_owned_pass consumes the pass handle exactly as documented -- GetRuntimeHandles().Release makes it invalid, the chain owns the object, clear and destroy both work. It does not decrement the game's owned-child count that cna_blit_pass_create incremented, so cna_game_destroy answers INVALID_STATE afterwards: \"All owned C child resources must be destroyed before the game.\" Reproduced in pure C by tools/native-abi/probes/chain_owned_pass.c, with no Java in the picture: create a game, hand one blit pass to a chain, clear and destroy the chain, and the game can never be destroyed.",
+      "currentState": "cna_post_process_chain_add_owned_pass consumes the pass handle exactly as documented -- GetRuntimeHandles().Release makes it invalid, the chain owns the object, clear and destroy both work. It does not decrement the game's owned-child count that cna_blit_pass_create incremented, so cna_game_destroy answers INVALID_STATE afterwards: \"All owned C child resources must be destroyed before the game.\" Reproduced in pure C by tools/native-abi/probes/chain_owned_pass.c, with no Java in the picture: create a game, hand one blit pass to a chain, clear and destroy the chain, and the game can never be destroyed. Revalidated on 2026-08-31 on OPENGL33 as well as HEADLESS: the game is still undestroyable afterwards, so the route stays unbound.",
       "expectedState": "The route decrements the owned-child count as cna_post_process_pass_destroy does, so a game that hands a pass to a chain shuts down like any other. One hand-over anywhere in a game's lifetime is enough to break shutdown, which makes this the more severe of the two ownership findings.",
       "blocker": "A CNA-side change to the C API's owned-resource accounting. Not fixable in CNA-Java, and this repository must not edit cnanext.",
       "tests": [
@@ -595,47 +598,98 @@
       "title": "Project the handles the engine layer lends once their lifetimes are stated or measured",
       "family": "org.openeggbert.cna.extensions.graphics",
       "authority": "engine_layer.h",
-      "status": "blocked",
+      "status": "done",
       "priority": 6,
-      "currentState": "About a dozen routes hand back an effect or a texture belonging to something else. tools/native-abi/probes/lent_handles.c split them by measurement. The ones whose prose says the borrow retains the lender -- cna_area_light_brdf_table_get_texture, cna_skybox_get_environment, cna_render_pipeline_get_skybox -- are safe: destroying the lender while a handle is out succeeds, the handle stays valid, and releasing it afterwards succeeds. The first is now bound as AreaLightBrdfTable.getTexture; the second is not, because Skybox already answers from the reference a game gave it for nothing. The rest say only \"borrowed\", with no release route and no stated lifetime: the four shadow maps' caster effects, the depth/normal prepass's two effects, the colour-grade pass's two LUTs, the weighted-blended transparency's two targets, cna_render_pipeline_get_shadow_map and cna_clustered_forward_effect_get_material_extensions. Separately, cna_render_pipeline_set_transparent_scene and cna_render_pipeline_set_shadow_scene register a draw callback that tools/native-abi/probes/pipeline_scene_callbacks.c measured is never entered: both register and clear cleanly, and a whole frame runs neither, because this renderer compiles no shaders and so runs no transparent or shadow pass.",
-      "expectedState": "Each of the unstated ones either documents its lifetime upstream or is measured the way the retaining ones were, and is then projected as a facade that adopts the handle and gives it back on disposal.",
-      "blocker": "Two different reasons. The caster and prepass effects come back CNA_INVALID_HANDLE on this renderer -- the header allows exactly that when the effect is unsupported, and a renderer with no shader compiler has none to lend -- so there is nothing here to project or to test. For the rest the declaration does not state whether the handle retains its lender, and cna_clustered_forward_effect_get_opaque_frame is explicit that its handle does NOT keep the texture alive; guessing which of the two a bare \"borrowed\" means is exactly the guess this binding refuses to make. The two pipeline scene callbacks are blocked for the light-probe baker's reason rather than an ownership one: the trampoline pattern the transparent draw list uses would work, but nothing here would ever enter it.",
+      "currentState": "Done for twenty-one of the thirty-five routes, and every one of the fourteen that remain is unbound for a reason that is not a renderer. lent_effect_lifetime.c and lent_handle_use_after_lender.c measured each lender on four questions and found two opposite contracts hiding under one word. COUNTED borrows, whose lender refuses to be destroyed while one is out: three of the four shadow maps caster effects, the depth/normal prepass two, and the clustered forward effect shader. RETAINING borrows, which may outlive their lender: the spot map caster, the clustered effect own material extensions and the transparency resolve two targets. Nothing dangles -- every lender that permits its own destruction really is retained by what it lent. The render pipeline scene target is a third shape, valid only inside an open frame.",
+      "expectedState": "Each lent handle projected as the facade its measured lifetime allows, rather than one guess applied to twenty.",
       "tests": [
-        "tools/native-abi/probes/lent_handles.c",
-        "AreaLightTests.theTableHandsOutTheTextureItsShaderSamples",
-        "tools/native-abi/probes/pipeline_scene_callbacks.c"
+        "BorrowedHandleTests",
+        "tools/native-abi/probes/lent_effect_lifetime.c",
+        "tools/native-abi/probes/lent_handle_use_after_lender.c",
+        "tools/native-abi/probes/lent_handles.c"
       ],
-      "note": "The same shape as cna_effect_get_shadow_map_ext, which is bound only far enough to answer EffectLighting.hasShadowMap: a boolean a caller can honestly have, with the handle given straight back. Where a game needs the object rather than the fact, the retained Java reference is the settled answer -- PbrMaterialExtensions, PbrEffect and Skybox all use it."
+      "note": "The nine PbrMaterialExtensions texture getters are bound as hasClearcoatTexture and its eight siblings -- a boolean with the fresh name given straight back, which is the treatment cna_effect_get_shadow_map_ext already had. That is what lets a material borrowed from an effect say what is bound, having been given nothing through Java. The fourteen still unbound are redundant getters (the pipeline shadow map and skybox, the skybox environment, the colour-grade LUTs, the clustered effect opaque frame, the image-based light, the two glTF initialisers, the LOD group mesh-part select), a getter that leaks (the post-process effect pass effect), a pure value test (the memory-barrier containment), the ASCII pass effect -- a non-owning view cna_effect_destroy refuses, which no Java facade can own -- and the one route that makes a game undestroyable, JAVA-UPSTREAM-011."
     },
     {
       "id": "JAVA-EXT-011",
       "title": "Project automatic exposure when a renderer that can measure luminance can qualify it",
       "family": "org.openeggbert.cna.extensions.graphics",
       "authority": "engine_layer.h",
-      "status": "blocked",
+      "status": "done",
       "priority": 6,
-      "currentState": "Thirteen routes measured and unbound: cna_auto_exposure_ext_create and the twelve that configure, drive and read it. Asked with a real graphics device by tools/native-abi/probes/engine_layer_families.c, cna_auto_exposure_ext_create answers NOT_SUPPORTED, so no object exists to set a key value on, to update, or to read an exposure back from.",
-      "expectedState": "One coherent family: a measured average luminance, a key value that turns it into an exposure, adaptation speeds that make the change gradual, and a clamp so a dark room does not become a bright one. All of it becomes reachable at once on a renderer that can read a frame's luminance back.",
-      "blocker": "HARDWARE_PENDING, not upstream. Automatic exposure measures the frame it is given, which needs a readback the HEADLESS renderer refuses -- the same wall the light-probe baker meets. Twelve of the thirteen routes cannot be reached, and the thirteenth only answers that the family is unavailable.",
+      "currentState": "Done. All thirteen routes are bound and reached as AutoExposure. The meter needs compute, which OPENGLES3 and OPENGL33 have, and the tests measure rather than assert existence: a grey of 8/255 and one of 240/255 come back as their own luminances, adaptation moves the exposure down for the brighter scene and up for the darker one, the key value doubles the exposure it asks for, and both clamping setters are asserted correcting what they were given. Three planted mutations registered.",
+      "expectedState": "A measured average luminance, a key value, adaptation speeds and a clamp, all reachable at once on a renderer that can read a frame back -- and it is.",
       "tests": [
-        "tools/native-abi/probes/engine_layer_families.c"
+        "AutoExposureTests",
+        "tools/native-abi/probes/gpu_renderer_qualification.c"
       ],
-      "note": "Not the GPU timer's treatment, for the same reason as JAVA-EXT-012: that family constructs and reports itself unsupported, so its refusal is observable; this one refuses at construction and leaves nothing to observe. cna_auto_exposure_ext_apply_to is additionally refused by the generator -- it takes a non-const CNA_RenderPipelineSettingsEXT the declaration does not mark as an output -- which would need a declaration in routes.json even once the renderer could run it."
+      "note": "cna_auto_exposure_ext_apply_to needed the generator declared in/out shape -- a non-const CNA_RenderPipelineSettingsEXT the declaration does not mark as an output -- which routes.json now states. The test asserts the other side of that: applying the exposure leaves every other setting alone, which an output-only marshalling would have zeroed."
     },
     {
       "id": "JAVA-EXT-012",
       "title": "Project the compute family when a renderer that has compute can qualify it",
       "family": "org.openeggbert.cna.extensions.graphics",
       "authority": "engine_layer.h",
+      "status": "done",
+      "priority": 6,
+      "currentState": "Done. All twenty-six routes of the compute family are bound and reached: ComputeShader, StorageBuffer, ImageAccess, MemoryBarrier, IndirectDraw and the two indirect-argument value types. A renderer with compute exists on this host after all -- not the desktop GL 4.3 the previous handoff predicted, but CNA EasyGL family reached through OPENGLES3 (an OpenGL ES 3.2 context) and OPENGL33 (which asks Mesa for 3.3 core and is handed 4.6 or 4.5). The acceptance test is semantic rather than structural: four known integers into a storage buffer, a dispatch that doubles them and adds a uniform, a readback compared against the same arithmetic in Java. Five of six planted mutations registered.",
+      "expectedState": "One coherent family a game can dispatch work with, and it is that.",
+      "tests": [
+        "ComputeTests",
+        "tools/native-abi/probes/gpu_renderer_qualification.c",
+        "tools/native-abi/probes/compute_and_storage.c",
+        "tools/native-abi/probes/compute_compile_contract.c"
+      ],
+      "note": "cna_graphics_memory_barrier_has is the one route deliberately left unbound: it is a pure bitmask containment test over integers the caller supplies, which java.util.EnumSet answers for nothing, and it reveals nothing about CNA own bit values. Those are pinned in probe.c instead, where a compile-time assertion against the live header is stronger than any runtime route could be."
+    },
+    {
+      "id": "JAVA-UPSTREAM-012",
+      "title": "A compute shader that does not compile is reported as an internal failure rather than as a shader carrying a compile error",
+      "family": "cnanext",
+      "authority": "engine_layer.h",
       "status": "blocked",
       "priority": 6,
-      "currentState": "Twenty-seven routes measured and unbound: cna_compute_shader_* (12), cna_storage_buffer_* (10), cna_graphics_memory_barrier_has, the two cna_indirect_draw_*_arguments_init and the two cna_graphics_device_draw_*_indirect_ext. tools/native-abi/probes/compute_and_storage.c asked all of them with a real graphics device: cna_compute_shader_create and both storage-buffer constructors answer NOT_SUPPORTED outright, so no object exists to configure, dispatch or observe. The three pure routes -- the memory-barrier bitmask test and the two argument initialisers -- do answer correctly.",
-      "expectedState": "One coherent family: a compute shader that records its compile error rather than throwing, storage buffers to dispatch over, memory barriers to order the results, and indirect draws that read their arguments from a buffer the shader wrote. On a renderer with compute the whole family becomes reachable at once, including the compile-error route the header documents and this runtime can never enter.",
-      "blocker": "HARDWARE_PENDING, not upstream. The HEADLESS renderer has no compute shaders -- the GPU instance culler says so in as many words -- so most of the family cannot be created, let alone exercised. Binding the three that work would ship fragments of an API: indirect drawing needs a storage buffer to draw from, and a memory barrier orders accesses nothing here can make.",
+      "currentState": "cna_compute_shader_create documents that creation succeeds even when the source does not compile, and that a caller then asks cna_compute_shader_is_valid and reads cna_compute_shader_copy_compile_error. It does not. The canonical ComputeShader constructor throws std::runtime_error for a program that does not compile or link, CallWithExceptionBarrier has no arm for it, and the caller is told CNA_RESULT_INTERNAL. Measured on both compute-capable renderers, three runs each, with five different sources.",
+      "expectedState": "Creation succeeds and the failure is read off the object, as the header says -- which would make the two documented routes reachable for the case they exist for.",
+      "blocker": "Upstream defect in cnanext C API exception barrier, the same shape as JAVA-UPSTREAM-006 and JAVA-UPSTREAM-009 on a third route. CNA-Java cannot fix it.",
       "tests": [
-        "tools/native-abi/probes/compute_and_storage.c"
+        "tools/native-abi/probes/compute_compile_contract.c",
+        "ComputeTests.sourceTheCompilerRefusesArrivesAsAShaderCompilationExceptionCarryingItsLog"
       ],
-      "note": "Deliberately not the GPU timer's treatment. That family constructs, reports itself unsupported and carries a human-readable reason, so its refusal is observable and worth projecting; this one refuses at construction, which leaves nothing to observe. Revisit against a desktop GL 4.3 renderer."
+      "note": "Two consequences. cna_compute_shader_is_valid and cna_compute_shader_copy_compile_error cannot answer the question they exist for, because a failed compile leaves no handle to ask. And the one refusal a game can act on -- a typo in a shader -- arrives as the result code that also means a defect inside CNA. The compiler own diagnostics do survive, in the barrier last message, which is what makes ComputeShader.compile able to throw a ShaderCompilationException carrying the GLSL log. That Java layer still asks isValid() on the success path, so the day CNA matches its header nothing here changes."
+    },
+    {
+      "id": "JAVA-UPSTREAM-013",
+      "title": "One of the four shadow maps does not count the effects it lends",
+      "family": "cnanext",
+      "authority": "engine_layer.h",
+      "status": "blocked",
+      "priority": 6,
+      "currentState": "cna_shadow_map_destroy, cna_cascaded_shadow_map_destroy and cna_cube_shadow_map_destroy each check an activeBorrowCount and refuse with INVALID_STATE while a caster effect is outstanding. cna_spot_shadow_map_destroy has no such check and releases the handle. All four hand out the borrow through the identical BorrowEffectFrom helper.",
+      "expectedState": "The four siblings agree, whichever discipline is chosen.",
+      "blocker": "Upstream inconsistency in cnanext C API. CNA-Java cannot fix it and does not need it fixed: the lent effect is retained by the handle, so a spot map destroyed while lending leaves the effect alive rather than dangling -- measured, not assumed.",
+      "tests": [
+        "tools/native-abi/probes/lent_effect_lifetime.c",
+        "tools/native-abi/probes/lent_handle_use_after_lender.c",
+        "BorrowedHandleTests.aSpotShadowMapDoesNotBlockAndItsViewOutlivesIt"
+      ],
+      "note": "A consistency finding rather than a memory-safety one, and it is worth reporting for that reason: a caller that relies on the refusal to catch an unreleased borrow is caught by three of the four maps and not by the fourth. SpotShadowMap.getCasterEffect documents the difference rather than papering over it."
+    },
+    {
+      "id": "JAVA-UPSTREAM-014",
+      "title": "A process exiting with a live vertex buffer aborts on the EasyGL renderer",
+      "family": "cnanext",
+      "authority": "engine_layer.h",
+      "status": "blocked",
+      "priority": 6,
+      "currentState": "A process that exits while a CNA vertex buffer is alive AND the thread that created it has already ended aborts during static destruction, with terminate called without an active exception and SIGABRT. Both conditions are necessary and neither alone does it, and it happens only on the EasyGL renderer family (OPENGLES3, OPENGL33); HEADLESS, SOFTWARE and OPENGL4 all exit zero. Reproduced in pure C, one case per process, with the two conditions isolated against each other.",
+      "expectedState": "A process may exit with a live graph, as it can on every other renderer.",
+      "blocker": "Upstream defect in cnanext EasyGL renderer. CNA-Java cannot fix it.",
+      "tests": [
+        "tools/native-abi/probes/exit_with_live_graph.c",
+        "NativeShutdownSubprocessTests.jvmShutdownWithLiveEffectChildrenBuffersAndCallbacksExitsCleanly"
+      ],
+      "note": "It reaches every Java program rather than an unusual one: the java launcher runs main on a thread it creates rather than on the process initial thread, so a JVM satisfies the second condition without anyone choosing it. A game that closes its buffers is unaffected; one that calls System.exit, or dies on an unhandled exception, is not. The subprocess test asserts the abort exact signature on the renderers where it is known, so an upstream fix shows up as a failing test."
     }
   ]
 }

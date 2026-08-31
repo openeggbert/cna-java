@@ -929,3 +929,67 @@ That result is what makes the whole group projectable. A Java facade over a bloc
 its parent alive and gives the handle back on `close()`; a facade over a retaining borrow may be
 closed in any order. Both are safe, and the measurement says which is which per route rather than
 one guess applied to twenty.
+
+The answer is the earlier probe's, in every configuration:
+
+```text
+default settings               shadows=off transparency=NONE
+defaults                       shadow=0 transparent=0
+shadows on                     shadow=1(at 1) transparent=0
+shadows on, sorted             shadow=1(at 1) transparent=1(at 2)
+transparent callback fails     begin=SUCCESS  end=INVALID_STATE
+```
+
+## content_manager_model_teardown.c
+
+`JAVA-UPSTREAM-004`, and the reason `CnaModel.Load` does not exist.
+
+Loading a Model through CNA's own content manager and destroying it segfaults inside
+`PartResource::~PartResource` for any asset whose meshes have parts -- which is every real model.
+cnanext's own content fixtures are models with one bone and no meshes, which is why the path is
+uncovered upstream.
+
+It is a source probe rather than a note because *"still broken"* is a measurement that has to be
+retaken against each CNA this repository qualifies against, and a segfault is not something a Java
+test can report. Retaken on 2026-08-31 against ABI 0.21.0, on HEADLESS and on OPENGL33:
+
+```text
+game_create=0  get_graphics_device=0  content_manager_create=0
+load_model=0 model=4294967303
+destroying
+<SIGABRT>
+```
+
+The model loads. `cna_model_destroy` does not return.
+
+## exit_with_live_graph.c
+
+`JAVA-UPSTREAM-014`. What happens when a process exits with a CNA game still alive?
+
+A game that is never destroyed is not a hypothetical: a JVM exiting on an unhandled exception, a
+`System.exit`, or simply a program that lets the operating system reclaim everything all leave the
+native graph standing. CNA-Java has had a subprocess test for exactly that since the ownership
+graph existed, and on HEADLESS the process exits zero.
+
+On the EasyGL renderers it aborts -- `terminate called without an active exception`, SIGABRT --
+and this reproduces it with no Java anywhere, one case per process because the interesting
+outcomes are crashes:
+
+| case | HEADLESS | SOFTWARE | OPENGL4 | OPENGLES3 | OPENGL33 |
+|---|---|---|---|---|---|
+| a live game | 0 | 0 | 0 | 0 | 0 |
+| a live device manager | 0 | 0 | 0 | 0 | 0 |
+| a frame run | 0 | 0 | 0 | 0 | 0 |
+| a live static or dynamic vertex buffer | 0 | 0 | 0 | 0 | 0 |
+| all of it on a thread that ends first | 0 | 0 | 0 | **134** | **134** |
+| that thread with **no** buffer | 0 | 0 | 0 | 0 | 0 |
+
+**Both conditions are necessary and neither alone does it.** A buffer alive at exit is fine; a
+thread that ends before the process is fine; the two together abort.
+
+The second condition is what makes this reach every Java program rather than an unusual one. The
+`java` launcher runs `main` on a thread it creates, not on the process's initial thread, so the
+thread that made the game and its GL context has already ended by the time the process exits --
+without anyone choosing that. Narrowing from the Java side agreed exactly: a plain game with a
+device and a frame exits cleanly, and adding one `VertexBuffer` -- static or dynamic, bound or
+not, with a listener or without -- aborts.
