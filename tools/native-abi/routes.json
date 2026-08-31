@@ -4111,6 +4111,42 @@
         "symbol": "cna_clustered_shadow_policy_set_hysteresis"
       },
       {
+        "java": "colorGradePassCreate",
+        "symbol": "cna_color_grade_pass_create"
+      },
+      {
+        "java": "colorGradePassCreateIdentityLut",
+        "symbol": "cna_color_grade_pass_create_identity_lut"
+      },
+      {
+        "java": "colorGradePassGetInterpolation",
+        "symbol": "cna_color_grade_pass_get_interpolation"
+      },
+      {
+        "java": "colorGradePassGetStrength",
+        "symbol": "cna_color_grade_pass_get_strength"
+      },
+      {
+        "java": "colorGradePassLutSizeForStrip",
+        "symbol": "cna_color_grade_pass_lut_size_for_strip"
+      },
+      {
+        "java": "colorGradePassSetInterpolation",
+        "symbol": "cna_color_grade_pass_set_interpolation"
+      },
+      {
+        "java": "colorGradePassSetLut",
+        "symbol": "cna_color_grade_pass_set_lut"
+      },
+      {
+        "java": "colorGradePassSetStrength",
+        "symbol": "cna_color_grade_pass_set_strength"
+      },
+      {
+        "java": "colorGradePassSetVolumeLut",
+        "symbol": "cna_color_grade_pass_set_volume_lut"
+      },
+      {
         "java": "contactShadowPassCombineVisibility",
         "symbol": "cna_contact_shadow_pass_combine_visibility"
       },
@@ -4177,6 +4213,50 @@
       {
         "java": "contactShadowPassSetThickness",
         "symbol": "cna_contact_shadow_pass_set_thickness"
+      },
+      {
+        "java": "cubeLutCopyTitle",
+        "symbol": "cna_cube_lut_copy_title"
+      },
+      {
+        "java": "cubeLutCreateStripTexture",
+        "symbol": "cna_cube_lut_create_strip_texture"
+      },
+      {
+        "java": "cubeLutCreateVolumeTexture",
+        "symbol": "cna_cube_lut_create_volume_texture"
+      },
+      {
+        "java": "cubeLutDestroy",
+        "symbol": "cna_cube_lut_destroy"
+      },
+      {
+        "java": "cubeLutGetDomainMax",
+        "symbol": "cna_cube_lut_get_domain_max"
+      },
+      {
+        "java": "cubeLutGetDomainMin",
+        "symbol": "cna_cube_lut_get_domain_min"
+      },
+      {
+        "java": "cubeLutGetEntry",
+        "symbol": "cna_cube_lut_get_entry"
+      },
+      {
+        "java": "cubeLutGetSize",
+        "symbol": "cna_cube_lut_get_size"
+      },
+      {
+        "java": "cubeLutIsUnitDomain",
+        "symbol": "cna_cube_lut_is_unit_domain"
+      },
+      {
+        "java": "cubeLutLoadFromFile",
+        "symbol": "cna_cube_lut_load_from_file"
+      },
+      {
+        "java": "cubeLutParse",
+        "symbol": "cna_cube_lut_parse"
       },
       {
         "java": "cubeShadowMapBegin",

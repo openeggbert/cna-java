@@ -106,3 +106,27 @@ wrong refusal.
 
 `CnaCApiEngineLayer.cpp` is not the only place that throws `std::logic_error`, so this is likely
 to be wider than one route; the probe pins the one CNA-Java depends on.
+
+## cube_lut_refusal.c
+
+`JAVA-UPSTREAM-009`, and the same shape as the one above: an exception escaping into the wrong arm
+of the same barrier.
+
+`cna_cube_lut_parse` documents `CNA_RESULT_INVALID_ARGUMENT` for text the parser refuses, and
+`ParseCubeLutText` catches `CNA::CNAException` to return exactly that. `CubeLut::parse` throws
+`CNA::Graphics::EngineException`, which that catch does not name and which
+`CallWithExceptionBarrier` maps to `CNA_RESULT_NOT_SUPPORTED`.
+
+Needs no device -- parsing is text -- and its output on ABI 0.21.0:
+
+```text
+well formed            SUCCESS
+no LUT_3D_SIZE         NOT_SUPPORTED (6)
+too few entries        NOT_SUPPORTED (6)
+malformed domain line  NOT_SUPPORTED (6)
+header documents       INVALID_ARGUMENT (1)
+```
+
+The consequence is worth spelling out: a typo in an artist's `.cube` file arrives at a game as
+"this renderer cannot do colour grading", so a game that catches the capability refusal in order
+to fall back will fall back for a file it could have rejected and told someone about.

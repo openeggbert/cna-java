@@ -6305,6 +6305,98 @@
       ]
     },
     {
+      "name": "cna_color_grade_pass_create",
+      "header": "engine_layer.h",
+      "ownership": "borrows the graphics device; returns an owned pass handle",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_Handle",
+        "CNA_PostProcessPassHandle*"
+      ]
+    },
+    {
+      "name": "cna_color_grade_pass_create_identity_lut",
+      "header": "engine_layer.h",
+      "ownership": "borrows the graphics device; returns a new texture the caller owns",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_Handle",
+        "int32_t",
+        "CNA_Handle*"
+      ]
+    },
+    {
+      "name": "cna_color_grade_pass_get_interpolation",
+      "header": "engine_layer.h",
+      "ownership": "borrows the pass",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_PostProcessPassHandle",
+        "CNA_LutInterpolation*"
+      ]
+    },
+    {
+      "name": "cna_color_grade_pass_get_strength",
+      "header": "engine_layer.h",
+      "ownership": "borrows the pass",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_PostProcessPassHandle",
+        "float*"
+      ]
+    },
+    {
+      "name": "cna_color_grade_pass_lut_size_for_strip",
+      "header": "engine_layer.h",
+      "ownership": "no handle; a pure function of its arguments",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "int32_t",
+        "int32_t",
+        "int32_t*"
+      ]
+    },
+    {
+      "name": "cna_color_grade_pass_set_interpolation",
+      "header": "engine_layer.h",
+      "ownership": "borrows the pass and the caller's texture; the slot is non-owning",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_PostProcessPassHandle",
+        "CNA_LutInterpolation"
+      ]
+    },
+    {
+      "name": "cna_color_grade_pass_set_lut",
+      "header": "engine_layer.h",
+      "ownership": "borrows the pass and the caller's texture; the slot is non-owning",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_PostProcessPassHandle",
+        "CNA_Handle"
+      ]
+    },
+    {
+      "name": "cna_color_grade_pass_set_strength",
+      "header": "engine_layer.h",
+      "ownership": "borrows the pass and the caller's texture; the slot is non-owning",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_PostProcessPassHandle",
+        "float"
+      ]
+    },
+    {
+      "name": "cna_color_grade_pass_set_volume_lut",
+      "header": "engine_layer.h",
+      "ownership": "borrows the pass and the caller's texture; the slot is non-owning",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_PostProcessPassHandle",
+        "CNA_Handle"
+      ]
+    },
+    {
       "name": "cna_compass_create",
       "header": "sensors.h",
       "ownership": "borrows game; returns an owned sensor handle",
@@ -6757,6 +6849,122 @@
       "parameters": [
         "CNA_EffectHandle",
         "float"
+      ]
+    },
+    {
+      "name": "cna_cube_lut_copy_title",
+      "header": "engine_layer.h",
+      "ownership": "borrows the LUT; fills the caller's byte buffer",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_CubeLutHandle",
+        "char*",
+        "uint64_t",
+        "uint64_t*"
+      ]
+    },
+    {
+      "name": "cna_cube_lut_create_strip_texture",
+      "header": "engine_layer.h",
+      "ownership": "borrows the LUT and the graphics device; returns a new texture the caller owns",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_CubeLutHandle",
+        "CNA_Handle",
+        "CNA_Handle*"
+      ]
+    },
+    {
+      "name": "cna_cube_lut_create_volume_texture",
+      "header": "engine_layer.h",
+      "ownership": "borrows the LUT and the graphics device; returns a new texture the caller owns",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_CubeLutHandle",
+        "CNA_Handle",
+        "CNA_Handle*"
+      ]
+    },
+    {
+      "name": "cna_cube_lut_destroy",
+      "header": "engine_layer.h",
+      "ownership": "releases the owned LUT handle; the textures it built are the caller's",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_CubeLutHandle"
+      ]
+    },
+    {
+      "name": "cna_cube_lut_get_domain_max",
+      "header": "engine_layer.h",
+      "ownership": "borrows the LUT",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_CubeLutHandle",
+        "CNA_Vector3*"
+      ]
+    },
+    {
+      "name": "cna_cube_lut_get_domain_min",
+      "header": "engine_layer.h",
+      "ownership": "borrows the LUT",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_CubeLutHandle",
+        "CNA_Vector3*"
+      ]
+    },
+    {
+      "name": "cna_cube_lut_get_entry",
+      "header": "engine_layer.h",
+      "ownership": "borrows the LUT",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_CubeLutHandle",
+        "int32_t",
+        "int32_t",
+        "int32_t",
+        "CNA_Vector3*"
+      ]
+    },
+    {
+      "name": "cna_cube_lut_get_size",
+      "header": "engine_layer.h",
+      "ownership": "borrows the LUT",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_CubeLutHandle",
+        "int32_t*"
+      ]
+    },
+    {
+      "name": "cna_cube_lut_is_unit_domain",
+      "header": "engine_layer.h",
+      "ownership": "borrows the LUT",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_CubeLutHandle",
+        "CNA_Bool*"
+      ]
+    },
+    {
+      "name": "cna_cube_lut_load_from_file",
+      "header": "engine_layer.h",
+      "ownership": "no handle; returns an owned LUT handle",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_StringView",
+        "CNA_CubeLutHandle*"
+      ]
+    },
+    {
+      "name": "cna_cube_lut_parse",
+      "header": "engine_layer.h",
+      "ownership": "no handle; returns an owned LUT handle",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_StringView",
+        "CNA_CubeLutHandle*"
       ]
     },
     {

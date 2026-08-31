@@ -1955,6 +1955,51 @@ public final class NativeEngineLayerRoutes {
     public static native int clusteredShadowPolicySetHysteresis(long policy, float hysteresis);
 
     /**
+     * cna_color_grade_pass_create (engine_layer.h).
+     */
+    public static native int colorGradePassCreate(long graphicsDevice, long[] outPass);
+
+    /**
+     * cna_color_grade_pass_create_identity_lut (engine_layer.h).
+     */
+    public static native int colorGradePassCreateIdentityLut(long graphicsDevice, int size, long[] outLut);
+
+    /**
+     * cna_color_grade_pass_get_interpolation (engine_layer.h).
+     */
+    public static native int colorGradePassGetInterpolation(long pass, int[] outValue);
+
+    /**
+     * cna_color_grade_pass_get_strength (engine_layer.h).
+     */
+    public static native int colorGradePassGetStrength(long pass, float[] outValue);
+
+    /**
+     * cna_color_grade_pass_lut_size_for_strip (engine_layer.h).
+     */
+    public static native int colorGradePassLutSizeForStrip(int width, int height, int[] outSize);
+
+    /**
+     * cna_color_grade_pass_set_interpolation (engine_layer.h).
+     */
+    public static native int colorGradePassSetInterpolation(long pass, int value);
+
+    /**
+     * cna_color_grade_pass_set_lut (engine_layer.h).
+     */
+    public static native int colorGradePassSetLut(long pass, long lut);
+
+    /**
+     * cna_color_grade_pass_set_strength (engine_layer.h).
+     */
+    public static native int colorGradePassSetStrength(long pass, float value);
+
+    /**
+     * cna_color_grade_pass_set_volume_lut (engine_layer.h).
+     */
+    public static native int colorGradePassSetVolumeLut(long pass, long lut);
+
+    /**
      * cna_contact_shadow_pass_combine_visibility (engine_layer.h).
      */
     public static native int contactShadowPassCombineVisibility(float shadowMapVisibility, float contactVisibility, float[] outVisibility);
@@ -2052,6 +2097,82 @@ public final class NativeEngineLayerRoutes {
      * cna_contact_shadow_pass_set_thickness (engine_layer.h).
      */
     public static native int contactShadowPassSetThickness(long pass, float thickness);
+
+    /**
+     * cna_cube_lut_copy_title (engine_layer.h).
+     */
+    public static native int cubeLutCopyTitle(long lut, byte[] destination, long[] outBytes);
+
+    /**
+     * cna_cube_lut_create_strip_texture (engine_layer.h).
+     */
+    public static native int cubeLutCreateStripTexture(long lut, long graphicsDevice, long[] outTexture);
+
+    /**
+     * cna_cube_lut_create_volume_texture (engine_layer.h).
+     */
+    public static native int cubeLutCreateVolumeTexture(long lut, long graphicsDevice, long[] outTexture);
+
+    /**
+     * cna_cube_lut_destroy (engine_layer.h).
+     */
+    public static native int cubeLutDestroy(long lut);
+
+    /**
+     * cna_cube_lut_get_domain_max (engine_layer.h).
+     *
+     * <p>outValueFloating carries CNA_Vector3 in this order:
+     * <ol start="0">
+     *   <li>{@code x} (float)</li>
+     *   <li>{@code y} (float)</li>
+     *   <li>{@code z} (float)</li>
+     * </ol>
+     */
+    public static native int cubeLutGetDomainMax(long lut, float[] outValueFloating);
+
+    /**
+     * cna_cube_lut_get_domain_min (engine_layer.h).
+     *
+     * <p>outValueFloating carries CNA_Vector3 in this order:
+     * <ol start="0">
+     *   <li>{@code x} (float)</li>
+     *   <li>{@code y} (float)</li>
+     *   <li>{@code z} (float)</li>
+     * </ol>
+     */
+    public static native int cubeLutGetDomainMin(long lut, float[] outValueFloating);
+
+    /**
+     * cna_cube_lut_get_entry (engine_layer.h).
+     *
+     * <p>outColorFloating carries CNA_Vector3 in this order:
+     * <ol start="0">
+     *   <li>{@code x} (float)</li>
+     *   <li>{@code y} (float)</li>
+     *   <li>{@code z} (float)</li>
+     * </ol>
+     */
+    public static native int cubeLutGetEntry(long lut, int red, int green, int blue, float[] outColorFloating);
+
+    /**
+     * cna_cube_lut_get_size (engine_layer.h).
+     */
+    public static native int cubeLutGetSize(long lut, int[] outSize);
+
+    /**
+     * cna_cube_lut_is_unit_domain (engine_layer.h).
+     */
+    public static native int cubeLutIsUnitDomain(long lut, boolean[] outUnit);
+
+    /**
+     * cna_cube_lut_load_from_file (engine_layer.h).
+     */
+    public static native int cubeLutLoadFromFile(byte[] path, long[] outLut);
+
+    /**
+     * cna_cube_lut_parse (engine_layer.h).
+     */
+    public static native int cubeLutParse(byte[] text, long[] outLut);
 
     /**
      * cna_cube_shadow_map_begin (engine_layer.h).

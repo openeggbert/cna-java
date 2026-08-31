@@ -4209,6 +4209,126 @@ Java_org_openeggbert_cna_internal_generated_NativeEngineLayerRoutes_clusteredSha
 }
 
 JNIEXPORT jint JNICALL
+Java_org_openeggbert_cna_internal_generated_NativeEngineLayerRoutes_colorGradePassCreate(
+    JNIEnv* environment, jclass declaring_class, jlong graphics_device, jlongArray out_pass)
+{
+    (void)environment;
+    (void)declaring_class;
+    CNA_PostProcessPassHandle out_pass_value = 0;
+    CNA_Result call_result = cna.color_grade_pass_create((CNA_Handle)graphics_device, &out_pass_value);
+    if (call_result == CNA_RESULT_SUCCESS || call_result == CNA_RESULT_BUFFER_TOO_SMALL) {
+        jlong out_pass_element = (jlong)out_pass_value;
+        (*environment)->SetLongArrayRegion(
+            environment, out_pass, 0, 1, &out_pass_element);
+    }
+    return (jint)call_result;
+}
+
+JNIEXPORT jint JNICALL
+Java_org_openeggbert_cna_internal_generated_NativeEngineLayerRoutes_colorGradePassCreateIdentityLut(
+    JNIEnv* environment, jclass declaring_class, jlong graphics_device, jint size, jlongArray out_lut)
+{
+    (void)environment;
+    (void)declaring_class;
+    CNA_Handle out_lut_value = 0;
+    CNA_Result call_result = cna.color_grade_pass_create_identity_lut((CNA_Handle)graphics_device, (int32_t)size, &out_lut_value);
+    if (call_result == CNA_RESULT_SUCCESS || call_result == CNA_RESULT_BUFFER_TOO_SMALL) {
+        jlong out_lut_element = (jlong)out_lut_value;
+        (*environment)->SetLongArrayRegion(
+            environment, out_lut, 0, 1, &out_lut_element);
+    }
+    return (jint)call_result;
+}
+
+JNIEXPORT jint JNICALL
+Java_org_openeggbert_cna_internal_generated_NativeEngineLayerRoutes_colorGradePassGetInterpolation(
+    JNIEnv* environment, jclass declaring_class, jlong pass, jintArray out_value)
+{
+    (void)environment;
+    (void)declaring_class;
+    CNA_LutInterpolation out_value_value = 0;
+    CNA_Result call_result = cna.color_grade_pass_get_interpolation((CNA_PostProcessPassHandle)pass, &out_value_value);
+    if (call_result == CNA_RESULT_SUCCESS || call_result == CNA_RESULT_BUFFER_TOO_SMALL) {
+        jint out_value_element = (jint)out_value_value;
+        (*environment)->SetIntArrayRegion(
+            environment, out_value, 0, 1, &out_value_element);
+    }
+    return (jint)call_result;
+}
+
+JNIEXPORT jint JNICALL
+Java_org_openeggbert_cna_internal_generated_NativeEngineLayerRoutes_colorGradePassGetStrength(
+    JNIEnv* environment, jclass declaring_class, jlong pass, jfloatArray out_value)
+{
+    (void)environment;
+    (void)declaring_class;
+    float out_value_value = 0;
+    CNA_Result call_result = cna.color_grade_pass_get_strength((CNA_PostProcessPassHandle)pass, &out_value_value);
+    if (call_result == CNA_RESULT_SUCCESS || call_result == CNA_RESULT_BUFFER_TOO_SMALL) {
+        jfloat out_value_element = (jfloat)out_value_value;
+        (*environment)->SetFloatArrayRegion(
+            environment, out_value, 0, 1, &out_value_element);
+    }
+    return (jint)call_result;
+}
+
+JNIEXPORT jint JNICALL
+Java_org_openeggbert_cna_internal_generated_NativeEngineLayerRoutes_colorGradePassLutSizeForStrip(
+    JNIEnv* environment, jclass declaring_class, jint width, jint height, jintArray out_size)
+{
+    (void)environment;
+    (void)declaring_class;
+    int32_t out_size_value = 0;
+    CNA_Result call_result = cna.color_grade_pass_lut_size_for_strip((int32_t)width, (int32_t)height, &out_size_value);
+    if (call_result == CNA_RESULT_SUCCESS || call_result == CNA_RESULT_BUFFER_TOO_SMALL) {
+        jint out_size_element = (jint)out_size_value;
+        (*environment)->SetIntArrayRegion(
+            environment, out_size, 0, 1, &out_size_element);
+    }
+    return (jint)call_result;
+}
+
+JNIEXPORT jint JNICALL
+Java_org_openeggbert_cna_internal_generated_NativeEngineLayerRoutes_colorGradePassSetInterpolation(
+    JNIEnv* environment, jclass declaring_class, jlong pass, jint value)
+{
+    (void)environment;
+    (void)declaring_class;
+    CNA_Result call_result = cna.color_grade_pass_set_interpolation((CNA_PostProcessPassHandle)pass, (CNA_LutInterpolation)value);
+    return (jint)call_result;
+}
+
+JNIEXPORT jint JNICALL
+Java_org_openeggbert_cna_internal_generated_NativeEngineLayerRoutes_colorGradePassSetLut(
+    JNIEnv* environment, jclass declaring_class, jlong pass, jlong lut)
+{
+    (void)environment;
+    (void)declaring_class;
+    CNA_Result call_result = cna.color_grade_pass_set_lut((CNA_PostProcessPassHandle)pass, (CNA_Handle)lut);
+    return (jint)call_result;
+}
+
+JNIEXPORT jint JNICALL
+Java_org_openeggbert_cna_internal_generated_NativeEngineLayerRoutes_colorGradePassSetStrength(
+    JNIEnv* environment, jclass declaring_class, jlong pass, jfloat value)
+{
+    (void)environment;
+    (void)declaring_class;
+    CNA_Result call_result = cna.color_grade_pass_set_strength((CNA_PostProcessPassHandle)pass, (float)value);
+    return (jint)call_result;
+}
+
+JNIEXPORT jint JNICALL
+Java_org_openeggbert_cna_internal_generated_NativeEngineLayerRoutes_colorGradePassSetVolumeLut(
+    JNIEnv* environment, jclass declaring_class, jlong pass, jlong lut)
+{
+    (void)environment;
+    (void)declaring_class;
+    CNA_Result call_result = cna.color_grade_pass_set_volume_lut((CNA_PostProcessPassHandle)pass, (CNA_Handle)lut);
+    return (jint)call_result;
+}
+
+JNIEXPORT jint JNICALL
 Java_org_openeggbert_cna_internal_generated_NativeEngineLayerRoutes_contactShadowPassCombineVisibility(
     JNIEnv* environment, jclass declaring_class, jfloat shadow_map_visibility, jfloat contact_visibility, jfloatArray out_visibility)
 {
@@ -4468,6 +4588,214 @@ Java_org_openeggbert_cna_internal_generated_NativeEngineLayerRoutes_contactShado
     (void)environment;
     (void)declaring_class;
     CNA_Result call_result = cna.contact_shadow_pass_set_thickness((CNA_PostProcessPassHandle)pass, (float)thickness);
+    return (jint)call_result;
+}
+
+JNIEXPORT jint JNICALL
+Java_org_openeggbert_cna_internal_generated_NativeEngineLayerRoutes_cubeLutCopyTitle(
+    JNIEnv* environment, jclass declaring_class, jlong lut, jbyteArray destination, jlongArray out_bytes)
+{
+    (void)environment;
+    (void)declaring_class;
+    jsize destination_size = (*environment)->GetArrayLength(environment, destination);
+    jbyte* destination_bytes = (*environment)->GetByteArrayElements(environment, destination, NULL);
+    if (destination_bytes == NULL) {
+        return (jint)CNA_RESULT_OUT_OF_MEMORY;
+    }
+    uint64_t destination_written = 0;
+    CNA_Result call_result = cna.cube_lut_copy_title((CNA_CubeLutHandle)lut, (char*)destination_bytes, (uint64_t)destination_size, &destination_written);
+    (*environment)->ReleaseByteArrayElements(environment, destination, destination_bytes, 0);
+    if (call_result == CNA_RESULT_SUCCESS || call_result == CNA_RESULT_BUFFER_TOO_SMALL) {
+        jlong destination_element = (jlong)destination_written;
+        (*environment)->SetLongArrayRegion(
+            environment, out_bytes, 0, 1, &destination_element);
+    }
+    return (jint)call_result;
+}
+
+JNIEXPORT jint JNICALL
+Java_org_openeggbert_cna_internal_generated_NativeEngineLayerRoutes_cubeLutCreateStripTexture(
+    JNIEnv* environment, jclass declaring_class, jlong lut, jlong graphics_device, jlongArray out_texture)
+{
+    (void)environment;
+    (void)declaring_class;
+    CNA_Handle out_texture_value = 0;
+    CNA_Result call_result = cna.cube_lut_create_strip_texture((CNA_CubeLutHandle)lut, (CNA_Handle)graphics_device, &out_texture_value);
+    if (call_result == CNA_RESULT_SUCCESS || call_result == CNA_RESULT_BUFFER_TOO_SMALL) {
+        jlong out_texture_element = (jlong)out_texture_value;
+        (*environment)->SetLongArrayRegion(
+            environment, out_texture, 0, 1, &out_texture_element);
+    }
+    return (jint)call_result;
+}
+
+JNIEXPORT jint JNICALL
+Java_org_openeggbert_cna_internal_generated_NativeEngineLayerRoutes_cubeLutCreateVolumeTexture(
+    JNIEnv* environment, jclass declaring_class, jlong lut, jlong graphics_device, jlongArray out_texture)
+{
+    (void)environment;
+    (void)declaring_class;
+    CNA_Handle out_texture_value = 0;
+    CNA_Result call_result = cna.cube_lut_create_volume_texture((CNA_CubeLutHandle)lut, (CNA_Handle)graphics_device, &out_texture_value);
+    if (call_result == CNA_RESULT_SUCCESS || call_result == CNA_RESULT_BUFFER_TOO_SMALL) {
+        jlong out_texture_element = (jlong)out_texture_value;
+        (*environment)->SetLongArrayRegion(
+            environment, out_texture, 0, 1, &out_texture_element);
+    }
+    return (jint)call_result;
+}
+
+JNIEXPORT jint JNICALL
+Java_org_openeggbert_cna_internal_generated_NativeEngineLayerRoutes_cubeLutDestroy(
+    JNIEnv* environment, jclass declaring_class, jlong lut)
+{
+    (void)environment;
+    (void)declaring_class;
+    CNA_Result call_result = cna.cube_lut_destroy((CNA_CubeLutHandle)lut);
+    return (jint)call_result;
+}
+
+JNIEXPORT jint JNICALL
+Java_org_openeggbert_cna_internal_generated_NativeEngineLayerRoutes_cubeLutGetDomainMax(
+    JNIEnv* environment, jclass declaring_class, jlong lut, jfloatArray out_valueFloating)
+{
+    (void)environment;
+    (void)declaring_class;
+    CNA_Vector3 out_value_value;
+    memset(&out_value_value, 0, sizeof out_value_value);
+    CNA_Result call_result = cna.cube_lut_get_domain_max((CNA_CubeLutHandle)lut, &out_value_value);
+    if (call_result == CNA_RESULT_SUCCESS || call_result == CNA_RESULT_BUFFER_TOO_SMALL) {
+        jfloat out_valueFloating_values[] = {
+            (jfloat)out_value_value.x,
+            (jfloat)out_value_value.y,
+            (jfloat)out_value_value.z
+        };
+        (*environment)->SetFloatArrayRegion(environment, out_valueFloating, 0,
+            (jsize)(sizeof out_valueFloating_values / sizeof out_valueFloating_values[0]),
+            out_valueFloating_values);
+    }
+    return (jint)call_result;
+}
+
+JNIEXPORT jint JNICALL
+Java_org_openeggbert_cna_internal_generated_NativeEngineLayerRoutes_cubeLutGetDomainMin(
+    JNIEnv* environment, jclass declaring_class, jlong lut, jfloatArray out_valueFloating)
+{
+    (void)environment;
+    (void)declaring_class;
+    CNA_Vector3 out_value_value;
+    memset(&out_value_value, 0, sizeof out_value_value);
+    CNA_Result call_result = cna.cube_lut_get_domain_min((CNA_CubeLutHandle)lut, &out_value_value);
+    if (call_result == CNA_RESULT_SUCCESS || call_result == CNA_RESULT_BUFFER_TOO_SMALL) {
+        jfloat out_valueFloating_values[] = {
+            (jfloat)out_value_value.x,
+            (jfloat)out_value_value.y,
+            (jfloat)out_value_value.z
+        };
+        (*environment)->SetFloatArrayRegion(environment, out_valueFloating, 0,
+            (jsize)(sizeof out_valueFloating_values / sizeof out_valueFloating_values[0]),
+            out_valueFloating_values);
+    }
+    return (jint)call_result;
+}
+
+JNIEXPORT jint JNICALL
+Java_org_openeggbert_cna_internal_generated_NativeEngineLayerRoutes_cubeLutGetEntry(
+    JNIEnv* environment, jclass declaring_class, jlong lut, jint red, jint green, jint blue, jfloatArray out_colorFloating)
+{
+    (void)environment;
+    (void)declaring_class;
+    CNA_Vector3 out_color_value;
+    memset(&out_color_value, 0, sizeof out_color_value);
+    CNA_Result call_result = cna.cube_lut_get_entry((CNA_CubeLutHandle)lut, (int32_t)red, (int32_t)green, (int32_t)blue, &out_color_value);
+    if (call_result == CNA_RESULT_SUCCESS || call_result == CNA_RESULT_BUFFER_TOO_SMALL) {
+        jfloat out_colorFloating_values[] = {
+            (jfloat)out_color_value.x,
+            (jfloat)out_color_value.y,
+            (jfloat)out_color_value.z
+        };
+        (*environment)->SetFloatArrayRegion(environment, out_colorFloating, 0,
+            (jsize)(sizeof out_colorFloating_values / sizeof out_colorFloating_values[0]),
+            out_colorFloating_values);
+    }
+    return (jint)call_result;
+}
+
+JNIEXPORT jint JNICALL
+Java_org_openeggbert_cna_internal_generated_NativeEngineLayerRoutes_cubeLutGetSize(
+    JNIEnv* environment, jclass declaring_class, jlong lut, jintArray out_size)
+{
+    (void)environment;
+    (void)declaring_class;
+    int32_t out_size_value = 0;
+    CNA_Result call_result = cna.cube_lut_get_size((CNA_CubeLutHandle)lut, &out_size_value);
+    if (call_result == CNA_RESULT_SUCCESS || call_result == CNA_RESULT_BUFFER_TOO_SMALL) {
+        jint out_size_element = (jint)out_size_value;
+        (*environment)->SetIntArrayRegion(
+            environment, out_size, 0, 1, &out_size_element);
+    }
+    return (jint)call_result;
+}
+
+JNIEXPORT jint JNICALL
+Java_org_openeggbert_cna_internal_generated_NativeEngineLayerRoutes_cubeLutIsUnitDomain(
+    JNIEnv* environment, jclass declaring_class, jlong lut, jbooleanArray out_unit)
+{
+    (void)environment;
+    (void)declaring_class;
+    CNA_Bool out_unit_value = 0;
+    CNA_Result call_result = cna.cube_lut_is_unit_domain((CNA_CubeLutHandle)lut, &out_unit_value);
+    if (call_result == CNA_RESULT_SUCCESS || call_result == CNA_RESULT_BUFFER_TOO_SMALL) {
+        jboolean out_unit_element = (jboolean)out_unit_value;
+        (*environment)->SetBooleanArrayRegion(
+            environment, out_unit, 0, 1, &out_unit_element);
+    }
+    return (jint)call_result;
+}
+
+JNIEXPORT jint JNICALL
+Java_org_openeggbert_cna_internal_generated_NativeEngineLayerRoutes_cubeLutLoadFromFile(
+    JNIEnv* environment, jclass declaring_class, jbyteArray path, jlongArray out_lut)
+{
+    (void)environment;
+    (void)declaring_class;
+    jsize path_size = (*environment)->GetArrayLength(environment, path);
+    jbyte* path_bytes = (*environment)->GetByteArrayElements(environment, path, NULL);
+    if (path_bytes == NULL) {
+        return (jint)CNA_RESULT_OUT_OF_MEMORY;
+    }
+    CNA_StringView path_view = {(const char*)path_bytes, (uint64_t)path_size};
+    CNA_CubeLutHandle out_lut_value = 0;
+    CNA_Result call_result = cna.cube_lut_load_from_file(path_view, &out_lut_value);
+    (*environment)->ReleaseByteArrayElements(environment, path, path_bytes, JNI_ABORT);
+    if (call_result == CNA_RESULT_SUCCESS || call_result == CNA_RESULT_BUFFER_TOO_SMALL) {
+        jlong out_lut_element = (jlong)out_lut_value;
+        (*environment)->SetLongArrayRegion(
+            environment, out_lut, 0, 1, &out_lut_element);
+    }
+    return (jint)call_result;
+}
+
+JNIEXPORT jint JNICALL
+Java_org_openeggbert_cna_internal_generated_NativeEngineLayerRoutes_cubeLutParse(
+    JNIEnv* environment, jclass declaring_class, jbyteArray text, jlongArray out_lut)
+{
+    (void)environment;
+    (void)declaring_class;
+    jsize text_size = (*environment)->GetArrayLength(environment, text);
+    jbyte* text_bytes = (*environment)->GetByteArrayElements(environment, text, NULL);
+    if (text_bytes == NULL) {
+        return (jint)CNA_RESULT_OUT_OF_MEMORY;
+    }
+    CNA_StringView text_view = {(const char*)text_bytes, (uint64_t)text_size};
+    CNA_CubeLutHandle out_lut_value = 0;
+    CNA_Result call_result = cna.cube_lut_parse(text_view, &out_lut_value);
+    (*environment)->ReleaseByteArrayElements(environment, text, text_bytes, JNI_ABORT);
+    if (call_result == CNA_RESULT_SUCCESS || call_result == CNA_RESULT_BUFFER_TOO_SMALL) {
+        jlong out_lut_element = (jlong)out_lut_value;
+        (*environment)->SetLongArrayRegion(
+            environment, out_lut, 0, 1, &out_lut_element);
+    }
     return (jint)call_result;
 }
 
