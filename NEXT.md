@@ -83,15 +83,15 @@ FULL PROFILE       TOTAL_DIAGNOSTICS=0  ALLOWLIST_ENTRIES=0
                    TARGET_TYPES=340     TARGET_MEMBERS=4022
 
 NATIVE
-CANONICAL_FUNCTIONS=4054   BOUND_FUNCTIONS=2510
+CANONICAL_FUNCTIONS=4054   BOUND_FUNCTIONS=2525
 XNA_BACKING=986  JAVA_INTERNAL_ONLY=9  CNA_EXTENSION_CANDIDATE=1927
 DEFERRED_RUNTIME=405  NOT_USEFUL_IN_JAVA=727  UNEXPLAINED=0
 BOUND_BUT_UNREACHED=0  BOUND_WITHOUT_JAVA_CALL_SITE=0
-LIBRARY_SYMBOL_CHECK=PASS (2510/2510)   NATIVE_TOOL_TESTS=146
+LIBRARY_SYMBOL_CHECK=PASS (2525/2525)   NATIVE_TOOL_TESTS=146
 ENGINE LAYER (engine_layer.h)   844 of 857 bound and reached
 EFFECTS (effects.h)             241 of 290 bound and reached
 
-TESTS=504 SUITES=93 FAILURES=0 ERRORS=0 SKIPPED=0
+TESTS=514 SUITES=94 FAILURES=0 ERRORS=0 SKIPPED=0
   -- on each of HEADLESS, SOFTWARE, OPENGL4, OPENGLES3 and OPENGL33
   -- and clean under -Xcheck:jni on all five (./gradlew test -PcheckJni)
 ```
@@ -118,6 +118,18 @@ TESTS=504 SUITES=93 FAILURES=0 ERRORS=0 SKIPPED=0
 8. **The generator learned two shapes** -- an opaque `void*` whose byte extent is declared, and a
    counted array whose count is not its length -- each with tool tests including the refusals.
    125 tool tests became 146.
+9. **The renderer selection family is projected**, which is what this session needed and did not
+   have: it was reading the renderer inventory out of `CMakeCache.txt` while
+   `cna_graphics_renderer_copy_available_ext` was sitting there unbound. `GraphicsRenderer`
+   answers what this build has, parses a name, and prefers one -- fifteen routes, and pointedly
+   not the five that answer wrong.
+10. **Two more upstream findings, one of them found by being hit.** A sweep named a renderer this
+   library was configured without and the JVM died with `SIGABRT` inside `System.loadLibrary`
+   (`JAVA-UPSTREAM-017`); measuring the family around it turned up five query routes that are
+   write-only (`JAVA-UPSTREAM-018`).
+11. **`ColorGradePass.setVolumeLut` took a `TextureCube` and could never have worked.** CNA wants a
+   cubical `Texture3D` and refuses a cube map with `INVALID_HANDLE`. Nothing caught it because no
+   test had ever bound a volume table; both are fixed together.
 
 ## Honest boundaries
 
@@ -135,22 +147,35 @@ TESTS=504 SUITES=93 FAILURES=0 ERRORS=0 SKIPPED=0
 - **No claim here is about the host's own GPU.** The qualification runs on a virtual display, so
   the GL implementation is llvmpipe; the same probes were also run against the AMD Radeon 780M
   through the host session and gave the same answers, bar the GL version.
+- **A mistyped renderer name is fatal and nothing in Java can soften it.** `CNA_GRAPHICS_RENDERER`
+  is read while `libcna_c_api.so` loads, and a name this build does not have aborts the process
+  there -- before `main`, before `System.loadLibrary` returns. `GraphicsRenderer.available()` is a
+  mitigation for the next run, not a guard for this one.
+- **Five renderer-selection getters are not projected because they answer wrong**, not because
+  they were missed: the count route says zero, the latch flag is inverted, and three identity
+  getters say `UNKNOWN`. `RendererCapabilities.getRendererName` is the route that answers "which
+  renderer am I on" correctly, and it asks the device rather than the selection.
 - Everything in `docs/runtime-capabilities.json` still holds for the previously measured families.
 
 ## Next work, in dependency order
 
 `docs/backlog.json` is the machine-readable source. Nothing in it is local work.
 
-1. **Eight upstream findings**, `JAVA-UPSTREAM-004` through `-016`, each with a pure-C reproducer
+1. **Ten upstream findings**, `JAVA-UPSTREAM-004` through `-018`, each with a pure-C reproducer
    in `tools/native-abi/probes/`. Three share one shape -- a capability query that does not
-   predict the behaviour -- and two more are the exception barrier flattening a refusal a game
-   could act on.
+   predict the behaviour -- two more are the exception barrier flattening a refusal a game could
+   act on, and `-017` is that barrier missing entirely at library load.
 2. **`JAVA-EXT-007`**, blocked with evidence and rechecked against the live headers: a clip enters
    a skinned model only through a descriptor pointer graph, and `cna_skinning_data_create` takes
    one of its own. No route takes a clip handle.
-3. **Thirteen engine-layer routes and 405 deferred ones**, each with a written reason. The
-   engine-layer thirteen are redundant getters, a getter that leaks, a pure value test, a
-   non-owning view no facade can own, and the route that makes a game undestroyable.
+3. **Thirteen engine-layer routes and 405 deferred ones**, each with a written reason -- and the
+   thirteen now carry their own, in `tools/native-abi/coverage-rules.json`, rather than sharing
+   the header's. Seven lend a fresh name for something the caller already holds, and a fresh name
+   is a game child: taking two and releasing neither makes `cna_game_destroy` answer
+   `INVALID_STATE`, which is the measurement that decided it. One lends back the identical handle
+   it was given. Two are struct initialisers the generated adapter already writes at compile time,
+   one is a bitmask test, one has nothing to return by construction, and one makes a game
+   undestroyable.
 4. **`cna_content_manager_load_effect`** is `ASSET_PENDING`, not blocked: no `.xnb` effect and no
    `.cnj` describing one exists in the checkout this qualifies against.
 

@@ -28,7 +28,7 @@
     "extendedGraphicsLayer": true,
     "devices": true,
     "cnaInventorySha256": "b485d17b1df9a86c6099700baedcd435c8a3f07487af8741b01d8c471956bfe7",
-    "note": "A multi-renderer CNA build: five renderers compiled in and one chosen before the first GraphicsDevice through the CNA_GRAPHICS_RENDERER environment variable. The whole suite runs green on each of the five. The platform is SDL3 rather than HEADLESS because a GPU renderer needs a native window; the suite can be pointed at a virtual display, and was."
+    "note": "A multi-renderer CNA build: five renderers compiled in and one chosen before the first GraphicsDevice through the CNA_GRAPHICS_RENDERER environment variable, or through GraphicsRenderer.setPreferred -- which is the safe way, because the environment variable naming a renderer this build lacks aborts the process at library load (JAVA-UPSTREAM-017). The whole suite runs green on each of the five. The platform is SDL3 rather than HEADLESS because a GPU renderer needs a native window; the suite can be pointed at a virtual display, and was."
   },
   "statusVocabulary": [
     "ASSET_PENDING",
@@ -378,6 +378,25 @@
         "PIXEL_VERIFIED"
       ],
       "detail": "The two values this projection could previously only pin by layout. Both cross into CNA and never come back, and a renderer that draws nothing accepts either without doing anything observable -- a planted swap of the sampler address modes passed every test. On a renderer that draws, a filter is a pixel: a two-by-two checkerboard magnified sixteen times over is hard blocks under point filtering and a gradient under linear, and the same planted swap now fails. The context is verified in three fields rather than all of them: a blit output is decided by its source and destination handles, and film grain is seeded from the elapsed time, so swapping or zeroing those fails -- while swapping the normals and velocity slots still passes, because nothing reachable here reads them. Those leaves stay pinned by the layout gate alone, and that limit is recorded rather than glossed."
+    },
+    {
+      "id": "graphics-renderer-selection",
+      "surface": "org.openeggbert.cna.extensions.graphics.GraphicsRenderer, GraphicsRendererType, GraphicsRendererFallback",
+      "statuses": [
+        "EXTENSION_VERIFIED",
+        "NATIVE_VERIFIED",
+        "UPSTREAM_CNA_BLOCKED"
+      ],
+      "detail": "Which renderers this build has, and which one to try first -- asked of the library rather than read out of CMakeCache.txt, which is what this qualification had been doing while the routes sat unbound. Fifteen of the family's twenty-two routes are projected: the inventory, per-identity availability, case-insensitive name parsing that treats an unknown name as an answer rather than a failure, the preference setters, the fallback chain with its history, CNA's own diagnostic messages and reason names, and the test-only reset. Every setter is refused once a renderer exists and refused for a renderer this build lacks, both measured. UPSTREAM_CNA_BLOCKED is two findings: JAVA-UPSTREAM-018, five query routes that answer zero, UNKNOWN or the inverse of their own declaration and are therefore not projected at all; and JAVA-UPSTREAM-017, the reason this exists -- CNA_GRAPHICS_RENDERER naming a renderer this build lacks aborts the process while the library loads, before any Java frame exists, so no guard is possible and reading the inventory beforehand is the only defence."
+    },
+    {
+      "id": "engine-color-grade-volume-lut",
+      "surface": "org.openeggbert.cna.extensions.graphics.ColorGradePass.setVolumeLut, getVolumeLut",
+      "statuses": [
+        "EXTENSION_VERIFIED",
+        "NATIVE_VERIFIED"
+      ],
+      "detail": "A volume grading table is a cubical Texture3D with an edge between two and sixty-four, measured rather than read: CNA's declaration says \"a cube\", which reads both ways, and a TextureCube is refused with INVALID_HANDLE while a Texture3D of the same edge is accepted. The Java signature took a TextureCube and so could never have worked; nothing had caught it because no test had ever bound a volume table. Qualified on both sides of GraphicsCapability.Texture3D, because HEADLESS has no real 3D texture storage and refuses to allocate one -- where the storage exists the slot is exercised and read back, and where it does not the refusal is the one CNA documents."
     }
   ]
 }

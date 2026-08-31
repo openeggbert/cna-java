@@ -1,7 +1,7 @@
 {
   "abiVersion": "0.21.0",
   "boundButUnreached": [],
-  "boundFunctions": 2510,
+  "boundFunctions": 2525,
   "boundWithoutJavaCallSite": [],
   "byHeader": {
     "abi.h": {
@@ -295,6 +295,8 @@
   "cnaInventorySha256": "b485d17b1df9a86c6099700baedcd435c8a3f07487af8741b01d8c471956bfe7",
   "deferredTasks": {
     "JAVA-EXT-006": 3,
+    "JAVA-EXT-008": 1,
+    "JAVA-EXT-012": 1,
     "JAVA-NATIVE-010": 8,
     "JAVA-NATIVE-011": 16,
     "JAVA-NATIVE-012": 38,
@@ -309,6 +311,7 @@
     "JAVA-NATIVE-021": 8,
     "JAVA-NATIVE-023": 41,
     "JAVA-UPSTREAM-004": 13,
+    "JAVA-UPSTREAM-011": 1,
     "JAVA-XNA-001": 2,
     "JAVA-XNA-002": 10
   },

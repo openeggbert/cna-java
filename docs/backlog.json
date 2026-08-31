@@ -722,6 +722,67 @@
         "ShaderEffectTests.aUniformSetFromJavaDecidesThePixelTheShaderWrites"
       ],
       "note": "The same renderer does it correctly one file over: EasyGLComputeShaderRenderer::SetUniformInt opens with program_.use(). Two uniform setters in one renderer, one of which works from a cold start and one of which does not, which is why this is a defect rather than a contract. CNA own passes are unaffected because they apply their effect as part of drawing; a game reaching the routes directly is not."
+    },
+    {
+      "id": "JAVA-UPSTREAM-017",
+      "title": "A renderer named in CNA_GRAPHICS_RENDERER that this build lacks aborts the process while the library loads",
+      "family": "cnanext",
+      "authority": "core_ext.h, graphics.h",
+      "status": "blocked",
+      "priority": 8,
+      "currentState": "Setting CNA_GRAPHICS_RENDERER to a renderer identity this build was not compiled with -- or to a string that names no renderer at all -- kills the process with SIGABRT: `terminate called after throwing an instance of 'System::InvalidOperationException'`. The selection is resolved while libcna_c_api.so is loading, so nothing of the caller runs: not main, not a __attribute__((constructor)) of the program itself. A program that links the library but references no symbol survives only because --as-needed drops the DT_NEEDED entry entirely; add one reference and it dies. In a JVM this happens inside System.loadLibrary, before any Java frame exists to catch anything, and takes the whole test run with it -- which is how it was found.",
+      "expectedState": "An unavailable or unrecognised CNA_GRAPHICS_RENDERER is reported the way the API path already reports it: the message it currently aborts with is a good one, and reaching the caller as a CNA_Result -- or as a fallback to the build default, which is what the same variable does when set after load -- would cost nothing. No C++ exception should escape a library's load.",
+      "blocker": "Upstream defect in cnanext renderer selection. Nothing in CNA-Java can guard it: the abort precedes every line of Java. The mitigation is GraphicsRenderer.available(), which lets a game read the inventory from a process that already loaded and choose through the API path, where an absent renderer is an IllegalStateException.",
+      "tests": [
+        "tools/native-abi/probes/renderer_selection.c",
+        "GraphicsRendererSelectionTests.aRendererThisBuildDoesNotHaveIsRefusedRatherThanAborting"
+      ],
+      "note": "The API path is correct and was measured alongside: set_preferred_ext and _by_name_ext answer INVALID_STATE for an identity not in the build and INVALID_ARGUMENT for one outside the table. Only the environment path aborts, and only because it runs where no barrier is installed yet."
+    },
+    {
+      "id": "JAVA-UPSTREAM-018",
+      "title": "Five renderer-selection query routes are write-only: they answer zero, UNKNOWN, or the opposite of what they document",
+      "family": "cnanext",
+      "authority": "core_ext.h",
+      "status": "blocked",
+      "priority": 6,
+      "currentState": "On a build with five renderers compiled in: cna_graphics_renderer_get_available_count_ext answers SUCCESS and 0, while cna_graphics_renderer_copy_available_ext(NULL, 0, &n) answers 5 for the same build. cna_graphics_renderer_get_is_latched_ext answers CNA_TRUE before anything is created and CNA_FALSE after a device exists, which is the exact opposite of its declaration, and reset_selection_for_tests_ext flips it back to TRUE. cna_graphics_renderer_get_selected_ext answers UNKNOWN even directly after set_preferred_by_name_ext(\"HEADLESS\") returned SUCCESS. cna_graphics_renderer_get_active_ext answers SUCCESS and UNKNOWN once a renderer exists, while CNA's own log line names HEADLESS. cna_graphics_renderer_get_current_type answers HEADLESS before the selection latches and UNKNOWN after, while its name-copying twin copy_current_name stays correct throughout.",
+      "expectedState": "The query half of the family answers what the setter half was told and what the selection actually did. The setters, the enumeration by copy, the parser and the fallback history are all correct, so this is five routes rather than a family.",
+      "blocker": "Upstream defect in cnanext renderer selection. CNA-Java binds the fifteen routes that work and none of these five: GraphicsRenderer.available() sizes its buffer with the zero-capacity probe rather than the count route, and the active renderer's name comes from RendererCapabilities.getRendererName, which asks the device and is correct.",
+      "tests": [
+        "tools/native-abi/probes/renderer_selection.c"
+      ],
+      "note": "Found while binding the family for JAVA-EXT-013. The inventory is the useful half and it works: copy_available_ext supports the zero-capacity probe, writes nothing when the buffer is one element short, and lists the renderers in the order CMake was given them."
+    },
+    {
+      "id": "JAVA-EXT-013",
+      "title": "Project CNA's renderer selection so a game can ask what this build has before it asks for one",
+      "family": "cna-java",
+      "authority": "core_ext.h",
+      "status": "done",
+      "priority": 7,
+      "currentState": "GraphicsRenderer, GraphicsRendererType and GraphicsRendererFallback project fifteen of the twenty-two routes: the inventory, per-identity availability, name parsing, the preference setters, the fallback chain and its history with CNA's own messages and reason names, and the test-only reset. The five broken query routes are not bound (JAVA-UPSTREAM-018), and cna_graphics_renderer_get_current_name_size / _copy_current_name were already bound.",
+      "expectedState": "A game reads GraphicsRenderer.available(), decides, and calls setPreferred -- rather than exporting CNA_GRAPHICS_RENDERER and finding out at load time that the renderer is not there (JAVA-UPSTREAM-017).",
+      "tests": [
+        "GraphicsRendererSelectionTests",
+        "tools/native-abi/probes/renderer_selection.c"
+      ],
+      "note": "Falsified with three planted defects, all of which failed the suite: a wrong CNA number on one identity (6 of 9 tests), parse() ignoring whether CNA recognised the name (1), and a refused selection treated as an accepted one (2). This projection had been reading the renderer inventory out of CMakeCache.txt; the routes to ask the library were there the whole time."
+    },
+    {
+      "id": "JAVA-EXT-014",
+      "title": "ColorGradePass bound its volume table to the wrong texture type, and nothing had ever tested it",
+      "family": "cna-java",
+      "authority": "engine_layer.h, texture_volume.h",
+      "status": "done",
+      "priority": 7,
+      "currentState": "setVolumeLut and getVolumeLut take and return a Texture3D. CNA documents the argument as \"a cube with an edge between two and CNA_COLOR_GRADE_MAX_LUT_SIZE_EXT\", which reads two ways; measured, a TextureCube is refused with INVALID_HANDLE and a cubical Texture3D is accepted. Java validates the same shape CNA does -- cubical, edge 2 to 64 -- and names the shape it was given rather than forwarding a result code.",
+      "expectedState": "A game can bind a volume grading table, which it could not before: the previous signature took a TextureCube and could never have succeeded.",
+      "tests": [
+        "ColorGradeTests.theVolumeSlotTakesACubicalVolumeAndRefusesEverythingElse",
+        "tools/native-abi/probes/lent_effect_lifetime.c"
+      ],
+      "note": "The signature was wrong and untested at the same time, which is the only way a signature this wrong survives: no test had ever bound a volume table, so there was nothing for the error to fail against. Found by a probe that bound one to ask a lifetime question about the getter. The first falsification attempt did not register -- asserting only the exception type passed with the Java validation deleted, because CNA raises the same type -- so the assertions read the message, which is what the Java check actually adds."
     }
   ]
 }
