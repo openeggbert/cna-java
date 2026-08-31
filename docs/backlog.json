@@ -419,15 +419,15 @@
       "title": "Project CNA's skinned model, and finish real avatar rendering on top of it",
       "family": "org.openeggbert.cna.extensions",
       "authority": "models.h, gamer_services.h",
-      "status": "ready",
+      "status": "blocked",
       "priority": 8,
-      "currentState": "26 cna_skinned_model_ext_* routes are unbound: create, skeleton, bind poses, named clips and their tracks, bone transform computation, and parts. Nothing in the Java projection has a skinned model, so the two avatar routes that need one are unbound too.",
-      "expectedState": "A SkinnedModel extension type that owns the handle and releases it, with the skeleton, the clips and the computed bone transforms a game needs to draw one. XNA 4.0 has no skeletal animation at all -- Microsoft shipped it as a separate sample -- so this is a capability the reference API never had rather than a member being filled in. Once it exists, AvatarExtensions.EnableRealRendering and DrawReal take it and the avatar slice is complete.",
-      "blocker": "None. It needs the API design and content to qualify a clip against.",
+      "currentState": "Measured against the live headers: the generator plans 23 of the 26 cna_skinned_model_ext_* routes and refuses three. cna_skinned_model_ext_create and cna_skinned_model_ext_set_clip take descriptors whose fields are pointers to arrays of descriptors -- clip to tracks to keyframes -- and cna_skinned_model_ext_create additionally carries three arrays governed by one count. The arrayLengths declaration added for the second shape covers set_skeleton; the nested descriptor graph is the one that is not covered.",
+      "expectedState": "A SkinnedModel extension type with the skeleton, the clips and the computed bone transforms a game needs. XNA 4.0 has no skeletal animation at all -- Microsoft shipped it as a separate sample -- so this is a capability the reference API never had.",
+      "blocker": "set_clip is the only door a clip can go through, and no route takes a clip handle instead. Without it a Java skinned model can have a skeleton and parts but no clips, and compute_bone_transforms has nothing to compute, so the 23 plannable routes do not add up to a usable feature. Either the generator learns nested descriptor graphs -- a marshaller for a variable-depth pointer graph, which is a much larger and less provable step than the two shapes added so far -- or CNA grows a handle-based way to put a clip into a skinned model.",
       "tests": [
         "AvatarExtensionTests"
       ],
-      "note": "cnanext's own AvatarsSmoke can only check that real rendering refuses an invalid model, because the C container has no skinned model to hand it either. Whatever is built here has to be qualified against a model this repository can actually construct, which is what a .cnb model or CNA's own creation routes would give."
+      "note": "cnanext's own AvatarsSmoke can only check that real rendering refuses an invalid model, because the C container has no skinned model to hand it either."
     }
   ]
 }

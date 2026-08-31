@@ -235,6 +235,46 @@ def test_generator(live: dict) -> None:
     check(adapter.count("ReleaseByteArrayElements(environment, createInfoHostAddress") == 1,
           "the pinned bytes are released exactly once")
 
+    # An input array whose length CNA states in prose rather than in a count parameter. The
+    # generator will not infer it -- a wrong guess is a read past the end inside CNA -- so
+    # routes.json declares it and the adapter checks the caller's array against the declaration.
+    skeleton = generator_tool.plan({
+        "java": "probe", "symbol": "cna_cnb_model_set_skeleton",
+        "arrayLengths": {
+            "bind_pose": {"per": 16, "count": "joint_count"},
+            "inverse_bind_pose": {"per": 16, "count": "joint_count"},
+            "root_prefix": {"per": 16, "count": "joint_count", "nullable": True},
+        }}, live)
+    sized = [step for step in skeleton["steps"] if step["shape"] == "sized_array"]
+    check(len(sized) == 3, "each declared array becomes its own sized_array step")
+    adapter = generator_tool.render_c("Probe", [skeleton])
+    guard = adapter[:adapter.index("GetIntArrayElements")]
+    check(guard.count("CNA_RESULT_INVALID_ARGUMENT") == 3,
+          "every declared length is checked before anything is acquired, so a wrong length "
+          "refuses without leaking what earlier parameters pinned")
+    check("bind_pose == NULL ||" in adapter,
+          "a non-nullable declared array refuses null")
+    check("root_prefix != NULL &&" in adapter,
+          "a nullable declared array accepts null and checks the length only when present")
+    check("16 * (*environment)->GetArrayLength(environment, hierarchy)" in adapter,
+          "a length stated per element of another array resolves to that array's own length")
+
+    # A fixed extent needs no count at all.
+    bone = generator_tool.plan({"java": "probe", "symbol": "cna_cnb_model_add_bone",
+                                "arrayLengths": {"transform": {"length": 16}}}, live)
+    check("!= (jsize)16" in generator_tool.render_c("Probe", [bone]),
+          "a fixed-extent array is checked against the literal length")
+
+    # And a declaration naming something the route cannot read up front is refused, rather than
+    # emitting C that names a variable which does not exist.
+    try:
+        generator_tool.plan({"java": "probe", "symbol": "cna_cnb_model_add_bone",
+                             "arrayLengths": {"transform": {"per": 4, "count": "nonsense"}}},
+                            live)
+        check(False, "a declared count that is not a readable parameter is refused")
+    except generator_tool.Unsupported:
+        check(True, "a declared count that is not a readable parameter is refused")
+
     # And a view whose lifetime the declaration does not state is refused rather than guessed.
     # An output structure's view would point at memory CNA owns on terms the header does not
     # give, and an array of such structures would need one pointer to outlive its element's

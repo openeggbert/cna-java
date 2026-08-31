@@ -214,6 +214,10 @@ def plan(route: dict, live: dict) -> dict:
 
     parameters = declaration["parameters"]
     steps: list[dict] = []
+    # Where each parameter's value can be read in C before anything has been acquired. A count
+    # that CNA declares as its own parameter is a JNI argument; one that a preceding array
+    # consumed is that array's length, which GetArrayLength answers with no side effect.
+    available: dict[str, str] = {}
     index = 0
     while index < len(parameters):
         parameter = parameters[index]
@@ -246,6 +250,7 @@ def plan(route: dict, live: dict) -> dict:
             jni, kind = classify_scalar(type_name, live)
             steps.append({"shape": "value", "name": name, "jni": jni, "kind": kind,
                           "ctype": type_name})
+            available[name] = name
             index += 1
             continue
         if pointers == 1 and type_name == "char" and index + 2 < len(parameters):
@@ -296,7 +301,28 @@ def plan(route: dict, live: dict) -> dict:
             steps.append({"shape": "array", "name": name, "jni": jni, "kind": kind,
                           "ctype": type_name, "input": constant,
                           "count": following["name"] or "count"})
+            available[following["name"] or "count"] = (
+                f"(*environment)->GetArrayLength(environment, {name})")
             index += 2
+            continue
+        if pointers == 1 and name in route.get("arrayLengths", {}):
+            # An input array whose length CNA states in prose rather than in a count parameter:
+            # "16 floats per joint", "one matrix per bone". The generator will not infer that --
+            # a wrong guess is a buffer overrun in C -- so routes.json declares it explicitly and
+            # the adapter checks the Java array against the declaration before passing it.
+            declared = route["arrayLengths"][name]
+            jni, kind = classify_scalar(type_name, live)
+            count = declared.get("count")
+            if count is not None and count not in available:
+                raise Unsupported(
+                    f"{route['symbol']}: arrayLengths names '{count}', which is not a parameter "
+                    "this route reads before it acquires anything")
+            steps.append({"shape": "sized_array", "name": name, "jni": jni, "kind": kind,
+                          "ctype": type_name,
+                          "per": int(declared.get("per", declared.get("length", 1))),
+                          "count": available.get(count) if count else None,
+                          "nullable": bool(declared.get("nullable", False))})
+            index += 1
             continue
         if pointers == 1:
             jni, kind = classify_scalar(type_name, live)
@@ -334,7 +360,7 @@ def java_signature(entry: dict) -> tuple[str, list[str]]:
             parameters.append(f"byte[] {java_name(step['name'])}")
             if step["shape"] == "text":
                 parameters.append(f"long[] {java_name(step['written'])}")
-        elif step["shape"] == "array":
+        elif step["shape"] in ("array", "sized_array"):
             parameters.append(f"{JAVA_OF_JNI[step['jni']]}[] {java_name(step['name'])}")
         elif step["shape"] in ("struct", "struct_array", "struct_value"):
             for group, _, _, java in STRUCT_GROUPS:
@@ -405,7 +431,9 @@ def render_c(class_name: str, entries: list[dict]) -> str:
         # The declaring-class parameter is spelled distinctively: a CNA parameter really is
         # named `type` in places, and a plain `type` here would collide with it.
         parameters = ["JNIEnv* environment", "jclass declaring_class"]
-        body: list[str] = ["    (void)environment;", "    (void)declaring_class;"]
+        body: list[str] = []
+        # Refusals that must run before anything is acquired, so a rejected call leaks nothing.
+        prologue: list[str] = []
         arguments: list[str] = []
         epilogue: list[str] = []
         cleanup: list[str] = []
@@ -446,6 +474,51 @@ def render_c(class_name: str, entries: list[dict]) -> str:
                     f"        jlong {name}_element = (jlong){name}_written;\n"
                     f"        (*environment)->SetLongArrayRegion(\n"
                     f"            environment, {step['written']}, 0, 1, &{name}_element);")
+            elif shape == "sized_array":
+                parameters.append(f"{step['jni']}Array {name}")
+                element = JAVA_OF_JNI[step["jni"]].capitalize()
+                required = (f"(jsize)({step['per']} * {step['count']})" if step["count"]
+                            else f"(jsize){step['per']}")
+                length = f"(*environment)->GetArrayLength(environment, {name})"
+                # Checked in the prologue, before anything is acquired, so a caller's wrong
+                # length is a plain refusal rather than a refusal that leaks whatever the
+                # earlier parameters had already pinned. CNA states these lengths in prose --
+                # "16 floats per joint" -- and a short array would be a read past the end
+                # inside CNA that no Java exception could describe.
+                if step["nullable"]:
+                    prologue.append(f"    if ({name} != NULL && {length} != {required}) {{")
+                else:
+                    prologue.append(f"    if ({name} == NULL || {length} != {required}) {{")
+                prologue.append("        return (jint)CNA_RESULT_INVALID_ARGUMENT;")
+                prologue.append("    }")
+                body.append(f"    {step['ctype']}* {name}_values = NULL;")
+                body.append(f"    {step['jni']}* {name}_elements = NULL;")
+                body.append(f"    if ({name} != NULL) {{")
+                body.append(f"        jsize {name}_size = {length};")
+                body.append(f"        {name}_elements = (*environment)->Get{element}"
+                            f"ArrayElements(environment, {name}, NULL);")
+                body.append(f"        if ({name}_elements == NULL) {{")
+                body.append("            return (jint)CNA_RESULT_OUT_OF_MEMORY;")
+                body.append("        }")
+                body.append(f"        {name}_values = ({step['ctype']}*)malloc(")
+                body.append(f"            ((size_t){name}_size + 1U) * sizeof(*{name}_values));")
+                body.append(f"        if ({name}_values == NULL) {{")
+                body.append(f"            (*environment)->Release{element}ArrayElements(")
+                body.append(f"                environment, {name}, {name}_elements, JNI_ABORT);")
+                body.append("            return (jint)CNA_RESULT_OUT_OF_MEMORY;")
+                body.append("        }")
+                body.append(f"        for (jsize index = 0; index < {name}_size; ++index) {{")
+                body.append(f"            {name}_values[index] = "
+                            f"({step['ctype']}){name}_elements[index];")
+                body.append("        }")
+                body.append("    }")
+                arguments.append(f"{name}_values")
+                cleanup.append(
+                    f"    if ({name}_elements != NULL) {{\n"
+                    f"        (*environment)->Release{element}ArrayElements(\n"
+                    f"            environment, {name}, {name}_elements, JNI_ABORT);\n"
+                    f"    }}\n"
+                    f"    free({name}_values);")
             elif shape == "array":
                 parameters.append(f"{step['jni']}Array {name}")
                 element = JAVA_OF_JNI[step["jni"]].capitalize()
@@ -622,6 +695,8 @@ def render_c(class_name: str, entries: list[dict]) -> str:
                     body.append(f"    {name}_value.{path}.data = (const char*){view}_bytes;")
                     body.append(f"    {name}_value.{path}.byte_length = (uint64_t){view}_size;")
                     cleanup.append(release_bytes(view, abort=True))
+        body = (["    (void)environment;", "    (void)declaring_class;"]
+                + prologue + body)
         body.append(f"    CNA_Result result = cna.{slot_of(symbol)}({', '.join(arguments)});")
         body.extend(cleanup)
         if epilogue:
