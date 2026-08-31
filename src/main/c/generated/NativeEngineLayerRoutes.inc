@@ -1893,6 +1893,22 @@ Java_org_openeggbert_cna_internal_generated_NativeEngineLayerRoutes_cascadedShad
 }
 
 JNIEXPORT jint JNICALL
+Java_org_openeggbert_cna_internal_generated_NativeEngineLayerRoutes_cascadedShadowMapGetCasterEffect(
+    JNIEnv* environment, jclass declaring_class, jlong shadow_map, jlongArray out_effect)
+{
+    (void)environment;
+    (void)declaring_class;
+    CNA_EffectHandle out_effect_value = 0;
+    CNA_Result call_result = cna.cascaded_shadow_map_get_caster_effect((CNA_CascadedShadowMapHandle)shadow_map, &out_effect_value);
+    if (call_result == CNA_RESULT_SUCCESS || call_result == CNA_RESULT_BUFFER_TOO_SMALL) {
+        jlong out_effect_element = (jlong)out_effect_value;
+        (*environment)->SetLongArrayRegion(
+            environment, out_effect, 0, 1, &out_effect_element);
+    }
+    return (jint)call_result;
+}
+
+JNIEXPORT jint JNICALL
 Java_org_openeggbert_cna_internal_generated_NativeEngineLayerRoutes_cascadedShadowMapGetShadowTexture(
     JNIEnv* environment, jclass declaring_class, jlong shadow_map, jlongArray out_texture)
 {
@@ -2625,6 +2641,22 @@ Java_org_openeggbert_cna_internal_generated_NativeEngineLayerRoutes_clusteredFor
 }
 
 JNIEXPORT jint JNICALL
+Java_org_openeggbert_cna_internal_generated_NativeEngineLayerRoutes_clusteredForwardEffectGetEffect(
+    JNIEnv* environment, jclass declaring_class, jlong effect, jlongArray out_shader)
+{
+    (void)environment;
+    (void)declaring_class;
+    CNA_EffectHandle out_shader_value = 0;
+    CNA_Result call_result = cna.clustered_forward_effect_get_effect((CNA_ClusteredForwardEffectHandle)effect, &out_shader_value);
+    if (call_result == CNA_RESULT_SUCCESS || call_result == CNA_RESULT_BUFFER_TOO_SMALL) {
+        jlong out_shader_element = (jlong)out_shader_value;
+        (*environment)->SetLongArrayRegion(
+            environment, out_shader, 0, 1, &out_shader_element);
+    }
+    return (jint)call_result;
+}
+
+JNIEXPORT jint JNICALL
 Java_org_openeggbert_cna_internal_generated_NativeEngineLayerRoutes_clusteredForwardEffectGetIor(
     JNIEnv* environment, jclass declaring_class, jlong effect, jfloatArray out_ior)
 {
@@ -2636,6 +2668,22 @@ Java_org_openeggbert_cna_internal_generated_NativeEngineLayerRoutes_clusteredFor
         jfloat out_ior_element = (jfloat)out_ior_value;
         (*environment)->SetFloatArrayRegion(
             environment, out_ior, 0, 1, &out_ior_element);
+    }
+    return (jint)call_result;
+}
+
+JNIEXPORT jint JNICALL
+Java_org_openeggbert_cna_internal_generated_NativeEngineLayerRoutes_clusteredForwardEffectGetMaterialExtensions(
+    JNIEnv* environment, jclass declaring_class, jlong effect, jlongArray out_extensions)
+{
+    (void)environment;
+    (void)declaring_class;
+    CNA_PbrMaterialExtensionsHandle out_extensions_value = 0;
+    CNA_Result call_result = cna.clustered_forward_effect_get_material_extensions((CNA_ClusteredForwardEffectHandle)effect, &out_extensions_value);
+    if (call_result == CNA_RESULT_SUCCESS || call_result == CNA_RESULT_BUFFER_TOO_SMALL) {
+        jlong out_extensions_element = (jlong)out_extensions_value;
+        (*environment)->SetLongArrayRegion(
+            environment, out_extensions, 0, 1, &out_extensions_element);
     }
     return (jint)call_result;
 }
@@ -5691,6 +5739,22 @@ Java_org_openeggbert_cna_internal_generated_NativeEngineLayerRoutes_cubeShadowMa
 }
 
 JNIEXPORT jint JNICALL
+Java_org_openeggbert_cna_internal_generated_NativeEngineLayerRoutes_cubeShadowMapGetCasterEffect(
+    JNIEnv* environment, jclass declaring_class, jlong shadow_map, jlongArray out_effect)
+{
+    (void)environment;
+    (void)declaring_class;
+    CNA_EffectHandle out_effect_value = 0;
+    CNA_Result call_result = cna.cube_shadow_map_get_caster_effect((CNA_CubeShadowMapHandle)shadow_map, &out_effect_value);
+    if (call_result == CNA_RESULT_SUCCESS || call_result == CNA_RESULT_BUFFER_TOO_SMALL) {
+        jlong out_effect_element = (jlong)out_effect_value;
+        (*environment)->SetLongArrayRegion(
+            environment, out_effect, 0, 1, &out_effect_element);
+    }
+    return (jint)call_result;
+}
+
+JNIEXPORT jint JNICALL
 Java_org_openeggbert_cna_internal_generated_NativeEngineLayerRoutes_cubeShadowMapGetDepthBias(
     JNIEnv* environment, jclass declaring_class, jlong shadow_map, jfloatArray out_bias)
 {
@@ -7072,6 +7136,22 @@ Java_org_openeggbert_cna_internal_generated_NativeEngineLayerRoutes_depthNormalP
 }
 
 JNIEXPORT jint JNICALL
+Java_org_openeggbert_cna_internal_generated_NativeEngineLayerRoutes_depthNormalPrepassGetPrepassEffect(
+    JNIEnv* environment, jclass declaring_class, jlong prepass, jlongArray out_effect)
+{
+    (void)environment;
+    (void)declaring_class;
+    CNA_EffectHandle out_effect_value = 0;
+    CNA_Result call_result = cna.depth_normal_prepass_get_prepass_effect((CNA_DepthNormalPrepassHandle)prepass, &out_effect_value);
+    if (call_result == CNA_RESULT_SUCCESS || call_result == CNA_RESULT_BUFFER_TOO_SMALL) {
+        jlong out_effect_element = (jlong)out_effect_value;
+        (*environment)->SetLongArrayRegion(
+            environment, out_effect, 0, 1, &out_effect_element);
+    }
+    return (jint)call_result;
+}
+
+JNIEXPORT jint JNICALL
 Java_org_openeggbert_cna_internal_generated_NativeEngineLayerRoutes_depthNormalPrepassGetRoughness(
     JNIEnv* environment, jclass declaring_class, jlong prepass, jfloatArray out_roughness)
 {
@@ -7083,6 +7163,22 @@ Java_org_openeggbert_cna_internal_generated_NativeEngineLayerRoutes_depthNormalP
         jfloat out_roughness_element = (jfloat)out_roughness_value;
         (*environment)->SetFloatArrayRegion(
             environment, out_roughness, 0, 1, &out_roughness_element);
+    }
+    return (jint)call_result;
+}
+
+JNIEXPORT jint JNICALL
+Java_org_openeggbert_cna_internal_generated_NativeEngineLayerRoutes_depthNormalPrepassGetSkinnedPrepassEffect(
+    JNIEnv* environment, jclass declaring_class, jlong prepass, jlongArray out_effect)
+{
+    (void)environment;
+    (void)declaring_class;
+    CNA_EffectHandle out_effect_value = 0;
+    CNA_Result call_result = cna.depth_normal_prepass_get_skinned_prepass_effect((CNA_DepthNormalPrepassHandle)prepass, &out_effect_value);
+    if (call_result == CNA_RESULT_SUCCESS || call_result == CNA_RESULT_BUFFER_TOO_SMALL) {
+        jlong out_effect_element = (jlong)out_effect_value;
+        (*environment)->SetLongArrayRegion(
+            environment, out_effect, 0, 1, &out_effect_element);
     }
     return (jint)call_result;
 }
@@ -14107,6 +14203,22 @@ Java_org_openeggbert_cna_internal_generated_NativeEngineLayerRoutes_pbrMaterialE
 }
 
 JNIEXPORT jint JNICALL
+Java_org_openeggbert_cna_internal_generated_NativeEngineLayerRoutes_pbrMaterialExtensionsGetClearcoatNormalTexture(
+    JNIEnv* environment, jclass declaring_class, jlong extensions, jlongArray out_texture)
+{
+    (void)environment;
+    (void)declaring_class;
+    CNA_Handle out_texture_value = 0;
+    CNA_Result call_result = cna.pbr_material_extensions_get_clearcoat_normal_texture((CNA_PbrMaterialExtensionsHandle)extensions, &out_texture_value);
+    if (call_result == CNA_RESULT_SUCCESS || call_result == CNA_RESULT_BUFFER_TOO_SMALL) {
+        jlong out_texture_element = (jlong)out_texture_value;
+        (*environment)->SetLongArrayRegion(
+            environment, out_texture, 0, 1, &out_texture_element);
+    }
+    return (jint)call_result;
+}
+
+JNIEXPORT jint JNICALL
 Java_org_openeggbert_cna_internal_generated_NativeEngineLayerRoutes_pbrMaterialExtensionsGetClearcoatRoughness(
     JNIEnv* environment, jclass declaring_class, jlong extensions, jfloatArray out_value)
 {
@@ -14118,6 +14230,38 @@ Java_org_openeggbert_cna_internal_generated_NativeEngineLayerRoutes_pbrMaterialE
         jfloat out_value_element = (jfloat)out_value_value;
         (*environment)->SetFloatArrayRegion(
             environment, out_value, 0, 1, &out_value_element);
+    }
+    return (jint)call_result;
+}
+
+JNIEXPORT jint JNICALL
+Java_org_openeggbert_cna_internal_generated_NativeEngineLayerRoutes_pbrMaterialExtensionsGetClearcoatRoughnessTexture(
+    JNIEnv* environment, jclass declaring_class, jlong extensions, jlongArray out_texture)
+{
+    (void)environment;
+    (void)declaring_class;
+    CNA_Handle out_texture_value = 0;
+    CNA_Result call_result = cna.pbr_material_extensions_get_clearcoat_roughness_texture((CNA_PbrMaterialExtensionsHandle)extensions, &out_texture_value);
+    if (call_result == CNA_RESULT_SUCCESS || call_result == CNA_RESULT_BUFFER_TOO_SMALL) {
+        jlong out_texture_element = (jlong)out_texture_value;
+        (*environment)->SetLongArrayRegion(
+            environment, out_texture, 0, 1, &out_texture_element);
+    }
+    return (jint)call_result;
+}
+
+JNIEXPORT jint JNICALL
+Java_org_openeggbert_cna_internal_generated_NativeEngineLayerRoutes_pbrMaterialExtensionsGetClearcoatTexture(
+    JNIEnv* environment, jclass declaring_class, jlong extensions, jlongArray out_texture)
+{
+    (void)environment;
+    (void)declaring_class;
+    CNA_Handle out_texture_value = 0;
+    CNA_Result call_result = cna.pbr_material_extensions_get_clearcoat_texture((CNA_PbrMaterialExtensionsHandle)extensions, &out_texture_value);
+    if (call_result == CNA_RESULT_SUCCESS || call_result == CNA_RESULT_BUFFER_TOO_SMALL) {
+        jlong out_texture_element = (jlong)out_texture_value;
+        (*environment)->SetLongArrayRegion(
+            environment, out_texture, 0, 1, &out_texture_element);
     }
     return (jint)call_result;
 }
@@ -14171,6 +14315,22 @@ Java_org_openeggbert_cna_internal_generated_NativeEngineLayerRoutes_pbrMaterialE
 }
 
 JNIEXPORT jint JNICALL
+Java_org_openeggbert_cna_internal_generated_NativeEngineLayerRoutes_pbrMaterialExtensionsGetIridescenceTexture(
+    JNIEnv* environment, jclass declaring_class, jlong extensions, jlongArray out_texture)
+{
+    (void)environment;
+    (void)declaring_class;
+    CNA_Handle out_texture_value = 0;
+    CNA_Result call_result = cna.pbr_material_extensions_get_iridescence_texture((CNA_PbrMaterialExtensionsHandle)extensions, &out_texture_value);
+    if (call_result == CNA_RESULT_SUCCESS || call_result == CNA_RESULT_BUFFER_TOO_SMALL) {
+        jlong out_texture_element = (jlong)out_texture_value;
+        (*environment)->SetLongArrayRegion(
+            environment, out_texture, 0, 1, &out_texture_element);
+    }
+    return (jint)call_result;
+}
+
+JNIEXPORT jint JNICALL
 Java_org_openeggbert_cna_internal_generated_NativeEngineLayerRoutes_pbrMaterialExtensionsGetIridescenceThicknessMaximum(
     JNIEnv* environment, jclass declaring_class, jlong extensions, jfloatArray out_value)
 {
@@ -14203,6 +14363,22 @@ Java_org_openeggbert_cna_internal_generated_NativeEngineLayerRoutes_pbrMaterialE
 }
 
 JNIEXPORT jint JNICALL
+Java_org_openeggbert_cna_internal_generated_NativeEngineLayerRoutes_pbrMaterialExtensionsGetIridescenceThicknessTexture(
+    JNIEnv* environment, jclass declaring_class, jlong extensions, jlongArray out_texture)
+{
+    (void)environment;
+    (void)declaring_class;
+    CNA_Handle out_texture_value = 0;
+    CNA_Result call_result = cna.pbr_material_extensions_get_iridescence_thickness_texture((CNA_PbrMaterialExtensionsHandle)extensions, &out_texture_value);
+    if (call_result == CNA_RESULT_SUCCESS || call_result == CNA_RESULT_BUFFER_TOO_SMALL) {
+        jlong out_texture_element = (jlong)out_texture_value;
+        (*environment)->SetLongArrayRegion(
+            environment, out_texture, 0, 1, &out_texture_element);
+    }
+    return (jint)call_result;
+}
+
+JNIEXPORT jint JNICALL
 Java_org_openeggbert_cna_internal_generated_NativeEngineLayerRoutes_pbrMaterialExtensionsGetSheenColorFactor(
     JNIEnv* environment, jclass declaring_class, jlong extensions, jfloatArray out_valueFloating)
 {
@@ -14228,6 +14404,22 @@ Java_org_openeggbert_cna_internal_generated_NativeEngineLayerRoutes_pbrMaterialE
 }
 
 JNIEXPORT jint JNICALL
+Java_org_openeggbert_cna_internal_generated_NativeEngineLayerRoutes_pbrMaterialExtensionsGetSheenColorTexture(
+    JNIEnv* environment, jclass declaring_class, jlong extensions, jlongArray out_texture)
+{
+    (void)environment;
+    (void)declaring_class;
+    CNA_Handle out_texture_value = 0;
+    CNA_Result call_result = cna.pbr_material_extensions_get_sheen_color_texture((CNA_PbrMaterialExtensionsHandle)extensions, &out_texture_value);
+    if (call_result == CNA_RESULT_SUCCESS || call_result == CNA_RESULT_BUFFER_TOO_SMALL) {
+        jlong out_texture_element = (jlong)out_texture_value;
+        (*environment)->SetLongArrayRegion(
+            environment, out_texture, 0, 1, &out_texture_element);
+    }
+    return (jint)call_result;
+}
+
+JNIEXPORT jint JNICALL
 Java_org_openeggbert_cna_internal_generated_NativeEngineLayerRoutes_pbrMaterialExtensionsGetSheenRoughness(
     JNIEnv* environment, jclass declaring_class, jlong extensions, jfloatArray out_value)
 {
@@ -14239,6 +14431,22 @@ Java_org_openeggbert_cna_internal_generated_NativeEngineLayerRoutes_pbrMaterialE
         jfloat out_value_element = (jfloat)out_value_value;
         (*environment)->SetFloatArrayRegion(
             environment, out_value, 0, 1, &out_value_element);
+    }
+    return (jint)call_result;
+}
+
+JNIEXPORT jint JNICALL
+Java_org_openeggbert_cna_internal_generated_NativeEngineLayerRoutes_pbrMaterialExtensionsGetSheenRoughnessTexture(
+    JNIEnv* environment, jclass declaring_class, jlong extensions, jlongArray out_texture)
+{
+    (void)environment;
+    (void)declaring_class;
+    CNA_Handle out_texture_value = 0;
+    CNA_Result call_result = cna.pbr_material_extensions_get_sheen_roughness_texture((CNA_PbrMaterialExtensionsHandle)extensions, &out_texture_value);
+    if (call_result == CNA_RESULT_SUCCESS || call_result == CNA_RESULT_BUFFER_TOO_SMALL) {
+        jlong out_texture_element = (jlong)out_texture_value;
+        (*environment)->SetLongArrayRegion(
+            environment, out_texture, 0, 1, &out_texture_element);
     }
     return (jint)call_result;
 }
@@ -14301,6 +14509,22 @@ Java_org_openeggbert_cna_internal_generated_NativeEngineLayerRoutes_pbrMaterialE
 }
 
 JNIEXPORT jint JNICALL
+Java_org_openeggbert_cna_internal_generated_NativeEngineLayerRoutes_pbrMaterialExtensionsGetThicknessTexture(
+    JNIEnv* environment, jclass declaring_class, jlong extensions, jlongArray out_texture)
+{
+    (void)environment;
+    (void)declaring_class;
+    CNA_Handle out_texture_value = 0;
+    CNA_Result call_result = cna.pbr_material_extensions_get_thickness_texture((CNA_PbrMaterialExtensionsHandle)extensions, &out_texture_value);
+    if (call_result == CNA_RESULT_SUCCESS || call_result == CNA_RESULT_BUFFER_TOO_SMALL) {
+        jlong out_texture_element = (jlong)out_texture_value;
+        (*environment)->SetLongArrayRegion(
+            environment, out_texture, 0, 1, &out_texture_element);
+    }
+    return (jint)call_result;
+}
+
+JNIEXPORT jint JNICALL
 Java_org_openeggbert_cna_internal_generated_NativeEngineLayerRoutes_pbrMaterialExtensionsGetTransmissionFactor(
     JNIEnv* environment, jclass declaring_class, jlong extensions, jfloatArray out_value)
 {
@@ -14312,6 +14536,22 @@ Java_org_openeggbert_cna_internal_generated_NativeEngineLayerRoutes_pbrMaterialE
         jfloat out_value_element = (jfloat)out_value_value;
         (*environment)->SetFloatArrayRegion(
             environment, out_value, 0, 1, &out_value_element);
+    }
+    return (jint)call_result;
+}
+
+JNIEXPORT jint JNICALL
+Java_org_openeggbert_cna_internal_generated_NativeEngineLayerRoutes_pbrMaterialExtensionsGetTransmissionTexture(
+    JNIEnv* environment, jclass declaring_class, jlong extensions, jlongArray out_texture)
+{
+    (void)environment;
+    (void)declaring_class;
+    CNA_Handle out_texture_value = 0;
+    CNA_Result call_result = cna.pbr_material_extensions_get_transmission_texture((CNA_PbrMaterialExtensionsHandle)extensions, &out_texture_value);
+    if (call_result == CNA_RESULT_SUCCESS || call_result == CNA_RESULT_BUFFER_TOO_SMALL) {
+        jlong out_texture_element = (jlong)out_texture_value;
+        (*environment)->SetLongArrayRegion(
+            environment, out_texture, 0, 1, &out_texture_element);
     }
     return (jint)call_result;
 }
@@ -15641,6 +15881,22 @@ Java_org_openeggbert_cna_internal_generated_NativeEngineLayerRoutes_renderPipeli
         (*environment)->SetDoubleArrayRegion(environment, out_timingDoubles, 0,
             (jsize)(sizeof out_timingDoubles_values / sizeof out_timingDoubles_values[0]),
             out_timingDoubles_values);
+    }
+    return (jint)call_result;
+}
+
+JNIEXPORT jint JNICALL
+Java_org_openeggbert_cna_internal_generated_NativeEngineLayerRoutes_renderPipelineGetSceneTarget(
+    JNIEnv* environment, jclass declaring_class, jlong pipeline, jlongArray out_texture)
+{
+    (void)environment;
+    (void)declaring_class;
+    CNA_Handle out_texture_value = 0;
+    CNA_Result call_result = cna.render_pipeline_get_scene_target((CNA_RenderPipelineHandle)pipeline, &out_texture_value);
+    if (call_result == CNA_RESULT_SUCCESS || call_result == CNA_RESULT_BUFFER_TOO_SMALL) {
+        jlong out_texture_element = (jlong)out_texture_value;
+        (*environment)->SetLongArrayRegion(
+            environment, out_texture, 0, 1, &out_texture_element);
     }
     return (jint)call_result;
 }
@@ -17307,6 +17563,22 @@ Java_org_openeggbert_cna_internal_generated_NativeEngineLayerRoutes_shadowMapFil
 }
 
 JNIEXPORT jint JNICALL
+Java_org_openeggbert_cna_internal_generated_NativeEngineLayerRoutes_shadowMapGetCasterEffect(
+    JNIEnv* environment, jclass declaring_class, jlong shadow_map, jlongArray out_effect)
+{
+    (void)environment;
+    (void)declaring_class;
+    CNA_EffectHandle out_effect_value = 0;
+    CNA_Result call_result = cna.shadow_map_get_caster_effect((CNA_ShadowMapHandle)shadow_map, &out_effect_value);
+    if (call_result == CNA_RESULT_SUCCESS || call_result == CNA_RESULT_BUFFER_TOO_SMALL) {
+        jlong out_effect_element = (jlong)out_effect_value;
+        (*environment)->SetLongArrayRegion(
+            environment, out_effect, 0, 1, &out_effect_element);
+    }
+    return (jint)call_result;
+}
+
+JNIEXPORT jint JNICALL
 Java_org_openeggbert_cna_internal_generated_NativeEngineLayerRoutes_shadowMapGetDepthBias(
     JNIEnv* environment, jclass declaring_class, jlong shadow_map, jfloatArray out_bias)
 {
@@ -17420,6 +17692,22 @@ Java_org_openeggbert_cna_internal_generated_NativeEngineLayerRoutes_shadowMapGet
         jint out_size_element = (jint)out_size_value;
         (*environment)->SetIntArrayRegion(
             environment, out_size, 0, 1, &out_size_element);
+    }
+    return (jint)call_result;
+}
+
+JNIEXPORT jint JNICALL
+Java_org_openeggbert_cna_internal_generated_NativeEngineLayerRoutes_shadowMapGetSkinnedCasterEffect(
+    JNIEnv* environment, jclass declaring_class, jlong shadow_map, jlongArray out_effect)
+{
+    (void)environment;
+    (void)declaring_class;
+    CNA_EffectHandle out_effect_value = 0;
+    CNA_Result call_result = cna.shadow_map_get_skinned_caster_effect((CNA_ShadowMapHandle)shadow_map, &out_effect_value);
+    if (call_result == CNA_RESULT_SUCCESS || call_result == CNA_RESULT_BUFFER_TOO_SMALL) {
+        jlong out_effect_element = (jlong)out_effect_value;
+        (*environment)->SetLongArrayRegion(
+            environment, out_effect, 0, 1, &out_effect_element);
     }
     return (jint)call_result;
 }
@@ -18385,6 +18673,22 @@ Java_org_openeggbert_cna_internal_generated_NativeEngineLayerRoutes_spotShadowMa
     (void)environment;
     (void)declaring_class;
     CNA_Result call_result = cna.spot_shadow_map_end((CNA_SpotShadowMapHandle)shadow_map);
+    return (jint)call_result;
+}
+
+JNIEXPORT jint JNICALL
+Java_org_openeggbert_cna_internal_generated_NativeEngineLayerRoutes_spotShadowMapGetCasterEffect(
+    JNIEnv* environment, jclass declaring_class, jlong shadow_map, jlongArray out_effect)
+{
+    (void)environment;
+    (void)declaring_class;
+    CNA_EffectHandle out_effect_value = 0;
+    CNA_Result call_result = cna.spot_shadow_map_get_caster_effect((CNA_SpotShadowMapHandle)shadow_map, &out_effect_value);
+    if (call_result == CNA_RESULT_SUCCESS || call_result == CNA_RESULT_BUFFER_TOO_SMALL) {
+        jlong out_effect_element = (jlong)out_effect_value;
+        (*environment)->SetLongArrayRegion(
+            environment, out_effect, 0, 1, &out_effect_element);
+    }
     return (jint)call_result;
 }
 
@@ -19847,6 +20151,38 @@ Java_org_openeggbert_cna_internal_generated_NativeEngineLayerRoutes_weightedBlen
     (void)environment;
     (void)declaring_class;
     CNA_Result call_result = cna.weighted_blended_transparency_end((CNA_WeightedBlendedTransparencyHandle)transparency);
+    return (jint)call_result;
+}
+
+JNIEXPORT jint JNICALL
+Java_org_openeggbert_cna_internal_generated_NativeEngineLayerRoutes_weightedBlendedTransparencyGetAccumulationTextureExt(
+    JNIEnv* environment, jclass declaring_class, jlong transparency, jlongArray out_texture)
+{
+    (void)environment;
+    (void)declaring_class;
+    CNA_Handle out_texture_value = 0;
+    CNA_Result call_result = cna.weighted_blended_transparency_get_accumulation_texture_ext((CNA_WeightedBlendedTransparencyHandle)transparency, &out_texture_value);
+    if (call_result == CNA_RESULT_SUCCESS || call_result == CNA_RESULT_BUFFER_TOO_SMALL) {
+        jlong out_texture_element = (jlong)out_texture_value;
+        (*environment)->SetLongArrayRegion(
+            environment, out_texture, 0, 1, &out_texture_element);
+    }
+    return (jint)call_result;
+}
+
+JNIEXPORT jint JNICALL
+Java_org_openeggbert_cna_internal_generated_NativeEngineLayerRoutes_weightedBlendedTransparencyGetRevealageTextureExt(
+    JNIEnv* environment, jclass declaring_class, jlong transparency, jlongArray out_texture)
+{
+    (void)environment;
+    (void)declaring_class;
+    CNA_Handle out_texture_value = 0;
+    CNA_Result call_result = cna.weighted_blended_transparency_get_revealage_texture_ext((CNA_WeightedBlendedTransparencyHandle)transparency, &out_texture_value);
+    if (call_result == CNA_RESULT_SUCCESS || call_result == CNA_RESULT_BUFFER_TOO_SMALL) {
+        jlong out_texture_element = (jlong)out_texture_value;
+        (*environment)->SetLongArrayRegion(
+            environment, out_texture, 0, 1, &out_texture_element);
+    }
     return (jint)call_result;
 }
 

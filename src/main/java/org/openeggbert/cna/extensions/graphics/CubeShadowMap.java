@@ -5,6 +5,8 @@ import Microsoft.Xna.Framework.Graphics.GraphicsDevice;
 import Microsoft.Xna.Framework.Graphics.TextureCube;
 import Microsoft.Xna.Framework.Matrix;
 import Microsoft.Xna.Framework.Vector3;
+import Microsoft.Xna.Framework.Graphics.Effect;
+import org.openeggbert.cna.internal.FacadeFactory;
 import org.openeggbert.cna.internal.NativeBindings;
 import org.openeggbert.cna.internal.generated.NativeEngineLayerRoutes;
 
@@ -237,6 +239,36 @@ public final class CubeShadowMap implements AutoCloseable {
     public void setDepthBias(float bias) {
         GraphicsExtension.check("CubeShadowMap.setDepthBias",
                 NativeEngineLayerRoutes.cubeShadowMapSetDepthBias(open(), bias));
+    }
+
+    /**
+     * Returns the effect this map casts shadows with, borrowed.
+     *
+     * <p>A CNA extension with no XNA shape: the shader is CNA's own, and this is the only way to
+     * reach it -- to give it a parameter, or to read what it has. The effect belongs to the
+     * lender; what comes back is a <em>view</em> of it, and disposing the view gives the borrow
+     * back rather than destroying the effect.
+     *
+     * <p><strong>A fresh view every call.</strong> Two calls are two objects to dispose and one
+     * effect underneath.
+     *
+     * <p><strong>The lender refuses to be destroyed while a view is outstanding, so disposing the
+     * view is not housekeeping -- it is what makes closing the lender possible, and the
+     * refusal is recoverable rather than fatal.</strong>
+     *
+     * <p>Answers {@code null} on a renderer with no shader compiler, which has no effect to
+     * lend -- and that is not a failure but the renderer's answer.
+     *
+     * @param graphicsDevice the device the effect belongs to
+     * @return the effect, which the caller disposes, or {@code null}
+     */
+    public Effect getCasterEffect(GraphicsDevice graphicsDevice) {
+        Objects.requireNonNull(graphicsDevice, "graphicsDevice");
+        long[] effect = new long[1];
+        GraphicsExtension.check("CubeShadowMap.getCasterEffect", NativeEngineLayerRoutes
+                .cubeShadowMapGetCasterEffect(open(), effect));
+        return effect[0] == 0L ? null
+                : FacadeFactory.createBorrowedEffect(graphicsDevice, effect[0]);
     }
 
     /** Releases the cube and its texture. Closing twice is a no-op. */

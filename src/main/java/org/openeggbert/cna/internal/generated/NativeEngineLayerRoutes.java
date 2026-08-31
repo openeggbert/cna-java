@@ -819,6 +819,11 @@ public final class NativeEngineLayerRoutes {
     public static native int cascadedShadowMapGetCascadeSize(long shadowMap, int[] outSize);
 
     /**
+     * cna_cascaded_shadow_map_get_caster_effect (engine_layer.h).
+     */
+    public static native int cascadedShadowMapGetCasterEffect(long shadowMap, long[] outEffect);
+
+    /**
      * cna_cascaded_shadow_map_get_shadow_texture (engine_layer.h).
      */
     public static native int cascadedShadowMapGetShadowTexture(long shadowMap, long[] outTexture);
@@ -1236,9 +1241,19 @@ public final class NativeEngineLayerRoutes {
     public static native int clusteredForwardEffectGetBaseColor(long effect, float[] outColorFloating);
 
     /**
+     * cna_clustered_forward_effect_get_effect (engine_layer.h).
+     */
+    public static native int clusteredForwardEffectGetEffect(long effect, long[] outShader);
+
+    /**
      * cna_clustered_forward_effect_get_ior (engine_layer.h).
      */
     public static native int clusteredForwardEffectGetIor(long effect, float[] outIor);
+
+    /**
+     * cna_clustered_forward_effect_get_material_extensions (engine_layer.h).
+     */
+    public static native int clusteredForwardEffectGetMaterialExtensions(long effect, long[] outExtensions);
 
     /**
      * cna_clustered_forward_effect_get_metallic (engine_layer.h).
@@ -2450,6 +2465,11 @@ public final class NativeEngineLayerRoutes {
     public static native int cubeShadowMapEnd(long shadowMap);
 
     /**
+     * cna_cube_shadow_map_get_caster_effect (engine_layer.h).
+     */
+    public static native int cubeShadowMapGetCasterEffect(long shadowMap, long[] outEffect);
+
+    /**
      * cna_cube_shadow_map_get_depth_bias (engine_layer.h).
      */
     public static native int cubeShadowMapGetDepthBias(long shadowMap, float[] outBias);
@@ -3062,9 +3082,19 @@ public final class NativeEngineLayerRoutes {
     public static native int depthNormalPrepassGetPassCount(long prepass, int[] outCount);
 
     /**
+     * cna_depth_normal_prepass_get_prepass_effect (engine_layer.h).
+     */
+    public static native int depthNormalPrepassGetPrepassEffect(long prepass, long[] outEffect);
+
+    /**
      * cna_depth_normal_prepass_get_roughness (engine_layer.h).
      */
     public static native int depthNormalPrepassGetRoughness(long prepass, float[] outRoughness);
+
+    /**
+     * cna_depth_normal_prepass_get_skinned_prepass_effect (engine_layer.h).
+     */
+    public static native int depthNormalPrepassGetSkinnedPrepassEffect(long prepass, long[] outEffect);
 
     /**
      * cna_depth_normal_prepass_get_velocity_texture_ext (engine_layer.h).
@@ -6418,9 +6448,24 @@ public final class NativeEngineLayerRoutes {
     public static native int pbrMaterialExtensionsGetClearcoatNormalScale(long extensions, float[] outValue);
 
     /**
+     * cna_pbr_material_extensions_get_clearcoat_normal_texture (engine_layer.h).
+     */
+    public static native int pbrMaterialExtensionsGetClearcoatNormalTexture(long extensions, long[] outTexture);
+
+    /**
      * cna_pbr_material_extensions_get_clearcoat_roughness (engine_layer.h).
      */
     public static native int pbrMaterialExtensionsGetClearcoatRoughness(long extensions, float[] outValue);
+
+    /**
+     * cna_pbr_material_extensions_get_clearcoat_roughness_texture (engine_layer.h).
+     */
+    public static native int pbrMaterialExtensionsGetClearcoatRoughnessTexture(long extensions, long[] outTexture);
+
+    /**
+     * cna_pbr_material_extensions_get_clearcoat_texture (engine_layer.h).
+     */
+    public static native int pbrMaterialExtensionsGetClearcoatTexture(long extensions, long[] outTexture);
 
     /**
      * cna_pbr_material_extensions_get_hash_code (engine_layer.h).
@@ -6438,6 +6483,11 @@ public final class NativeEngineLayerRoutes {
     public static native int pbrMaterialExtensionsGetIridescenceIor(long extensions, float[] outValue);
 
     /**
+     * cna_pbr_material_extensions_get_iridescence_texture (engine_layer.h).
+     */
+    public static native int pbrMaterialExtensionsGetIridescenceTexture(long extensions, long[] outTexture);
+
+    /**
      * cna_pbr_material_extensions_get_iridescence_thickness_maximum (engine_layer.h).
      */
     public static native int pbrMaterialExtensionsGetIridescenceThicknessMaximum(long extensions, float[] outValue);
@@ -6446,6 +6496,11 @@ public final class NativeEngineLayerRoutes {
      * cna_pbr_material_extensions_get_iridescence_thickness_minimum (engine_layer.h).
      */
     public static native int pbrMaterialExtensionsGetIridescenceThicknessMinimum(long extensions, float[] outValue);
+
+    /**
+     * cna_pbr_material_extensions_get_iridescence_thickness_texture (engine_layer.h).
+     */
+    public static native int pbrMaterialExtensionsGetIridescenceThicknessTexture(long extensions, long[] outTexture);
 
     /**
      * cna_pbr_material_extensions_get_sheen_color_factor (engine_layer.h).
@@ -6460,9 +6515,19 @@ public final class NativeEngineLayerRoutes {
     public static native int pbrMaterialExtensionsGetSheenColorFactor(long extensions, float[] outValueFloating);
 
     /**
+     * cna_pbr_material_extensions_get_sheen_color_texture (engine_layer.h).
+     */
+    public static native int pbrMaterialExtensionsGetSheenColorTexture(long extensions, long[] outTexture);
+
+    /**
      * cna_pbr_material_extensions_get_sheen_roughness (engine_layer.h).
      */
     public static native int pbrMaterialExtensionsGetSheenRoughness(long extensions, float[] outValue);
+
+    /**
+     * cna_pbr_material_extensions_get_sheen_roughness_texture (engine_layer.h).
+     */
+    public static native int pbrMaterialExtensionsGetSheenRoughnessTexture(long extensions, long[] outTexture);
 
     /**
      * cna_pbr_material_extensions_get_subsurface_color (engine_layer.h).
@@ -6487,9 +6552,19 @@ public final class NativeEngineLayerRoutes {
     public static native int pbrMaterialExtensionsGetThicknessFactor(long extensions, float[] outValue);
 
     /**
+     * cna_pbr_material_extensions_get_thickness_texture (engine_layer.h).
+     */
+    public static native int pbrMaterialExtensionsGetThicknessTexture(long extensions, long[] outTexture);
+
+    /**
      * cna_pbr_material_extensions_get_transmission_factor (engine_layer.h).
      */
     public static native int pbrMaterialExtensionsGetTransmissionFactor(long extensions, float[] outValue);
+
+    /**
+     * cna_pbr_material_extensions_get_transmission_texture (engine_layer.h).
+     */
+    public static native int pbrMaterialExtensionsGetTransmissionTexture(long extensions, long[] outTexture);
 
     /**
      * cna_pbr_material_extensions_is_iridescence_enabled (engine_layer.h).
@@ -7220,6 +7295,11 @@ public final class NativeEngineLayerRoutes {
      * </ol>
      */
     public static native int renderPipelineGetPassTimingExt(long pipeline, long index, byte[] outTimingBytes, long[] outTimingIntegral, double[] outTimingDoubles);
+
+    /**
+     * cna_render_pipeline_get_scene_target (engine_layer.h).
+     */
+    public static native int renderPipelineGetSceneTarget(long pipeline, long[] outTexture);
 
     /**
      * cna_render_pipeline_get_scene_target_format (engine_layer.h).
@@ -8148,6 +8228,11 @@ public final class NativeEngineLayerRoutes {
     public static native int shadowMapFilterRadiusForQuality(int quality, int[] outRadius);
 
     /**
+     * cna_shadow_map_get_caster_effect (engine_layer.h).
+     */
+    public static native int shadowMapGetCasterEffect(long shadowMap, long[] outEffect);
+
+    /**
      * cna_shadow_map_get_depth_bias (engine_layer.h).
      */
     public static native int shadowMapGetDepthBias(long shadowMap, float[] outBias);
@@ -8196,6 +8281,11 @@ public final class NativeEngineLayerRoutes {
      * cna_shadow_map_get_size (engine_layer.h).
      */
     public static native int shadowMapGetSize(long shadowMap, int[] outSize);
+
+    /**
+     * cna_shadow_map_get_skinned_caster_effect (engine_layer.h).
+     */
+    public static native int shadowMapGetSkinnedCasterEffect(long shadowMap, long[] outEffect);
 
     /**
      * cna_shadow_map_is_supported (engine_layer.h).
@@ -8794,6 +8884,11 @@ public final class NativeEngineLayerRoutes {
     public static native int spotShadowMapEnd(long shadowMap);
 
     /**
+     * cna_spot_shadow_map_get_caster_effect (engine_layer.h).
+     */
+    public static native int spotShadowMapGetCasterEffect(long shadowMap, long[] outEffect);
+
+    /**
      * cna_spot_shadow_map_get_depth_bias (engine_layer.h).
      */
     public static native int spotShadowMapGetDepthBias(long shadowMap, float[] outBias);
@@ -9321,6 +9416,16 @@ public final class NativeEngineLayerRoutes {
      * cna_weighted_blended_transparency_end (engine_layer.h).
      */
     public static native int weightedBlendedTransparencyEnd(long transparency);
+
+    /**
+     * cna_weighted_blended_transparency_get_accumulation_texture_ext (engine_layer.h).
+     */
+    public static native int weightedBlendedTransparencyGetAccumulationTextureExt(long transparency, long[] outTexture);
+
+    /**
+     * cna_weighted_blended_transparency_get_revealage_texture_ext (engine_layer.h).
+     */
+    public static native int weightedBlendedTransparencyGetRevealageTextureExt(long transparency, long[] outTexture);
 
     /**
      * cna_weighted_blended_transparency_is_accumulating (engine_layer.h).

@@ -372,15 +372,29 @@ final class NativeIntegrationTests {
     }
 
     @Test
-    void NativeKeyboardCapturesIndependentHeadlessSnapshots() {
+    void NativeKeyboardCapturesIndependentSnapshotsThatAgreeWithThemselves() {
         try (KeyboardGame game = new KeyboardGame()) {
             assertThrows(IllegalStateException.class, Keyboard::GetState);
             game.RunOneFrame();
             assertNotNull(game.first);
             assertNotSame(game.first, game.second);
             assertEquals(game.first, game.second);
-            assertTrue(game.first.IsKeyUp(Keys.Escape));
-            assertArrayEquals(new Keys[0], game.first.GetPressedKeys());
+            // What is true whatever the host's keyboard is doing: two snapshots of one frame
+            // agree, and each one's two ways of asking agree with each other. Asserting that no
+            // key is pressed described a platform with no keyboard -- on one that reads a real
+            // one, whatever the person at the machine is holding down turns up here.
+            Keys[] pressed = game.first.GetPressedKeys();
+            assertNotNull(pressed);
+            assertArrayEquals(pressed, game.second.GetPressedKeys(),
+                    "two snapshots of one frame report the same keys");
+            for (Keys key : pressed) {
+                assertTrue(game.first.IsKeyDown(key),
+                        key + " is in the pressed list, so it must be down");
+                assertFalse(game.first.IsKeyUp(key));
+            }
+            assertEquals(java.util.Arrays.asList(pressed).contains(Keys.Escape),
+                    game.first.IsKeyDown(Keys.Escape),
+                    "the list and the question agree about a key nobody pressed either");
         }
         assertThrows(IllegalStateException.class, Keyboard::GetState);
     }

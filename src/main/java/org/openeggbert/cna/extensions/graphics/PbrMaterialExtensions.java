@@ -63,6 +63,22 @@ public final class PbrMaterialExtensions implements AutoCloseable {
     }
 
     /**
+     * Adopts a borrowed handle onto another object's extensions.
+     *
+     * <p>Package-private: a native handle must not appear in this type's public contract. The
+     * borrow is released by {@link #close()}, which does not destroy the lender's own extensions.
+     *
+     * @param handle the borrowed handle
+     * @return the view, which the caller closes
+     */
+    static PbrMaterialExtensions adoptBorrowed(long handle) {
+        if (handle == 0L) {
+            throw new IllegalArgumentException("handle");
+        }
+        return new PbrMaterialExtensions(handle);
+    }
+
+    /**
      * Returns the material's AttenuationDistance.
      *
      * @return the value
@@ -763,6 +779,186 @@ X
         return new String(destination, 0, Math.toIntExact(bytes[0]), StandardCharsets.UTF_8);
     }
 
+    /**
+     * Reports whether CNA has a clearcoat texture bound, whoever bound it.
+     *
+     * <p>A boolean rather than the texture, deliberately, and the same decision
+     * {@code EffectLighting.hasShadowMap} records: CNA answers with a <em>fresh name</em> for the
+     * texture rather than the handle that was set, and that name keeps nothing alive -- so a Java
+     * facade over it would claim an ownership that does not exist and would dangle the moment
+     * whoever really owns the texture disposed it. The name is given straight back here.
+     *
+     * <p>The companion to {@link #getClearcoatTexture()}, which answers with the object <em>this</em>
+     * material was given. The two differ on a view borrowed from something else: the getter has
+     * nothing to return and this still knows what is bound.
+     *
+     * @return whether a clearcoat texture is bound
+     */
+    public boolean hasClearcoatTexture() {
+        return hasTexture("PbrMaterialExtensions.hasClearcoatTexture",
+                NativeEngineLayerRoutes::pbrMaterialExtensionsGetClearcoatTexture);
+    }
+
+    /**
+     * Reports whether CNA has a clearcoat roughness texture bound, whoever bound it.
+     *
+     * <p>A boolean rather than the texture, deliberately, and the same decision
+     * {@code EffectLighting.hasShadowMap} records: CNA answers with a <em>fresh name</em> for the
+     * texture rather than the handle that was set, and that name keeps nothing alive -- so a Java
+     * facade over it would claim an ownership that does not exist and would dangle the moment
+     * whoever really owns the texture disposed it. The name is given straight back here.
+     *
+     * <p>The companion to {@link #getClearcoatRoughnessTexture()}, which answers with the object <em>this</em>
+     * material was given. The two differ on a view borrowed from something else: the getter has
+     * nothing to return and this still knows what is bound.
+     *
+     * @return whether a clearcoat roughness texture is bound
+     */
+    public boolean hasClearcoatRoughnessTexture() {
+        return hasTexture("PbrMaterialExtensions.hasClearcoatRoughnessTexture",
+                NativeEngineLayerRoutes::pbrMaterialExtensionsGetClearcoatRoughnessTexture);
+    }
+
+    /**
+     * Reports whether CNA has a clearcoat normal texture bound, whoever bound it.
+     *
+     * <p>A boolean rather than the texture, deliberately, and the same decision
+     * {@code EffectLighting.hasShadowMap} records: CNA answers with a <em>fresh name</em> for the
+     * texture rather than the handle that was set, and that name keeps nothing alive -- so a Java
+     * facade over it would claim an ownership that does not exist and would dangle the moment
+     * whoever really owns the texture disposed it. The name is given straight back here.
+     *
+     * <p>The companion to {@link #getClearcoatNormalTexture()}, which answers with the object <em>this</em>
+     * material was given. The two differ on a view borrowed from something else: the getter has
+     * nothing to return and this still knows what is bound.
+     *
+     * @return whether a clearcoat normal texture is bound
+     */
+    public boolean hasClearcoatNormalTexture() {
+        return hasTexture("PbrMaterialExtensions.hasClearcoatNormalTexture",
+                NativeEngineLayerRoutes::pbrMaterialExtensionsGetClearcoatNormalTexture);
+    }
+
+    /**
+     * Reports whether CNA has a iridescence texture bound, whoever bound it.
+     *
+     * <p>A boolean rather than the texture, deliberately, and the same decision
+     * {@code EffectLighting.hasShadowMap} records: CNA answers with a <em>fresh name</em> for the
+     * texture rather than the handle that was set, and that name keeps nothing alive -- so a Java
+     * facade over it would claim an ownership that does not exist and would dangle the moment
+     * whoever really owns the texture disposed it. The name is given straight back here.
+     *
+     * <p>The companion to {@link #getIridescenceTexture()}, which answers with the object <em>this</em>
+     * material was given. The two differ on a view borrowed from something else: the getter has
+     * nothing to return and this still knows what is bound.
+     *
+     * @return whether a iridescence texture is bound
+     */
+    public boolean hasIridescenceTexture() {
+        return hasTexture("PbrMaterialExtensions.hasIridescenceTexture",
+                NativeEngineLayerRoutes::pbrMaterialExtensionsGetIridescenceTexture);
+    }
+
+    /**
+     * Reports whether CNA has a iridescence thickness texture bound, whoever bound it.
+     *
+     * <p>A boolean rather than the texture, deliberately, and the same decision
+     * {@code EffectLighting.hasShadowMap} records: CNA answers with a <em>fresh name</em> for the
+     * texture rather than the handle that was set, and that name keeps nothing alive -- so a Java
+     * facade over it would claim an ownership that does not exist and would dangle the moment
+     * whoever really owns the texture disposed it. The name is given straight back here.
+     *
+     * <p>The companion to {@link #getIridescenceThicknessTexture()}, which answers with the object <em>this</em>
+     * material was given. The two differ on a view borrowed from something else: the getter has
+     * nothing to return and this still knows what is bound.
+     *
+     * @return whether a iridescence thickness texture is bound
+     */
+    public boolean hasIridescenceThicknessTexture() {
+        return hasTexture("PbrMaterialExtensions.hasIridescenceThicknessTexture",
+                NativeEngineLayerRoutes::pbrMaterialExtensionsGetIridescenceThicknessTexture);
+    }
+
+    /**
+     * Reports whether CNA has a sheen colour texture bound, whoever bound it.
+     *
+     * <p>A boolean rather than the texture, deliberately, and the same decision
+     * {@code EffectLighting.hasShadowMap} records: CNA answers with a <em>fresh name</em> for the
+     * texture rather than the handle that was set, and that name keeps nothing alive -- so a Java
+     * facade over it would claim an ownership that does not exist and would dangle the moment
+     * whoever really owns the texture disposed it. The name is given straight back here.
+     *
+     * <p>The companion to {@link #getSheenColorTexture()}, which answers with the object <em>this</em>
+     * material was given. The two differ on a view borrowed from something else: the getter has
+     * nothing to return and this still knows what is bound.
+     *
+     * @return whether a sheen colour texture is bound
+     */
+    public boolean hasSheenColorTexture() {
+        return hasTexture("PbrMaterialExtensions.hasSheenColorTexture",
+                NativeEngineLayerRoutes::pbrMaterialExtensionsGetSheenColorTexture);
+    }
+
+    /**
+     * Reports whether CNA has a sheen roughness texture bound, whoever bound it.
+     *
+     * <p>A boolean rather than the texture, deliberately, and the same decision
+     * {@code EffectLighting.hasShadowMap} records: CNA answers with a <em>fresh name</em> for the
+     * texture rather than the handle that was set, and that name keeps nothing alive -- so a Java
+     * facade over it would claim an ownership that does not exist and would dangle the moment
+     * whoever really owns the texture disposed it. The name is given straight back here.
+     *
+     * <p>The companion to {@link #getSheenRoughnessTexture()}, which answers with the object <em>this</em>
+     * material was given. The two differ on a view borrowed from something else: the getter has
+     * nothing to return and this still knows what is bound.
+     *
+     * @return whether a sheen roughness texture is bound
+     */
+    public boolean hasSheenRoughnessTexture() {
+        return hasTexture("PbrMaterialExtensions.hasSheenRoughnessTexture",
+                NativeEngineLayerRoutes::pbrMaterialExtensionsGetSheenRoughnessTexture);
+    }
+
+    /**
+     * Reports whether CNA has a thickness texture bound, whoever bound it.
+     *
+     * <p>A boolean rather than the texture, deliberately, and the same decision
+     * {@code EffectLighting.hasShadowMap} records: CNA answers with a <em>fresh name</em> for the
+     * texture rather than the handle that was set, and that name keeps nothing alive -- so a Java
+     * facade over it would claim an ownership that does not exist and would dangle the moment
+     * whoever really owns the texture disposed it. The name is given straight back here.
+     *
+     * <p>The companion to {@link #getThicknessTexture()}, which answers with the object <em>this</em>
+     * material was given. The two differ on a view borrowed from something else: the getter has
+     * nothing to return and this still knows what is bound.
+     *
+     * @return whether a thickness texture is bound
+     */
+    public boolean hasThicknessTexture() {
+        return hasTexture("PbrMaterialExtensions.hasThicknessTexture",
+                NativeEngineLayerRoutes::pbrMaterialExtensionsGetThicknessTexture);
+    }
+
+    /**
+     * Reports whether CNA has a transmission texture bound, whoever bound it.
+     *
+     * <p>A boolean rather than the texture, deliberately, and the same decision
+     * {@code EffectLighting.hasShadowMap} records: CNA answers with a <em>fresh name</em> for the
+     * texture rather than the handle that was set, and that name keeps nothing alive -- so a Java
+     * facade over it would claim an ownership that does not exist and would dangle the moment
+     * whoever really owns the texture disposed it. The name is given straight back here.
+     *
+     * <p>The companion to {@link #getTransmissionTexture()}, which answers with the object <em>this</em>
+     * material was given. The two differ on a view borrowed from something else: the getter has
+     * nothing to return and this still knows what is bound.
+     *
+     * @return whether a transmission texture is bound
+     */
+    public boolean hasTransmissionTexture() {
+        return hasTexture("PbrMaterialExtensions.hasTransmissionTexture",
+                NativeEngineLayerRoutes::pbrMaterialExtensionsGetTransmissionTexture);
+    }
+
     /** Releases the material. The textures it named are untouched. Closing twice is a no-op. */
     @Override
     public void close() {
@@ -777,6 +973,19 @@ X
         }
         GraphicsExtension.check("PbrMaterialExtensions.close",
                 NativeEngineLayerRoutes.pbrMaterialExtensionsDestroy(handle));
+    }
+
+    /** A texture CNA names freshly on every call, asked about and given straight back. */
+    @FunctionalInterface
+    private interface TextureRoute {
+        int call(long extensions, long[] answer);
+    }
+
+    private boolean hasTexture(String operation, TextureRoute route) {
+        long[] texture = new long[1];
+        GraphicsExtension.check(operation, route.call(open(), texture));
+        NativeBindings.releaseBorrowedTextureName(texture[0]);
+        return texture[0] != 0L;
     }
 
     /** A float CNA answers about one material. */

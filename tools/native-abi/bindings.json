@@ -2609,6 +2609,16 @@
       ]
     },
     {
+      "name": "cna_cascaded_shadow_map_get_caster_effect",
+      "header": "engine_layer.h",
+      "ownership": "borrows the map; returns a COUNTED borrow of its caster effect, released with cna_effect_destroy, and the map refuses to be destroyed while one is outstanding",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_CascadedShadowMapHandle",
+        "CNA_EffectHandle*"
+      ]
+    },
+    {
       "name": "cna_cascaded_shadow_map_get_shadow_texture",
       "header": "engine_layer.h",
       "ownership": "borrows the map; returns a counted borrow of its atlas that the caller releases with cna_render_target_destroy",
@@ -2868,6 +2878,16 @@
       ]
     },
     {
+      "name": "cna_clustered_forward_effect_get_effect",
+      "header": "engine_layer.h",
+      "ownership": "borrows the effect; returns a COUNTED borrow of its shader effect, released with cna_effect_destroy, and the effect refuses to be destroyed while one is outstanding",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_ClusteredForwardEffectHandle",
+        "CNA_EffectHandle*"
+      ]
+    },
+    {
       "name": "cna_clustered_forward_effect_get_ior",
       "header": "engine_layer.h",
       "ownership": "borrows the effect",
@@ -2875,6 +2895,16 @@
       "parameters": [
         "CNA_ClusteredForwardEffectHandle",
         "float*"
+      ]
+    },
+    {
+      "name": "cna_clustered_forward_effect_get_material_extensions",
+      "header": "engine_layer.h",
+      "ownership": "borrows the effect; returns a RETAINING borrow of its own material extensions, released with cna_pbr_material_extensions_destroy, and the effect may be destroyed first",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_ClusteredForwardEffectHandle",
+        "CNA_PbrMaterialExtensionsHandle*"
       ]
     },
     {
@@ -7313,6 +7343,16 @@
       ]
     },
     {
+      "name": "cna_cube_shadow_map_get_caster_effect",
+      "header": "engine_layer.h",
+      "ownership": "borrows the map; returns a COUNTED borrow of its caster effect, released with cna_effect_destroy, and the map refuses to be destroyed while one is outstanding",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_CubeShadowMapHandle",
+        "CNA_EffectHandle*"
+      ]
+    },
+    {
       "name": "cna_cube_shadow_map_get_depth_bias",
       "header": "engine_layer.h",
       "ownership": "borrows the cube shadow map",
@@ -8140,6 +8180,16 @@
       ]
     },
     {
+      "name": "cna_depth_normal_prepass_get_prepass_effect",
+      "header": "engine_layer.h",
+      "ownership": "borrows the prepass; returns a COUNTED borrow of its effect, released with cna_effect_destroy, and the prepass refuses to be destroyed while one is outstanding",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_DepthNormalPrepassHandle",
+        "CNA_EffectHandle*"
+      ]
+    },
+    {
       "name": "cna_depth_normal_prepass_get_roughness",
       "header": "engine_layer.h",
       "ownership": "borrows the prepass",
@@ -8147,6 +8197,16 @@
       "parameters": [
         "CNA_DepthNormalPrepassHandle",
         "float*"
+      ]
+    },
+    {
+      "name": "cna_depth_normal_prepass_get_skinned_prepass_effect",
+      "header": "engine_layer.h",
+      "ownership": "borrows the prepass; returns a COUNTED borrow of its skinned effect, released with cna_effect_destroy, and the prepass refuses to be destroyed while one is outstanding",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_DepthNormalPrepassHandle",
+        "CNA_EffectHandle*"
       ]
     },
     {
@@ -19634,6 +19694,16 @@
       ]
     },
     {
+      "name": "cna_pbr_material_extensions_get_clearcoat_normal_texture",
+      "header": "engine_layer.h",
+      "ownership": "borrows the material; returns a fresh name for the bound texture that keeps nothing alive, given straight back with cna_texture2d_destroy",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_PbrMaterialExtensionsHandle",
+        "CNA_Handle*"
+      ]
+    },
+    {
       "name": "cna_pbr_material_extensions_get_clearcoat_roughness",
       "header": "engine_layer.h",
       "ownership": "borrows the material",
@@ -19641,6 +19711,26 @@
       "parameters": [
         "CNA_PbrMaterialExtensionsHandle",
         "float*"
+      ]
+    },
+    {
+      "name": "cna_pbr_material_extensions_get_clearcoat_roughness_texture",
+      "header": "engine_layer.h",
+      "ownership": "borrows the material; returns a fresh name for the bound texture that keeps nothing alive, given straight back with cna_texture2d_destroy",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_PbrMaterialExtensionsHandle",
+        "CNA_Handle*"
+      ]
+    },
+    {
+      "name": "cna_pbr_material_extensions_get_clearcoat_texture",
+      "header": "engine_layer.h",
+      "ownership": "borrows the material; returns a fresh name for the bound texture that keeps nothing alive, given straight back with cna_texture2d_destroy",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_PbrMaterialExtensionsHandle",
+        "CNA_Handle*"
       ]
     },
     {
@@ -19674,6 +19764,16 @@
       ]
     },
     {
+      "name": "cna_pbr_material_extensions_get_iridescence_texture",
+      "header": "engine_layer.h",
+      "ownership": "borrows the material; returns a fresh name for the bound texture that keeps nothing alive, given straight back with cna_texture2d_destroy",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_PbrMaterialExtensionsHandle",
+        "CNA_Handle*"
+      ]
+    },
+    {
       "name": "cna_pbr_material_extensions_get_iridescence_thickness_maximum",
       "header": "engine_layer.h",
       "ownership": "borrows the material",
@@ -19694,6 +19794,16 @@
       ]
     },
     {
+      "name": "cna_pbr_material_extensions_get_iridescence_thickness_texture",
+      "header": "engine_layer.h",
+      "ownership": "borrows the material; returns a fresh name for the bound texture that keeps nothing alive, given straight back with cna_texture2d_destroy",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_PbrMaterialExtensionsHandle",
+        "CNA_Handle*"
+      ]
+    },
+    {
       "name": "cna_pbr_material_extensions_get_sheen_color_factor",
       "header": "engine_layer.h",
       "ownership": "borrows the material",
@@ -19704,6 +19814,16 @@
       ]
     },
     {
+      "name": "cna_pbr_material_extensions_get_sheen_color_texture",
+      "header": "engine_layer.h",
+      "ownership": "borrows the material; returns a fresh name for the bound texture that keeps nothing alive, given straight back with cna_texture2d_destroy",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_PbrMaterialExtensionsHandle",
+        "CNA_Handle*"
+      ]
+    },
+    {
       "name": "cna_pbr_material_extensions_get_sheen_roughness",
       "header": "engine_layer.h",
       "ownership": "borrows the material",
@@ -19711,6 +19831,16 @@
       "parameters": [
         "CNA_PbrMaterialExtensionsHandle",
         "float*"
+      ]
+    },
+    {
+      "name": "cna_pbr_material_extensions_get_sheen_roughness_texture",
+      "header": "engine_layer.h",
+      "ownership": "borrows the material; returns a fresh name for the bound texture that keeps nothing alive, given straight back with cna_texture2d_destroy",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_PbrMaterialExtensionsHandle",
+        "CNA_Handle*"
       ]
     },
     {
@@ -19744,6 +19874,16 @@
       ]
     },
     {
+      "name": "cna_pbr_material_extensions_get_thickness_texture",
+      "header": "engine_layer.h",
+      "ownership": "borrows the material; returns a fresh name for the bound texture that keeps nothing alive, given straight back with cna_texture2d_destroy",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_PbrMaterialExtensionsHandle",
+        "CNA_Handle*"
+      ]
+    },
+    {
       "name": "cna_pbr_material_extensions_get_transmission_factor",
       "header": "engine_layer.h",
       "ownership": "borrows the material",
@@ -19751,6 +19891,16 @@
       "parameters": [
         "CNA_PbrMaterialExtensionsHandle",
         "float*"
+      ]
+    },
+    {
+      "name": "cna_pbr_material_extensions_get_transmission_texture",
+      "header": "engine_layer.h",
+      "ownership": "borrows the material; returns a fresh name for the bound texture that keeps nothing alive, given straight back with cna_texture2d_destroy",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_PbrMaterialExtensionsHandle",
+        "CNA_Handle*"
       ]
     },
     {
@@ -21281,6 +21431,16 @@
       ]
     },
     {
+      "name": "cna_render_pipeline_get_scene_target",
+      "header": "engine_layer.h",
+      "ownership": "borrows the pipeline; returns a fresh borrow of the offscreen scene target, valid only while a frame is open, released with cna_texture2d_destroy",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_RenderPipelineHandle",
+        "CNA_Handle*"
+      ]
+    },
+    {
       "name": "cna_render_pipeline_get_scene_target_format",
       "header": "engine_layer.h",
       "ownership": "borrows the pipeline",
@@ -21873,6 +22033,16 @@
       ]
     },
     {
+      "name": "cna_shadow_map_get_caster_effect",
+      "header": "engine_layer.h",
+      "ownership": "borrows the map; returns a COUNTED borrow of its caster effect that the caller releases with cna_effect_destroy, and the map refuses to be destroyed while one is outstanding",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_ShadowMapHandle",
+        "CNA_EffectHandle*"
+      ]
+    },
+    {
       "name": "cna_shadow_map_get_depth_bias",
       "header": "engine_layer.h",
       "ownership": "borrows the directional shadow map",
@@ -21930,6 +22100,16 @@
       "parameters": [
         "CNA_ShadowMapHandle",
         "int32_t*"
+      ]
+    },
+    {
+      "name": "cna_shadow_map_get_skinned_caster_effect",
+      "header": "engine_layer.h",
+      "ownership": "borrows the map; returns a COUNTED borrow of its skinned caster effect, released with cna_effect_destroy, and the map refuses to be destroyed while one is outstanding",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_ShadowMapHandle",
+        "CNA_EffectHandle*"
       ]
     },
     {
@@ -23273,6 +23453,16 @@
       "returnType": "CNA_Result",
       "parameters": [
         "CNA_SpotShadowMapHandle"
+      ]
+    },
+    {
+      "name": "cna_spot_shadow_map_get_caster_effect",
+      "header": "engine_layer.h",
+      "ownership": "borrows the map; returns a RETAINING borrow of its caster effect, released with cna_effect_destroy -- unlike its three siblings the map does NOT refuse destruction while one is outstanding, and the handle keeps the effect alive (JAVA-UPSTREAM-013)",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_SpotShadowMapHandle",
+        "CNA_EffectHandle*"
       ]
     },
     {
@@ -25817,6 +26007,26 @@
       "returnType": "CNA_Result",
       "parameters": [
         "CNA_WeightedBlendedTransparencyHandle"
+      ]
+    },
+    {
+      "name": "cna_weighted_blended_transparency_get_accumulation_texture_ext",
+      "header": "engine_layer.h",
+      "ownership": "borrows the resolve; returns a RETAINING borrow of its accumulation target, released with cna_texture2d_destroy, and the resolve may be destroyed first",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_WeightedBlendedTransparencyHandle",
+        "CNA_Handle*"
+      ]
+    },
+    {
+      "name": "cna_weighted_blended_transparency_get_revealage_texture_ext",
+      "header": "engine_layer.h",
+      "ownership": "borrows the resolve; returns a RETAINING borrow of its revealage target, released with cna_texture2d_destroy, and the resolve may be destroyed first",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_WeightedBlendedTransparencyHandle",
+        "CNA_Handle*"
       ]
     },
     {

@@ -3742,6 +3742,10 @@
         "symbol": "cna_cascaded_shadow_map_get_cascade_size"
       },
       {
+        "java": "cascadedShadowMapGetCasterEffect",
+        "symbol": "cna_cascaded_shadow_map_get_caster_effect"
+      },
+      {
         "java": "cascadedShadowMapGetShadowTexture",
         "symbol": "cna_cascaded_shadow_map_get_shadow_texture"
       },
@@ -3834,8 +3838,16 @@
         "symbol": "cna_clustered_forward_effect_get_base_color"
       },
       {
+        "java": "clusteredForwardEffectGetEffect",
+        "symbol": "cna_clustered_forward_effect_get_effect"
+      },
+      {
         "java": "clusteredForwardEffectGetIor",
         "symbol": "cna_clustered_forward_effect_get_ior"
+      },
+      {
+        "java": "clusteredForwardEffectGetMaterialExtensions",
+        "symbol": "cna_clustered_forward_effect_get_material_extensions"
       },
       {
         "java": "clusteredForwardEffectGetMetallic",
@@ -4414,6 +4426,10 @@
         "symbol": "cna_cube_shadow_map_end"
       },
       {
+        "java": "cubeShadowMapGetCasterEffect",
+        "symbol": "cna_cube_shadow_map_get_caster_effect"
+      },
+      {
         "java": "cubeShadowMapGetDepthBias",
         "symbol": "cna_cube_shadow_map_get_depth_bias"
       },
@@ -4626,8 +4642,16 @@
         "symbol": "cna_depth_normal_prepass_get_pass_count"
       },
       {
+        "java": "depthNormalPrepassGetPrepassEffect",
+        "symbol": "cna_depth_normal_prepass_get_prepass_effect"
+      },
+      {
         "java": "depthNormalPrepassGetRoughness",
         "symbol": "cna_depth_normal_prepass_get_roughness"
+      },
+      {
+        "java": "depthNormalPrepassGetSkinnedPrepassEffect",
+        "symbol": "cna_depth_normal_prepass_get_skinned_prepass_effect"
       },
       {
         "java": "depthNormalPrepassGetVelocityTextureExt",
@@ -5715,8 +5739,20 @@
         "symbol": "cna_pbr_material_extensions_get_clearcoat_normal_scale"
       },
       {
+        "java": "pbrMaterialExtensionsGetClearcoatNormalTexture",
+        "symbol": "cna_pbr_material_extensions_get_clearcoat_normal_texture"
+      },
+      {
         "java": "pbrMaterialExtensionsGetClearcoatRoughness",
         "symbol": "cna_pbr_material_extensions_get_clearcoat_roughness"
+      },
+      {
+        "java": "pbrMaterialExtensionsGetClearcoatRoughnessTexture",
+        "symbol": "cna_pbr_material_extensions_get_clearcoat_roughness_texture"
+      },
+      {
+        "java": "pbrMaterialExtensionsGetClearcoatTexture",
+        "symbol": "cna_pbr_material_extensions_get_clearcoat_texture"
       },
       {
         "java": "pbrMaterialExtensionsGetHashCode",
@@ -5731,6 +5767,10 @@
         "symbol": "cna_pbr_material_extensions_get_iridescence_ior"
       },
       {
+        "java": "pbrMaterialExtensionsGetIridescenceTexture",
+        "symbol": "cna_pbr_material_extensions_get_iridescence_texture"
+      },
+      {
         "java": "pbrMaterialExtensionsGetIridescenceThicknessMaximum",
         "symbol": "cna_pbr_material_extensions_get_iridescence_thickness_maximum"
       },
@@ -5739,12 +5779,24 @@
         "symbol": "cna_pbr_material_extensions_get_iridescence_thickness_minimum"
       },
       {
+        "java": "pbrMaterialExtensionsGetIridescenceThicknessTexture",
+        "symbol": "cna_pbr_material_extensions_get_iridescence_thickness_texture"
+      },
+      {
         "java": "pbrMaterialExtensionsGetSheenColorFactor",
         "symbol": "cna_pbr_material_extensions_get_sheen_color_factor"
       },
       {
+        "java": "pbrMaterialExtensionsGetSheenColorTexture",
+        "symbol": "cna_pbr_material_extensions_get_sheen_color_texture"
+      },
+      {
         "java": "pbrMaterialExtensionsGetSheenRoughness",
         "symbol": "cna_pbr_material_extensions_get_sheen_roughness"
+      },
+      {
+        "java": "pbrMaterialExtensionsGetSheenRoughnessTexture",
+        "symbol": "cna_pbr_material_extensions_get_sheen_roughness_texture"
       },
       {
         "java": "pbrMaterialExtensionsGetSubsurfaceColor",
@@ -5759,8 +5811,16 @@
         "symbol": "cna_pbr_material_extensions_get_thickness_factor"
       },
       {
+        "java": "pbrMaterialExtensionsGetThicknessTexture",
+        "symbol": "cna_pbr_material_extensions_get_thickness_texture"
+      },
+      {
         "java": "pbrMaterialExtensionsGetTransmissionFactor",
         "symbol": "cna_pbr_material_extensions_get_transmission_factor"
+      },
+      {
+        "java": "pbrMaterialExtensionsGetTransmissionTexture",
+        "symbol": "cna_pbr_material_extensions_get_transmission_texture"
       },
       {
         "java": "pbrMaterialExtensionsIsIridescenceEnabled",
@@ -6048,6 +6108,10 @@
         "symbol": "cna_render_pipeline_get_pass_timing_ext"
       },
       {
+        "java": "renderPipelineGetSceneTarget",
+        "symbol": "cna_render_pipeline_get_scene_target"
+      },
+      {
         "java": "renderPipelineGetSceneTargetFormat",
         "symbol": "cna_render_pipeline_get_scene_target_format"
       },
@@ -6229,6 +6293,10 @@
         "symbol": "cna_shadow_map_filter_radius_for_quality"
       },
       {
+        "java": "shadowMapGetCasterEffect",
+        "symbol": "cna_shadow_map_get_caster_effect"
+      },
+      {
         "java": "shadowMapGetDepthBias",
         "symbol": "cna_shadow_map_get_depth_bias"
       },
@@ -6251,6 +6319,10 @@
       {
         "java": "shadowMapGetSize",
         "symbol": "cna_shadow_map_get_size"
+      },
+      {
+        "java": "shadowMapGetSkinnedCasterEffect",
+        "symbol": "cna_shadow_map_get_skinned_caster_effect"
       },
       {
         "java": "shadowMapIsSupported",
@@ -6383,6 +6455,10 @@
       {
         "java": "spotShadowMapEnd",
         "symbol": "cna_spot_shadow_map_end"
+      },
+      {
+        "java": "spotShadowMapGetCasterEffect",
+        "symbol": "cna_spot_shadow_map_get_caster_effect"
       },
       {
         "java": "spotShadowMapGetDepthBias",
@@ -6741,6 +6817,14 @@
       {
         "java": "weightedBlendedTransparencyEnd",
         "symbol": "cna_weighted_blended_transparency_end"
+      },
+      {
+        "java": "weightedBlendedTransparencyGetAccumulationTextureExt",
+        "symbol": "cna_weighted_blended_transparency_get_accumulation_texture_ext"
+      },
+      {
+        "java": "weightedBlendedTransparencyGetRevealageTextureExt",
+        "symbol": "cna_weighted_blended_transparency_get_revealage_texture_ext"
       },
       {
         "java": "weightedBlendedTransparencyIsAccumulating",

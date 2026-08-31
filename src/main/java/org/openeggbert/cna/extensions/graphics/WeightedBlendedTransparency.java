@@ -1,6 +1,7 @@
 package org.openeggbert.cna.extensions.graphics;
 
 import Microsoft.Xna.Framework.Graphics.GraphicsDevice;
+import Microsoft.Xna.Framework.Graphics.Texture2D;
 import org.openeggbert.cna.internal.NativeBindings;
 import org.openeggbert.cna.internal.generated.NativeEngineLayerRoutes;
 
@@ -200,6 +201,55 @@ public final class WeightedBlendedTransparency implements AutoCloseable {
                 NativeEngineLayerRoutes.weightedBlendedTransparencyIsAccumulating(open(),
                         accumulating));
         return accumulating[0];
+    }
+
+    /**
+     * Returns the accumulation target, borrowed.
+     *
+     * <p>A CNA extension. Order-independent transparency works by summing weighted colour into
+     * one target and coverage into another, then dividing; this is the first of the two, and
+     * reaching it is how a game debugs a transparency that looks wrong -- or builds a pass of its
+     * own over the same intermediate.
+     *
+     * <p><strong>A retaining borrow, fresh every call.</strong> Two calls are two objects to
+     * dispose and one target underneath, this object may be closed while a view is out, and the
+     * view keeps what it names alive.
+     *
+     * <p>Answers {@code null} on a renderer that has no float target to accumulate into, which is
+     * the same renderer {@link #isSupported()} answers {@code false} for.
+     *
+     * @param graphicsDevice the device the target belongs to
+     * @return the target, which the caller disposes, or {@code null}
+     */
+    public Texture2D getAccumulationTexture(GraphicsDevice graphicsDevice) {
+        Objects.requireNonNull(graphicsDevice, "graphicsDevice");
+        long[] texture = new long[1];
+        GraphicsExtension.check("WeightedBlendedTransparency.getAccumulationTexture",
+                NativeEngineLayerRoutes.weightedBlendedTransparencyGetAccumulationTextureExt(
+                        open(), texture));
+        return texture[0] == 0L ? null
+                : NativeBindings.createBorrowedRenderTarget(graphicsDevice, texture[0]);
+    }
+
+    /**
+     * Returns the revealage target, borrowed.
+     *
+     * <p>The other half of {@link #getAccumulationTexture}: the coverage the accumulated colour is
+     * divided by. Same ownership in every respect, and a different surface format -- the
+     * accumulation target carries colour and this one carries one channel of coverage, which is
+     * the cheapest way to tell the two apart.
+     *
+     * @param graphicsDevice the device the target belongs to
+     * @return the target, which the caller disposes, or {@code null}
+     */
+    public Texture2D getRevealageTexture(GraphicsDevice graphicsDevice) {
+        Objects.requireNonNull(graphicsDevice, "graphicsDevice");
+        long[] texture = new long[1];
+        GraphicsExtension.check("WeightedBlendedTransparency.getRevealageTexture",
+                NativeEngineLayerRoutes.weightedBlendedTransparencyGetRevealageTextureExt(
+                        open(), texture));
+        return texture[0] == 0L ? null
+                : NativeBindings.createBorrowedRenderTarget(graphicsDevice, texture[0]);
     }
 
     /** Releases the resolve and its targets. Closing twice is a no-op. */

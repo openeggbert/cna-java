@@ -321,22 +321,31 @@ static CNA_Result on_update(CNA_Handle game, const CNA_GameTime* game_time, void
         settings.hdr_enabled = CNA_TRUE;
         cna_render_pipeline_set_settings(pipeline, &settings);
         const CNA_Color clear = { 0U, 0U, 0U, 255U };
+        /* Asked from inside the frame as well as after it, because the pipeline builds the
+           target when a frame opens and may not keep it afterwards -- and inside the frame is
+           when a game would want it, to feed a pass of its own. */
         cna_render_pipeline_begin(pipeline, &clear);
+        CNA_Handle inside_a = 0, inside_b = 0;
+        const CNA_Result got_inside = cna_render_pipeline_get_scene_target(pipeline, &inside_a);
+        cna_render_pipeline_get_scene_target(pipeline, &inside_b);
         cna_render_pipeline_end(pipeline);
         CNA_Handle target_a = 0, target_b = 0;
         const CNA_Result got_on = cna_render_pipeline_get_scene_target(pipeline, &target_a);
         cna_render_pipeline_get_scene_target(pipeline, &target_b);
         CNA_Bool using_target = CNA_FALSE;
         cna_render_pipeline_is_using_scene_target(pipeline, &using_target);
-        printf("  pipeline scene target              off=%s %s  on=%s %s %s  using=%s\n",
-               name_of(got_off), target_off == 0 ? "invalid" : "valid", name_of(got_on),
-               target_a == 0 ? "invalid" : "valid",
-               target_a == target_b ? "same handle" : "fresh each call",
-               using_target ? "yes" : "no");
-        if (target_a != 0) {
+        printf("  pipeline scene target              off=%s %s  inside=%s %s %s  "
+               "after=%s %s  using=%s\n",
+               name_of(got_off), target_off == 0 ? "invalid" : "valid", name_of(got_inside),
+               inside_a == 0 ? "invalid" : "valid",
+               inside_a == inside_b ? "same handle" : "fresh each call", name_of(got_on),
+               target_a == 0 ? "invalid" : "valid", using_target ? "yes" : "no");
+        if (inside_a != 0) {
             printf("  scene target release               %s\n",
-                   name_of(cna_texture2d_destroy(target_a)));
+                   name_of(cna_texture2d_destroy(inside_a)));
         }
+        if (inside_b != 0) cna_texture2d_destroy(inside_b);
+        if (target_a != 0) cna_texture2d_destroy(target_a);
         if (target_b != 0) cna_texture2d_destroy(target_b);
 
         CNA_SkyboxHandle sky_a = 0, sky_b = 0;

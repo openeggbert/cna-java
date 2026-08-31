@@ -4,6 +4,7 @@ import Microsoft.Xna.Framework.BoundingBox;
 import Microsoft.Xna.Framework.Color;
 import Microsoft.Xna.Framework.Graphics.GraphicsDevice;
 import Microsoft.Xna.Framework.Graphics.SurfaceFormat;
+import Microsoft.Xna.Framework.Graphics.Texture2D;
 import Microsoft.Xna.Framework.Matrix;
 import org.openeggbert.cna.internal.NativeBindings;
 import org.openeggbert.cna.internal.generated.NativeEngineLayerRoutes;
@@ -465,6 +466,34 @@ public final class RenderPipeline implements AutoCloseable {
             transparentSceneToken = token;
         }
         NativeBindings.releaseCallbackToken(previous);
+    }
+
+    /**
+     * Returns the offscreen target this frame is rendering into, borrowed.
+     *
+     * <p>A CNA extension. A pipeline that has any effect enabled renders the scene into a target
+     * of its own before the post-process chain runs, and this is that target -- what a game needs
+     * to add a pass the pipeline has no setting for, or to read the frame back.
+     *
+     * <p><strong>Only inside an open frame.</strong> The pipeline builds the target when
+     * {@link #begin(Color)} opens a frame and does not keep it afterwards, so this answers
+     * {@code null} before {@code begin} and after {@link #end()} -- measured, on every renderer,
+     * even while {@link #isUsingSceneTarget()} still answers {@code true}. The two questions are
+     * about different things: whether the frame used one, and whether one exists now.
+     *
+     * <p><strong>A fresh view every call.</strong> Two calls are two objects to dispose and one
+     * target underneath.
+     *
+     * @param graphicsDevice the device the target belongs to
+     * @return the target, which the caller disposes, or {@code null} outside a frame
+     */
+    public Texture2D getSceneTarget(GraphicsDevice graphicsDevice) {
+        Objects.requireNonNull(graphicsDevice, "graphicsDevice");
+        long[] texture = new long[1];
+        GraphicsExtension.check("RenderPipeline.getSceneTarget",
+                NativeEngineLayerRoutes.renderPipelineGetSceneTarget(open(), texture));
+        return texture[0] == 0L ? null
+                : NativeBindings.createBorrowedRenderTarget(graphicsDevice, texture[0]);
     }
 
     /**

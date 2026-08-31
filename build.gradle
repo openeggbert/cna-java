@@ -108,6 +108,21 @@ test {
         environment 'CNA_GRAPHICS_RENDERER', System.getenv('CNA_GRAPHICS_RENDERER')
         inputs.property('cnaGraphicsRenderer', System.getenv('CNA_GRAPHICS_RENDERER'))
     }
+    // Which display a GPU renderer opens its window on. A test worker inherits the Gradle
+    // daemon's environment, not the shell's, so a run redirected to a virtual display -- Xvfb,
+    // or a headless CI machine -- would otherwise still be sent at whatever display the daemon
+    // was started with, and would open real windows on someone's desktop. Forwarded explicitly,
+    // and WAYLAND_DISPLAY is blanked rather than left alone: SDL prefers Wayland whenever that
+    // variable is set, so an X11 display alone would not redirect anything.
+    ['DISPLAY', 'SDL_VIDEODRIVER', 'WAYLAND_DISPLAY'].each { name ->
+        String value = System.getenv(name)
+        if (value != null) {
+            environment name, value
+        }
+    }
+    if (System.getenv('DISPLAY') && !System.getenv('WAYLAND_DISPLAY')) {
+        environment 'WAYLAND_DISPLAY', ''
+    }
     // The CNA checkout the build already qualifies against. A test that needs an authored
     // asset -- an XNA 4.0 .xnb no fixture generator can honestly stand in for -- reads it from
     // there and skips itself when it is absent, rather than copying someone else's asset in.

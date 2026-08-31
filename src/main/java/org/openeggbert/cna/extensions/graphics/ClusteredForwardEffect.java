@@ -4,6 +4,8 @@ import Microsoft.Xna.Framework.Graphics.GraphicsDevice;
 import Microsoft.Xna.Framework.Graphics.Texture2D;
 import Microsoft.Xna.Framework.Matrix;
 import Microsoft.Xna.Framework.Vector3;
+import Microsoft.Xna.Framework.Graphics.Effect;
+import org.openeggbert.cna.internal.FacadeFactory;
 import org.openeggbert.cna.internal.NativeBindings;
 import org.openeggbert.cna.internal.generated.NativeEngineLayerRoutes;
 
@@ -448,6 +450,58 @@ public final class ClusteredForwardEffect implements AutoCloseable {
         return opaqueFrame;
     }
 
+    /**
+     * Returns the shader effect this one shades with, borrowed.
+     *
+     * <p>A CNA extension. The clustered forward effect is a wrapper around a real shader effect,
+     * and this is the way to reach that shader -- to set a parameter the wrapper has no property
+     * for, or to hand it to a {@code SpriteBatch}. The effect belongs to this object; what comes
+     * back is a <em>view</em>, and disposing the view gives the borrow back.
+     *
+     * <p><strong>A fresh view every call, and this object refuses to close while one is
+     * outstanding.</strong> Disposing them is what makes closing possible, and the refusal is
+     * recoverable rather than fatal.
+     *
+     * @param graphicsDevice the device the effect belongs to
+     * @return the effect, which the caller disposes, or {@code null} where there is none
+     */
+    public Effect getEffect(GraphicsDevice graphicsDevice) {
+        Objects.requireNonNull(graphicsDevice, "graphicsDevice");
+        long[] effect = new long[1];
+        GraphicsExtension.check("ClusteredForwardEffect.getEffect", NativeEngineLayerRoutes
+                .clusteredForwardEffectGetEffect(open(), effect));
+        return effect[0] == 0L ? null
+                : FacadeFactory.createBorrowedEffect(graphicsDevice, effect[0]);
+    }
+
+    /**
+     * Returns the material extensions this effect actually shades with, borrowed.
+     *
+     * <p>Not the same object as {@link #getMaterialExtensions()}, and the difference is the point.
+     * {@link #setMaterialExtensions} gives CNA a <strong>copy</strong>, so what the effect shades
+     * with is its own object with its own corrections applied -- the same relationship
+     * {@link RenderPipelineSettingsExt#normalize()} exists for. This is that object.
+     *
+     * <p><strong>A retaining borrow.</strong> Unlike the shader effect above, this effect may be
+     * closed while a view is outstanding: the view keeps what it names alive, and closing it
+     * afterwards is fine.
+     *
+     * <p><strong>The view's texture slots are CNA's, not this binding's.</strong> A borrowed view
+     * was never given a texture through Java, so {@link PbrMaterialExtensions#getClearcoatTexture}
+     * and its eight siblings answer {@code null} on one. What is bound is still askable:
+     * {@link PbrMaterialExtensions#hasClearcoatTexture()} and its siblings ask CNA and give the
+     * name straight back.
+     *
+     * @return the extensions, which the caller closes
+     */
+    public PbrMaterialExtensions getEffectMaterialExtensions() {
+        long[] extensions = new long[1];
+        GraphicsExtension.check("ClusteredForwardEffect.getEffectMaterialExtensions",
+                NativeEngineLayerRoutes.clusteredForwardEffectGetMaterialExtensions(open(),
+                        extensions));
+        return PbrMaterialExtensions.adoptBorrowed(extensions[0]);
+    }
+
     /** Releases the effect. What it named is untouched. Closing twice is a no-op. */
     @Override
     public void close() {
@@ -455,6 +509,15 @@ public final class ClusteredForwardEffect implements AutoCloseable {
             if (closed) {
                 return;
             }
+        }
+        // Marked closed only after CNA agrees, and the retained references dropped only then.
+        // Since getEffect() lends this effect's shader as a counted borrow, the release has a
+        // reachable refusal -- and an object that recorded itself closed on the way to one would
+        // be unusable and undestroyable at once, with the native effect leaked. A refused close
+        // leaves it exactly as it was, so the caller can dispose the view and close again.
+        GraphicsExtension.check("ClusteredForwardEffect.close",
+                NativeEngineLayerRoutes.clusteredForwardEffectDestroy(handle));
+        synchronized (this) {
             closed = true;
             probe = null;
             volume = null;
@@ -463,8 +526,6 @@ public final class ClusteredForwardEffect implements AutoCloseable {
             materialExtensions = null;
             opaqueFrame = null;
         }
-        GraphicsExtension.check("ClusteredForwardEffect.close",
-                NativeEngineLayerRoutes.clusteredForwardEffectDestroy(handle));
     }
 
     /** A boolean CNA answers about one effect. */
