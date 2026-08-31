@@ -384,6 +384,28 @@ public final class CnbDocument implements AutoCloseable {
         return new CnbSoundEffectData(sound[0]);
     }
 
+    /**
+     * Reads the file's song metadata and its streaming reference.
+     *
+     * @return the song's recorded name, duration and media reference
+     * @throws CnbFormatException when the file is not a Song asset, or does not name exactly one
+     *         external reference
+     */
+    public CnbSong decodeSong() {
+        return CnbSong.read(this, open());
+    }
+
+    /**
+     * Reads the file's video metadata and its streaming reference.
+     *
+     * @return the video's recorded shape, rate, duration, soundtrack type and media reference
+     * @throws CnbFormatException when the file is not a Video asset, or its declarations are out
+     *         of range
+     */
+    public CnbVideo decodeVideo() {
+        return CnbVideo.read(open());
+    }
+
     /** Releases the document. Closing twice is a no-op. */
     @Override
     public void close() {

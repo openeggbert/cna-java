@@ -61,6 +61,16 @@ final class CnbExtension {
         throw NativeBindings.failure(operation, result);
     }
 
+    /** Returns the prefix CNA actually wrote, sharing the buffer when it filled it. */
+    static byte[] trim(byte[] destination, long written) {
+        if (written == destination.length) {
+            return destination;
+        }
+        byte[] exact = new byte[Math.toIntExact(written)];
+        System.arraycopy(destination, 0, exact, 0, exact.length);
+        return exact;
+    }
+
     static byte[] utf8(String value) {
         return value.getBytes(StandardCharsets.UTF_8);
     }

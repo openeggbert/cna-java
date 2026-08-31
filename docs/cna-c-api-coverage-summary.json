@@ -1,7 +1,7 @@
 {
   "abiVersion": "0.21.0",
   "boundButUnreached": [],
-  "boundFunctions": 1442,
+  "boundFunctions": 1452,
   "boundWithoutJavaCallSite": [],
   "byHeader": {
     "abi.h": {

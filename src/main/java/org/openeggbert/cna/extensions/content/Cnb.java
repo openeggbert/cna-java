@@ -38,12 +38,7 @@ public final class Cnb {
         long[] written = new long[1];
         CnbExtension.check("Cnb.encodeTexture2D", NativeCnbRoutes
                 .cnbEncodeTexture2d(texture.handle(), name, destination, written));
-        if (written[0] == destination.length) {
-            return destination;
-        }
-        byte[] exact = new byte[Math.toIntExact(written[0])];
-        System.arraycopy(destination, 0, exact, 0, exact.length);
-        return exact;
+        return CnbExtension.trim(destination, written[0]);
     }
 
     /**
@@ -73,11 +68,6 @@ public final class Cnb {
         long[] written = new long[1];
         CnbExtension.check("Cnb.encodeSoundEffect", NativeCnbRoutes
                 .cnbEncodeSoundEffect(sound.handle(), name, destination, written));
-        if (written[0] == destination.length) {
-            return destination;
-        }
-        byte[] exact = new byte[Math.toIntExact(written[0])];
-        System.arraycopy(destination, 0, exact, 0, exact.length);
-        return exact;
+        return CnbExtension.trim(destination, written[0]);
     }
 }

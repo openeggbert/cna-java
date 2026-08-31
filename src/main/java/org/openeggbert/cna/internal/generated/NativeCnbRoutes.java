@@ -111,6 +111,31 @@ public final class NativeCnbRoutes {
     public static native int cnbCrc32cUsesHardware(boolean[] outUsesHardware);
 
     /**
+     * cna_cnb_decode_song_duration_milliseconds (cnb.h).
+     */
+    public static native int cnbDecodeSongDurationMilliseconds(long document, int[] outDurationMilliseconds);
+
+    /**
+     * cna_cnb_decode_song_name (cnb.h).
+     */
+    public static native int cnbDecodeSongName(long document, byte[] destination, long[] outByteCount);
+
+    /**
+     * cna_cnb_decode_song_name_size (cnb.h).
+     */
+    public static native int cnbDecodeSongNameSize(long document, long[] outByteCount);
+
+    /**
+     * cna_cnb_decode_song_stream_reference (cnb.h).
+     */
+    public static native int cnbDecodeSongStreamReference(long document, byte[] destination, long[] outByteCount);
+
+    /**
+     * cna_cnb_decode_song_stream_reference_size (cnb.h).
+     */
+    public static native int cnbDecodeSongStreamReferenceSize(long document, long[] outByteCount);
+
+    /**
      * cna_cnb_decode_sound_effect (cnb.h).
      */
     public static native int cnbDecodeSoundEffect(long document, long[] outSound);
@@ -119,6 +144,35 @@ public final class NativeCnbRoutes {
      * cna_cnb_decode_texture2d (cnb.h).
      */
     public static native int cnbDecodeTexture2d(long document, long[] outTexture);
+
+    /**
+     * cna_cnb_decode_video (cnb.h).
+     *
+     * <p>outInfoIntegral carries CNA_CnbVideoInfo in this order:
+     * <ol start="0">
+     *   <li>{@code duration_milliseconds} (uint32_t)</li>
+     *   <li>{@code width} (uint32_t)</li>
+     *   <li>{@code height} (uint32_t)</li>
+     *   <li>{@code soundtrack_type} (CNA_VideoSoundtrackType)</li>
+     *   <li>{@code reserved} (uint32_t)</li>
+     * </ol>
+     *
+     * <p>outInfoFloating carries CNA_CnbVideoInfo in this order:
+     * <ol start="0">
+     *   <li>{@code frames_per_second} (float)</li>
+     * </ol>
+     */
+    public static native int cnbDecodeVideo(long document, long[] outInfoIntegral, float[] outInfoFloating);
+
+    /**
+     * cna_cnb_decode_video_stream_reference (cnb.h).
+     */
+    public static native int cnbDecodeVideoStreamReference(long document, byte[] destination, long[] outByteCount);
+
+    /**
+     * cna_cnb_decode_video_stream_reference_size (cnb.h).
+     */
+    public static native int cnbDecodeVideoStreamReferenceSize(long document, long[] outByteCount);
 
     /**
      * cna_cnb_document_copy_chunk_data (cnb.h).
@@ -331,6 +385,11 @@ public final class NativeCnbRoutes {
     public static native int cnbDocumentRequireSingle(long document, int type, long[] outIndex);
 
     /**
+     * cna_cnb_encode_song (cnb.h).
+     */
+    public static native int cnbEncodeSong(byte[] streamReference, byte[] name, int durationMilliseconds, byte[] contentName, byte[] destination, long[] outByteCount);
+
+    /**
      * cna_cnb_encode_sound_effect (cnb.h).
      */
     public static native int cnbEncodeSoundEffect(long sound, byte[] contentName, byte[] destination, long[] outByteCount);
@@ -339,6 +398,25 @@ public final class NativeCnbRoutes {
      * cna_cnb_encode_texture2d (cnb.h).
      */
     public static native int cnbEncodeTexture2d(long texture, byte[] contentName, byte[] destination, long[] outByteCount);
+
+    /**
+     * cna_cnb_encode_video (cnb.h).
+     *
+     * <p>infoIntegral carries CNA_CnbVideoInfo in this order:
+     * <ol start="0">
+     *   <li>{@code duration_milliseconds} (uint32_t)</li>
+     *   <li>{@code width} (uint32_t)</li>
+     *   <li>{@code height} (uint32_t)</li>
+     *   <li>{@code soundtrack_type} (CNA_VideoSoundtrackType)</li>
+     *   <li>{@code reserved} (uint32_t)</li>
+     * </ol>
+     *
+     * <p>infoFloating carries CNA_CnbVideoInfo in this order:
+     * <ol start="0">
+     *   <li>{@code frames_per_second} (float)</li>
+     * </ol>
+     */
+    public static native int cnbEncodeVideo(byte[] streamReference, long[] infoIntegral, float[] infoFloating, byte[] contentName, byte[] destination, long[] outByteCount);
 
     /**
      * cna_cnb_get_asset_type_name_size (cnb.h).

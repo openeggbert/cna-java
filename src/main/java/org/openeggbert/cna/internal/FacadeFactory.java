@@ -13,6 +13,7 @@ import Microsoft.Xna.Framework.Content.ContentReader;
 import Microsoft.Xna.Framework.Media.MediaPlayer;
 import Microsoft.Xna.Framework.Media.VisualizationData;
 import Microsoft.Xna.Framework.Media.Video;
+import Microsoft.Xna.Framework.Media.VideoSoundtrackType;
 import Microsoft.Xna.Framework.Storage.StorageContainer;
 
 import java.lang.reflect.Constructor;
@@ -37,6 +38,7 @@ public final class FacadeFactory {
             "releaseGameScopedState");
     private static final Method VISUALIZATION_SET = visualizationMethod();
     private static final Constructor<Video> VIDEO = videoConstructor();
+    private static final Method VIDEO_SOUNDTRACK_VALUE = videoSoundtrackValueMethod();
     private static final Method EFFECT_ADOPT_EXTENSION = effectAdoptExtensionMethod();
     private static final Method CONTENT_MANAGER_DEVICE = contentManagerDeviceMethod();
     private static final Method TEXTURE_2D_LEVEL_BYTES = texture2DLevelBytesMethod();
@@ -172,6 +174,34 @@ public final class FacadeFactory {
             throw new IllegalStateException("Cannot construct the Video facade", exception);
         } catch (InvocationTargetException exception) {
             throw facadeFailure("Video construction failed", exception);
+        }
+    }
+
+    /**
+     * Reads CNA's own identifier for a video soundtrack role.
+     *
+     * <p>The accessor is package-private in {@code Microsoft.Xna.Framework.Media} because XNA has
+     * no such member and adding a public one would put a non-XNA member in an XNA type.
+     */
+    public static int videoSoundtrackValue(VideoSoundtrackType soundtrackType) {
+        try {
+            return (int) VIDEO_SOUNDTRACK_VALUE.invoke(soundtrackType);
+        } catch (IllegalAccessException exception) {
+            throw new IllegalStateException(
+                    "Cannot read the hidden VideoSoundtrackType value", exception);
+        } catch (InvocationTargetException exception) {
+            throw facadeFailure("VideoSoundtrackType value read failed", exception);
+        }
+    }
+
+    private static Method videoSoundtrackValueMethod() {
+        try {
+            Method method = VideoSoundtrackType.class.getDeclaredMethod("value");
+            method.setAccessible(true);
+            return method;
+        } catch (NoSuchMethodException exception) {
+            throw new IllegalStateException(
+                    "VideoSoundtrackType has no hidden value accessor", exception);
         }
     }
 

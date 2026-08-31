@@ -2386,12 +2386,44 @@
         "symbol": "cna_cnb_crc32c_uses_hardware"
       },
       {
+        "java": "cnbDecodeSongDurationMilliseconds",
+        "symbol": "cna_cnb_decode_song_duration_milliseconds"
+      },
+      {
+        "java": "cnbDecodeSongName",
+        "symbol": "cna_cnb_decode_song_name"
+      },
+      {
+        "java": "cnbDecodeSongNameSize",
+        "symbol": "cna_cnb_decode_song_name_size"
+      },
+      {
+        "java": "cnbDecodeSongStreamReference",
+        "symbol": "cna_cnb_decode_song_stream_reference"
+      },
+      {
+        "java": "cnbDecodeSongStreamReferenceSize",
+        "symbol": "cna_cnb_decode_song_stream_reference_size"
+      },
+      {
         "java": "cnbDecodeSoundEffect",
         "symbol": "cna_cnb_decode_sound_effect"
       },
       {
         "java": "cnbDecodeTexture2d",
         "symbol": "cna_cnb_decode_texture2d"
+      },
+      {
+        "java": "cnbDecodeVideo",
+        "symbol": "cna_cnb_decode_video"
+      },
+      {
+        "java": "cnbDecodeVideoStreamReference",
+        "symbol": "cna_cnb_decode_video_stream_reference"
+      },
+      {
+        "java": "cnbDecodeVideoStreamReferenceSize",
+        "symbol": "cna_cnb_decode_video_stream_reference_size"
       },
       {
         "java": "cnbDocumentCopyChunkData",
@@ -2510,12 +2542,20 @@
         "symbol": "cna_cnb_document_require_single"
       },
       {
+        "java": "cnbEncodeSong",
+        "symbol": "cna_cnb_encode_song"
+      },
+      {
         "java": "cnbEncodeSoundEffect",
         "symbol": "cna_cnb_encode_sound_effect"
       },
       {
         "java": "cnbEncodeTexture2d",
         "symbol": "cna_cnb_encode_texture2d"
+      },
+      {
+        "java": "cnbEncodeVideo",
+        "symbol": "cna_cnb_encode_video"
       },
       {
         "java": "cnbGetAssetTypeNameSize",

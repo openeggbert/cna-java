@@ -1844,6 +1844,60 @@
       ]
     },
     {
+      "name": "cna_cnb_decode_song_duration_milliseconds",
+      "header": "cnb.h",
+      "ownership": "borrows document; caller integer output",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_CnbDocumentHandle",
+        "uint32_t*"
+      ]
+    },
+    {
+      "name": "cna_cnb_decode_song_name",
+      "header": "cnb.h",
+      "ownership": "borrows document; caller buffer",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_CnbDocumentHandle",
+        "char*",
+        "uint64_t",
+        "uint64_t*"
+      ]
+    },
+    {
+      "name": "cna_cnb_decode_song_name_size",
+      "header": "cnb.h",
+      "ownership": "borrows document; caller integer output",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_CnbDocumentHandle",
+        "uint64_t*"
+      ]
+    },
+    {
+      "name": "cna_cnb_decode_song_stream_reference",
+      "header": "cnb.h",
+      "ownership": "borrows document; caller buffer",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_CnbDocumentHandle",
+        "char*",
+        "uint64_t",
+        "uint64_t*"
+      ]
+    },
+    {
+      "name": "cna_cnb_decode_song_stream_reference_size",
+      "header": "cnb.h",
+      "ownership": "borrows document; caller integer output",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_CnbDocumentHandle",
+        "uint64_t*"
+      ]
+    },
+    {
       "name": "cna_cnb_decode_sound_effect",
       "header": "cnb.h",
       "ownership": "borrows document; returns an owned sound-data handle",
@@ -1861,6 +1915,38 @@
       "parameters": [
         "CNA_CnbDocumentHandle",
         "CNA_CnbTextureDataHandle*"
+      ]
+    },
+    {
+      "name": "cna_cnb_decode_video",
+      "header": "cnb.h",
+      "ownership": "borrows document; caller structure output",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_CnbDocumentHandle",
+        "CNA_CnbVideoInfo*"
+      ]
+    },
+    {
+      "name": "cna_cnb_decode_video_stream_reference",
+      "header": "cnb.h",
+      "ownership": "borrows document; caller buffer",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_CnbDocumentHandle",
+        "char*",
+        "uint64_t",
+        "uint64_t*"
+      ]
+    },
+    {
+      "name": "cna_cnb_decode_video_stream_reference_size",
+      "header": "cnb.h",
+      "ownership": "borrows document; caller integer output",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_CnbDocumentHandle",
+        "uint64_t*"
       ]
     },
     {
@@ -2183,6 +2269,21 @@
       ]
     },
     {
+      "name": "cna_cnb_encode_song",
+      "header": "cnb.h",
+      "ownership": "no handle; caller buffer",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_StringView",
+        "CNA_StringView",
+        "uint32_t",
+        "CNA_StringView",
+        "uint8_t*",
+        "uint64_t",
+        "uint64_t*"
+      ]
+    },
+    {
       "name": "cna_cnb_encode_sound_effect",
       "header": "cnb.h",
       "ownership": "borrows sound data; caller buffer",
@@ -2202,6 +2303,20 @@
       "returnType": "CNA_Result",
       "parameters": [
         "CNA_CnbTextureDataHandle",
+        "CNA_StringView",
+        "uint8_t*",
+        "uint64_t",
+        "uint64_t*"
+      ]
+    },
+    {
+      "name": "cna_cnb_encode_video",
+      "header": "cnb.h",
+      "ownership": "no handle; caller buffer",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_StringView",
+        "const CNA_CnbVideoInfo*",
         "CNA_StringView",
         "uint8_t*",
         "uint64_t",

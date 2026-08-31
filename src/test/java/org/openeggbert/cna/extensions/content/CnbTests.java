@@ -9,6 +9,9 @@ import Microsoft.Xna.Framework.Audio.SoundEffect;
 import Microsoft.Xna.Framework.Audio.SoundEffectInstance;
 import Microsoft.Xna.Framework.Audio.SoundState;
 import Microsoft.Xna.Framework.Graphics.SurfaceFormat;
+import Microsoft.Xna.Framework.Media.Song;
+import Microsoft.Xna.Framework.Media.Video;
+import Microsoft.Xna.Framework.Media.VideoSoundtrackType;
 import Microsoft.Xna.Framework.Graphics.Texture2D;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.condition.EnabledIfEnvironmentVariable;
@@ -426,6 +429,64 @@ final class CnbTests {
     }
 
     @Test
+    void aSongIsMetadataAndAReferenceRatherThanAudio() {
+        byte[] file = CnbSong.encode("music/theme.ogg", "Main Theme",
+                Duration.ofMinutes(3).plusSeconds(21), "music/theme");
+        try (CnbDocument document = CnbDocument.parse(
+                     file, "theme.cnb", CnbReadLimits.standard())) {
+            assertEquals(CnbAssetType.SONG, document.getAssetType());
+            CnbSong song = document.decodeSong();
+            assertEquals("music/theme.ogg", song.StreamReference());
+            assertEquals("Main Theme", song.Name());
+            assertEquals(Duration.ofSeconds(201), song.Duration());
+
+            // The reference is the document's single external reference, which is what makes the
+            // dependency visible to a build tool rather than buried in a payload.
+            List<CnbExternalReference> references = document.getExternalReferences();
+            assertEquals(1, references.size());
+            assertEquals("music/theme.ogg", references.get(0).LogicalName());
+
+            // And the audio is not in the file: three minutes of music would not fit in one.
+            assertTrue(file.length < 4096,
+                    "a song .cnb carries no audio, so it must stay tiny: " + file.length);
+        }
+
+        // An unnamed song of unknown length is an ordinary case a compiler produces.
+        byte[] bare = CnbSong.encode("music/unknown.ogg", "", Duration.ZERO, "");
+        try (CnbDocument document = CnbDocument.parse(
+                     bare, "unknown.cnb", CnbReadLimits.standard())) {
+            CnbSong song = document.decodeSong();
+            assertEquals("", song.Name());
+            assertEquals(Duration.ZERO, song.Duration());
+        }
+
+        // An empty reference is the one thing a song may not have, because it is the whole point.
+        assertThrows(CnbFormatException.class,
+                () -> CnbSong.encode("", "Nameless", Duration.ZERO, ""));
+    }
+
+    @Test
+    void aVideoCarriesTheShapeAGameNeedsBeforeOpeningTheMedia() {
+        CnbVideo source = new CnbVideo("video/intro.webm", Duration.ofSeconds(12),
+                1280, 720, 29.97f, VideoSoundtrackType.MusicAndDialog);
+        byte[] file = CnbVideo.encode("video/intro.webm", source, "video/intro");
+        try (CnbDocument document = CnbDocument.parse(
+                     file, "intro.cnb", CnbReadLimits.standard())) {
+            assertEquals(CnbAssetType.VIDEO, document.getAssetType());
+            assertEquals(source, document.decodeVideo());
+        }
+
+        // A frame rate that is not positive and finite is refused rather than written, because a
+        // player dividing by it later has no way back.
+        CnbVideo broken = new CnbVideo("video/intro.webm", Duration.ofSeconds(12),
+                1280, 720, 0.0f, VideoSoundtrackType.Music);
+        assertThrows(CnbFormatException.class,
+                () -> CnbVideo.encode("video/intro.webm", broken, ""));
+        assertThrows(CnbFormatException.class,
+                () -> CnbVideo.encode("", source, ""));
+    }
+
+    @Test
     void aDecodedSoundBecomesAnXnaSoundEffect() {
         try (SoundProbe probe = new SoundProbe()) {
             probe.RunOneFrame();
@@ -436,6 +497,84 @@ final class CnbTests {
                 throw new IllegalStateException(probe.failure);
             }
             assertTrue(probe.ran, "the probe must have run");
+        }
+    }
+
+    @Test
+    void aDecodedSongAndVideoBecomeXnaMediaObjects() {
+        try (MediaProbe probe = new MediaProbe()) {
+            probe.RunOneFrame();
+            if (probe.failure != null) {
+                if (probe.failure instanceof RuntimeException runtime) {
+                    throw runtime;
+                }
+                throw new IllegalStateException(probe.failure);
+            }
+            assertTrue(probe.ran, "the probe must have run");
+        }
+    }
+
+    /**
+     * The media half of the song and video slices, inside a game for the same reason as the audio.
+     *
+     * <p>Both types are references to media that lives outside the {@code .cnb}, so this proves
+     * the crossing -- a decoded reference becomes an XNA media object carrying the file's own
+     * metadata -- and not that anything played. Playback needs media this repository does not
+     * ship and a backend this qualification does not have.
+     */
+    private static final class MediaProbe extends Game {
+
+        private boolean ran;
+        private Throwable failure;
+
+        private MediaProbe() {
+            new GraphicsDeviceManager(this);
+        }
+
+        @Override
+        protected void Update(GameTime gameTime) {
+            super.Update(gameTime);
+            if (ran) {
+                return;
+            }
+            ran = true;
+            try {
+                byte[] songFile = CnbSong.encode("music/theme.ogg", "Main Theme",
+                        Duration.ofSeconds(201), "music/theme");
+                try (CnbDocument document = CnbDocument.parse(
+                             songFile, "theme.cnb", CnbReadLimits.standard())) {
+                    CnbSong compiled = document.decodeSong();
+                    // CNA opens the media when the Song is created, so the location the caller
+                    // resolves has to be a file that is really there. That is the requirement
+                    // being demonstrated, not an obstacle worked around: a logical reference is
+                    // not playable until someone resolves it.
+                    Path media = Files.createTempFile("cna-java-song", ".ogg");
+                    try {
+                        Song song = compiled.toSong(media.toUri());
+                        // The display name is the file's; the location is the caller's, which is
+                        // the whole shape of the slice.
+                        assertEquals("Main Theme", song.getName());
+                    } finally {
+                        Files.deleteIfExists(media);
+                    }
+                }
+
+                CnbVideo source = new CnbVideo("video/intro.webm", Duration.ofSeconds(12),
+                        1280, 720, 30.0f, VideoSoundtrackType.Dialog);
+                byte[] videoFile = CnbVideo.encode("video/intro.webm", source, "video/intro");
+                try (CnbDocument document = CnbDocument.parse(
+                             videoFile, "intro.cnb", CnbReadLimits.standard())) {
+                    CnbVideo compiled = document.decodeVideo();
+                    Video video = compiled.toVideo(getGraphicsDevice(), "video/intro.webm");
+                    assertEquals(1280, video.getWidth());
+                    assertEquals(720, video.getHeight());
+                    assertEquals(30.0f, video.getFramesPerSecond());
+                    assertEquals(Duration.ofSeconds(12), video.getDuration());
+                    assertEquals(VideoSoundtrackType.Dialog, video.getVideoSoundtrackType());
+                }
+            } catch (Throwable exception) {
+                failure = exception;
+            }
         }
     }
 

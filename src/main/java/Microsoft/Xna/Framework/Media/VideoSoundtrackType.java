@@ -10,6 +10,14 @@ public enum VideoSoundtrackType {
 
     VideoSoundtrackType(int value) { this.value = value; }
 
+    /**
+     * Returns CNA's own identifier for this role.
+     *
+     * <p>Package-private on purpose: XNA's enumeration has no such member, and the numbers
+     * are CNA's, not part of the API this type projects.
+     */
+    int value() { return value; }
+
     static VideoSoundtrackType fromValue(int value) {
         for (VideoSoundtrackType type : values()) if (type.value == value) return type;
         throw new IllegalStateException("CNA returned unknown VideoSoundtrackType " + value);

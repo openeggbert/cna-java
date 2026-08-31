@@ -88,8 +88,16 @@
     CNA_JNI_ROUTE(cna_cnb_crc32c_continue) cnb_crc32c_continue;
     CNA_JNI_ROUTE(cna_cnb_crc32c_portable) cnb_crc32c_portable;
     CNA_JNI_ROUTE(cna_cnb_crc32c_uses_hardware) cnb_crc32c_uses_hardware;
+    CNA_JNI_ROUTE(cna_cnb_decode_song_duration_milliseconds) cnb_decode_song_duration_milliseconds;
+    CNA_JNI_ROUTE(cna_cnb_decode_song_name) cnb_decode_song_name;
+    CNA_JNI_ROUTE(cna_cnb_decode_song_name_size) cnb_decode_song_name_size;
+    CNA_JNI_ROUTE(cna_cnb_decode_song_stream_reference) cnb_decode_song_stream_reference;
+    CNA_JNI_ROUTE(cna_cnb_decode_song_stream_reference_size) cnb_decode_song_stream_reference_size;
     CNA_JNI_ROUTE(cna_cnb_decode_sound_effect) cnb_decode_sound_effect;
     CNA_JNI_ROUTE(cna_cnb_decode_texture2d) cnb_decode_texture2d;
+    CNA_JNI_ROUTE(cna_cnb_decode_video) cnb_decode_video;
+    CNA_JNI_ROUTE(cna_cnb_decode_video_stream_reference) cnb_decode_video_stream_reference;
+    CNA_JNI_ROUTE(cna_cnb_decode_video_stream_reference_size) cnb_decode_video_stream_reference_size;
     CNA_JNI_ROUTE(cna_cnb_document_copy_chunk_data) cnb_document_copy_chunk_data;
     CNA_JNI_ROUTE(cna_cnb_document_copy_external_reference_name) cnb_document_copy_external_reference_name;
     CNA_JNI_ROUTE(cna_cnb_document_copy_metadata_asset_type_name) cnb_document_copy_metadata_asset_type_name;
@@ -119,8 +127,10 @@
     CNA_JNI_ROUTE(cna_cnb_document_require_asset) cnb_document_require_asset;
     CNA_JNI_ROUTE(cna_cnb_document_require_mandatory_chunks_understood) cnb_document_require_mandatory_chunks_understood;
     CNA_JNI_ROUTE(cna_cnb_document_require_single) cnb_document_require_single;
+    CNA_JNI_ROUTE(cna_cnb_encode_song) cnb_encode_song;
     CNA_JNI_ROUTE(cna_cnb_encode_sound_effect) cnb_encode_sound_effect;
     CNA_JNI_ROUTE(cna_cnb_encode_texture2d) cnb_encode_texture2d;
+    CNA_JNI_ROUTE(cna_cnb_encode_video) cnb_encode_video;
     CNA_JNI_ROUTE(cna_cnb_get_asset_type_name_size) cnb_get_asset_type_name_size;
     CNA_JNI_ROUTE(cna_cnb_get_audio_format_name_size) cnb_get_audio_format_name_size;
     CNA_JNI_ROUTE(cna_cnb_get_chunk_id_string_size) cnb_get_chunk_id_string_size;

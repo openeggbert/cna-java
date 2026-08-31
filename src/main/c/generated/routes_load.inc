@@ -88,8 +88,16 @@
     LOAD(cnb_crc32c_continue, "cna_cnb_crc32c_continue");
     LOAD(cnb_crc32c_portable, "cna_cnb_crc32c_portable");
     LOAD(cnb_crc32c_uses_hardware, "cna_cnb_crc32c_uses_hardware");
+    LOAD(cnb_decode_song_duration_milliseconds, "cna_cnb_decode_song_duration_milliseconds");
+    LOAD(cnb_decode_song_name, "cna_cnb_decode_song_name");
+    LOAD(cnb_decode_song_name_size, "cna_cnb_decode_song_name_size");
+    LOAD(cnb_decode_song_stream_reference, "cna_cnb_decode_song_stream_reference");
+    LOAD(cnb_decode_song_stream_reference_size, "cna_cnb_decode_song_stream_reference_size");
     LOAD(cnb_decode_sound_effect, "cna_cnb_decode_sound_effect");
     LOAD(cnb_decode_texture2d, "cna_cnb_decode_texture2d");
+    LOAD(cnb_decode_video, "cna_cnb_decode_video");
+    LOAD(cnb_decode_video_stream_reference, "cna_cnb_decode_video_stream_reference");
+    LOAD(cnb_decode_video_stream_reference_size, "cna_cnb_decode_video_stream_reference_size");
     LOAD(cnb_document_copy_chunk_data, "cna_cnb_document_copy_chunk_data");
     LOAD(cnb_document_copy_external_reference_name, "cna_cnb_document_copy_external_reference_name");
     LOAD(cnb_document_copy_metadata_asset_type_name, "cna_cnb_document_copy_metadata_asset_type_name");
@@ -119,8 +127,10 @@
     LOAD(cnb_document_require_asset, "cna_cnb_document_require_asset");
     LOAD(cnb_document_require_mandatory_chunks_understood, "cna_cnb_document_require_mandatory_chunks_understood");
     LOAD(cnb_document_require_single, "cna_cnb_document_require_single");
+    LOAD(cnb_encode_song, "cna_cnb_encode_song");
     LOAD(cnb_encode_sound_effect, "cna_cnb_encode_sound_effect");
     LOAD(cnb_encode_texture2d, "cna_cnb_encode_texture2d");
+    LOAD(cnb_encode_video, "cna_cnb_encode_video");
     LOAD(cnb_get_asset_type_name_size, "cna_cnb_get_asset_type_name_size");
     LOAD(cnb_get_audio_format_name_size, "cna_cnb_get_audio_format_name_size");
     LOAD(cnb_get_chunk_id_string_size, "cna_cnb_get_chunk_id_string_size");
