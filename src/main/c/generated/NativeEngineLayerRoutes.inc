@@ -6804,6 +6804,127 @@ Java_org_openeggbert_cna_internal_generated_NativeEngineLayerRoutes_effectGetPun
 }
 
 JNIEXPORT jint JNICALL
+Java_org_openeggbert_cna_internal_generated_NativeEngineLayerRoutes_effectGetShadowCascadesExt(
+    JNIEnv* environment, jclass declaring_class, jlong effect, jbyteArray out_stateBytes, jlongArray out_stateIntegral, jfloatArray out_stateFloating)
+{
+    (void)environment;
+    (void)declaring_class;
+    CNA_ShadowCascadeStateEXT out_state_value;
+    memset(&out_state_value, 0, sizeof out_state_value);
+    out_state_value.struct_size = (uint32_t)(sizeof out_state_value);
+    out_state_value.struct_version = UINT32_C(1);
+    CNA_Result call_result = cna.effect_get_shadow_cascades_ext((CNA_EffectHandle)effect, &out_state_value);
+    if (call_result == CNA_RESULT_SUCCESS || call_result == CNA_RESULT_BUFFER_TOO_SMALL) {
+        jbyte out_stateBytes_values[] = {
+            (jbyte)out_state_value.reserved[0],
+            (jbyte)out_state_value.reserved[1],
+            (jbyte)out_state_value.reserved[2]
+        };
+        (*environment)->SetByteArrayRegion(environment, out_stateBytes, 0,
+            (jsize)(sizeof out_stateBytes_values / sizeof out_stateBytes_values[0]),
+            out_stateBytes_values);
+        jlong out_stateIntegral_values[] = {
+            (jlong)out_state_value.count,
+            (jlong)out_state_value.debug_tint
+        };
+        (*environment)->SetLongArrayRegion(environment, out_stateIntegral, 0,
+            (jsize)(sizeof out_stateIntegral_values / sizeof out_stateIntegral_values[0]),
+            out_stateIntegral_values);
+        jfloat out_stateFloating_values[] = {
+            (jfloat)out_state_value.blend_band,
+            (jfloat)out_state_value.world_to_atlas[0].m11,
+            (jfloat)out_state_value.world_to_atlas[0].m12,
+            (jfloat)out_state_value.world_to_atlas[0].m13,
+            (jfloat)out_state_value.world_to_atlas[0].m14,
+            (jfloat)out_state_value.world_to_atlas[0].m21,
+            (jfloat)out_state_value.world_to_atlas[0].m22,
+            (jfloat)out_state_value.world_to_atlas[0].m23,
+            (jfloat)out_state_value.world_to_atlas[0].m24,
+            (jfloat)out_state_value.world_to_atlas[0].m31,
+            (jfloat)out_state_value.world_to_atlas[0].m32,
+            (jfloat)out_state_value.world_to_atlas[0].m33,
+            (jfloat)out_state_value.world_to_atlas[0].m34,
+            (jfloat)out_state_value.world_to_atlas[0].m41,
+            (jfloat)out_state_value.world_to_atlas[0].m42,
+            (jfloat)out_state_value.world_to_atlas[0].m43,
+            (jfloat)out_state_value.world_to_atlas[0].m44,
+            (jfloat)out_state_value.world_to_atlas[1].m11,
+            (jfloat)out_state_value.world_to_atlas[1].m12,
+            (jfloat)out_state_value.world_to_atlas[1].m13,
+            (jfloat)out_state_value.world_to_atlas[1].m14,
+            (jfloat)out_state_value.world_to_atlas[1].m21,
+            (jfloat)out_state_value.world_to_atlas[1].m22,
+            (jfloat)out_state_value.world_to_atlas[1].m23,
+            (jfloat)out_state_value.world_to_atlas[1].m24,
+            (jfloat)out_state_value.world_to_atlas[1].m31,
+            (jfloat)out_state_value.world_to_atlas[1].m32,
+            (jfloat)out_state_value.world_to_atlas[1].m33,
+            (jfloat)out_state_value.world_to_atlas[1].m34,
+            (jfloat)out_state_value.world_to_atlas[1].m41,
+            (jfloat)out_state_value.world_to_atlas[1].m42,
+            (jfloat)out_state_value.world_to_atlas[1].m43,
+            (jfloat)out_state_value.world_to_atlas[1].m44,
+            (jfloat)out_state_value.world_to_atlas[2].m11,
+            (jfloat)out_state_value.world_to_atlas[2].m12,
+            (jfloat)out_state_value.world_to_atlas[2].m13,
+            (jfloat)out_state_value.world_to_atlas[2].m14,
+            (jfloat)out_state_value.world_to_atlas[2].m21,
+            (jfloat)out_state_value.world_to_atlas[2].m22,
+            (jfloat)out_state_value.world_to_atlas[2].m23,
+            (jfloat)out_state_value.world_to_atlas[2].m24,
+            (jfloat)out_state_value.world_to_atlas[2].m31,
+            (jfloat)out_state_value.world_to_atlas[2].m32,
+            (jfloat)out_state_value.world_to_atlas[2].m33,
+            (jfloat)out_state_value.world_to_atlas[2].m34,
+            (jfloat)out_state_value.world_to_atlas[2].m41,
+            (jfloat)out_state_value.world_to_atlas[2].m42,
+            (jfloat)out_state_value.world_to_atlas[2].m43,
+            (jfloat)out_state_value.world_to_atlas[2].m44,
+            (jfloat)out_state_value.world_to_atlas[3].m11,
+            (jfloat)out_state_value.world_to_atlas[3].m12,
+            (jfloat)out_state_value.world_to_atlas[3].m13,
+            (jfloat)out_state_value.world_to_atlas[3].m14,
+            (jfloat)out_state_value.world_to_atlas[3].m21,
+            (jfloat)out_state_value.world_to_atlas[3].m22,
+            (jfloat)out_state_value.world_to_atlas[3].m23,
+            (jfloat)out_state_value.world_to_atlas[3].m24,
+            (jfloat)out_state_value.world_to_atlas[3].m31,
+            (jfloat)out_state_value.world_to_atlas[3].m32,
+            (jfloat)out_state_value.world_to_atlas[3].m33,
+            (jfloat)out_state_value.world_to_atlas[3].m34,
+            (jfloat)out_state_value.world_to_atlas[3].m41,
+            (jfloat)out_state_value.world_to_atlas[3].m42,
+            (jfloat)out_state_value.world_to_atlas[3].m43,
+            (jfloat)out_state_value.world_to_atlas[3].m44,
+            (jfloat)out_state_value.split_distance[0],
+            (jfloat)out_state_value.split_distance[1],
+            (jfloat)out_state_value.split_distance[2],
+            (jfloat)out_state_value.split_distance[3],
+            (jfloat)out_state_value.camera_view.m11,
+            (jfloat)out_state_value.camera_view.m12,
+            (jfloat)out_state_value.camera_view.m13,
+            (jfloat)out_state_value.camera_view.m14,
+            (jfloat)out_state_value.camera_view.m21,
+            (jfloat)out_state_value.camera_view.m22,
+            (jfloat)out_state_value.camera_view.m23,
+            (jfloat)out_state_value.camera_view.m24,
+            (jfloat)out_state_value.camera_view.m31,
+            (jfloat)out_state_value.camera_view.m32,
+            (jfloat)out_state_value.camera_view.m33,
+            (jfloat)out_state_value.camera_view.m34,
+            (jfloat)out_state_value.camera_view.m41,
+            (jfloat)out_state_value.camera_view.m42,
+            (jfloat)out_state_value.camera_view.m43,
+            (jfloat)out_state_value.camera_view.m44
+        };
+        (*environment)->SetFloatArrayRegion(environment, out_stateFloating, 0,
+            (jsize)(sizeof out_stateFloating_values / sizeof out_stateFloating_values[0]),
+            out_stateFloating_values);
+    }
+    return (jint)call_result;
+}
+
+JNIEXPORT jint JNICALL
 Java_org_openeggbert_cna_internal_generated_NativeEngineLayerRoutes_effectGetShadowDepthBiasExt(
     JNIEnv* environment, jclass declaring_class, jlong effect, jfloatArray out_bias)
 {
@@ -6978,6 +7099,122 @@ Java_org_openeggbert_cna_internal_generated_NativeEngineLayerRoutes_effectSetPun
         light_value.shadow_view_projection.m44 = (float)lightFloating_values[28];
     }
     CNA_Result call_result = cna.effect_set_punctual_light_ext((CNA_EffectHandle)effect, &light_value);
+    return (jint)call_result;
+}
+
+JNIEXPORT jint JNICALL
+Java_org_openeggbert_cna_internal_generated_NativeEngineLayerRoutes_effectSetShadowCascadesExt(
+    JNIEnv* environment, jclass declaring_class, jlong effect, jbyteArray stateBytes, jlongArray stateIntegral, jfloatArray stateFloating)
+{
+    (void)environment;
+    (void)declaring_class;
+    CNA_ShadowCascadeStateEXT state_value;
+    memset(&state_value, 0, sizeof state_value);
+    state_value.struct_size = (uint32_t)(sizeof state_value);
+    state_value.struct_version = UINT32_C(1);
+    {
+        jbyte stateBytes_values[3];
+        (*environment)->GetByteArrayRegion(environment, stateBytes, 0, 3, stateBytes_values);
+        state_value.reserved[0] = (uint8_t)stateBytes_values[0];
+        state_value.reserved[1] = (uint8_t)stateBytes_values[1];
+        state_value.reserved[2] = (uint8_t)stateBytes_values[2];
+    }
+    {
+        jlong stateIntegral_values[2];
+        (*environment)->GetLongArrayRegion(environment, stateIntegral, 0, 2, stateIntegral_values);
+        state_value.count = (int32_t)stateIntegral_values[0];
+        state_value.debug_tint = (CNA_Bool)stateIntegral_values[1];
+    }
+    {
+        jfloat stateFloating_values[85];
+        (*environment)->GetFloatArrayRegion(environment, stateFloating, 0, 85, stateFloating_values);
+        state_value.blend_band = (float)stateFloating_values[0];
+        state_value.world_to_atlas[0].m11 = (float)stateFloating_values[1];
+        state_value.world_to_atlas[0].m12 = (float)stateFloating_values[2];
+        state_value.world_to_atlas[0].m13 = (float)stateFloating_values[3];
+        state_value.world_to_atlas[0].m14 = (float)stateFloating_values[4];
+        state_value.world_to_atlas[0].m21 = (float)stateFloating_values[5];
+        state_value.world_to_atlas[0].m22 = (float)stateFloating_values[6];
+        state_value.world_to_atlas[0].m23 = (float)stateFloating_values[7];
+        state_value.world_to_atlas[0].m24 = (float)stateFloating_values[8];
+        state_value.world_to_atlas[0].m31 = (float)stateFloating_values[9];
+        state_value.world_to_atlas[0].m32 = (float)stateFloating_values[10];
+        state_value.world_to_atlas[0].m33 = (float)stateFloating_values[11];
+        state_value.world_to_atlas[0].m34 = (float)stateFloating_values[12];
+        state_value.world_to_atlas[0].m41 = (float)stateFloating_values[13];
+        state_value.world_to_atlas[0].m42 = (float)stateFloating_values[14];
+        state_value.world_to_atlas[0].m43 = (float)stateFloating_values[15];
+        state_value.world_to_atlas[0].m44 = (float)stateFloating_values[16];
+        state_value.world_to_atlas[1].m11 = (float)stateFloating_values[17];
+        state_value.world_to_atlas[1].m12 = (float)stateFloating_values[18];
+        state_value.world_to_atlas[1].m13 = (float)stateFloating_values[19];
+        state_value.world_to_atlas[1].m14 = (float)stateFloating_values[20];
+        state_value.world_to_atlas[1].m21 = (float)stateFloating_values[21];
+        state_value.world_to_atlas[1].m22 = (float)stateFloating_values[22];
+        state_value.world_to_atlas[1].m23 = (float)stateFloating_values[23];
+        state_value.world_to_atlas[1].m24 = (float)stateFloating_values[24];
+        state_value.world_to_atlas[1].m31 = (float)stateFloating_values[25];
+        state_value.world_to_atlas[1].m32 = (float)stateFloating_values[26];
+        state_value.world_to_atlas[1].m33 = (float)stateFloating_values[27];
+        state_value.world_to_atlas[1].m34 = (float)stateFloating_values[28];
+        state_value.world_to_atlas[1].m41 = (float)stateFloating_values[29];
+        state_value.world_to_atlas[1].m42 = (float)stateFloating_values[30];
+        state_value.world_to_atlas[1].m43 = (float)stateFloating_values[31];
+        state_value.world_to_atlas[1].m44 = (float)stateFloating_values[32];
+        state_value.world_to_atlas[2].m11 = (float)stateFloating_values[33];
+        state_value.world_to_atlas[2].m12 = (float)stateFloating_values[34];
+        state_value.world_to_atlas[2].m13 = (float)stateFloating_values[35];
+        state_value.world_to_atlas[2].m14 = (float)stateFloating_values[36];
+        state_value.world_to_atlas[2].m21 = (float)stateFloating_values[37];
+        state_value.world_to_atlas[2].m22 = (float)stateFloating_values[38];
+        state_value.world_to_atlas[2].m23 = (float)stateFloating_values[39];
+        state_value.world_to_atlas[2].m24 = (float)stateFloating_values[40];
+        state_value.world_to_atlas[2].m31 = (float)stateFloating_values[41];
+        state_value.world_to_atlas[2].m32 = (float)stateFloating_values[42];
+        state_value.world_to_atlas[2].m33 = (float)stateFloating_values[43];
+        state_value.world_to_atlas[2].m34 = (float)stateFloating_values[44];
+        state_value.world_to_atlas[2].m41 = (float)stateFloating_values[45];
+        state_value.world_to_atlas[2].m42 = (float)stateFloating_values[46];
+        state_value.world_to_atlas[2].m43 = (float)stateFloating_values[47];
+        state_value.world_to_atlas[2].m44 = (float)stateFloating_values[48];
+        state_value.world_to_atlas[3].m11 = (float)stateFloating_values[49];
+        state_value.world_to_atlas[3].m12 = (float)stateFloating_values[50];
+        state_value.world_to_atlas[3].m13 = (float)stateFloating_values[51];
+        state_value.world_to_atlas[3].m14 = (float)stateFloating_values[52];
+        state_value.world_to_atlas[3].m21 = (float)stateFloating_values[53];
+        state_value.world_to_atlas[3].m22 = (float)stateFloating_values[54];
+        state_value.world_to_atlas[3].m23 = (float)stateFloating_values[55];
+        state_value.world_to_atlas[3].m24 = (float)stateFloating_values[56];
+        state_value.world_to_atlas[3].m31 = (float)stateFloating_values[57];
+        state_value.world_to_atlas[3].m32 = (float)stateFloating_values[58];
+        state_value.world_to_atlas[3].m33 = (float)stateFloating_values[59];
+        state_value.world_to_atlas[3].m34 = (float)stateFloating_values[60];
+        state_value.world_to_atlas[3].m41 = (float)stateFloating_values[61];
+        state_value.world_to_atlas[3].m42 = (float)stateFloating_values[62];
+        state_value.world_to_atlas[3].m43 = (float)stateFloating_values[63];
+        state_value.world_to_atlas[3].m44 = (float)stateFloating_values[64];
+        state_value.split_distance[0] = (float)stateFloating_values[65];
+        state_value.split_distance[1] = (float)stateFloating_values[66];
+        state_value.split_distance[2] = (float)stateFloating_values[67];
+        state_value.split_distance[3] = (float)stateFloating_values[68];
+        state_value.camera_view.m11 = (float)stateFloating_values[69];
+        state_value.camera_view.m12 = (float)stateFloating_values[70];
+        state_value.camera_view.m13 = (float)stateFloating_values[71];
+        state_value.camera_view.m14 = (float)stateFloating_values[72];
+        state_value.camera_view.m21 = (float)stateFloating_values[73];
+        state_value.camera_view.m22 = (float)stateFloating_values[74];
+        state_value.camera_view.m23 = (float)stateFloating_values[75];
+        state_value.camera_view.m24 = (float)stateFloating_values[76];
+        state_value.camera_view.m31 = (float)stateFloating_values[77];
+        state_value.camera_view.m32 = (float)stateFloating_values[78];
+        state_value.camera_view.m33 = (float)stateFloating_values[79];
+        state_value.camera_view.m34 = (float)stateFloating_values[80];
+        state_value.camera_view.m41 = (float)stateFloating_values[81];
+        state_value.camera_view.m42 = (float)stateFloating_values[82];
+        state_value.camera_view.m43 = (float)stateFloating_values[83];
+        state_value.camera_view.m44 = (float)stateFloating_values[84];
+    }
+    CNA_Result call_result = cna.effect_set_shadow_cascades_ext((CNA_EffectHandle)effect, &state_value);
     return (jint)call_result;
 }
 
@@ -13553,6 +13790,127 @@ Java_org_openeggbert_cna_internal_generated_NativeEngineLayerRoutes_shaderEffect
         jlong out_compile_count_element = (jlong)out_compile_count_value;
         (*environment)->SetLongArrayRegion(
             environment, out_compile_count, 0, 1, &out_compile_count_element);
+    }
+    return (jint)call_result;
+}
+
+JNIEXPORT jint JNICALL
+Java_org_openeggbert_cna_internal_generated_NativeEngineLayerRoutes_shadowCascadeStateExtInit(
+    JNIEnv* environment, jclass declaring_class, jbyteArray out_stateBytes, jlongArray out_stateIntegral, jfloatArray out_stateFloating)
+{
+    (void)environment;
+    (void)declaring_class;
+    CNA_ShadowCascadeStateEXT out_state_value;
+    memset(&out_state_value, 0, sizeof out_state_value);
+    out_state_value.struct_size = (uint32_t)(sizeof out_state_value);
+    out_state_value.struct_version = UINT32_C(1);
+    CNA_Result call_result = cna.shadow_cascade_state_ext_init(&out_state_value);
+    if (call_result == CNA_RESULT_SUCCESS || call_result == CNA_RESULT_BUFFER_TOO_SMALL) {
+        jbyte out_stateBytes_values[] = {
+            (jbyte)out_state_value.reserved[0],
+            (jbyte)out_state_value.reserved[1],
+            (jbyte)out_state_value.reserved[2]
+        };
+        (*environment)->SetByteArrayRegion(environment, out_stateBytes, 0,
+            (jsize)(sizeof out_stateBytes_values / sizeof out_stateBytes_values[0]),
+            out_stateBytes_values);
+        jlong out_stateIntegral_values[] = {
+            (jlong)out_state_value.count,
+            (jlong)out_state_value.debug_tint
+        };
+        (*environment)->SetLongArrayRegion(environment, out_stateIntegral, 0,
+            (jsize)(sizeof out_stateIntegral_values / sizeof out_stateIntegral_values[0]),
+            out_stateIntegral_values);
+        jfloat out_stateFloating_values[] = {
+            (jfloat)out_state_value.blend_band,
+            (jfloat)out_state_value.world_to_atlas[0].m11,
+            (jfloat)out_state_value.world_to_atlas[0].m12,
+            (jfloat)out_state_value.world_to_atlas[0].m13,
+            (jfloat)out_state_value.world_to_atlas[0].m14,
+            (jfloat)out_state_value.world_to_atlas[0].m21,
+            (jfloat)out_state_value.world_to_atlas[0].m22,
+            (jfloat)out_state_value.world_to_atlas[0].m23,
+            (jfloat)out_state_value.world_to_atlas[0].m24,
+            (jfloat)out_state_value.world_to_atlas[0].m31,
+            (jfloat)out_state_value.world_to_atlas[0].m32,
+            (jfloat)out_state_value.world_to_atlas[0].m33,
+            (jfloat)out_state_value.world_to_atlas[0].m34,
+            (jfloat)out_state_value.world_to_atlas[0].m41,
+            (jfloat)out_state_value.world_to_atlas[0].m42,
+            (jfloat)out_state_value.world_to_atlas[0].m43,
+            (jfloat)out_state_value.world_to_atlas[0].m44,
+            (jfloat)out_state_value.world_to_atlas[1].m11,
+            (jfloat)out_state_value.world_to_atlas[1].m12,
+            (jfloat)out_state_value.world_to_atlas[1].m13,
+            (jfloat)out_state_value.world_to_atlas[1].m14,
+            (jfloat)out_state_value.world_to_atlas[1].m21,
+            (jfloat)out_state_value.world_to_atlas[1].m22,
+            (jfloat)out_state_value.world_to_atlas[1].m23,
+            (jfloat)out_state_value.world_to_atlas[1].m24,
+            (jfloat)out_state_value.world_to_atlas[1].m31,
+            (jfloat)out_state_value.world_to_atlas[1].m32,
+            (jfloat)out_state_value.world_to_atlas[1].m33,
+            (jfloat)out_state_value.world_to_atlas[1].m34,
+            (jfloat)out_state_value.world_to_atlas[1].m41,
+            (jfloat)out_state_value.world_to_atlas[1].m42,
+            (jfloat)out_state_value.world_to_atlas[1].m43,
+            (jfloat)out_state_value.world_to_atlas[1].m44,
+            (jfloat)out_state_value.world_to_atlas[2].m11,
+            (jfloat)out_state_value.world_to_atlas[2].m12,
+            (jfloat)out_state_value.world_to_atlas[2].m13,
+            (jfloat)out_state_value.world_to_atlas[2].m14,
+            (jfloat)out_state_value.world_to_atlas[2].m21,
+            (jfloat)out_state_value.world_to_atlas[2].m22,
+            (jfloat)out_state_value.world_to_atlas[2].m23,
+            (jfloat)out_state_value.world_to_atlas[2].m24,
+            (jfloat)out_state_value.world_to_atlas[2].m31,
+            (jfloat)out_state_value.world_to_atlas[2].m32,
+            (jfloat)out_state_value.world_to_atlas[2].m33,
+            (jfloat)out_state_value.world_to_atlas[2].m34,
+            (jfloat)out_state_value.world_to_atlas[2].m41,
+            (jfloat)out_state_value.world_to_atlas[2].m42,
+            (jfloat)out_state_value.world_to_atlas[2].m43,
+            (jfloat)out_state_value.world_to_atlas[2].m44,
+            (jfloat)out_state_value.world_to_atlas[3].m11,
+            (jfloat)out_state_value.world_to_atlas[3].m12,
+            (jfloat)out_state_value.world_to_atlas[3].m13,
+            (jfloat)out_state_value.world_to_atlas[3].m14,
+            (jfloat)out_state_value.world_to_atlas[3].m21,
+            (jfloat)out_state_value.world_to_atlas[3].m22,
+            (jfloat)out_state_value.world_to_atlas[3].m23,
+            (jfloat)out_state_value.world_to_atlas[3].m24,
+            (jfloat)out_state_value.world_to_atlas[3].m31,
+            (jfloat)out_state_value.world_to_atlas[3].m32,
+            (jfloat)out_state_value.world_to_atlas[3].m33,
+            (jfloat)out_state_value.world_to_atlas[3].m34,
+            (jfloat)out_state_value.world_to_atlas[3].m41,
+            (jfloat)out_state_value.world_to_atlas[3].m42,
+            (jfloat)out_state_value.world_to_atlas[3].m43,
+            (jfloat)out_state_value.world_to_atlas[3].m44,
+            (jfloat)out_state_value.split_distance[0],
+            (jfloat)out_state_value.split_distance[1],
+            (jfloat)out_state_value.split_distance[2],
+            (jfloat)out_state_value.split_distance[3],
+            (jfloat)out_state_value.camera_view.m11,
+            (jfloat)out_state_value.camera_view.m12,
+            (jfloat)out_state_value.camera_view.m13,
+            (jfloat)out_state_value.camera_view.m14,
+            (jfloat)out_state_value.camera_view.m21,
+            (jfloat)out_state_value.camera_view.m22,
+            (jfloat)out_state_value.camera_view.m23,
+            (jfloat)out_state_value.camera_view.m24,
+            (jfloat)out_state_value.camera_view.m31,
+            (jfloat)out_state_value.camera_view.m32,
+            (jfloat)out_state_value.camera_view.m33,
+            (jfloat)out_state_value.camera_view.m34,
+            (jfloat)out_state_value.camera_view.m41,
+            (jfloat)out_state_value.camera_view.m42,
+            (jfloat)out_state_value.camera_view.m43,
+            (jfloat)out_state_value.camera_view.m44
+        };
+        (*environment)->SetFloatArrayRegion(environment, out_stateFloating, 0,
+            (jsize)(sizeof out_stateFloating_values / sizeof out_stateFloating_values[0]),
+            out_stateFloating_values);
     }
     return (jint)call_result;
 }

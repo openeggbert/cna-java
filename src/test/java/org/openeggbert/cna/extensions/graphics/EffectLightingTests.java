@@ -191,6 +191,102 @@ final class EffectLightingTests {
     }
 
     @Test
+    void theCascadeStateRoundTripsAllFourTransformsAndSplits() {
+        GameProbe.run(probe -> {
+            try (BasicEffect effect = new BasicEffect(probe.device())) {
+                ShadowCascadeState defaults = ShadowCascadeState.createDefault();
+                // CNA's own defaults, and what they mean: no cascades is how cascaded shadows
+                // are turned off, and the four slots still exist because the layout is fixed.
+                assertEquals(0, defaults.getCount(), "the default state disables cascades");
+                assertEquals(0f, defaults.getBlendBand(), 1.0e-6f);
+                assertFalse(defaults.isDebugTint());
+
+                // Four distinguishable transforms and four distinguishable splits. A structure
+                // whose fixed arrays were flattened in the wrong order, or whose fourth element
+                // overlapped the camera view, fails here rather than passing on symmetry.
+                ShadowCascadeState state = buildState();
+                EffectLighting.setShadowCascades(effect, state);
+
+                ShadowCascadeState returned = EffectLighting.getShadowCascades(effect);
+                assertEquals(3, returned.getCount());
+                assertEquals(2.5f, returned.getBlendBand(), 1.0e-6f);
+                assertTrue(returned.isDebugTint());
+                for (int cascade = 0; cascade < ShadowCascadeState.MAX_CASCADES; cascade++) {
+                    assertEquals((cascade + 1) * 10f, returned.getSplitDistance(cascade),
+                            1.0e-5f, "split " + cascade);
+                    assertMatrixEquals(Matrix.CreateTranslation(
+                                    new Vector3(cascade, cascade * 2f, cascade * 3f)),
+                            returned.getWorldToAtlas(cascade));
+                }
+                assertMatrixEquals(Matrix.CreateScale(7f), returned.getCameraView());
+
+                // Not a constant: turning the tint off comes back off.
+                EffectLighting.setShadowCascades(effect, state.withDebugTint(false)
+                        .withBlendBand(0.75f));
+                ShadowCascadeState changed = EffectLighting.getShadowCascades(effect);
+                assertFalse(changed.isDebugTint());
+                assertEquals(0.75f, changed.getBlendBand(), 1.0e-6f);
+                assertEquals(3, changed.getCount(), "and the rest is unchanged");
+
+                assertThrows(NullPointerException.class,
+                        () -> EffectLighting.setShadowCascades(effect, null));
+            }
+        });
+    }
+
+    @Test
+    void aCascadeStateReadsAMapRatherThanBeingCopiedByHand() {
+        GameProbe.run(probe -> {
+            try (CascadedShadowMap map =
+                         CascadedShadowMap.create(probe.device(), ShadowQuality.Low, 3);
+                 BasicEffect effect = new BasicEffect(probe.device())) {
+                Matrix cameraView = Matrix.CreateLookAt(new Vector3(0f, 12f, 30f),
+                        Vector3.getZero(), Vector3.getUp());
+                map.setBlendBand(1.5f);
+                map.setDebugTintEnabled(true);
+                map.update(DirectionalLight.createDefault(), cameraView,
+                        Matrix.CreatePerspectiveFieldOfView(0.9f, 1.6f, 1f, 300f));
+                ShadowCascadeState state = ShadowCascadeState.of(map, cameraView);
+
+                // Every field comes from the map's own answers, so this is a real comparison and
+                // not a copy of what the test just set: a state that invented its own transforms
+                // would disagree with the map that computed them.
+                assertEquals(map.getCascadeCount(), state.getCount());
+                assertEquals(map.getBlendBand(), state.getBlendBand(), 1.0e-6f);
+                assertEquals(map.isDebugTintEnabled(), state.isDebugTint());
+                for (int cascade = 0; cascade < map.getCascadeCount(); cascade++) {
+                    assertMatrixEquals(map.getCascadeMatrix(cascade),
+                            state.getWorldToAtlas(cascade));
+                    assertEquals(map.getSplitDistance(cascade),
+                            state.getSplitDistance(cascade), 1.0e-5f);
+                }
+                assertMatrixEquals(cameraView, state.getCameraView());
+
+                // The splits must be an increasing sequence -- each cascade ends further away
+                // than the last -- or the effect could never pick one from a depth.
+                for (int cascade = 1; cascade < map.getCascadeCount(); cascade++) {
+                    assertTrue(state.getSplitDistance(cascade)
+                                    > state.getSplitDistance(cascade - 1),
+                            "cascade " + cascade + " ends beyond cascade " + (cascade - 1));
+                }
+
+                // And it survives the round trip through the effect unchanged.
+                EffectLighting.setShadowCascades(effect, state);
+                ShadowCascadeState returned = EffectLighting.getShadowCascades(effect);
+                for (int cascade = 0; cascade < map.getCascadeCount(); cascade++) {
+                    assertMatrixEquals(state.getWorldToAtlas(cascade),
+                            returned.getWorldToAtlas(cascade));
+                }
+
+                assertThrows(NullPointerException.class,
+                        () -> ShadowCascadeState.of(null, cameraView));
+                assertThrows(NullPointerException.class,
+                        () -> ShadowCascadeState.of(map, null));
+            }
+        });
+    }
+
+    @Test
     void anImageBasedLightKnowsWhenItIsIncomplete() {
         GameProbe.run(probe -> {
             ImageBasedLight defaults = ImageBasedLight.createDefault();
@@ -260,6 +356,19 @@ final class EffectLightingTests {
                         () -> PunctualLight.createDefault().withPosition(null));
             }
         });
+    }
+
+    /** Four distinguishable transforms and four distinguishable splits. */
+    private static ShadowCascadeState buildState() {
+        java.util.List<Matrix> transforms = new java.util.ArrayList<>();
+        float[] splits = new float[ShadowCascadeState.MAX_CASCADES];
+        for (int cascade = 0; cascade < ShadowCascadeState.MAX_CASCADES; cascade++) {
+            transforms.add(Matrix.CreateTranslation(
+                    new Vector3(cascade, cascade * 2f, cascade * 3f)));
+            splits[cascade] = (cascade + 1) * 10f;
+        }
+        return ShadowCascadeState.create(3, 2.5f, transforms, splits, Matrix.CreateScale(7f),
+                true);
     }
 
     private static void assertVectorEquals(Vector3 expected, Vector3 actual) {

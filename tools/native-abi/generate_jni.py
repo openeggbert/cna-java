@@ -108,6 +108,30 @@ def classify_scalar(name: str, live: dict) -> tuple[str, str]:
     raise Unsupported(f"not a scalar C type: {name}")
 
 
+def array_extent(where: str, extent: str, live: dict) -> int:
+    """Resolve a fixed array's extent, which CNA writes as a literal or as one of its own macros.
+
+    ``CNA_Matrix world_to_atlas[CNA_SHADOW_CASCADE_MAX_EXT]`` is the same layout as
+    ``[4]`` and has to flatten the same way, so the macro is looked up rather than
+    the field refused. A macro whose value is not a plain positive integer is
+    refused instead of evaluated: guessing at an expression is exactly the kind of
+    arithmetic that would silently mis-size a structure.
+    """
+    if extent.isdigit():
+        count = int(extent)
+    else:
+        constant = live["constants"].get(extent)
+        if constant is None:
+            raise Unsupported(f"{where}: array extent {extent} is not a CNA constant")
+        value = str(constant["value"]).strip()
+        if not value.isdigit():
+            raise Unsupported(f"{where}: array extent {extent} is {value!r}, not a plain integer")
+        count = int(value)
+    if count < 1:
+        raise Unsupported(f"{where}: array extent {extent} is not positive")
+    return count
+
+
 def flatten_struct(name: str, live: dict, seen: frozenset[str] = frozenset()) -> list[tuple[str, str]]:
     """Flatten a POD struct into its scalar leaves as (field path, C type).
 
@@ -125,11 +149,23 @@ def flatten_struct(name: str, live: dict, seen: frozenset[str] = frozenset()) ->
         field_type, pointers = bare(field["type"])
         if pointers or not field["name"]:
             raise Unsupported(f"{name}.{field['name']}: unsupported field type {field['type']}")
-        extent = re.fullmatch(r"(?P<element>[A-Za-z_][A-Za-z0-9_]*)\[(?P<count>\d+)\]", field_type)
+        extent = re.fullmatch(
+            r"(?P<element>[A-Za-z_][A-Za-z0-9_]*)\[(?P<count>[A-Za-z0-9_]+)\]", field_type)
         if extent is not None:
             element = extent.group("element")
-            classify_scalar(element, live) if element not in ("char",) else None
-            for index in range(int(extent.group("count"))):
+            count = array_extent(f"{name}.{field['name']}", extent.group("count"), live)
+            if element in live["structures"]:
+                # An array of structures is an array and a structure, and both are already
+                # understood one at a time. Expanding it here is what keeps a fixed-extent
+                # member -- four cascade transforms, seven texture transforms -- a layout the
+                # generator lays out rather than a shape it refuses.
+                for index in range(count):
+                    for path, leaf in flatten_struct(element, live, seen | {name}):
+                        leaves.append((f"{field['name']}[{index}].{path}", leaf))
+                continue
+            if element != "char":
+                classify_scalar(element, live)
+            for index in range(count):
                 leaves.append((f"{field['name']}[{index}]", element))
             continue
         if "[" in field_type:
@@ -185,7 +221,24 @@ def version_paths(name: str, live: dict, prefix: str = "",
                           struct_version(name, live)))
     for field in structure["fields"]:
         field_type, pointers = bare(field["type"])
-        if pointers or "[" in field_type or field_type not in live["structures"]:
+        if pointers:
+            continue
+        extent = re.fullmatch(
+            r"(?P<element>[A-Za-z_][A-Za-z0-9_]*)\[(?P<count>[A-Za-z0-9_]+)\]", field_type)
+        if extent is not None:
+            # Every element of a fixed array of versioned structures needs stamping, not just
+            # the first. A material carries seven texture transforms, and seven unstamped ones
+            # would each tell CNA they were zero bytes long -- which is the silent half of the
+            # same mistake this whole walk exists to prevent.
+            element = extent.group("element")
+            if element not in live["structures"]:
+                continue
+            for index in range(array_extent(f"{name}.{field['name']}",
+                                            extent.group("count"), live)):
+                found.extend(version_paths(element, live,
+                                           f"{prefix}{field['name']}[{index}].", seen | {name}))
+            continue
+        if field_type not in live["structures"]:
             continue
         found.extend(version_paths(field_type, live, f"{prefix}{field['name']}.",
                                    seen | {name}))

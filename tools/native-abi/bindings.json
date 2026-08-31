@@ -8759,6 +8759,16 @@
       ]
     },
     {
+      "name": "cna_effect_get_shadow_cascades_ext",
+      "header": "engine_layer.h",
+      "ownership": "borrows the effect; copies the state out",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_EffectHandle",
+        "CNA_ShadowCascadeStateEXT*"
+      ]
+    },
+    {
       "name": "cna_effect_get_shadow_depth_bias_ext",
       "header": "engine_layer.h",
       "ownership": "borrows the effect; owns nothing",
@@ -9291,6 +9301,16 @@
       "parameters": [
         "CNA_EffectHandle",
         "const CNA_PunctualLightEXT*"
+      ]
+    },
+    {
+      "name": "cna_effect_set_shadow_cascades_ext",
+      "header": "engine_layer.h",
+      "ownership": "borrows the effect; the state is a value and is copied",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_EffectHandle",
+        "const CNA_ShadowCascadeStateEXT*"
       ]
     },
     {
@@ -20604,6 +20624,15 @@
       "parameters": [
         "CNA_ShaderEffectFactoryHandle",
         "uint64_t*"
+      ]
+    },
+    {
+      "name": "cna_shadow_cascade_state_ext_init",
+      "header": "engine_layer.h",
+      "ownership": "owns nothing; fills a caller-owned structure",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_ShadowCascadeStateEXT*"
       ]
     },
     {

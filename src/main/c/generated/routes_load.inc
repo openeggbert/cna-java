@@ -664,6 +664,7 @@
     LOAD(effect_copy_type_name, "cna_effect_copy_type_name");
     LOAD(effect_get_light_view_projection_ext, "cna_effect_get_light_view_projection_ext");
     LOAD(effect_get_punctual_light_ext, "cna_effect_get_punctual_light_ext");
+    LOAD(effect_get_shadow_cascades_ext, "cna_effect_get_shadow_cascades_ext");
     LOAD(effect_get_shadow_depth_bias_ext, "cna_effect_get_shadow_depth_bias_ext");
     LOAD(effect_get_shadow_filter_radius_ext, "cna_effect_get_shadow_filter_radius_ext");
     LOAD(effect_get_shadow_map_ext, "cna_effect_get_shadow_map_ext");
@@ -672,6 +673,7 @@
     LOAD(effect_set_image_based_light_ext, "cna_effect_set_image_based_light_ext");
     LOAD(effect_set_light_view_projection_ext, "cna_effect_set_light_view_projection_ext");
     LOAD(effect_set_punctual_light_ext, "cna_effect_set_punctual_light_ext");
+    LOAD(effect_set_shadow_cascades_ext, "cna_effect_set_shadow_cascades_ext");
     LOAD(effect_set_shadow_depth_bias_ext, "cna_effect_set_shadow_depth_bias_ext");
     LOAD(effect_set_shadow_filter_radius_ext, "cna_effect_set_shadow_filter_radius_ext");
     LOAD(effect_set_shadow_map_ext, "cna_effect_set_shadow_map_ext");
@@ -1416,6 +1418,7 @@
     LOAD(shader_effect_factory_create, "cna_shader_effect_factory_create");
     LOAD(shader_effect_factory_destroy, "cna_shader_effect_factory_destroy");
     LOAD(shader_effect_factory_get_compile_count, "cna_shader_effect_factory_get_compile_count");
+    LOAD(shadow_cascade_state_ext_init, "cna_shadow_cascade_state_ext_init");
     LOAD(shadow_map_apply_caster, "cna_shadow_map_apply_caster");
     LOAD(shadow_map_apply_skinned_caster, "cna_shadow_map_apply_skinned_caster");
     LOAD(shadow_map_begin, "cna_shadow_map_begin");

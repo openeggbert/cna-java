@@ -106,7 +106,21 @@ final class EngineValues {
 
     /** Reads one matrix back out of a packed array. */
     static Matrix matrix(float[] packed, int index) {
-        int base = Math.multiplyExact(index, MATRIX_LEAVES);
+        return matrixAt(packed, Math.multiplyExact(index, MATRIX_LEAVES));
+    }
+
+    /**
+     * Reads one matrix out of flat leaves at a given offset.
+     *
+     * <p>The sibling of {@link #matrix(float[], int)} for a structure whose matrices are not the
+     * only thing in the array: a cascade state's four transforms start one leaf in, after the
+     * blend band, so counting in matrices would read the wrong sixteen floats.
+     *
+     * @param packed the leaves
+     * @param base the offset of the first element
+     * @return the matrix
+     */
+    static Matrix matrixAt(float[] packed, int base) {
         return new Matrix(
                 packed[base], packed[base + 1], packed[base + 2], packed[base + 3],
                 packed[base + 4], packed[base + 5], packed[base + 6], packed[base + 7],

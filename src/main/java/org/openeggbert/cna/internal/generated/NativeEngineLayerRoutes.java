@@ -3148,6 +3148,113 @@ public final class NativeEngineLayerRoutes {
     public static native int effectGetPunctualLightExt(long effect, long[] outLightIntegral, float[] outLightFloating);
 
     /**
+     * cna_effect_get_shadow_cascades_ext (engine_layer.h).
+     *
+     * <p>outStateBytes carries CNA_ShadowCascadeStateEXT in this order:
+     * <ol start="0">
+     *   <li>{@code reserved[0]} (uint8_t)</li>
+     *   <li>{@code reserved[1]} (uint8_t)</li>
+     *   <li>{@code reserved[2]} (uint8_t)</li>
+     * </ol>
+     *
+     * <p>outStateIntegral carries CNA_ShadowCascadeStateEXT in this order:
+     * <ol start="0">
+     *   <li>{@code count} (int32_t)</li>
+     *   <li>{@code debug_tint} (CNA_Bool)</li>
+     * </ol>
+     *
+     * <p>outStateFloating carries CNA_ShadowCascadeStateEXT in this order:
+     * <ol start="0">
+     *   <li>{@code blend_band} (float)</li>
+     *   <li>{@code world_to_atlas[0].m11} (float)</li>
+     *   <li>{@code world_to_atlas[0].m12} (float)</li>
+     *   <li>{@code world_to_atlas[0].m13} (float)</li>
+     *   <li>{@code world_to_atlas[0].m14} (float)</li>
+     *   <li>{@code world_to_atlas[0].m21} (float)</li>
+     *   <li>{@code world_to_atlas[0].m22} (float)</li>
+     *   <li>{@code world_to_atlas[0].m23} (float)</li>
+     *   <li>{@code world_to_atlas[0].m24} (float)</li>
+     *   <li>{@code world_to_atlas[0].m31} (float)</li>
+     *   <li>{@code world_to_atlas[0].m32} (float)</li>
+     *   <li>{@code world_to_atlas[0].m33} (float)</li>
+     *   <li>{@code world_to_atlas[0].m34} (float)</li>
+     *   <li>{@code world_to_atlas[0].m41} (float)</li>
+     *   <li>{@code world_to_atlas[0].m42} (float)</li>
+     *   <li>{@code world_to_atlas[0].m43} (float)</li>
+     *   <li>{@code world_to_atlas[0].m44} (float)</li>
+     *   <li>{@code world_to_atlas[1].m11} (float)</li>
+     *   <li>{@code world_to_atlas[1].m12} (float)</li>
+     *   <li>{@code world_to_atlas[1].m13} (float)</li>
+     *   <li>{@code world_to_atlas[1].m14} (float)</li>
+     *   <li>{@code world_to_atlas[1].m21} (float)</li>
+     *   <li>{@code world_to_atlas[1].m22} (float)</li>
+     *   <li>{@code world_to_atlas[1].m23} (float)</li>
+     *   <li>{@code world_to_atlas[1].m24} (float)</li>
+     *   <li>{@code world_to_atlas[1].m31} (float)</li>
+     *   <li>{@code world_to_atlas[1].m32} (float)</li>
+     *   <li>{@code world_to_atlas[1].m33} (float)</li>
+     *   <li>{@code world_to_atlas[1].m34} (float)</li>
+     *   <li>{@code world_to_atlas[1].m41} (float)</li>
+     *   <li>{@code world_to_atlas[1].m42} (float)</li>
+     *   <li>{@code world_to_atlas[1].m43} (float)</li>
+     *   <li>{@code world_to_atlas[1].m44} (float)</li>
+     *   <li>{@code world_to_atlas[2].m11} (float)</li>
+     *   <li>{@code world_to_atlas[2].m12} (float)</li>
+     *   <li>{@code world_to_atlas[2].m13} (float)</li>
+     *   <li>{@code world_to_atlas[2].m14} (float)</li>
+     *   <li>{@code world_to_atlas[2].m21} (float)</li>
+     *   <li>{@code world_to_atlas[2].m22} (float)</li>
+     *   <li>{@code world_to_atlas[2].m23} (float)</li>
+     *   <li>{@code world_to_atlas[2].m24} (float)</li>
+     *   <li>{@code world_to_atlas[2].m31} (float)</li>
+     *   <li>{@code world_to_atlas[2].m32} (float)</li>
+     *   <li>{@code world_to_atlas[2].m33} (float)</li>
+     *   <li>{@code world_to_atlas[2].m34} (float)</li>
+     *   <li>{@code world_to_atlas[2].m41} (float)</li>
+     *   <li>{@code world_to_atlas[2].m42} (float)</li>
+     *   <li>{@code world_to_atlas[2].m43} (float)</li>
+     *   <li>{@code world_to_atlas[2].m44} (float)</li>
+     *   <li>{@code world_to_atlas[3].m11} (float)</li>
+     *   <li>{@code world_to_atlas[3].m12} (float)</li>
+     *   <li>{@code world_to_atlas[3].m13} (float)</li>
+     *   <li>{@code world_to_atlas[3].m14} (float)</li>
+     *   <li>{@code world_to_atlas[3].m21} (float)</li>
+     *   <li>{@code world_to_atlas[3].m22} (float)</li>
+     *   <li>{@code world_to_atlas[3].m23} (float)</li>
+     *   <li>{@code world_to_atlas[3].m24} (float)</li>
+     *   <li>{@code world_to_atlas[3].m31} (float)</li>
+     *   <li>{@code world_to_atlas[3].m32} (float)</li>
+     *   <li>{@code world_to_atlas[3].m33} (float)</li>
+     *   <li>{@code world_to_atlas[3].m34} (float)</li>
+     *   <li>{@code world_to_atlas[3].m41} (float)</li>
+     *   <li>{@code world_to_atlas[3].m42} (float)</li>
+     *   <li>{@code world_to_atlas[3].m43} (float)</li>
+     *   <li>{@code world_to_atlas[3].m44} (float)</li>
+     *   <li>{@code split_distance[0]} (float)</li>
+     *   <li>{@code split_distance[1]} (float)</li>
+     *   <li>{@code split_distance[2]} (float)</li>
+     *   <li>{@code split_distance[3]} (float)</li>
+     *   <li>{@code camera_view.m11} (float)</li>
+     *   <li>{@code camera_view.m12} (float)</li>
+     *   <li>{@code camera_view.m13} (float)</li>
+     *   <li>{@code camera_view.m14} (float)</li>
+     *   <li>{@code camera_view.m21} (float)</li>
+     *   <li>{@code camera_view.m22} (float)</li>
+     *   <li>{@code camera_view.m23} (float)</li>
+     *   <li>{@code camera_view.m24} (float)</li>
+     *   <li>{@code camera_view.m31} (float)</li>
+     *   <li>{@code camera_view.m32} (float)</li>
+     *   <li>{@code camera_view.m33} (float)</li>
+     *   <li>{@code camera_view.m34} (float)</li>
+     *   <li>{@code camera_view.m41} (float)</li>
+     *   <li>{@code camera_view.m42} (float)</li>
+     *   <li>{@code camera_view.m43} (float)</li>
+     *   <li>{@code camera_view.m44} (float)</li>
+     * </ol>
+     */
+    public static native int effectGetShadowCascadesExt(long effect, byte[] outStateBytes, long[] outStateIntegral, float[] outStateFloating);
+
+    /**
      * cna_effect_get_shadow_depth_bias_ext (engine_layer.h).
      */
     public static native int effectGetShadowDepthBiasExt(long effect, float[] outBias);
@@ -3255,6 +3362,113 @@ public final class NativeEngineLayerRoutes {
      * </ol>
      */
     public static native int effectSetPunctualLightExt(long effect, long[] lightIntegral, float[] lightFloating);
+
+    /**
+     * cna_effect_set_shadow_cascades_ext (engine_layer.h).
+     *
+     * <p>stateBytes carries CNA_ShadowCascadeStateEXT in this order:
+     * <ol start="0">
+     *   <li>{@code reserved[0]} (uint8_t)</li>
+     *   <li>{@code reserved[1]} (uint8_t)</li>
+     *   <li>{@code reserved[2]} (uint8_t)</li>
+     * </ol>
+     *
+     * <p>stateIntegral carries CNA_ShadowCascadeStateEXT in this order:
+     * <ol start="0">
+     *   <li>{@code count} (int32_t)</li>
+     *   <li>{@code debug_tint} (CNA_Bool)</li>
+     * </ol>
+     *
+     * <p>stateFloating carries CNA_ShadowCascadeStateEXT in this order:
+     * <ol start="0">
+     *   <li>{@code blend_band} (float)</li>
+     *   <li>{@code world_to_atlas[0].m11} (float)</li>
+     *   <li>{@code world_to_atlas[0].m12} (float)</li>
+     *   <li>{@code world_to_atlas[0].m13} (float)</li>
+     *   <li>{@code world_to_atlas[0].m14} (float)</li>
+     *   <li>{@code world_to_atlas[0].m21} (float)</li>
+     *   <li>{@code world_to_atlas[0].m22} (float)</li>
+     *   <li>{@code world_to_atlas[0].m23} (float)</li>
+     *   <li>{@code world_to_atlas[0].m24} (float)</li>
+     *   <li>{@code world_to_atlas[0].m31} (float)</li>
+     *   <li>{@code world_to_atlas[0].m32} (float)</li>
+     *   <li>{@code world_to_atlas[0].m33} (float)</li>
+     *   <li>{@code world_to_atlas[0].m34} (float)</li>
+     *   <li>{@code world_to_atlas[0].m41} (float)</li>
+     *   <li>{@code world_to_atlas[0].m42} (float)</li>
+     *   <li>{@code world_to_atlas[0].m43} (float)</li>
+     *   <li>{@code world_to_atlas[0].m44} (float)</li>
+     *   <li>{@code world_to_atlas[1].m11} (float)</li>
+     *   <li>{@code world_to_atlas[1].m12} (float)</li>
+     *   <li>{@code world_to_atlas[1].m13} (float)</li>
+     *   <li>{@code world_to_atlas[1].m14} (float)</li>
+     *   <li>{@code world_to_atlas[1].m21} (float)</li>
+     *   <li>{@code world_to_atlas[1].m22} (float)</li>
+     *   <li>{@code world_to_atlas[1].m23} (float)</li>
+     *   <li>{@code world_to_atlas[1].m24} (float)</li>
+     *   <li>{@code world_to_atlas[1].m31} (float)</li>
+     *   <li>{@code world_to_atlas[1].m32} (float)</li>
+     *   <li>{@code world_to_atlas[1].m33} (float)</li>
+     *   <li>{@code world_to_atlas[1].m34} (float)</li>
+     *   <li>{@code world_to_atlas[1].m41} (float)</li>
+     *   <li>{@code world_to_atlas[1].m42} (float)</li>
+     *   <li>{@code world_to_atlas[1].m43} (float)</li>
+     *   <li>{@code world_to_atlas[1].m44} (float)</li>
+     *   <li>{@code world_to_atlas[2].m11} (float)</li>
+     *   <li>{@code world_to_atlas[2].m12} (float)</li>
+     *   <li>{@code world_to_atlas[2].m13} (float)</li>
+     *   <li>{@code world_to_atlas[2].m14} (float)</li>
+     *   <li>{@code world_to_atlas[2].m21} (float)</li>
+     *   <li>{@code world_to_atlas[2].m22} (float)</li>
+     *   <li>{@code world_to_atlas[2].m23} (float)</li>
+     *   <li>{@code world_to_atlas[2].m24} (float)</li>
+     *   <li>{@code world_to_atlas[2].m31} (float)</li>
+     *   <li>{@code world_to_atlas[2].m32} (float)</li>
+     *   <li>{@code world_to_atlas[2].m33} (float)</li>
+     *   <li>{@code world_to_atlas[2].m34} (float)</li>
+     *   <li>{@code world_to_atlas[2].m41} (float)</li>
+     *   <li>{@code world_to_atlas[2].m42} (float)</li>
+     *   <li>{@code world_to_atlas[2].m43} (float)</li>
+     *   <li>{@code world_to_atlas[2].m44} (float)</li>
+     *   <li>{@code world_to_atlas[3].m11} (float)</li>
+     *   <li>{@code world_to_atlas[3].m12} (float)</li>
+     *   <li>{@code world_to_atlas[3].m13} (float)</li>
+     *   <li>{@code world_to_atlas[3].m14} (float)</li>
+     *   <li>{@code world_to_atlas[3].m21} (float)</li>
+     *   <li>{@code world_to_atlas[3].m22} (float)</li>
+     *   <li>{@code world_to_atlas[3].m23} (float)</li>
+     *   <li>{@code world_to_atlas[3].m24} (float)</li>
+     *   <li>{@code world_to_atlas[3].m31} (float)</li>
+     *   <li>{@code world_to_atlas[3].m32} (float)</li>
+     *   <li>{@code world_to_atlas[3].m33} (float)</li>
+     *   <li>{@code world_to_atlas[3].m34} (float)</li>
+     *   <li>{@code world_to_atlas[3].m41} (float)</li>
+     *   <li>{@code world_to_atlas[3].m42} (float)</li>
+     *   <li>{@code world_to_atlas[3].m43} (float)</li>
+     *   <li>{@code world_to_atlas[3].m44} (float)</li>
+     *   <li>{@code split_distance[0]} (float)</li>
+     *   <li>{@code split_distance[1]} (float)</li>
+     *   <li>{@code split_distance[2]} (float)</li>
+     *   <li>{@code split_distance[3]} (float)</li>
+     *   <li>{@code camera_view.m11} (float)</li>
+     *   <li>{@code camera_view.m12} (float)</li>
+     *   <li>{@code camera_view.m13} (float)</li>
+     *   <li>{@code camera_view.m14} (float)</li>
+     *   <li>{@code camera_view.m21} (float)</li>
+     *   <li>{@code camera_view.m22} (float)</li>
+     *   <li>{@code camera_view.m23} (float)</li>
+     *   <li>{@code camera_view.m24} (float)</li>
+     *   <li>{@code camera_view.m31} (float)</li>
+     *   <li>{@code camera_view.m32} (float)</li>
+     *   <li>{@code camera_view.m33} (float)</li>
+     *   <li>{@code camera_view.m34} (float)</li>
+     *   <li>{@code camera_view.m41} (float)</li>
+     *   <li>{@code camera_view.m42} (float)</li>
+     *   <li>{@code camera_view.m43} (float)</li>
+     *   <li>{@code camera_view.m44} (float)</li>
+     * </ol>
+     */
+    public static native int effectSetShadowCascadesExt(long effect, byte[] stateBytes, long[] stateIntegral, float[] stateFloating);
 
     /**
      * cna_effect_set_shadow_depth_bias_ext (engine_layer.h).
@@ -6032,6 +6246,113 @@ public final class NativeEngineLayerRoutes {
      * cna_shader_effect_factory_get_compile_count (engine_layer.h).
      */
     public static native int shaderEffectFactoryGetCompileCount(long factory, long[] outCompileCount);
+
+    /**
+     * cna_shadow_cascade_state_ext_init (engine_layer.h).
+     *
+     * <p>outStateBytes carries CNA_ShadowCascadeStateEXT in this order:
+     * <ol start="0">
+     *   <li>{@code reserved[0]} (uint8_t)</li>
+     *   <li>{@code reserved[1]} (uint8_t)</li>
+     *   <li>{@code reserved[2]} (uint8_t)</li>
+     * </ol>
+     *
+     * <p>outStateIntegral carries CNA_ShadowCascadeStateEXT in this order:
+     * <ol start="0">
+     *   <li>{@code count} (int32_t)</li>
+     *   <li>{@code debug_tint} (CNA_Bool)</li>
+     * </ol>
+     *
+     * <p>outStateFloating carries CNA_ShadowCascadeStateEXT in this order:
+     * <ol start="0">
+     *   <li>{@code blend_band} (float)</li>
+     *   <li>{@code world_to_atlas[0].m11} (float)</li>
+     *   <li>{@code world_to_atlas[0].m12} (float)</li>
+     *   <li>{@code world_to_atlas[0].m13} (float)</li>
+     *   <li>{@code world_to_atlas[0].m14} (float)</li>
+     *   <li>{@code world_to_atlas[0].m21} (float)</li>
+     *   <li>{@code world_to_atlas[0].m22} (float)</li>
+     *   <li>{@code world_to_atlas[0].m23} (float)</li>
+     *   <li>{@code world_to_atlas[0].m24} (float)</li>
+     *   <li>{@code world_to_atlas[0].m31} (float)</li>
+     *   <li>{@code world_to_atlas[0].m32} (float)</li>
+     *   <li>{@code world_to_atlas[0].m33} (float)</li>
+     *   <li>{@code world_to_atlas[0].m34} (float)</li>
+     *   <li>{@code world_to_atlas[0].m41} (float)</li>
+     *   <li>{@code world_to_atlas[0].m42} (float)</li>
+     *   <li>{@code world_to_atlas[0].m43} (float)</li>
+     *   <li>{@code world_to_atlas[0].m44} (float)</li>
+     *   <li>{@code world_to_atlas[1].m11} (float)</li>
+     *   <li>{@code world_to_atlas[1].m12} (float)</li>
+     *   <li>{@code world_to_atlas[1].m13} (float)</li>
+     *   <li>{@code world_to_atlas[1].m14} (float)</li>
+     *   <li>{@code world_to_atlas[1].m21} (float)</li>
+     *   <li>{@code world_to_atlas[1].m22} (float)</li>
+     *   <li>{@code world_to_atlas[1].m23} (float)</li>
+     *   <li>{@code world_to_atlas[1].m24} (float)</li>
+     *   <li>{@code world_to_atlas[1].m31} (float)</li>
+     *   <li>{@code world_to_atlas[1].m32} (float)</li>
+     *   <li>{@code world_to_atlas[1].m33} (float)</li>
+     *   <li>{@code world_to_atlas[1].m34} (float)</li>
+     *   <li>{@code world_to_atlas[1].m41} (float)</li>
+     *   <li>{@code world_to_atlas[1].m42} (float)</li>
+     *   <li>{@code world_to_atlas[1].m43} (float)</li>
+     *   <li>{@code world_to_atlas[1].m44} (float)</li>
+     *   <li>{@code world_to_atlas[2].m11} (float)</li>
+     *   <li>{@code world_to_atlas[2].m12} (float)</li>
+     *   <li>{@code world_to_atlas[2].m13} (float)</li>
+     *   <li>{@code world_to_atlas[2].m14} (float)</li>
+     *   <li>{@code world_to_atlas[2].m21} (float)</li>
+     *   <li>{@code world_to_atlas[2].m22} (float)</li>
+     *   <li>{@code world_to_atlas[2].m23} (float)</li>
+     *   <li>{@code world_to_atlas[2].m24} (float)</li>
+     *   <li>{@code world_to_atlas[2].m31} (float)</li>
+     *   <li>{@code world_to_atlas[2].m32} (float)</li>
+     *   <li>{@code world_to_atlas[2].m33} (float)</li>
+     *   <li>{@code world_to_atlas[2].m34} (float)</li>
+     *   <li>{@code world_to_atlas[2].m41} (float)</li>
+     *   <li>{@code world_to_atlas[2].m42} (float)</li>
+     *   <li>{@code world_to_atlas[2].m43} (float)</li>
+     *   <li>{@code world_to_atlas[2].m44} (float)</li>
+     *   <li>{@code world_to_atlas[3].m11} (float)</li>
+     *   <li>{@code world_to_atlas[3].m12} (float)</li>
+     *   <li>{@code world_to_atlas[3].m13} (float)</li>
+     *   <li>{@code world_to_atlas[3].m14} (float)</li>
+     *   <li>{@code world_to_atlas[3].m21} (float)</li>
+     *   <li>{@code world_to_atlas[3].m22} (float)</li>
+     *   <li>{@code world_to_atlas[3].m23} (float)</li>
+     *   <li>{@code world_to_atlas[3].m24} (float)</li>
+     *   <li>{@code world_to_atlas[3].m31} (float)</li>
+     *   <li>{@code world_to_atlas[3].m32} (float)</li>
+     *   <li>{@code world_to_atlas[3].m33} (float)</li>
+     *   <li>{@code world_to_atlas[3].m34} (float)</li>
+     *   <li>{@code world_to_atlas[3].m41} (float)</li>
+     *   <li>{@code world_to_atlas[3].m42} (float)</li>
+     *   <li>{@code world_to_atlas[3].m43} (float)</li>
+     *   <li>{@code world_to_atlas[3].m44} (float)</li>
+     *   <li>{@code split_distance[0]} (float)</li>
+     *   <li>{@code split_distance[1]} (float)</li>
+     *   <li>{@code split_distance[2]} (float)</li>
+     *   <li>{@code split_distance[3]} (float)</li>
+     *   <li>{@code camera_view.m11} (float)</li>
+     *   <li>{@code camera_view.m12} (float)</li>
+     *   <li>{@code camera_view.m13} (float)</li>
+     *   <li>{@code camera_view.m14} (float)</li>
+     *   <li>{@code camera_view.m21} (float)</li>
+     *   <li>{@code camera_view.m22} (float)</li>
+     *   <li>{@code camera_view.m23} (float)</li>
+     *   <li>{@code camera_view.m24} (float)</li>
+     *   <li>{@code camera_view.m31} (float)</li>
+     *   <li>{@code camera_view.m32} (float)</li>
+     *   <li>{@code camera_view.m33} (float)</li>
+     *   <li>{@code camera_view.m34} (float)</li>
+     *   <li>{@code camera_view.m41} (float)</li>
+     *   <li>{@code camera_view.m42} (float)</li>
+     *   <li>{@code camera_view.m43} (float)</li>
+     *   <li>{@code camera_view.m44} (float)</li>
+     * </ol>
+     */
+    public static native int shadowCascadeStateExtInit(byte[] outStateBytes, long[] outStateIntegral, float[] outStateFloating);
 
     /**
      * cna_shadow_map_apply_caster (engine_layer.h).

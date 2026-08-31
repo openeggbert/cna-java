@@ -664,6 +664,7 @@
     CNA_JNI_ROUTE(cna_effect_copy_type_name) effect_copy_type_name;
     CNA_JNI_ROUTE(cna_effect_get_light_view_projection_ext) effect_get_light_view_projection_ext;
     CNA_JNI_ROUTE(cna_effect_get_punctual_light_ext) effect_get_punctual_light_ext;
+    CNA_JNI_ROUTE(cna_effect_get_shadow_cascades_ext) effect_get_shadow_cascades_ext;
     CNA_JNI_ROUTE(cna_effect_get_shadow_depth_bias_ext) effect_get_shadow_depth_bias_ext;
     CNA_JNI_ROUTE(cna_effect_get_shadow_filter_radius_ext) effect_get_shadow_filter_radius_ext;
     CNA_JNI_ROUTE(cna_effect_get_shadow_map_ext) effect_get_shadow_map_ext;
@@ -672,6 +673,7 @@
     CNA_JNI_ROUTE(cna_effect_set_image_based_light_ext) effect_set_image_based_light_ext;
     CNA_JNI_ROUTE(cna_effect_set_light_view_projection_ext) effect_set_light_view_projection_ext;
     CNA_JNI_ROUTE(cna_effect_set_punctual_light_ext) effect_set_punctual_light_ext;
+    CNA_JNI_ROUTE(cna_effect_set_shadow_cascades_ext) effect_set_shadow_cascades_ext;
     CNA_JNI_ROUTE(cna_effect_set_shadow_depth_bias_ext) effect_set_shadow_depth_bias_ext;
     CNA_JNI_ROUTE(cna_effect_set_shadow_filter_radius_ext) effect_set_shadow_filter_radius_ext;
     CNA_JNI_ROUTE(cna_effect_set_shadow_map_ext) effect_set_shadow_map_ext;
@@ -1416,6 +1418,7 @@
     CNA_JNI_ROUTE(cna_shader_effect_factory_create) shader_effect_factory_create;
     CNA_JNI_ROUTE(cna_shader_effect_factory_destroy) shader_effect_factory_destroy;
     CNA_JNI_ROUTE(cna_shader_effect_factory_get_compile_count) shader_effect_factory_get_compile_count;
+    CNA_JNI_ROUTE(cna_shadow_cascade_state_ext_init) shadow_cascade_state_ext_init;
     CNA_JNI_ROUTE(cna_shadow_map_apply_caster) shadow_map_apply_caster;
     CNA_JNI_ROUTE(cna_shadow_map_apply_skinned_caster) shadow_map_apply_skinned_caster;
     CNA_JNI_ROUTE(cna_shadow_map_begin) shadow_map_begin;

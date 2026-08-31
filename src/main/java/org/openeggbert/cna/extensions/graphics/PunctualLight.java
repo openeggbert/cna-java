@@ -217,16 +217,7 @@ public final class PunctualLight {
                 new Vector3(floating[3], floating[4], floating[5]),
                 new Vector3(floating[6], floating[7], floating[8]),
                 floating[9], floating[10], floating[11], floating[12],
-                null, null, matrixAt(floating, 13));
-    }
-
-    /** Reads the shadow transform out of the flat leaves, which start at a fixed offset. */
-    private static Matrix matrixAt(float[] leaves, int base) {
-        return new Matrix(
-                leaves[base], leaves[base + 1], leaves[base + 2], leaves[base + 3],
-                leaves[base + 4], leaves[base + 5], leaves[base + 6], leaves[base + 7],
-                leaves[base + 8], leaves[base + 9], leaves[base + 10], leaves[base + 11],
-                leaves[base + 12], leaves[base + 13], leaves[base + 14], leaves[base + 15]);
+                null, null, EngineValues.matrixAt(floating, 13));
     }
 
     /** The integral leaves CNA's structure declares, in declaration order. */

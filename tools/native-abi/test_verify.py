@@ -459,6 +459,49 @@ def test_generator(live: dict) -> None:
           "the array write-back still happens only on success, because a refused copy wrote "
           "nothing into the buffer")
 
+    # A fixed array inside a structure is a layout, not a shape to refuse. Two of them were
+    # refused until now for reasons that were nothing to do with the array: an extent written as
+    # one of CNA's own macros, and elements that are themselves structures.
+    cascades = generator_tool.flatten_struct("CNA_ShadowCascadeStateEXT", live)
+    check(("world_to_atlas[3].m44", "float") in cascades,
+          "a macro extent is resolved through CNA's own constant rather than refused")
+    check(sum(1 for path, _ in cascades if path.startswith("world_to_atlas[")) == 64,
+          "four cascade transforms are sixty-four leaves, not one matrix")
+    check(("split_distance[3]", "float") in cascades,
+          "and the scalar array beside it expands the same way")
+
+    material = generator_tool.flatten_struct("CNA_PbrMaterialEXT", live)
+    check(("texture_transforms[6].offset.x", "float") in material,
+          "an array whose elements are structures expands element by element")
+    check(sum(1 for path, _ in material if path.startswith("texture_coordinate_sets[")) == 7,
+          "and the plain array beside it keeps its own extent")
+
+    # The half of that which is silent when it is wrong: every element of an array of versioned
+    # structures has to be stamped, not just the first. Seven unstamped texture transforms would
+    # each tell CNA they were zero bytes long, and nothing in Java would ever say so.
+    stamped = generator_tool.version_paths("CNA_PbrMaterialEXT", live)
+    check(sum(1 for path, _, _ in stamped
+              if path.startswith("texture_transforms[") and path.endswith("struct_size")) == 7,
+          "every element of an array of versioned structures is stamped")
+    lines = generator_tool.stamp_versions("material", stamped)
+    check("    material.texture_transforms[6].struct_size = "
+          "(uint32_t)(sizeof material.texture_transforms[6]);" in lines,
+          "and each is sized from itself rather than from the outer structure")
+    check(not any(path.rsplit(".", 1)[-1] in generator_tool.VERSION_FIELDS
+                  for path, _ in generator_tool.group_leaves(material)["integral"]),
+          "a nested stamped field never crosses into Java, however deeply nested it is")
+
+    # An extent the generator cannot resolve to a plain positive integer is refused rather than
+    # evaluated, because guessing at an expression is how a structure is silently mis-sized.
+    for bad in ("CNA_NOT_A_CONSTANT", "0"):
+        try:
+            generator_tool.array_extent("probe.field", bad, live)
+            check(False, f"an unresolvable array extent {bad} is refused")
+        except generator_tool.Unsupported:
+            check(True, f"an unresolvable array extent {bad} is refused")
+    check(generator_tool.array_extent("probe.field", "CNA_SHADOW_CASCADE_MAX_EXT", live) == 4,
+          "a resolvable one is resolved")
+
     # The generator refuses a shape it cannot prove rather than guessing at it.
     try:
         plan("cna_text_input_subscribe_text_input_ext")

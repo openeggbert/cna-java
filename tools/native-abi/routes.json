@@ -6287,6 +6287,18 @@
         "symbol": "cna_post_process_effect_pass_set_effect"
       },
       {
+        "java": "effectGetShadowCascadesExt",
+        "symbol": "cna_effect_get_shadow_cascades_ext"
+      },
+      {
+        "java": "effectSetShadowCascadesExt",
+        "symbol": "cna_effect_set_shadow_cascades_ext"
+      },
+      {
+        "java": "shadowCascadeStateExtInit",
+        "symbol": "cna_shadow_cascade_state_ext_init"
+      },
+      {
         "java": "shaderEffectFactoryAcquire",
         "symbol": "cna_shader_effect_factory_acquire"
       },

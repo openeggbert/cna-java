@@ -200,6 +200,40 @@ public final class EffectLighting {
     }
 
     /**
+     * Gives an effect the cascaded-shadow state to sample with.
+     *
+     * <p>The other half of {@link #setShadowMap}: a single shadow map needs one transform, and a
+     * cascaded one needs four along with the distances that say which to use. {@link
+     * ShadowCascadeState#of} builds the state from a {@link CascadedShadowMap}, so a game does not
+     * copy four transforms by hand each frame.
+     *
+     * @param effect the effect
+     * @param state the state; a count of zero disables cascaded shadows
+     */
+    public static void setShadowCascades(Effect effect, ShadowCascadeState state) {
+        Objects.requireNonNull(state, "state");
+        GraphicsExtension.check("EffectLighting.setShadowCascades",
+                NativeEngineLayerRoutes.effectSetShadowCascadesExt(handle(effect), state.bytes(),
+                        state.integral(), state.floating()));
+    }
+
+    /**
+     * Returns the cascaded-shadow state an effect samples with.
+     *
+     * @param effect the effect
+     * @return the state
+     */
+    public static ShadowCascadeState getShadowCascades(Effect effect) {
+        byte[] bytes = new byte[3];
+        long[] integral = new long[2];
+        float[] floating = new float[85];
+        GraphicsExtension.check("EffectLighting.getShadowCascades",
+                NativeEngineLayerRoutes.effectGetShadowCascadesExt(handle(effect), bytes,
+                        integral, floating));
+        return ShadowCascadeState.fromLeaves(integral, floating);
+    }
+
+    /**
      * Gives an effect an environment to light from.
      *
      * @param effect the effect
