@@ -366,6 +366,7 @@
     LOAD(display_info_get_safe_area_ext, "cna_display_info_get_safe_area_ext");
     LOAD(effect_copy_type_name, "cna_effect_copy_type_name");
     LOAD(effect_get_type_name_byte_count, "cna_effect_get_type_name_byte_count");
+    LOAD(engine_layer_get_version, "cna_engine_layer_get_version");
     LOAD(friend_collection_get_is_disposed, "cna_friend_collection_get_is_disposed");
     LOAD(friend_gamer_copy_presence, "cna_friend_gamer_copy_presence");
     LOAD(friend_gamer_get_info, "cna_friend_gamer_get_info");
@@ -594,6 +595,19 @@
     LOAD(locale_get_country_size_at_ext, "cna_locale_get_country_size_at_ext");
     LOAD(locale_get_language_size_at_ext, "cna_locale_get_language_size_at_ext");
     LOAD(locale_get_preferred_count_ext, "cna_locale_get_preferred_count_ext");
+    LOAD(lod_group_ext_add_level, "cna_lod_group_ext_add_level");
+    LOAD(lod_group_ext_clear, "cna_lod_group_ext_clear");
+    LOAD(lod_group_ext_copy_levels, "cna_lod_group_ext_copy_levels");
+    LOAD(lod_group_ext_create, "cna_lod_group_ext_create");
+    LOAD(lod_group_ext_destroy, "cna_lod_group_ext_destroy");
+    LOAD(lod_group_ext_get_hysteresis, "cna_lod_group_ext_get_hysteresis");
+    LOAD(lod_group_ext_get_selection_mode, "cna_lod_group_ext_get_selection_mode");
+    LOAD(lod_group_ext_projected_radius_pixels, "cna_lod_group_ext_projected_radius_pixels");
+    LOAD(lod_group_ext_reset_hysteresis, "cna_lod_group_ext_reset_hysteresis");
+    LOAD(lod_group_ext_select_index, "cna_lod_group_ext_select_index");
+    LOAD(lod_group_ext_set_hysteresis, "cna_lod_group_ext_set_hysteresis");
+    LOAD(lod_group_ext_set_screen_space_parameters, "cna_lod_group_ext_set_screen_space_parameters");
+    LOAD(lod_group_ext_set_selection_mode, "cna_lod_group_ext_set_selection_mode");
     LOAD(logger_get_minimum_level, "cna_logger_get_minimum_level");
     LOAD(logger_log, "cna_logger_log");
     LOAD(logger_set_minimum_level, "cna_logger_set_minimum_level");

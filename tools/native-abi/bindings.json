@@ -6152,6 +6152,15 @@
       ]
     },
     {
+      "name": "cna_engine_layer_get_version",
+      "header": "engine_layer.h",
+      "ownership": "no handle; caller integer output",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "int32_t*"
+      ]
+    },
+    {
       "name": "cna_environment_map_effect_create",
       "header": "effects.h",
       "ownership": "borrows device; returns owned executable EnvironmentMapEffect",
@@ -10518,6 +10527,139 @@
       "parameters": [
         "CNA_Handle",
         "uint64_t*"
+      ]
+    },
+    {
+      "name": "cna_lod_group_ext_add_level",
+      "header": "engine_layer.h",
+      "ownership": "borrows the group and the caller's mesh part",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_LodGroupEXTHandle",
+        "float",
+        "CNA_ModelMeshPartHandle"
+      ]
+    },
+    {
+      "name": "cna_lod_group_ext_clear",
+      "header": "engine_layer.h",
+      "ownership": "borrows the group",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_LodGroupEXTHandle"
+      ]
+    },
+    {
+      "name": "cna_lod_group_ext_copy_levels",
+      "header": "engine_layer.h",
+      "ownership": "borrows the group; caller buffer of borrowed part handles",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_LodGroupEXTHandle",
+        "CNA_LodLevelEXT*",
+        "uint64_t",
+        "uint64_t*"
+      ]
+    },
+    {
+      "name": "cna_lod_group_ext_create",
+      "header": "engine_layer.h",
+      "ownership": "no handle; returns an owned LOD-group handle",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_LodGroupEXTHandle*"
+      ]
+    },
+    {
+      "name": "cna_lod_group_ext_destroy",
+      "header": "engine_layer.h",
+      "ownership": "releases the owned LOD-group handle; the mesh parts it held are borrowed and are not released with it",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_LodGroupEXTHandle"
+      ]
+    },
+    {
+      "name": "cna_lod_group_ext_get_hysteresis",
+      "header": "engine_layer.h",
+      "ownership": "borrows the group; caller value output",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_LodGroupEXTHandle",
+        "float*"
+      ]
+    },
+    {
+      "name": "cna_lod_group_ext_get_selection_mode",
+      "header": "engine_layer.h",
+      "ownership": "borrows the group; caller identity output",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_LodGroupEXTHandle",
+        "CNA_LodSelectionMode*"
+      ]
+    },
+    {
+      "name": "cna_lod_group_ext_projected_radius_pixels",
+      "header": "engine_layer.h",
+      "ownership": "borrows the group; caller value output",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_LodGroupEXTHandle",
+        "float",
+        "float*"
+      ]
+    },
+    {
+      "name": "cna_lod_group_ext_reset_hysteresis",
+      "header": "engine_layer.h",
+      "ownership": "borrows the group",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_LodGroupEXTHandle"
+      ]
+    },
+    {
+      "name": "cna_lod_group_ext_select_index",
+      "header": "engine_layer.h",
+      "ownership": "borrows the group; caller integer output",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_LodGroupEXTHandle",
+        "float",
+        "int32_t*"
+      ]
+    },
+    {
+      "name": "cna_lod_group_ext_set_hysteresis",
+      "header": "engine_layer.h",
+      "ownership": "borrows the group; value parameter",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_LodGroupEXTHandle",
+        "float"
+      ]
+    },
+    {
+      "name": "cna_lod_group_ext_set_screen_space_parameters",
+      "header": "engine_layer.h",
+      "ownership": "borrows the group; value parameters",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_LodGroupEXTHandle",
+        "float",
+        "float",
+        "float"
+      ]
+    },
+    {
+      "name": "cna_lod_group_ext_set_selection_mode",
+      "header": "engine_layer.h",
+      "ownership": "borrows the group; value parameter",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_LodGroupEXTHandle",
+        "CNA_LodSelectionMode"
       ]
     },
     {

@@ -3385,6 +3385,64 @@
         "java": "curveSetPreLoop",
         "symbol": "cna_curve_set_pre_loop"
       }
+    ],
+    "NativeEngineLayerRoutes": [
+      {
+        "java": "engineLayerGetVersion",
+        "symbol": "cna_engine_layer_get_version"
+      },
+      {
+        "java": "lodGroupExtAddLevel",
+        "symbol": "cna_lod_group_ext_add_level"
+      },
+      {
+        "java": "lodGroupExtClear",
+        "symbol": "cna_lod_group_ext_clear"
+      },
+      {
+        "java": "lodGroupExtCopyLevels",
+        "symbol": "cna_lod_group_ext_copy_levels"
+      },
+      {
+        "java": "lodGroupExtCreate",
+        "symbol": "cna_lod_group_ext_create"
+      },
+      {
+        "java": "lodGroupExtDestroy",
+        "symbol": "cna_lod_group_ext_destroy"
+      },
+      {
+        "java": "lodGroupExtGetHysteresis",
+        "symbol": "cna_lod_group_ext_get_hysteresis"
+      },
+      {
+        "java": "lodGroupExtGetSelectionMode",
+        "symbol": "cna_lod_group_ext_get_selection_mode"
+      },
+      {
+        "java": "lodGroupExtProjectedRadiusPixels",
+        "symbol": "cna_lod_group_ext_projected_radius_pixels"
+      },
+      {
+        "java": "lodGroupExtResetHysteresis",
+        "symbol": "cna_lod_group_ext_reset_hysteresis"
+      },
+      {
+        "java": "lodGroupExtSelectIndex",
+        "symbol": "cna_lod_group_ext_select_index"
+      },
+      {
+        "java": "lodGroupExtSetHysteresis",
+        "symbol": "cna_lod_group_ext_set_hysteresis"
+      },
+      {
+        "java": "lodGroupExtSetScreenSpaceParameters",
+        "symbol": "cna_lod_group_ext_set_screen_space_parameters"
+      },
+      {
+        "java": "lodGroupExtSetSelectionMode",
+        "symbol": "cna_lod_group_ext_set_selection_mode"
+      }
     ]
   }
 }

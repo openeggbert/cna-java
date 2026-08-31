@@ -31,3 +31,15 @@ It also earned its keep twice over: the first two runs failed, and taught the Ja
 things CNA requires that no header comment states outright -- a part's declared
 `vertex_stride * vertex_count` has to equal the bytes it holds, and the primitive topology of a
 triangle list is 4.
+
+## engine_layer_families.c
+
+Asks which engine-layer families can be created in this HEADLESS/HEADLESS configuration, because
+"the layer reports itself available" and "this family does anything without a GPU" are different
+questions, and binding a family that answers NOT_SUPPORTED to everything would be shipping an API
+nobody can call.
+
+Its answer on ABI 0.21.0: the layer is present at revision 2, `cna_lod_group_ext_create` succeeds
+with no device at all, and both `cna_debug_draw_create` and `cna_particle_system_create` refuse an
+invalid device -- so those two want a real one and belong in a test that runs inside a `Game`.
+That is why the LOD group was the first engine-layer family projected.

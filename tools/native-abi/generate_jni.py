@@ -837,6 +837,22 @@ def main() -> int:
     declarations, loads = render_table(all_entries)
     emit(GENERATED_C / "routes_table.inc", declarations)
     emit(GENERATED_C / "routes_load.inc", loads)
+    # The adapter includes this one file rather than each class by name. A hand-maintained list
+    # is a list somebody forgets: a new generated class whose .inc was never included compiles
+    # and links, and every one of its routes fails at first call with UnsatisfiedLinkError.
+    # That happened once, which is why this file exists.
+    emit(GENERATED_C / "routes_includes.inc",
+         "/* SPDX-License-Identifier: MS-PL */\n"
+         "/*\n"
+         " * Every generated JNI implementation, in one place.\n"
+         " *\n"
+         " * Produced by tools/native-abi/generate_jni.py. Do not edit: adding a route class to\n"
+         " * routes.json is what adds it here, so the adapter cannot be missing one.\n"
+         " */\n\n"
+         # Included from this file's own directory, not the adapter's, because that is where
+         # the C preprocessor looks first for a quoted include.
+         + "".join(f'#include "{class_name}.inc"\n'
+                   for class_name in sorted(specification["classes"])))
 
     print(f"GENERATED_CLASSES={len(specification['classes'])}")
     print(f"GENERATED_ROUTES={len(all_entries)}")

@@ -428,6 +428,21 @@
         "AvatarExtensionTests"
       ],
       "note": "cnanext's own AvatarsSmoke can only check that real rendering refuses an invalid model, because the C container has no skinned model to hand it either."
+    },
+    {
+      "id": "JAVA-EXT-008",
+      "title": "Project CNA's engine layer, one family at a time",
+      "family": "org.openeggbert.cna.extensions.graphics",
+      "authority": "engine_layer.h",
+      "status": "ready",
+      "priority": 7,
+      "currentState": "14 of the 857 routes are bound and reached: the layer's revision, and the LOD group -- level selection by distance or by projected screen size, with hysteresis. It was chosen first because tools/native-abi/probes/engine_layer_families.c measured that it is the one family that needs no graphics device, so it is fully qualified in this HEADLESS configuration rather than partly.",
+      "expectedState": "More families as each earns a consumer and can be qualified. The layer is a modern renderer -- clustered forward lighting, cascaded and contact and cube shadows, SSAO, SSR, tonemapping, auto-exposure, atmospheric sky, decals, particles, debug draw, instancing, light probes -- none of which XNA 4.0 has any counterpart for, so every family is an addition rather than a member being filled in. It is 857 routes and the wrong way to spend them is mechanically: a coherent Java type per family, with the parts that cannot be honestly qualified here left unbound and said so.",
+      "blocker": "None, but most families need a real graphics device. The probe found that debug draw and the particle system both refuse an invalid one, so those tests have to run inside a Game, and anything whose result is a rendered image cannot be checked in a HEADLESS renderer at all -- which has to be stated rather than asserted around.",
+      "tests": [
+        "LodGroupTests"
+      ],
+      "note": "LodGroup deliberately holds thresholds rather than mesh parts: the Java projection's ModelMeshPart is a managed object with no native handle, so there is nothing to hand CNA and nothing meaningful to receive. selectIndex returns the level and the game draws what it keeps at that index."
     }
   ]
 }

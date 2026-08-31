@@ -12225,13 +12225,7 @@ Java_org_openeggbert_cna_internal_NativeGamerServices_nativeGuideShowMessageBox(
  * Generated JNI entry points. They are included rather than compiled separately so that
  * they share this translation unit's single dispatch table and its helpers.
  */
-#include "generated/NativeGamerServicesRoutes.inc"
-#include "generated/NativeNetworkRoutes.inc"
-#include "generated/NativeGraphicsExtensionRoutes.inc"
-#include "generated/NativeRuntimeExtensionRoutes.inc"
-#include "generated/NativeDeviceExtensionRoutes.inc"
-#include "generated/NativeInputExtensionRoutes.inc"
-#include "generated/NativeSensorExtensionRoutes.inc"
-#include "generated/NativeModelExtensionRoutes.inc"
-#include "generated/NativeCnbRoutes.inc"
+/* Every generated route class, listed by the generator rather than by hand. A class whose .inc
+   was left out of a hand-maintained list still compiles and links, and fails at first call. */
+#include "generated/routes_includes.inc"
 #include "cna_java_jni_events.inc"

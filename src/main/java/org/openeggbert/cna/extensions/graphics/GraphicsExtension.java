@@ -2,6 +2,7 @@ package org.openeggbert.cna.extensions.graphics;
 
 import org.openeggbert.cna.internal.CnaNativeException;
 import org.openeggbert.cna.internal.NativeBindings;
+import org.openeggbert.cna.internal.generated.NativeEngineLayerRoutes;
 import org.openeggbert.cna.internal.generated.NativeGraphicsExtensionRoutes;
 
 /**
@@ -16,6 +17,7 @@ import org.openeggbert.cna.internal.generated.NativeGraphicsExtensionRoutes;
 public final class GraphicsExtension {
 
     private static final int RESULT_SUCCESS = 0;
+    private static final int RESULT_INVALID_ARGUMENT = 1;
     private static final int RESULT_NOT_SUPPORTED = 6;
 
     private GraphicsExtension() {
@@ -35,6 +37,26 @@ public final class GraphicsExtension {
         check("GraphicsExtension.isAvailable",
                 NativeGraphicsExtensionRoutes.graphicsExtIsAvailable(available));
         return available[0];
+    }
+
+    /**
+     * Returns the engine-layer revision the loaded library was built with.
+     *
+     * <p>A revision marker rather than an ABI promise, and the reason to expose it is diagnostic:
+     * CNA's own header says that when this disagrees with the revision the headers declare, a
+     * header and a library from different builds have been mixed. A game that reports it in a
+     * crash log gives whoever reads that log the one fact that explains the whole class of
+     * confusing failures.
+     *
+     * @return the revision, which is the same in every build because the layer's declarations
+     *         always exist even where its objects do not
+     */
+    public static int getEngineLayerVersion() {
+        requireBackend();
+        int[] version = new int[1];
+        check("GraphicsExtension.getEngineLayerVersion",
+                NativeEngineLayerRoutes.engineLayerGetVersion(version));
+        return version[0];
     }
 
     /**
@@ -63,6 +85,12 @@ public final class GraphicsExtension {
                     + " needs CNA's extended graphics layer, which this build does not contain");
         }
         CnaNativeException failure = NativeBindings.failure(operation, result);
+        if (result == RESULT_INVALID_ARGUMENT) {
+            // A value the caller passed, not a native fault. Java has a name for that, and a
+            // caller catching IllegalArgumentException should not have to know that the check
+            // happened on the other side of JNI.
+            throw new IllegalArgumentException(failure.getMessage(), failure);
+        }
         throw failure;
     }
 }

@@ -366,6 +366,7 @@
     CNA_JNI_ROUTE(cna_display_info_get_safe_area_ext) display_info_get_safe_area_ext;
     CNA_JNI_ROUTE(cna_effect_copy_type_name) effect_copy_type_name;
     CNA_JNI_ROUTE(cna_effect_get_type_name_byte_count) effect_get_type_name_byte_count;
+    CNA_JNI_ROUTE(cna_engine_layer_get_version) engine_layer_get_version;
     CNA_JNI_ROUTE(cna_friend_collection_get_is_disposed) friend_collection_get_is_disposed;
     CNA_JNI_ROUTE(cna_friend_gamer_copy_presence) friend_gamer_copy_presence;
     CNA_JNI_ROUTE(cna_friend_gamer_get_info) friend_gamer_get_info;
@@ -594,6 +595,19 @@
     CNA_JNI_ROUTE(cna_locale_get_country_size_at_ext) locale_get_country_size_at_ext;
     CNA_JNI_ROUTE(cna_locale_get_language_size_at_ext) locale_get_language_size_at_ext;
     CNA_JNI_ROUTE(cna_locale_get_preferred_count_ext) locale_get_preferred_count_ext;
+    CNA_JNI_ROUTE(cna_lod_group_ext_add_level) lod_group_ext_add_level;
+    CNA_JNI_ROUTE(cna_lod_group_ext_clear) lod_group_ext_clear;
+    CNA_JNI_ROUTE(cna_lod_group_ext_copy_levels) lod_group_ext_copy_levels;
+    CNA_JNI_ROUTE(cna_lod_group_ext_create) lod_group_ext_create;
+    CNA_JNI_ROUTE(cna_lod_group_ext_destroy) lod_group_ext_destroy;
+    CNA_JNI_ROUTE(cna_lod_group_ext_get_hysteresis) lod_group_ext_get_hysteresis;
+    CNA_JNI_ROUTE(cna_lod_group_ext_get_selection_mode) lod_group_ext_get_selection_mode;
+    CNA_JNI_ROUTE(cna_lod_group_ext_projected_radius_pixels) lod_group_ext_projected_radius_pixels;
+    CNA_JNI_ROUTE(cna_lod_group_ext_reset_hysteresis) lod_group_ext_reset_hysteresis;
+    CNA_JNI_ROUTE(cna_lod_group_ext_select_index) lod_group_ext_select_index;
+    CNA_JNI_ROUTE(cna_lod_group_ext_set_hysteresis) lod_group_ext_set_hysteresis;
+    CNA_JNI_ROUTE(cna_lod_group_ext_set_screen_space_parameters) lod_group_ext_set_screen_space_parameters;
+    CNA_JNI_ROUTE(cna_lod_group_ext_set_selection_mode) lod_group_ext_set_selection_mode;
     CNA_JNI_ROUTE(cna_logger_get_minimum_level) logger_get_minimum_level;
     CNA_JNI_ROUTE(cna_logger_log) logger_log;
     CNA_JNI_ROUTE(cna_logger_set_minimum_level) logger_set_minimum_level;
