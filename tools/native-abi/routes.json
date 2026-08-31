@@ -2828,6 +2828,85 @@
         "symbol": "cna_model_set_material_variant_ext"
       },
       {
+        "java": "morphTargetDataBlend",
+        "symbol": "cna_morph_target_data_ext_blend",
+        "byteBuffers": {
+          "destination": {
+            "extent": [
+              "capacity"
+            ]
+          }
+        }
+      },
+      {
+        "java": "morphTargetDataCopyBaseVertexBytes",
+        "symbol": "cna_morph_target_data_ext_copy_base_vertex_bytes"
+      },
+      {
+        "java": "morphTargetDataCopyNormalDeltas",
+        "symbol": "cna_morph_target_data_ext_copy_normal_deltas"
+      },
+      {
+        "java": "morphTargetDataCopyPositionDeltas",
+        "symbol": "cna_morph_target_data_ext_copy_position_deltas"
+      },
+      {
+        "java": "morphTargetDataCopyTangentDeltas",
+        "symbol": "cna_morph_target_data_ext_copy_tangent_deltas"
+      },
+      {
+        "java": "morphTargetDataCopyTriangleIndicesExt",
+        "symbol": "cna_morph_target_data_ext_copy_triangle_indices_ext"
+      },
+      {
+        "java": "morphTargetDataCopyWeightKeyframe",
+        "symbol": "cna_morph_target_data_ext_copy_weight_keyframe"
+      },
+      {
+        "java": "morphTargetDataCopyWeights",
+        "symbol": "cna_morph_target_data_ext_copy_weights"
+      },
+      {
+        "java": "morphTargetDataDestroy",
+        "symbol": "cna_morph_target_data_ext_destroy"
+      },
+      {
+        "java": "morphTargetDataGetBaseVertexByteCount",
+        "symbol": "cna_morph_target_data_ext_get_base_vertex_byte_count"
+      },
+      {
+        "java": "morphTargetDataGetRecomputeFlatNormalsExt",
+        "symbol": "cna_morph_target_data_ext_get_recompute_flat_normals_ext"
+      },
+      {
+        "java": "morphTargetDataGetStride",
+        "symbol": "cna_morph_target_data_ext_get_stride"
+      },
+      {
+        "java": "morphTargetDataGetTargetCount",
+        "symbol": "cna_morph_target_data_ext_get_target_count"
+      },
+      {
+        "java": "morphTargetDataGetWeightTrackInfo",
+        "symbol": "cna_morph_target_data_ext_get_weight_track_info"
+      },
+      {
+        "java": "morphTargetDataSetRecomputeFlatNormalsExt",
+        "symbol": "cna_morph_target_data_ext_set_recompute_flat_normals_ext"
+      },
+      {
+        "java": "morphTargetDataSetTangentDeltas",
+        "symbol": "cna_morph_target_data_ext_set_tangent_deltas"
+      },
+      {
+        "java": "morphTargetDataSetTriangleIndicesExt",
+        "symbol": "cna_morph_target_data_ext_set_triangle_indices_ext"
+      },
+      {
+        "java": "morphTargetDataSetWeights",
+        "symbol": "cna_morph_target_data_ext_set_weights"
+      },
+      {
         "java": "skinnedModelAddPart",
         "symbol": "cna_skinned_model_ext_add_part"
       },

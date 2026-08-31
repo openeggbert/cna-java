@@ -19112,6 +19112,253 @@
       ]
     },
     {
+      "name": "cna_morph_target_data_ext_blend",
+      "header": "models.h",
+      "ownership": "borrows data and the weights; writes into the caller buffer",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_MorphTargetDataEXTHandle",
+        "const float*",
+        "uint64_t",
+        "uint8_t*",
+        "uint64_t",
+        "uint64_t*"
+      ]
+    },
+    {
+      "name": "cna_morph_target_data_ext_copy_base_vertex_bytes",
+      "header": "models.h",
+      "ownership": "borrows data; copies into the caller buffer",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_MorphTargetDataEXTHandle",
+        "uint8_t*",
+        "uint64_t",
+        "uint64_t*"
+      ]
+    },
+    {
+      "name": "cna_morph_target_data_ext_copy_normal_deltas",
+      "header": "models.h",
+      "ownership": "borrows data; copies into the caller buffer",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_MorphTargetDataEXTHandle",
+        "uint64_t",
+        "CNA_Vector3*",
+        "uint64_t",
+        "uint64_t*"
+      ]
+    },
+    {
+      "name": "cna_morph_target_data_ext_copy_position_deltas",
+      "header": "models.h",
+      "ownership": "borrows data; copies into the caller buffer",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_MorphTargetDataEXTHandle",
+        "uint64_t",
+        "CNA_Vector3*",
+        "uint64_t",
+        "uint64_t*"
+      ]
+    },
+    {
+      "name": "cna_morph_target_data_ext_copy_tangent_deltas",
+      "header": "models.h",
+      "ownership": "borrows data; copies into the caller buffer",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_MorphTargetDataEXTHandle",
+        "uint64_t",
+        "CNA_Vector3*",
+        "uint64_t",
+        "uint64_t*"
+      ]
+    },
+    {
+      "name": "cna_morph_target_data_ext_copy_triangle_indices_ext",
+      "header": "models.h",
+      "ownership": "borrows data; copies into the caller buffer",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_MorphTargetDataEXTHandle",
+        "uint32_t*",
+        "uint64_t",
+        "uint64_t*"
+      ]
+    },
+    {
+      "name": "cna_morph_target_data_ext_copy_weight_keyframe",
+      "header": "models.h",
+      "ownership": "borrows data; copies into three caller buffers",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_MorphTargetDataEXTHandle",
+        "uint64_t",
+        "double*",
+        "float*",
+        "uint64_t",
+        "uint64_t*",
+        "float*",
+        "uint64_t",
+        "uint64_t*",
+        "float*",
+        "uint64_t",
+        "uint64_t*"
+      ]
+    },
+    {
+      "name": "cna_morph_target_data_ext_copy_weights",
+      "header": "models.h",
+      "ownership": "borrows data; copies into the caller buffer",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_MorphTargetDataEXTHandle",
+        "float*",
+        "uint64_t",
+        "uint64_t*"
+      ]
+    },
+    {
+      "name": "cna_morph_target_data_ext_create",
+      "header": "models.h",
+      "ownership": "deeply copies the descriptor graph; returns an owned morph-data handle",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "const CNA_MorphTargetDataEXTDescriptor*",
+        "CNA_MorphTargetDataEXTHandle*"
+      ]
+    },
+    {
+      "name": "cna_morph_target_data_ext_destroy",
+      "header": "models.h",
+      "ownership": "destroys an owned morph-data handle",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_MorphTargetDataEXTHandle"
+      ]
+    },
+    {
+      "name": "cna_morph_target_data_ext_get_base_vertex_byte_count",
+      "header": "models.h",
+      "ownership": "borrows data; returns a value",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_MorphTargetDataEXTHandle",
+        "uint64_t*"
+      ]
+    },
+    {
+      "name": "cna_morph_target_data_ext_get_recompute_flat_normals_ext",
+      "header": "models.h",
+      "ownership": "borrows data; returns a value",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_MorphTargetDataEXTHandle",
+        "CNA_Bool*"
+      ]
+    },
+    {
+      "name": "cna_morph_target_data_ext_get_stride",
+      "header": "models.h",
+      "ownership": "borrows data; returns a value",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_MorphTargetDataEXTHandle",
+        "int32_t*"
+      ]
+    },
+    {
+      "name": "cna_morph_target_data_ext_get_target_count",
+      "header": "models.h",
+      "ownership": "borrows data; returns a value",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_MorphTargetDataEXTHandle",
+        "uint64_t*"
+      ]
+    },
+    {
+      "name": "cna_morph_target_data_ext_get_weight_track_info",
+      "header": "models.h",
+      "ownership": "borrows data; returns three values",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_MorphTargetDataEXTHandle",
+        "uint64_t*",
+        "CNA_Bool*",
+        "CNA_Bool*"
+      ]
+    },
+    {
+      "name": "cna_morph_target_data_ext_set_recompute_flat_normals_ext",
+      "header": "models.h",
+      "ownership": "borrows data",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_MorphTargetDataEXTHandle",
+        "CNA_Bool"
+      ]
+    },
+    {
+      "name": "cna_morph_target_data_ext_set_tangent_deltas",
+      "header": "models.h",
+      "ownership": "borrows data and the deltas for the call",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_MorphTargetDataEXTHandle",
+        "uint64_t",
+        "const CNA_Vector3*",
+        "uint64_t"
+      ]
+    },
+    {
+      "name": "cna_morph_target_data_ext_set_triangle_indices_ext",
+      "header": "models.h",
+      "ownership": "borrows data and the indices for the call",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_MorphTargetDataEXTHandle",
+        "const uint32_t*",
+        "uint64_t"
+      ]
+    },
+    {
+      "name": "cna_morph_target_data_ext_set_weight_track",
+      "header": "models.h",
+      "ownership": "borrows data and the track graph for the call",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_MorphTargetDataEXTHandle",
+        "const CNA_MorphWeightTrackEXTDescriptor*"
+      ]
+    },
+    {
+      "name": "cna_morph_target_data_ext_set_weights",
+      "header": "models.h",
+      "ownership": "borrows data and the weights for the call",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_MorphTargetDataEXTHandle",
+        "const float*",
+        "uint64_t"
+      ]
+    },
+    {
+      "name": "cna_morph_weight_track_ext_evaluate",
+      "header": "models.h",
+      "ownership": "borrows the track graph for the call; writes into the caller buffer",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "const CNA_MorphWeightTrackEXTDescriptor*",
+        "double",
+        "float*",
+        "uint64_t",
+        "uint64_t*"
+      ]
+    },
+    {
       "name": "cna_motion_blur_pass_create",
       "header": "engine_layer.h",
       "ownership": "borrows the graphics device; returns an owned pass handle",

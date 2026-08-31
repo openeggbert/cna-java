@@ -1395,6 +1395,112 @@ public final class NativeBindings {
             double durationSeconds, int[] boneIndices, int[] keyframeCounts, double[] times,
             float[] values);
 
+    /**
+     * Creates morph-target data from its whole descriptor graph.
+     *
+     * <p>The third and widest graph this adapter marshals by hand, and hand-written for the same
+     * reason as the other two: C states every count as a separate parameter and Java carries each
+     * in its own array, so nothing derives which deltas belong to which target or which weights
+     * to which keyframe. Every relationship is checked before anything is built.
+     *
+     * @param baseVertexBytes the base pose's vertex bytes
+     * @param stride one base vertex's byte stride
+     * @param positionCounts how many position deltas each target has
+     * @param positionDeltas three floats per delta, across every target in order
+     * @param normalCounts how many normal deltas each target has
+     * @param normalDeltas three floats per delta
+     * @param weights the current weight per target
+     * @param trackTimes each weight keyframe's time
+     * @param trackWeightCounts how many weights each keyframe carries
+     * @param trackWeights the weights, across every keyframe in order
+     * @param trackInCounts how many incoming tangents each keyframe carries
+     * @param trackInTangents the incoming tangents
+     * @param trackOutCounts how many outgoing tangents each keyframe carries
+     * @param trackOutTangents the outgoing tangents
+     * @param stepInterpolation whether evaluation holds the lower keyframe's value
+     * @param cubicSpline whether evaluation uses the tangents
+     * @param outData receives the owned handle
+     * @return CNA's result
+     */
+    public static int morphTargetDataCreate(byte[] baseVertexBytes, int stride,
+            int[] positionCounts, float[] positionDeltas, int[] normalCounts,
+            float[] normalDeltas, float[] weights, double[] trackTimes, int[] trackWeightCounts,
+            float[] trackWeights, int[] trackInCounts, float[] trackInTangents,
+            int[] trackOutCounts, float[] trackOutTangents, boolean stepInterpolation,
+            boolean cubicSpline, long[] outData) {
+        requireAvailable();
+        return nativeMorphTargetDataCreate(baseVertexBytes, stride, positionCounts,
+                positionDeltas, normalCounts, normalDeltas, weights, trackTimes,
+                trackWeightCounts, trackWeights, trackInCounts, trackInTangents, trackOutCounts,
+                trackOutTangents, stepInterpolation, cubicSpline, outData);
+    }
+
+    /**
+     * Replaces the weight track morph data animates its weights from.
+     *
+     * @param data the native morph-data handle
+     * @param times each keyframe's time
+     * @param weightCounts how many weights each keyframe carries
+     * @param weights the weights, across every keyframe in order
+     * @param inCounts how many incoming tangents each keyframe carries
+     * @param inTangents the incoming tangents
+     * @param outCounts how many outgoing tangents each keyframe carries
+     * @param outTangents the outgoing tangents
+     * @param stepInterpolation whether evaluation holds the lower keyframe's value
+     * @param cubicSpline whether evaluation uses the tangents
+     * @return CNA's result
+     */
+    public static int morphTargetDataSetWeightTrack(long data, double[] times, int[] weightCounts,
+            float[] weights, int[] inCounts, float[] inTangents, int[] outCounts,
+            float[] outTangents, boolean stepInterpolation, boolean cubicSpline) {
+        requireAvailable();
+        return nativeMorphTargetDataSetWeightTrack(data, times, weightCounts, weights, inCounts,
+                inTangents, outCounts, outTangents, stepInterpolation, cubicSpline);
+    }
+
+    /**
+     * Evaluates a standalone weight track at a time, without any morph data.
+     *
+     * @param times each keyframe's time
+     * @param weightCounts how many weights each keyframe carries
+     * @param weights the weights, across every keyframe in order
+     * @param inCounts how many incoming tangents each keyframe carries
+     * @param inTangents the incoming tangents
+     * @param outCounts how many outgoing tangents each keyframe carries
+     * @param outTangents the outgoing tangents
+     * @param stepInterpolation whether evaluation holds the lower keyframe's value
+     * @param cubicSpline whether evaluation uses the tangents
+     * @param timeSeconds when to evaluate
+     * @param destination receives the weights; may be empty to ask only for the count
+     * @param outWeightCount receives the count, written either way
+     * @return CNA's result
+     */
+    public static int morphWeightTrackEvaluate(double[] times, int[] weightCounts,
+            float[] weights, int[] inCounts, float[] inTangents, int[] outCounts,
+            float[] outTangents, boolean stepInterpolation, boolean cubicSpline,
+            double timeSeconds, float[] destination, long[] outWeightCount) {
+        requireAvailable();
+        return nativeMorphWeightTrackEvaluate(times, weightCounts, weights, inCounts, inTangents,
+                outCounts, outTangents, stepInterpolation, cubicSpline, timeSeconds, destination,
+                outWeightCount);
+    }
+
+    private static native int nativeMorphTargetDataCreate(byte[] baseVertexBytes, int stride,
+            int[] positionCounts, float[] positionDeltas, int[] normalCounts,
+            float[] normalDeltas, float[] weights, double[] trackTimes, int[] trackWeightCounts,
+            float[] trackWeights, int[] trackInCounts, float[] trackInTangents,
+            int[] trackOutCounts, float[] trackOutTangents, boolean stepInterpolation,
+            boolean cubicSpline, long[] outData);
+
+    private static native int nativeMorphTargetDataSetWeightTrack(long data, double[] times,
+            int[] weightCounts, float[] weights, int[] inCounts, float[] inTangents,
+            int[] outCounts, float[] outTangents, boolean stepInterpolation, boolean cubicSpline);
+
+    private static native int nativeMorphWeightTrackEvaluate(double[] times, int[] weightCounts,
+            float[] weights, int[] inCounts, float[] inTangents, int[] outCounts,
+            float[] outTangents, boolean stepInterpolation, boolean cubicSpline,
+            double timeSeconds, float[] destination, long[] outWeightCount);
+
 
     /**
      * Releases a texture handle that names a texture without keeping it alive.

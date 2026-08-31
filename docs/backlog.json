@@ -844,6 +844,20 @@
         "tools/native-abi/probes/shader_dialect_answer.c",
         "ColorMatrixEffectTests.theDialectRouteAnswersUnknownOnEveryRendererThisBuildHas"
       ]
+    },
+    {
+      "id": "JAVA-UPSTREAM-023",
+      "title": "A morph target's tangent deltas cannot be read until they have been written, and the refusal names the wrong reason",
+      "family": "cnanext",
+      "authority": "models.h",
+      "status": "blocked",
+      "priority": 4,
+      "currentState": "cna_morph_target_data_ext_copy_tangent_deltas bounds-checks its target index against data->value->TangentDeltas.size(), which is zero until cna_morph_target_data_ext_set_tangent_deltas resizes it. So reading target zero of a morph data that has one target -- an index that is in range by every other route's reckoning -- answers CNA_RESULT_INVALID_ARGUMENT with \"The MorphTargetDataEXT target index is outside the valid range\". The setter beside it checks against PositionDeltas.size() and is correct.",
+      "expectedState": "A target with no tangent deltas reports none, which is what cna_morph_target_data_ext_copy_normal_deltas already does for a target with no normal deltas: the count comes back zero and the call succeeds. An index past the target count stays a refusal.",
+      "blocker": "Upstream, and small: the bound to compare against is the target count rather than the tangent array's length. A caller can work around it by setting before reading, which is what CnaMorphTargetData documents.",
+      "tests": [
+        "CnaMorphTargetDataTests.eachTargetsDeltasComeBackAsItsOwn"
+      ]
     }
   ]
 }

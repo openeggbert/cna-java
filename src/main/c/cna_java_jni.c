@@ -864,6 +864,13 @@ typedef struct CnaFunctions {
     CNA_JNI_ROUTE(cna_skinned_model_ext_set_skeleton) skinned_model_ext_set_skeleton;
     CNA_JNI_ROUTE(cna_skinned_model_ext_set_clip) skinned_model_ext_set_clip;
 
+    /* Morph targets, whose descriptor carries a graph of its own: per-target delta arrays and a
+       weight track of keyframes each holding a weight vector and two tangent vectors. */
+    CNA_JNI_ROUTE(cna_morph_target_data_ext_create) morph_target_data_ext_create;
+    CNA_JNI_ROUTE(cna_morph_target_data_ext_set_weight_track)
+        morph_target_data_ext_set_weight_track;
+    CNA_JNI_ROUTE(cna_morph_weight_track_ext_evaluate) morph_weight_track_ext_evaluate;
+
     /* The seven sensor subscriptions. Each takes a C function pointer with its own reading
        shape, and each registration outlives the call that made it -- a sensor raises its event
        whenever a reading arrives -- so the Java handler is pinned by a token the registration
@@ -1969,6 +1976,168 @@ static CNA_Result cna_jni_borrow_skeleton(
         cna_jni_free_skeleton(environment, out_skeleton);
         return CNA_RESULT_OUT_OF_MEMORY;
     }
+    return CNA_RESULT_SUCCESS;
+}
+
+/* A morph weight track: keyframes each carrying a weight vector and two optional tangent
+ * vectors. The third and last descriptor graph in this adapter, and the widest -- seven parallel
+ * arrays -- for the same reason as the first two: C states the counts as separate parameters and
+ * Java carries them in its arrays, so every relationship is checked before anything is built.
+ */
+typedef struct CnaJniWeightTrack {
+    CNA_MorphWeightTrackEXTDescriptor track;
+    CNA_MorphWeightKeyframeEXTDescriptor* keyframes;
+    float* weights;
+    float* in_tangents;
+    float* out_tangents;
+} CnaJniWeightTrack;
+
+static void cna_jni_free_weight_track(CnaJniWeightTrack* value)
+{
+    free(value->keyframes);
+    value->keyframes = NULL;
+    free(value->weights);
+    value->weights = NULL;
+    free(value->in_tangents);
+    value->in_tangents = NULL;
+    free(value->out_tangents);
+    value->out_tangents = NULL;
+}
+
+/* Copies a jfloatArray into a malloc'd float array, one over so an empty one is not null. */
+static float* cna_jni_floats(JNIEnv* environment, jfloatArray source, jsize* out_count)
+{
+    const jsize count = source == NULL ? 0
+        : (*environment)->GetArrayLength(environment, source);
+    *out_count = count;
+    float* values = (float*)calloc((size_t)count + 1U, sizeof(*values));
+    if (values == NULL) {
+        return NULL;
+    }
+    if (count > 0) {
+        (*environment)->GetFloatArrayRegion(environment, source, 0, count, (jfloat*)values);
+    }
+    return values;
+}
+
+/* Sums a jintArray of counts into a jlong, refusing a negative element. */
+static int cna_jni_sum_counts(JNIEnv* environment, jintArray counts, jlong* out_total)
+{
+    const jsize length = (*environment)->GetArrayLength(environment, counts);
+    jint* elements = (*environment)->GetIntArrayElements(environment, counts, NULL);
+    if (elements == NULL) {
+        return 0;
+    }
+    jlong total = 0;
+    int ok = 1;
+    for (jsize index = 0; index < length; ++index) {
+        if (elements[index] < 0) {
+            ok = 0;
+            break;
+        }
+        total += (jlong)elements[index];
+    }
+    (*environment)->ReleaseIntArrayElements(environment, counts, elements, JNI_ABORT);
+    *out_total = total;
+    return ok;
+}
+
+static CNA_Result cna_jni_borrow_weight_track(
+    JNIEnv* environment,
+    jdoubleArray times,
+    jintArray weight_counts,
+    jfloatArray weights,
+    jintArray in_tangent_counts,
+    jfloatArray in_tangents,
+    jintArray out_tangent_counts,
+    jfloatArray out_tangents,
+    jboolean step_interpolation,
+    jboolean cubic_spline,
+    CnaJniWeightTrack* out_value)
+{
+    memset(out_value, 0, sizeof(*out_value));
+    out_value->track.step_interpolation = (CNA_Bool)step_interpolation;
+    out_value->track.cubic_spline = (CNA_Bool)cubic_spline;
+    if (times == NULL || weight_counts == NULL || weights == NULL || in_tangent_counts == NULL
+            || in_tangents == NULL || out_tangent_counts == NULL || out_tangents == NULL) {
+        return CNA_RESULT_INVALID_ARGUMENT;
+    }
+    const jsize keyframe_count = (*environment)->GetArrayLength(environment, times);
+    if ((*environment)->GetArrayLength(environment, weight_counts) != keyframe_count
+            || (*environment)->GetArrayLength(environment, in_tangent_counts) != keyframe_count
+            || (*environment)->GetArrayLength(environment, out_tangent_counts) != keyframe_count) {
+        return CNA_RESULT_INVALID_ARGUMENT;
+    }
+
+    jsize weight_total = 0;
+    jsize in_total = 0;
+    jsize out_total = 0;
+    out_value->weights = cna_jni_floats(environment, weights, &weight_total);
+    out_value->in_tangents = cna_jni_floats(environment, in_tangents, &in_total);
+    out_value->out_tangents = cna_jni_floats(environment, out_tangents, &out_total);
+    if (out_value->weights == NULL || out_value->in_tangents == NULL
+            || out_value->out_tangents == NULL) {
+        cna_jni_free_weight_track(out_value);
+        return CNA_RESULT_OUT_OF_MEMORY;
+    }
+
+    jlong promised_weights = 0;
+    jlong promised_in = 0;
+    jlong promised_out = 0;
+    if (!cna_jni_sum_counts(environment, weight_counts, &promised_weights)
+            || !cna_jni_sum_counts(environment, in_tangent_counts, &promised_in)
+            || !cna_jni_sum_counts(environment, out_tangent_counts, &promised_out)
+            || promised_weights != (jlong)weight_total || promised_in != (jlong)in_total
+            || promised_out != (jlong)out_total) {
+        cna_jni_free_weight_track(out_value);
+        return CNA_RESULT_INVALID_ARGUMENT;
+    }
+
+    out_value->keyframes = (CNA_MorphWeightKeyframeEXTDescriptor*)calloc(
+        (size_t)keyframe_count + 1U, sizeof(*out_value->keyframes));
+    if (out_value->keyframes == NULL) {
+        cna_jni_free_weight_track(out_value);
+        return CNA_RESULT_OUT_OF_MEMORY;
+    }
+
+    jdouble* time_elements = (*environment)->GetDoubleArrayElements(environment, times, NULL);
+    jint* weight_elements =
+        (*environment)->GetIntArrayElements(environment, weight_counts, NULL);
+    jint* in_elements =
+        (*environment)->GetIntArrayElements(environment, in_tangent_counts, NULL);
+    jint* out_elements =
+        (*environment)->GetIntArrayElements(environment, out_tangent_counts, NULL);
+    if (time_elements == NULL || weight_elements == NULL || in_elements == NULL
+            || out_elements == NULL) {
+        cna_jni_free_weight_track(out_value);
+        return CNA_RESULT_OUT_OF_MEMORY;
+    }
+    jlong weights_used = 0;
+    jlong in_used = 0;
+    jlong out_used = 0;
+    for (jsize index = 0; index < keyframe_count; ++index) {
+        CNA_MorphWeightKeyframeEXTDescriptor* keyframe = &out_value->keyframes[index];
+        keyframe->time_seconds = (double)time_elements[index];
+        keyframe->weights = out_value->weights + weights_used;
+        keyframe->weight_count = (uint64_t)weight_elements[index];
+        keyframe->in_tangents = out_value->in_tangents + in_used;
+        keyframe->in_tangent_count = (uint64_t)in_elements[index];
+        keyframe->out_tangents = out_value->out_tangents + out_used;
+        keyframe->out_tangent_count = (uint64_t)out_elements[index];
+        weights_used += (jlong)weight_elements[index];
+        in_used += (jlong)in_elements[index];
+        out_used += (jlong)out_elements[index];
+    }
+    (*environment)->ReleaseDoubleArrayElements(environment, times, time_elements, JNI_ABORT);
+    (*environment)->ReleaseIntArrayElements(
+        environment, weight_counts, weight_elements, JNI_ABORT);
+    (*environment)->ReleaseIntArrayElements(
+        environment, in_tangent_counts, in_elements, JNI_ABORT);
+    (*environment)->ReleaseIntArrayElements(
+        environment, out_tangent_counts, out_elements, JNI_ABORT);
+
+    out_value->track.keyframes = out_value->keyframes;
+    out_value->track.keyframe_count = (uint64_t)keyframe_count;
     return CNA_RESULT_SUCCESS;
 }
 
@@ -3159,6 +3328,10 @@ JNIEXPORT jint JNICALL Java_org_openeggbert_cna_internal_NativeBindings_nativeLo
     LOAD(skinning_data_create, "cna_skinning_data_create");
     LOAD(skinned_model_ext_set_skeleton, "cna_skinned_model_ext_set_skeleton");
     LOAD(skinned_model_ext_set_clip, "cna_skinned_model_ext_set_clip");
+    LOAD(morph_target_data_ext_create, "cna_morph_target_data_ext_create");
+    LOAD(morph_target_data_ext_set_weight_track,
+         "cna_morph_target_data_ext_set_weight_track");
+    LOAD(morph_weight_track_ext_evaluate, "cna_morph_weight_track_ext_evaluate");
     LOAD(accelerometer_subscribe_current_value_changed,
          "cna_accelerometer_subscribe_current_value_changed");
     LOAD(accelerometer_subscribe_reading_changed,
@@ -14026,6 +14199,235 @@ Java_org_openeggbert_cna_internal_NativeBindings_nativeSkinnedModelSetClip(
         (CNA_SkinnedModelEXTHandle)model, name, &graph.clip);
     (*environment)->ReleaseByteArrayElements(environment, clip_name, name_bytes, JNI_ABORT);
     cna_jni_free_clip(environment, &graph);
+    return (jint)call_result;
+}
+
+/*
+ * Morph targets: the third descriptor graph, and the one that carries two of them at once.
+ *
+ * A morph target data holds base vertex bytes, one delta array pair per target, a current weight
+ * vector, and a weight track whose keyframes each carry a weight vector and two optional tangent
+ * vectors. Every count is stated separately in C and carried by a Java array here, so all of them
+ * are checked against each other before anything is built.
+ */
+JNIEXPORT jint JNICALL
+Java_org_openeggbert_cna_internal_NativeBindings_nativeMorphTargetDataCreate(
+    JNIEnv* environment,
+    jclass type,
+    jbyteArray base_vertex_bytes,
+    jint stride,
+    jintArray position_counts,
+    jfloatArray position_deltas,
+    jintArray normal_counts,
+    jfloatArray normal_deltas,
+    jfloatArray weights,
+    jdoubleArray track_times,
+    jintArray track_weight_counts,
+    jfloatArray track_weights,
+    jintArray track_in_counts,
+    jfloatArray track_in_tangents,
+    jintArray track_out_counts,
+    jfloatArray track_out_tangents,
+    jboolean step_interpolation,
+    jboolean cubic_spline,
+    jlongArray out_data)
+{
+    (void)type;
+    if (base_vertex_bytes == NULL || position_counts == NULL || position_deltas == NULL
+            || normal_counts == NULL || normal_deltas == NULL || weights == NULL) {
+        return (jint)CNA_RESULT_INVALID_ARGUMENT;
+    }
+    const jsize target_count = (*environment)->GetArrayLength(environment, position_counts);
+    if ((*environment)->GetArrayLength(environment, normal_counts) != target_count) {
+        return (jint)CNA_RESULT_INVALID_ARGUMENT;
+    }
+    /* Three floats per delta, and the counts are deltas rather than floats. */
+    const jsize position_floats = (*environment)->GetArrayLength(environment, position_deltas);
+    const jsize normal_floats = (*environment)->GetArrayLength(environment, normal_deltas);
+    if (position_floats % 3 != 0 || normal_floats % 3 != 0) {
+        return (jint)CNA_RESULT_INVALID_ARGUMENT;
+    }
+    jlong promised_positions = 0;
+    jlong promised_normals = 0;
+    if (!cna_jni_sum_counts(environment, position_counts, &promised_positions)
+            || !cna_jni_sum_counts(environment, normal_counts, &promised_normals)
+            || promised_positions != (jlong)(position_floats / 3)
+            || promised_normals != (jlong)(normal_floats / 3)) {
+        return (jint)CNA_RESULT_INVALID_ARGUMENT;
+    }
+
+    CnaJniWeightTrack track;
+    const CNA_Result borrowed = cna_jni_borrow_weight_track(
+        environment, track_times, track_weight_counts, track_weights, track_in_counts,
+        track_in_tangents, track_out_counts, track_out_tangents, step_interpolation,
+        cubic_spline, &track);
+    if (borrowed != CNA_RESULT_SUCCESS) {
+        return (jint)borrowed;
+    }
+
+    jsize weight_total = 0;
+    float* weight_values = cna_jni_floats(environment, weights, &weight_total);
+    CNA_Vector3* positions = (CNA_Vector3*)calloc(
+        (size_t)(position_floats / 3) + 1U, sizeof(*positions));
+    CNA_Vector3* normals = (CNA_Vector3*)calloc(
+        (size_t)(normal_floats / 3) + 1U, sizeof(*normals));
+    CNA_MorphTargetDeltaEXTDescriptor* targets =
+        (CNA_MorphTargetDeltaEXTDescriptor*)calloc(
+            (size_t)target_count + 1U, sizeof(*targets));
+    jbyte* base_bytes = (*environment)->GetByteArrayElements(
+        environment, base_vertex_bytes, NULL);
+    CNA_Result call_result = CNA_RESULT_OUT_OF_MEMORY;
+    if (weight_values != NULL && positions != NULL && normals != NULL && targets != NULL
+            && base_bytes != NULL) {
+        jfloat* position_elements =
+            (*environment)->GetFloatArrayElements(environment, position_deltas, NULL);
+        jfloat* normal_elements =
+            (*environment)->GetFloatArrayElements(environment, normal_deltas, NULL);
+        jint* position_count_elements =
+            (*environment)->GetIntArrayElements(environment, position_counts, NULL);
+        jint* normal_count_elements =
+            (*environment)->GetIntArrayElements(environment, normal_counts, NULL);
+        if (position_elements != NULL && normal_elements != NULL
+                && position_count_elements != NULL && normal_count_elements != NULL) {
+            for (jsize index = 0; index < position_floats / 3; ++index) {
+                positions[index].x = (float)position_elements[index * 3];
+                positions[index].y = (float)position_elements[index * 3 + 1];
+                positions[index].z = (float)position_elements[index * 3 + 2];
+            }
+            for (jsize index = 0; index < normal_floats / 3; ++index) {
+                normals[index].x = (float)normal_elements[index * 3];
+                normals[index].y = (float)normal_elements[index * 3 + 1];
+                normals[index].z = (float)normal_elements[index * 3 + 2];
+            }
+            jlong positions_used = 0;
+            jlong normals_used = 0;
+            for (jsize index = 0; index < target_count; ++index) {
+                targets[index].position_deltas = positions + positions_used;
+                targets[index].position_delta_count = (uint64_t)position_count_elements[index];
+                targets[index].normal_deltas = normals + normals_used;
+                targets[index].normal_delta_count = (uint64_t)normal_count_elements[index];
+                positions_used += (jlong)position_count_elements[index];
+                normals_used += (jlong)normal_count_elements[index];
+            }
+
+            CNA_MorphTargetDataEXTDescriptor descriptor;
+            memset(&descriptor, 0, sizeof descriptor);
+            descriptor.base_vertex_bytes = (const uint8_t*)base_bytes;
+            descriptor.base_vertex_byte_count =
+                (uint64_t)(*environment)->GetArrayLength(environment, base_vertex_bytes);
+            descriptor.stride = (int32_t)stride;
+            descriptor.targets = targets;
+            descriptor.target_count = (uint64_t)target_count;
+            descriptor.weights = weight_values;
+            descriptor.weight_count = (uint64_t)weight_total;
+            descriptor.weight_track = track.track;
+
+            CNA_MorphTargetDataEXTHandle created = 0;
+            call_result = cna.morph_target_data_ext_create(&descriptor, &created);
+            if (call_result == CNA_RESULT_SUCCESS) {
+                const jlong handle = (jlong)created;
+                (*environment)->SetLongArrayRegion(environment, out_data, 0, 1, &handle);
+            }
+        }
+        if (position_elements != NULL) {
+            (*environment)->ReleaseFloatArrayElements(
+                environment, position_deltas, position_elements, JNI_ABORT);
+        }
+        if (normal_elements != NULL) {
+            (*environment)->ReleaseFloatArrayElements(
+                environment, normal_deltas, normal_elements, JNI_ABORT);
+        }
+        if (position_count_elements != NULL) {
+            (*environment)->ReleaseIntArrayElements(
+                environment, position_counts, position_count_elements, JNI_ABORT);
+        }
+        if (normal_count_elements != NULL) {
+            (*environment)->ReleaseIntArrayElements(
+                environment, normal_counts, normal_count_elements, JNI_ABORT);
+        }
+    }
+    if (base_bytes != NULL) {
+        (*environment)->ReleaseByteArrayElements(
+            environment, base_vertex_bytes, base_bytes, JNI_ABORT);
+    }
+    free(targets);
+    free(normals);
+    free(positions);
+    free(weight_values);
+    cna_jni_free_weight_track(&track);
+    return (jint)call_result;
+}
+
+JNIEXPORT jint JNICALL
+Java_org_openeggbert_cna_internal_NativeBindings_nativeMorphTargetDataSetWeightTrack(
+    JNIEnv* environment,
+    jclass type,
+    jlong data,
+    jdoubleArray times,
+    jintArray weight_counts,
+    jfloatArray weights,
+    jintArray in_counts,
+    jfloatArray in_tangents,
+    jintArray out_counts,
+    jfloatArray out_tangents,
+    jboolean step_interpolation,
+    jboolean cubic_spline)
+{
+    (void)type;
+    CnaJniWeightTrack track;
+    const CNA_Result borrowed = cna_jni_borrow_weight_track(
+        environment, times, weight_counts, weights, in_counts, in_tangents, out_counts,
+        out_tangents, step_interpolation, cubic_spline, &track);
+    if (borrowed != CNA_RESULT_SUCCESS) {
+        return (jint)borrowed;
+    }
+    const CNA_Result call_result = cna.morph_target_data_ext_set_weight_track(
+        (CNA_MorphTargetDataEXTHandle)data, &track.track);
+    cna_jni_free_weight_track(&track);
+    return (jint)call_result;
+}
+
+JNIEXPORT jint JNICALL
+Java_org_openeggbert_cna_internal_NativeBindings_nativeMorphWeightTrackEvaluate(
+    JNIEnv* environment,
+    jclass type,
+    jdoubleArray times,
+    jintArray weight_counts,
+    jfloatArray weights,
+    jintArray in_counts,
+    jfloatArray in_tangents,
+    jintArray out_counts,
+    jfloatArray out_tangents,
+    jboolean step_interpolation,
+    jboolean cubic_spline,
+    jdouble time_seconds,
+    jfloatArray destination,
+    jlongArray out_weight_count)
+{
+    (void)type;
+    CnaJniWeightTrack track;
+    const CNA_Result borrowed = cna_jni_borrow_weight_track(
+        environment, times, weight_counts, weights, in_counts, in_tangents, out_counts,
+        out_tangents, step_interpolation, cubic_spline, &track);
+    if (borrowed != CNA_RESULT_SUCCESS) {
+        return (jint)borrowed;
+    }
+    const jsize capacity = (*environment)->GetArrayLength(environment, destination);
+    jfloat* values = capacity == 0 ? NULL
+        : (*environment)->GetFloatArrayElements(environment, destination, NULL);
+    if (capacity != 0 && values == NULL) {
+        cna_jni_free_weight_track(&track);
+        return (jint)CNA_RESULT_OUT_OF_MEMORY;
+    }
+    uint64_t written = 0;
+    const CNA_Result call_result = cna.morph_weight_track_ext_evaluate(
+        &track.track, (double)time_seconds, (float*)values, (uint64_t)capacity, &written);
+    if (values != NULL) {
+        (*environment)->ReleaseFloatArrayElements(environment, destination, values, 0);
+    }
+    cna_jni_free_weight_track(&track);
+    const jlong count = (jlong)written;
+    (*environment)->SetLongArrayRegion(environment, out_weight_count, 0, 1, &count);
     return (jint)call_result;
 }
 

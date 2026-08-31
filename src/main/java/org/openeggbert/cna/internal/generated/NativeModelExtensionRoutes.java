@@ -542,6 +542,96 @@ public final class NativeModelExtensionRoutes {
     public static native int modelSetMaterialVariantExt(long model, int value);
 
     /**
+     * cna_morph_target_data_ext_blend (models.h).
+     */
+    public static native int morphTargetDataBlend(long data, float[] weights, byte[] destination, long[] outByteCount);
+
+    /**
+     * cna_morph_target_data_ext_copy_base_vertex_bytes (models.h).
+     */
+    public static native int morphTargetDataCopyBaseVertexBytes(long data, byte[] destination, long[] outByteCount);
+
+    /**
+     * cna_morph_target_data_ext_copy_normal_deltas (models.h).
+     */
+    public static native int morphTargetDataCopyNormalDeltas(long data, long targetIndex, float[] destinationFloating, long[] outDeltaCount);
+
+    /**
+     * cna_morph_target_data_ext_copy_position_deltas (models.h).
+     */
+    public static native int morphTargetDataCopyPositionDeltas(long data, long targetIndex, float[] destinationFloating, long[] outDeltaCount);
+
+    /**
+     * cna_morph_target_data_ext_copy_tangent_deltas (models.h).
+     */
+    public static native int morphTargetDataCopyTangentDeltas(long data, long targetIndex, float[] destinationFloating, long[] outDeltaCount);
+
+    /**
+     * cna_morph_target_data_ext_copy_triangle_indices_ext (models.h).
+     */
+    public static native int morphTargetDataCopyTriangleIndicesExt(long data, int[] destination, long[] outIndexCount);
+
+    /**
+     * cna_morph_target_data_ext_copy_weight_keyframe (models.h).
+     */
+    public static native int morphTargetDataCopyWeightKeyframe(long data, long keyframeIndex, double[] outTimeSeconds, float[] weights, long[] outWeightCount, float[] inTangents, long[] outInTangentCount, float[] outTangents, long[] outOutTangentCount);
+
+    /**
+     * cna_morph_target_data_ext_copy_weights (models.h).
+     */
+    public static native int morphTargetDataCopyWeights(long data, float[] destination, long[] outWeightCount);
+
+    /**
+     * cna_morph_target_data_ext_destroy (models.h).
+     */
+    public static native int morphTargetDataDestroy(long data);
+
+    /**
+     * cna_morph_target_data_ext_get_base_vertex_byte_count (models.h).
+     */
+    public static native int morphTargetDataGetBaseVertexByteCount(long data, long[] outByteCount);
+
+    /**
+     * cna_morph_target_data_ext_get_recompute_flat_normals_ext (models.h).
+     */
+    public static native int morphTargetDataGetRecomputeFlatNormalsExt(long data, boolean[] outRecompute);
+
+    /**
+     * cna_morph_target_data_ext_get_stride (models.h).
+     */
+    public static native int morphTargetDataGetStride(long data, int[] outStride);
+
+    /**
+     * cna_morph_target_data_ext_get_target_count (models.h).
+     */
+    public static native int morphTargetDataGetTargetCount(long data, long[] outTargetCount);
+
+    /**
+     * cna_morph_target_data_ext_get_weight_track_info (models.h).
+     */
+    public static native int morphTargetDataGetWeightTrackInfo(long data, long[] outKeyframeCount, boolean[] outStepInterpolation, boolean[] outCubicSpline);
+
+    /**
+     * cna_morph_target_data_ext_set_recompute_flat_normals_ext (models.h).
+     */
+    public static native int morphTargetDataSetRecomputeFlatNormalsExt(long data, boolean recompute);
+
+    /**
+     * cna_morph_target_data_ext_set_tangent_deltas (models.h).
+     */
+    public static native int morphTargetDataSetTangentDeltas(long data, long targetIndex, float[] deltasFloating);
+
+    /**
+     * cna_morph_target_data_ext_set_triangle_indices_ext (models.h).
+     */
+    public static native int morphTargetDataSetTriangleIndicesExt(long data, int[] indices);
+
+    /**
+     * cna_morph_target_data_ext_set_weights (models.h).
+     */
+    public static native int morphTargetDataSetWeights(long data, float[] weights);
+
+    /**
      * cna_skinned_model_ext_add_part (models.h).
      */
     public static native int skinnedModelAddPart(long model, byte[] name, long vertexBuffer, long indexBuffer, long part, long texture);

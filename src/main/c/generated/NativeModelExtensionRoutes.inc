@@ -2091,6 +2091,678 @@ Java_org_openeggbert_cna_internal_generated_NativeModelExtensionRoutes_modelSetM
 }
 
 JNIEXPORT jint JNICALL
+Java_org_openeggbert_cna_internal_generated_NativeModelExtensionRoutes_morphTargetDataBlend(
+    JNIEnv* environment, jclass declaring_class, jlong data, jfloatArray weights, jbyteArray destination, jlongArray out_byte_count)
+{
+    (void)environment;
+    (void)declaring_class;
+    jsize weights_size = (*environment)->GetArrayLength(environment, weights);
+    jfloat* weights_elements = (*environment)->GetFloatArrayElements(environment, weights, NULL);
+    if (weights_elements == NULL) {
+        return (jint)CNA_RESULT_OUT_OF_MEMORY;
+    }
+    float* weights_values = (float*)malloc(
+        ((size_t)weights_size + 1U) * sizeof(*weights_values));
+    if (weights_values == NULL) {
+        (*environment)->ReleaseFloatArrayElements(
+            environment, weights, weights_elements, JNI_ABORT);
+        return (jint)CNA_RESULT_OUT_OF_MEMORY;
+    }
+    for (jsize index = 0; index < weights_size; ++index) {
+        weights_values[index] = (float)weights_elements[index];
+    }
+    jsize destination_size = (*environment)->GetArrayLength(environment, destination);
+    jbyte* destination_elements = (*environment)->GetByteArrayElements(environment, destination, NULL);
+    if (destination_elements == NULL) {
+    free(weights_values);
+    (*environment)->ReleaseFloatArrayElements(
+        environment, weights, weights_elements, JNI_ABORT);
+        return (jint)CNA_RESULT_OUT_OF_MEMORY;
+    }
+    uint8_t* destination_values = (uint8_t*)malloc(
+        ((size_t)destination_size + 1U) * sizeof(*destination_values));
+    if (destination_values == NULL) {
+        (*environment)->ReleaseByteArrayElements(
+            environment, destination, destination_elements, JNI_ABORT);
+    free(weights_values);
+    (*environment)->ReleaseFloatArrayElements(
+        environment, weights, weights_elements, JNI_ABORT);
+        return (jint)CNA_RESULT_OUT_OF_MEMORY;
+    }
+    for (jsize index = 0; index < destination_size; ++index) {
+        destination_values[index] = (uint8_t)destination_elements[index];
+    }
+    uint64_t out_byte_count_value = 0;
+    CNA_Result call_result = cna.morph_target_data_ext_blend((CNA_MorphTargetDataEXTHandle)data, weights_values, (uint64_t)weights_size, destination_values, (uint64_t)destination_size, &out_byte_count_value);
+    free(weights_values);
+    (*environment)->ReleaseFloatArrayElements(
+        environment, weights, weights_elements, JNI_ABORT);
+    if (call_result == CNA_RESULT_SUCCESS) {
+        for (jsize index = 0; index < destination_size; ++index) {
+            destination_elements[index] = (jbyte)destination_values[index];
+        }
+    }
+    free(destination_values);
+    (*environment)->ReleaseByteArrayElements(
+        environment, destination, destination_elements, 0);
+    if (call_result == CNA_RESULT_SUCCESS || call_result == CNA_RESULT_BUFFER_TOO_SMALL) {
+        jlong out_byte_count_element = (jlong)out_byte_count_value;
+        (*environment)->SetLongArrayRegion(
+            environment, out_byte_count, 0, 1, &out_byte_count_element);
+    }
+    return (jint)call_result;
+}
+
+JNIEXPORT jint JNICALL
+Java_org_openeggbert_cna_internal_generated_NativeModelExtensionRoutes_morphTargetDataCopyBaseVertexBytes(
+    JNIEnv* environment, jclass declaring_class, jlong data, jbyteArray destination, jlongArray out_byte_count)
+{
+    (void)environment;
+    (void)declaring_class;
+    jsize destination_size = (*environment)->GetArrayLength(environment, destination);
+    jbyte* destination_elements = (*environment)->GetByteArrayElements(environment, destination, NULL);
+    if (destination_elements == NULL) {
+        return (jint)CNA_RESULT_OUT_OF_MEMORY;
+    }
+    uint8_t* destination_values = (uint8_t*)malloc(
+        ((size_t)destination_size + 1U) * sizeof(*destination_values));
+    if (destination_values == NULL) {
+        (*environment)->ReleaseByteArrayElements(
+            environment, destination, destination_elements, JNI_ABORT);
+        return (jint)CNA_RESULT_OUT_OF_MEMORY;
+    }
+    for (jsize index = 0; index < destination_size; ++index) {
+        destination_values[index] = (uint8_t)destination_elements[index];
+    }
+    uint64_t out_byte_count_value = 0;
+    CNA_Result call_result = cna.morph_target_data_ext_copy_base_vertex_bytes((CNA_MorphTargetDataEXTHandle)data, destination_values, (uint64_t)destination_size, &out_byte_count_value);
+    if (call_result == CNA_RESULT_SUCCESS) {
+        for (jsize index = 0; index < destination_size; ++index) {
+            destination_elements[index] = (jbyte)destination_values[index];
+        }
+    }
+    free(destination_values);
+    (*environment)->ReleaseByteArrayElements(
+        environment, destination, destination_elements, 0);
+    if (call_result == CNA_RESULT_SUCCESS || call_result == CNA_RESULT_BUFFER_TOO_SMALL) {
+        jlong out_byte_count_element = (jlong)out_byte_count_value;
+        (*environment)->SetLongArrayRegion(
+            environment, out_byte_count, 0, 1, &out_byte_count_element);
+    }
+    return (jint)call_result;
+}
+
+JNIEXPORT jint JNICALL
+Java_org_openeggbert_cna_internal_generated_NativeModelExtensionRoutes_morphTargetDataCopyNormalDeltas(
+    JNIEnv* environment, jclass declaring_class, jlong data, jlong target_index, jfloatArray destinationFloating, jlongArray out_delta_count)
+{
+    (void)environment;
+    (void)declaring_class;
+    jsize destination_count = (*environment)->GetArrayLength(environment, destinationFloating) / 3;
+    if ((*environment)->GetArrayLength(environment, destinationFloating) != destination_count * 3) {
+        return (jint)CNA_RESULT_INVALID_ARGUMENT;
+    }
+    CNA_Vector3* destination_values = (CNA_Vector3*)calloc(
+        (size_t)destination_count + 1U, sizeof(*destination_values));
+    if (destination_values == NULL) {
+        return (jint)CNA_RESULT_OUT_OF_MEMORY;
+    }
+    {
+        jsize destinationFloating_length = (*environment)->GetArrayLength(environment, destinationFloating);
+        jfloat* destinationFloating_values = (jfloat*)malloc(
+            ((size_t)destinationFloating_length + 1U) * sizeof(*destinationFloating_values));
+        if (destinationFloating_values == NULL) {
+            free(destination_values);
+            return (jint)CNA_RESULT_OUT_OF_MEMORY;
+        }
+        (*environment)->GetFloatArrayRegion(environment, destinationFloating, 0, destinationFloating_length, destinationFloating_values);
+        for (jsize element = 0; element < destination_count; ++element) {
+            destination_values[element].x = (float)destinationFloating_values[element * 3 + 0];
+            destination_values[element].y = (float)destinationFloating_values[element * 3 + 1];
+            destination_values[element].z = (float)destinationFloating_values[element * 3 + 2];
+        }
+        free(destinationFloating_values);
+    }
+    uint64_t out_delta_count_value = 0;
+    CNA_Result call_result = cna.morph_target_data_ext_copy_normal_deltas((CNA_MorphTargetDataEXTHandle)data, (uint64_t)target_index, destination_values, (uint64_t)destination_count, &out_delta_count_value);
+    if (call_result == CNA_RESULT_SUCCESS) {
+        {
+            jfloat* destinationFloating_out = (jfloat*)malloc(
+                ((size_t)destination_count * 3 + 1U) * sizeof(*destinationFloating_out));
+            if (destinationFloating_out != NULL) {
+                for (jsize element = 0; element < destination_count; ++element) {
+                    destinationFloating_out[element * 3 + 0] = (jfloat)destination_values[element].x;
+                    destinationFloating_out[element * 3 + 1] = (jfloat)destination_values[element].y;
+                    destinationFloating_out[element * 3 + 2] = (jfloat)destination_values[element].z;
+                }
+                (*environment)->SetFloatArrayRegion(
+                    environment, destinationFloating, 0,
+                    (jsize)(destination_count * 3), destinationFloating_out);
+                free(destinationFloating_out);
+            }
+        }
+    }
+    free(destination_values);
+    if (call_result == CNA_RESULT_SUCCESS || call_result == CNA_RESULT_BUFFER_TOO_SMALL) {
+        jlong out_delta_count_element = (jlong)out_delta_count_value;
+        (*environment)->SetLongArrayRegion(
+            environment, out_delta_count, 0, 1, &out_delta_count_element);
+    }
+    return (jint)call_result;
+}
+
+JNIEXPORT jint JNICALL
+Java_org_openeggbert_cna_internal_generated_NativeModelExtensionRoutes_morphTargetDataCopyPositionDeltas(
+    JNIEnv* environment, jclass declaring_class, jlong data, jlong target_index, jfloatArray destinationFloating, jlongArray out_delta_count)
+{
+    (void)environment;
+    (void)declaring_class;
+    jsize destination_count = (*environment)->GetArrayLength(environment, destinationFloating) / 3;
+    if ((*environment)->GetArrayLength(environment, destinationFloating) != destination_count * 3) {
+        return (jint)CNA_RESULT_INVALID_ARGUMENT;
+    }
+    CNA_Vector3* destination_values = (CNA_Vector3*)calloc(
+        (size_t)destination_count + 1U, sizeof(*destination_values));
+    if (destination_values == NULL) {
+        return (jint)CNA_RESULT_OUT_OF_MEMORY;
+    }
+    {
+        jsize destinationFloating_length = (*environment)->GetArrayLength(environment, destinationFloating);
+        jfloat* destinationFloating_values = (jfloat*)malloc(
+            ((size_t)destinationFloating_length + 1U) * sizeof(*destinationFloating_values));
+        if (destinationFloating_values == NULL) {
+            free(destination_values);
+            return (jint)CNA_RESULT_OUT_OF_MEMORY;
+        }
+        (*environment)->GetFloatArrayRegion(environment, destinationFloating, 0, destinationFloating_length, destinationFloating_values);
+        for (jsize element = 0; element < destination_count; ++element) {
+            destination_values[element].x = (float)destinationFloating_values[element * 3 + 0];
+            destination_values[element].y = (float)destinationFloating_values[element * 3 + 1];
+            destination_values[element].z = (float)destinationFloating_values[element * 3 + 2];
+        }
+        free(destinationFloating_values);
+    }
+    uint64_t out_delta_count_value = 0;
+    CNA_Result call_result = cna.morph_target_data_ext_copy_position_deltas((CNA_MorphTargetDataEXTHandle)data, (uint64_t)target_index, destination_values, (uint64_t)destination_count, &out_delta_count_value);
+    if (call_result == CNA_RESULT_SUCCESS) {
+        {
+            jfloat* destinationFloating_out = (jfloat*)malloc(
+                ((size_t)destination_count * 3 + 1U) * sizeof(*destinationFloating_out));
+            if (destinationFloating_out != NULL) {
+                for (jsize element = 0; element < destination_count; ++element) {
+                    destinationFloating_out[element * 3 + 0] = (jfloat)destination_values[element].x;
+                    destinationFloating_out[element * 3 + 1] = (jfloat)destination_values[element].y;
+                    destinationFloating_out[element * 3 + 2] = (jfloat)destination_values[element].z;
+                }
+                (*environment)->SetFloatArrayRegion(
+                    environment, destinationFloating, 0,
+                    (jsize)(destination_count * 3), destinationFloating_out);
+                free(destinationFloating_out);
+            }
+        }
+    }
+    free(destination_values);
+    if (call_result == CNA_RESULT_SUCCESS || call_result == CNA_RESULT_BUFFER_TOO_SMALL) {
+        jlong out_delta_count_element = (jlong)out_delta_count_value;
+        (*environment)->SetLongArrayRegion(
+            environment, out_delta_count, 0, 1, &out_delta_count_element);
+    }
+    return (jint)call_result;
+}
+
+JNIEXPORT jint JNICALL
+Java_org_openeggbert_cna_internal_generated_NativeModelExtensionRoutes_morphTargetDataCopyTangentDeltas(
+    JNIEnv* environment, jclass declaring_class, jlong data, jlong target_index, jfloatArray destinationFloating, jlongArray out_delta_count)
+{
+    (void)environment;
+    (void)declaring_class;
+    jsize destination_count = (*environment)->GetArrayLength(environment, destinationFloating) / 3;
+    if ((*environment)->GetArrayLength(environment, destinationFloating) != destination_count * 3) {
+        return (jint)CNA_RESULT_INVALID_ARGUMENT;
+    }
+    CNA_Vector3* destination_values = (CNA_Vector3*)calloc(
+        (size_t)destination_count + 1U, sizeof(*destination_values));
+    if (destination_values == NULL) {
+        return (jint)CNA_RESULT_OUT_OF_MEMORY;
+    }
+    {
+        jsize destinationFloating_length = (*environment)->GetArrayLength(environment, destinationFloating);
+        jfloat* destinationFloating_values = (jfloat*)malloc(
+            ((size_t)destinationFloating_length + 1U) * sizeof(*destinationFloating_values));
+        if (destinationFloating_values == NULL) {
+            free(destination_values);
+            return (jint)CNA_RESULT_OUT_OF_MEMORY;
+        }
+        (*environment)->GetFloatArrayRegion(environment, destinationFloating, 0, destinationFloating_length, destinationFloating_values);
+        for (jsize element = 0; element < destination_count; ++element) {
+            destination_values[element].x = (float)destinationFloating_values[element * 3 + 0];
+            destination_values[element].y = (float)destinationFloating_values[element * 3 + 1];
+            destination_values[element].z = (float)destinationFloating_values[element * 3 + 2];
+        }
+        free(destinationFloating_values);
+    }
+    uint64_t out_delta_count_value = 0;
+    CNA_Result call_result = cna.morph_target_data_ext_copy_tangent_deltas((CNA_MorphTargetDataEXTHandle)data, (uint64_t)target_index, destination_values, (uint64_t)destination_count, &out_delta_count_value);
+    if (call_result == CNA_RESULT_SUCCESS) {
+        {
+            jfloat* destinationFloating_out = (jfloat*)malloc(
+                ((size_t)destination_count * 3 + 1U) * sizeof(*destinationFloating_out));
+            if (destinationFloating_out != NULL) {
+                for (jsize element = 0; element < destination_count; ++element) {
+                    destinationFloating_out[element * 3 + 0] = (jfloat)destination_values[element].x;
+                    destinationFloating_out[element * 3 + 1] = (jfloat)destination_values[element].y;
+                    destinationFloating_out[element * 3 + 2] = (jfloat)destination_values[element].z;
+                }
+                (*environment)->SetFloatArrayRegion(
+                    environment, destinationFloating, 0,
+                    (jsize)(destination_count * 3), destinationFloating_out);
+                free(destinationFloating_out);
+            }
+        }
+    }
+    free(destination_values);
+    if (call_result == CNA_RESULT_SUCCESS || call_result == CNA_RESULT_BUFFER_TOO_SMALL) {
+        jlong out_delta_count_element = (jlong)out_delta_count_value;
+        (*environment)->SetLongArrayRegion(
+            environment, out_delta_count, 0, 1, &out_delta_count_element);
+    }
+    return (jint)call_result;
+}
+
+JNIEXPORT jint JNICALL
+Java_org_openeggbert_cna_internal_generated_NativeModelExtensionRoutes_morphTargetDataCopyTriangleIndicesExt(
+    JNIEnv* environment, jclass declaring_class, jlong data, jintArray destination, jlongArray out_index_count)
+{
+    (void)environment;
+    (void)declaring_class;
+    jsize destination_size = (*environment)->GetArrayLength(environment, destination);
+    jint* destination_elements = (*environment)->GetIntArrayElements(environment, destination, NULL);
+    if (destination_elements == NULL) {
+        return (jint)CNA_RESULT_OUT_OF_MEMORY;
+    }
+    uint32_t* destination_values = (uint32_t*)malloc(
+        ((size_t)destination_size + 1U) * sizeof(*destination_values));
+    if (destination_values == NULL) {
+        (*environment)->ReleaseIntArrayElements(
+            environment, destination, destination_elements, JNI_ABORT);
+        return (jint)CNA_RESULT_OUT_OF_MEMORY;
+    }
+    for (jsize index = 0; index < destination_size; ++index) {
+        destination_values[index] = (uint32_t)destination_elements[index];
+    }
+    uint64_t out_index_count_value = 0;
+    CNA_Result call_result = cna.morph_target_data_ext_copy_triangle_indices_ext((CNA_MorphTargetDataEXTHandle)data, destination_values, (uint64_t)destination_size, &out_index_count_value);
+    if (call_result == CNA_RESULT_SUCCESS) {
+        for (jsize index = 0; index < destination_size; ++index) {
+            destination_elements[index] = (jint)destination_values[index];
+        }
+    }
+    free(destination_values);
+    (*environment)->ReleaseIntArrayElements(
+        environment, destination, destination_elements, 0);
+    if (call_result == CNA_RESULT_SUCCESS || call_result == CNA_RESULT_BUFFER_TOO_SMALL) {
+        jlong out_index_count_element = (jlong)out_index_count_value;
+        (*environment)->SetLongArrayRegion(
+            environment, out_index_count, 0, 1, &out_index_count_element);
+    }
+    return (jint)call_result;
+}
+
+JNIEXPORT jint JNICALL
+Java_org_openeggbert_cna_internal_generated_NativeModelExtensionRoutes_morphTargetDataCopyWeightKeyframe(
+    JNIEnv* environment, jclass declaring_class, jlong data, jlong keyframe_index, jdoubleArray out_time_seconds, jfloatArray weights, jlongArray out_weight_count, jfloatArray in_tangents, jlongArray out_in_tangent_count, jfloatArray out_tangents, jlongArray out_out_tangent_count)
+{
+    (void)environment;
+    (void)declaring_class;
+    double out_time_seconds_value = 0;
+    jsize weights_size = (*environment)->GetArrayLength(environment, weights);
+    jfloat* weights_elements = (*environment)->GetFloatArrayElements(environment, weights, NULL);
+    if (weights_elements == NULL) {
+        return (jint)CNA_RESULT_OUT_OF_MEMORY;
+    }
+    float* weights_values = (float*)malloc(
+        ((size_t)weights_size + 1U) * sizeof(*weights_values));
+    if (weights_values == NULL) {
+        (*environment)->ReleaseFloatArrayElements(
+            environment, weights, weights_elements, JNI_ABORT);
+        return (jint)CNA_RESULT_OUT_OF_MEMORY;
+    }
+    for (jsize index = 0; index < weights_size; ++index) {
+        weights_values[index] = (float)weights_elements[index];
+    }
+    uint64_t out_weight_count_value = 0;
+    jsize in_tangents_size = (*environment)->GetArrayLength(environment, in_tangents);
+    jfloat* in_tangents_elements = (*environment)->GetFloatArrayElements(environment, in_tangents, NULL);
+    if (in_tangents_elements == NULL) {
+    free(weights_values);
+    (*environment)->ReleaseFloatArrayElements(
+        environment, weights, weights_elements, JNI_ABORT);
+        return (jint)CNA_RESULT_OUT_OF_MEMORY;
+    }
+    float* in_tangents_values = (float*)malloc(
+        ((size_t)in_tangents_size + 1U) * sizeof(*in_tangents_values));
+    if (in_tangents_values == NULL) {
+        (*environment)->ReleaseFloatArrayElements(
+            environment, in_tangents, in_tangents_elements, JNI_ABORT);
+    free(weights_values);
+    (*environment)->ReleaseFloatArrayElements(
+        environment, weights, weights_elements, JNI_ABORT);
+        return (jint)CNA_RESULT_OUT_OF_MEMORY;
+    }
+    for (jsize index = 0; index < in_tangents_size; ++index) {
+        in_tangents_values[index] = (float)in_tangents_elements[index];
+    }
+    uint64_t out_in_tangent_count_value = 0;
+    jsize out_tangents_size = (*environment)->GetArrayLength(environment, out_tangents);
+    jfloat* out_tangents_elements = (*environment)->GetFloatArrayElements(environment, out_tangents, NULL);
+    if (out_tangents_elements == NULL) {
+    free(in_tangents_values);
+    (*environment)->ReleaseFloatArrayElements(
+        environment, in_tangents, in_tangents_elements, JNI_ABORT);
+    free(weights_values);
+    (*environment)->ReleaseFloatArrayElements(
+        environment, weights, weights_elements, JNI_ABORT);
+        return (jint)CNA_RESULT_OUT_OF_MEMORY;
+    }
+    float* out_tangents_values = (float*)malloc(
+        ((size_t)out_tangents_size + 1U) * sizeof(*out_tangents_values));
+    if (out_tangents_values == NULL) {
+        (*environment)->ReleaseFloatArrayElements(
+            environment, out_tangents, out_tangents_elements, JNI_ABORT);
+    free(in_tangents_values);
+    (*environment)->ReleaseFloatArrayElements(
+        environment, in_tangents, in_tangents_elements, JNI_ABORT);
+    free(weights_values);
+    (*environment)->ReleaseFloatArrayElements(
+        environment, weights, weights_elements, JNI_ABORT);
+        return (jint)CNA_RESULT_OUT_OF_MEMORY;
+    }
+    for (jsize index = 0; index < out_tangents_size; ++index) {
+        out_tangents_values[index] = (float)out_tangents_elements[index];
+    }
+    uint64_t out_out_tangent_count_value = 0;
+    CNA_Result call_result = cna.morph_target_data_ext_copy_weight_keyframe((CNA_MorphTargetDataEXTHandle)data, (uint64_t)keyframe_index, &out_time_seconds_value, weights_values, (uint64_t)weights_size, &out_weight_count_value, in_tangents_values, (uint64_t)in_tangents_size, &out_in_tangent_count_value, out_tangents_values, (uint64_t)out_tangents_size, &out_out_tangent_count_value);
+    if (call_result == CNA_RESULT_SUCCESS) {
+        for (jsize index = 0; index < weights_size; ++index) {
+            weights_elements[index] = (jfloat)weights_values[index];
+        }
+    }
+    free(weights_values);
+    (*environment)->ReleaseFloatArrayElements(
+        environment, weights, weights_elements, 0);
+    if (call_result == CNA_RESULT_SUCCESS) {
+        for (jsize index = 0; index < in_tangents_size; ++index) {
+            in_tangents_elements[index] = (jfloat)in_tangents_values[index];
+        }
+    }
+    free(in_tangents_values);
+    (*environment)->ReleaseFloatArrayElements(
+        environment, in_tangents, in_tangents_elements, 0);
+    if (call_result == CNA_RESULT_SUCCESS) {
+        for (jsize index = 0; index < out_tangents_size; ++index) {
+            out_tangents_elements[index] = (jfloat)out_tangents_values[index];
+        }
+    }
+    free(out_tangents_values);
+    (*environment)->ReleaseFloatArrayElements(
+        environment, out_tangents, out_tangents_elements, 0);
+    if (call_result == CNA_RESULT_SUCCESS || call_result == CNA_RESULT_BUFFER_TOO_SMALL) {
+        jdouble out_time_seconds_element = (jdouble)out_time_seconds_value;
+        (*environment)->SetDoubleArrayRegion(
+            environment, out_time_seconds, 0, 1, &out_time_seconds_element);
+        jlong out_weight_count_element = (jlong)out_weight_count_value;
+        (*environment)->SetLongArrayRegion(
+            environment, out_weight_count, 0, 1, &out_weight_count_element);
+        jlong out_in_tangent_count_element = (jlong)out_in_tangent_count_value;
+        (*environment)->SetLongArrayRegion(
+            environment, out_in_tangent_count, 0, 1, &out_in_tangent_count_element);
+        jlong out_out_tangent_count_element = (jlong)out_out_tangent_count_value;
+        (*environment)->SetLongArrayRegion(
+            environment, out_out_tangent_count, 0, 1, &out_out_tangent_count_element);
+    }
+    return (jint)call_result;
+}
+
+JNIEXPORT jint JNICALL
+Java_org_openeggbert_cna_internal_generated_NativeModelExtensionRoutes_morphTargetDataCopyWeights(
+    JNIEnv* environment, jclass declaring_class, jlong data, jfloatArray destination, jlongArray out_weight_count)
+{
+    (void)environment;
+    (void)declaring_class;
+    jsize destination_size = (*environment)->GetArrayLength(environment, destination);
+    jfloat* destination_elements = (*environment)->GetFloatArrayElements(environment, destination, NULL);
+    if (destination_elements == NULL) {
+        return (jint)CNA_RESULT_OUT_OF_MEMORY;
+    }
+    float* destination_values = (float*)malloc(
+        ((size_t)destination_size + 1U) * sizeof(*destination_values));
+    if (destination_values == NULL) {
+        (*environment)->ReleaseFloatArrayElements(
+            environment, destination, destination_elements, JNI_ABORT);
+        return (jint)CNA_RESULT_OUT_OF_MEMORY;
+    }
+    for (jsize index = 0; index < destination_size; ++index) {
+        destination_values[index] = (float)destination_elements[index];
+    }
+    uint64_t out_weight_count_value = 0;
+    CNA_Result call_result = cna.morph_target_data_ext_copy_weights((CNA_MorphTargetDataEXTHandle)data, destination_values, (uint64_t)destination_size, &out_weight_count_value);
+    if (call_result == CNA_RESULT_SUCCESS) {
+        for (jsize index = 0; index < destination_size; ++index) {
+            destination_elements[index] = (jfloat)destination_values[index];
+        }
+    }
+    free(destination_values);
+    (*environment)->ReleaseFloatArrayElements(
+        environment, destination, destination_elements, 0);
+    if (call_result == CNA_RESULT_SUCCESS || call_result == CNA_RESULT_BUFFER_TOO_SMALL) {
+        jlong out_weight_count_element = (jlong)out_weight_count_value;
+        (*environment)->SetLongArrayRegion(
+            environment, out_weight_count, 0, 1, &out_weight_count_element);
+    }
+    return (jint)call_result;
+}
+
+JNIEXPORT jint JNICALL
+Java_org_openeggbert_cna_internal_generated_NativeModelExtensionRoutes_morphTargetDataDestroy(
+    JNIEnv* environment, jclass declaring_class, jlong data)
+{
+    (void)environment;
+    (void)declaring_class;
+    CNA_Result call_result = cna.morph_target_data_ext_destroy((CNA_MorphTargetDataEXTHandle)data);
+    return (jint)call_result;
+}
+
+JNIEXPORT jint JNICALL
+Java_org_openeggbert_cna_internal_generated_NativeModelExtensionRoutes_morphTargetDataGetBaseVertexByteCount(
+    JNIEnv* environment, jclass declaring_class, jlong data, jlongArray out_byte_count)
+{
+    (void)environment;
+    (void)declaring_class;
+    uint64_t out_byte_count_value = 0;
+    CNA_Result call_result = cna.morph_target_data_ext_get_base_vertex_byte_count((CNA_MorphTargetDataEXTHandle)data, &out_byte_count_value);
+    if (call_result == CNA_RESULT_SUCCESS || call_result == CNA_RESULT_BUFFER_TOO_SMALL) {
+        jlong out_byte_count_element = (jlong)out_byte_count_value;
+        (*environment)->SetLongArrayRegion(
+            environment, out_byte_count, 0, 1, &out_byte_count_element);
+    }
+    return (jint)call_result;
+}
+
+JNIEXPORT jint JNICALL
+Java_org_openeggbert_cna_internal_generated_NativeModelExtensionRoutes_morphTargetDataGetRecomputeFlatNormalsExt(
+    JNIEnv* environment, jclass declaring_class, jlong data, jbooleanArray out_recompute)
+{
+    (void)environment;
+    (void)declaring_class;
+    CNA_Bool out_recompute_value = 0;
+    CNA_Result call_result = cna.morph_target_data_ext_get_recompute_flat_normals_ext((CNA_MorphTargetDataEXTHandle)data, &out_recompute_value);
+    if (call_result == CNA_RESULT_SUCCESS || call_result == CNA_RESULT_BUFFER_TOO_SMALL) {
+        jboolean out_recompute_element = (jboolean)out_recompute_value;
+        (*environment)->SetBooleanArrayRegion(
+            environment, out_recompute, 0, 1, &out_recompute_element);
+    }
+    return (jint)call_result;
+}
+
+JNIEXPORT jint JNICALL
+Java_org_openeggbert_cna_internal_generated_NativeModelExtensionRoutes_morphTargetDataGetStride(
+    JNIEnv* environment, jclass declaring_class, jlong data, jintArray out_stride)
+{
+    (void)environment;
+    (void)declaring_class;
+    int32_t out_stride_value = 0;
+    CNA_Result call_result = cna.morph_target_data_ext_get_stride((CNA_MorphTargetDataEXTHandle)data, &out_stride_value);
+    if (call_result == CNA_RESULT_SUCCESS || call_result == CNA_RESULT_BUFFER_TOO_SMALL) {
+        jint out_stride_element = (jint)out_stride_value;
+        (*environment)->SetIntArrayRegion(
+            environment, out_stride, 0, 1, &out_stride_element);
+    }
+    return (jint)call_result;
+}
+
+JNIEXPORT jint JNICALL
+Java_org_openeggbert_cna_internal_generated_NativeModelExtensionRoutes_morphTargetDataGetTargetCount(
+    JNIEnv* environment, jclass declaring_class, jlong data, jlongArray out_target_count)
+{
+    (void)environment;
+    (void)declaring_class;
+    uint64_t out_target_count_value = 0;
+    CNA_Result call_result = cna.morph_target_data_ext_get_target_count((CNA_MorphTargetDataEXTHandle)data, &out_target_count_value);
+    if (call_result == CNA_RESULT_SUCCESS || call_result == CNA_RESULT_BUFFER_TOO_SMALL) {
+        jlong out_target_count_element = (jlong)out_target_count_value;
+        (*environment)->SetLongArrayRegion(
+            environment, out_target_count, 0, 1, &out_target_count_element);
+    }
+    return (jint)call_result;
+}
+
+JNIEXPORT jint JNICALL
+Java_org_openeggbert_cna_internal_generated_NativeModelExtensionRoutes_morphTargetDataGetWeightTrackInfo(
+    JNIEnv* environment, jclass declaring_class, jlong data, jlongArray out_keyframe_count, jbooleanArray out_step_interpolation, jbooleanArray out_cubic_spline)
+{
+    (void)environment;
+    (void)declaring_class;
+    uint64_t out_keyframe_count_value = 0;
+    CNA_Bool out_step_interpolation_value = 0;
+    CNA_Bool out_cubic_spline_value = 0;
+    CNA_Result call_result = cna.morph_target_data_ext_get_weight_track_info((CNA_MorphTargetDataEXTHandle)data, &out_keyframe_count_value, &out_step_interpolation_value, &out_cubic_spline_value);
+    if (call_result == CNA_RESULT_SUCCESS || call_result == CNA_RESULT_BUFFER_TOO_SMALL) {
+        jlong out_keyframe_count_element = (jlong)out_keyframe_count_value;
+        (*environment)->SetLongArrayRegion(
+            environment, out_keyframe_count, 0, 1, &out_keyframe_count_element);
+        jboolean out_step_interpolation_element = (jboolean)out_step_interpolation_value;
+        (*environment)->SetBooleanArrayRegion(
+            environment, out_step_interpolation, 0, 1, &out_step_interpolation_element);
+        jboolean out_cubic_spline_element = (jboolean)out_cubic_spline_value;
+        (*environment)->SetBooleanArrayRegion(
+            environment, out_cubic_spline, 0, 1, &out_cubic_spline_element);
+    }
+    return (jint)call_result;
+}
+
+JNIEXPORT jint JNICALL
+Java_org_openeggbert_cna_internal_generated_NativeModelExtensionRoutes_morphTargetDataSetRecomputeFlatNormalsExt(
+    JNIEnv* environment, jclass declaring_class, jlong data, jboolean recompute)
+{
+    (void)environment;
+    (void)declaring_class;
+    CNA_Result call_result = cna.morph_target_data_ext_set_recompute_flat_normals_ext((CNA_MorphTargetDataEXTHandle)data, (CNA_Bool)recompute);
+    return (jint)call_result;
+}
+
+JNIEXPORT jint JNICALL
+Java_org_openeggbert_cna_internal_generated_NativeModelExtensionRoutes_morphTargetDataSetTangentDeltas(
+    JNIEnv* environment, jclass declaring_class, jlong data, jlong target_index, jfloatArray deltasFloating)
+{
+    (void)environment;
+    (void)declaring_class;
+    jsize deltas_count = (*environment)->GetArrayLength(environment, deltasFloating) / 3;
+    if ((*environment)->GetArrayLength(environment, deltasFloating) != deltas_count * 3) {
+        return (jint)CNA_RESULT_INVALID_ARGUMENT;
+    }
+    CNA_Vector3* deltas_values = (CNA_Vector3*)calloc(
+        (size_t)deltas_count + 1U, sizeof(*deltas_values));
+    if (deltas_values == NULL) {
+        return (jint)CNA_RESULT_OUT_OF_MEMORY;
+    }
+    {
+        jsize deltasFloating_length = (*environment)->GetArrayLength(environment, deltasFloating);
+        jfloat* deltasFloating_values = (jfloat*)malloc(
+            ((size_t)deltasFloating_length + 1U) * sizeof(*deltasFloating_values));
+        if (deltasFloating_values == NULL) {
+            free(deltas_values);
+            return (jint)CNA_RESULT_OUT_OF_MEMORY;
+        }
+        (*environment)->GetFloatArrayRegion(environment, deltasFloating, 0, deltasFloating_length, deltasFloating_values);
+        for (jsize element = 0; element < deltas_count; ++element) {
+            deltas_values[element].x = (float)deltasFloating_values[element * 3 + 0];
+            deltas_values[element].y = (float)deltasFloating_values[element * 3 + 1];
+            deltas_values[element].z = (float)deltasFloating_values[element * 3 + 2];
+        }
+        free(deltasFloating_values);
+    }
+    CNA_Result call_result = cna.morph_target_data_ext_set_tangent_deltas((CNA_MorphTargetDataEXTHandle)data, (uint64_t)target_index, deltas_values, (uint64_t)deltas_count);
+    free(deltas_values);
+    return (jint)call_result;
+}
+
+JNIEXPORT jint JNICALL
+Java_org_openeggbert_cna_internal_generated_NativeModelExtensionRoutes_morphTargetDataSetTriangleIndicesExt(
+    JNIEnv* environment, jclass declaring_class, jlong data, jintArray indices)
+{
+    (void)environment;
+    (void)declaring_class;
+    jsize indices_size = (*environment)->GetArrayLength(environment, indices);
+    jint* indices_elements = (*environment)->GetIntArrayElements(environment, indices, NULL);
+    if (indices_elements == NULL) {
+        return (jint)CNA_RESULT_OUT_OF_MEMORY;
+    }
+    uint32_t* indices_values = (uint32_t*)malloc(
+        ((size_t)indices_size + 1U) * sizeof(*indices_values));
+    if (indices_values == NULL) {
+        (*environment)->ReleaseIntArrayElements(
+            environment, indices, indices_elements, JNI_ABORT);
+        return (jint)CNA_RESULT_OUT_OF_MEMORY;
+    }
+    for (jsize index = 0; index < indices_size; ++index) {
+        indices_values[index] = (uint32_t)indices_elements[index];
+    }
+    CNA_Result call_result = cna.morph_target_data_ext_set_triangle_indices_ext((CNA_MorphTargetDataEXTHandle)data, indices_values, (uint64_t)indices_size);
+    free(indices_values);
+    (*environment)->ReleaseIntArrayElements(
+        environment, indices, indices_elements, JNI_ABORT);
+    return (jint)call_result;
+}
+
+JNIEXPORT jint JNICALL
+Java_org_openeggbert_cna_internal_generated_NativeModelExtensionRoutes_morphTargetDataSetWeights(
+    JNIEnv* environment, jclass declaring_class, jlong data, jfloatArray weights)
+{
+    (void)environment;
+    (void)declaring_class;
+    jsize weights_size = (*environment)->GetArrayLength(environment, weights);
+    jfloat* weights_elements = (*environment)->GetFloatArrayElements(environment, weights, NULL);
+    if (weights_elements == NULL) {
+        return (jint)CNA_RESULT_OUT_OF_MEMORY;
+    }
+    float* weights_values = (float*)malloc(
+        ((size_t)weights_size + 1U) * sizeof(*weights_values));
+    if (weights_values == NULL) {
+        (*environment)->ReleaseFloatArrayElements(
+            environment, weights, weights_elements, JNI_ABORT);
+        return (jint)CNA_RESULT_OUT_OF_MEMORY;
+    }
+    for (jsize index = 0; index < weights_size; ++index) {
+        weights_values[index] = (float)weights_elements[index];
+    }
+    CNA_Result call_result = cna.morph_target_data_ext_set_weights((CNA_MorphTargetDataEXTHandle)data, weights_values, (uint64_t)weights_size);
+    free(weights_values);
+    (*environment)->ReleaseFloatArrayElements(
+        environment, weights, weights_elements, JNI_ABORT);
+    return (jint)call_result;
+}
+
+JNIEXPORT jint JNICALL
 Java_org_openeggbert_cna_internal_generated_NativeModelExtensionRoutes_skinnedModelAddPart(
     JNIEnv* environment, jclass declaring_class, jlong model, jbyteArray name, jlong vertex_buffer, jlong index_buffer, jlong part, jlong texture)
 {

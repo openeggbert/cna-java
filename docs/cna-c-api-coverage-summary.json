@@ -1,37 +1,14 @@
 {
   "abiVersion": "0.21.0",
-  "actionableLocal": [
-    "cna_morph_target_data_ext_blend",
-    "cna_morph_target_data_ext_copy_base_vertex_bytes",
-    "cna_morph_target_data_ext_copy_normal_deltas",
-    "cna_morph_target_data_ext_copy_position_deltas",
-    "cna_morph_target_data_ext_copy_tangent_deltas",
-    "cna_morph_target_data_ext_copy_triangle_indices_ext",
-    "cna_morph_target_data_ext_copy_weight_keyframe",
-    "cna_morph_target_data_ext_copy_weights",
-    "cna_morph_target_data_ext_create",
-    "cna_morph_target_data_ext_destroy",
-    "cna_morph_target_data_ext_get_base_vertex_byte_count",
-    "cna_morph_target_data_ext_get_recompute_flat_normals_ext",
-    "cna_morph_target_data_ext_get_stride",
-    "cna_morph_target_data_ext_get_target_count",
-    "cna_morph_target_data_ext_get_type_name_byte_count",
-    "cna_morph_target_data_ext_get_weight_track_info",
-    "cna_morph_target_data_ext_set_recompute_flat_normals_ext",
-    "cna_morph_target_data_ext_set_tangent_deltas",
-    "cna_morph_target_data_ext_set_triangle_indices_ext",
-    "cna_morph_target_data_ext_set_weight_track",
-    "cna_morph_target_data_ext_set_weights"
-  ],
+  "actionableLocal": [],
   "bindingStatusCounts": {
-    "ACTIONABLE_LOCAL": 21,
-    "BLOCKED_UPSTREAM": 48,
-    "BOUND": 2724,
+    "BLOCKED_UPSTREAM": 47,
+    "BOUND": 2745,
     "DEFERRED_TRACKED": 326,
-    "DELIBERATE_NON_BINDING": 935
+    "DELIBERATE_NON_BINDING": 936
   },
   "boundButUnreached": [],
-  "boundFunctions": 2724,
+  "boundFunctions": 2745,
   "boundWithoutJavaCallSite": [],
   "byHeader": {
     "abi.h": {
@@ -224,9 +201,9 @@
       "total": 41
     },
     "models.h": {
-      "CNA_EXTENSION_CANDIDATE": 182,
+      "CNA_EXTENSION_CANDIDATE": 181,
       "DEFERRED_RUNTIME": 1,
-      "NOT_USEFUL_IN_JAVA": 33,
+      "NOT_USEFUL_IN_JAVA": 34,
       "total": 216
     },
     "net.h": {
@@ -338,21 +315,20 @@
   },
   "canonicalFunctions": 4054,
   "classificationCounts": {
-    "CNA_EXTENSION_CANDIDATE": 1851,
+    "CNA_EXTENSION_CANDIDATE": 1850,
     "DEFERRED_RUNTIME": 327,
     "JAVA_INTERNAL_ONLY": 11,
-    "NOT_USEFUL_IN_JAVA": 879,
+    "NOT_USEFUL_IN_JAVA": 880,
     "XNA_BACKING": 986
   },
   "cnaInventorySha256": "b485d17b1df9a86c6099700baedcd435c8a3f07487af8741b01d8c471956bfe7",
   "deferredTasks": {
     "JAVA-EXT-006": 2,
-    "JAVA-EXT-007": 21,
     "JAVA-EXT-008": 1,
     "JAVA-EXT-010": 8,
     "JAVA-EXT-012": 1,
     "JAVA-NATIVE-010": 8,
-    "JAVA-NATIVE-011": 15,
+    "JAVA-NATIVE-011": 14,
     "JAVA-NATIVE-012": 37,
     "JAVA-NATIVE-013": 25,
     "JAVA-NATIVE-014": 39,
@@ -407,10 +383,9 @@
       "total": 1
     },
     "models.h": {
-      "ACTIONABLE_LOCAL": 21,
-      "BLOCKED_UPSTREAM": 27,
+      "BLOCKED_UPSTREAM": 26,
       "DELIBERATE_NON_BINDING": 4,
-      "total": 52
+      "total": 30
     },
     "sensors.h": {
       "DELIBERATE_NON_BINDING": 2,
