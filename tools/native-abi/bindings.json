@@ -3024,6 +3024,35 @@
       ]
     },
     {
+      "name": "cna_cnb_model_add_morph_target",
+      "header": "cnb.h",
+      "ownership": "borrows model data; caller integer output",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_CnbModelDataHandle",
+        "uint64_t",
+        "uint64_t*"
+      ]
+    },
+    {
+      "name": "cna_cnb_model_add_morph_weight_key",
+      "header": "cnb.h",
+      "ownership": "borrows model data; copies the caller's values, caller integer output",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_CnbModelDataHandle",
+        "uint64_t",
+        "double",
+        "const float*",
+        "uint64_t",
+        "const float*",
+        "uint64_t",
+        "const float*",
+        "uint64_t",
+        "uint64_t*"
+      ]
+    },
+    {
       "name": "cna_cnb_model_add_part",
       "header": "cnb.h",
       "ownership": "borrows model data; copies the caller's structure and names, caller integer output",
@@ -3037,12 +3066,49 @@
       ]
     },
     {
+      "name": "cna_cnb_model_clear_morph",
+      "header": "cnb.h",
+      "ownership": "borrows model data",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_CnbModelDataHandle",
+        "uint64_t"
+      ]
+    },
+    {
       "name": "cna_cnb_model_clear_skeleton",
       "header": "cnb.h",
       "ownership": "borrows model data",
       "returnType": "CNA_Result",
       "parameters": [
         "CNA_CnbModelDataHandle"
+      ]
+    },
+    {
+      "name": "cna_cnb_model_copy_animation_keyframes",
+      "header": "cnb.h",
+      "ownership": "borrows model data; caller buffer",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_CnbModelDataHandle",
+        "uint64_t",
+        "uint64_t",
+        "CNA_KeyframeEXT*",
+        "uint64_t",
+        "uint64_t*"
+      ]
+    },
+    {
+      "name": "cna_cnb_model_copy_animation_name",
+      "header": "cnb.h",
+      "ownership": "borrows model data; caller buffer",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_CnbModelDataHandle",
+        "uint64_t",
+        "char*",
+        "uint64_t",
+        "uint64_t*"
       ]
     },
     {
@@ -3094,6 +3160,49 @@
         "CNA_CnbModelDataHandle",
         "uint64_t",
         "uint32_t*",
+        "uint64_t",
+        "uint64_t*"
+      ]
+    },
+    {
+      "name": "cna_cnb_model_copy_morph_target_deltas",
+      "header": "cnb.h",
+      "ownership": "borrows model data; caller buffer",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_CnbModelDataHandle",
+        "uint64_t",
+        "uint64_t",
+        "CNA_CnbMorphDeltaStream",
+        "float*",
+        "uint64_t",
+        "uint64_t*"
+      ]
+    },
+    {
+      "name": "cna_cnb_model_copy_morph_weight_key_values",
+      "header": "cnb.h",
+      "ownership": "borrows model data; caller buffer",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_CnbModelDataHandle",
+        "uint64_t",
+        "uint64_t",
+        "CNA_CnbMorphKeyStream",
+        "float*",
+        "uint64_t",
+        "uint64_t*"
+      ]
+    },
+    {
+      "name": "cna_cnb_model_copy_morph_weights",
+      "header": "cnb.h",
+      "ownership": "borrows model data; caller buffer",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_CnbModelDataHandle",
+        "uint64_t",
+        "float*",
         "uint64_t",
         "uint64_t*"
       ]
@@ -3281,6 +3390,43 @@
       ]
     },
     {
+      "name": "cna_cnb_model_get_animation",
+      "header": "cnb.h",
+      "ownership": "borrows model data; caller value outputs",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_CnbModelDataHandle",
+        "uint64_t",
+        "double*",
+        "uint64_t*",
+        "CNA_ClipTargetSpaceEXT*"
+      ]
+    },
+    {
+      "name": "cna_cnb_model_get_animation_name_size",
+      "header": "cnb.h",
+      "ownership": "borrows model data; caller integer output",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_CnbModelDataHandle",
+        "uint64_t",
+        "uint64_t*"
+      ]
+    },
+    {
+      "name": "cna_cnb_model_get_animation_track",
+      "header": "cnb.h",
+      "ownership": "borrows model data; caller value outputs",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_CnbModelDataHandle",
+        "uint64_t",
+        "uint64_t",
+        "int32_t*",
+        "uint64_t*"
+      ]
+    },
+    {
       "name": "cna_cnb_model_get_bone",
       "header": "cnb.h",
       "ownership": "borrows model data; caller structure output",
@@ -3405,6 +3551,29 @@
       ]
     },
     {
+      "name": "cna_cnb_model_get_morph",
+      "header": "cnb.h",
+      "ownership": "borrows model data; caller structure output",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_CnbModelDataHandle",
+        "uint64_t",
+        "CNA_CnbMorphInfo*"
+      ]
+    },
+    {
+      "name": "cna_cnb_model_get_morph_weight_key",
+      "header": "cnb.h",
+      "ownership": "borrows model data; caller structure output",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_CnbModelDataHandle",
+        "uint64_t",
+        "uint64_t",
+        "CNA_CnbMorphWeightKeyInfo*"
+      ]
+    },
+    {
       "name": "cna_cnb_model_get_part",
       "header": "cnb.h",
       "ownership": "borrows model data; caller structure output",
@@ -3445,6 +3614,17 @@
       "parameters": [
         "CNA_CnbModelDataHandle",
         "CNA_CnbSkeletonInfo*"
+      ]
+    },
+    {
+      "name": "cna_cnb_model_has_morph",
+      "header": "cnb.h",
+      "ownership": "borrows model data; caller boolean output",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_CnbModelDataHandle",
+        "uint64_t",
+        "CNA_Bool*"
       ]
     },
     {
@@ -3515,6 +3695,43 @@
         "uint64_t",
         "uint64_t",
         "const CNA_CnbTextureTransform*"
+      ]
+    },
+    {
+      "name": "cna_cnb_model_set_morph",
+      "header": "cnb.h",
+      "ownership": "borrows model data; reads the caller's structure",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_CnbModelDataHandle",
+        "uint64_t",
+        "const CNA_CnbMorphInfo*"
+      ]
+    },
+    {
+      "name": "cna_cnb_model_set_morph_target_deltas",
+      "header": "cnb.h",
+      "ownership": "borrows model data; copies the caller's values",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_CnbModelDataHandle",
+        "uint64_t",
+        "uint64_t",
+        "CNA_CnbMorphDeltaStream",
+        "const float*",
+        "uint64_t"
+      ]
+    },
+    {
+      "name": "cna_cnb_model_set_morph_weights",
+      "header": "cnb.h",
+      "ownership": "borrows model data; copies the caller's values",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_CnbModelDataHandle",
+        "uint64_t",
+        "const float*",
+        "uint64_t"
       ]
     },
     {

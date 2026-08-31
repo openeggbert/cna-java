@@ -686,6 +686,16 @@ public final class NativeCnbRoutes {
     public static native int cnbModelAddMesh(long model, byte[] name, int parentBone, int[] partIndices, long[] outIndex);
 
     /**
+     * cna_cnb_model_add_morph_target (cnb.h).
+     */
+    public static native int cnbModelAddMorphTarget(long model, long part, long[] outIndex);
+
+    /**
+     * cna_cnb_model_add_morph_weight_key (cnb.h).
+     */
+    public static native int cnbModelAddMorphWeightKey(long model, long part, double timeSeconds, float[] weights, float[] inTangents, float[] outTangents, long[] outIndex);
+
+    /**
      * cna_cnb_model_add_part (cnb.h).
      *
      * <p>infoBytes carries CNA_CnbModelPartInfo in this order:
@@ -710,9 +720,24 @@ public final class NativeCnbRoutes {
     public static native int cnbModelAddPart(long model, byte[] infoBytes, long[] infoIntegral, byte[] name, byte[] externalEffect, long[] outIndex);
 
     /**
+     * cna_cnb_model_clear_morph (cnb.h).
+     */
+    public static native int cnbModelClearMorph(long model, long part);
+
+    /**
      * cna_cnb_model_clear_skeleton (cnb.h).
      */
     public static native int cnbModelClearSkeleton(long model);
+
+    /**
+     * cna_cnb_model_copy_animation_keyframes (cnb.h).
+     */
+    public static native int cnbModelCopyAnimationKeyframes(long model, long index, long track, float[] destinationFloating, double[] destinationDoubles, long[] outKeyframeCount);
+
+    /**
+     * cna_cnb_model_copy_animation_name (cnb.h).
+     */
+    public static native int cnbModelCopyAnimationName(long model, long index, byte[] destination, long[] outByteCount);
 
     /**
      * cna_cnb_model_copy_bone_name (cnb.h).
@@ -733,6 +758,21 @@ public final class NativeCnbRoutes {
      * cna_cnb_model_copy_mesh_part_indices (cnb.h).
      */
     public static native int cnbModelCopyMeshPartIndices(long model, long index, int[] destination, long[] outIndexCount);
+
+    /**
+     * cna_cnb_model_copy_morph_target_deltas (cnb.h).
+     */
+    public static native int cnbModelCopyMorphTargetDeltas(long model, long part, long target, int stream, float[] destination, long[] outValueCount);
+
+    /**
+     * cna_cnb_model_copy_morph_weight_key_values (cnb.h).
+     */
+    public static native int cnbModelCopyMorphWeightKeyValues(long model, long part, long key, int stream, float[] destination, long[] outValueCount);
+
+    /**
+     * cna_cnb_model_copy_morph_weights (cnb.h).
+     */
+    public static native int cnbModelCopyMorphWeights(long model, long part, float[] destination, long[] outValueCount);
 
     /**
      * cna_cnb_model_copy_part_external_effect (cnb.h).
@@ -813,6 +853,21 @@ public final class NativeCnbRoutes {
      * cna_cnb_model_from_cnj_take_model (cnb.h).
      */
     public static native int cnbModelFromCnjTakeModel(long result, long[] outModel);
+
+    /**
+     * cna_cnb_model_get_animation (cnb.h).
+     */
+    public static native int cnbModelGetAnimation(long model, long index, double[] outDurationSeconds, long[] outTrackCount, int[] outTargetSpace);
+
+    /**
+     * cna_cnb_model_get_animation_name_size (cnb.h).
+     */
+    public static native int cnbModelGetAnimationNameSize(long model, long index, long[] outByteCount);
+
+    /**
+     * cna_cnb_model_get_animation_track (cnb.h).
+     */
+    public static native int cnbModelGetAnimationTrack(long model, long index, long track, int[] outBoneIndex, long[] outKeyframeCount);
 
     /**
      * cna_cnb_model_get_bone (cnb.h).
@@ -984,6 +1039,49 @@ public final class NativeCnbRoutes {
     public static native int cnbModelGetMeshNameSize(long model, long index, long[] outByteCount);
 
     /**
+     * cna_cnb_model_get_morph (cnb.h).
+     *
+     * <p>outInfoBytes carries CNA_CnbMorphInfo in this order:
+     * <ol start="0">
+     *   <li>{@code reserved2[0]} (uint8_t)</li>
+     *   <li>{@code reserved2[1]} (uint8_t)</li>
+     *   <li>{@code reserved2[2]} (uint8_t)</li>
+     *   <li>{@code reserved2[3]} (uint8_t)</li>
+     *   <li>{@code reserved2[4]} (uint8_t)</li>
+     * </ol>
+     *
+     * <p>outInfoIntegral carries CNA_CnbMorphInfo in this order:
+     * <ol start="0">
+     *   <li>{@code vertex_count} (uint32_t)</li>
+     *   <li>{@code reserved} (uint32_t)</li>
+     *   <li>{@code target_count} (uint64_t)</li>
+     *   <li>{@code weight_count} (uint64_t)</li>
+     *   <li>{@code weight_track_key_count} (uint64_t)</li>
+     *   <li>{@code recompute_flat_normals} (CNA_Bool)</li>
+     *   <li>{@code weight_track_step_interpolation} (CNA_Bool)</li>
+     *   <li>{@code weight_track_cubic_spline} (CNA_Bool)</li>
+     * </ol>
+     */
+    public static native int cnbModelGetMorph(long model, long part, byte[] outInfoBytes, long[] outInfoIntegral);
+
+    /**
+     * cna_cnb_model_get_morph_weight_key (cnb.h).
+     *
+     * <p>outInfoIntegral carries CNA_CnbMorphWeightKeyInfo in this order:
+     * <ol start="0">
+     *   <li>{@code weight_count} (uint64_t)</li>
+     *   <li>{@code in_tangent_count} (uint64_t)</li>
+     *   <li>{@code out_tangent_count} (uint64_t)</li>
+     * </ol>
+     *
+     * <p>outInfoDoubles carries CNA_CnbMorphWeightKeyInfo in this order:
+     * <ol start="0">
+     *   <li>{@code time_seconds} (double)</li>
+     * </ol>
+     */
+    public static native int cnbModelGetMorphWeightKey(long model, long part, long key, long[] outInfoIntegral, double[] outInfoDoubles);
+
+    /**
      * cna_cnb_model_get_part (cnb.h).
      *
      * <p>outInfoBytes carries CNA_CnbModelPartInfo in this order:
@@ -1038,6 +1136,11 @@ public final class NativeCnbRoutes {
      * </ol>
      */
     public static native int cnbModelGetSkeleton(long model, byte[] outInfoBytes, long[] outInfoIntegral);
+
+    /**
+     * cna_cnb_model_has_morph (cnb.h).
+     */
+    public static native int cnbModelHasMorph(long model, long part, boolean[] outPresent);
 
     /**
      * cna_cnb_model_set_flags (cnb.h).
@@ -1126,6 +1229,42 @@ public final class NativeCnbRoutes {
      * </ol>
      */
     public static native int cnbModelSetMaterialTextureTransform(long model, long part, long slot, float[] transformFloating);
+
+    /**
+     * cna_cnb_model_set_morph (cnb.h).
+     *
+     * <p>infoBytes carries CNA_CnbMorphInfo in this order:
+     * <ol start="0">
+     *   <li>{@code reserved2[0]} (uint8_t)</li>
+     *   <li>{@code reserved2[1]} (uint8_t)</li>
+     *   <li>{@code reserved2[2]} (uint8_t)</li>
+     *   <li>{@code reserved2[3]} (uint8_t)</li>
+     *   <li>{@code reserved2[4]} (uint8_t)</li>
+     * </ol>
+     *
+     * <p>infoIntegral carries CNA_CnbMorphInfo in this order:
+     * <ol start="0">
+     *   <li>{@code vertex_count} (uint32_t)</li>
+     *   <li>{@code reserved} (uint32_t)</li>
+     *   <li>{@code target_count} (uint64_t)</li>
+     *   <li>{@code weight_count} (uint64_t)</li>
+     *   <li>{@code weight_track_key_count} (uint64_t)</li>
+     *   <li>{@code recompute_flat_normals} (CNA_Bool)</li>
+     *   <li>{@code weight_track_step_interpolation} (CNA_Bool)</li>
+     *   <li>{@code weight_track_cubic_spline} (CNA_Bool)</li>
+     * </ol>
+     */
+    public static native int cnbModelSetMorph(long model, long part, byte[] infoBytes, long[] infoIntegral);
+
+    /**
+     * cna_cnb_model_set_morph_target_deltas (cnb.h).
+     */
+    public static native int cnbModelSetMorphTargetDeltas(long model, long part, long target, int stream, float[] values);
+
+    /**
+     * cna_cnb_model_set_morph_weights (cnb.h).
+     */
+    public static native int cnbModelSetMorphWeights(long model, long part, float[] values);
 
     /**
      * cna_cnb_model_set_part (cnb.h).

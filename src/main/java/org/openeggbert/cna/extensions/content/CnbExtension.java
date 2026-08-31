@@ -101,6 +101,28 @@ final class CnbExtension {
         return trim(destination, count[0]);
     }
 
+    /** Reads one of CNA's size-then-copy float payloads. */
+    static float[] floats(String operation, FloatCopyRoute copy) {
+        long[] count = new long[1];
+        int probe = copy.read(new float[0], count);
+        if (probe != RESULT_BUFFER_TOO_SMALL) {
+            check(operation, probe);
+        }
+        float[] destination = new float[Math.toIntExact(count[0])];
+        check(operation, copy.read(destination, count));
+        if (count[0] == destination.length) {
+            return destination;
+        }
+        float[] exact = new float[Math.toIntExact(count[0])];
+        System.arraycopy(destination, 0, exact, 0, exact.length);
+        return exact;
+    }
+
+    /** The copy half of a count/copy float pair. */
+    interface FloatCopyRoute {
+        int read(float[] destination, long[] outCount);
+    }
+
     /** Reads one of CNA's count-then-size-then-copy string lists. */
     static java.util.List<String> list(
             String operation, CountRoute count, IndexedSizeRoute size, IndexedCopyRoute copy) {

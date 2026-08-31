@@ -218,6 +218,92 @@ final class CnbModelTests {
     }
 
     @Test
+    void blendShapesSurviveTheContainer() {
+        byte[] file;
+        try (CnbModelData model = buildModel()) {
+            assertFalse(model.hasMorph(0), "a plain part carries no blend shapes");
+
+            // setMorph is what creates the morph block; adding a target to a part that has
+            // none is refused rather than silently creating one.
+            assertThrows(IllegalArgumentException.class, () -> model.addMorphTarget(0));
+            model.setMorph(0, 3, true, false, true);
+            assertTrue(model.hasMorph(0));
+            assertEquals(0, model.addMorphTarget(0));
+            assertEquals(1, model.addMorphTarget(0));
+
+            // Three vertices of three floats per stream, each stream given its own values so a
+            // position read out of the normal slot cannot pass.
+            for (int target = 0; target < 2; target++) {
+                for (CnbMorphDeltaStream stream : CnbMorphDeltaStream.values()) {
+                    model.setMorphTargetDeltas(0, target, stream,
+                            deltas(target * 100 + stream.ordinal() * 10));
+                }
+            }
+            model.setMorphWeights(0, new float[] {0.25f, 0.75f});
+            assertEquals(0, model.addMorphWeightKey(0, 0.0,
+                    new float[] {0.0f, 0.0f},
+                    new float[] {0.1f, 0.2f}, new float[] {0.3f, 0.4f}));
+            assertEquals(1, model.addMorphWeightKey(0, 1.5,
+                    new float[] {1.0f, 0.5f},
+                    new float[] {0.5f, 0.6f}, new float[] {0.7f, 0.8f}));
+
+            CnbMorphInfo info = model.getMorph(0);
+            assertEquals(3, info.VertexCount());
+            assertEquals(2, info.TargetCount());
+            assertEquals(2, info.WeightCount());
+            assertEquals(2, info.WeightTrackKeyCount());
+            assertTrue(info.RecomputeFlatNormals());
+            assertFalse(info.WeightTrackStepInterpolation());
+            assertTrue(info.WeightTrackCubicSpline());
+
+            file = Cnb.encodeModel(model, "models/morph");
+        }
+
+        try (CnbDocument document = CnbDocument.parse(
+                     file, "morph.cnb", CnbReadLimits.standard());
+             CnbModelData decoded = document.decodeModel()) {
+            assertTrue(decoded.hasMorph(0));
+            assertEquals(2, decoded.getMorph(0).TargetCount());
+            for (int target = 0; target < 2; target++) {
+                for (CnbMorphDeltaStream stream : CnbMorphDeltaStream.values()) {
+                    assertArrayEquals(deltas(target * 100 + stream.ordinal() * 10),
+                            decoded.readMorphTargetDeltas(0, target, stream),
+                            "target " + target + " " + stream);
+                }
+            }
+            assertArrayEquals(new float[] {0.25f, 0.75f}, decoded.readMorphWeights(0));
+
+            CnbMorphWeightKey second = decoded.getMorphWeightKey(0, 1);
+            assertEquals(1.5, second.TimeSeconds());
+            assertEquals(2, second.WeightCount());
+            assertEquals(2, second.InTangentCount());
+            assertArrayEquals(new float[] {1.0f, 0.5f},
+                    decoded.readMorphWeightKeyValues(0, 1, CnbMorphKeyStream.Weights));
+            assertArrayEquals(new float[] {0.5f, 0.6f},
+                    decoded.readMorphWeightKeyValues(0, 1, CnbMorphKeyStream.InTangent));
+            assertArrayEquals(new float[] {0.7f, 0.8f},
+                    decoded.readMorphWeightKeyValues(0, 1, CnbMorphKeyStream.OutTangent));
+        }
+
+        try (CnbModelData model = buildModel()) {
+            model.setMorph(0, 3, false, true, false);
+            model.addMorphTarget(0);
+            assertTrue(model.hasMorph(0));
+            model.clearMorph(0);
+            assertFalse(model.hasMorph(0), "clearing removes the blend shapes entirely");
+        }
+    }
+
+    /** Three vertices of three floats, offset so every stream and target is distinguishable. */
+    private static float[] deltas(int offset) {
+        float[] values = new float[9];
+        for (int index = 0; index < values.length; index++) {
+            values[index] = offset + index;
+        }
+        return values;
+    }
+
+    @Test
     void aMaterialAndItsEightSlotsSurviveTheContainer() {
         CnbMaterial material = new CnbMaterial(
                 new Vector4(0.25f, 0.5f, 0.75f, 1.0f),

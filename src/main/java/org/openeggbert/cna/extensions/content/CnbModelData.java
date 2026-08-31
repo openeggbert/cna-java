@@ -1,6 +1,7 @@
 package org.openeggbert.cna.extensions.content;
 
 import Microsoft.Xna.Framework.Matrix;
+import Microsoft.Xna.Framework.Quaternion;
 import Microsoft.Xna.Framework.Vector3;
 import Microsoft.Xna.Framework.Vector4;
 
@@ -564,6 +565,262 @@ public final class CnbModelData implements AutoCloseable {
                 .cnbModelSetMaterialSampler(open(), part, slot.ordinal(), new byte[3],
                         new long[] {sampler.Filter(), sampler.AddressU(), sampler.AddressV(),
                             sampler.Declared() ? 1 : 0}));
+    }
+
+    /**
+     * Reports whether one part carries blend shapes.
+     *
+     * @param part the zero-based part index
+     * @return true when the part has morph targets
+     */
+    public boolean hasMorph(int part) {
+        boolean[] present = new boolean[1];
+        CnbExtension.check("CnbModelData.hasMorph",
+                NativeCnbRoutes.cnbModelHasMorph(open(), part, present));
+        return present[0];
+    }
+
+    /**
+     * Returns one part's morph state.
+     *
+     * @param part the zero-based part index
+     * @return its blend-shape counts and weight-track flags
+     */
+    public CnbMorphInfo getMorph(int part) {
+        long[] values = new long[8];
+        CnbExtension.check("CnbModelData.getMorph",
+                NativeCnbRoutes.cnbModelGetMorph(open(), part, new byte[5], values));
+        return new CnbMorphInfo((int) values[0], (int) values[2], (int) values[3],
+                (int) values[4], values[5] != 0, values[6] != 0, values[7] != 0);
+    }
+
+    /**
+     * Sets one part's morph state.
+     *
+     * <p>This is what <em>creates</em> a part's morph block; {@link #addMorphTarget} then adds
+     * shapes to it. Doing it the other way round is refused with "the part carries no
+     * morph-target data".
+     *
+     * <p>The target, weight and key counts are CNA's own: they follow from what the part actually
+     * holds, and this sends zeros for them exactly as CNA's own encoder does. What a caller sets
+     * is the vertex count and the three flags.
+     *
+     * @param part the zero-based part index
+     * @param vertexCount how many vertices each target's deltas cover
+     * @param recomputeFlatNormals whether normals are recomputed after blending
+     * @param stepInterpolation whether the weight track steps rather than interpolates
+     * @param cubicSpline whether the weight track is a cubic spline
+     */
+    public void setMorph(int part, int vertexCount, boolean recomputeFlatNormals,
+            boolean stepInterpolation, boolean cubicSpline) {
+        long[] values = {
+            vertexCount, 0, 0, 0, 0,
+            recomputeFlatNormals ? 1 : 0, stepInterpolation ? 1 : 0, cubicSpline ? 1 : 0,
+        };
+        CnbExtension.check("CnbModelData.setMorph",
+                NativeCnbRoutes.cnbModelSetMorph(open(), part, new byte[5], values));
+    }
+
+    /**
+     * Removes one part's blend shapes entirely.
+     *
+     * @param part the zero-based part index
+     */
+    public void clearMorph(int part) {
+        CnbExtension.check("CnbModelData.clearMorph",
+                NativeCnbRoutes.cnbModelClearMorph(open(), part));
+    }
+
+    /**
+     * Appends one blend shape to a part, with no deltas yet.
+     *
+     * @param part the zero-based part index
+     * @return the new target's index
+     */
+    public int addMorphTarget(int part) {
+        long[] index = new long[1];
+        CnbExtension.check("CnbModelData.addMorphTarget",
+                NativeCnbRoutes.cnbModelAddMorphTarget(open(), part, index));
+        return (int) index[0];
+    }
+
+    /**
+     * Sets one blend shape's per-vertex displacements for one stream.
+     *
+     * @param part the zero-based part index
+     * @param target the zero-based target index
+     * @param stream which per-vertex stream the deltas belong to
+     * @param values three floats per vertex; CNA copies them
+     */
+    public void setMorphTargetDeltas(
+            int part, int target, CnbMorphDeltaStream stream, float[] values) {
+        Objects.requireNonNull(stream, "stream");
+        Objects.requireNonNull(values, "values");
+        CnbExtension.check("CnbModelData.setMorphTargetDeltas", NativeCnbRoutes
+                .cnbModelSetMorphTargetDeltas(open(), part, target, stream.ordinal(), values));
+    }
+
+    /**
+     * Returns one blend shape's per-vertex displacements for one stream.
+     *
+     * @param part the zero-based part index
+     * @param target the zero-based target index
+     * @param stream which per-vertex stream to read
+     * @return a fresh copy of the deltas, three floats per vertex
+     */
+    public float[] readMorphTargetDeltas(int part, int target, CnbMorphDeltaStream stream) {
+        Objects.requireNonNull(stream, "stream");
+        long model = open();
+        return CnbExtension.floats("CnbModelData.readMorphTargetDeltas",
+                (destination, count) -> NativeCnbRoutes.cnbModelCopyMorphTargetDeltas(
+                        model, part, target, stream.ordinal(), destination, count));
+    }
+
+    /**
+     * Sets the weights a part blends its shapes with.
+     *
+     * @param part the zero-based part index
+     * @param values one weight per blend shape being blended; CNA copies them
+     */
+    public void setMorphWeights(int part, float[] values) {
+        Objects.requireNonNull(values, "values");
+        CnbExtension.check("CnbModelData.setMorphWeights",
+                NativeCnbRoutes.cnbModelSetMorphWeights(open(), part, values));
+    }
+
+    /**
+     * Returns the weights a part blends its shapes with.
+     *
+     * @param part the zero-based part index
+     * @return a fresh copy of the weights
+     */
+    public float[] readMorphWeights(int part) {
+        long model = open();
+        return CnbExtension.floats("CnbModelData.readMorphWeights",
+                (destination, count) -> NativeCnbRoutes
+                        .cnbModelCopyMorphWeights(model, part, destination, count));
+    }
+
+    /**
+     * Appends one key to a part's morph weight track.
+     *
+     * @param part the zero-based part index
+     * @param timeSeconds when in the track this key applies
+     * @param weights one weight per blend shape
+     * @param inTangents the incoming tangents, or null for a track that is not a cubic spline
+     * @param outTangents the outgoing tangents, or null for the same reason
+     * @return the new key's index
+     */
+    public int addMorphWeightKey(int part, double timeSeconds, float[] weights,
+            float[] inTangents, float[] outTangents) {
+        Objects.requireNonNull(weights, "weights");
+        long[] index = new long[1];
+        CnbExtension.check("CnbModelData.addMorphWeightKey",
+                NativeCnbRoutes.cnbModelAddMorphWeightKey(open(), part, timeSeconds, weights,
+                        inTangents == null ? new float[0] : inTangents,
+                        outTangents == null ? new float[0] : outTangents, index));
+        return (int) index[0];
+    }
+
+    /**
+     * Returns one morph weight key's time and array lengths.
+     *
+     * @param part the zero-based part index
+     * @param key the zero-based key index
+     * @return its time and how many weights and tangents it carries
+     */
+    public CnbMorphWeightKey getMorphWeightKey(int part, int key) {
+        long[] integral = new long[3];
+        double[] doubles = new double[1];
+        CnbExtension.check("CnbModelData.getMorphWeightKey", NativeCnbRoutes
+                .cnbModelGetMorphWeightKey(open(), part, key, integral, doubles));
+        return new CnbMorphWeightKey(doubles[0], (int) integral[0], (int) integral[1],
+                (int) integral[2]);
+    }
+
+    /**
+     * Returns one morph weight key's values for one stream.
+     *
+     * @param part the zero-based part index
+     * @param key the zero-based key index
+     * @param stream which of the key's three arrays to read
+     * @return a fresh copy of that array
+     */
+    public float[] readMorphWeightKeyValues(int part, int key, CnbMorphKeyStream stream) {
+        Objects.requireNonNull(stream, "stream");
+        long model = open();
+        return CnbExtension.floats("CnbModelData.readMorphWeightKeyValues",
+                (destination, count) -> NativeCnbRoutes.cnbModelCopyMorphWeightKeyValues(
+                        model, part, key, stream.ordinal(), destination, count));
+    }
+
+    /**
+     * Returns one animation clip's name, duration, track count and index space.
+     *
+     * @param index the zero-based animation index
+     * @return that clip's description
+     */
+    public CnbAnimation getAnimation(int index) {
+        long model = open();
+        double[] duration = new double[1];
+        long[] tracks = new long[1];
+        int[] space = new int[1];
+        CnbExtension.check("CnbModelData.getAnimation", NativeCnbRoutes
+                .cnbModelGetAnimation(model, index, duration, tracks, space));
+        return new CnbAnimation(
+                CnbExtension.text("CnbModelData.getAnimation",
+                        bytes -> NativeCnbRoutes
+                                .cnbModelGetAnimationNameSize(model, index, bytes),
+                        (destination, bytes) -> NativeCnbRoutes
+                                .cnbModelCopyAnimationName(model, index, destination, bytes)),
+                duration[0], (int) tracks[0], CnbClipTargetSpace.fromValue(space[0]));
+    }
+
+    /** Returns every animation clip in index order. */
+    public List<CnbAnimation> getAnimations() {
+        return read(getInfo().AnimationCount(), this::getAnimation);
+    }
+
+    /**
+     * Returns which bone one animation track drives, and how many keyframes it has.
+     *
+     * @param index the zero-based animation index
+     * @param track the zero-based track index
+     * @return the bone index in the clip's own space, and the keyframe count
+     */
+    public int[] getAnimationTrack(int index, int track) {
+        int[] bone = new int[1];
+        long[] keyframes = new long[1];
+        CnbExtension.check("CnbModelData.getAnimationTrack", NativeCnbRoutes
+                .cnbModelGetAnimationTrack(open(), index, track, bone, keyframes));
+        return new int[] {bone[0], Math.toIntExact(keyframes[0])};
+    }
+
+    /**
+     * Returns one animation track's keyframes.
+     *
+     * @param index the zero-based animation index
+     * @param track the zero-based track index
+     * @return the poses that track holds, in time order
+     */
+    public List<CnbKeyframe> readAnimationKeyframes(int index, int track) {
+        long model = open();
+        int count = getAnimationTrack(index, track)[1];
+        float[] floating = new float[Math.multiplyExact(count, 10)];
+        double[] doubles = new double[count];
+        long[] written = new long[1];
+        CnbExtension.check("CnbModelData.readAnimationKeyframes", NativeCnbRoutes
+                .cnbModelCopyAnimationKeyframes(model, index, track, floating, doubles, written));
+        List<CnbKeyframe> keyframes = new ArrayList<>(count);
+        for (int keyframe = 0; keyframe < written[0]; keyframe++) {
+            int base = keyframe * 10;
+            keyframes.add(new CnbKeyframe(doubles[keyframe],
+                    new Vector3(floating[base], floating[base + 1], floating[base + 2]),
+                    new Quaternion(floating[base + 3], floating[base + 4],
+                            floating[base + 5], floating[base + 6]),
+                    new Vector3(floating[base + 7], floating[base + 8], floating[base + 9])));
+        }
+        return List.copyOf(keyframes);
     }
 
     long handle() {

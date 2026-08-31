@@ -2819,12 +2819,32 @@
         "symbol": "cna_cnb_model_add_mesh"
       },
       {
+        "java": "cnbModelAddMorphTarget",
+        "symbol": "cna_cnb_model_add_morph_target"
+      },
+      {
+        "java": "cnbModelAddMorphWeightKey",
+        "symbol": "cna_cnb_model_add_morph_weight_key"
+      },
+      {
         "java": "cnbModelAddPart",
         "symbol": "cna_cnb_model_add_part"
       },
       {
+        "java": "cnbModelClearMorph",
+        "symbol": "cna_cnb_model_clear_morph"
+      },
+      {
         "java": "cnbModelClearSkeleton",
         "symbol": "cna_cnb_model_clear_skeleton"
+      },
+      {
+        "java": "cnbModelCopyAnimationKeyframes",
+        "symbol": "cna_cnb_model_copy_animation_keyframes"
+      },
+      {
+        "java": "cnbModelCopyAnimationName",
+        "symbol": "cna_cnb_model_copy_animation_name"
       },
       {
         "java": "cnbModelCopyBoneName",
@@ -2841,6 +2861,18 @@
       {
         "java": "cnbModelCopyMeshPartIndices",
         "symbol": "cna_cnb_model_copy_mesh_part_indices"
+      },
+      {
+        "java": "cnbModelCopyMorphTargetDeltas",
+        "symbol": "cna_cnb_model_copy_morph_target_deltas"
+      },
+      {
+        "java": "cnbModelCopyMorphWeightKeyValues",
+        "symbol": "cna_cnb_model_copy_morph_weight_key_values"
+      },
+      {
+        "java": "cnbModelCopyMorphWeights",
+        "symbol": "cna_cnb_model_copy_morph_weights"
       },
       {
         "java": "cnbModelCopyPartExternalEffect",
@@ -2907,6 +2939,18 @@
         "symbol": "cna_cnb_model_from_cnj_take_model"
       },
       {
+        "java": "cnbModelGetAnimation",
+        "symbol": "cna_cnb_model_get_animation"
+      },
+      {
+        "java": "cnbModelGetAnimationNameSize",
+        "symbol": "cna_cnb_model_get_animation_name_size"
+      },
+      {
+        "java": "cnbModelGetAnimationTrack",
+        "symbol": "cna_cnb_model_get_animation_track"
+      },
+      {
         "java": "cnbModelGetBone",
         "symbol": "cna_cnb_model_get_bone"
       },
@@ -2951,6 +2995,14 @@
         "symbol": "cna_cnb_model_get_mesh_name_size"
       },
       {
+        "java": "cnbModelGetMorph",
+        "symbol": "cna_cnb_model_get_morph"
+      },
+      {
+        "java": "cnbModelGetMorphWeightKey",
+        "symbol": "cna_cnb_model_get_morph_weight_key"
+      },
+      {
         "java": "cnbModelGetPart",
         "symbol": "cna_cnb_model_get_part"
       },
@@ -2965,6 +3017,10 @@
       {
         "java": "cnbModelGetSkeleton",
         "symbol": "cna_cnb_model_get_skeleton"
+      },
+      {
+        "java": "cnbModelHasMorph",
+        "symbol": "cna_cnb_model_has_morph"
       },
       {
         "java": "cnbModelSetFlags",
@@ -2989,6 +3045,18 @@
       {
         "java": "cnbModelSetMaterialTextureTransform",
         "symbol": "cna_cnb_model_set_material_texture_transform"
+      },
+      {
+        "java": "cnbModelSetMorph",
+        "symbol": "cna_cnb_model_set_morph"
+      },
+      {
+        "java": "cnbModelSetMorphTargetDeltas",
+        "symbol": "cna_cnb_model_set_morph_target_deltas"
+      },
+      {
+        "java": "cnbModelSetMorphWeights",
+        "symbol": "cna_cnb_model_set_morph_weights"
       },
       {
         "java": "cnbModelSetPart",

@@ -3,6 +3,7 @@ package org.openeggbert.cna.extensions.content;
 import Microsoft.Xna.Framework.Curve;
 import Microsoft.Xna.Framework.CurveContinuity;
 import Microsoft.Xna.Framework.CurveLoopType;
+import Microsoft.Xna.Framework.Vector3;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.condition.EnabledIfEnvironmentVariable;
 import org.junit.jupiter.api.io.TempDir;
@@ -156,6 +157,52 @@ final class CnjCompilerTests {
             // The model is moved out, not lent, so a second take finds nothing to move and the
             // result can be closed without taking the first one's model with it.
             assertThrows(RuntimeException.class, result::takeModel);
+        }
+    }
+
+    @Test
+    void aModelWithAnAnimationCarriesItsTracksAndKeyframes(@TempDir Path directory)
+            throws IOException {
+        write(directory, "wave.cnj",
+                "{\"cnjVersion\":1,\"type\":\"AnimationClip\",\"duration\":2.0,"
+                + "\"targetSpace\":\"SceneNode\",\"tracks\":[{\"boneIndex\":0,\"keys\":["
+                + "{\"time\":0.0,\"translation\":[0,0,0],\"rotation\":[0,0,0,1],"
+                + "\"scale\":[1,1,1]},"
+                + "{\"time\":2.0,\"translation\":[4,0,0],\"rotation\":[0,0,0,1],"
+                + "\"scale\":[1,1,1]}]}]}");
+        Path model = write(directory, "hero.cnj",
+                "{\"cnjVersion\":1,\"type\":\"Model\",\"meshes\":[],"
+                + "\"animations\":[{\"name\":\"wave\",\"clip\":\"wave.cnj\"}]}");
+
+        // The content root is explicit here, and has to be: a model naming a sidecar is refused
+        // without one, because a relative path has nothing to be relative to.
+        assertThrows(CnbFormatException.class, () -> Cnj.buildModel(model, null));
+        try (CnjModelResult result = Cnj.buildModel(model, directory);
+             CnbModelData compiled = result.takeModel()) {
+            // The clip sidecar is what the compile absorbed, which is what a build watches.
+            assertEquals(List.of("wave.cnj"), result.getAbsorbedFiles());
+
+            assertEquals(1, compiled.getInfo().AnimationCount());
+            CnbAnimation animation = compiled.getAnimations().get(0);
+            assertEquals("wave", animation.Name());
+            assertEquals(2.0, animation.DurationSeconds());
+            assertEquals(1, animation.TrackCount());
+            // Scene-node rather than joint-palette: this model has no skeleton, and the two
+            // spaces select different things, so the one the document declared has to survive.
+            assertEquals(CnbClipTargetSpace.SceneNode, animation.TargetSpace());
+
+            int[] track = compiled.getAnimationTrack(0, 0);
+            assertEquals(0, track[0], "the track drives bone 0");
+            assertEquals(2, track[1]);
+
+            List<CnbKeyframe> keyframes = compiled.readAnimationKeyframes(0, 0);
+            assertEquals(2, keyframes.size());
+            assertEquals(0.0, keyframes.get(0).TimeSeconds());
+            assertEquals(2.0, keyframes.get(1).TimeSeconds());
+            assertEquals(new Vector3(0f, 0f, 0f), keyframes.get(0).Translation());
+            assertEquals(new Vector3(4f, 0f, 0f), keyframes.get(1).Translation());
+            assertEquals(1.0f, keyframes.get(1).Rotation().W);
+            assertEquals(new Vector3(1f, 1f, 1f), keyframes.get(1).Scale());
         }
     }
 

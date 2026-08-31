@@ -64,10 +64,13 @@ public final class Cnj {
      * {@link CnjModelResult}.
      *
      * @param cnjPath the document to compile
-     * @param contentRoot the root the document's relative paths resolve against, or null for the
-     *        document's own parent directory
+     * @param contentRoot the root the document's relative paths resolve against. Unlike
+     *        {@link #compile}, this one has no default: a model naming a sidecar with a null root
+     *        is refused, because a relative path then has nothing to be relative to. Pass the
+     *        document's own directory for the usual layout.
      * @return the compiled result, which the caller closes
-     * @throws CnbFormatException when the document is malformed or is not a model
+     * @throws CnbFormatException when the document is malformed, is not a model, or names a
+     *         sidecar that does not resolve inside the content root
      */
     public static CnjModelResult buildModel(Path cnjPath, Path contentRoot) {
         CnbExtension.requireAvailable();
