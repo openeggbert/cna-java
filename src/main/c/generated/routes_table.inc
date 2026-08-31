@@ -662,7 +662,20 @@
     CNA_JNI_ROUTE(cna_display_info_get_content_scale_ext) display_info_get_content_scale_ext;
     CNA_JNI_ROUTE(cna_display_info_get_safe_area_ext) display_info_get_safe_area_ext;
     CNA_JNI_ROUTE(cna_effect_copy_type_name) effect_copy_type_name;
+    CNA_JNI_ROUTE(cna_effect_get_light_view_projection_ext) effect_get_light_view_projection_ext;
+    CNA_JNI_ROUTE(cna_effect_get_punctual_light_ext) effect_get_punctual_light_ext;
+    CNA_JNI_ROUTE(cna_effect_get_shadow_depth_bias_ext) effect_get_shadow_depth_bias_ext;
+    CNA_JNI_ROUTE(cna_effect_get_shadow_filter_radius_ext) effect_get_shadow_filter_radius_ext;
+    CNA_JNI_ROUTE(cna_effect_get_shadow_map_ext) effect_get_shadow_map_ext;
     CNA_JNI_ROUTE(cna_effect_get_type_name_byte_count) effect_get_type_name_byte_count;
+    CNA_JNI_ROUTE(cna_effect_is_shadows_enabled_ext) effect_is_shadows_enabled_ext;
+    CNA_JNI_ROUTE(cna_effect_set_image_based_light_ext) effect_set_image_based_light_ext;
+    CNA_JNI_ROUTE(cna_effect_set_light_view_projection_ext) effect_set_light_view_projection_ext;
+    CNA_JNI_ROUTE(cna_effect_set_punctual_light_ext) effect_set_punctual_light_ext;
+    CNA_JNI_ROUTE(cna_effect_set_shadow_depth_bias_ext) effect_set_shadow_depth_bias_ext;
+    CNA_JNI_ROUTE(cna_effect_set_shadow_filter_radius_ext) effect_set_shadow_filter_radius_ext;
+    CNA_JNI_ROUTE(cna_effect_set_shadow_map_ext) effect_set_shadow_map_ext;
+    CNA_JNI_ROUTE(cna_effect_set_shadows_enabled_ext) effect_set_shadows_enabled_ext;
     CNA_JNI_ROUTE(cna_engine_layer_copy_version_string) engine_layer_copy_version_string;
     CNA_JNI_ROUTE(cna_engine_layer_get_version) engine_layer_get_version;
     CNA_JNI_ROUTE(cna_environment_processor_convert_equirectangular) environment_processor_convert_equirectangular;
@@ -897,6 +910,8 @@
     CNA_JNI_ROUTE(cna_height_fog_pass_set_color) height_fog_pass_set_color;
     CNA_JNI_ROUTE(cna_height_fog_pass_set_density) height_fog_pass_set_density;
     CNA_JNI_ROUTE(cna_height_fog_pass_set_falloff) height_fog_pass_set_falloff;
+    CNA_JNI_ROUTE(cna_image_based_light_ext_init) image_based_light_ext_init;
+    CNA_JNI_ROUTE(cna_image_based_light_ext_is_valid) image_based_light_ext_is_valid;
     CNA_JNI_ROUTE(cna_input_devices_copy_keyboard_name_at) input_devices_copy_keyboard_name_at;
     CNA_JNI_ROUTE(cna_input_devices_copy_mouse_name_at) input_devices_copy_mouse_name_at;
     CNA_JNI_ROUTE(cna_input_devices_copy_touch_device_name_at) input_devices_copy_touch_device_name_at;
@@ -1332,6 +1347,7 @@
     CNA_JNI_ROUTE(cna_property_dictionary_set_string) property_dictionary_set_string;
     CNA_JNI_ROUTE(cna_property_dictionary_set_time_span_ticks) property_dictionary_set_time_span_ticks;
     CNA_JNI_ROUTE(cna_property_dictionary_try_get_value_kind_ext) property_dictionary_try_get_value_kind_ext;
+    CNA_JNI_ROUTE(cna_punctual_light_ext_init) punctual_light_ext_init;
     CNA_JNI_ROUTE(cna_render_pipeline_add_user_pass) render_pipeline_add_user_pass;
     CNA_JNI_ROUTE(cna_render_pipeline_begin) render_pipeline_begin;
     CNA_JNI_ROUTE(cna_render_pipeline_clear_user_passes) render_pipeline_clear_user_passes;

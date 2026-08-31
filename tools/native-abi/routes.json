@@ -4599,6 +4599,58 @@
         "symbol": "cna_directional_light_ext_init"
       },
       {
+        "java": "effectGetLightViewProjectionExt",
+        "symbol": "cna_effect_get_light_view_projection_ext"
+      },
+      {
+        "java": "effectGetPunctualLightExt",
+        "symbol": "cna_effect_get_punctual_light_ext"
+      },
+      {
+        "java": "effectGetShadowMapExt",
+        "symbol": "cna_effect_get_shadow_map_ext"
+      },
+      {
+        "java": "effectGetShadowDepthBiasExt",
+        "symbol": "cna_effect_get_shadow_depth_bias_ext"
+      },
+      {
+        "java": "effectGetShadowFilterRadiusExt",
+        "symbol": "cna_effect_get_shadow_filter_radius_ext"
+      },
+      {
+        "java": "effectIsShadowsEnabledExt",
+        "symbol": "cna_effect_is_shadows_enabled_ext"
+      },
+      {
+        "java": "effectSetImageBasedLightExt",
+        "symbol": "cna_effect_set_image_based_light_ext"
+      },
+      {
+        "java": "effectSetLightViewProjectionExt",
+        "symbol": "cna_effect_set_light_view_projection_ext"
+      },
+      {
+        "java": "effectSetPunctualLightExt",
+        "symbol": "cna_effect_set_punctual_light_ext"
+      },
+      {
+        "java": "effectSetShadowDepthBiasExt",
+        "symbol": "cna_effect_set_shadow_depth_bias_ext"
+      },
+      {
+        "java": "effectSetShadowFilterRadiusExt",
+        "symbol": "cna_effect_set_shadow_filter_radius_ext"
+      },
+      {
+        "java": "effectSetShadowMapExt",
+        "symbol": "cna_effect_set_shadow_map_ext"
+      },
+      {
+        "java": "effectSetShadowsEnabledExt",
+        "symbol": "cna_effect_set_shadows_enabled_ext"
+      },
+      {
         "java": "engineLayerCopyVersionString",
         "symbol": "cna_engine_layer_copy_version_string"
       },
@@ -4921,6 +4973,14 @@
       {
         "java": "heightFogPassSetFalloff",
         "symbol": "cna_height_fog_pass_set_falloff"
+      },
+      {
+        "java": "imageBasedLightExtInit",
+        "symbol": "cna_image_based_light_ext_init"
+      },
+      {
+        "java": "imageBasedLightExtIsValid",
+        "symbol": "cna_image_based_light_ext_is_valid"
       },
       {
         "java": "instancedRendererExtCopyInstanceElements",
@@ -5576,6 +5636,10 @@
       {
         "java": "postProcessPassIsSupported",
         "symbol": "cna_post_process_pass_is_supported"
+      },
+      {
+        "java": "punctualLightExtInit",
+        "symbol": "cna_punctual_light_ext_init"
       },
       {
         "java": "renderPipelineAddUserPass",

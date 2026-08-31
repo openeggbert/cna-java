@@ -662,7 +662,20 @@
     LOAD(display_info_get_content_scale_ext, "cna_display_info_get_content_scale_ext");
     LOAD(display_info_get_safe_area_ext, "cna_display_info_get_safe_area_ext");
     LOAD(effect_copy_type_name, "cna_effect_copy_type_name");
+    LOAD(effect_get_light_view_projection_ext, "cna_effect_get_light_view_projection_ext");
+    LOAD(effect_get_punctual_light_ext, "cna_effect_get_punctual_light_ext");
+    LOAD(effect_get_shadow_depth_bias_ext, "cna_effect_get_shadow_depth_bias_ext");
+    LOAD(effect_get_shadow_filter_radius_ext, "cna_effect_get_shadow_filter_radius_ext");
+    LOAD(effect_get_shadow_map_ext, "cna_effect_get_shadow_map_ext");
     LOAD(effect_get_type_name_byte_count, "cna_effect_get_type_name_byte_count");
+    LOAD(effect_is_shadows_enabled_ext, "cna_effect_is_shadows_enabled_ext");
+    LOAD(effect_set_image_based_light_ext, "cna_effect_set_image_based_light_ext");
+    LOAD(effect_set_light_view_projection_ext, "cna_effect_set_light_view_projection_ext");
+    LOAD(effect_set_punctual_light_ext, "cna_effect_set_punctual_light_ext");
+    LOAD(effect_set_shadow_depth_bias_ext, "cna_effect_set_shadow_depth_bias_ext");
+    LOAD(effect_set_shadow_filter_radius_ext, "cna_effect_set_shadow_filter_radius_ext");
+    LOAD(effect_set_shadow_map_ext, "cna_effect_set_shadow_map_ext");
+    LOAD(effect_set_shadows_enabled_ext, "cna_effect_set_shadows_enabled_ext");
     LOAD(engine_layer_copy_version_string, "cna_engine_layer_copy_version_string");
     LOAD(engine_layer_get_version, "cna_engine_layer_get_version");
     LOAD(environment_processor_convert_equirectangular, "cna_environment_processor_convert_equirectangular");
@@ -897,6 +910,8 @@
     LOAD(height_fog_pass_set_color, "cna_height_fog_pass_set_color");
     LOAD(height_fog_pass_set_density, "cna_height_fog_pass_set_density");
     LOAD(height_fog_pass_set_falloff, "cna_height_fog_pass_set_falloff");
+    LOAD(image_based_light_ext_init, "cna_image_based_light_ext_init");
+    LOAD(image_based_light_ext_is_valid, "cna_image_based_light_ext_is_valid");
     LOAD(input_devices_copy_keyboard_name_at, "cna_input_devices_copy_keyboard_name_at");
     LOAD(input_devices_copy_mouse_name_at, "cna_input_devices_copy_mouse_name_at");
     LOAD(input_devices_copy_touch_device_name_at, "cna_input_devices_copy_touch_device_name_at");
@@ -1332,6 +1347,7 @@
     LOAD(property_dictionary_set_string, "cna_property_dictionary_set_string");
     LOAD(property_dictionary_set_time_span_ticks, "cna_property_dictionary_set_time_span_ticks");
     LOAD(property_dictionary_try_get_value_kind_ext, "cna_property_dictionary_try_get_value_kind_ext");
+    LOAD(punctual_light_ext_init, "cna_punctual_light_ext_init");
     LOAD(render_pipeline_add_user_pass, "cna_render_pipeline_add_user_pass");
     LOAD(render_pipeline_begin, "cna_render_pipeline_begin");
     LOAD(render_pipeline_clear_user_passes, "cna_render_pipeline_clear_user_passes");

@@ -905,6 +905,26 @@ public final class NativeBindings {
     }
 
     /**
+     * Releases a texture handle that names a texture without keeping it alive.
+     *
+     * <p>The engine layer hands one of these back from routes such as
+     * {@code cna_effect_get_shadow_map_ext}, whose documentation is explicit that the handle is a
+     * fresh name for a texture the effect only borrows: releasing it releases the name and never
+     * the texture. Wrapping such a handle in a facade would be wrong -- the facade would look like
+     * it owned something -- so a caller that only needed to know whether a texture was bound
+     * gives the name straight back here.
+     *
+     * @param nativeTexture the handle the engine layer returned; zero is ignored, because zero is
+     *        how those routes say "none"
+     */
+    public static void releaseBorrowedTextureName(long nativeTexture) {
+        if (nativeTexture == 0L) {
+            return;
+        }
+        destroyRenderTarget(nativeTexture);
+    }
+
+    /**
      * Adopts a cube-texture handle as an owning Java facade.
      *
      * <p>The cube form of {@link #createBorrowedRenderTarget}, and it serves both shapes the

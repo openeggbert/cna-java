@@ -8729,6 +8729,16 @@
       ]
     },
     {
+      "name": "cna_effect_get_light_view_projection_ext",
+      "header": "engine_layer.h",
+      "ownership": "borrows the effect; copies the matrix out",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_EffectHandle",
+        "CNA_Matrix*"
+      ]
+    },
+    {
       "name": "cna_effect_get_parameters",
       "header": "effects.h",
       "ownership": "borrows Effect; returns owned stable parameter-collection view",
@@ -8736,6 +8746,46 @@
       "parameters": [
         "CNA_EffectHandle",
         "CNA_EffectParameterCollectionHandle*"
+      ]
+    },
+    {
+      "name": "cna_effect_get_punctual_light_ext",
+      "header": "engine_layer.h",
+      "ownership": "borrows the effect; copies the light out with both shadow handles invalid, so it transfers no ownership at all",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_EffectHandle",
+        "CNA_PunctualLightEXT*"
+      ]
+    },
+    {
+      "name": "cna_effect_get_shadow_depth_bias_ext",
+      "header": "engine_layer.h",
+      "ownership": "borrows the effect; owns nothing",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_EffectHandle",
+        "float*"
+      ]
+    },
+    {
+      "name": "cna_effect_get_shadow_filter_radius_ext",
+      "header": "engine_layer.h",
+      "ownership": "borrows the effect; owns nothing",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_EffectHandle",
+        "int32_t*"
+      ]
+    },
+    {
+      "name": "cna_effect_get_shadow_map_ext",
+      "header": "engine_layer.h",
+      "ownership": "borrows the effect; returns a fresh NAME for the same texture that keeps nothing alive, released with cna_render_target_destroy, and zero when none is bound",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_EffectHandle",
+        "CNA_Handle*"
       ]
     },
     {
@@ -8756,6 +8806,16 @@
       "parameters": [
         "CNA_EffectHandle",
         "uint64_t*"
+      ]
+    },
+    {
+      "name": "cna_effect_is_shadows_enabled_ext",
+      "header": "engine_layer.h",
+      "ownership": "borrows the effect; owns nothing",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_EffectHandle",
+        "CNA_Bool*"
       ]
     },
     {
@@ -9201,6 +9261,76 @@
       "parameters": [
         "CNA_EffectHandle",
         "CNA_EffectTechniqueHandle"
+      ]
+    },
+    {
+      "name": "cna_effect_set_image_based_light_ext",
+      "header": "engine_layer.h",
+      "ownership": "borrows the effect; the light's three textures are borrowed by the effect and stay the caller's",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_EffectHandle",
+        "const CNA_ImageBasedLightEXT*"
+      ]
+    },
+    {
+      "name": "cna_effect_set_light_view_projection_ext",
+      "header": "engine_layer.h",
+      "ownership": "borrows the effect; the matrix is copied",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_EffectHandle",
+        "const CNA_Matrix*"
+      ]
+    },
+    {
+      "name": "cna_effect_set_punctual_light_ext",
+      "header": "engine_layer.h",
+      "ownership": "borrows the effect; the light's two shadow textures are borrowed by the effect and stay the caller's, which is why the Java light retains them",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_EffectHandle",
+        "const CNA_PunctualLightEXT*"
+      ]
+    },
+    {
+      "name": "cna_effect_set_shadow_depth_bias_ext",
+      "header": "engine_layer.h",
+      "ownership": "borrows the effect; owns nothing",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_EffectHandle",
+        "float"
+      ]
+    },
+    {
+      "name": "cna_effect_set_shadow_filter_radius_ext",
+      "header": "engine_layer.h",
+      "ownership": "borrows the effect; owns nothing",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_EffectHandle",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "cna_effect_set_shadow_map_ext",
+      "header": "engine_layer.h",
+      "ownership": "borrows the effect; the shadow texture is borrowed by the effect and stays the caller's to keep alive and dispose; a zero handle unbinds",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_EffectHandle",
+        "CNA_Handle"
+      ]
+    },
+    {
+      "name": "cna_effect_set_shadows_enabled_ext",
+      "header": "engine_layer.h",
+      "ownership": "borrows the effect; owns nothing",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_EffectHandle",
+        "CNA_Bool"
       ]
     },
     {
@@ -13496,6 +13626,25 @@
       "parameters": [
         "CNA_PostProcessPassHandle",
         "const float"
+      ]
+    },
+    {
+      "name": "cna_image_based_light_ext_init",
+      "header": "engine_layer.h",
+      "ownership": "owns nothing; fills a caller-owned structure",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_ImageBasedLightEXT*"
+      ]
+    },
+    {
+      "name": "cna_image_based_light_ext_is_valid",
+      "header": "engine_layer.h",
+      "ownership": "owns nothing; reads a caller-owned structure",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "const CNA_ImageBasedLightEXT*",
+        "CNA_Bool*"
       ]
     },
     {
@@ -19702,6 +19851,15 @@
         "CNA_StringView",
         "CNA_Bool*",
         "CNA_PropertyValueKind*"
+      ]
+    },
+    {
+      "name": "cna_punctual_light_ext_init",
+      "header": "engine_layer.h",
+      "ownership": "owns nothing; fills a caller-owned structure",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_PunctualLightEXT*"
       ]
     },
     {

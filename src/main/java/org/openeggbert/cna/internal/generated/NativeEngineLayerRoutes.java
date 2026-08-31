@@ -3077,6 +3077,206 @@ public final class NativeEngineLayerRoutes {
     public static native int directionalLightExtInit(byte[] outLightBytes, long[] outLightIntegral, float[] outLightFloating);
 
     /**
+     * cna_effect_get_light_view_projection_ext (engine_layer.h).
+     *
+     * <p>outMatrixFloating carries CNA_Matrix in this order:
+     * <ol start="0">
+     *   <li>{@code m11} (float)</li>
+     *   <li>{@code m12} (float)</li>
+     *   <li>{@code m13} (float)</li>
+     *   <li>{@code m14} (float)</li>
+     *   <li>{@code m21} (float)</li>
+     *   <li>{@code m22} (float)</li>
+     *   <li>{@code m23} (float)</li>
+     *   <li>{@code m24} (float)</li>
+     *   <li>{@code m31} (float)</li>
+     *   <li>{@code m32} (float)</li>
+     *   <li>{@code m33} (float)</li>
+     *   <li>{@code m34} (float)</li>
+     *   <li>{@code m41} (float)</li>
+     *   <li>{@code m42} (float)</li>
+     *   <li>{@code m43} (float)</li>
+     *   <li>{@code m44} (float)</li>
+     * </ol>
+     */
+    public static native int effectGetLightViewProjectionExt(long effect, float[] outMatrixFloating);
+
+    /**
+     * cna_effect_get_punctual_light_ext (engine_layer.h).
+     *
+     * <p>outLightIntegral carries CNA_PunctualLightEXT in this order:
+     * <ol start="0">
+     *   <li>{@code kind} (CNA_PunctualLightKindEXT)</li>
+     *   <li>{@code reserved} (uint32_t)</li>
+     *   <li>{@code shadow_cube} (CNA_Handle)</li>
+     *   <li>{@code shadow_map} (CNA_Handle)</li>
+     * </ol>
+     *
+     * <p>outLightFloating carries CNA_PunctualLightEXT in this order:
+     * <ol start="0">
+     *   <li>{@code position.x} (float)</li>
+     *   <li>{@code position.y} (float)</li>
+     *   <li>{@code position.z} (float)</li>
+     *   <li>{@code direction.x} (float)</li>
+     *   <li>{@code direction.y} (float)</li>
+     *   <li>{@code direction.z} (float)</li>
+     *   <li>{@code diffuse_color.x} (float)</li>
+     *   <li>{@code diffuse_color.y} (float)</li>
+     *   <li>{@code diffuse_color.z} (float)</li>
+     *   <li>{@code range} (float)</li>
+     *   <li>{@code inner_angle} (float)</li>
+     *   <li>{@code outer_angle} (float)</li>
+     *   <li>{@code shadow_depth_bias} (float)</li>
+     *   <li>{@code shadow_view_projection.m11} (float)</li>
+     *   <li>{@code shadow_view_projection.m12} (float)</li>
+     *   <li>{@code shadow_view_projection.m13} (float)</li>
+     *   <li>{@code shadow_view_projection.m14} (float)</li>
+     *   <li>{@code shadow_view_projection.m21} (float)</li>
+     *   <li>{@code shadow_view_projection.m22} (float)</li>
+     *   <li>{@code shadow_view_projection.m23} (float)</li>
+     *   <li>{@code shadow_view_projection.m24} (float)</li>
+     *   <li>{@code shadow_view_projection.m31} (float)</li>
+     *   <li>{@code shadow_view_projection.m32} (float)</li>
+     *   <li>{@code shadow_view_projection.m33} (float)</li>
+     *   <li>{@code shadow_view_projection.m34} (float)</li>
+     *   <li>{@code shadow_view_projection.m41} (float)</li>
+     *   <li>{@code shadow_view_projection.m42} (float)</li>
+     *   <li>{@code shadow_view_projection.m43} (float)</li>
+     *   <li>{@code shadow_view_projection.m44} (float)</li>
+     * </ol>
+     */
+    public static native int effectGetPunctualLightExt(long effect, long[] outLightIntegral, float[] outLightFloating);
+
+    /**
+     * cna_effect_get_shadow_depth_bias_ext (engine_layer.h).
+     */
+    public static native int effectGetShadowDepthBiasExt(long effect, float[] outBias);
+
+    /**
+     * cna_effect_get_shadow_filter_radius_ext (engine_layer.h).
+     */
+    public static native int effectGetShadowFilterRadiusExt(long effect, int[] outRadius);
+
+    /**
+     * cna_effect_get_shadow_map_ext (engine_layer.h).
+     */
+    public static native int effectGetShadowMapExt(long effect, long[] outShadowMap);
+
+    /**
+     * cna_effect_is_shadows_enabled_ext (engine_layer.h).
+     */
+    public static native int effectIsShadowsEnabledExt(long effect, boolean[] outEnabled);
+
+    /**
+     * cna_effect_set_image_based_light_ext (engine_layer.h).
+     *
+     * <p>lightIntegral carries CNA_ImageBasedLightEXT in this order:
+     * <ol start="0">
+     *   <li>{@code irradiance} (CNA_Handle)</li>
+     *   <li>{@code prefiltered_specular} (CNA_Handle)</li>
+     *   <li>{@code brdf_lut} (CNA_Handle)</li>
+     *   <li>{@code prefiltered_mip_count} (int32_t)</li>
+     * </ol>
+     *
+     * <p>lightFloating carries CNA_ImageBasedLightEXT in this order:
+     * <ol start="0">
+     *   <li>{@code intensity} (float)</li>
+     * </ol>
+     */
+    public static native int effectSetImageBasedLightExt(long effect, long[] lightIntegral, float[] lightFloating);
+
+    /**
+     * cna_effect_set_light_view_projection_ext (engine_layer.h).
+     *
+     * <p>lightViewProjectionFloating carries CNA_Matrix in this order:
+     * <ol start="0">
+     *   <li>{@code m11} (float)</li>
+     *   <li>{@code m12} (float)</li>
+     *   <li>{@code m13} (float)</li>
+     *   <li>{@code m14} (float)</li>
+     *   <li>{@code m21} (float)</li>
+     *   <li>{@code m22} (float)</li>
+     *   <li>{@code m23} (float)</li>
+     *   <li>{@code m24} (float)</li>
+     *   <li>{@code m31} (float)</li>
+     *   <li>{@code m32} (float)</li>
+     *   <li>{@code m33} (float)</li>
+     *   <li>{@code m34} (float)</li>
+     *   <li>{@code m41} (float)</li>
+     *   <li>{@code m42} (float)</li>
+     *   <li>{@code m43} (float)</li>
+     *   <li>{@code m44} (float)</li>
+     * </ol>
+     */
+    public static native int effectSetLightViewProjectionExt(long effect, float[] lightViewProjectionFloating);
+
+    /**
+     * cna_effect_set_punctual_light_ext (engine_layer.h).
+     *
+     * <p>lightIntegral carries CNA_PunctualLightEXT in this order:
+     * <ol start="0">
+     *   <li>{@code kind} (CNA_PunctualLightKindEXT)</li>
+     *   <li>{@code reserved} (uint32_t)</li>
+     *   <li>{@code shadow_cube} (CNA_Handle)</li>
+     *   <li>{@code shadow_map} (CNA_Handle)</li>
+     * </ol>
+     *
+     * <p>lightFloating carries CNA_PunctualLightEXT in this order:
+     * <ol start="0">
+     *   <li>{@code position.x} (float)</li>
+     *   <li>{@code position.y} (float)</li>
+     *   <li>{@code position.z} (float)</li>
+     *   <li>{@code direction.x} (float)</li>
+     *   <li>{@code direction.y} (float)</li>
+     *   <li>{@code direction.z} (float)</li>
+     *   <li>{@code diffuse_color.x} (float)</li>
+     *   <li>{@code diffuse_color.y} (float)</li>
+     *   <li>{@code diffuse_color.z} (float)</li>
+     *   <li>{@code range} (float)</li>
+     *   <li>{@code inner_angle} (float)</li>
+     *   <li>{@code outer_angle} (float)</li>
+     *   <li>{@code shadow_depth_bias} (float)</li>
+     *   <li>{@code shadow_view_projection.m11} (float)</li>
+     *   <li>{@code shadow_view_projection.m12} (float)</li>
+     *   <li>{@code shadow_view_projection.m13} (float)</li>
+     *   <li>{@code shadow_view_projection.m14} (float)</li>
+     *   <li>{@code shadow_view_projection.m21} (float)</li>
+     *   <li>{@code shadow_view_projection.m22} (float)</li>
+     *   <li>{@code shadow_view_projection.m23} (float)</li>
+     *   <li>{@code shadow_view_projection.m24} (float)</li>
+     *   <li>{@code shadow_view_projection.m31} (float)</li>
+     *   <li>{@code shadow_view_projection.m32} (float)</li>
+     *   <li>{@code shadow_view_projection.m33} (float)</li>
+     *   <li>{@code shadow_view_projection.m34} (float)</li>
+     *   <li>{@code shadow_view_projection.m41} (float)</li>
+     *   <li>{@code shadow_view_projection.m42} (float)</li>
+     *   <li>{@code shadow_view_projection.m43} (float)</li>
+     *   <li>{@code shadow_view_projection.m44} (float)</li>
+     * </ol>
+     */
+    public static native int effectSetPunctualLightExt(long effect, long[] lightIntegral, float[] lightFloating);
+
+    /**
+     * cna_effect_set_shadow_depth_bias_ext (engine_layer.h).
+     */
+    public static native int effectSetShadowDepthBiasExt(long effect, float bias);
+
+    /**
+     * cna_effect_set_shadow_filter_radius_ext (engine_layer.h).
+     */
+    public static native int effectSetShadowFilterRadiusExt(long effect, int radius);
+
+    /**
+     * cna_effect_set_shadow_map_ext (engine_layer.h).
+     */
+    public static native int effectSetShadowMapExt(long effect, long shadowMap);
+
+    /**
+     * cna_effect_set_shadows_enabled_ext (engine_layer.h).
+     */
+    public static native int effectSetShadowsEnabledExt(long effect, boolean enabled);
+
+    /**
      * cna_engine_layer_copy_version_string (engine_layer.h).
      */
     public static native int engineLayerCopyVersionString(byte[] destination, long[] outBytes);
@@ -3721,6 +3921,42 @@ public final class NativeEngineLayerRoutes {
      * cna_height_fog_pass_set_falloff (engine_layer.h).
      */
     public static native int heightFogPassSetFalloff(long pass, float value);
+
+    /**
+     * cna_image_based_light_ext_init (engine_layer.h).
+     *
+     * <p>outLightIntegral carries CNA_ImageBasedLightEXT in this order:
+     * <ol start="0">
+     *   <li>{@code irradiance} (CNA_Handle)</li>
+     *   <li>{@code prefiltered_specular} (CNA_Handle)</li>
+     *   <li>{@code brdf_lut} (CNA_Handle)</li>
+     *   <li>{@code prefiltered_mip_count} (int32_t)</li>
+     * </ol>
+     *
+     * <p>outLightFloating carries CNA_ImageBasedLightEXT in this order:
+     * <ol start="0">
+     *   <li>{@code intensity} (float)</li>
+     * </ol>
+     */
+    public static native int imageBasedLightExtInit(long[] outLightIntegral, float[] outLightFloating);
+
+    /**
+     * cna_image_based_light_ext_is_valid (engine_layer.h).
+     *
+     * <p>lightIntegral carries CNA_ImageBasedLightEXT in this order:
+     * <ol start="0">
+     *   <li>{@code irradiance} (CNA_Handle)</li>
+     *   <li>{@code prefiltered_specular} (CNA_Handle)</li>
+     *   <li>{@code brdf_lut} (CNA_Handle)</li>
+     *   <li>{@code prefiltered_mip_count} (int32_t)</li>
+     * </ol>
+     *
+     * <p>lightFloating carries CNA_ImageBasedLightEXT in this order:
+     * <ol start="0">
+     *   <li>{@code intensity} (float)</li>
+     * </ol>
+     */
+    public static native int imageBasedLightExtIsValid(long[] lightIntegral, float[] lightFloating, boolean[] outValid);
 
     /**
      * cna_instanced_renderer_ext_copy_instance_elements (engine_layer.h).
@@ -4924,6 +5160,52 @@ public final class NativeEngineLayerRoutes {
      * cna_post_process_pass_is_supported (engine_layer.h).
      */
     public static native int postProcessPassIsSupported(long pass, long graphicsDevice, boolean[] outSupported);
+
+    /**
+     * cna_punctual_light_ext_init (engine_layer.h).
+     *
+     * <p>outLightIntegral carries CNA_PunctualLightEXT in this order:
+     * <ol start="0">
+     *   <li>{@code kind} (CNA_PunctualLightKindEXT)</li>
+     *   <li>{@code reserved} (uint32_t)</li>
+     *   <li>{@code shadow_cube} (CNA_Handle)</li>
+     *   <li>{@code shadow_map} (CNA_Handle)</li>
+     * </ol>
+     *
+     * <p>outLightFloating carries CNA_PunctualLightEXT in this order:
+     * <ol start="0">
+     *   <li>{@code position.x} (float)</li>
+     *   <li>{@code position.y} (float)</li>
+     *   <li>{@code position.z} (float)</li>
+     *   <li>{@code direction.x} (float)</li>
+     *   <li>{@code direction.y} (float)</li>
+     *   <li>{@code direction.z} (float)</li>
+     *   <li>{@code diffuse_color.x} (float)</li>
+     *   <li>{@code diffuse_color.y} (float)</li>
+     *   <li>{@code diffuse_color.z} (float)</li>
+     *   <li>{@code range} (float)</li>
+     *   <li>{@code inner_angle} (float)</li>
+     *   <li>{@code outer_angle} (float)</li>
+     *   <li>{@code shadow_depth_bias} (float)</li>
+     *   <li>{@code shadow_view_projection.m11} (float)</li>
+     *   <li>{@code shadow_view_projection.m12} (float)</li>
+     *   <li>{@code shadow_view_projection.m13} (float)</li>
+     *   <li>{@code shadow_view_projection.m14} (float)</li>
+     *   <li>{@code shadow_view_projection.m21} (float)</li>
+     *   <li>{@code shadow_view_projection.m22} (float)</li>
+     *   <li>{@code shadow_view_projection.m23} (float)</li>
+     *   <li>{@code shadow_view_projection.m24} (float)</li>
+     *   <li>{@code shadow_view_projection.m31} (float)</li>
+     *   <li>{@code shadow_view_projection.m32} (float)</li>
+     *   <li>{@code shadow_view_projection.m33} (float)</li>
+     *   <li>{@code shadow_view_projection.m34} (float)</li>
+     *   <li>{@code shadow_view_projection.m41} (float)</li>
+     *   <li>{@code shadow_view_projection.m42} (float)</li>
+     *   <li>{@code shadow_view_projection.m43} (float)</li>
+     *   <li>{@code shadow_view_projection.m44} (float)</li>
+     * </ol>
+     */
+    public static native int punctualLightExtInit(long[] outLightIntegral, float[] outLightFloating);
 
     /**
      * cna_render_pipeline_add_user_pass (engine_layer.h).
