@@ -1,5 +1,6 @@
 package org.openeggbert.cna.extensions.graphics;
 
+import Microsoft.Xna.Framework.BoundingBox;
 import Microsoft.Xna.Framework.Color;
 import Microsoft.Xna.Framework.Matrix;
 import Microsoft.Xna.Framework.Vector3;
@@ -31,6 +32,12 @@ final class RenderPipelineTests {
 
     private static final Matrix PROJECTION = Matrix.CreatePerspectiveFieldOfView(
             (float) (Math.PI / 3.0), 4.0f / 3.0f, 0.5f, 250.0f);
+
+    private static final DirectionalLight LIGHT = new DirectionalLight(
+            new Vector3(-0.4f, -1f, -0.3f), new Vector3(1f, 0.95f, 0.9f), 1.0f, true);
+
+    private static final BoundingBox SCENE = new BoundingBox(
+            new Vector3(-10f, -10f, -10f), new Vector3(10f, 10f, 10f));
 
     @Test
     void aFrameHasToBeSizedBeforeItCanOpen() {
@@ -172,19 +179,27 @@ final class RenderPipelineTests {
             try (RenderPipeline pipeline = RenderPipeline.create(probe.device())) {
                 assertFalse(pipeline.isGpuTimingEnabled(), "timing is off until asked for");
                 pipeline.setGpuTimingEnabled(true);
-                // Asking for timing does not create a clock. The pipeline reports what it can
-                // actually do, which on a renderer with no timer query is nothing -- and that
-                // is a better answer than a switch that reads as on while measuring nothing.
-                try (GpuTimer clock = GpuTimer.create(probe.device())) {
-                    assertEquals(clock.isSupported(), pipeline.isGpuTimingEnabled(),
-                            "the pipeline times only where the renderer has a timer, and it "
-                            + "said: " + clock.getUnsupportedReason());
-                }
+                // Asking for timing does not create a clock, and it does not create one even on
+                // a renderer that has timer queries: the switch reads as on only once a pass has
+                // actually been timed, because the timers belong to the chain's passes and an
+                // empty chain has none. Both halves of that are asserted, in order.
+                assertFalse(pipeline.isGpuTimingEnabled(),
+                        "an empty chain has nothing to time, whatever the renderer can do");
 
                 pipeline.resize(128, 128);
                 pipeline.setCamera(VIEW, PROJECTION, 0.5f, 250.0f);
+                // Bloom is a chain pass, so enabling it gives the chain something to time.
+                RenderPipelineSettingsExt timed = pipeline.getSettings();
+                timed.setBloomEnabled(true);
+                pipeline.setSettings(timed);
                 pipeline.begin(Color.Black);
                 pipeline.end();
+
+                try (GpuTimer clock = GpuTimer.create(probe.device())) {
+                    assertEquals(clock.isSupported(), pipeline.isGpuTimingEnabled(),
+                            "once a pass has run, the pipeline times exactly where the renderer "
+                            + "has a timer, and it said: " + clock.getUnsupportedReason());
+                }
 
                 for (PassTiming timing : pipeline.getPassTimings()) {
                     assertFalse(timing.name().isBlank(), "a timing names its pass");
@@ -199,6 +214,110 @@ final class RenderPipelineTests {
                 }
                 // The fallback reason is a diagnostic that exists whether or not it fell back.
                 assertNotNull(pipeline.getTransparencyFallbackReason());
+            }
+        });
+    }
+
+    @Test
+    void theSceneCallbacksRunOnlyWhenTheSettingsAskForTheirPasses() {
+        GameProbe.run(probe -> {
+            try (RenderPipeline pipeline = RenderPipeline.create(probe.device());
+                    ShadowMap map = ShadowMap.create(probe.device(), ShadowQuality.Low)) {
+                int[] shadowCalls = new int[1];
+                int[] transparentCalls = new int[1];
+                int[] sequence = new int[1];
+                int[] shadowAt = new int[1];
+                int[] transparentAt = new int[1];
+
+                pipeline.setTransparentScene(() -> {
+                    transparentCalls[0]++;
+                    transparentAt[0] = ++sequence[0];
+                });
+                pipeline.setShadowScene(map, LIGHT,
+                        SCENE,
+                        () -> {
+                            shadowCalls[0]++;
+                            shadowAt[0] = ++sequence[0];
+                        });
+                pipeline.resize(320, 240);
+                pipeline.setCamera(VIEW, PROJECTION, 0.5f, 250.0f);
+
+                // The default settings have shadows off and transparency None, and CNA runs
+                // neither pass without them. A frame here enters neither callback -- which is
+                // the fact an earlier reading of this family mistook for a renderer boundary.
+                pipeline.begin(Color.Black);
+                pipeline.end();
+                assertEquals(0, shadowCalls[0], "shadows are off, so no caster pass runs");
+                assertEquals(0, transparentCalls[0],
+                        "transparency is None, so no transparent pass runs");
+                assertFalse(pipeline.didShadowPassRun());
+
+                RenderPipelineSettingsExt settings = pipeline.getSettings();
+                settings.setShadowsEnabled(true);
+                settings.setTransparencyMode(TransparencyMode.Sorted);
+                pipeline.setSettings(settings);
+
+                sequence[0] = 0;
+                pipeline.begin(Color.Black);
+                pipeline.end();
+                assertEquals(1, shadowCalls[0], "the caster callback runs once per frame");
+                assertEquals(1, transparentCalls[0],
+                        "and so does the transparent callback");
+                assertTrue(pipeline.didShadowPassRun());
+                // The shadow pass runs inside begin, before the scene target is bound, and the
+                // transparent one inside end. The order matters to a game that shares state
+                // between them, and it is the order CNA guarantees rather than an accident.
+                assertEquals(1, shadowAt[0], "the shadow callback runs first");
+                assertEquals(2, transparentAt[0], "and the transparent one second");
+
+                // Once per frame is a rate rather than a coincidence.
+                pipeline.begin(Color.Black);
+                pipeline.end();
+                assertEquals(2, shadowCalls[0]);
+                assertEquals(2, transparentCalls[0]);
+
+                // Clearing either one stops it and leaves the other alone.
+                pipeline.setTransparentScene(null);
+                pipeline.begin(Color.Black);
+                pipeline.end();
+                assertEquals(3, shadowCalls[0], "the shadow callback is untouched");
+                assertEquals(2, transparentCalls[0], "the cleared one does not run");
+
+                pipeline.setShadowScene(map, LIGHT, SCENE, null);
+                pipeline.begin(Color.Black);
+                pipeline.end();
+                assertEquals(3, shadowCalls[0], "and clearing the caster callback stops it too");
+                assertFalse(pipeline.didShadowPassRun());
+            }
+        });
+    }
+
+    @Test
+    void anExceptionFromASceneCallbackSurfacesAtTheFrameThatRanIt() {
+        GameProbe.run(probe -> {
+            try (RenderPipeline pipeline = RenderPipeline.create(probe.device())) {
+                pipeline.resize(128, 128);
+                pipeline.setCamera(VIEW, PROJECTION, 0.5f, 250.0f);
+                RenderPipelineSettingsExt settings = pipeline.getSettings();
+                settings.setTransparencyMode(TransparencyMode.Sorted);
+                pipeline.setSettings(settings);
+                pipeline.setTransparentScene(() -> {
+                    throw new IllegalStateException("the transparent scene refused");
+                });
+
+                // The transparent pass runs inside end(), so that is where the exception
+                // surfaces -- at the call that caused it, carrying the callback's own message
+                // rather than a result code.
+                pipeline.begin(Color.Black);
+                IllegalStateException thrown =
+                        assertThrows(IllegalStateException.class, pipeline::end);
+                assertEquals("the transparent scene refused", thrown.getMessage());
+
+                // And the pipeline is usable afterwards: the frame that failed is closed, so the
+                // next one opens.
+                pipeline.setTransparentScene(null);
+                pipeline.begin(Color.Black);
+                pipeline.end();
             }
         });
     }

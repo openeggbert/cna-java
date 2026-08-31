@@ -1246,6 +1246,26 @@
         "symbol": "cna_depth_effect_set_mode"
       },
       {
+        "java": "graphicsDeviceCopyCapabilityReportExt",
+        "symbol": "cna_graphics_device_copy_capability_report_ext"
+      },
+      {
+        "java": "graphicsDeviceCopyRendererName",
+        "symbol": "cna_graphics_device_copy_renderer_name"
+      },
+      {
+        "java": "graphicsDeviceGetCapabilityReportSizeExt",
+        "symbol": "cna_graphics_device_get_capability_report_size_ext"
+      },
+      {
+        "java": "graphicsDeviceGetRendererNameSize",
+        "symbol": "cna_graphics_device_get_renderer_name_size"
+      },
+      {
+        "java": "graphicsDeviceSupportsCapability",
+        "symbol": "cna_graphics_device_supports_capability"
+      },
+      {
         "java": "graphicsExtIsAvailable",
         "symbol": "cna_graphics_ext_is_available"
       },
@@ -3565,6 +3585,61 @@
         "symbol": "cna_atmospheric_sky_set_turbidity"
       },
       {
+        "java": "autoExposureExtApplyTo",
+        "symbol": "cna_auto_exposure_ext_apply_to",
+        "inOut": [
+          "settings"
+        ]
+      },
+      {
+        "java": "autoExposureExtCreate",
+        "symbol": "cna_auto_exposure_ext_create"
+      },
+      {
+        "java": "autoExposureExtDestroy",
+        "symbol": "cna_auto_exposure_ext_destroy"
+      },
+      {
+        "java": "autoExposureExtGetBrighteningSpeed",
+        "symbol": "cna_auto_exposure_ext_get_brightening_speed"
+      },
+      {
+        "java": "autoExposureExtGetDarkeningSpeed",
+        "symbol": "cna_auto_exposure_ext_get_darkening_speed"
+      },
+      {
+        "java": "autoExposureExtGetExposure",
+        "symbol": "cna_auto_exposure_ext_get_exposure"
+      },
+      {
+        "java": "autoExposureExtGetKeyValue",
+        "symbol": "cna_auto_exposure_ext_get_key_value"
+      },
+      {
+        "java": "autoExposureExtMeasureAverageLuminance",
+        "symbol": "cna_auto_exposure_ext_measure_average_luminance"
+      },
+      {
+        "java": "autoExposureExtSetAdaptationSpeeds",
+        "symbol": "cna_auto_exposure_ext_set_adaptation_speeds"
+      },
+      {
+        "java": "autoExposureExtSetExposure",
+        "symbol": "cna_auto_exposure_ext_set_exposure"
+      },
+      {
+        "java": "autoExposureExtSetExposureRange",
+        "symbol": "cna_auto_exposure_ext_set_exposure_range"
+      },
+      {
+        "java": "autoExposureExtSetKeyValue",
+        "symbol": "cna_auto_exposure_ext_set_key_value"
+      },
+      {
+        "java": "autoExposureExtUpdate",
+        "symbol": "cna_auto_exposure_ext_update"
+      },
+      {
         "java": "blitPassCreate",
         "symbol": "cna_blit_pass_create"
       },
@@ -4153,6 +4228,54 @@
       {
         "java": "colorGradePassSetVolumeLut",
         "symbol": "cna_color_grade_pass_set_volume_lut"
+      },
+      {
+        "java": "computeShaderBarrier",
+        "symbol": "cna_compute_shader_barrier"
+      },
+      {
+        "java": "computeShaderBindImage",
+        "symbol": "cna_compute_shader_bind_image"
+      },
+      {
+        "java": "computeShaderBindStorageBuffer",
+        "symbol": "cna_compute_shader_bind_storage_buffer"
+      },
+      {
+        "java": "computeShaderBindTexture",
+        "symbol": "cna_compute_shader_bind_texture"
+      },
+      {
+        "java": "computeShaderCopyCompileError",
+        "symbol": "cna_compute_shader_copy_compile_error"
+      },
+      {
+        "java": "computeShaderCreate",
+        "symbol": "cna_compute_shader_create"
+      },
+      {
+        "java": "computeShaderDestroy",
+        "symbol": "cna_compute_shader_destroy"
+      },
+      {
+        "java": "computeShaderDispatch",
+        "symbol": "cna_compute_shader_dispatch"
+      },
+      {
+        "java": "computeShaderIsImageBindingSupported",
+        "symbol": "cna_compute_shader_is_image_binding_supported"
+      },
+      {
+        "java": "computeShaderIsValid",
+        "symbol": "cna_compute_shader_is_valid"
+      },
+      {
+        "java": "computeShaderSetUniformFloat",
+        "symbol": "cna_compute_shader_set_uniform_float"
+      },
+      {
+        "java": "computeShaderSetUniformInt",
+        "symbol": "cna_compute_shader_set_uniform_int"
       },
       {
         "java": "contactShadowPassCombineVisibility",
@@ -4925,6 +5048,14 @@
         "symbol": "cna_gpu_timer_poll"
       },
       {
+        "java": "graphicsDeviceDrawIndexedPrimitivesIndirectExt",
+        "symbol": "cna_graphics_device_draw_indexed_primitives_indirect_ext"
+      },
+      {
+        "java": "graphicsDeviceDrawPrimitivesIndirectExt",
+        "symbol": "cna_graphics_device_draw_primitives_indirect_ext"
+      },
+      {
         "java": "graphicsDeviceSupportsShadowSamplingExt",
         "symbol": "cna_graphics_device_supports_shadow_sampling_ext"
       },
@@ -5035,6 +5166,14 @@
       {
         "java": "imageBasedLightExtIsValid",
         "symbol": "cna_image_based_light_ext_is_valid"
+      },
+      {
+        "java": "indirectDrawArgumentsInit",
+        "symbol": "cna_indirect_draw_arguments_init"
+      },
+      {
+        "java": "indirectDrawIndexedArgumentsInit",
+        "symbol": "cna_indirect_draw_indexed_arguments_init"
       },
       {
         "java": "instancedRendererExtCopyInstanceElements",
@@ -6392,6 +6531,76 @@
       {
         "java": "ssrPassSetThickness",
         "symbol": "cna_ssr_pass_set_thickness"
+      },
+      {
+        "java": "storageBufferCreate",
+        "symbol": "cna_storage_buffer_create"
+      },
+      {
+        "java": "storageBufferCreateTyped",
+        "symbol": "cna_storage_buffer_create_typed"
+      },
+      {
+        "java": "storageBufferDestroy",
+        "symbol": "cna_storage_buffer_destroy"
+      },
+      {
+        "java": "storageBufferGetByteSize",
+        "symbol": "cna_storage_buffer_get_byte_size"
+      },
+      {
+        "java": "storageBufferGetBytes",
+        "symbol": "cna_storage_buffer_get_bytes",
+        "byteBuffers": {
+          "destination": {
+            "extent": [
+              "byte_size"
+            ]
+          }
+        }
+      },
+      {
+        "java": "storageBufferGetElementByteSize",
+        "symbol": "cna_storage_buffer_get_element_byte_size"
+      },
+      {
+        "java": "storageBufferGetElementCount",
+        "symbol": "cna_storage_buffer_get_element_count"
+      },
+      {
+        "java": "storageBufferGetElements",
+        "symbol": "cna_storage_buffer_get_elements",
+        "byteBuffers": {
+          "destination": {
+            "extent": [
+              "element_count",
+              "element_byte_size"
+            ]
+          }
+        }
+      },
+      {
+        "java": "storageBufferSetBytes",
+        "symbol": "cna_storage_buffer_set_bytes",
+        "byteBuffers": {
+          "data": {
+            "extent": [
+              "byte_size"
+            ]
+          }
+        }
+      },
+      {
+        "java": "storageBufferSetElements",
+        "symbol": "cna_storage_buffer_set_elements",
+        "byteBuffers": {
+          "data": {
+            "extent": [
+              "element_count",
+              "element_byte_size"
+            ]
+          }
+        }
       },
       {
         "java": "thinFilmIridescenceCopyGlsl",

@@ -1522,6 +1522,140 @@
       ]
     },
     {
+      "name": "cna_auto_exposure_ext_apply_to",
+      "header": "engine_layer.h",
+      "ownership": "borrows the meter; reads and writes the caller's own settings structure",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_AutoExposureHandle",
+        "CNA_RenderPipelineSettingsEXT*"
+      ]
+    },
+    {
+      "name": "cna_auto_exposure_ext_create",
+      "header": "engine_layer.h",
+      "ownership": "borrows the graphics device; returns an owned meter handle released with cna_auto_exposure_ext_destroy before the game that owns the device",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_Handle",
+        "CNA_AutoExposureHandle*"
+      ]
+    },
+    {
+      "name": "cna_auto_exposure_ext_destroy",
+      "header": "engine_layer.h",
+      "ownership": "releases the owned meter handle",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_AutoExposureHandle"
+      ]
+    },
+    {
+      "name": "cna_auto_exposure_ext_get_brightening_speed",
+      "header": "engine_layer.h",
+      "ownership": "borrows the meter; returns a value",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_AutoExposureHandle",
+        "float*"
+      ]
+    },
+    {
+      "name": "cna_auto_exposure_ext_get_darkening_speed",
+      "header": "engine_layer.h",
+      "ownership": "borrows the meter; returns a value",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_AutoExposureHandle",
+        "float*"
+      ]
+    },
+    {
+      "name": "cna_auto_exposure_ext_get_exposure",
+      "header": "engine_layer.h",
+      "ownership": "borrows the meter; returns a value",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_AutoExposureHandle",
+        "float*"
+      ]
+    },
+    {
+      "name": "cna_auto_exposure_ext_get_key_value",
+      "header": "engine_layer.h",
+      "ownership": "borrows the meter; returns a value",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_AutoExposureHandle",
+        "float*"
+      ]
+    },
+    {
+      "name": "cna_auto_exposure_ext_measure_average_luminance",
+      "header": "engine_layer.h",
+      "ownership": "borrows the meter and the scene texture; keeps neither",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_AutoExposureHandle",
+        "CNA_Handle",
+        "float*"
+      ]
+    },
+    {
+      "name": "cna_auto_exposure_ext_set_adaptation_speeds",
+      "header": "engine_layer.h",
+      "ownership": "borrows the meter",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_AutoExposureHandle",
+        "float",
+        "float"
+      ]
+    },
+    {
+      "name": "cna_auto_exposure_ext_set_exposure",
+      "header": "engine_layer.h",
+      "ownership": "borrows the meter",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_AutoExposureHandle",
+        "float"
+      ]
+    },
+    {
+      "name": "cna_auto_exposure_ext_set_exposure_range",
+      "header": "engine_layer.h",
+      "ownership": "borrows the meter",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_AutoExposureHandle",
+        "float",
+        "float"
+      ]
+    },
+    {
+      "name": "cna_auto_exposure_ext_set_key_value",
+      "header": "engine_layer.h",
+      "ownership": "borrows the meter",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_AutoExposureHandle",
+        "float"
+      ]
+    },
+    {
+      "name": "cna_auto_exposure_ext_update",
+      "header": "engine_layer.h",
+      "ownership": "borrows the meter and the scene texture; keeps neither",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_AutoExposureHandle",
+        "CNA_Handle",
+        "float",
+        "float*"
+      ]
+    },
+    {
       "name": "cna_available_network_session_collection_copy_session",
       "header": "net_sessions.h",
       "ownership": "borrows its inputs; returns an owned handle",
@@ -6511,6 +6645,137 @@
       "returnType": "CNA_Result",
       "parameters": [
         "CNA_CompassHandle"
+      ]
+    },
+    {
+      "name": "cna_compute_shader_barrier",
+      "header": "engine_layer.h",
+      "ownership": "borrows the shader",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_ComputeShaderHandle",
+        "CNA_GraphicsMemoryBarrier"
+      ]
+    },
+    {
+      "name": "cna_compute_shader_bind_image",
+      "header": "engine_layer.h",
+      "ownership": "borrows the shader and the texture; the texture must outlive every dispatch that touches the image",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_ComputeShaderHandle",
+        "int32_t",
+        "CNA_Handle",
+        "CNA_GraphicsImageAccess"
+      ]
+    },
+    {
+      "name": "cna_compute_shader_bind_storage_buffer",
+      "header": "engine_layer.h",
+      "ownership": "borrows both; the buffer is retained by neither and must outlive every dispatch that reads it",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_ComputeShaderHandle",
+        "int32_t",
+        "CNA_StorageBufferHandle"
+      ]
+    },
+    {
+      "name": "cna_compute_shader_bind_texture",
+      "header": "engine_layer.h",
+      "ownership": "borrows the shader, the sampler name bytes and the texture; the texture must outlive every dispatch that samples it",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_ComputeShaderHandle",
+        "int32_t",
+        "CNA_StringView",
+        "CNA_Handle"
+      ]
+    },
+    {
+      "name": "cna_compute_shader_copy_compile_error",
+      "header": "engine_layer.h",
+      "ownership": "borrows the shader; fills the caller's buffer and writes no partial string",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_ComputeShaderHandle",
+        "char*",
+        "uint64_t",
+        "uint64_t*"
+      ]
+    },
+    {
+      "name": "cna_compute_shader_create",
+      "header": "engine_layer.h",
+      "ownership": "borrows the graphics device and the source bytes; returns an owned compute-shader handle released with cna_compute_shader_destroy before the game that owns the device",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_Handle",
+        "CNA_StringView",
+        "CNA_ComputeShaderHandle*"
+      ]
+    },
+    {
+      "name": "cna_compute_shader_destroy",
+      "header": "engine_layer.h",
+      "ownership": "releases the owned compute-shader handle; an invalid handle is an error rather than a silent no-op",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_ComputeShaderHandle"
+      ]
+    },
+    {
+      "name": "cna_compute_shader_dispatch",
+      "header": "engine_layer.h",
+      "ownership": "borrows the shader",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_ComputeShaderHandle",
+        "int32_t",
+        "int32_t",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "cna_compute_shader_is_image_binding_supported",
+      "header": "engine_layer.h",
+      "ownership": "borrows the shader; returns a value",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_ComputeShaderHandle",
+        "CNA_Bool*"
+      ]
+    },
+    {
+      "name": "cna_compute_shader_is_valid",
+      "header": "engine_layer.h",
+      "ownership": "borrows the shader; returns a value",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_ComputeShaderHandle",
+        "CNA_Bool*"
+      ]
+    },
+    {
+      "name": "cna_compute_shader_set_uniform_float",
+      "header": "engine_layer.h",
+      "ownership": "borrows the shader and the name bytes for the duration of the call",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_ComputeShaderHandle",
+        "CNA_StringView",
+        "float"
+      ]
+    },
+    {
+      "name": "cna_compute_shader_set_uniform_int",
+      "header": "engine_layer.h",
+      "ownership": "borrows the shader and the name bytes for the duration of the call",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_ComputeShaderHandle",
+        "CNA_StringView",
+        "int32_t"
       ]
     },
     {
@@ -11751,6 +12016,18 @@
       ]
     },
     {
+      "name": "cna_graphics_device_copy_capability_report_ext",
+      "header": "graphics.h",
+      "ownership": "borrows the callback-scoped graphics device; fills the caller's buffer and writes no partial string",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_Handle",
+        "char*",
+        "uint64_t",
+        "uint64_t*"
+      ]
+    },
+    {
       "name": "cna_graphics_device_copy_render_targets",
       "header": "render_target.h",
       "ownership": "borrows device; copies complete binding array",
@@ -11758,6 +12035,18 @@
       "parameters": [
         "CNA_Handle",
         "CNA_RenderTargetBinding*",
+        "uint64_t",
+        "uint64_t*"
+      ]
+    },
+    {
+      "name": "cna_graphics_device_copy_renderer_name",
+      "header": "graphics.h",
+      "ownership": "borrows the callback-scoped graphics device; fills the caller's buffer and writes no partial string",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_Handle",
+        "char*",
         "uint64_t",
         "uint64_t*"
       ]
@@ -11790,6 +12079,18 @@
       ]
     },
     {
+      "name": "cna_graphics_device_draw_indexed_primitives_indirect_ext",
+      "header": "engine_layer.h",
+      "ownership": "borrows the callback-scoped graphics device and the storage buffer holding the arguments; keeps neither",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_Handle",
+        "CNA_PrimitiveType",
+        "CNA_StorageBufferHandle",
+        "int32_t"
+      ]
+    },
+    {
       "name": "cna_graphics_device_draw_instanced_primitives",
       "header": "graphics_device.h",
       "ownership": "borrows device and bound resources",
@@ -11814,6 +12115,18 @@
         "CNA_Handle",
         "CNA_PrimitiveType",
         "int32_t",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "cna_graphics_device_draw_primitives_indirect_ext",
+      "header": "engine_layer.h",
+      "ownership": "borrows the callback-scoped graphics device and the storage buffer holding the arguments; keeps neither",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_Handle",
+        "CNA_PrimitiveType",
+        "CNA_StorageBufferHandle",
         "int32_t"
       ]
     },
@@ -11888,6 +12201,16 @@
       "parameters": [
         "CNA_Handle",
         "CNA_BlendState*"
+      ]
+    },
+    {
+      "name": "cna_graphics_device_get_capability_report_size_ext",
+      "header": "graphics.h",
+      "ownership": "borrows the callback-scoped graphics device; returns a value",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_Handle",
+        "uint64_t*"
       ]
     },
     {
@@ -11984,6 +12307,16 @@
       "name": "cna_graphics_device_get_render_target_count",
       "header": "render_target.h",
       "ownership": "borrows device; caller output",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_Handle",
+        "uint64_t*"
+      ]
+    },
+    {
+      "name": "cna_graphics_device_get_renderer_name_size",
+      "header": "graphics.h",
+      "ownership": "borrows the callback-scoped graphics device; returns a value",
       "returnType": "CNA_Result",
       "parameters": [
         "CNA_Handle",
@@ -12585,6 +12918,17 @@
         "CNA_GraphicsDeviceResourceDestroyedCallback",
         "void*",
         "CNA_GraphicsDeviceEventRegistrationHandle*"
+      ]
+    },
+    {
+      "name": "cna_graphics_device_supports_capability",
+      "header": "graphics.h",
+      "ownership": "borrows the callback-scoped graphics device; returns a value",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_Handle",
+        "CNA_GraphicsCapability",
+        "CNA_Bool*"
       ]
     },
     {
@@ -13865,6 +14209,24 @@
       ]
     },
     {
+      "name": "cna_indirect_draw_arguments_init",
+      "header": "engine_layer.h",
+      "ownership": "no handle; fills the caller's own structure",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_IndirectDrawArguments*"
+      ]
+    },
+    {
+      "name": "cna_indirect_draw_indexed_arguments_init",
+      "header": "engine_layer.h",
+      "ownership": "no handle; fills the caller's own structure",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_IndirectDrawIndexedArguments*"
+      ]
+    },
+    {
       "name": "cna_input_devices_copy_keyboard_name_at",
       "header": "input_devices.h",
       "ownership": "borrows game; caller buffer",
@@ -14875,6 +15237,43 @@
       "parameters": [
         "CNA_PostProcessPassHandle",
         "float"
+      ]
+    },
+    {
+      "name": "cna_light_probe_baker_bake_light",
+      "header": "engine_layer.h",
+      "ownership": "borrows the baker, the volume and the caller's callback for the duration of the call; writes into the volume's own probes",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_LightProbeBakerHandle",
+        "CNA_LightProbeVolumeHandle",
+        "CNA_LightProbeSceneDrawCallback",
+        "void*"
+      ]
+    },
+    {
+      "name": "cna_light_probe_baker_bake_probe",
+      "header": "engine_layer.h",
+      "ownership": "borrows the baker and the caller's callback for the duration of the call; returns a new owned probe handle the caller releases with cna_light_probe_ext_destroy",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_LightProbeBakerHandle",
+        "const CNA_Vector3*",
+        "CNA_LightProbeSceneDrawCallback",
+        "void*",
+        "CNA_LightProbeHandle*"
+      ]
+    },
+    {
+      "name": "cna_light_probe_baker_bake_visibility",
+      "header": "engine_layer.h",
+      "ownership": "borrows the baker, the volume and the caller's callback for the duration of the call; writes into the volume's own probes",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_LightProbeBakerHandle",
+        "CNA_LightProbeVolumeHandle",
+        "CNA_LightProbeSceneDrawCallback",
+        "void*"
       ]
     },
     {
@@ -20996,6 +21395,20 @@
       ]
     },
     {
+      "name": "cna_render_pipeline_set_shadow_scene",
+      "header": "engine_layer.h",
+      "ownership": "borrows the pipeline, the shadow map, the light and the bounds; RETAINS the callback and its context until they are replaced or cleared",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_RenderPipelineHandle",
+        "CNA_ShadowMapHandle",
+        "const CNA_DirectionalLightEXT*",
+        "const CNA_BoundingBox*",
+        "CNA_RenderPipelineDrawCallback",
+        "void*"
+      ]
+    },
+    {
       "name": "cna_render_pipeline_set_skybox",
       "header": "engine_layer.h",
       "ownership": "borrows the pipeline and the caller's skybox; the pipeline never owns it",
@@ -21014,6 +21427,17 @@
         "CNA_RenderPipelineHandle",
         "const CNA_Matrix*",
         "const CNA_Matrix*"
+      ]
+    },
+    {
+      "name": "cna_render_pipeline_set_transparent_scene",
+      "header": "engine_layer.h",
+      "ownership": "borrows the pipeline; RETAINS the callback and its context until they are replaced or cleared, which is why the Java reference is pinned by an explicit token the pipeline owns",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_RenderPipelineHandle",
+        "CNA_RenderPipelineDrawCallback",
+        "void*"
       ]
     },
     {
@@ -23405,6 +23829,114 @@
       "parameters": [
         "CNA_PostProcessPassHandle",
         "float"
+      ]
+    },
+    {
+      "name": "cna_storage_buffer_create",
+      "header": "engine_layer.h",
+      "ownership": "borrows the graphics device; returns an owned storage-buffer handle the caller releases with cna_storage_buffer_destroy before the game that owns the device",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_Handle",
+        "uint64_t",
+        "CNA_StorageBufferHandle*"
+      ]
+    },
+    {
+      "name": "cna_storage_buffer_create_typed",
+      "header": "engine_layer.h",
+      "ownership": "borrows the graphics device; returns an owned storage-buffer handle that also remembers its element count and element size, released with cna_storage_buffer_destroy",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_Handle",
+        "uint64_t",
+        "uint64_t",
+        "CNA_StorageBufferHandle*"
+      ]
+    },
+    {
+      "name": "cna_storage_buffer_destroy",
+      "header": "engine_layer.h",
+      "ownership": "releases the owned storage-buffer handle; an invalid handle is an error rather than a silent no-op",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_StorageBufferHandle"
+      ]
+    },
+    {
+      "name": "cna_storage_buffer_get_byte_size",
+      "header": "engine_layer.h",
+      "ownership": "borrows the buffer; returns a value",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_StorageBufferHandle",
+        "uint64_t*"
+      ]
+    },
+    {
+      "name": "cna_storage_buffer_get_bytes",
+      "header": "engine_layer.h",
+      "ownership": "borrows the buffer; fills the caller's own bytes and keeps nothing",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_StorageBufferHandle",
+        "void*",
+        "uint64_t"
+      ]
+    },
+    {
+      "name": "cna_storage_buffer_get_element_byte_size",
+      "header": "engine_layer.h",
+      "ownership": "borrows the buffer; returns a value",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_StorageBufferHandle",
+        "uint64_t*"
+      ]
+    },
+    {
+      "name": "cna_storage_buffer_get_element_count",
+      "header": "engine_layer.h",
+      "ownership": "borrows the buffer; returns a value",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_StorageBufferHandle",
+        "uint64_t*"
+      ]
+    },
+    {
+      "name": "cna_storage_buffer_get_elements",
+      "header": "engine_layer.h",
+      "ownership": "borrows the buffer; fills the caller's own bytes and keeps nothing",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_StorageBufferHandle",
+        "void*",
+        "uint64_t",
+        "uint64_t"
+      ]
+    },
+    {
+      "name": "cna_storage_buffer_set_bytes",
+      "header": "engine_layer.h",
+      "ownership": "borrows the buffer and the caller's bytes for the duration of the call; CNA copies them to the GPU",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_StorageBufferHandle",
+        "const void*",
+        "uint64_t"
+      ]
+    },
+    {
+      "name": "cna_storage_buffer_set_elements",
+      "header": "engine_layer.h",
+      "ownership": "borrows the buffer and the caller's bytes for the duration of the call; refuses a count or element size the buffer was not created for",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_StorageBufferHandle",
+        "const void*",
+        "uint64_t",
+        "uint64_t"
       ]
     },
     {

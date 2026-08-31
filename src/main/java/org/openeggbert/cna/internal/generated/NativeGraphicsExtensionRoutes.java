@@ -141,6 +141,31 @@ public final class NativeGraphicsExtensionRoutes {
     public static native int depthEffectSetMode(long effect, int mode);
 
     /**
+     * cna_graphics_device_copy_capability_report_ext (graphics.h).
+     */
+    public static native int graphicsDeviceCopyCapabilityReportExt(long graphicsDevice, byte[] destination, long[] outBytes);
+
+    /**
+     * cna_graphics_device_copy_renderer_name (graphics.h).
+     */
+    public static native int graphicsDeviceCopyRendererName(long graphicsDevice, byte[] destination, long[] outBytes);
+
+    /**
+     * cna_graphics_device_get_capability_report_size_ext (graphics.h).
+     */
+    public static native int graphicsDeviceGetCapabilityReportSizeExt(long graphicsDevice, long[] outBytes);
+
+    /**
+     * cna_graphics_device_get_renderer_name_size (graphics.h).
+     */
+    public static native int graphicsDeviceGetRendererNameSize(long graphicsDevice, long[] outBytes);
+
+    /**
+     * cna_graphics_device_supports_capability (graphics.h).
+     */
+    public static native int graphicsDeviceSupportsCapability(long graphicsDevice, int capability, boolean[] outSupported);
+
+    /**
      * cna_graphics_ext_is_available (graphics_ext.h).
      */
     public static native int graphicsExtIsAvailable(boolean[] outAvailable);

@@ -509,6 +509,134 @@ public final class NativeEngineLayerRoutes {
     public static native int atmosphericSkySetTurbidity(long sky, float turbidity);
 
     /**
+     * cna_auto_exposure_ext_apply_to (engine_layer.h).
+     *
+     * <p>settingsBytes carries CNA_RenderPipelineSettingsEXT in this order:
+     * <ol start="0">
+     *   <li>{@code reserved[0]} (uint8_t)</li>
+     *   <li>{@code reserved[1]} (uint8_t)</li>
+     *   <li>{@code reserved[2]} (uint8_t)</li>
+     *   <li>{@code reserved[3]} (uint8_t)</li>
+     * </ol>
+     *
+     * <p>settingsIntegral carries CNA_RenderPipelineSettingsEXT in this order:
+     * <ol start="0">
+     *   <li>{@code hdr_enabled} (CNA_Bool)</li>
+     *   <li>{@code tonemapping_mode} (CNA_TonemappingMode)</li>
+     *   <li>{@code bloom_enabled} (CNA_Bool)</li>
+     *   <li>{@code bloom_iterations} (int32_t)</li>
+     *   <li>{@code ssao_enabled} (CNA_Bool)</li>
+     *   <li>{@code transparency_mode} (CNA_TransparencyMode)</li>
+     *   <li>{@code ssao_sample_count} (int32_t)</li>
+     *   <li>{@code ssr_enabled} (CNA_Bool)</li>
+     *   <li>{@code ssr_step_count} (int32_t)</li>
+     *   <li>{@code color_grade_enabled} (CNA_Bool)</li>
+     *   <li>{@code dof_enabled} (CNA_Bool)</li>
+     *   <li>{@code fxaa_enabled} (CNA_Bool)</li>
+     *   <li>{@code render_quality} (CNA_RenderQuality)</li>
+     *   <li>{@code shadow_quality} (CNA_ShadowQuality)</li>
+     *   <li>{@code shadows_enabled} (CNA_Bool)</li>
+     * </ol>
+     *
+     * <p>settingsFloating carries CNA_RenderPipelineSettingsEXT in this order:
+     * <ol start="0">
+     *   <li>{@code exposure} (float)</li>
+     *   <li>{@code gamma} (float)</li>
+     *   <li>{@code bloom_intensity} (float)</li>
+     *   <li>{@code bloom_threshold} (float)</li>
+     *   <li>{@code ssao_radius} (float)</li>
+     *   <li>{@code ssao_intensity} (float)</li>
+     *   <li>{@code ssr_max_distance} (float)</li>
+     *   <li>{@code ssr_thickness} (float)</li>
+     *   <li>{@code ssr_depth_bias} (float)</li>
+     *   <li>{@code ssr_edge_fade} (float)</li>
+     *   <li>{@code volumetric_fog_density} (float)</li>
+     *   <li>{@code light_shaft_threshold} (float)</li>
+     *   <li>{@code light_shaft_intensity} (float)</li>
+     *   <li>{@code light_shaft_decay} (float)</li>
+     *   <li>{@code height_fog_density} (float)</li>
+     *   <li>{@code height_fog_falloff} (float)</li>
+     *   <li>{@code height_fog_base_height} (float)</li>
+     *   <li>{@code motion_blur_strength} (float)</li>
+     *   <li>{@code motion_blur_max_distance} (float)</li>
+     *   <li>{@code chromatic_aberration_strength} (float)</li>
+     *   <li>{@code film_grain_intensity} (float)</li>
+     *   <li>{@code lens_flare_threshold} (float)</li>
+     *   <li>{@code lens_flare_intensity} (float)</li>
+     *   <li>{@code lens_flare_dispersal} (float)</li>
+     *   <li>{@code color_grade_strength} (float)</li>
+     *   <li>{@code dof_focus_distance} (float)</li>
+     *   <li>{@code dof_focal_length} (float)</li>
+     *   <li>{@code doff_number} (float)</li>
+     *   <li>{@code dof_max_radius} (float)</li>
+     *   <li>{@code ssr_roughness_blur} (float)</li>
+     *   <li>{@code ssr_intensity} (float)</li>
+     *   <li>{@code fxaa_edge_threshold_ext} (float)</li>
+     * </ol>
+     */
+    public static native int autoExposureExtApplyTo(long autoExposure, byte[] settingsBytes, long[] settingsIntegral, float[] settingsFloating);
+
+    /**
+     * cna_auto_exposure_ext_create (engine_layer.h).
+     */
+    public static native int autoExposureExtCreate(long graphicsDevice, long[] outAutoExposure);
+
+    /**
+     * cna_auto_exposure_ext_destroy (engine_layer.h).
+     */
+    public static native int autoExposureExtDestroy(long autoExposure);
+
+    /**
+     * cna_auto_exposure_ext_get_brightening_speed (engine_layer.h).
+     */
+    public static native int autoExposureExtGetBrighteningSpeed(long autoExposure, float[] outValue);
+
+    /**
+     * cna_auto_exposure_ext_get_darkening_speed (engine_layer.h).
+     */
+    public static native int autoExposureExtGetDarkeningSpeed(long autoExposure, float[] outValue);
+
+    /**
+     * cna_auto_exposure_ext_get_exposure (engine_layer.h).
+     */
+    public static native int autoExposureExtGetExposure(long autoExposure, float[] outValue);
+
+    /**
+     * cna_auto_exposure_ext_get_key_value (engine_layer.h).
+     */
+    public static native int autoExposureExtGetKeyValue(long autoExposure, float[] outValue);
+
+    /**
+     * cna_auto_exposure_ext_measure_average_luminance (engine_layer.h).
+     */
+    public static native int autoExposureExtMeasureAverageLuminance(long autoExposure, long scene, float[] outLuminance);
+
+    /**
+     * cna_auto_exposure_ext_set_adaptation_speeds (engine_layer.h).
+     */
+    public static native int autoExposureExtSetAdaptationSpeeds(long autoExposure, float brighteningPerSecond, float darkeningPerSecond);
+
+    /**
+     * cna_auto_exposure_ext_set_exposure (engine_layer.h).
+     */
+    public static native int autoExposureExtSetExposure(long autoExposure, float value);
+
+    /**
+     * cna_auto_exposure_ext_set_exposure_range (engine_layer.h).
+     */
+    public static native int autoExposureExtSetExposureRange(long autoExposure, float minimum, float maximum);
+
+    /**
+     * cna_auto_exposure_ext_set_key_value (engine_layer.h).
+     */
+    public static native int autoExposureExtSetKeyValue(long autoExposure, float value);
+
+    /**
+     * cna_auto_exposure_ext_update (engine_layer.h).
+     */
+    public static native int autoExposureExtUpdate(long autoExposure, long scene, float deltaSeconds, float[] outExposure);
+
+    /**
      * cna_blit_pass_create (engine_layer.h).
      */
     public static native int blitPassCreate(long graphicsDevice, long[] outPass);
@@ -2008,6 +2136,66 @@ public final class NativeEngineLayerRoutes {
      * cna_color_grade_pass_set_volume_lut (engine_layer.h).
      */
     public static native int colorGradePassSetVolumeLut(long pass, long lut);
+
+    /**
+     * cna_compute_shader_barrier (engine_layer.h).
+     */
+    public static native int computeShaderBarrier(long shader, int bits);
+
+    /**
+     * cna_compute_shader_bind_image (engine_layer.h).
+     */
+    public static native int computeShaderBindImage(long shader, int unit, long texture, int access);
+
+    /**
+     * cna_compute_shader_bind_storage_buffer (engine_layer.h).
+     */
+    public static native int computeShaderBindStorageBuffer(long shader, int binding, long buffer);
+
+    /**
+     * cna_compute_shader_bind_texture (engine_layer.h).
+     */
+    public static native int computeShaderBindTexture(long shader, int unit, byte[] samplerName, long texture);
+
+    /**
+     * cna_compute_shader_copy_compile_error (engine_layer.h).
+     */
+    public static native int computeShaderCopyCompileError(long shader, byte[] destination, long[] outBytes);
+
+    /**
+     * cna_compute_shader_create (engine_layer.h).
+     */
+    public static native int computeShaderCreate(long graphicsDevice, byte[] source, long[] outShader);
+
+    /**
+     * cna_compute_shader_destroy (engine_layer.h).
+     */
+    public static native int computeShaderDestroy(long shader);
+
+    /**
+     * cna_compute_shader_dispatch (engine_layer.h).
+     */
+    public static native int computeShaderDispatch(long shader, int groupsX, int groupsY, int groupsZ);
+
+    /**
+     * cna_compute_shader_is_image_binding_supported (engine_layer.h).
+     */
+    public static native int computeShaderIsImageBindingSupported(long shader, boolean[] outSupported);
+
+    /**
+     * cna_compute_shader_is_valid (engine_layer.h).
+     */
+    public static native int computeShaderIsValid(long shader, boolean[] outValid);
+
+    /**
+     * cna_compute_shader_set_uniform_float (engine_layer.h).
+     */
+    public static native int computeShaderSetUniformFloat(long shader, byte[] name, float value);
+
+    /**
+     * cna_compute_shader_set_uniform_int (engine_layer.h).
+     */
+    public static native int computeShaderSetUniformInt(long shader, byte[] name, int value);
 
     /**
      * cna_contact_shadow_pass_combine_visibility (engine_layer.h).
@@ -4350,6 +4538,16 @@ public final class NativeEngineLayerRoutes {
     public static native int gpuTimerPoll(long timer, boolean[] outCollected);
 
     /**
+     * cna_graphics_device_draw_indexed_primitives_indirect_ext (engine_layer.h).
+     */
+    public static native int graphicsDeviceDrawIndexedPrimitivesIndirectExt(long graphicsDevice, int primitiveType, long argumentBuffer, int argumentByteOffset);
+
+    /**
+     * cna_graphics_device_draw_primitives_indirect_ext (engine_layer.h).
+     */
+    public static native int graphicsDeviceDrawPrimitivesIndirectExt(long graphicsDevice, int primitiveType, long argumentBuffer, int argumentByteOffset);
+
+    /**
      * cna_graphics_device_supports_shadow_sampling_ext (engine_layer.h).
      */
     public static native int graphicsDeviceSupportsShadowSamplingExt(long graphicsDevice, boolean[] outSupported);
@@ -4556,6 +4754,33 @@ public final class NativeEngineLayerRoutes {
      * </ol>
      */
     public static native int imageBasedLightExtIsValid(long[] lightIntegral, float[] lightFloating, boolean[] outValid);
+
+    /**
+     * cna_indirect_draw_arguments_init (engine_layer.h).
+     *
+     * <p>outArgumentsIntegral carries CNA_IndirectDrawArguments in this order:
+     * <ol start="0">
+     *   <li>{@code vertex_count} (uint32_t)</li>
+     *   <li>{@code instance_count} (uint32_t)</li>
+     *   <li>{@code first_vertex} (uint32_t)</li>
+     *   <li>{@code base_instance} (uint32_t)</li>
+     * </ol>
+     */
+    public static native int indirectDrawArgumentsInit(long[] outArgumentsIntegral);
+
+    /**
+     * cna_indirect_draw_indexed_arguments_init (engine_layer.h).
+     *
+     * <p>outArgumentsIntegral carries CNA_IndirectDrawIndexedArguments in this order:
+     * <ol start="0">
+     *   <li>{@code index_count} (uint32_t)</li>
+     *   <li>{@code instance_count} (uint32_t)</li>
+     *   <li>{@code first_index} (uint32_t)</li>
+     *   <li>{@code base_vertex} (int32_t)</li>
+     *   <li>{@code base_instance} (uint32_t)</li>
+     * </ol>
+     */
+    public static native int indirectDrawIndexedArgumentsInit(long[] outArgumentsIntegral);
 
     /**
      * cna_instanced_renderer_ext_copy_instance_elements (engine_layer.h).
@@ -8779,6 +9004,56 @@ public final class NativeEngineLayerRoutes {
      * cna_ssr_pass_set_thickness (engine_layer.h).
      */
     public static native int ssrPassSetThickness(long pass, float value);
+
+    /**
+     * cna_storage_buffer_create (engine_layer.h).
+     */
+    public static native int storageBufferCreate(long graphicsDevice, long byteSize, long[] outBuffer);
+
+    /**
+     * cna_storage_buffer_create_typed (engine_layer.h).
+     */
+    public static native int storageBufferCreateTyped(long graphicsDevice, long elementCount, long elementByteSize, long[] outBuffer);
+
+    /**
+     * cna_storage_buffer_destroy (engine_layer.h).
+     */
+    public static native int storageBufferDestroy(long buffer);
+
+    /**
+     * cna_storage_buffer_get_byte_size (engine_layer.h).
+     */
+    public static native int storageBufferGetByteSize(long buffer, long[] outByteSize);
+
+    /**
+     * cna_storage_buffer_get_bytes (engine_layer.h).
+     */
+    public static native int storageBufferGetBytes(long buffer, byte[] destination, long byteSize);
+
+    /**
+     * cna_storage_buffer_get_element_byte_size (engine_layer.h).
+     */
+    public static native int storageBufferGetElementByteSize(long buffer, long[] outElementByteSize);
+
+    /**
+     * cna_storage_buffer_get_element_count (engine_layer.h).
+     */
+    public static native int storageBufferGetElementCount(long buffer, long[] outElementCount);
+
+    /**
+     * cna_storage_buffer_get_elements (engine_layer.h).
+     */
+    public static native int storageBufferGetElements(long buffer, byte[] destination, long elementCount, long elementByteSize);
+
+    /**
+     * cna_storage_buffer_set_bytes (engine_layer.h).
+     */
+    public static native int storageBufferSetBytes(long buffer, byte[] data, long byteSize);
+
+    /**
+     * cna_storage_buffer_set_elements (engine_layer.h).
+     */
+    public static native int storageBufferSetElements(long buffer, byte[] data, long elementCount, long elementByteSize);
 
     /**
      * cna_thin_film_iridescence_copy_glsl (engine_layer.h).

@@ -20,15 +20,25 @@ import java.util.Objects;
  * measurement is {@link #isSupported()}, and it is {@code false} on the headless renderer, which
  * binds happily and then refuses the readback.
  *
- * <p><strong>CNA's own bake routes are deliberately not projected.</strong> They take a C callback
- * that CNA runs once per face, and on a renderer that cannot capture the callback is never entered
- * -- measured, in {@code tools/native-abi/probes/light_probe_bake.c}: all three bake routes refuse
- * with {@code INVALID_STATE} and draw zero faces. A JNI trampoline for them would therefore be
- * code no test here could execute, which is a worse thing to ship than an absence. What is here
- * instead is everything a game needs to capture the six faces itself: {@link #isSupported()} to
- * know whether CNA's own bake would have worked, {@link #getFaceSize()} for the target to render
- * into, {@link #faceView(int, Vector3)} for each face's camera, and the two planes that go with a
- * ninety-degree square projection.
+ * <p><strong>The three bake routes take a callback CNA runs once per face.</strong>
+ * {@link #bakeProbe}, {@link #bakeLight} and {@link #bakeVisibility} run it six times per probe,
+ * with the view and projection the baker chose, and they run it only inside the call -- so the
+ * Java callback is passed in for that call's duration and nothing outlives it.
+ *
+ * <p><strong>Draw the scene and nothing else inside the callback.</strong> The baker owns the
+ * render target for the duration, and binding another one loses the face being captured. That is
+ * CNA's instruction, repeated here because it is not recoverable: the capture silently comes back
+ * wrong rather than failing.
+ *
+ * <p><strong>An exception thrown by the callback cannot stop the bake.</strong> CNA's callback
+ * returns nothing and has no way to refuse, so the remaining faces are skipped instead and the
+ * exception surfaces at the bake call. The probe CNA produces in that case is whatever the faces
+ * that did run captured, and a caller that let an exception escape should discard it.
+ *
+ * <p>Everything a game needs to capture the six faces <em>itself</em> is here too, for the
+ * renderers CNA cannot bake on: {@link #isSupported()} to know which case it is,
+ * {@link #getFaceSize()} for the target to render into, {@link #faceView(int, Vector3)} for each
+ * face's camera, and {@link #faceProjection()} for the ninety-degree square frustum.
  *
  * <p><strong>Ownership.</strong> The native baker is OWNED and released by {@link #close()}. The
  * device is BORROWED and outlives it.
@@ -197,6 +207,100 @@ public final class LightProbeBaker implements AutoCloseable {
     public Matrix faceProjection() {
         return Matrix.CreatePerspectiveFieldOfView((float) (Math.PI / 2.0), 1f,
                 getNearPlane(), getFarPlane());
+    }
+
+    /**
+     * Draws one cube face of a capture.
+     *
+     * <p>The one callback CNA's bake routes take. It is called six times per probe, in face
+     * order, with the camera the baker chose for that face.
+     */
+    @FunctionalInterface
+    public interface SceneDraw {
+
+        /**
+         * Draws the scene for one face.
+         *
+         * @param view the view matrix for this face
+         * @param projection the projection matrix for this face
+         */
+        void draw(Matrix view, Matrix projection);
+    }
+
+    /**
+     * Captures one probe at a position, drawing the scene six times.
+     *
+     * @param position where to capture from
+     * @param draw the per-face scene callback
+     * @return a new probe carrying what the six faces saw, which the caller closes
+     * @throws IllegalStateException when this renderer cannot capture; {@link #isSupported()} is
+     *         how to ask first
+     */
+    public LightProbe bakeProbe(Vector3 position, SceneDraw draw) {
+        Objects.requireNonNull(position, "position");
+        Objects.requireNonNull(draw, "draw");
+        long[] probe = new long[1];
+        int[] faces = new int[1];
+        GraphicsExtension.check("LightProbeBaker.bakeProbe",
+                NativeBindings.lightProbeBakerBakeProbe(alive(),
+                        EngineValues.floats(position, "position"), adapt(draw), probe, faces));
+        return LightProbe.adopt(probe[0]);
+    }
+
+    /**
+     * Captures every probe of a volume's lighting.
+     *
+     * <p>Six faces per probe, so a two-by-two-by-two volume draws the scene forty-eight times.
+     * Whatever visibility each probe already carried is kept: light and visibility are separate
+     * bakes and either may be run without the other.
+     *
+     * @param volume the volume whose probes to capture
+     * @param draw the per-face scene callback
+     * @return how many faces were drawn, which is six times the volume's probe count
+     * @throws IllegalStateException when this renderer cannot capture
+     */
+    public int bakeLight(LightProbeVolume volume, SceneDraw draw) {
+        Objects.requireNonNull(volume, "volume");
+        Objects.requireNonNull(draw, "draw");
+        int[] faces = new int[1];
+        GraphicsExtension.check("LightProbeBaker.bakeLight",
+                NativeBindings.lightProbeBakerBakeLight(alive(), volume.handle(), adapt(draw),
+                        faces));
+        return faces[0];
+    }
+
+    /**
+     * Captures every probe of a volume's visibility.
+     *
+     * <p>The other half of {@link #bakeLight}: what each probe can see rather than how bright it
+     * is, which is what keeps light from leaking through a wall. Whatever lighting each probe
+     * already carried is kept.
+     *
+     * @param volume the volume whose probes to capture
+     * @param draw the per-face scene callback
+     * @return how many faces were drawn
+     * @throws IllegalStateException when this renderer cannot capture
+     */
+    public int bakeVisibility(LightProbeVolume volume, SceneDraw draw) {
+        Objects.requireNonNull(volume, "volume");
+        Objects.requireNonNull(draw, "draw");
+        int[] faces = new int[1];
+        GraphicsExtension.check("LightProbeBaker.bakeVisibility",
+                NativeBindings.lightProbeBakerBakeVisibility(alive(), volume.handle(),
+                        adapt(draw), faces));
+        return faces[0];
+    }
+
+    /**
+     * Wraps a scene callback in the shape the native boundary calls.
+     *
+     * <p>Two sixteen-float arrays rather than two matrices, because the trampoline builds them in
+     * C and a Java type would have to be constructed there. The conversion happens here, on the
+     * Java side of the boundary, where it is ordinary code.
+     */
+    private static java.util.function.BiConsumer<float[], float[]> adapt(SceneDraw draw) {
+        return (view, projection) ->
+                draw.draw(EngineValues.matrix(view, 0), EngineValues.matrix(projection, 0));
     }
 
     /**

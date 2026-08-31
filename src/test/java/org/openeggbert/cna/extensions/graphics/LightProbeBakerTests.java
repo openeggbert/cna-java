@@ -1,5 +1,6 @@
 package org.openeggbert.cna.extensions.graphics;
 
+import Microsoft.Xna.Framework.BoundingBox;
 import Microsoft.Xna.Framework.Matrix;
 import Microsoft.Xna.Framework.Vector3;
 import org.junit.jupiter.api.Test;
@@ -17,12 +18,12 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 /**
  * The light-probe baker, against the live runtime.
  *
- * <p><strong>What this can and cannot say.</strong> VERIFIED_HEADLESS_GAME for the baker's
- * configuration and its face cameras, which are real matrices with real content.
- * NOT_SUPPORTED_BY_RENDERER for capture itself: {@link LightProbeBaker#isSupported()} is
- * {@code false} here, because the headless renderer binds an offscreen target happily and then
- * refuses to read it back -- and that refusal is asserted rather than skipped, because a game
- * branches on it.
+ * <p><strong>What this can say depends on the renderer, and it says which.</strong> Whether a
+ * capture can be read back is measured by CNA at construction rather than published as a
+ * capability, and the two outcomes are qualified separately. On {@code HEADLESS} the target binds
+ * happily, the readback is refused, and all three bake routes refuse with {@code INVALID_STATE}
+ * having entered the callback zero times. On {@code OPENGLES3} and {@code OPENGL33} the bake runs
+ * and the callback is entered once per cube face, which is what the face counts here assert.
  *
  * <p>The six face cameras are the substance. They are checked for being six <em>different</em>
  * cameras that between them look along all six axes and all sit at the capture position, which is
@@ -33,14 +34,128 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 final class LightProbeBakerTests {
 
     @Test
-    void thisRendererCannotCaptureAndTheBakerSaysSoRatherThanFailingLater() {
+    void whetherThisRendererCanCaptureIsMeasuredAtConstruction() {
         GameProbe.run(probe -> {
             try (LightProbeBaker baker = LightProbeBaker.create(probe.device())) {
-                // The measurement CNA took at construction. Asserted as what it is: a HEADLESS
-                // renderer binds the target and refuses the readback, so a game that bakes at
-                // load time has to know before it spends the time.
-                assertFalse(baker.isSupported(),
-                        "the headless renderer cannot read a capture back");
+                // The measurement CNA took at construction, whichever way it came out. A
+                // renderer that binds an offscreen target and then refuses the readback -- which
+                // HEADLESS does -- answers false, and a game that bakes at load time has to know
+                // before it spends the time. Nothing is asserted about which answer this
+                // renderer gives; what is asserted is that the answer decides what the bake
+                // routes do, in the two tests below.
+                boolean supported = baker.isSupported();
+                try (LightProbeBaker second = LightProbeBaker.create(probe.device())) {
+                    assertEquals(supported, second.isSupported(),
+                            "the measurement is a property of the renderer, not of one baker");
+                }
+            }
+        });
+    }
+
+    @Test
+    void aBakeDrawsSixFacesPerProbeOrRefusesOutright() {
+        GameProbe.run(probe -> {
+            try (LightProbeBaker baker = LightProbeBaker.create(probe.device())) {
+                List<Matrix> views = new ArrayList<>();
+                List<Matrix> projections = new ArrayList<>();
+                LightProbeBaker.SceneDraw record = (view, projection) -> {
+                    views.add(view);
+                    projections.add(projection);
+                };
+                if (!baker.isSupported()) {
+                    // Documented, and measured in light_probe_bake.c: a renderer that cannot
+                    // read a capture back refuses with INVALID_STATE and enters the callback
+                    // zero times. Asserted rather than skipped, so a renderer that gains the
+                    // capability shows up here.
+                    assertThrows(IllegalStateException.class,
+                            () -> baker.bakeProbe(new Vector3(0f, 1f, 0f), record));
+                    assertEquals(0, views.size(),
+                            "a refused bake must not have entered the callback");
+                    return;
+                }
+
+                try (LightProbe baked = baker.bakeProbe(new Vector3(0f, 1f, 0f), record)) {
+                    // Six faces, once each. A baker that returned success without capturing
+                    // would have drawn none, and that is the difference this counts.
+                    assertEquals(LightProbeBaker.getFaceCount(), views.size(),
+                            "one callback per cube face");
+                    assertEquals(views.size(), projections.size());
+                    // A probe CNA produced from a real capture, and its position is where it
+                    // was told to capture from -- which a probe that was merely allocated and
+                    // handed back would not have.
+                    assertEquals(1f, baked.getPosition().Y, 1.0e-4f,
+                            "the probe is at the capture position");
+
+                    // The six cameras are six different ones, and each is the camera the baker
+                    // would have handed out for that face. A bake that passed the same matrix
+                    // six times, or the faces in a different order, fails here.
+                    for (int face = 0; face < views.size(); face++) {
+                        Matrix expected = baker.faceView(face, new Vector3(0f, 1f, 0f));
+                        assertEquals(expected.M31, views.get(face).M31, 1.0e-4f,
+                                "face " + face + " was drawn with its own view");
+                        assertEquals(expected.M41, views.get(face).M41, 1.0e-4f,
+                                "face " + face + " was drawn from the capture position");
+                    }
+                    // And the projection is the square ninety-degree frustum a cube face needs,
+                    // the same one faceProjection() derives.
+                    assertEquals(baker.faceProjection().M11, projections.get(0).M11, 1.0e-4f);
+                }
+            }
+        });
+    }
+
+    @Test
+    void bakingAVolumeDrawsSixFacesForEveryProbeInIt() {
+        GameProbe.run(probe -> {
+            try (LightProbeBaker baker = LightProbeBaker.create(probe.device());
+                    LightProbeVolume volume = LightProbeVolume.create(
+                            new BoundingBox(new Vector3(-1f, -1f, -1f), new Vector3(1f, 1f, 1f)),
+                            2, 2, 2)) {
+                int[] calls = new int[1];
+                LightProbeBaker.SceneDraw count = (view, projection) -> calls[0]++;
+                if (!baker.isSupported()) {
+                    assertThrows(IllegalStateException.class,
+                            () -> baker.bakeLight(volume, count));
+                    assertEquals(0, calls[0]);
+                    return;
+                }
+                int lightFaces = baker.bakeLight(volume, count);
+                // Eight probes, six faces each. The arithmetic is what says the whole volume was
+                // walked rather than one probe of it.
+                assertEquals(8 * LightProbeBaker.getFaceCount(), lightFaces,
+                        "six faces for each of the volume's eight probes");
+                assertEquals(lightFaces, calls[0],
+                        "and the callback ran once for each of them");
+
+                calls[0] = 0;
+                int visibilityFaces = baker.bakeVisibility(volume, count);
+                assertEquals(lightFaces, visibilityFaces,
+                        "a visibility bake walks the same probes");
+                assertEquals(visibilityFaces, calls[0]);
+            }
+        });
+    }
+
+    @Test
+    void anExceptionFromTheCallbackSurfacesAtTheBakeAndStopsTheRemainingFaces() {
+        GameProbe.run(probe -> {
+            try (LightProbeBaker baker = LightProbeBaker.create(probe.device())) {
+                if (!baker.isSupported()) {
+                    return;
+                }
+                int[] calls = new int[1];
+                IllegalStateException thrown = assertThrows(IllegalStateException.class,
+                        () -> baker.bakeProbe(new Vector3(0f, 0f, 0f), (view, projection) -> {
+                            calls[0]++;
+                            throw new IllegalStateException("the scene refused");
+                        }));
+                assertEquals("the scene refused", thrown.getMessage(),
+                        "the callback's own exception surfaces, not a translated result");
+                // CNA's callback returns nothing and cannot refuse, so the trampoline skips the
+                // remaining faces rather than calling into Java with an exception pending --
+                // which is undefined in JNI and is what -Xcheck:jni fails a suite for.
+                assertEquals(1, calls[0],
+                        "the faces after the failing one must not have been entered");
             }
         });
     }

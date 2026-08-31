@@ -19,9 +19,16 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 /**
  * GPU culling, render-target scopes, thin-film iridescence and two device queries.
  *
- * <p>GPU culling is a family this renderer cannot run, projected with its refusal intact -- the
- * same shape {@link GpuTimer} has, and for the same reason: a game that can read <em>why</em> can
- * fall back to {@link FrustumCuller} and say so, where a missing class would leave it guessing.
+ * <p>GPU culling is a family whose availability the renderer decides: it is a compute dispatch
+ * over a storage buffer, so a renderer without compute cannot run any of it. That refusal is
+ * projected intact -- the same shape {@link GpuTimer} has, and for the same reason: a game that
+ * can read <em>why</em> can fall back to {@link FrustumCuller} and say so, where a missing class
+ * would leave it guessing.
+ *
+ * <p>Both states are qualified rather than one being skipped. On {@code HEADLESS},
+ * {@code SOFTWARE} and {@code OPENGL4} every route past construction refuses; on
+ * {@code OPENGLES3} and {@code OPENGL33} the culler really culls, and the test asserts what CNA
+ * documents about a draw instead.
  */
 @EnabledIfEnvironmentVariable(named = "CNA_NATIVE_LIBRARY", matches = ".+")
 final class GpuCullingTests {
@@ -46,11 +53,32 @@ final class GpuCullingTests {
                         new Vector3(0f, 0f, -1f), new Vector3(0f, 1f, 0f));
                 Matrix projection = Matrix.CreatePerspectiveFieldOfView(1.0f, 1.0f, 1.0f, 100.0f);
                 if (supported) {
+                    assertEquals("", culler.getUnsupportedReason(),
+                            "a supported culler has nothing to explain");
                     culler.setInstances(instances);
                     assertEquals(2, culler.getInstanceCount(),
                             "the count is what was uploaded, not what survived");
                     culler.cull(view, projection, 36, 0, 0);
-                    assertTrue(culler.readVisibleCount() >= 0);
+                    int visible = culler.readVisibleCount();
+                    // One box is five units in front of the camera and the other forty units
+                    // behind it, and the projection's far plane is a hundred. Whatever the cull
+                    // keeps, it cannot be more than what was uploaded, and reading the count
+                    // back at all is the evidence that the dispatch ran.
+                    assertTrue(visible >= 0 && visible <= 2,
+                            "the surviving count must be within what was uploaded, got " + visible);
+
+                    // What CNA documents about the draw, and the reason this branch does not
+                    // simply call it: the route carries the command, not the geometry, so with
+                    // no vertex buffer bound it is a native failure rather than a draw of
+                    // nothing.
+                    assertThrows(RuntimeException.class,
+                            () -> culler.draw(PrimitiveType.TriangleList),
+                            "a culled draw with no mesh bound is a native failure");
+                    // And the documented exception to that: with nothing uploaded it returns
+                    // before touching the device at all, so it succeeds whatever is bound.
+                    culler.setInstances(List.of());
+                    assertEquals(0, culler.getInstanceCount());
+                    culler.cull(view, projection, 36, 0, 0);
                     culler.draw(PrimitiveType.TriangleList);
                 } else {
                     // Everything past construction refuses, because every part of the technique

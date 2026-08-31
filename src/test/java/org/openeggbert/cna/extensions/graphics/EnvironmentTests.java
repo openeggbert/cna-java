@@ -123,7 +123,7 @@ final class EnvironmentTests {
     }
 
     @Test
-    void theGeneratorsRefuseOnARendererThatCannotRunThem() {
+    void theGeneratorsEitherRunOrRefuseInTheRenderersOwnWords() {
         GameProbe.run(probe -> {
             try (EnvironmentProcessor processor = EnvironmentProcessor.create(probe.device());
                  Texture2D panorama = new Texture2D(probe.device(), 8, 4, false,
@@ -132,18 +132,33 @@ final class EnvironmentTests {
                 java.util.Arrays.fill(sky, Color.CornflowerBlue);
                 panorama.SetData(sky);
 
-                // The processor constructs on this renderer and then refuses to do the work,
-                // which is NOT_SUPPORTED_BY_RENDERER rather than a missing layer -- and the two
-                // are worth telling apart, because a build without the layer would not have got
-                // this far. Asserted rather than skipped, so a renderer that gains the
-                // capability shows up here.
-                ExtensionNotSupportedException refusal = assertThrows(
-                        ExtensionNotSupportedException.class,
-                        () -> processor.convertEquirectangular(probe.device(), panorama, 8));
-                assertTrue(refusal.getMessage().contains("renderer"),
-                        "the refusal names both possibilities: " + refusal.getMessage());
-                // Not everything refuses: the BRDF lookup is integrated rather than sampled
-                // from a cube map, so it generates here -- and what it generates belongs to the
+                // The processor constructs on every renderer and then either does the work or
+                // refuses it, and which one depends on whether the renderer can render into a
+                // cube face at all. Both are qualified rather than one being skipped: a
+                // NOT_SUPPORTED here is NOT_SUPPORTED_BY_RENDERER rather than a missing layer,
+                // and the two are worth telling apart because a build without the layer would
+                // not have got this far.
+                if (RendererCapabilities.supports(probe.device(),
+                        GraphicsCapability.CustomEffects)
+                        && !"HEADLESS".equals(
+                                RendererCapabilities.getRendererName(probe.device()))) {
+                    TextureCube converted =
+                            processor.convertEquirectangular(probe.device(), panorama, 8);
+                    try {
+                        assertEquals(8, converted.getSize(),
+                                "the cube is the size asked for");
+                    } finally {
+                        converted.Dispose();
+                    }
+                } else {
+                    ExtensionNotSupportedException refusal = assertThrows(
+                            ExtensionNotSupportedException.class,
+                            () -> processor.convertEquirectangular(probe.device(), panorama, 8));
+                    assertTrue(refusal.getMessage().contains("renderer"),
+                            "the refusal names both possibilities: " + refusal.getMessage());
+                }
+                // The BRDF lookup is integrated rather than sampled from a cube map, so it
+                // generates on every renderer here -- and what it generates belongs to the
                 // caller, which is the ownership rule this whole family rests on. The processor
                 // can be closed and the texture stays.
                 Texture2D lut = processor.generateBrdfLut(probe.device(), 16, 16);

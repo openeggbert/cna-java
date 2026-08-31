@@ -21,10 +21,18 @@ Supported parameter shapes, all derived from the header:
               ``byte[]`` whose length supplies the capacity plus a ``long[]``
 ``struct``    a flat POD struct out-parameter, flattened to its scalar leaves
               and projected as a ``long[]`` and/or a ``float[]``
+``bytes``     an opaque ``void*`` buffer, projected as a ``byte[]``, whose byte
+              extent ``byteBuffers`` names -- see below
 
-A route whose declaration uses anything else -- a callback, a ``void*``
-context, an array of structs -- is refused with a diagnostic rather than
+A route whose declaration uses anything else -- a callback, an undeclared
+``void*``, an array of structs -- is refused with a diagnostic rather than
 guessed at, and stays hand-written.
+
+A ``void*`` says nothing at all: not what it points at, not how much of it CNA
+reads or writes, and not whether the extent is one parameter or the product of
+two.  ``byteBuffers`` names the parameters whose product is its byte count, and
+the adapter refuses a Java array too small for what it was told to pass rather
+than letting CNA read past the end of it.
 
 A bare ``T*`` is one structure or an array of them and C does not say which, so
 the generator reads the parameter's own documentation: one that names a count is
@@ -338,6 +346,7 @@ def plan(route: dict, live: dict) -> dict:
         raise Unsupported(f"{route['symbol']}: returns {declaration['returnType']}, not CNA_Result")
 
     parameters = declaration["parameters"]
+    declared_names = {parameter["name"] for parameter in parameters}
     steps: list[dict] = []
     # Where each parameter's value can be read in C before anything has been acquired. A count
     # that CNA declares as its own parameter is a JNI argument; one that a preceding array
@@ -389,6 +398,30 @@ def plan(route: dict, live: dict) -> dict:
             steps.append({"shape": "value", "name": name, "jni": jni, "kind": kind,
                           "ctype": type_name})
             available[name] = name
+            index += 1
+            continue
+        if pointers == 1 and type_name == "void":
+            # A void* is the one C type that says nothing whatsoever: not what it points at, not
+            # how many bytes of it CNA touches, and not whether that count is one parameter or
+            # the product of two. Every other shape here is derived from the declaration; this
+            # one cannot be, and a wrong guess is a read or a write past the end of a Java array
+            # from inside C. So it is refused until routes.json states the extent.
+            declared = route.get("byteBuffers", {}).get(name)
+            if declared is None:
+                raise Unsupported(
+                    f"{route['symbol']}: '{name}' is a {raw} whose byte extent the declaration "
+                    "does not state -- C says neither what it points at nor how much of it CNA "
+                    "reads; name the parameters whose product is its byte count in byteBuffers")
+            extent = list(declared["extent"])
+            if not extent:
+                raise Unsupported(
+                    f"{route['symbol']}: byteBuffers names no extent parameter for '{name}'")
+            for part in extent:
+                if part not in declared_names:
+                    raise Unsupported(
+                        f"{route['symbol']}: byteBuffers names '{part}', which is not a "
+                        "parameter of this route")
+            steps.append({"shape": "bytes", "name": name, "input": constant, "extent": extent})
             index += 1
             continue
         if pointers == 1 and type_name == "char" and index + 2 < len(parameters):
@@ -552,6 +585,8 @@ def java_signature(entry: dict) -> tuple[str, list[str]]:
                 parameters.append(f"long[] {java_name(step['written'])}")
         elif step["shape"] in ("array", "sized_array"):
             parameters.append(f"{JAVA_OF_JNI[step['jni']]}[] {java_name(step['name'])}")
+        elif step["shape"] == "bytes":
+            parameters.append(f"byte[] {java_name(step['name'])}")
         elif step["shape"] in ("struct", "struct_array", "struct_value"):
             for group, _, _, java in STRUCT_GROUPS:
                 if step[group]:
@@ -720,6 +755,47 @@ def render_c(class_name: str, entries: list[dict]) -> str:
                     f"    }}\n"
                     f"    free({name}_values);")
                 cleanup.append(unwind[-1])
+            elif shape == "bytes":
+                # A void* whose byte extent routes.json states, as the product of one or two of
+                # CNA's own parameters. Those parameters are ordinary JNI arguments of this same
+                # function, so they can be read here whatever order the steps were emitted in.
+                #
+                # The product is folded one factor at a time and each multiplication is checked
+                # against the array's length BEFORE it happens, so an extent that would overflow
+                # a jlong is refused rather than wrapping into a small number that passes. That
+                # is the failure this check exists for: a wrapped product would let CNA read or
+                # write far past the end of a pinned Java array.
+                parameters.append(f"jbyteArray {name}")
+                body.append(f"    jsize {name}_length = "
+                            f"(*environment)->GetArrayLength(environment, {name});")
+                body.append(f"    jlong {name}_required = 1;")
+                body.append(f"    int {name}_refused = 0;")
+                for part in step["extent"]:
+                    body.append(f"    if ((jlong){part} < 0) {{")
+                    body.append(f"        {name}_refused = 1;")
+                    body.append(f"    }} else if ((jlong){part} != 0 && {name}_required > "
+                                f"(jlong){name}_length / (jlong){part}) {{")
+                    body.append(f"        {name}_refused = 1;")
+                    body.append("    } else {")
+                    body.append(f"        {name}_required *= (jlong){part};")
+                    body.append("    }")
+                body.append(f"    if ({name}_refused || {name}_required > (jlong){name}_length) {{")
+                body.extend(unwind_lines(unwind, "    "))
+                body.append("        return (jint)CNA_RESULT_INVALID_ARGUMENT;")
+                body.append("    }")
+                body.append(f"    jbyte* {name}_bytes = "
+                            f"(*environment)->GetByteArrayElements(environment, {name}, NULL);")
+                body.append(f"    if ({name}_bytes == NULL) {{")
+                body.extend(unwind_lines(unwind, ""))
+                body.append("        return (jint)CNA_RESULT_OUT_OF_MEMORY;")
+                body.append("    }")
+                arguments.append(f"({'const void*' if step['input'] else 'void*'}){name}_bytes")
+                release = (
+                    f"    (*environment)->ReleaseByteArrayElements(\n"
+                    f"        environment, {name}, {name}_bytes, "
+                    f"{'JNI_ABORT' if step['input'] else '0'});")
+                unwind.append(release)
+                cleanup.append(release)
             elif shape == "array":
                 parameters.append(f"{step['jni']}Array {name}")
                 element = JAVA_OF_JNI[step["jni"]].capitalize()

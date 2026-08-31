@@ -346,6 +346,98 @@ Java_org_openeggbert_cna_internal_generated_NativeGraphicsExtensionRoutes_depthE
 }
 
 JNIEXPORT jint JNICALL
+Java_org_openeggbert_cna_internal_generated_NativeGraphicsExtensionRoutes_graphicsDeviceCopyCapabilityReportExt(
+    JNIEnv* environment, jclass declaring_class, jlong graphics_device, jbyteArray destination, jlongArray out_bytes)
+{
+    (void)environment;
+    (void)declaring_class;
+    jsize destination_size = (*environment)->GetArrayLength(environment, destination);
+    jbyte* destination_bytes = (*environment)->GetByteArrayElements(environment, destination, NULL);
+    if (destination_bytes == NULL) {
+        return (jint)CNA_RESULT_OUT_OF_MEMORY;
+    }
+    uint64_t destination_written = 0;
+    CNA_Result call_result = cna.graphics_device_copy_capability_report_ext((CNA_Handle)graphics_device, (char*)destination_bytes, (uint64_t)destination_size, &destination_written);
+    (*environment)->ReleaseByteArrayElements(environment, destination, destination_bytes, 0);
+    if (call_result == CNA_RESULT_SUCCESS || call_result == CNA_RESULT_BUFFER_TOO_SMALL) {
+        jlong destination_element = (jlong)destination_written;
+        (*environment)->SetLongArrayRegion(
+            environment, out_bytes, 0, 1, &destination_element);
+    }
+    return (jint)call_result;
+}
+
+JNIEXPORT jint JNICALL
+Java_org_openeggbert_cna_internal_generated_NativeGraphicsExtensionRoutes_graphicsDeviceCopyRendererName(
+    JNIEnv* environment, jclass declaring_class, jlong graphics_device, jbyteArray destination, jlongArray out_bytes)
+{
+    (void)environment;
+    (void)declaring_class;
+    jsize destination_size = (*environment)->GetArrayLength(environment, destination);
+    jbyte* destination_bytes = (*environment)->GetByteArrayElements(environment, destination, NULL);
+    if (destination_bytes == NULL) {
+        return (jint)CNA_RESULT_OUT_OF_MEMORY;
+    }
+    uint64_t destination_written = 0;
+    CNA_Result call_result = cna.graphics_device_copy_renderer_name((CNA_Handle)graphics_device, (char*)destination_bytes, (uint64_t)destination_size, &destination_written);
+    (*environment)->ReleaseByteArrayElements(environment, destination, destination_bytes, 0);
+    if (call_result == CNA_RESULT_SUCCESS || call_result == CNA_RESULT_BUFFER_TOO_SMALL) {
+        jlong destination_element = (jlong)destination_written;
+        (*environment)->SetLongArrayRegion(
+            environment, out_bytes, 0, 1, &destination_element);
+    }
+    return (jint)call_result;
+}
+
+JNIEXPORT jint JNICALL
+Java_org_openeggbert_cna_internal_generated_NativeGraphicsExtensionRoutes_graphicsDeviceGetCapabilityReportSizeExt(
+    JNIEnv* environment, jclass declaring_class, jlong graphics_device, jlongArray out_bytes)
+{
+    (void)environment;
+    (void)declaring_class;
+    uint64_t out_bytes_value = 0;
+    CNA_Result call_result = cna.graphics_device_get_capability_report_size_ext((CNA_Handle)graphics_device, &out_bytes_value);
+    if (call_result == CNA_RESULT_SUCCESS || call_result == CNA_RESULT_BUFFER_TOO_SMALL) {
+        jlong out_bytes_element = (jlong)out_bytes_value;
+        (*environment)->SetLongArrayRegion(
+            environment, out_bytes, 0, 1, &out_bytes_element);
+    }
+    return (jint)call_result;
+}
+
+JNIEXPORT jint JNICALL
+Java_org_openeggbert_cna_internal_generated_NativeGraphicsExtensionRoutes_graphicsDeviceGetRendererNameSize(
+    JNIEnv* environment, jclass declaring_class, jlong graphics_device, jlongArray out_bytes)
+{
+    (void)environment;
+    (void)declaring_class;
+    uint64_t out_bytes_value = 0;
+    CNA_Result call_result = cna.graphics_device_get_renderer_name_size((CNA_Handle)graphics_device, &out_bytes_value);
+    if (call_result == CNA_RESULT_SUCCESS || call_result == CNA_RESULT_BUFFER_TOO_SMALL) {
+        jlong out_bytes_element = (jlong)out_bytes_value;
+        (*environment)->SetLongArrayRegion(
+            environment, out_bytes, 0, 1, &out_bytes_element);
+    }
+    return (jint)call_result;
+}
+
+JNIEXPORT jint JNICALL
+Java_org_openeggbert_cna_internal_generated_NativeGraphicsExtensionRoutes_graphicsDeviceSupportsCapability(
+    JNIEnv* environment, jclass declaring_class, jlong graphics_device, jint capability, jbooleanArray out_supported)
+{
+    (void)environment;
+    (void)declaring_class;
+    CNA_Bool out_supported_value = 0;
+    CNA_Result call_result = cna.graphics_device_supports_capability((CNA_Handle)graphics_device, (CNA_GraphicsCapability)capability, &out_supported_value);
+    if (call_result == CNA_RESULT_SUCCESS || call_result == CNA_RESULT_BUFFER_TOO_SMALL) {
+        jboolean out_supported_element = (jboolean)out_supported_value;
+        (*environment)->SetBooleanArrayRegion(
+            environment, out_supported, 0, 1, &out_supported_element);
+    }
+    return (jint)call_result;
+}
+
+JNIEXPORT jint JNICALL
 Java_org_openeggbert_cna_internal_generated_NativeGraphicsExtensionRoutes_graphicsExtIsAvailable(
     JNIEnv* environment, jclass declaring_class, jbooleanArray out_available)
 {

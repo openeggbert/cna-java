@@ -613,6 +613,75 @@ def test_generator(live: dict) -> None:
     check([path for path, _ in sampler_leaves["floating"]] == ["mip_map_level_of_detail_bias"],
           "and its one float is the level-of-detail bias")
 
+    # An opaque `void*` buffer. C says nothing about it at all -- not what it points at, not how
+    # many bytes CNA touches, and not whether that count is one parameter or the product of two --
+    # so the generator refuses it until routes.json states the extent.
+    try:
+        plan("cna_storage_buffer_set_bytes")
+        check(False, "an undeclared void* is refused rather than guessed at")
+    except generator_tool.Unsupported:
+        check(True, "an undeclared void* is refused rather than guessed at")
+
+    # A declared extent that names something which is not a parameter of the route is refused
+    # too, rather than emitting C that will not compile or, worse, reading a stale name.
+    try:
+        generator_tool.plan({"java": "probe", "symbol": "cna_storage_buffer_set_bytes",
+                             "byteBuffers": {"data": {"extent": ["not_a_parameter"]}}}, live)
+        check(False, "a byteBuffers extent naming a non-parameter is refused")
+    except generator_tool.Unsupported:
+        check(True, "a byteBuffers extent naming a non-parameter is refused")
+
+    # An empty extent would mean "no bytes at all", which is not a shape any of these routes has
+    # and would silently pass a pointer CNA reads with a size from somewhere else.
+    try:
+        generator_tool.plan({"java": "probe", "symbol": "cna_storage_buffer_set_bytes",
+                             "byteBuffers": {"data": {"extent": []}}}, live)
+        check(False, "a byteBuffers entry with no extent is refused")
+    except generator_tool.Unsupported:
+        check(True, "a byteBuffers entry with no extent is refused")
+
+    single = generator_tool.plan({"java": "probe", "symbol": "cna_storage_buffer_set_bytes",
+                                  "byteBuffers": {"data": {"extent": ["byte_size"]}}}, live)
+    _, parameters = generator_tool.java_signature(single)
+    check(parameters == ["long buffer", "byte[] data", "long byteSize"],
+          "a declared void* is a byte[] and its extent stays a parameter of its own")
+    adapter = generator_tool.render_c("Probe", [single])
+    check("(const void*)data_bytes" in adapter,
+          "a const void* input reaches CNA as a const void*")
+    check("data_bytes, JNI_ABORT" in adapter,
+          "and an input's pinned bytes are released without copying back")
+
+    # The output form differs in exactly two places: the cast and the release mode. Getting the
+    # second wrong would leave every read-back buffer holding what it held before the call.
+    output = generator_tool.plan({"java": "probe", "symbol": "cna_storage_buffer_get_bytes",
+                                  "byteBuffers": {"destination": {"extent": ["byte_size"]}}}, live)
+    adapter = generator_tool.render_c("Probe", [output])
+    check("(void*)destination_bytes" in adapter,
+          "a non-const void* output reaches CNA as a writable void*")
+    check("destination_bytes, 0);" in adapter,
+          "and an output's pinned bytes are copied back on release")
+
+    # The whole reason the extent is declared rather than inferred: the adapter checks the Java
+    # array against what it was told to pass, factor by factor, and each multiplication is
+    # checked BEFORE it happens. A product that overflowed would wrap into a small number that
+    # passed the final comparison and let CNA read far past the end of a pinned array.
+    product = generator_tool.plan(
+        {"java": "probe", "symbol": "cna_storage_buffer_set_elements",
+         "byteBuffers": {"data": {"extent": ["element_count", "element_byte_size"]}}}, live)
+    adapter = generator_tool.render_c("Probe", [product])
+    check("data_required > (jlong)data_length / (jlong)element_count" in adapter,
+          "the first factor is checked against the array before it is multiplied in")
+    check("data_required > (jlong)data_length / (jlong)element_byte_size" in adapter,
+          "and so is the second")
+    check("(jlong)element_count < 0" in adapter and "(jlong)element_byte_size < 0" in adapter,
+          "a negative extent is refused rather than sign-extended into a huge one")
+    check("return (jint)CNA_RESULT_INVALID_ARGUMENT;" in adapter,
+          "and a refused extent never reaches CNA")
+    _, parameters = generator_tool.java_signature(product)
+    check(parameters == ["long buffer", "byte[] data", "long elementCount",
+                         "long elementByteSize"],
+          "both extent parameters stay in the Java signature, because CNA reads both")
+
     # The generator refuses a shape it cannot prove rather than guessing at it.
     try:
         plan("cna_text_input_subscribe_text_input_ext")

@@ -43,6 +43,7 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.Objects;
+import java.util.function.BiConsumer;
 import java.util.WeakHashMap;
 
 /** JNI entry point for CNA's stable C ABI. This class is not application API. */
@@ -947,6 +948,143 @@ public final class NativeBindings {
 
     private static native int nativeTransparentDrawListDrawSorted(long list, float[] view,
             Runnable[] callbacks);
+
+    /**
+     * Captures one light probe, drawing the scene once per cube face.
+     *
+     * <p>Hand-written for the same reason as the transparent draw list: CNA takes a C function
+     * pointer. The callback runs only inside this call, six times, so it is passed in for the
+     * call's duration and no reference outlives it.
+     *
+     * <p>An exception the callback throws cannot stop the bake -- CNA's callback returns
+     * {@code void} and has no way to refuse -- so the remaining faces are skipped instead and the
+     * exception surfaces here.
+     *
+     * @param baker the native baker handle
+     * @param position where to capture from, as three floats
+     * @param callback receives each face's view and projection as sixteen floats each
+     * @param outProbe receives the new probe handle
+     * @param outFaces receives how many faces were actually drawn
+     * @return CNA's result
+     */
+    public static int lightProbeBakerBakeProbe(long baker, float[] position,
+            BiConsumer<float[], float[]> callback, long[] outProbe, int[] outFaces) {
+        requireAvailable();
+        return nativeLightProbeBakerBakeProbe(baker, position, callback, outProbe, outFaces);
+    }
+
+    /**
+     * Captures every probe of a volume's lighting.
+     *
+     * @param baker the native baker handle
+     * @param volume the native volume handle
+     * @param callback receives each face's view and projection as sixteen floats each
+     * @param outFaces receives how many faces were actually drawn
+     * @return CNA's result
+     */
+    public static int lightProbeBakerBakeLight(long baker, long volume,
+            BiConsumer<float[], float[]> callback, int[] outFaces) {
+        requireAvailable();
+        return nativeLightProbeBakerBakeLight(baker, volume, callback, outFaces);
+    }
+
+    /**
+     * Captures every probe of a volume's visibility.
+     *
+     * @param baker the native baker handle
+     * @param volume the native volume handle
+     * @param callback receives each face's view and projection as sixteen floats each
+     * @param outFaces receives how many faces were actually drawn
+     * @return CNA's result
+     */
+    public static int lightProbeBakerBakeVisibility(long baker, long volume,
+            BiConsumer<float[], float[]> callback, int[] outFaces) {
+        requireAvailable();
+        return nativeLightProbeBakerBakeVisibility(baker, volume, callback, outFaces);
+    }
+
+    /**
+     * Pins a Java object so native code may call it after the registering call returns.
+     *
+     * <p>The render pipeline's scene callbacks are registered once and run inside every later
+     * frame, so unlike the two families above they need a reference that outlives the call. CNA
+     * offers no unregistration hook beyond passing a null callback, so the reference is made
+     * explicit rather than hidden: this returns it as an opaque token, the caller stores it beside
+     * the registration, and {@link #releaseCallbackToken(long)} deletes it.
+     *
+     * @param callback the object to pin
+     * @return the token, or zero for a null callback
+     */
+    public static long newCallbackToken(Object callback) {
+        requireAvailable();
+        return nativeCallbackTokenCreate(callback);
+    }
+
+    /**
+     * Releases a token from {@link #newCallbackToken(Object)}.
+     *
+     * <p>Releasing zero is a no-op, and releasing a token twice would delete a reference that is
+     * already gone, so a caller keeps one owner per token.
+     *
+     * @param token the token to release
+     */
+    public static void releaseCallbackToken(long token) {
+        if (token == 0L) {
+            return;
+        }
+        requireAvailable();
+        nativeCallbackTokenRelease(token);
+    }
+
+    /**
+     * Registers the callback a render pipeline draws transparent geometry from.
+     *
+     * @param pipeline the native pipeline handle
+     * @param token a token from {@link #newCallbackToken(Object)} over a {@link Runnable}, or zero
+     *        to clear the registration
+     * @return CNA's result
+     */
+    public static int renderPipelineSetTransparentScene(long pipeline, long token) {
+        requireAvailable();
+        return nativeRenderPipelineSetTransparentScene(pipeline, token);
+    }
+
+    /**
+     * Registers the shadow map, light and caster callback a render pipeline's shadow pass uses.
+     *
+     * @param pipeline the native pipeline handle
+     * @param shadowMap the native shadow-map handle, or zero to clear the shadow scene
+     * @param lightIntegral the light's one integral leaf
+     * @param lightFloating the light's seven floating leaves, in declaration order
+     * @param sceneBounds the bounds the light's projection must cover, as six floats
+     * @param token a token from {@link #newCallbackToken(Object)} over a {@link Runnable}, or zero
+     *        to register no callback
+     * @return CNA's result
+     */
+    public static int renderPipelineSetShadowScene(long pipeline, long shadowMap,
+            long[] lightIntegral, float[] lightFloating, float[] sceneBounds, long token) {
+        requireAvailable();
+        return nativeRenderPipelineSetShadowScene(pipeline, shadowMap, lightIntegral,
+                lightFloating, sceneBounds, token);
+    }
+
+    private static native int nativeLightProbeBakerBakeProbe(long baker, float[] position,
+            BiConsumer<float[], float[]> callback, long[] outProbe, int[] outFaces);
+
+    private static native int nativeLightProbeBakerBakeLight(long baker, long volume,
+            BiConsumer<float[], float[]> callback, int[] outFaces);
+
+    private static native int nativeLightProbeBakerBakeVisibility(long baker, long volume,
+            BiConsumer<float[], float[]> callback, int[] outFaces);
+
+    private static native long nativeCallbackTokenCreate(Object callback);
+
+    private static native void nativeCallbackTokenRelease(long token);
+
+    private static native int nativeRenderPipelineSetTransparentScene(long pipeline, long token);
+
+    private static native int nativeRenderPipelineSetShadowScene(long pipeline, long shadowMap,
+            long[] lightIntegral, float[] lightFloating, float[] sceneBounds, long token);
 
     /**
      * Releases a texture handle that names a texture without keeping it alive.

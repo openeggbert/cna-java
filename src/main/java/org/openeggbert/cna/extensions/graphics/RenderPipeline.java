@@ -1,5 +1,6 @@
 package org.openeggbert.cna.extensions.graphics;
 
+import Microsoft.Xna.Framework.BoundingBox;
 import Microsoft.Xna.Framework.Color;
 import Microsoft.Xna.Framework.Graphics.GraphicsDevice;
 import Microsoft.Xna.Framework.Graphics.SurfaceFormat;
@@ -50,6 +51,15 @@ public final class RenderPipeline implements AutoCloseable {
     // Retained for the same reason the passes are: the pipeline borrows the skybox and never
     // owns it, so something has to keep it alive while the pipeline names it.
     private Skybox skybox;
+    // The scene callbacks are the one thing here CNA keeps a pointer to across calls, so each
+    // one is pinned by an explicit native token this object owns and releases. A token is
+    // released when its registration is replaced or cleared and when the pipeline closes, which
+    // is the whole of its lifetime; nothing else may release it.
+    private long transparentSceneToken;
+    private long shadowSceneToken;
+    // And the shadow map the shadow scene names, retained for the reason the passes are: the
+    // pipeline borrows it and CNA states it never owns it.
+    private ShadowMap shadowScene;
     private boolean closed;
 
     private RenderPipeline(long handle) {
@@ -425,6 +435,79 @@ public final class RenderPipeline implements AutoCloseable {
     }
 
     /** Releases the pipeline and its targets. Closing twice is a no-op. */
+    /**
+     * Registers the callback the pipeline draws transparent geometry from.
+     *
+     * <p><strong>It runs only when the settings ask for a transparent pass.</strong>
+     * {@link RenderPipelineSettingsExt#getTransparencyMode()} defaults to
+     * {@link TransparencyMode#None}, and a pipeline with that mode never enters this callback --
+     * which is not a renderer boundary but a configuration one, and is the single most likely
+     * reason for a callback that appears never to run.
+     *
+     * <p>Called once per frame, inside {@link #end()}, after the shadow callback. An exception it
+     * throws makes {@code end()} fail and surfaces there.
+     *
+     * @param draw the callback, or {@code null} to clear the registration
+     */
+    public void setTransparentScene(Runnable draw) {
+        long pipeline = open();
+        long token = draw == null ? 0L : NativeBindings.newCallbackToken(draw);
+        int result = NativeBindings.renderPipelineSetTransparentScene(pipeline, token);
+        if (result != 0) {
+            // The registration did not happen, so the new token has no owner. Released here
+            // rather than left for close(), which would release the previous one instead.
+            NativeBindings.releaseCallbackToken(token);
+            GraphicsExtension.check("RenderPipeline.setTransparentScene", result);
+        }
+        long previous;
+        synchronized (this) {
+            previous = transparentSceneToken;
+            transparentSceneToken = token;
+        }
+        NativeBindings.releaseCallbackToken(previous);
+    }
+
+    /**
+     * Registers the shadow map, light and caster callback the pipeline's shadow pass uses.
+     *
+     * <p><strong>It runs only when the settings enable shadows.</strong>
+     * {@link RenderPipelineSettingsExt#getShadowsEnabled()} defaults to {@code false}, and CNA
+     * additionally requires both a shadow map and a callback, so all three have to be present
+     * before a frame enters this.
+     *
+     * <p>Called once per frame, inside {@link #begin(Color)}, before the transparent callback and
+     * before the scene target is bound. An exception it throws makes {@code begin()} fail.
+     *
+     * <p>The shadow map is borrowed and never owned; this object retains the Java reference so it
+     * cannot be collected while the pipeline names it.
+     *
+     * @param shadowMap the map to render casters into, or {@code null} to clear the shadow scene
+     * @param light the directional light to render from
+     * @param sceneBounds the bounds the light's projection must cover
+     * @param drawCasters the callback that draws the casters, or {@code null} for none
+     */
+    public void setShadowScene(ShadowMap shadowMap, DirectionalLight light,
+            BoundingBox sceneBounds, Runnable drawCasters) {
+        long pipeline = open();
+        Objects.requireNonNull(light, "light");
+        Objects.requireNonNull(sceneBounds, "sceneBounds");
+        long token = drawCasters == null ? 0L : NativeBindings.newCallbackToken(drawCasters);
+        int result = NativeBindings.renderPipelineSetShadowScene(pipeline,
+                shadowMap == null ? 0L : shadowMap.handleForBorrow(), light.integral(),
+                light.floating(), EngineValues.floats(sceneBounds, "sceneBounds"), token);
+        if (result != 0) {
+            NativeBindings.releaseCallbackToken(token);
+            GraphicsExtension.check("RenderPipeline.setShadowScene", result);
+        }
+        long previous;
+        synchronized (this) {
+            previous = shadowSceneToken;
+            shadowSceneToken = token;
+            shadowScene = shadowMap;
+        }
+        NativeBindings.releaseCallbackToken(previous);
+    }
+
     @Override
     public void close() {
         synchronized (this) {
@@ -436,9 +519,21 @@ public final class RenderPipeline implements AutoCloseable {
         synchronized (userPasses) {
             userPasses.clear();
         }
+        long transparent;
+        long shadow;
         synchronized (this) {
             skybox = null;
+            shadowScene = null;
+            transparent = transparentSceneToken;
+            shadow = shadowSceneToken;
+            transparentSceneToken = 0L;
+            shadowSceneToken = 0L;
         }
+        // Before the pipeline goes, so CNA cannot enter a callback whose reference has been
+        // deleted; nothing runs a pipeline's callbacks outside a frame, and the pipeline is
+        // about to stop existing either way.
+        NativeBindings.releaseCallbackToken(transparent);
+        NativeBindings.releaseCallbackToken(shadow);
         GraphicsExtension.check("RenderPipeline.close",
                 NativeEngineLayerRoutes.renderPipelineDestroy(handle));
     }

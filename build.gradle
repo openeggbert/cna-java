@@ -99,6 +99,15 @@ test {
         inputs.file(file(System.getenv('CNA_NATIVE_LIBRARY')))
                 .withPropertyName('cnaLibrary')
     }
+    // CNA can be built with several renderers compiled in and one chosen before the first
+    // GraphicsDevice exists, through this environment variable. It has to reach the test JVM as
+    // an environment variable rather than a system property, because CNA reads getenv inside the
+    // native library; and it is an input, because the same classes and the same library answer
+    // differently under it -- a suite that ran green on HEADLESS says nothing about OPENGLES3.
+    if (System.getenv('CNA_GRAPHICS_RENDERER')) {
+        environment 'CNA_GRAPHICS_RENDERER', System.getenv('CNA_GRAPHICS_RENDERER')
+        inputs.property('cnaGraphicsRenderer', System.getenv('CNA_GRAPHICS_RENDERER'))
+    }
     // The CNA checkout the build already qualifies against. A test that needs an authored
     // asset -- an XNA 4.0 .xnb no fixture generator can honestly stand in for -- reads it from
     // there and skips itself when it is absent, rather than copying someone else's asset in.

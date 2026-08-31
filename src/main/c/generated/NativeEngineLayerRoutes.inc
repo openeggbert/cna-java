@@ -1092,6 +1092,316 @@ Java_org_openeggbert_cna_internal_generated_NativeEngineLayerRoutes_atmosphericS
 }
 
 JNIEXPORT jint JNICALL
+Java_org_openeggbert_cna_internal_generated_NativeEngineLayerRoutes_autoExposureExtApplyTo(
+    JNIEnv* environment, jclass declaring_class, jlong auto_exposure, jbyteArray settingsBytes, jlongArray settingsIntegral, jfloatArray settingsFloating)
+{
+    (void)environment;
+    (void)declaring_class;
+    if (settingsBytes == NULL || settingsIntegral == NULL || settingsFloating == NULL) {
+        return (jint)CNA_RESULT_INVALID_ARGUMENT;
+    }
+    CNA_RenderPipelineSettingsEXT settings_value;
+    memset(&settings_value, 0, sizeof settings_value);
+    settings_value.struct_size = (uint32_t)(sizeof settings_value);
+    settings_value.struct_version = UINT32_C(1);
+    {
+        jbyte settingsBytes_values[4];
+        (*environment)->GetByteArrayRegion(environment, settingsBytes, 0, 4, settingsBytes_values);
+        settings_value.reserved[0] = (uint8_t)settingsBytes_values[0];
+        settings_value.reserved[1] = (uint8_t)settingsBytes_values[1];
+        settings_value.reserved[2] = (uint8_t)settingsBytes_values[2];
+        settings_value.reserved[3] = (uint8_t)settingsBytes_values[3];
+    }
+    {
+        jlong settingsIntegral_values[15];
+        (*environment)->GetLongArrayRegion(environment, settingsIntegral, 0, 15, settingsIntegral_values);
+        settings_value.hdr_enabled = (CNA_Bool)settingsIntegral_values[0];
+        settings_value.tonemapping_mode = (CNA_TonemappingMode)settingsIntegral_values[1];
+        settings_value.bloom_enabled = (CNA_Bool)settingsIntegral_values[2];
+        settings_value.bloom_iterations = (int32_t)settingsIntegral_values[3];
+        settings_value.ssao_enabled = (CNA_Bool)settingsIntegral_values[4];
+        settings_value.transparency_mode = (CNA_TransparencyMode)settingsIntegral_values[5];
+        settings_value.ssao_sample_count = (int32_t)settingsIntegral_values[6];
+        settings_value.ssr_enabled = (CNA_Bool)settingsIntegral_values[7];
+        settings_value.ssr_step_count = (int32_t)settingsIntegral_values[8];
+        settings_value.color_grade_enabled = (CNA_Bool)settingsIntegral_values[9];
+        settings_value.dof_enabled = (CNA_Bool)settingsIntegral_values[10];
+        settings_value.fxaa_enabled = (CNA_Bool)settingsIntegral_values[11];
+        settings_value.render_quality = (CNA_RenderQuality)settingsIntegral_values[12];
+        settings_value.shadow_quality = (CNA_ShadowQuality)settingsIntegral_values[13];
+        settings_value.shadows_enabled = (CNA_Bool)settingsIntegral_values[14];
+    }
+    {
+        jfloat settingsFloating_values[32];
+        (*environment)->GetFloatArrayRegion(environment, settingsFloating, 0, 32, settingsFloating_values);
+        settings_value.exposure = (float)settingsFloating_values[0];
+        settings_value.gamma = (float)settingsFloating_values[1];
+        settings_value.bloom_intensity = (float)settingsFloating_values[2];
+        settings_value.bloom_threshold = (float)settingsFloating_values[3];
+        settings_value.ssao_radius = (float)settingsFloating_values[4];
+        settings_value.ssao_intensity = (float)settingsFloating_values[5];
+        settings_value.ssr_max_distance = (float)settingsFloating_values[6];
+        settings_value.ssr_thickness = (float)settingsFloating_values[7];
+        settings_value.ssr_depth_bias = (float)settingsFloating_values[8];
+        settings_value.ssr_edge_fade = (float)settingsFloating_values[9];
+        settings_value.volumetric_fog_density = (float)settingsFloating_values[10];
+        settings_value.light_shaft_threshold = (float)settingsFloating_values[11];
+        settings_value.light_shaft_intensity = (float)settingsFloating_values[12];
+        settings_value.light_shaft_decay = (float)settingsFloating_values[13];
+        settings_value.height_fog_density = (float)settingsFloating_values[14];
+        settings_value.height_fog_falloff = (float)settingsFloating_values[15];
+        settings_value.height_fog_base_height = (float)settingsFloating_values[16];
+        settings_value.motion_blur_strength = (float)settingsFloating_values[17];
+        settings_value.motion_blur_max_distance = (float)settingsFloating_values[18];
+        settings_value.chromatic_aberration_strength = (float)settingsFloating_values[19];
+        settings_value.film_grain_intensity = (float)settingsFloating_values[20];
+        settings_value.lens_flare_threshold = (float)settingsFloating_values[21];
+        settings_value.lens_flare_intensity = (float)settingsFloating_values[22];
+        settings_value.lens_flare_dispersal = (float)settingsFloating_values[23];
+        settings_value.color_grade_strength = (float)settingsFloating_values[24];
+        settings_value.dof_focus_distance = (float)settingsFloating_values[25];
+        settings_value.dof_focal_length = (float)settingsFloating_values[26];
+        settings_value.doff_number = (float)settingsFloating_values[27];
+        settings_value.dof_max_radius = (float)settingsFloating_values[28];
+        settings_value.ssr_roughness_blur = (float)settingsFloating_values[29];
+        settings_value.ssr_intensity = (float)settingsFloating_values[30];
+        settings_value.fxaa_edge_threshold_ext = (float)settingsFloating_values[31];
+    }
+    CNA_Result call_result = cna.auto_exposure_ext_apply_to((CNA_AutoExposureHandle)auto_exposure, &settings_value);
+    if (call_result == CNA_RESULT_SUCCESS || call_result == CNA_RESULT_BUFFER_TOO_SMALL) {
+        jbyte settingsBytes_values[] = {
+            (jbyte)settings_value.reserved[0],
+            (jbyte)settings_value.reserved[1],
+            (jbyte)settings_value.reserved[2],
+            (jbyte)settings_value.reserved[3]
+        };
+        (*environment)->SetByteArrayRegion(environment, settingsBytes, 0,
+            (jsize)(sizeof settingsBytes_values / sizeof settingsBytes_values[0]),
+            settingsBytes_values);
+        jlong settingsIntegral_values[] = {
+            (jlong)settings_value.hdr_enabled,
+            (jlong)settings_value.tonemapping_mode,
+            (jlong)settings_value.bloom_enabled,
+            (jlong)settings_value.bloom_iterations,
+            (jlong)settings_value.ssao_enabled,
+            (jlong)settings_value.transparency_mode,
+            (jlong)settings_value.ssao_sample_count,
+            (jlong)settings_value.ssr_enabled,
+            (jlong)settings_value.ssr_step_count,
+            (jlong)settings_value.color_grade_enabled,
+            (jlong)settings_value.dof_enabled,
+            (jlong)settings_value.fxaa_enabled,
+            (jlong)settings_value.render_quality,
+            (jlong)settings_value.shadow_quality,
+            (jlong)settings_value.shadows_enabled
+        };
+        (*environment)->SetLongArrayRegion(environment, settingsIntegral, 0,
+            (jsize)(sizeof settingsIntegral_values / sizeof settingsIntegral_values[0]),
+            settingsIntegral_values);
+        jfloat settingsFloating_values[] = {
+            (jfloat)settings_value.exposure,
+            (jfloat)settings_value.gamma,
+            (jfloat)settings_value.bloom_intensity,
+            (jfloat)settings_value.bloom_threshold,
+            (jfloat)settings_value.ssao_radius,
+            (jfloat)settings_value.ssao_intensity,
+            (jfloat)settings_value.ssr_max_distance,
+            (jfloat)settings_value.ssr_thickness,
+            (jfloat)settings_value.ssr_depth_bias,
+            (jfloat)settings_value.ssr_edge_fade,
+            (jfloat)settings_value.volumetric_fog_density,
+            (jfloat)settings_value.light_shaft_threshold,
+            (jfloat)settings_value.light_shaft_intensity,
+            (jfloat)settings_value.light_shaft_decay,
+            (jfloat)settings_value.height_fog_density,
+            (jfloat)settings_value.height_fog_falloff,
+            (jfloat)settings_value.height_fog_base_height,
+            (jfloat)settings_value.motion_blur_strength,
+            (jfloat)settings_value.motion_blur_max_distance,
+            (jfloat)settings_value.chromatic_aberration_strength,
+            (jfloat)settings_value.film_grain_intensity,
+            (jfloat)settings_value.lens_flare_threshold,
+            (jfloat)settings_value.lens_flare_intensity,
+            (jfloat)settings_value.lens_flare_dispersal,
+            (jfloat)settings_value.color_grade_strength,
+            (jfloat)settings_value.dof_focus_distance,
+            (jfloat)settings_value.dof_focal_length,
+            (jfloat)settings_value.doff_number,
+            (jfloat)settings_value.dof_max_radius,
+            (jfloat)settings_value.ssr_roughness_blur,
+            (jfloat)settings_value.ssr_intensity,
+            (jfloat)settings_value.fxaa_edge_threshold_ext
+        };
+        (*environment)->SetFloatArrayRegion(environment, settingsFloating, 0,
+            (jsize)(sizeof settingsFloating_values / sizeof settingsFloating_values[0]),
+            settingsFloating_values);
+    }
+    return (jint)call_result;
+}
+
+JNIEXPORT jint JNICALL
+Java_org_openeggbert_cna_internal_generated_NativeEngineLayerRoutes_autoExposureExtCreate(
+    JNIEnv* environment, jclass declaring_class, jlong graphics_device, jlongArray out_auto_exposure)
+{
+    (void)environment;
+    (void)declaring_class;
+    CNA_AutoExposureHandle out_auto_exposure_value = 0;
+    CNA_Result call_result = cna.auto_exposure_ext_create((CNA_Handle)graphics_device, &out_auto_exposure_value);
+    if (call_result == CNA_RESULT_SUCCESS || call_result == CNA_RESULT_BUFFER_TOO_SMALL) {
+        jlong out_auto_exposure_element = (jlong)out_auto_exposure_value;
+        (*environment)->SetLongArrayRegion(
+            environment, out_auto_exposure, 0, 1, &out_auto_exposure_element);
+    }
+    return (jint)call_result;
+}
+
+JNIEXPORT jint JNICALL
+Java_org_openeggbert_cna_internal_generated_NativeEngineLayerRoutes_autoExposureExtDestroy(
+    JNIEnv* environment, jclass declaring_class, jlong auto_exposure)
+{
+    (void)environment;
+    (void)declaring_class;
+    CNA_Result call_result = cna.auto_exposure_ext_destroy((CNA_AutoExposureHandle)auto_exposure);
+    return (jint)call_result;
+}
+
+JNIEXPORT jint JNICALL
+Java_org_openeggbert_cna_internal_generated_NativeEngineLayerRoutes_autoExposureExtGetBrighteningSpeed(
+    JNIEnv* environment, jclass declaring_class, jlong auto_exposure, jfloatArray out_value)
+{
+    (void)environment;
+    (void)declaring_class;
+    float out_value_value = 0;
+    CNA_Result call_result = cna.auto_exposure_ext_get_brightening_speed((CNA_AutoExposureHandle)auto_exposure, &out_value_value);
+    if (call_result == CNA_RESULT_SUCCESS || call_result == CNA_RESULT_BUFFER_TOO_SMALL) {
+        jfloat out_value_element = (jfloat)out_value_value;
+        (*environment)->SetFloatArrayRegion(
+            environment, out_value, 0, 1, &out_value_element);
+    }
+    return (jint)call_result;
+}
+
+JNIEXPORT jint JNICALL
+Java_org_openeggbert_cna_internal_generated_NativeEngineLayerRoutes_autoExposureExtGetDarkeningSpeed(
+    JNIEnv* environment, jclass declaring_class, jlong auto_exposure, jfloatArray out_value)
+{
+    (void)environment;
+    (void)declaring_class;
+    float out_value_value = 0;
+    CNA_Result call_result = cna.auto_exposure_ext_get_darkening_speed((CNA_AutoExposureHandle)auto_exposure, &out_value_value);
+    if (call_result == CNA_RESULT_SUCCESS || call_result == CNA_RESULT_BUFFER_TOO_SMALL) {
+        jfloat out_value_element = (jfloat)out_value_value;
+        (*environment)->SetFloatArrayRegion(
+            environment, out_value, 0, 1, &out_value_element);
+    }
+    return (jint)call_result;
+}
+
+JNIEXPORT jint JNICALL
+Java_org_openeggbert_cna_internal_generated_NativeEngineLayerRoutes_autoExposureExtGetExposure(
+    JNIEnv* environment, jclass declaring_class, jlong auto_exposure, jfloatArray out_value)
+{
+    (void)environment;
+    (void)declaring_class;
+    float out_value_value = 0;
+    CNA_Result call_result = cna.auto_exposure_ext_get_exposure((CNA_AutoExposureHandle)auto_exposure, &out_value_value);
+    if (call_result == CNA_RESULT_SUCCESS || call_result == CNA_RESULT_BUFFER_TOO_SMALL) {
+        jfloat out_value_element = (jfloat)out_value_value;
+        (*environment)->SetFloatArrayRegion(
+            environment, out_value, 0, 1, &out_value_element);
+    }
+    return (jint)call_result;
+}
+
+JNIEXPORT jint JNICALL
+Java_org_openeggbert_cna_internal_generated_NativeEngineLayerRoutes_autoExposureExtGetKeyValue(
+    JNIEnv* environment, jclass declaring_class, jlong auto_exposure, jfloatArray out_value)
+{
+    (void)environment;
+    (void)declaring_class;
+    float out_value_value = 0;
+    CNA_Result call_result = cna.auto_exposure_ext_get_key_value((CNA_AutoExposureHandle)auto_exposure, &out_value_value);
+    if (call_result == CNA_RESULT_SUCCESS || call_result == CNA_RESULT_BUFFER_TOO_SMALL) {
+        jfloat out_value_element = (jfloat)out_value_value;
+        (*environment)->SetFloatArrayRegion(
+            environment, out_value, 0, 1, &out_value_element);
+    }
+    return (jint)call_result;
+}
+
+JNIEXPORT jint JNICALL
+Java_org_openeggbert_cna_internal_generated_NativeEngineLayerRoutes_autoExposureExtMeasureAverageLuminance(
+    JNIEnv* environment, jclass declaring_class, jlong auto_exposure, jlong scene, jfloatArray out_luminance)
+{
+    (void)environment;
+    (void)declaring_class;
+    float out_luminance_value = 0;
+    CNA_Result call_result = cna.auto_exposure_ext_measure_average_luminance((CNA_AutoExposureHandle)auto_exposure, (CNA_Handle)scene, &out_luminance_value);
+    if (call_result == CNA_RESULT_SUCCESS || call_result == CNA_RESULT_BUFFER_TOO_SMALL) {
+        jfloat out_luminance_element = (jfloat)out_luminance_value;
+        (*environment)->SetFloatArrayRegion(
+            environment, out_luminance, 0, 1, &out_luminance_element);
+    }
+    return (jint)call_result;
+}
+
+JNIEXPORT jint JNICALL
+Java_org_openeggbert_cna_internal_generated_NativeEngineLayerRoutes_autoExposureExtSetAdaptationSpeeds(
+    JNIEnv* environment, jclass declaring_class, jlong auto_exposure, jfloat brightening_per_second, jfloat darkening_per_second)
+{
+    (void)environment;
+    (void)declaring_class;
+    CNA_Result call_result = cna.auto_exposure_ext_set_adaptation_speeds((CNA_AutoExposureHandle)auto_exposure, (float)brightening_per_second, (float)darkening_per_second);
+    return (jint)call_result;
+}
+
+JNIEXPORT jint JNICALL
+Java_org_openeggbert_cna_internal_generated_NativeEngineLayerRoutes_autoExposureExtSetExposure(
+    JNIEnv* environment, jclass declaring_class, jlong auto_exposure, jfloat value)
+{
+    (void)environment;
+    (void)declaring_class;
+    CNA_Result call_result = cna.auto_exposure_ext_set_exposure((CNA_AutoExposureHandle)auto_exposure, (float)value);
+    return (jint)call_result;
+}
+
+JNIEXPORT jint JNICALL
+Java_org_openeggbert_cna_internal_generated_NativeEngineLayerRoutes_autoExposureExtSetExposureRange(
+    JNIEnv* environment, jclass declaring_class, jlong auto_exposure, jfloat minimum, jfloat maximum)
+{
+    (void)environment;
+    (void)declaring_class;
+    CNA_Result call_result = cna.auto_exposure_ext_set_exposure_range((CNA_AutoExposureHandle)auto_exposure, (float)minimum, (float)maximum);
+    return (jint)call_result;
+}
+
+JNIEXPORT jint JNICALL
+Java_org_openeggbert_cna_internal_generated_NativeEngineLayerRoutes_autoExposureExtSetKeyValue(
+    JNIEnv* environment, jclass declaring_class, jlong auto_exposure, jfloat value)
+{
+    (void)environment;
+    (void)declaring_class;
+    CNA_Result call_result = cna.auto_exposure_ext_set_key_value((CNA_AutoExposureHandle)auto_exposure, (float)value);
+    return (jint)call_result;
+}
+
+JNIEXPORT jint JNICALL
+Java_org_openeggbert_cna_internal_generated_NativeEngineLayerRoutes_autoExposureExtUpdate(
+    JNIEnv* environment, jclass declaring_class, jlong auto_exposure, jlong scene, jfloat delta_seconds, jfloatArray out_exposure)
+{
+    (void)environment;
+    (void)declaring_class;
+    float out_exposure_value = 0;
+    CNA_Result call_result = cna.auto_exposure_ext_update((CNA_AutoExposureHandle)auto_exposure, (CNA_Handle)scene, (float)delta_seconds, &out_exposure_value);
+    if (call_result == CNA_RESULT_SUCCESS || call_result == CNA_RESULT_BUFFER_TOO_SMALL) {
+        jfloat out_exposure_element = (jfloat)out_exposure_value;
+        (*environment)->SetFloatArrayRegion(
+            environment, out_exposure, 0, 1, &out_exposure_element);
+    }
+    return (jint)call_result;
+}
+
+JNIEXPORT jint JNICALL
 Java_org_openeggbert_cna_internal_generated_NativeEngineLayerRoutes_blitPassCreate(
     JNIEnv* environment, jclass declaring_class, jlong graphics_device, jlongArray out_pass)
 {
@@ -4579,6 +4889,184 @@ Java_org_openeggbert_cna_internal_generated_NativeEngineLayerRoutes_colorGradePa
     (void)environment;
     (void)declaring_class;
     CNA_Result call_result = cna.color_grade_pass_set_volume_lut((CNA_PostProcessPassHandle)pass, (CNA_Handle)lut);
+    return (jint)call_result;
+}
+
+JNIEXPORT jint JNICALL
+Java_org_openeggbert_cna_internal_generated_NativeEngineLayerRoutes_computeShaderBarrier(
+    JNIEnv* environment, jclass declaring_class, jlong shader, jint bits)
+{
+    (void)environment;
+    (void)declaring_class;
+    CNA_Result call_result = cna.compute_shader_barrier((CNA_ComputeShaderHandle)shader, (CNA_GraphicsMemoryBarrier)bits);
+    return (jint)call_result;
+}
+
+JNIEXPORT jint JNICALL
+Java_org_openeggbert_cna_internal_generated_NativeEngineLayerRoutes_computeShaderBindImage(
+    JNIEnv* environment, jclass declaring_class, jlong shader, jint unit, jlong texture, jint access)
+{
+    (void)environment;
+    (void)declaring_class;
+    CNA_Result call_result = cna.compute_shader_bind_image((CNA_ComputeShaderHandle)shader, (int32_t)unit, (CNA_Handle)texture, (CNA_GraphicsImageAccess)access);
+    return (jint)call_result;
+}
+
+JNIEXPORT jint JNICALL
+Java_org_openeggbert_cna_internal_generated_NativeEngineLayerRoutes_computeShaderBindStorageBuffer(
+    JNIEnv* environment, jclass declaring_class, jlong shader, jint binding, jlong buffer)
+{
+    (void)environment;
+    (void)declaring_class;
+    CNA_Result call_result = cna.compute_shader_bind_storage_buffer((CNA_ComputeShaderHandle)shader, (int32_t)binding, (CNA_StorageBufferHandle)buffer);
+    return (jint)call_result;
+}
+
+JNIEXPORT jint JNICALL
+Java_org_openeggbert_cna_internal_generated_NativeEngineLayerRoutes_computeShaderBindTexture(
+    JNIEnv* environment, jclass declaring_class, jlong shader, jint unit, jbyteArray sampler_name, jlong texture)
+{
+    (void)environment;
+    (void)declaring_class;
+    jsize sampler_name_size = (*environment)->GetArrayLength(environment, sampler_name);
+    jbyte* sampler_name_bytes = (*environment)->GetByteArrayElements(environment, sampler_name, NULL);
+    if (sampler_name_bytes == NULL) {
+        return (jint)CNA_RESULT_OUT_OF_MEMORY;
+    }
+    CNA_StringView sampler_name_view = {(const char*)sampler_name_bytes, (uint64_t)sampler_name_size};
+    CNA_Result call_result = cna.compute_shader_bind_texture((CNA_ComputeShaderHandle)shader, (int32_t)unit, sampler_name_view, (CNA_Handle)texture);
+    (*environment)->ReleaseByteArrayElements(environment, sampler_name, sampler_name_bytes, JNI_ABORT);
+    return (jint)call_result;
+}
+
+JNIEXPORT jint JNICALL
+Java_org_openeggbert_cna_internal_generated_NativeEngineLayerRoutes_computeShaderCopyCompileError(
+    JNIEnv* environment, jclass declaring_class, jlong shader, jbyteArray destination, jlongArray out_bytes)
+{
+    (void)environment;
+    (void)declaring_class;
+    jsize destination_size = (*environment)->GetArrayLength(environment, destination);
+    jbyte* destination_bytes = (*environment)->GetByteArrayElements(environment, destination, NULL);
+    if (destination_bytes == NULL) {
+        return (jint)CNA_RESULT_OUT_OF_MEMORY;
+    }
+    uint64_t destination_written = 0;
+    CNA_Result call_result = cna.compute_shader_copy_compile_error((CNA_ComputeShaderHandle)shader, (char*)destination_bytes, (uint64_t)destination_size, &destination_written);
+    (*environment)->ReleaseByteArrayElements(environment, destination, destination_bytes, 0);
+    if (call_result == CNA_RESULT_SUCCESS || call_result == CNA_RESULT_BUFFER_TOO_SMALL) {
+        jlong destination_element = (jlong)destination_written;
+        (*environment)->SetLongArrayRegion(
+            environment, out_bytes, 0, 1, &destination_element);
+    }
+    return (jint)call_result;
+}
+
+JNIEXPORT jint JNICALL
+Java_org_openeggbert_cna_internal_generated_NativeEngineLayerRoutes_computeShaderCreate(
+    JNIEnv* environment, jclass declaring_class, jlong graphics_device, jbyteArray source, jlongArray out_shader)
+{
+    (void)environment;
+    (void)declaring_class;
+    jsize source_size = (*environment)->GetArrayLength(environment, source);
+    jbyte* source_bytes = (*environment)->GetByteArrayElements(environment, source, NULL);
+    if (source_bytes == NULL) {
+        return (jint)CNA_RESULT_OUT_OF_MEMORY;
+    }
+    CNA_StringView source_view = {(const char*)source_bytes, (uint64_t)source_size};
+    CNA_ComputeShaderHandle out_shader_value = 0;
+    CNA_Result call_result = cna.compute_shader_create((CNA_Handle)graphics_device, source_view, &out_shader_value);
+    (*environment)->ReleaseByteArrayElements(environment, source, source_bytes, JNI_ABORT);
+    if (call_result == CNA_RESULT_SUCCESS || call_result == CNA_RESULT_BUFFER_TOO_SMALL) {
+        jlong out_shader_element = (jlong)out_shader_value;
+        (*environment)->SetLongArrayRegion(
+            environment, out_shader, 0, 1, &out_shader_element);
+    }
+    return (jint)call_result;
+}
+
+JNIEXPORT jint JNICALL
+Java_org_openeggbert_cna_internal_generated_NativeEngineLayerRoutes_computeShaderDestroy(
+    JNIEnv* environment, jclass declaring_class, jlong shader)
+{
+    (void)environment;
+    (void)declaring_class;
+    CNA_Result call_result = cna.compute_shader_destroy((CNA_ComputeShaderHandle)shader);
+    return (jint)call_result;
+}
+
+JNIEXPORT jint JNICALL
+Java_org_openeggbert_cna_internal_generated_NativeEngineLayerRoutes_computeShaderDispatch(
+    JNIEnv* environment, jclass declaring_class, jlong shader, jint groups_x, jint groups_y, jint groups_z)
+{
+    (void)environment;
+    (void)declaring_class;
+    CNA_Result call_result = cna.compute_shader_dispatch((CNA_ComputeShaderHandle)shader, (int32_t)groups_x, (int32_t)groups_y, (int32_t)groups_z);
+    return (jint)call_result;
+}
+
+JNIEXPORT jint JNICALL
+Java_org_openeggbert_cna_internal_generated_NativeEngineLayerRoutes_computeShaderIsImageBindingSupported(
+    JNIEnv* environment, jclass declaring_class, jlong shader, jbooleanArray out_supported)
+{
+    (void)environment;
+    (void)declaring_class;
+    CNA_Bool out_supported_value = 0;
+    CNA_Result call_result = cna.compute_shader_is_image_binding_supported((CNA_ComputeShaderHandle)shader, &out_supported_value);
+    if (call_result == CNA_RESULT_SUCCESS || call_result == CNA_RESULT_BUFFER_TOO_SMALL) {
+        jboolean out_supported_element = (jboolean)out_supported_value;
+        (*environment)->SetBooleanArrayRegion(
+            environment, out_supported, 0, 1, &out_supported_element);
+    }
+    return (jint)call_result;
+}
+
+JNIEXPORT jint JNICALL
+Java_org_openeggbert_cna_internal_generated_NativeEngineLayerRoutes_computeShaderIsValid(
+    JNIEnv* environment, jclass declaring_class, jlong shader, jbooleanArray out_valid)
+{
+    (void)environment;
+    (void)declaring_class;
+    CNA_Bool out_valid_value = 0;
+    CNA_Result call_result = cna.compute_shader_is_valid((CNA_ComputeShaderHandle)shader, &out_valid_value);
+    if (call_result == CNA_RESULT_SUCCESS || call_result == CNA_RESULT_BUFFER_TOO_SMALL) {
+        jboolean out_valid_element = (jboolean)out_valid_value;
+        (*environment)->SetBooleanArrayRegion(
+            environment, out_valid, 0, 1, &out_valid_element);
+    }
+    return (jint)call_result;
+}
+
+JNIEXPORT jint JNICALL
+Java_org_openeggbert_cna_internal_generated_NativeEngineLayerRoutes_computeShaderSetUniformFloat(
+    JNIEnv* environment, jclass declaring_class, jlong shader, jbyteArray name, jfloat value)
+{
+    (void)environment;
+    (void)declaring_class;
+    jsize name_size = (*environment)->GetArrayLength(environment, name);
+    jbyte* name_bytes = (*environment)->GetByteArrayElements(environment, name, NULL);
+    if (name_bytes == NULL) {
+        return (jint)CNA_RESULT_OUT_OF_MEMORY;
+    }
+    CNA_StringView name_view = {(const char*)name_bytes, (uint64_t)name_size};
+    CNA_Result call_result = cna.compute_shader_set_uniform_float((CNA_ComputeShaderHandle)shader, name_view, (float)value);
+    (*environment)->ReleaseByteArrayElements(environment, name, name_bytes, JNI_ABORT);
+    return (jint)call_result;
+}
+
+JNIEXPORT jint JNICALL
+Java_org_openeggbert_cna_internal_generated_NativeEngineLayerRoutes_computeShaderSetUniformInt(
+    JNIEnv* environment, jclass declaring_class, jlong shader, jbyteArray name, jint value)
+{
+    (void)environment;
+    (void)declaring_class;
+    jsize name_size = (*environment)->GetArrayLength(environment, name);
+    jbyte* name_bytes = (*environment)->GetByteArrayElements(environment, name, NULL);
+    if (name_bytes == NULL) {
+        return (jint)CNA_RESULT_OUT_OF_MEMORY;
+    }
+    CNA_StringView name_view = {(const char*)name_bytes, (uint64_t)name_size};
+    CNA_Result call_result = cna.compute_shader_set_uniform_int((CNA_ComputeShaderHandle)shader, name_view, (int32_t)value);
+    (*environment)->ReleaseByteArrayElements(environment, name, name_bytes, JNI_ABORT);
     return (jint)call_result;
 }
 
@@ -9583,6 +10071,26 @@ Java_org_openeggbert_cna_internal_generated_NativeEngineLayerRoutes_gpuTimerPoll
 }
 
 JNIEXPORT jint JNICALL
+Java_org_openeggbert_cna_internal_generated_NativeEngineLayerRoutes_graphicsDeviceDrawIndexedPrimitivesIndirectExt(
+    JNIEnv* environment, jclass declaring_class, jlong graphics_device, jint primitive_type, jlong argument_buffer, jint argument_byte_offset)
+{
+    (void)environment;
+    (void)declaring_class;
+    CNA_Result call_result = cna.graphics_device_draw_indexed_primitives_indirect_ext((CNA_Handle)graphics_device, (CNA_PrimitiveType)primitive_type, (CNA_StorageBufferHandle)argument_buffer, (int32_t)argument_byte_offset);
+    return (jint)call_result;
+}
+
+JNIEXPORT jint JNICALL
+Java_org_openeggbert_cna_internal_generated_NativeEngineLayerRoutes_graphicsDeviceDrawPrimitivesIndirectExt(
+    JNIEnv* environment, jclass declaring_class, jlong graphics_device, jint primitive_type, jlong argument_buffer, jint argument_byte_offset)
+{
+    (void)environment;
+    (void)declaring_class;
+    CNA_Result call_result = cna.graphics_device_draw_primitives_indirect_ext((CNA_Handle)graphics_device, (CNA_PrimitiveType)primitive_type, (CNA_StorageBufferHandle)argument_buffer, (int32_t)argument_byte_offset);
+    return (jint)call_result;
+}
+
+JNIEXPORT jint JNICALL
 Java_org_openeggbert_cna_internal_generated_NativeEngineLayerRoutes_graphicsDeviceSupportsShadowSamplingExt(
     JNIEnv* environment, jclass declaring_class, jlong graphics_device, jbooleanArray out_supported)
 {
@@ -10073,6 +10581,59 @@ Java_org_openeggbert_cna_internal_generated_NativeEngineLayerRoutes_imageBasedLi
         jboolean out_valid_element = (jboolean)out_valid_value;
         (*environment)->SetBooleanArrayRegion(
             environment, out_valid, 0, 1, &out_valid_element);
+    }
+    return (jint)call_result;
+}
+
+JNIEXPORT jint JNICALL
+Java_org_openeggbert_cna_internal_generated_NativeEngineLayerRoutes_indirectDrawArgumentsInit(
+    JNIEnv* environment, jclass declaring_class, jlongArray out_argumentsIntegral)
+{
+    (void)environment;
+    (void)declaring_class;
+    if (out_argumentsIntegral == NULL) {
+        return (jint)CNA_RESULT_INVALID_ARGUMENT;
+    }
+    CNA_IndirectDrawArguments out_arguments_value;
+    memset(&out_arguments_value, 0, sizeof out_arguments_value);
+    CNA_Result call_result = cna.indirect_draw_arguments_init(&out_arguments_value);
+    if (call_result == CNA_RESULT_SUCCESS || call_result == CNA_RESULT_BUFFER_TOO_SMALL) {
+        jlong out_argumentsIntegral_values[] = {
+            (jlong)out_arguments_value.vertex_count,
+            (jlong)out_arguments_value.instance_count,
+            (jlong)out_arguments_value.first_vertex,
+            (jlong)out_arguments_value.base_instance
+        };
+        (*environment)->SetLongArrayRegion(environment, out_argumentsIntegral, 0,
+            (jsize)(sizeof out_argumentsIntegral_values / sizeof out_argumentsIntegral_values[0]),
+            out_argumentsIntegral_values);
+    }
+    return (jint)call_result;
+}
+
+JNIEXPORT jint JNICALL
+Java_org_openeggbert_cna_internal_generated_NativeEngineLayerRoutes_indirectDrawIndexedArgumentsInit(
+    JNIEnv* environment, jclass declaring_class, jlongArray out_argumentsIntegral)
+{
+    (void)environment;
+    (void)declaring_class;
+    if (out_argumentsIntegral == NULL) {
+        return (jint)CNA_RESULT_INVALID_ARGUMENT;
+    }
+    CNA_IndirectDrawIndexedArguments out_arguments_value;
+    memset(&out_arguments_value, 0, sizeof out_arguments_value);
+    CNA_Result call_result = cna.indirect_draw_indexed_arguments_init(&out_arguments_value);
+    if (call_result == CNA_RESULT_SUCCESS || call_result == CNA_RESULT_BUFFER_TOO_SMALL) {
+        jlong out_argumentsIntegral_values[] = {
+            (jlong)out_arguments_value.index_count,
+            (jlong)out_arguments_value.instance_count,
+            (jlong)out_arguments_value.first_index,
+            (jlong)out_arguments_value.base_vertex,
+            (jlong)out_arguments_value.base_instance
+        };
+        (*environment)->SetLongArrayRegion(environment, out_argumentsIntegral, 0,
+            (jsize)(sizeof out_argumentsIntegral_values / sizeof out_argumentsIntegral_values[0]),
+            out_argumentsIntegral_values);
     }
     return (jint)call_result;
 }
@@ -18418,6 +18979,226 @@ Java_org_openeggbert_cna_internal_generated_NativeEngineLayerRoutes_ssrPassSetTh
     (void)environment;
     (void)declaring_class;
     CNA_Result call_result = cna.ssr_pass_set_thickness((CNA_PostProcessPassHandle)pass, (float)value);
+    return (jint)call_result;
+}
+
+JNIEXPORT jint JNICALL
+Java_org_openeggbert_cna_internal_generated_NativeEngineLayerRoutes_storageBufferCreate(
+    JNIEnv* environment, jclass declaring_class, jlong graphics_device, jlong byte_size, jlongArray out_buffer)
+{
+    (void)environment;
+    (void)declaring_class;
+    CNA_StorageBufferHandle out_buffer_value = 0;
+    CNA_Result call_result = cna.storage_buffer_create((CNA_Handle)graphics_device, (uint64_t)byte_size, &out_buffer_value);
+    if (call_result == CNA_RESULT_SUCCESS || call_result == CNA_RESULT_BUFFER_TOO_SMALL) {
+        jlong out_buffer_element = (jlong)out_buffer_value;
+        (*environment)->SetLongArrayRegion(
+            environment, out_buffer, 0, 1, &out_buffer_element);
+    }
+    return (jint)call_result;
+}
+
+JNIEXPORT jint JNICALL
+Java_org_openeggbert_cna_internal_generated_NativeEngineLayerRoutes_storageBufferCreateTyped(
+    JNIEnv* environment, jclass declaring_class, jlong graphics_device, jlong element_count, jlong element_byte_size, jlongArray out_buffer)
+{
+    (void)environment;
+    (void)declaring_class;
+    CNA_StorageBufferHandle out_buffer_value = 0;
+    CNA_Result call_result = cna.storage_buffer_create_typed((CNA_Handle)graphics_device, (uint64_t)element_count, (uint64_t)element_byte_size, &out_buffer_value);
+    if (call_result == CNA_RESULT_SUCCESS || call_result == CNA_RESULT_BUFFER_TOO_SMALL) {
+        jlong out_buffer_element = (jlong)out_buffer_value;
+        (*environment)->SetLongArrayRegion(
+            environment, out_buffer, 0, 1, &out_buffer_element);
+    }
+    return (jint)call_result;
+}
+
+JNIEXPORT jint JNICALL
+Java_org_openeggbert_cna_internal_generated_NativeEngineLayerRoutes_storageBufferDestroy(
+    JNIEnv* environment, jclass declaring_class, jlong buffer)
+{
+    (void)environment;
+    (void)declaring_class;
+    CNA_Result call_result = cna.storage_buffer_destroy((CNA_StorageBufferHandle)buffer);
+    return (jint)call_result;
+}
+
+JNIEXPORT jint JNICALL
+Java_org_openeggbert_cna_internal_generated_NativeEngineLayerRoutes_storageBufferGetByteSize(
+    JNIEnv* environment, jclass declaring_class, jlong buffer, jlongArray out_byte_size)
+{
+    (void)environment;
+    (void)declaring_class;
+    uint64_t out_byte_size_value = 0;
+    CNA_Result call_result = cna.storage_buffer_get_byte_size((CNA_StorageBufferHandle)buffer, &out_byte_size_value);
+    if (call_result == CNA_RESULT_SUCCESS || call_result == CNA_RESULT_BUFFER_TOO_SMALL) {
+        jlong out_byte_size_element = (jlong)out_byte_size_value;
+        (*environment)->SetLongArrayRegion(
+            environment, out_byte_size, 0, 1, &out_byte_size_element);
+    }
+    return (jint)call_result;
+}
+
+JNIEXPORT jint JNICALL
+Java_org_openeggbert_cna_internal_generated_NativeEngineLayerRoutes_storageBufferGetBytes(
+    JNIEnv* environment, jclass declaring_class, jlong buffer, jbyteArray destination, jlong byte_size)
+{
+    (void)environment;
+    (void)declaring_class;
+    jsize destination_length = (*environment)->GetArrayLength(environment, destination);
+    jlong destination_required = 1;
+    int destination_refused = 0;
+    if ((jlong)byte_size < 0) {
+        destination_refused = 1;
+    } else if ((jlong)byte_size != 0 && destination_required > (jlong)destination_length / (jlong)byte_size) {
+        destination_refused = 1;
+    } else {
+        destination_required *= (jlong)byte_size;
+    }
+    if (destination_refused || destination_required > (jlong)destination_length) {
+        return (jint)CNA_RESULT_INVALID_ARGUMENT;
+    }
+    jbyte* destination_bytes = (*environment)->GetByteArrayElements(environment, destination, NULL);
+    if (destination_bytes == NULL) {
+        return (jint)CNA_RESULT_OUT_OF_MEMORY;
+    }
+    CNA_Result call_result = cna.storage_buffer_get_bytes((CNA_StorageBufferHandle)buffer, (void*)destination_bytes, (uint64_t)byte_size);
+    (*environment)->ReleaseByteArrayElements(
+        environment, destination, destination_bytes, 0);
+    return (jint)call_result;
+}
+
+JNIEXPORT jint JNICALL
+Java_org_openeggbert_cna_internal_generated_NativeEngineLayerRoutes_storageBufferGetElementByteSize(
+    JNIEnv* environment, jclass declaring_class, jlong buffer, jlongArray out_element_byte_size)
+{
+    (void)environment;
+    (void)declaring_class;
+    uint64_t out_element_byte_size_value = 0;
+    CNA_Result call_result = cna.storage_buffer_get_element_byte_size((CNA_StorageBufferHandle)buffer, &out_element_byte_size_value);
+    if (call_result == CNA_RESULT_SUCCESS || call_result == CNA_RESULT_BUFFER_TOO_SMALL) {
+        jlong out_element_byte_size_element = (jlong)out_element_byte_size_value;
+        (*environment)->SetLongArrayRegion(
+            environment, out_element_byte_size, 0, 1, &out_element_byte_size_element);
+    }
+    return (jint)call_result;
+}
+
+JNIEXPORT jint JNICALL
+Java_org_openeggbert_cna_internal_generated_NativeEngineLayerRoutes_storageBufferGetElementCount(
+    JNIEnv* environment, jclass declaring_class, jlong buffer, jlongArray out_element_count)
+{
+    (void)environment;
+    (void)declaring_class;
+    uint64_t out_element_count_value = 0;
+    CNA_Result call_result = cna.storage_buffer_get_element_count((CNA_StorageBufferHandle)buffer, &out_element_count_value);
+    if (call_result == CNA_RESULT_SUCCESS || call_result == CNA_RESULT_BUFFER_TOO_SMALL) {
+        jlong out_element_count_element = (jlong)out_element_count_value;
+        (*environment)->SetLongArrayRegion(
+            environment, out_element_count, 0, 1, &out_element_count_element);
+    }
+    return (jint)call_result;
+}
+
+JNIEXPORT jint JNICALL
+Java_org_openeggbert_cna_internal_generated_NativeEngineLayerRoutes_storageBufferGetElements(
+    JNIEnv* environment, jclass declaring_class, jlong buffer, jbyteArray destination, jlong element_count, jlong element_byte_size)
+{
+    (void)environment;
+    (void)declaring_class;
+    jsize destination_length = (*environment)->GetArrayLength(environment, destination);
+    jlong destination_required = 1;
+    int destination_refused = 0;
+    if ((jlong)element_count < 0) {
+        destination_refused = 1;
+    } else if ((jlong)element_count != 0 && destination_required > (jlong)destination_length / (jlong)element_count) {
+        destination_refused = 1;
+    } else {
+        destination_required *= (jlong)element_count;
+    }
+    if ((jlong)element_byte_size < 0) {
+        destination_refused = 1;
+    } else if ((jlong)element_byte_size != 0 && destination_required > (jlong)destination_length / (jlong)element_byte_size) {
+        destination_refused = 1;
+    } else {
+        destination_required *= (jlong)element_byte_size;
+    }
+    if (destination_refused || destination_required > (jlong)destination_length) {
+        return (jint)CNA_RESULT_INVALID_ARGUMENT;
+    }
+    jbyte* destination_bytes = (*environment)->GetByteArrayElements(environment, destination, NULL);
+    if (destination_bytes == NULL) {
+        return (jint)CNA_RESULT_OUT_OF_MEMORY;
+    }
+    CNA_Result call_result = cna.storage_buffer_get_elements((CNA_StorageBufferHandle)buffer, (void*)destination_bytes, (uint64_t)element_count, (uint64_t)element_byte_size);
+    (*environment)->ReleaseByteArrayElements(
+        environment, destination, destination_bytes, 0);
+    return (jint)call_result;
+}
+
+JNIEXPORT jint JNICALL
+Java_org_openeggbert_cna_internal_generated_NativeEngineLayerRoutes_storageBufferSetBytes(
+    JNIEnv* environment, jclass declaring_class, jlong buffer, jbyteArray data, jlong byte_size)
+{
+    (void)environment;
+    (void)declaring_class;
+    jsize data_length = (*environment)->GetArrayLength(environment, data);
+    jlong data_required = 1;
+    int data_refused = 0;
+    if ((jlong)byte_size < 0) {
+        data_refused = 1;
+    } else if ((jlong)byte_size != 0 && data_required > (jlong)data_length / (jlong)byte_size) {
+        data_refused = 1;
+    } else {
+        data_required *= (jlong)byte_size;
+    }
+    if (data_refused || data_required > (jlong)data_length) {
+        return (jint)CNA_RESULT_INVALID_ARGUMENT;
+    }
+    jbyte* data_bytes = (*environment)->GetByteArrayElements(environment, data, NULL);
+    if (data_bytes == NULL) {
+        return (jint)CNA_RESULT_OUT_OF_MEMORY;
+    }
+    CNA_Result call_result = cna.storage_buffer_set_bytes((CNA_StorageBufferHandle)buffer, (const void*)data_bytes, (uint64_t)byte_size);
+    (*environment)->ReleaseByteArrayElements(
+        environment, data, data_bytes, JNI_ABORT);
+    return (jint)call_result;
+}
+
+JNIEXPORT jint JNICALL
+Java_org_openeggbert_cna_internal_generated_NativeEngineLayerRoutes_storageBufferSetElements(
+    JNIEnv* environment, jclass declaring_class, jlong buffer, jbyteArray data, jlong element_count, jlong element_byte_size)
+{
+    (void)environment;
+    (void)declaring_class;
+    jsize data_length = (*environment)->GetArrayLength(environment, data);
+    jlong data_required = 1;
+    int data_refused = 0;
+    if ((jlong)element_count < 0) {
+        data_refused = 1;
+    } else if ((jlong)element_count != 0 && data_required > (jlong)data_length / (jlong)element_count) {
+        data_refused = 1;
+    } else {
+        data_required *= (jlong)element_count;
+    }
+    if ((jlong)element_byte_size < 0) {
+        data_refused = 1;
+    } else if ((jlong)element_byte_size != 0 && data_required > (jlong)data_length / (jlong)element_byte_size) {
+        data_refused = 1;
+    } else {
+        data_required *= (jlong)element_byte_size;
+    }
+    if (data_refused || data_required > (jlong)data_length) {
+        return (jint)CNA_RESULT_INVALID_ARGUMENT;
+    }
+    jbyte* data_bytes = (*environment)->GetByteArrayElements(environment, data, NULL);
+    if (data_bytes == NULL) {
+        return (jint)CNA_RESULT_OUT_OF_MEMORY;
+    }
+    CNA_Result call_result = cna.storage_buffer_set_elements((CNA_StorageBufferHandle)buffer, (const void*)data_bytes, (uint64_t)element_count, (uint64_t)element_byte_size);
+    (*environment)->ReleaseByteArrayElements(
+        environment, data, data_bytes, JNI_ABORT);
     return (jint)call_result;
 }
 

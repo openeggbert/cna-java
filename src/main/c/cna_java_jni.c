@@ -833,6 +833,18 @@ typedef struct CnaFunctions {
     CNA_JNI_ROUTE(cna_transparent_draw_list_submit) transparent_draw_list_submit;
     CNA_JNI_ROUTE(cna_transparent_draw_list_draw_sorted) transparent_draw_list_draw_sorted;
 
+    /* The light-probe baker's three capture routes, here for the same reason: each takes a C
+       function pointer CNA calls once per cube face, six times per probe. */
+    CNA_JNI_ROUTE(cna_light_probe_baker_bake_probe) light_probe_baker_bake_probe;
+    CNA_JNI_ROUTE(cna_light_probe_baker_bake_light) light_probe_baker_bake_light;
+    CNA_JNI_ROUTE(cna_light_probe_baker_bake_visibility) light_probe_baker_bake_visibility;
+
+    /* And the render pipeline's two scene callbacks, which are registered once and run inside
+       every frame until they are cleared -- a longer life than the two families above, and the
+       reason their Java references are held by the pipeline rather than passed per call. */
+    CNA_JNI_ROUTE(cna_render_pipeline_set_transparent_scene) render_pipeline_set_transparent_scene;
+    CNA_JNI_ROUTE(cna_render_pipeline_set_shadow_scene) render_pipeline_set_shadow_scene;
+
     /* Slots for the routes whose adapter is generated from the CNA headers. */
 #include "generated/routes_table.inc"
 } CnaFunctions;
@@ -2570,6 +2582,11 @@ JNIEXPORT jint JNICALL Java_org_openeggbert_cna_internal_NativeBindings_nativeLo
     LOAD(storage_stream_close, "cna_storage_stream_close");
     LOAD(transparent_draw_list_submit, "cna_transparent_draw_list_submit");
     LOAD(transparent_draw_list_draw_sorted, "cna_transparent_draw_list_draw_sorted");
+    LOAD(light_probe_baker_bake_probe, "cna_light_probe_baker_bake_probe");
+    LOAD(light_probe_baker_bake_light, "cna_light_probe_baker_bake_light");
+    LOAD(light_probe_baker_bake_visibility, "cna_light_probe_baker_bake_visibility");
+    LOAD(render_pipeline_set_transparent_scene, "cna_render_pipeline_set_transparent_scene");
+    LOAD(render_pipeline_set_shadow_scene, "cna_render_pipeline_set_shadow_scene");
 
     /* Loads for the routes whose adapter is generated from the CNA headers. */
 #include "generated/routes_load.inc"
@@ -12360,6 +12377,337 @@ Java_org_openeggbert_cna_internal_NativeBindings_nativeTransparentDrawListDrawSo
         (CNA_TransparentDrawListHandle)list, &matrix);
     transparent_draw_active = previous;
     return (jint)result;
+}
+
+/*
+ * The light-probe baker's three capture routes.
+ *
+ * The same shape as the transparent draw list and for the same reason: CNA calls a C function
+ * pointer once per cube face, six times per probe, and only inside the bake call that Java made.
+ * Nothing outlives that call, so the Java callback is passed in for its duration and the context
+ * is a pointer to a stack structure -- no global reference is created and none can leak.
+ *
+ * The callback returns `void`, which is the one difference that matters. A Java exception cannot
+ * stop the bake, so it is checked for before every face and the remaining faces are skipped
+ * rather than invoked with an exception pending, which is undefined behaviour in JNI and is what
+ * `-Xcheck:jni` fails a suite for. The exception stays pending and surfaces at the Java call.
+ *
+ * Thread-local for the same reason as the draw list's: two threads baking two probes is unusual
+ * but legal, and a plain static would have them overwrite each other.
+ */
+typedef struct ProbeBakeDispatch {
+    JNIEnv* environment;
+    jobject callback;
+    jmethodID accept;
+    int failed;
+    int faces;
+} ProbeBakeDispatch;
+
+static _Thread_local ProbeBakeDispatch* probe_bake_active = NULL;
+
+static jfloatArray matrix_to_java(JNIEnv* environment, const CNA_Matrix* matrix)
+{
+    jfloatArray array = (*environment)->NewFloatArray(environment, 16);
+    if (array == NULL) {
+        return NULL;
+    }
+    /* Written out rather than walked with a pointer: CNA_Matrix is sixteen named floats, and
+       stepping a float* across separate members would be undefined however it is laid out. */
+    const jfloat leaves[16] = {
+        (jfloat)matrix->m11, (jfloat)matrix->m12, (jfloat)matrix->m13, (jfloat)matrix->m14,
+        (jfloat)matrix->m21, (jfloat)matrix->m22, (jfloat)matrix->m23, (jfloat)matrix->m24,
+        (jfloat)matrix->m31, (jfloat)matrix->m32, (jfloat)matrix->m33, (jfloat)matrix->m34,
+        (jfloat)matrix->m41, (jfloat)matrix->m42, (jfloat)matrix->m43, (jfloat)matrix->m44,
+    };
+    (*environment)->SetFloatArrayRegion(environment, array, 0, 16, leaves);
+    return array;
+}
+
+static void probe_bake_face(const CNA_Matrix* view, const CNA_Matrix* projection, void* context)
+{
+    ProbeBakeDispatch* dispatch = (ProbeBakeDispatch*)context;
+    if (dispatch == NULL || dispatch->failed != 0) {
+        return;
+    }
+    JNIEnv* environment = dispatch->environment;
+    if ((*environment)->ExceptionCheck(environment) == JNI_TRUE) {
+        /* An earlier face threw. CNA has no way to be told to stop, so every later face is
+           skipped here instead -- calling into Java with an exception pending is undefined. */
+        dispatch->failed = 1;
+        return;
+    }
+    jfloatArray view_array = matrix_to_java(environment, view);
+    if (view_array == NULL) {
+        dispatch->failed = 1;
+        return;
+    }
+    jfloatArray projection_array = matrix_to_java(environment, projection);
+    if (projection_array == NULL) {
+        (*environment)->DeleteLocalRef(environment, view_array);
+        dispatch->failed = 1;
+        return;
+    }
+    dispatch->faces++;
+    (*environment)->CallVoidMethod(environment, dispatch->callback, dispatch->accept,
+        (jobject)view_array, (jobject)projection_array);
+    (*environment)->DeleteLocalRef(environment, projection_array);
+    (*environment)->DeleteLocalRef(environment, view_array);
+    if ((*environment)->ExceptionCheck(environment) == JNI_TRUE) {
+        dispatch->failed = 1;
+    }
+}
+
+/* Resolves BiConsumer.accept once per bake, so the six faces do not each pay a lookup. */
+static jmethodID biconsumer_accept(JNIEnv* environment)
+{
+    jclass type = (*environment)->FindClass(environment, "java/util/function/BiConsumer");
+    if (type == NULL) {
+        return NULL;
+    }
+    jmethodID accept = (*environment)->GetMethodID(environment, type, "accept",
+        "(Ljava/lang/Object;Ljava/lang/Object;)V");
+    (*environment)->DeleteLocalRef(environment, type);
+    return accept;
+}
+
+JNIEXPORT jint JNICALL
+Java_org_openeggbert_cna_internal_NativeBindings_nativeLightProbeBakerBakeProbe(
+    JNIEnv* environment,
+    jclass type,
+    jlong baker,
+    jfloatArray position,
+    jobject callback,
+    jlongArray out_probe,
+    jintArray out_faces)
+{
+    (void)type;
+    if ((*environment)->GetArrayLength(environment, position) != 3) {
+        return (jint)CNA_RESULT_INVALID_ARGUMENT;
+    }
+    jmethodID accept = biconsumer_accept(environment);
+    if (accept == NULL) {
+        return (jint)CNA_RESULT_INTERNAL;
+    }
+    jfloat leaves[3];
+    (*environment)->GetFloatArrayRegion(environment, position, 0, 3, leaves);
+    CNA_Vector3 where;
+    where.x = (float)leaves[0];
+    where.y = (float)leaves[1];
+    where.z = (float)leaves[2];
+
+    ProbeBakeDispatch dispatch = {environment, callback, accept, 0, 0};
+    ProbeBakeDispatch* previous = probe_bake_active;
+    probe_bake_active = &dispatch;
+    CNA_LightProbeHandle probe = CNA_INVALID_HANDLE;
+    CNA_Result result = cna.light_probe_baker_bake_probe(
+        (CNA_LightProbeBakerHandle)baker, &where, probe_bake_face, &dispatch, &probe);
+    probe_bake_active = previous;
+
+    const jlong handle = (jlong)probe;
+    (*environment)->SetLongArrayRegion(environment, out_probe, 0, 1, &handle);
+    const jint faces = (jint)dispatch.faces;
+    (*environment)->SetIntArrayRegion(environment, out_faces, 0, 1, &faces);
+    return (jint)result;
+}
+
+JNIEXPORT jint JNICALL
+Java_org_openeggbert_cna_internal_NativeBindings_nativeLightProbeBakerBakeLight(
+    JNIEnv* environment,
+    jclass type,
+    jlong baker,
+    jlong volume,
+    jobject callback,
+    jintArray out_faces)
+{
+    (void)type;
+    jmethodID accept = biconsumer_accept(environment);
+    if (accept == NULL) {
+        return (jint)CNA_RESULT_INTERNAL;
+    }
+    ProbeBakeDispatch dispatch = {environment, callback, accept, 0, 0};
+    ProbeBakeDispatch* previous = probe_bake_active;
+    probe_bake_active = &dispatch;
+    CNA_Result result = cna.light_probe_baker_bake_light(
+        (CNA_LightProbeBakerHandle)baker, (CNA_LightProbeVolumeHandle)volume, probe_bake_face,
+        &dispatch);
+    probe_bake_active = previous;
+    const jint faces = (jint)dispatch.faces;
+    (*environment)->SetIntArrayRegion(environment, out_faces, 0, 1, &faces);
+    return (jint)result;
+}
+
+JNIEXPORT jint JNICALL
+Java_org_openeggbert_cna_internal_NativeBindings_nativeLightProbeBakerBakeVisibility(
+    JNIEnv* environment,
+    jclass type,
+    jlong baker,
+    jlong volume,
+    jobject callback,
+    jintArray out_faces)
+{
+    (void)type;
+    jmethodID accept = biconsumer_accept(environment);
+    if (accept == NULL) {
+        return (jint)CNA_RESULT_INTERNAL;
+    }
+    ProbeBakeDispatch dispatch = {environment, callback, accept, 0, 0};
+    ProbeBakeDispatch* previous = probe_bake_active;
+    probe_bake_active = &dispatch;
+    CNA_Result result = cna.light_probe_baker_bake_visibility(
+        (CNA_LightProbeBakerHandle)baker, (CNA_LightProbeVolumeHandle)volume, probe_bake_face,
+        &dispatch);
+    probe_bake_active = previous;
+    const jint faces = (jint)dispatch.faces;
+    (*environment)->SetIntArrayRegion(environment, out_faces, 0, 1, &faces);
+    return (jint)result;
+}
+
+/*
+ * The render pipeline's two scene callbacks.
+ *
+ * These are the *other* callback shape, and the difference decides everything about their
+ * lifetime: they are registered once and run inside every later frame, so the Java object has to
+ * survive the call that registered it. That needs a global reference, and a global reference
+ * needs somewhere to be deleted.
+ *
+ * CNA offers no unregistration hook beyond passing a null callback, so the reference is made
+ * explicit instead of hidden: `nativeCallbackTokenCreate` returns one as an opaque token, the
+ * Java side stores it beside the registration, and `nativeCallbackTokenRelease` deletes it. A
+ * pipeline replacing or clearing its callback releases the token it held, and closing releases
+ * the last one -- which it must do anyway to release the pipeline handle itself.
+ *
+ * The callbacks run on whichever thread called `begin` or `end`, which is the thread that made
+ * the Java call into CNA, so the environment is fetched rather than assumed.
+ */
+static CNA_Result pipeline_scene_draw(void* context)
+{
+    if (context == NULL) {
+        return CNA_RESULT_INVALID_STATE;
+    }
+    int attached = 0;
+    JNIEnv* environment = callback_environment(&attached);
+    if (environment == NULL) {
+        return CNA_RESULT_INTERNAL;
+    }
+    CNA_Result answer = CNA_RESULT_SUCCESS;
+    if ((*environment)->ExceptionCheck(environment) == JNI_TRUE) {
+        /* Never call into Java with an exception pending. The frame is failed instead, and the
+           original exception surfaces at the Java call that opened it. */
+        answer = CNA_RESULT_INTERNAL;
+    } else {
+        jclass runnable = (*environment)->FindClass(environment, "java/lang/Runnable");
+        jmethodID run = runnable == NULL ? NULL
+            : (*environment)->GetMethodID(environment, runnable, "run", "()V");
+        if (runnable != NULL) {
+            (*environment)->DeleteLocalRef(environment, runnable);
+        }
+        if (run == NULL) {
+            answer = CNA_RESULT_INTERNAL;
+        } else {
+            (*environment)->CallVoidMethod(environment, (jobject)context, run);
+            if ((*environment)->ExceptionCheck(environment) == JNI_TRUE) {
+                /* The exception stays pending. CNA carries this result out to the caller of
+                   begin or end, and the exception surfaces there. */
+                answer = CNA_RESULT_INTERNAL;
+            }
+        }
+    }
+    finish_callback_environment(attached);
+    return answer;
+}
+
+JNIEXPORT jlong JNICALL
+Java_org_openeggbert_cna_internal_NativeBindings_nativeCallbackTokenCreate(
+    JNIEnv* environment, jclass type, jobject callback)
+{
+    (void)type;
+    if (callback == NULL) {
+        return 0;
+    }
+    return (jlong)(intptr_t)(*environment)->NewGlobalRef(environment, callback);
+}
+
+JNIEXPORT void JNICALL
+Java_org_openeggbert_cna_internal_NativeBindings_nativeCallbackTokenRelease(
+    JNIEnv* environment, jclass type, jlong token)
+{
+    (void)type;
+    if (token != 0) {
+        (*environment)->DeleteGlobalRef(environment, (jobject)(intptr_t)token);
+    }
+}
+
+JNIEXPORT jint JNICALL
+Java_org_openeggbert_cna_internal_NativeBindings_nativeRenderPipelineSetTransparentScene(
+    JNIEnv* environment, jclass type, jlong pipeline, jlong token)
+{
+    (void)environment;
+    (void)type;
+    if (token == 0) {
+        return (jint)cna.render_pipeline_set_transparent_scene(
+            (CNA_RenderPipelineHandle)pipeline, NULL, NULL);
+    }
+    return (jint)cna.render_pipeline_set_transparent_scene(
+        (CNA_RenderPipelineHandle)pipeline, pipeline_scene_draw, (void*)(intptr_t)token);
+}
+
+JNIEXPORT jint JNICALL
+Java_org_openeggbert_cna_internal_NativeBindings_nativeRenderPipelineSetShadowScene(
+    JNIEnv* environment,
+    jclass type,
+    jlong pipeline,
+    jlong shadow_map,
+    jlongArray light_integral,
+    jfloatArray light_floating,
+    jfloatArray bounds_floating,
+    jlong token)
+{
+    (void)type;
+    /* The light and the bounds are carried exactly as the generator carries them for every other
+       route that takes these two structures -- one long[] for the integral leaves and one float[]
+       for the floating ones, in declaration order. The orders are pinned against the live header
+       by a generator tool test rather than trusted here, which is the same arrangement the
+       full-screen pass's sampler has and for the same reason: this is the one place a structure
+       is packed by hand. */
+    if ((*environment)->GetArrayLength(environment, light_integral) != 1
+        || (*environment)->GetArrayLength(environment, light_floating) != 7
+        || (*environment)->GetArrayLength(environment, bounds_floating) != 6) {
+        return (jint)CNA_RESULT_INVALID_ARGUMENT;
+    }
+    jlong casts_shadows = 0;
+    (*environment)->GetLongArrayRegion(environment, light_integral, 0, 1, &casts_shadows);
+    jfloat light_leaves[7];
+    (*environment)->GetFloatArrayRegion(environment, light_floating, 0, 7, light_leaves);
+    CNA_DirectionalLightEXT directional;
+    memset(&directional, 0, sizeof directional);
+    directional.struct_size = (uint32_t)(sizeof directional);
+    directional.struct_version = UINT32_C(1);
+    directional.casts_shadows = (CNA_Bool)(casts_shadows != 0);
+    directional.direction.x = (float)light_leaves[0];
+    directional.direction.y = (float)light_leaves[1];
+    directional.direction.z = (float)light_leaves[2];
+    directional.color.x = (float)light_leaves[3];
+    directional.color.y = (float)light_leaves[4];
+    directional.color.z = (float)light_leaves[5];
+    directional.intensity = (float)light_leaves[6];
+
+    jfloat bounds_leaves[6];
+    (*environment)->GetFloatArrayRegion(environment, bounds_floating, 0, 6, bounds_leaves);
+    CNA_BoundingBox box;
+    box.min.x = (float)bounds_leaves[0];
+    box.min.y = (float)bounds_leaves[1];
+    box.min.z = (float)bounds_leaves[2];
+    box.max.x = (float)bounds_leaves[3];
+    box.max.y = (float)bounds_leaves[4];
+    box.max.z = (float)bounds_leaves[5];
+
+    if (token == 0) {
+        return (jint)cna.render_pipeline_set_shadow_scene((CNA_RenderPipelineHandle)pipeline,
+            (CNA_ShadowMapHandle)shadow_map, &directional, &box, NULL, NULL);
+    }
+    return (jint)cna.render_pipeline_set_shadow_scene((CNA_RenderPipelineHandle)pipeline,
+        (CNA_ShadowMapHandle)shadow_map, &directional, &box, pipeline_scene_draw,
+        (void*)(intptr_t)token);
 }
 
 /*
