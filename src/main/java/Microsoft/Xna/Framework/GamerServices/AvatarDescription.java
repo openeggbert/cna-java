@@ -3,6 +3,7 @@ package Microsoft.Xna.Framework.GamerServices;
 import Microsoft.Xna.Framework.EventArgs;
 import Microsoft.Xna.Framework.EventHandler;
 import org.openeggbert.cna.internal.CompletedAsyncResult;
+import org.openeggbert.cna.internal.NativeDeferredRelease;
 import org.openeggbert.cna.internal.NativeGamerServices;
 import org.openeggbert.cna.internal.generated.NativeGamerServicesRoutes;
 import System.AsyncCallback;
@@ -24,8 +25,21 @@ public class AvatarDescription {
     private final List<EventHandler<EventArgs>> changed = new CopyOnWriteArrayList<>();
     private final long handle;
 
+    /**
+     * Adopts one description handle.
+     *
+     * <p>Every route that produces a description hands back an owned handle -- the byte
+     * constructor, both random factories and the read from a gamer -- so the release is
+     * registered here rather than at four call sites. XNA's type is not disposable, so it
+     * happens once this object is unreachable, on the thread that created it, the next time that
+     * thread pumps.
+     */
+    @SuppressWarnings("this-escape")
     AvatarDescription(long handle) {
         this.handle = handle;
+        NativeDeferredRelease.onOwningThread(this, handle,
+                NativeGamerServicesRoutes::avatarDescriptionDestroy,
+                "cna_avatar_description_destroy");
     }
 
     /**
@@ -35,6 +49,7 @@ public class AvatarDescription {
      * range-checked Java {@code int}, so the array is {@code int[]} with every element in
      * 0..255.
      */
+    @SuppressWarnings("this-escape")
     public AvatarDescription(int[] data) {
         Objects.requireNonNull(data, "data");
         NativeGamerServices.requireAvailable("AvatarDescription");
@@ -51,6 +66,9 @@ public class AvatarDescription {
         NativeGamerServices.check("AvatarDescription",
                 NativeGamerServicesRoutes.avatarDescriptionCreate(bytes, description));
         handle = description[0];
+        NativeDeferredRelease.onOwningThread(this, handle,
+                NativeGamerServicesRoutes::avatarDescriptionDestroy,
+                "cna_avatar_description_destroy");
     }
 
     long handle() {

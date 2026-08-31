@@ -1,5 +1,6 @@
 package Microsoft.Xna.Framework.GamerServices;
 
+import org.openeggbert.cna.internal.NativeDeferredRelease;
 import org.openeggbert.cna.internal.NativeGamerServices;
 import org.openeggbert.cna.internal.generated.NativeGamerServicesRoutes;
 
@@ -9,8 +10,19 @@ public final class LeaderboardEntry {
     private final long handle;
     private PropertyDictionary columns;
 
+    /**
+     * Adopts one entry handle.
+     *
+     * <p>Every leaderboard entry this ABI hands out is an owned copy -- a reader's page answers
+     * by value, so reading the same row twice gives two handles -- which is why the release is
+     * registered here rather than at one call site. It happens on the thread that read the entry,
+     * the next time that thread pumps, because CNA will not take it from another.
+     */
     LeaderboardEntry(long handle) {
         this.handle = handle;
+        NativeDeferredRelease.onOwningThread(this, handle,
+                NativeGamerServicesRoutes::leaderboardEntryDestroy,
+                "cna_leaderboard_entry_destroy");
     }
 
     long handle() {

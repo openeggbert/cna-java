@@ -366,13 +366,14 @@
     },
     {
       "id": "JAVA-NATIVE-024",
-      "title": "NetworkSessionProperties leaked its native list, and no gate could see it",
+      "title": "Three value types leaked the CNA handles they owned",
       "family": "Microsoft.Xna.Framework.Net",
       "authority": "cna_network_session_properties_create and _destroy",
-      "currentState": "Fixed. The public constructor created an owned CNA list and nothing ever released it; XNA's type is not IDisposable, so a game had nothing to close. Measured: cna_network_session_properties_destroy answers CNA_RESULT_THREAD from any thread but the creating one, so a Cleaner could not release it either.",
+      "currentState": "Fixed, and it was three types rather than one. NetworkSessionProperties' public constructor, all four AvatarDescription paths, and every LeaderboardEntry created an owned CNA handle that nothing released; none of the three is IDisposable in XNA, so a game had nothing to close and no way to know. LeaderboardReader.getEntries was the worst: every entry CNA hands out is an owned copy, so the leak grew with each call of an ordinary getter. Measured: cna_network_session_properties_destroy answers CNA_RESULT_THREAD from any thread but the creating one, so a Cleaner could not release any of them either.",
       "expectedState": "org.openeggbert.cna.internal.NativeDeferredRelease records the handle when the Java object becomes unreachable and the owning thread releases it at the next FrameworkDispatcher.Update, which is where this binding already does deferred native work. A session-owned list registers nothing, because the session frees it.",
       "tests": [
-        "NetworkSessionNativeIntegrationTests"
+        "NetworkSessionNativeIntegrationTests",
+        "GamerServicesNativeIntegrationTests"
       ],
       "priority": 4,
       "status": "done"

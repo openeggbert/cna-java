@@ -215,6 +215,48 @@ final class GamerServicesNativeIntegrationTests {
             assertThrows(IllegalArgumentException.class, () -> columns.put("bad", this));
             columns.clear();
             assertTrue(columns.isEmpty(), "columns empty after clear");
+
+            ownedHandlesGoBackToCna();
+        }
+
+        /**
+         * Proves the handles these value types own are given back.
+         *
+         * <p>Neither type is disposable in XNA, so a game has nothing to close and a leak here
+         * would be silent and permanent. Every leaderboard entry CNA hands out is an owned copy,
+         * so reading a page twice is two handles, not one; and every route that produces an
+         * avatar description hands back an owned handle too.
+         */
+        private void ownedHandlesGoBackToCna() {
+            int before = org.openeggbert.cna.internal.NativeDeferredRelease.pendingCount();
+            LeaderboardWriter writer = new LeaderboardWriter();
+            for (int index = 0; index < 16; index++) {
+                LeaderboardIdentity identity = new LeaderboardIdentity();
+                identity.setKey("leak-probe-" + index);
+                assertNotNull(writer.GetLeaderboard(identity));
+                assertNotNull(AvatarDescription.CreateRandom());
+            }
+            writer = null;
+
+            int released = 0;
+            for (int attempt = 0; attempt < 50 && released == 0; attempt++) {
+                System.gc();
+                try {
+                    Thread.sleep(10L);
+                } catch (InterruptedException interrupted) {
+                    Thread.currentThread().interrupt();
+                    break;
+                }
+                int owed = org.openeggbert.cna.internal.NativeDeferredRelease.pendingCount();
+                if (owed > before) {
+                    Microsoft.Xna.Framework.FrameworkDispatcher.Update();
+                    released = owed - before;
+                }
+            }
+            assertTrue(released > 0,
+                    "a collected entry or description must hand its handle back on this thread");
+            assertEquals(0, org.openeggbert.cna.internal.NativeDeferredRelease.pendingCount(),
+                    "the drain must leave nothing owed");
         }
     }
 }

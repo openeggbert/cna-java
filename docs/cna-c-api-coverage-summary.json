@@ -32,7 +32,6 @@
     "cna_avatar_appearance_init_ext",
     "cna_avatar_body_type_copy_content_name_ext",
     "cna_avatar_body_type_get_content_name_size_ext",
-    "cna_avatar_description_destroy",
     "cna_avatar_expression_init",
     "cna_avatar_renderer_draw_real_ext",
     "cna_avatar_renderer_enable_real_rendering_ext",
@@ -80,7 +79,6 @@
     "cna_guide_simulate_message_box_click_ext",
     "cna_host_changed_event_info_init",
     "cna_invite_accepted_event_info_init",
-    "cna_leaderboard_entry_destroy",
     "cna_leaderboard_entry_equals",
     "cna_leaderboard_identity_init",
     "cna_leaderboard_reader_begin_page_down",
@@ -226,8 +224,8 @@
     },
     "gamer_services.h": {
       "DEFERRED_RUNTIME": 2,
-      "JAVA_INTERNAL_ONLY": 81,
-      "XNA_BACKING": 167,
+      "JAVA_INTERNAL_ONLY": 79,
+      "XNA_BACKING": 169,
       "total": 250
     },
     "geometry.h": {
@@ -445,9 +443,9 @@
   "classificationCounts": {
     "CNA_EXTENSION_CANDIDATE": 1871,
     "DEFERRED_RUNTIME": 417,
-    "JAVA_INTERNAL_ONLY": 169,
+    "JAVA_INTERNAL_ONLY": 167,
     "NOT_USEFUL_IN_JAVA": 620,
-    "XNA_BACKING": 977
+    "XNA_BACKING": 979
   },
   "cnaInventorySha256": "be9a2bf818318002adc100ad1db22949b164726d2d124352f3b29aa3fdc48ea2",
   "deferredTasks": {
@@ -499,7 +497,6 @@
     "cna_avatar_appearance_init_ext",
     "cna_avatar_body_type_copy_content_name_ext",
     "cna_avatar_body_type_get_content_name_size_ext",
-    "cna_avatar_description_destroy",
     "cna_avatar_expression_init",
     "cna_avatar_renderer_draw_real_ext",
     "cna_avatar_renderer_enable_real_rendering_ext",
@@ -547,7 +544,6 @@
     "cna_guide_simulate_message_box_click_ext",
     "cna_host_changed_event_info_init",
     "cna_invite_accepted_event_info_init",
-    "cna_leaderboard_entry_destroy",
     "cna_leaderboard_entry_equals",
     "cna_leaderboard_identity_init",
     "cna_leaderboard_reader_begin_page_down",
