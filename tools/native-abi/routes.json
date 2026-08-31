@@ -4410,6 +4410,66 @@
         "symbol": "cna_gpu_timer_poll"
       },
       {
+        "java": "hdrDisplayOutputCreate",
+        "symbol": "cna_hdr_display_output_create"
+      },
+      {
+        "java": "hdrDisplayOutputDecodePq",
+        "symbol": "cna_hdr_display_output_decode_pq"
+      },
+      {
+        "java": "hdrDisplayOutputDestroy",
+        "symbol": "cna_hdr_display_output_destroy"
+      },
+      {
+        "java": "hdrDisplayOutputDraw",
+        "symbol": "cna_hdr_display_output_draw"
+      },
+      {
+        "java": "hdrDisplayOutputEncode",
+        "symbol": "cna_hdr_display_output_encode"
+      },
+      {
+        "java": "hdrDisplayOutputEncodePq",
+        "symbol": "cna_hdr_display_output_encode_pq"
+      },
+      {
+        "java": "hdrDisplayOutputGetColorSpace",
+        "symbol": "cna_hdr_display_output_get_color_space"
+      },
+      {
+        "java": "hdrDisplayOutputGetPaperWhiteNits",
+        "symbol": "cna_hdr_display_output_get_paper_white_nits"
+      },
+      {
+        "java": "hdrDisplayOutputGetPeakNits",
+        "symbol": "cna_hdr_display_output_get_peak_nits"
+      },
+      {
+        "java": "hdrDisplayOutputIsSupported",
+        "symbol": "cna_hdr_display_output_is_supported"
+      },
+      {
+        "java": "hdrDisplayOutputRec709ToRec2020",
+        "symbol": "cna_hdr_display_output_rec709_to_rec2020"
+      },
+      {
+        "java": "hdrDisplayOutputRollOff",
+        "symbol": "cna_hdr_display_output_roll_off"
+      },
+      {
+        "java": "hdrDisplayOutputSetColorSpace",
+        "symbol": "cna_hdr_display_output_set_color_space"
+      },
+      {
+        "java": "hdrDisplayOutputSetPaperWhiteNits",
+        "symbol": "cna_hdr_display_output_set_paper_white_nits"
+      },
+      {
+        "java": "hdrDisplayOutputSetPeakNits",
+        "symbol": "cna_hdr_display_output_set_peak_nits"
+      },
+      {
         "java": "heightFogPassCreate",
         "symbol": "cna_height_fog_pass_create"
       },
@@ -5238,6 +5298,30 @@
         ]
       },
       {
+        "java": "renderTargetPoolAcquire",
+        "symbol": "cna_render_target_pool_acquire"
+      },
+      {
+        "java": "renderTargetPoolCreate",
+        "symbol": "cna_render_target_pool_create"
+      },
+      {
+        "java": "renderTargetPoolDestroy",
+        "symbol": "cna_render_target_pool_destroy"
+      },
+      {
+        "java": "renderTargetPoolGetEstimatedBytes",
+        "symbol": "cna_render_target_pool_get_estimated_bytes"
+      },
+      {
+        "java": "renderTargetPoolGetTargetCount",
+        "symbol": "cna_render_target_pool_get_target_count"
+      },
+      {
+        "java": "renderTargetPoolReset",
+        "symbol": "cna_render_target_pool_reset"
+      },
+      {
         "java": "shadowMapApplyCaster",
         "symbol": "cna_shadow_map_apply_caster"
       },
@@ -5308,6 +5392,38 @@
       {
         "java": "shadowMapSizeForQuality",
         "symbol": "cna_shadow_map_size_for_quality"
+      },
+      {
+        "java": "spatialUpscalePassCreate",
+        "symbol": "cna_spatial_upscale_pass_create"
+      },
+      {
+        "java": "spatialUpscalePassDestroy",
+        "symbol": "cna_spatial_upscale_pass_destroy"
+      },
+      {
+        "java": "spatialUpscalePassDraw",
+        "symbol": "cna_spatial_upscale_pass_draw"
+      },
+      {
+        "java": "spatialUpscalePassGetEdgeAdaptive",
+        "symbol": "cna_spatial_upscale_pass_get_edge_adaptive"
+      },
+      {
+        "java": "spatialUpscalePassGetSharpness",
+        "symbol": "cna_spatial_upscale_pass_get_sharpness"
+      },
+      {
+        "java": "spatialUpscalePassIsIdentityScale",
+        "symbol": "cna_spatial_upscale_pass_is_identity_scale"
+      },
+      {
+        "java": "spatialUpscalePassSetEdgeAdaptive",
+        "symbol": "cna_spatial_upscale_pass_set_edge_adaptive"
+      },
+      {
+        "java": "spatialUpscalePassSetSharpness",
+        "symbol": "cna_spatial_upscale_pass_set_sharpness"
       },
       {
         "java": "spotLightExtInit",
@@ -5564,6 +5680,50 @@
       {
         "java": "volumetricFogPassSetRange",
         "symbol": "cna_volumetric_fog_pass_set_range"
+      },
+      {
+        "java": "weightedBlendedTransparencyBegin",
+        "symbol": "cna_weighted_blended_transparency_begin"
+      },
+      {
+        "java": "weightedBlendedTransparencyCopyAccumulationGlsl",
+        "symbol": "cna_weighted_blended_transparency_copy_accumulation_glsl"
+      },
+      {
+        "java": "weightedBlendedTransparencyCopyUnsupportedReason",
+        "symbol": "cna_weighted_blended_transparency_copy_unsupported_reason"
+      },
+      {
+        "java": "weightedBlendedTransparencyCreate",
+        "symbol": "cna_weighted_blended_transparency_create"
+      },
+      {
+        "java": "weightedBlendedTransparencyDestroy",
+        "symbol": "cna_weighted_blended_transparency_destroy"
+      },
+      {
+        "java": "weightedBlendedTransparencyEnd",
+        "symbol": "cna_weighted_blended_transparency_end"
+      },
+      {
+        "java": "weightedBlendedTransparencyIsAccumulating",
+        "symbol": "cna_weighted_blended_transparency_is_accumulating"
+      },
+      {
+        "java": "weightedBlendedTransparencyIsSupported",
+        "symbol": "cna_weighted_blended_transparency_is_supported"
+      },
+      {
+        "java": "weightedBlendedTransparencyResize",
+        "symbol": "cna_weighted_blended_transparency_resize"
+      },
+      {
+        "java": "weightedBlendedTransparencyResolve",
+        "symbol": "cna_weighted_blended_transparency_resolve"
+      },
+      {
+        "java": "weightedBlendedTransparencyWeight",
+        "symbol": "cna_weighted_blended_transparency_weight"
       }
     ]
   }

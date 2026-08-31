@@ -2415,6 +2415,109 @@ public final class NativeEngineLayerRoutes {
     public static native int gpuTimerPoll(long timer, boolean[] outCollected);
 
     /**
+     * cna_hdr_display_output_create (engine_layer.h).
+     */
+    public static native int hdrDisplayOutputCreate(long graphicsDevice, long[] outOutput);
+
+    /**
+     * cna_hdr_display_output_decode_pq (engine_layer.h).
+     */
+    public static native int hdrDisplayOutputDecodePq(float encoded, float[] outNits);
+
+    /**
+     * cna_hdr_display_output_destroy (engine_layer.h).
+     */
+    public static native int hdrDisplayOutputDestroy(long output);
+
+    /**
+     * cna_hdr_display_output_draw (engine_layer.h).
+     */
+    public static native int hdrDisplayOutputDraw(long output, long source, long destination, int width, int height);
+
+    /**
+     * cna_hdr_display_output_encode (engine_layer.h).
+     *
+     * <p>sceneLinearFloating carries CNA_Vector3 in this order:
+     * <ol start="0">
+     *   <li>{@code x} (float)</li>
+     *   <li>{@code y} (float)</li>
+     *   <li>{@code z} (float)</li>
+     * </ol>
+     *
+     * <p>outColorFloating carries CNA_Vector3 in this order:
+     * <ol start="0">
+     *   <li>{@code x} (float)</li>
+     *   <li>{@code y} (float)</li>
+     *   <li>{@code z} (float)</li>
+     * </ol>
+     */
+    public static native int hdrDisplayOutputEncode(int space, float[] sceneLinearFloating, float paperWhiteNits, float peakNits, float[] outColorFloating);
+
+    /**
+     * cna_hdr_display_output_encode_pq (engine_layer.h).
+     */
+    public static native int hdrDisplayOutputEncodePq(float nits, float[] outEncoded);
+
+    /**
+     * cna_hdr_display_output_get_color_space (engine_layer.h).
+     */
+    public static native int hdrDisplayOutputGetColorSpace(long output, int[] outSpace);
+
+    /**
+     * cna_hdr_display_output_get_paper_white_nits (engine_layer.h).
+     */
+    public static native int hdrDisplayOutputGetPaperWhiteNits(long output, float[] outNits);
+
+    /**
+     * cna_hdr_display_output_get_peak_nits (engine_layer.h).
+     */
+    public static native int hdrDisplayOutputGetPeakNits(long output, float[] outNits);
+
+    /**
+     * cna_hdr_display_output_is_supported (engine_layer.h).
+     */
+    public static native int hdrDisplayOutputIsSupported(long output, boolean[] outSupported);
+
+    /**
+     * cna_hdr_display_output_rec709_to_rec2020 (engine_layer.h).
+     *
+     * <p>colorFloating carries CNA_Vector3 in this order:
+     * <ol start="0">
+     *   <li>{@code x} (float)</li>
+     *   <li>{@code y} (float)</li>
+     *   <li>{@code z} (float)</li>
+     * </ol>
+     *
+     * <p>outColorFloating carries CNA_Vector3 in this order:
+     * <ol start="0">
+     *   <li>{@code x} (float)</li>
+     *   <li>{@code y} (float)</li>
+     *   <li>{@code z} (float)</li>
+     * </ol>
+     */
+    public static native int hdrDisplayOutputRec709ToRec2020(float[] colorFloating, float[] outColorFloating);
+
+    /**
+     * cna_hdr_display_output_roll_off (engine_layer.h).
+     */
+    public static native int hdrDisplayOutputRollOff(float nits, float peakNits, float[] outNits);
+
+    /**
+     * cna_hdr_display_output_set_color_space (engine_layer.h).
+     */
+    public static native int hdrDisplayOutputSetColorSpace(long output, int value);
+
+    /**
+     * cna_hdr_display_output_set_paper_white_nits (engine_layer.h).
+     */
+    public static native int hdrDisplayOutputSetPaperWhiteNits(long output, float value);
+
+    /**
+     * cna_hdr_display_output_set_peak_nits (engine_layer.h).
+     */
+    public static native int hdrDisplayOutputSetPeakNits(long output, float value);
+
+    /**
      * cna_height_fog_pass_create (engine_layer.h).
      */
     public static native int heightFogPassCreate(long graphicsDevice, long[] outPass);
@@ -4336,6 +4439,36 @@ public final class NativeEngineLayerRoutes {
     public static native int renderPipelineSettingsExtNormalize(byte[] settingsBytes, long[] settingsIntegral, float[] settingsFloating);
 
     /**
+     * cna_render_target_pool_acquire (engine_layer.h).
+     */
+    public static native int renderTargetPoolAcquire(long pool, int width, int height, int format, int depthFormat, int slot, long[] outRenderTarget);
+
+    /**
+     * cna_render_target_pool_create (engine_layer.h).
+     */
+    public static native int renderTargetPoolCreate(long graphicsDevice, long[] outPool);
+
+    /**
+     * cna_render_target_pool_destroy (engine_layer.h).
+     */
+    public static native int renderTargetPoolDestroy(long pool);
+
+    /**
+     * cna_render_target_pool_get_estimated_bytes (engine_layer.h).
+     */
+    public static native int renderTargetPoolGetEstimatedBytes(long pool, long[] outBytes);
+
+    /**
+     * cna_render_target_pool_get_target_count (engine_layer.h).
+     */
+    public static native int renderTargetPoolGetTargetCount(long pool, long[] outTargetCount);
+
+    /**
+     * cna_render_target_pool_reset (engine_layer.h).
+     */
+    public static native int renderTargetPoolReset(long pool);
+
+    /**
      * cna_shadow_map_apply_caster (engine_layer.h).
      */
     public static native int shadowMapApplyCaster(long shadowMap);
@@ -4580,6 +4713,46 @@ public final class NativeEngineLayerRoutes {
      * cna_shadow_map_size_for_quality (engine_layer.h).
      */
     public static native int shadowMapSizeForQuality(int quality, int[] outSize);
+
+    /**
+     * cna_spatial_upscale_pass_create (engine_layer.h).
+     */
+    public static native int spatialUpscalePassCreate(long graphicsDevice, long[] outPass);
+
+    /**
+     * cna_spatial_upscale_pass_destroy (engine_layer.h).
+     */
+    public static native int spatialUpscalePassDestroy(long pass);
+
+    /**
+     * cna_spatial_upscale_pass_draw (engine_layer.h).
+     */
+    public static native int spatialUpscalePassDraw(long pass, long source, int sourceWidth, int sourceHeight, int targetWidth, int targetHeight);
+
+    /**
+     * cna_spatial_upscale_pass_get_edge_adaptive (engine_layer.h).
+     */
+    public static native int spatialUpscalePassGetEdgeAdaptive(long pass, boolean[] outValue);
+
+    /**
+     * cna_spatial_upscale_pass_get_sharpness (engine_layer.h).
+     */
+    public static native int spatialUpscalePassGetSharpness(long pass, float[] outValue);
+
+    /**
+     * cna_spatial_upscale_pass_is_identity_scale (engine_layer.h).
+     */
+    public static native int spatialUpscalePassIsIdentityScale(int sourceWidth, int sourceHeight, int targetWidth, int targetHeight, boolean[] outIdentity);
+
+    /**
+     * cna_spatial_upscale_pass_set_edge_adaptive (engine_layer.h).
+     */
+    public static native int spatialUpscalePassSetEdgeAdaptive(long pass, boolean value);
+
+    /**
+     * cna_spatial_upscale_pass_set_sharpness (engine_layer.h).
+     */
+    public static native int spatialUpscalePassSetSharpness(long pass, float value);
 
     /**
      * cna_spot_light_ext_init (engine_layer.h).
@@ -5097,4 +5270,59 @@ public final class NativeEngineLayerRoutes {
      * cna_volumetric_fog_pass_set_range (engine_layer.h).
      */
     public static native int volumetricFogPassSetRange(long pass, float value);
+
+    /**
+     * cna_weighted_blended_transparency_begin (engine_layer.h).
+     */
+    public static native int weightedBlendedTransparencyBegin(long transparency, float farPlane);
+
+    /**
+     * cna_weighted_blended_transparency_copy_accumulation_glsl (engine_layer.h).
+     */
+    public static native int weightedBlendedTransparencyCopyAccumulationGlsl(byte[] destination, long[] outBytes);
+
+    /**
+     * cna_weighted_blended_transparency_copy_unsupported_reason (engine_layer.h).
+     */
+    public static native int weightedBlendedTransparencyCopyUnsupportedReason(long transparency, byte[] destination, long[] outBytes);
+
+    /**
+     * cna_weighted_blended_transparency_create (engine_layer.h).
+     */
+    public static native int weightedBlendedTransparencyCreate(long graphicsDevice, int width, int height, long[] outTransparency);
+
+    /**
+     * cna_weighted_blended_transparency_destroy (engine_layer.h).
+     */
+    public static native int weightedBlendedTransparencyDestroy(long transparency);
+
+    /**
+     * cna_weighted_blended_transparency_end (engine_layer.h).
+     */
+    public static native int weightedBlendedTransparencyEnd(long transparency);
+
+    /**
+     * cna_weighted_blended_transparency_is_accumulating (engine_layer.h).
+     */
+    public static native int weightedBlendedTransparencyIsAccumulating(long transparency, boolean[] outAccumulating);
+
+    /**
+     * cna_weighted_blended_transparency_is_supported (engine_layer.h).
+     */
+    public static native int weightedBlendedTransparencyIsSupported(long transparency, boolean[] outSupported);
+
+    /**
+     * cna_weighted_blended_transparency_resize (engine_layer.h).
+     */
+    public static native int weightedBlendedTransparencyResize(long transparency, int width, int height);
+
+    /**
+     * cna_weighted_blended_transparency_resolve (engine_layer.h).
+     */
+    public static native int weightedBlendedTransparencyResolve(long transparency, int width, int height);
+
+    /**
+     * cna_weighted_blended_transparency_weight (engine_layer.h).
+     */
+    public static native int weightedBlendedTransparencyWeight(float viewDepth, float alpha, float farPlane, float[] outWeight);
 }

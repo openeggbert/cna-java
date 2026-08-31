@@ -12154,6 +12154,162 @@
       ]
     },
     {
+      "name": "cna_hdr_display_output_create",
+      "header": "engine_layer.h",
+      "ownership": "borrows the graphics device; returns an owned output handle",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_Handle",
+        "CNA_HdrDisplayOutputHandle*"
+      ]
+    },
+    {
+      "name": "cna_hdr_display_output_decode_pq",
+      "header": "engine_layer.h",
+      "ownership": "no handle; a pure function of its arguments",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "float",
+        "float*"
+      ]
+    },
+    {
+      "name": "cna_hdr_display_output_destroy",
+      "header": "engine_layer.h",
+      "ownership": "releases the owned output handle",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_HdrDisplayOutputHandle"
+      ]
+    },
+    {
+      "name": "cna_hdr_display_output_draw",
+      "header": "engine_layer.h",
+      "ownership": "borrows the output and the caller's textures for the duration of the call",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_HdrDisplayOutputHandle",
+        "CNA_Handle",
+        "CNA_Handle",
+        "int32_t",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "cna_hdr_display_output_encode",
+      "header": "engine_layer.h",
+      "ownership": "no handle; a pure function of its arguments",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_DisplayColorSpace",
+        "const CNA_Vector3*",
+        "float",
+        "float",
+        "CNA_Vector3*"
+      ]
+    },
+    {
+      "name": "cna_hdr_display_output_encode_pq",
+      "header": "engine_layer.h",
+      "ownership": "no handle; a pure function of its arguments",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "float",
+        "float*"
+      ]
+    },
+    {
+      "name": "cna_hdr_display_output_get_color_space",
+      "header": "engine_layer.h",
+      "ownership": "borrows the output",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_HdrDisplayOutputHandle",
+        "CNA_DisplayColorSpace*"
+      ]
+    },
+    {
+      "name": "cna_hdr_display_output_get_paper_white_nits",
+      "header": "engine_layer.h",
+      "ownership": "borrows the output",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_HdrDisplayOutputHandle",
+        "float*"
+      ]
+    },
+    {
+      "name": "cna_hdr_display_output_get_peak_nits",
+      "header": "engine_layer.h",
+      "ownership": "borrows the output",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_HdrDisplayOutputHandle",
+        "float*"
+      ]
+    },
+    {
+      "name": "cna_hdr_display_output_is_supported",
+      "header": "engine_layer.h",
+      "ownership": "borrows the output",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_HdrDisplayOutputHandle",
+        "CNA_Bool*"
+      ]
+    },
+    {
+      "name": "cna_hdr_display_output_rec709_to_rec2020",
+      "header": "engine_layer.h",
+      "ownership": "no handle; a pure function of its arguments",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "const CNA_Vector3*",
+        "CNA_Vector3*"
+      ]
+    },
+    {
+      "name": "cna_hdr_display_output_roll_off",
+      "header": "engine_layer.h",
+      "ownership": "no handle; a pure function of its arguments",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "float",
+        "float",
+        "float*"
+      ]
+    },
+    {
+      "name": "cna_hdr_display_output_set_color_space",
+      "header": "engine_layer.h",
+      "ownership": "borrows the output",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_HdrDisplayOutputHandle",
+        "CNA_DisplayColorSpace"
+      ]
+    },
+    {
+      "name": "cna_hdr_display_output_set_paper_white_nits",
+      "header": "engine_layer.h",
+      "ownership": "borrows the output",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_HdrDisplayOutputHandle",
+        "float"
+      ]
+    },
+    {
+      "name": "cna_hdr_display_output_set_peak_nits",
+      "header": "engine_layer.h",
+      "ownership": "borrows the output",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_HdrDisplayOutputHandle",
+        "float"
+      ]
+    },
+    {
       "name": "cna_height_fog_pass_create",
       "header": "engine_layer.h",
       "ownership": "borrows the graphics device; returns an owned pass handle",
@@ -18831,6 +18987,69 @@
       ]
     },
     {
+      "name": "cna_render_target_pool_acquire",
+      "header": "engine_layer.h",
+      "ownership": "borrows the pool; returns a counted borrow of a pool-owned target that the caller releases with cna_render_target_destroy",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_RenderTargetPoolHandle",
+        "int32_t",
+        "int32_t",
+        "CNA_SurfaceFormat",
+        "CNA_DepthFormat",
+        "int32_t",
+        "CNA_Handle*"
+      ]
+    },
+    {
+      "name": "cna_render_target_pool_create",
+      "header": "engine_layer.h",
+      "ownership": "borrows the graphics device; returns an owned pool handle",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_Handle",
+        "CNA_RenderTargetPoolHandle*"
+      ]
+    },
+    {
+      "name": "cna_render_target_pool_destroy",
+      "header": "engine_layer.h",
+      "ownership": "releases the owned pool handle and its targets; refused while a borrowed view is outstanding",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_RenderTargetPoolHandle"
+      ]
+    },
+    {
+      "name": "cna_render_target_pool_get_estimated_bytes",
+      "header": "engine_layer.h",
+      "ownership": "borrows the pool",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_RenderTargetPoolHandle",
+        "uint64_t*"
+      ]
+    },
+    {
+      "name": "cna_render_target_pool_get_target_count",
+      "header": "engine_layer.h",
+      "ownership": "borrows the pool",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_RenderTargetPoolHandle",
+        "uint64_t*"
+      ]
+    },
+    {
+      "name": "cna_render_target_pool_reset",
+      "header": "engine_layer.h",
+      "ownership": "borrows the pool",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_RenderTargetPoolHandle"
+      ]
+    },
+    {
       "name": "cna_sensors_copy_name_at",
       "header": "input_devices.h",
       "ownership": "borrows game; caller buffer",
@@ -20035,6 +20254,92 @@
       "returnType": "CNA_Result",
       "parameters": [
         "CNA_Handle",
+        "float"
+      ]
+    },
+    {
+      "name": "cna_spatial_upscale_pass_create",
+      "header": "engine_layer.h",
+      "ownership": "borrows the graphics device; returns an owned upscale-pass handle",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_Handle",
+        "CNA_SpatialUpscalePassHandle*"
+      ]
+    },
+    {
+      "name": "cna_spatial_upscale_pass_destroy",
+      "header": "engine_layer.h",
+      "ownership": "releases the owned upscale-pass handle",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_SpatialUpscalePassHandle"
+      ]
+    },
+    {
+      "name": "cna_spatial_upscale_pass_draw",
+      "header": "engine_layer.h",
+      "ownership": "borrows the pass and the caller's texture for the duration of the call",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_SpatialUpscalePassHandle",
+        "CNA_Handle",
+        "int32_t",
+        "int32_t",
+        "int32_t",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "cna_spatial_upscale_pass_get_edge_adaptive",
+      "header": "engine_layer.h",
+      "ownership": "borrows the pass",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_SpatialUpscalePassHandle",
+        "CNA_Bool*"
+      ]
+    },
+    {
+      "name": "cna_spatial_upscale_pass_get_sharpness",
+      "header": "engine_layer.h",
+      "ownership": "borrows the pass",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_SpatialUpscalePassHandle",
+        "float*"
+      ]
+    },
+    {
+      "name": "cna_spatial_upscale_pass_is_identity_scale",
+      "header": "engine_layer.h",
+      "ownership": "no handle; a pure function of its arguments",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "int32_t",
+        "int32_t",
+        "int32_t",
+        "int32_t",
+        "CNA_Bool*"
+      ]
+    },
+    {
+      "name": "cna_spatial_upscale_pass_set_edge_adaptive",
+      "header": "engine_layer.h",
+      "ownership": "borrows the pass",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_SpatialUpscalePassHandle",
+        "CNA_Bool"
+      ]
+    },
+    {
+      "name": "cna_spatial_upscale_pass_set_sharpness",
+      "header": "engine_layer.h",
+      "ownership": "borrows the pass",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_SpatialUpscalePassHandle",
         "float"
       ]
     },
@@ -22359,6 +22664,123 @@
       "parameters": [
         "CNA_Handle",
         "CNA_Bool*"
+      ]
+    },
+    {
+      "name": "cna_weighted_blended_transparency_begin",
+      "header": "engine_layer.h",
+      "ownership": "borrows the resolve",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_WeightedBlendedTransparencyHandle",
+        "float"
+      ]
+    },
+    {
+      "name": "cna_weighted_blended_transparency_copy_accumulation_glsl",
+      "header": "engine_layer.h",
+      "ownership": "no handle; a pure function of its arguments",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "char*",
+        "uint64_t",
+        "uint64_t*"
+      ]
+    },
+    {
+      "name": "cna_weighted_blended_transparency_copy_unsupported_reason",
+      "header": "engine_layer.h",
+      "ownership": "borrows the resolve; fills the caller's byte buffer",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_WeightedBlendedTransparencyHandle",
+        "char*",
+        "uint64_t",
+        "uint64_t*"
+      ]
+    },
+    {
+      "name": "cna_weighted_blended_transparency_create",
+      "header": "engine_layer.h",
+      "ownership": "borrows the graphics device; returns an owned transparency handle",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_Handle",
+        "int32_t",
+        "int32_t",
+        "CNA_WeightedBlendedTransparencyHandle*"
+      ]
+    },
+    {
+      "name": "cna_weighted_blended_transparency_destroy",
+      "header": "engine_layer.h",
+      "ownership": "releases the owned transparency handle and its targets",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_WeightedBlendedTransparencyHandle"
+      ]
+    },
+    {
+      "name": "cna_weighted_blended_transparency_end",
+      "header": "engine_layer.h",
+      "ownership": "borrows the resolve",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_WeightedBlendedTransparencyHandle"
+      ]
+    },
+    {
+      "name": "cna_weighted_blended_transparency_is_accumulating",
+      "header": "engine_layer.h",
+      "ownership": "borrows the resolve",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_WeightedBlendedTransparencyHandle",
+        "CNA_Bool*"
+      ]
+    },
+    {
+      "name": "cna_weighted_blended_transparency_is_supported",
+      "header": "engine_layer.h",
+      "ownership": "borrows the resolve",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_WeightedBlendedTransparencyHandle",
+        "CNA_Bool*"
+      ]
+    },
+    {
+      "name": "cna_weighted_blended_transparency_resize",
+      "header": "engine_layer.h",
+      "ownership": "borrows the resolve",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_WeightedBlendedTransparencyHandle",
+        "int32_t",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "cna_weighted_blended_transparency_resolve",
+      "header": "engine_layer.h",
+      "ownership": "borrows the resolve",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_WeightedBlendedTransparencyHandle",
+        "int32_t",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "cna_weighted_blended_transparency_weight",
+      "header": "engine_layer.h",
+      "ownership": "no handle; a pure function of its arguments",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "float",
+        "float",
+        "float",
+        "float*"
       ]
     }
   ]
