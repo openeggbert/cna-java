@@ -100,6 +100,9 @@ Java_org_openeggbert_cna_internal_generated_NativeInputExtensionRoutes_gamepadGe
 {
     (void)environment;
     (void)declaring_class;
+    if (out_accelerationFloating == NULL) {
+        return (jint)CNA_RESULT_INVALID_ARGUMENT;
+    }
     CNA_Vector3 out_acceleration_value;
     memset(&out_acceleration_value, 0, sizeof out_acceleration_value);
     CNA_Bool out_available_value = 0;
@@ -190,6 +193,9 @@ Java_org_openeggbert_cna_internal_generated_NativeInputExtensionRoutes_gamepadGe
 {
     (void)environment;
     (void)declaring_class;
+    if (out_gyroFloating == NULL) {
+        return (jint)CNA_RESULT_INVALID_ARGUMENT;
+    }
     CNA_Vector3 out_gyro_value;
     memset(&out_gyro_value, 0, sizeof out_gyro_value);
     CNA_Bool out_available_value = 0;
@@ -348,6 +354,9 @@ Java_org_openeggbert_cna_internal_generated_NativeInputExtensionRoutes_gamepadGe
 {
     (void)environment;
     (void)declaring_class;
+    if (out_fingerBytes == NULL || out_fingerIntegral == NULL || out_fingerFloating == NULL) {
+        return (jint)CNA_RESULT_INVALID_ARGUMENT;
+    }
     CNA_GamePadTouchpadFinger out_finger_value;
     memset(&out_finger_value, 0, sizeof out_finger_value);
     CNA_Bool out_available_value = 0;
@@ -462,6 +471,9 @@ Java_org_openeggbert_cna_internal_generated_NativeInputExtensionRoutes_hapticDev
 {
     (void)environment;
     (void)declaring_class;
+    if (effectIntegral == NULL) {
+        return (jint)CNA_RESULT_INVALID_ARGUMENT;
+    }
     CNA_HapticEffect effect_value;
     memset(&effect_value, 0, sizeof effect_value);
     effect_value.struct_size = (uint32_t)(sizeof effect_value);
@@ -568,6 +580,9 @@ Java_org_openeggbert_cna_internal_generated_NativeInputExtensionRoutes_hapticDev
 {
     (void)environment;
     (void)declaring_class;
+    if (out_capabilitiesBytes == NULL || out_capabilitiesIntegral == NULL) {
+        return (jint)CNA_RESULT_INVALID_ARGUMENT;
+    }
     CNA_HapticCapabilities out_capabilities_value;
     memset(&out_capabilities_value, 0, sizeof out_capabilities_value);
     out_capabilities_value.struct_size = (uint32_t)(sizeof out_capabilities_value);
@@ -618,6 +633,9 @@ Java_org_openeggbert_cna_internal_generated_NativeInputExtensionRoutes_hapticDev
 {
     (void)environment;
     (void)declaring_class;
+    if (effectIntegral == NULL) {
+        return (jint)CNA_RESULT_INVALID_ARGUMENT;
+    }
     CNA_HapticEffect effect_value;
     memset(&effect_value, 0, sizeof effect_value);
     effect_value.struct_size = (uint32_t)(sizeof effect_value);
@@ -896,6 +914,9 @@ Java_org_openeggbert_cna_internal_generated_NativeInputExtensionRoutes_hapticDev
 {
     (void)environment;
     (void)declaring_class;
+    if (effectIntegral == NULL) {
+        return (jint)CNA_RESULT_INVALID_ARGUMENT;
+    }
     CNA_HapticEffect effect_value;
     memset(&effect_value, 0, sizeof effect_value);
     effect_value.struct_size = (uint32_t)(sizeof effect_value);
@@ -1462,6 +1483,9 @@ Java_org_openeggbert_cna_internal_generated_NativeInputExtensionRoutes_joysticks
 {
     (void)environment;
     (void)declaring_class;
+    if (out_capabilitiesBytes == NULL || out_capabilitiesIntegral == NULL) {
+        return (jint)CNA_RESULT_INVALID_ARGUMENT;
+    }
     CNA_JoystickCapabilities out_capabilities_value;
     memset(&out_capabilities_value, 0, sizeof out_capabilities_value);
     out_capabilities_value.struct_size = (uint32_t)(sizeof out_capabilities_value);
@@ -1547,6 +1571,9 @@ Java_org_openeggbert_cna_internal_generated_NativeInputExtensionRoutes_joysticks
 {
     (void)environment;
     (void)declaring_class;
+    if (out_infoIntegral == NULL) {
+        return (jint)CNA_RESULT_INVALID_ARGUMENT;
+    }
     CNA_JoystickInfo out_info_value;
     memset(&out_info_value, 0, sizeof out_info_value);
     out_info_value.struct_size = (uint32_t)(sizeof out_info_value);

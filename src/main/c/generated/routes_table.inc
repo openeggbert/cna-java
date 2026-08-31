@@ -52,6 +52,7 @@
     CNA_JNI_ROUTE(cna_area_light_shading_coverage) area_light_shading_coverage;
     CNA_JNI_ROUTE(cna_area_light_shading_lobe_scale_for) area_light_shading_lobe_scale_for;
     CNA_JNI_ROUTE(cna_area_light_shading_quad_of) area_light_shading_quad_of;
+    CNA_JNI_ROUTE(cna_ascii_pass_create) ascii_pass_create;
     CNA_JNI_ROUTE(cna_ascii_post_process_effect_create) ascii_post_process_effect_create;
     CNA_JNI_ROUTE(cna_ascii_post_process_effect_destroy) ascii_post_process_effect_destroy;
     CNA_JNI_ROUTE(cna_ascii_post_process_effect_draw) ascii_post_process_effect_draw;
@@ -710,6 +711,10 @@
     CNA_JNI_ROUTE(cna_frustum_culler_ext_is_sphere_visible) frustum_culler_ext_is_sphere_visible;
     CNA_JNI_ROUTE(cna_frustum_culler_ext_set_camera) frustum_culler_ext_set_camera;
     CNA_JNI_ROUTE(cna_frustum_culler_ext_set_view_projection) frustum_culler_ext_set_view_projection;
+    CNA_JNI_ROUTE(cna_fullscreen_pass_create) fullscreen_pass_create;
+    CNA_JNI_ROUTE(cna_fullscreen_pass_destroy) fullscreen_pass_destroy;
+    CNA_JNI_ROUTE(cna_fullscreen_pass_draw) fullscreen_pass_draw;
+    CNA_JNI_ROUTE(cna_fullscreen_pass_draw_over_current_target) fullscreen_pass_draw_over_current_target;
     CNA_JNI_ROUTE(cna_fxaa_pass_copy_fragment_glsl) fxaa_pass_copy_fragment_glsl;
     CNA_JNI_ROUTE(cna_fxaa_pass_create) fxaa_pass_create;
     CNA_JNI_ROUTE(cna_fxaa_pass_edge_threshold_for_quality) fxaa_pass_edge_threshold_for_quality;

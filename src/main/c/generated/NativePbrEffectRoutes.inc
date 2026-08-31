@@ -76,6 +76,9 @@ Java_org_openeggbert_cna_internal_generated_NativePbrEffectRoutes_pbrEffectGetDi
 {
     (void)environment;
     (void)declaring_class;
+    if (out_valueFloating == NULL) {
+        return (jint)CNA_RESULT_INVALID_ARGUMENT;
+    }
     CNA_Vector3 out_value_value;
     memset(&out_value_value, 0, sizeof out_value_value);
     CNA_Result call_result = cna.pbr_effect_get_diffuse_color((CNA_EffectHandle)effect, &out_value_value);
@@ -114,6 +117,9 @@ Java_org_openeggbert_cna_internal_generated_NativePbrEffectRoutes_pbrEffectGetEm
 {
     (void)environment;
     (void)declaring_class;
+    if (out_valueFloating == NULL) {
+        return (jint)CNA_RESULT_INVALID_ARGUMENT;
+    }
     CNA_Vector3 out_value_value;
     memset(&out_value_value, 0, sizeof out_value_value);
     CNA_Result call_result = cna.pbr_effect_get_emissive_factor((CNA_EffectHandle)effect, &out_value_value);
@@ -232,6 +238,9 @@ Java_org_openeggbert_cna_internal_generated_NativePbrEffectRoutes_pbrEffectGetSp
 {
     (void)environment;
     (void)declaring_class;
+    if (out_valueFloating == NULL) {
+        return (jint)CNA_RESULT_INVALID_ARGUMENT;
+    }
     CNA_Vector3 out_value_value;
     memset(&out_value_value, 0, sizeof out_value_value);
     CNA_Result call_result = cna.pbr_effect_get_specular_color_factor_ext((CNA_EffectHandle)effect, &out_value_value);
@@ -322,6 +331,9 @@ Java_org_openeggbert_cna_internal_generated_NativePbrEffectRoutes_pbrEffectGetTe
 {
     (void)environment;
     (void)declaring_class;
+    if (out_transformFloating == NULL) {
+        return (jint)CNA_RESULT_INVALID_ARGUMENT;
+    }
     CNA_TextureTransformEXT out_transform_value;
     memset(&out_transform_value, 0, sizeof out_transform_value);
     out_transform_value.struct_size = (uint32_t)(sizeof out_transform_value);
@@ -561,6 +573,9 @@ Java_org_openeggbert_cna_internal_generated_NativePbrEffectRoutes_pbrEffectSetTe
 {
     (void)environment;
     (void)declaring_class;
+    if (transformFloating == NULL) {
+        return (jint)CNA_RESULT_INVALID_ARGUMENT;
+    }
     CNA_TextureTransformEXT transform_value;
     memset(&transform_value, 0, sizeof transform_value);
     transform_value.struct_size = (uint32_t)(sizeof transform_value);

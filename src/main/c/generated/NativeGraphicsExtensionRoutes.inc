@@ -38,6 +38,9 @@ Java_org_openeggbert_cna_internal_generated_NativeGraphicsExtensionRoutes_asciiP
 {
     (void)environment;
     (void)declaring_class;
+    if (destination_rectangleIntegral == NULL) {
+        return (jint)CNA_RESULT_INVALID_ARGUMENT;
+    }
     CNA_Rectangle destination_rectangle_value;
     memset(&destination_rectangle_value, 0, sizeof destination_rectangle_value);
     {
@@ -364,6 +367,9 @@ Java_org_openeggbert_cna_internal_generated_NativeGraphicsExtensionRoutes_pbrMat
 {
     (void)environment;
     (void)declaring_class;
+    if (out_materialBytes == NULL || out_materialIntegral == NULL || out_materialFloating == NULL) {
+        return (jint)CNA_RESULT_INVALID_ARGUMENT;
+    }
     CNA_PbrMaterial out_material_value;
     memset(&out_material_value, 0, sizeof out_material_value);
     CNA_Result call_result = cna.pbr_material_init(&out_material_value);
@@ -415,6 +421,9 @@ Java_org_openeggbert_cna_internal_generated_NativeGraphicsExtensionRoutes_render
 {
     (void)environment;
     (void)declaring_class;
+    if (out_settingsIntegral == NULL || out_settingsFloating == NULL) {
+        return (jint)CNA_RESULT_INVALID_ARGUMENT;
+    }
     CNA_RenderPipelineSettings out_settings_value;
     memset(&out_settings_value, 0, sizeof out_settings_value);
     CNA_Result call_result = cna.render_pipeline_settings_init(&out_settings_value);

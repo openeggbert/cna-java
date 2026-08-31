@@ -364,6 +364,11 @@ public final class NativeEngineLayerRoutes {
     public static native int areaLightShadingQuadOf(byte[] lightBytes, long[] lightIntegral, float[] lightFloating, float[] surfaceFloating, float[] outQuadFloating);
 
     /**
+     * cna_ascii_pass_create (engine_layer.h).
+     */
+    public static native int asciiPassCreate(long graphicsDevice, long[] outPass);
+
+    /**
      * cna_atmospheric_sky_copy_model_glsl (engine_layer.h).
      */
     public static native int atmosphericSkyCopyModelGlsl(byte[] destination, long[] outBytes);
@@ -3762,6 +3767,58 @@ public final class NativeEngineLayerRoutes {
      * </ol>
      */
     public static native int frustumCullerExtSetViewProjection(long culler, float[] viewProjectionFloating);
+
+    /**
+     * cna_fullscreen_pass_create (engine_layer.h).
+     */
+    public static native int fullscreenPassCreate(long graphicsDevice, long[] outPass);
+
+    /**
+     * cna_fullscreen_pass_destroy (engine_layer.h).
+     */
+    public static native int fullscreenPassDestroy(long pass);
+
+    /**
+     * cna_fullscreen_pass_draw (engine_layer.h).
+     *
+     * <p>samplerIntegral carries CNA_SamplerState in this order:
+     * <ol start="0">
+     *   <li>{@code address_u} (CNA_TextureAddressMode)</li>
+     *   <li>{@code address_v} (CNA_TextureAddressMode)</li>
+     *   <li>{@code address_w} (CNA_TextureAddressMode)</li>
+     *   <li>{@code filter} (CNA_TextureFilter)</li>
+     *   <li>{@code max_anisotropy} (int32_t)</li>
+     *   <li>{@code max_mip_level} (int32_t)</li>
+     *   <li>{@code reserved} (uint32_t)</li>
+     * </ol>
+     *
+     * <p>samplerFloating carries CNA_SamplerState in this order:
+     * <ol start="0">
+     *   <li>{@code mip_map_level_of_detail_bias} (float)</li>
+     * </ol>
+     */
+    public static native int fullscreenPassDraw(long pass, long source, long destination, long effect, int width, int height, long[] samplerIntegral, float[] samplerFloating);
+
+    /**
+     * cna_fullscreen_pass_draw_over_current_target (engine_layer.h).
+     *
+     * <p>samplerIntegral carries CNA_SamplerState in this order:
+     * <ol start="0">
+     *   <li>{@code address_u} (CNA_TextureAddressMode)</li>
+     *   <li>{@code address_v} (CNA_TextureAddressMode)</li>
+     *   <li>{@code address_w} (CNA_TextureAddressMode)</li>
+     *   <li>{@code filter} (CNA_TextureFilter)</li>
+     *   <li>{@code max_anisotropy} (int32_t)</li>
+     *   <li>{@code max_mip_level} (int32_t)</li>
+     *   <li>{@code reserved} (uint32_t)</li>
+     * </ol>
+     *
+     * <p>samplerFloating carries CNA_SamplerState in this order:
+     * <ol start="0">
+     *   <li>{@code mip_map_level_of_detail_bias} (float)</li>
+     * </ol>
+     */
+    public static native int fullscreenPassDrawOverCurrentTarget(long pass, long source, long effect, int width, int height, long[] samplerIntegral, float[] samplerFloating);
 
     /**
      * cna_fxaa_pass_copy_fragment_glsl (engine_layer.h).

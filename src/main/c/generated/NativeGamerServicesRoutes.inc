@@ -245,6 +245,9 @@ Java_org_openeggbert_cna_internal_generated_NativeGamerServicesRoutes_achievemen
 {
     (void)environment;
     (void)declaring_class;
+    if (out_infoIntegral == NULL) {
+        return (jint)CNA_RESULT_INVALID_ARGUMENT;
+    }
     CNA_AchievementInfo out_info_value;
     memset(&out_info_value, 0, sizeof out_info_value);
     out_info_value.struct_size = (uint32_t)(sizeof out_info_value);
@@ -368,6 +371,9 @@ Java_org_openeggbert_cna_internal_generated_NativeGamerServicesRoutes_avatarAnim
 {
     (void)environment;
     (void)declaring_class;
+    if (out_transformFloating == NULL) {
+        return (jint)CNA_RESULT_INVALID_ARGUMENT;
+    }
     CNA_Matrix out_transform_value;
     memset(&out_transform_value, 0, sizeof out_transform_value);
     CNA_Result call_result = cna.avatar_animation_get_bone_transform_at((CNA_AvatarAnimationHandle)animation, (int32_t)index, &out_transform_value);
@@ -403,6 +409,9 @@ Java_org_openeggbert_cna_internal_generated_NativeGamerServicesRoutes_avatarAnim
 {
     (void)environment;
     (void)declaring_class;
+    if (out_expressionIntegral == NULL) {
+        return (jint)CNA_RESULT_INVALID_ARGUMENT;
+    }
     CNA_AvatarExpression out_expression_value;
     memset(&out_expression_value, 0, sizeof out_expression_value);
     out_expression_value.struct_size = (uint32_t)(sizeof out_expression_value);
@@ -429,6 +438,9 @@ Java_org_openeggbert_cna_internal_generated_NativeGamerServicesRoutes_avatarAnim
 {
     (void)environment;
     (void)declaring_class;
+    if (out_infoBytes == NULL || out_infoIntegral == NULL) {
+        return (jint)CNA_RESULT_INVALID_ARGUMENT;
+    }
     CNA_AvatarAnimationInfo out_info_value;
     memset(&out_info_value, 0, sizeof out_info_value);
     out_info_value.struct_size = (uint32_t)(sizeof out_info_value);
@@ -553,6 +565,9 @@ Java_org_openeggbert_cna_internal_generated_NativeGamerServicesRoutes_avatarAppe
 {
     (void)environment;
     (void)declaring_class;
+    if (out_appearanceIntegral == NULL) {
+        return (jint)CNA_RESULT_INVALID_ARGUMENT;
+    }
     CNA_AvatarAppearanceEXT out_appearance_value;
     memset(&out_appearance_value, 0, sizeof out_appearance_value);
     out_appearance_value.struct_size = (uint32_t)(sizeof out_appearance_value);
@@ -763,6 +778,9 @@ Java_org_openeggbert_cna_internal_generated_NativeGamerServicesRoutes_avatarDesc
 {
     (void)environment;
     (void)declaring_class;
+    if (out_infoBytes == NULL || out_infoIntegral == NULL || out_infoFloating == NULL) {
+        return (jint)CNA_RESULT_INVALID_ARGUMENT;
+    }
     CNA_AvatarDescriptionInfo out_info_value;
     memset(&out_info_value, 0, sizeof out_info_value);
     out_info_value.struct_size = (uint32_t)(sizeof out_info_value);
@@ -841,6 +859,9 @@ Java_org_openeggbert_cna_internal_generated_NativeGamerServicesRoutes_avatarRend
 {
     (void)environment;
     (void)declaring_class;
+    if (expressionIntegral == NULL) {
+        return (jint)CNA_RESULT_INVALID_ARGUMENT;
+    }
     jsize bones_count = (*environment)->GetArrayLength(environment, bonesFloating) / 16;
     if ((*environment)->GetArrayLength(environment, bonesFloating) != bones_count * 16) {
         return (jint)CNA_RESULT_INVALID_ARGUMENT;
@@ -903,6 +924,9 @@ Java_org_openeggbert_cna_internal_generated_NativeGamerServicesRoutes_avatarRend
 {
     (void)environment;
     (void)declaring_class;
+    if (out_transformFloating == NULL) {
+        return (jint)CNA_RESULT_INVALID_ARGUMENT;
+    }
     CNA_Matrix out_transform_value;
     memset(&out_transform_value, 0, sizeof out_transform_value);
     CNA_Result call_result = cna.avatar_renderer_get_bind_pose_at((CNA_AvatarRendererHandle)renderer, (int32_t)index, &out_transform_value);
@@ -938,6 +962,9 @@ Java_org_openeggbert_cna_internal_generated_NativeGamerServicesRoutes_avatarRend
 {
     (void)environment;
     (void)declaring_class;
+    if (out_infoBytes == NULL || out_infoIntegral == NULL) {
+        return (jint)CNA_RESULT_INVALID_ARGUMENT;
+    }
     CNA_AvatarRendererInfo out_info_value;
     memset(&out_info_value, 0, sizeof out_info_value);
     out_info_value.struct_size = (uint32_t)(sizeof out_info_value);
@@ -969,6 +996,15 @@ Java_org_openeggbert_cna_internal_generated_NativeGamerServicesRoutes_avatarRend
 {
     (void)environment;
     (void)declaring_class;
+    if (out_light_colorFloating == NULL) {
+        return (jint)CNA_RESULT_INVALID_ARGUMENT;
+    }
+    if (out_light_directionFloating == NULL) {
+        return (jint)CNA_RESULT_INVALID_ARGUMENT;
+    }
+    if (out_ambient_light_colorFloating == NULL) {
+        return (jint)CNA_RESULT_INVALID_ARGUMENT;
+    }
     CNA_Vector3 out_light_color_value;
     memset(&out_light_color_value, 0, sizeof out_light_color_value);
     CNA_Vector3 out_light_direction_value;
@@ -1027,6 +1063,15 @@ Java_org_openeggbert_cna_internal_generated_NativeGamerServicesRoutes_avatarRend
 {
     (void)environment;
     (void)declaring_class;
+    if (out_worldFloating == NULL) {
+        return (jint)CNA_RESULT_INVALID_ARGUMENT;
+    }
+    if (out_viewFloating == NULL) {
+        return (jint)CNA_RESULT_INVALID_ARGUMENT;
+    }
+    if (out_projectionFloating == NULL) {
+        return (jint)CNA_RESULT_INVALID_ARGUMENT;
+    }
     CNA_Matrix out_world_value;
     memset(&out_world_value, 0, sizeof out_world_value);
     CNA_Matrix out_view_value;
@@ -1108,6 +1153,9 @@ Java_org_openeggbert_cna_internal_generated_NativeGamerServicesRoutes_avatarRend
 {
     (void)environment;
     (void)declaring_class;
+    if (appearanceIntegral == NULL) {
+        return (jint)CNA_RESULT_INVALID_ARGUMENT;
+    }
     CNA_AvatarAppearanceEXT appearance_value;
     memset(&appearance_value, 0, sizeof appearance_value);
     appearance_value.struct_size = (uint32_t)(sizeof appearance_value);
@@ -1146,6 +1194,15 @@ Java_org_openeggbert_cna_internal_generated_NativeGamerServicesRoutes_avatarRend
 {
     (void)environment;
     (void)declaring_class;
+    if (light_colorFloating == NULL) {
+        return (jint)CNA_RESULT_INVALID_ARGUMENT;
+    }
+    if (light_directionFloating == NULL) {
+        return (jint)CNA_RESULT_INVALID_ARGUMENT;
+    }
+    if (ambient_light_colorFloating == NULL) {
+        return (jint)CNA_RESULT_INVALID_ARGUMENT;
+    }
     CNA_Vector3 light_color_value;
     memset(&light_color_value, 0, sizeof light_color_value);
     {
@@ -1183,6 +1240,15 @@ Java_org_openeggbert_cna_internal_generated_NativeGamerServicesRoutes_avatarRend
 {
     (void)environment;
     (void)declaring_class;
+    if (worldFloating == NULL) {
+        return (jint)CNA_RESULT_INVALID_ARGUMENT;
+    }
+    if (viewFloating == NULL) {
+        return (jint)CNA_RESULT_INVALID_ARGUMENT;
+    }
+    if (projectionFloating == NULL) {
+        return (jint)CNA_RESULT_INVALID_ARGUMENT;
+    }
     CNA_Matrix world_value;
     memset(&world_value, 0, sizeof world_value);
     {
@@ -1297,6 +1363,9 @@ Java_org_openeggbert_cna_internal_generated_NativeGamerServicesRoutes_friendGame
 {
     (void)environment;
     (void)declaring_class;
+    if (out_infoBytes == NULL || out_infoIntegral == NULL) {
+        return (jint)CNA_RESULT_INVALID_ARGUMENT;
+    }
     CNA_FriendGamerInfo out_info_value;
     memset(&out_info_value, 0, sizeof out_info_value);
     out_info_value.struct_size = (uint32_t)(sizeof out_info_value);
@@ -1799,6 +1868,9 @@ Java_org_openeggbert_cna_internal_generated_NativeGamerServicesRoutes_gamerProfi
 {
     (void)environment;
     (void)declaring_class;
+    if (out_infoBytes == NULL || out_infoIntegral == NULL || out_infoFloating == NULL) {
+        return (jint)CNA_RESULT_INVALID_ARGUMENT;
+    }
     CNA_GamerProfileInfo out_info_value;
     memset(&out_info_value, 0, sizeof out_info_value);
     out_info_value.struct_size = (uint32_t)(sizeof out_info_value);
@@ -2684,6 +2756,9 @@ Java_org_openeggbert_cna_internal_generated_NativeGamerServicesRoutes_leaderboar
 {
     (void)environment;
     (void)declaring_class;
+    if (out_infoBytes == NULL || out_infoIntegral == NULL) {
+        return (jint)CNA_RESULT_INVALID_ARGUMENT;
+    }
     CNA_LeaderboardEntryInfo out_info_value;
     memset(&out_info_value, 0, sizeof out_info_value);
     out_info_value.struct_size = (uint32_t)(sizeof out_info_value);
@@ -2752,6 +2827,9 @@ Java_org_openeggbert_cna_internal_generated_NativeGamerServicesRoutes_leaderboar
 {
     (void)environment;
     (void)declaring_class;
+    if (out_identityBytes == NULL || out_identityIntegral == NULL) {
+        return (jint)CNA_RESULT_INVALID_ARGUMENT;
+    }
     CNA_LeaderboardIdentity out_identity_value;
     memset(&out_identity_value, 0, sizeof out_identity_value);
     out_identity_value.struct_size = (uint32_t)(sizeof out_identity_value);
@@ -2843,6 +2921,9 @@ Java_org_openeggbert_cna_internal_generated_NativeGamerServicesRoutes_leaderboar
 {
     (void)environment;
     (void)declaring_class;
+    if (out_infoIntegral == NULL) {
+        return (jint)CNA_RESULT_INVALID_ARGUMENT;
+    }
     CNA_LeaderboardReaderInfo out_info_value;
     memset(&out_info_value, 0, sizeof out_info_value);
     out_info_value.struct_size = (uint32_t)(sizeof out_info_value);
@@ -2891,6 +2972,9 @@ Java_org_openeggbert_cna_internal_generated_NativeGamerServicesRoutes_leaderboar
 {
     (void)environment;
     (void)declaring_class;
+    if (identityBytes == NULL || identityIntegral == NULL) {
+        return (jint)CNA_RESULT_INVALID_ARGUMENT;
+    }
     CNA_LeaderboardIdentity identity_value;
     memset(&identity_value, 0, sizeof identity_value);
     identity_value.struct_size = (uint32_t)(sizeof identity_value);
@@ -2984,6 +3068,9 @@ Java_org_openeggbert_cna_internal_generated_NativeGamerServicesRoutes_leaderboar
 {
     (void)environment;
     (void)declaring_class;
+    if (identityBytes == NULL || identityIntegral == NULL) {
+        return (jint)CNA_RESULT_INVALID_ARGUMENT;
+    }
     CNA_LeaderboardIdentity identity_value;
     memset(&identity_value, 0, sizeof identity_value);
     identity_value.struct_size = (uint32_t)(sizeof identity_value);
@@ -3095,6 +3182,9 @@ Java_org_openeggbert_cna_internal_generated_NativeGamerServicesRoutes_leaderboar
 {
     (void)environment;
     (void)declaring_class;
+    if (identityBytes == NULL || identityIntegral == NULL) {
+        return (jint)CNA_RESULT_INVALID_ARGUMENT;
+    }
     CNA_LeaderboardIdentity identity_value;
     memset(&identity_value, 0, sizeof identity_value);
     identity_value.struct_size = (uint32_t)(sizeof identity_value);
@@ -3759,6 +3849,9 @@ Java_org_openeggbert_cna_internal_generated_NativeGamerServicesRoutes_signedInGa
 {
     (void)environment;
     (void)declaring_class;
+    if (out_defaultsBytes == NULL || out_defaultsIntegral == NULL) {
+        return (jint)CNA_RESULT_INVALID_ARGUMENT;
+    }
     CNA_GameDefaults out_defaults_value;
     memset(&out_defaults_value, 0, sizeof out_defaults_value);
     out_defaults_value.struct_size = (uint32_t)(sizeof out_defaults_value);
@@ -3872,6 +3965,9 @@ Java_org_openeggbert_cna_internal_generated_NativeGamerServicesRoutes_signedInGa
 {
     (void)environment;
     (void)declaring_class;
+    if (out_presenceIntegral == NULL) {
+        return (jint)CNA_RESULT_INVALID_ARGUMENT;
+    }
     CNA_GamerPresence out_presence_value;
     memset(&out_presence_value, 0, sizeof out_presence_value);
     out_presence_value.struct_size = (uint32_t)(sizeof out_presence_value);
@@ -3895,6 +3991,9 @@ Java_org_openeggbert_cna_internal_generated_NativeGamerServicesRoutes_signedInGa
 {
     (void)environment;
     (void)declaring_class;
+    if (out_privilegesBytes == NULL || out_privilegesIntegral == NULL) {
+        return (jint)CNA_RESULT_INVALID_ARGUMENT;
+    }
     CNA_GamerPrivileges out_privileges_value;
     memset(&out_privileges_value, 0, sizeof out_privileges_value);
     out_privileges_value.struct_size = (uint32_t)(sizeof out_privileges_value);
@@ -3974,6 +4073,9 @@ Java_org_openeggbert_cna_internal_generated_NativeGamerServicesRoutes_signedInGa
 {
     (void)environment;
     (void)declaring_class;
+    if (presenceIntegral == NULL) {
+        return (jint)CNA_RESULT_INVALID_ARGUMENT;
+    }
     CNA_GamerPresence presence_value;
     memset(&presence_value, 0, sizeof presence_value);
     presence_value.struct_size = (uint32_t)(sizeof presence_value);

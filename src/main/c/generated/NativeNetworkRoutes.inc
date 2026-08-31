@@ -130,6 +130,12 @@ Java_org_openeggbert_cna_internal_generated_NativeNetworkRoutes_availableNetwork
 {
     (void)environment;
     (void)declaring_class;
+    if (create_infoBytes == NULL || create_infoIntegral == NULL) {
+        return (jint)CNA_RESULT_INVALID_ARGUMENT;
+    }
+    if (quality_of_serviceBytes == NULL || quality_of_serviceIntegral == NULL) {
+        return (jint)CNA_RESULT_INVALID_ARGUMENT;
+    }
     CNA_AvailableNetworkSessionCreateInfo create_info_value;
     memset(&create_info_value, 0, sizeof create_info_value);
     create_info_value.struct_size = (uint32_t)(sizeof create_info_value);
@@ -317,6 +323,9 @@ Java_org_openeggbert_cna_internal_generated_NativeNetworkRoutes_availableNetwork
 {
     (void)environment;
     (void)declaring_class;
+    if (out_valueBytes == NULL || out_valueIntegral == NULL) {
+        return (jint)CNA_RESULT_INVALID_ARGUMENT;
+    }
     CNA_QualityOfService out_value_value;
     memset(&out_value_value, 0, sizeof out_value_value);
     out_value_value.struct_size = (uint32_t)(sizeof out_value_value);
@@ -1593,6 +1602,9 @@ Java_org_openeggbert_cna_internal_generated_NativeNetworkRoutes_networkSessionPr
 {
     (void)environment;
     (void)declaring_class;
+    if (out_valueBytes == NULL || out_valueIntegral == NULL) {
+        return (jint)CNA_RESULT_INVALID_ARGUMENT;
+    }
     CNA_OptionalInt32 out_value_value;
     memset(&out_value_value, 0, sizeof out_value_value);
     CNA_Result call_result = cna.network_session_properties_get_item((CNA_NetworkSessionPropertiesHandle)properties, (int32_t)index, &out_value_value);

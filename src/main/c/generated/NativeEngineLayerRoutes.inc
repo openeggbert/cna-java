@@ -12,6 +12,9 @@ Java_org_openeggbert_cna_internal_generated_NativeEngineLayerRoutes_aerialPerspe
 {
     (void)environment;
     (void)declaring_class;
+    if (view_directionFloating == NULL) {
+        return (jint)CNA_RESULT_INVALID_ARGUMENT;
+    }
     CNA_Vector3 view_direction_value;
     memset(&view_direction_value, 0, sizeof view_direction_value);
     {
@@ -107,6 +110,9 @@ Java_org_openeggbert_cna_internal_generated_NativeEngineLayerRoutes_aerialPerspe
 {
     (void)environment;
     (void)declaring_class;
+    if (out_valueFloating == NULL) {
+        return (jint)CNA_RESULT_INVALID_ARGUMENT;
+    }
     CNA_Vector3 out_value_value;
     memset(&out_value_value, 0, sizeof out_value_value);
     CNA_Result call_result = cna.aerial_perspective_pass_get_sun_direction((CNA_PostProcessPassHandle)pass, &out_value_value);
@@ -165,6 +171,9 @@ Java_org_openeggbert_cna_internal_generated_NativeEngineLayerRoutes_aerialPerspe
 {
     (void)environment;
     (void)declaring_class;
+    if (valueFloating == NULL) {
+        return (jint)CNA_RESULT_INVALID_ARGUMENT;
+    }
     CNA_Vector3 value_value;
     memset(&value_value, 0, sizeof value_value);
     {
@@ -194,6 +203,9 @@ Java_org_openeggbert_cna_internal_generated_NativeEngineLayerRoutes_aerialPerspe
 {
     (void)environment;
     (void)declaring_class;
+    if (out_transmittanceFloating == NULL) {
+        return (jint)CNA_RESULT_INVALID_ARGUMENT;
+    }
     CNA_Vector3 out_transmittance_value;
     memset(&out_transmittance_value, 0, sizeof out_transmittance_value);
     CNA_Result call_result = cna.aerial_perspective_pass_transmittance((float)turbidity, (float)air_mass, &out_transmittance_value);
@@ -280,6 +292,9 @@ Java_org_openeggbert_cna_internal_generated_NativeEngineLayerRoutes_areaLightBrd
 {
     (void)environment;
     (void)declaring_class;
+    if (out_termsFloating == NULL) {
+        return (jint)CNA_RESULT_INVALID_ARGUMENT;
+    }
     CNA_AreaLightBrdfTerms out_terms_value;
     memset(&out_terms_value, 0, sizeof out_terms_value);
     out_terms_value.struct_size = (uint32_t)(sizeof out_terms_value);
@@ -353,6 +368,9 @@ Java_org_openeggbert_cna_internal_generated_NativeEngineLayerRoutes_areaLightExt
 {
     (void)environment;
     (void)declaring_class;
+    if (out_lightBytes == NULL || out_lightIntegral == NULL || out_lightFloating == NULL) {
+        return (jint)CNA_RESULT_INVALID_ARGUMENT;
+    }
     CNA_AreaLightEXT out_light_value;
     memset(&out_light_value, 0, sizeof out_light_value);
     out_light_value.struct_size = (uint32_t)(sizeof out_light_value);
@@ -403,6 +421,9 @@ Java_org_openeggbert_cna_internal_generated_NativeEngineLayerRoutes_areaLightExt
 {
     (void)environment;
     (void)declaring_class;
+    if (lightBytes == NULL || lightIntegral == NULL || lightFloating == NULL) {
+        return (jint)CNA_RESULT_INVALID_ARGUMENT;
+    }
     CNA_AreaLightEXT light_value;
     memset(&light_value, 0, sizeof light_value);
     light_value.struct_size = (uint32_t)(sizeof light_value);
@@ -454,6 +475,24 @@ Java_org_openeggbert_cna_internal_generated_NativeEngineLayerRoutes_areaLightSha
 {
     (void)environment;
     (void)declaring_class;
+    if (lightBytes == NULL || lightIntegral == NULL || lightFloating == NULL) {
+        return (jint)CNA_RESULT_INVALID_ARGUMENT;
+    }
+    if (surfaceFloating == NULL) {
+        return (jint)CNA_RESULT_INVALID_ARGUMENT;
+    }
+    if (normalFloating == NULL) {
+        return (jint)CNA_RESULT_INVALID_ARGUMENT;
+    }
+    if (camera_positionFloating == NULL) {
+        return (jint)CNA_RESULT_INVALID_ARGUMENT;
+    }
+    if (base_colorFloating == NULL) {
+        return (jint)CNA_RESULT_INVALID_ARGUMENT;
+    }
+    if (out_contributionFloating == NULL) {
+        return (jint)CNA_RESULT_INVALID_ARGUMENT;
+    }
     CNA_AreaLightEXT light_value;
     memset(&light_value, 0, sizeof light_value);
     light_value.struct_size = (uint32_t)(sizeof light_value);
@@ -569,6 +608,12 @@ Java_org_openeggbert_cna_internal_generated_NativeEngineLayerRoutes_areaLightSha
 {
     (void)environment;
     (void)declaring_class;
+    if (surfaceFloating == NULL) {
+        return (jint)CNA_RESULT_INVALID_ARGUMENT;
+    }
+    if (lobe_axisFloating == NULL) {
+        return (jint)CNA_RESULT_INVALID_ARGUMENT;
+    }
     const jsize quad_count = 4;
     if ((*environment)->GetArrayLength(environment, quadFloating) != quad_count * 3) {
         return (jint)CNA_RESULT_INVALID_ARGUMENT;
@@ -645,6 +690,12 @@ Java_org_openeggbert_cna_internal_generated_NativeEngineLayerRoutes_areaLightSha
 {
     (void)environment;
     (void)declaring_class;
+    if (lightBytes == NULL || lightIntegral == NULL || lightFloating == NULL) {
+        return (jint)CNA_RESULT_INVALID_ARGUMENT;
+    }
+    if (surfaceFloating == NULL) {
+        return (jint)CNA_RESULT_INVALID_ARGUMENT;
+    }
     CNA_AreaLightEXT light_value;
     memset(&light_value, 0, sizeof light_value);
     light_value.struct_size = (uint32_t)(sizeof light_value);
@@ -737,6 +788,22 @@ Java_org_openeggbert_cna_internal_generated_NativeEngineLayerRoutes_areaLightSha
 }
 
 JNIEXPORT jint JNICALL
+Java_org_openeggbert_cna_internal_generated_NativeEngineLayerRoutes_asciiPassCreate(
+    JNIEnv* environment, jclass declaring_class, jlong graphics_device, jlongArray out_pass)
+{
+    (void)environment;
+    (void)declaring_class;
+    CNA_PostProcessPassHandle out_pass_value = 0;
+    CNA_Result call_result = cna.ascii_pass_create((CNA_Handle)graphics_device, &out_pass_value);
+    if (call_result == CNA_RESULT_SUCCESS || call_result == CNA_RESULT_BUFFER_TOO_SMALL) {
+        jlong out_pass_element = (jlong)out_pass_value;
+        (*environment)->SetLongArrayRegion(
+            environment, out_pass, 0, 1, &out_pass_element);
+    }
+    return (jint)call_result;
+}
+
+JNIEXPORT jint JNICALL
 Java_org_openeggbert_cna_internal_generated_NativeEngineLayerRoutes_atmosphericSkyCopyModelGlsl(
     JNIEnv* environment, jclass declaring_class, jbyteArray destination, jlongArray out_bytes)
 {
@@ -790,6 +857,12 @@ Java_org_openeggbert_cna_internal_generated_NativeEngineLayerRoutes_atmosphericS
 {
     (void)environment;
     (void)declaring_class;
+    if (viewFloating == NULL) {
+        return (jint)CNA_RESULT_INVALID_ARGUMENT;
+    }
+    if (projectionFloating == NULL) {
+        return (jint)CNA_RESULT_INVALID_ARGUMENT;
+    }
     CNA_Matrix view_value;
     memset(&view_value, 0, sizeof view_value);
     {
@@ -860,6 +933,9 @@ Java_org_openeggbert_cna_internal_generated_NativeEngineLayerRoutes_atmosphericS
 {
     (void)environment;
     (void)declaring_class;
+    if (out_directionFloating == NULL) {
+        return (jint)CNA_RESULT_INVALID_ARGUMENT;
+    }
     CNA_Vector3 out_direction_value;
     memset(&out_direction_value, 0, sizeof out_direction_value);
     CNA_Result call_result = cna.atmospheric_sky_get_sun_direction((CNA_AtmosphericSkyHandle)sky, &out_direction_value);
@@ -914,6 +990,15 @@ Java_org_openeggbert_cna_internal_generated_NativeEngineLayerRoutes_atmosphericS
 {
     (void)environment;
     (void)declaring_class;
+    if (view_directionFloating == NULL) {
+        return (jint)CNA_RESULT_INVALID_ARGUMENT;
+    }
+    if (sun_directionFloating == NULL) {
+        return (jint)CNA_RESULT_INVALID_ARGUMENT;
+    }
+    if (out_radianceFloating == NULL) {
+        return (jint)CNA_RESULT_INVALID_ARGUMENT;
+    }
     CNA_Vector3 view_direction_value;
     memset(&view_direction_value, 0, sizeof view_direction_value);
     {
@@ -964,6 +1049,9 @@ Java_org_openeggbert_cna_internal_generated_NativeEngineLayerRoutes_atmosphericS
 {
     (void)environment;
     (void)declaring_class;
+    if (directionFloating == NULL) {
+        return (jint)CNA_RESULT_INVALID_ARGUMENT;
+    }
     CNA_Vector3 direction_value;
     memset(&direction_value, 0, sizeof direction_value);
     {
@@ -1165,6 +1253,9 @@ Java_org_openeggbert_cna_internal_generated_NativeEngineLayerRoutes_cascadedShad
 {
     (void)environment;
     (void)declaring_class;
+    if (out_centreFloating == NULL) {
+        return (jint)CNA_RESULT_INVALID_ARGUMENT;
+    }
     const jsize corners_count = 8;
     if ((*environment)->GetArrayLength(environment, cornersFloating) != corners_count * 3) {
         return (jint)CNA_RESULT_INVALID_ARGUMENT;
@@ -1217,6 +1308,12 @@ Java_org_openeggbert_cna_internal_generated_NativeEngineLayerRoutes_cascadedShad
 {
     (void)environment;
     (void)declaring_class;
+    if (viewFloating == NULL) {
+        return (jint)CNA_RESULT_INVALID_ARGUMENT;
+    }
+    if (projectionFloating == NULL) {
+        return (jint)CNA_RESULT_INVALID_ARGUMENT;
+    }
     CNA_Matrix view_value;
     memset(&view_value, 0, sizeof view_value);
     {
@@ -1421,6 +1518,9 @@ Java_org_openeggbert_cna_internal_generated_NativeEngineLayerRoutes_cascadedShad
 {
     (void)environment;
     (void)declaring_class;
+    if (out_matrixFloating == NULL) {
+        return (jint)CNA_RESULT_INVALID_ARGUMENT;
+    }
     CNA_Matrix out_matrix_value;
     memset(&out_matrix_value, 0, sizeof out_matrix_value);
     CNA_Result call_result = cna.cascaded_shadow_map_get_cascade_matrix((CNA_CascadedShadowMapHandle)shadow_map, (int32_t)cascade_index, &out_matrix_value);
@@ -1598,6 +1698,12 @@ Java_org_openeggbert_cna_internal_generated_NativeEngineLayerRoutes_cascadedShad
 {
     (void)environment;
     (void)declaring_class;
+    if (centreFloating == NULL) {
+        return (jint)CNA_RESULT_INVALID_ARGUMENT;
+    }
+    if (out_centreFloating == NULL) {
+        return (jint)CNA_RESULT_INVALID_ARGUMENT;
+    }
     CNA_Vector3 centre_value;
     memset(&centre_value, 0, sizeof centre_value);
     {
@@ -1629,6 +1735,15 @@ Java_org_openeggbert_cna_internal_generated_NativeEngineLayerRoutes_cascadedShad
 {
     (void)environment;
     (void)declaring_class;
+    if (lightBytes == NULL || lightIntegral == NULL || lightFloating == NULL) {
+        return (jint)CNA_RESULT_INVALID_ARGUMENT;
+    }
+    if (camera_viewFloating == NULL) {
+        return (jint)CNA_RESULT_INVALID_ARGUMENT;
+    }
+    if (camera_projectionFloating == NULL) {
+        return (jint)CNA_RESULT_INVALID_ARGUMENT;
+    }
     CNA_DirectionalLightEXT light_value;
     memset(&light_value, 0, sizeof light_value);
     light_value.struct_size = (uint32_t)(sizeof light_value);
@@ -1752,6 +1867,18 @@ Java_org_openeggbert_cna_internal_generated_NativeEngineLayerRoutes_clusteredFor
 {
     (void)environment;
     (void)declaring_class;
+    if (worldFloating == NULL) {
+        return (jint)CNA_RESULT_INVALID_ARGUMENT;
+    }
+    if (viewFloating == NULL) {
+        return (jint)CNA_RESULT_INVALID_ARGUMENT;
+    }
+    if (projectionFloating == NULL) {
+        return (jint)CNA_RESULT_INVALID_ARGUMENT;
+    }
+    if (camera_positionFloating == NULL) {
+        return (jint)CNA_RESULT_INVALID_ARGUMENT;
+    }
     CNA_Matrix world_value;
     memset(&world_value, 0, sizeof world_value);
     {
@@ -1857,6 +1984,30 @@ Java_org_openeggbert_cna_internal_generated_NativeEngineLayerRoutes_clusteredFor
 {
     (void)environment;
     (void)declaring_class;
+    if (lightBytes == NULL || lightIntegral == NULL || lightFloating == NULL) {
+        return (jint)CNA_RESULT_INVALID_ARGUMENT;
+    }
+    if (surfaceFloating == NULL) {
+        return (jint)CNA_RESULT_INVALID_ARGUMENT;
+    }
+    if (normalFloating == NULL) {
+        return (jint)CNA_RESULT_INVALID_ARGUMENT;
+    }
+    if (camera_positionFloating == NULL) {
+        return (jint)CNA_RESULT_INVALID_ARGUMENT;
+    }
+    if (base_colorFloating == NULL) {
+        return (jint)CNA_RESULT_INVALID_ARGUMENT;
+    }
+    if (sheen_colorFloating == NULL) {
+        return (jint)CNA_RESULT_INVALID_ARGUMENT;
+    }
+    if (subsurface_colorFloating == NULL) {
+        return (jint)CNA_RESULT_INVALID_ARGUMENT;
+    }
+    if (out_contributionFloating == NULL) {
+        return (jint)CNA_RESULT_INVALID_ARGUMENT;
+    }
     CNA_ClusteredLightEXT light_value;
     memset(&light_value, 0, sizeof light_value);
     light_value.struct_size = (uint32_t)(sizeof light_value);
@@ -1967,6 +2118,24 @@ Java_org_openeggbert_cna_internal_generated_NativeEngineLayerRoutes_clusteredFor
 {
     (void)environment;
     (void)declaring_class;
+    if (lightBytes == NULL || lightIntegral == NULL || lightFloating == NULL) {
+        return (jint)CNA_RESULT_INVALID_ARGUMENT;
+    }
+    if (surfaceFloating == NULL) {
+        return (jint)CNA_RESULT_INVALID_ARGUMENT;
+    }
+    if (normalFloating == NULL) {
+        return (jint)CNA_RESULT_INVALID_ARGUMENT;
+    }
+    if (camera_positionFloating == NULL) {
+        return (jint)CNA_RESULT_INVALID_ARGUMENT;
+    }
+    if (base_colorFloating == NULL) {
+        return (jint)CNA_RESULT_INVALID_ARGUMENT;
+    }
+    if (out_contributionFloating == NULL) {
+        return (jint)CNA_RESULT_INVALID_ARGUMENT;
+    }
     CNA_ClusteredLightEXT light_value;
     memset(&light_value, 0, sizeof light_value);
     light_value.struct_size = (uint32_t)(sizeof light_value);
@@ -2085,6 +2254,9 @@ Java_org_openeggbert_cna_internal_generated_NativeEngineLayerRoutes_clusteredFor
 {
     (void)environment;
     (void)declaring_class;
+    if (out_ambientFloating == NULL) {
+        return (jint)CNA_RESULT_INVALID_ARGUMENT;
+    }
     CNA_Vector3 out_ambient_value;
     memset(&out_ambient_value, 0, sizeof out_ambient_value);
     CNA_Result call_result = cna.clustered_forward_effect_get_ambient((CNA_ClusteredForwardEffectHandle)effect, &out_ambient_value);
@@ -2107,6 +2279,9 @@ Java_org_openeggbert_cna_internal_generated_NativeEngineLayerRoutes_clusteredFor
 {
     (void)environment;
     (void)declaring_class;
+    if (out_colorFloating == NULL) {
+        return (jint)CNA_RESULT_INVALID_ARGUMENT;
+    }
     CNA_Vector3 out_color_value;
     memset(&out_color_value, 0, sizeof out_color_value);
     CNA_Result call_result = cna.clustered_forward_effect_get_base_color((CNA_ClusteredForwardEffectHandle)effect, &out_color_value);
@@ -2225,6 +2400,9 @@ Java_org_openeggbert_cna_internal_generated_NativeEngineLayerRoutes_clusteredFor
 {
     (void)environment;
     (void)declaring_class;
+    if (ambientFloating == NULL) {
+        return (jint)CNA_RESULT_INVALID_ARGUMENT;
+    }
     CNA_Vector3 ambient_value;
     memset(&ambient_value, 0, sizeof ambient_value);
     {
@@ -2244,6 +2422,9 @@ Java_org_openeggbert_cna_internal_generated_NativeEngineLayerRoutes_clusteredFor
 {
     (void)environment;
     (void)declaring_class;
+    if (lightBytes == NULL || lightIntegral == NULL || lightFloating == NULL) {
+        return (jint)CNA_RESULT_INVALID_ARGUMENT;
+    }
     CNA_AreaLightEXT light_value;
     memset(&light_value, 0, sizeof light_value);
     light_value.struct_size = (uint32_t)(sizeof light_value);
@@ -2289,6 +2470,9 @@ Java_org_openeggbert_cna_internal_generated_NativeEngineLayerRoutes_clusteredFor
 {
     (void)environment;
     (void)declaring_class;
+    if (colorFloating == NULL) {
+        return (jint)CNA_RESULT_INVALID_ARGUMENT;
+    }
     CNA_Vector3 color_value;
     memset(&color_value, 0, sizeof color_value);
     {
@@ -2378,6 +2562,12 @@ Java_org_openeggbert_cna_internal_generated_NativeEngineLayerRoutes_clusteredFor
 {
     (void)environment;
     (void)declaring_class;
+    if (attenuation_colorFloating == NULL) {
+        return (jint)CNA_RESULT_INVALID_ARGUMENT;
+    }
+    if (out_attenuationFloating == NULL) {
+        return (jint)CNA_RESULT_INVALID_ARGUMENT;
+    }
     CNA_Vector3 attenuation_color_value;
     memset(&attenuation_color_value, 0, sizeof attenuation_color_value);
     {
@@ -2461,6 +2651,9 @@ Java_org_openeggbert_cna_internal_generated_NativeEngineLayerRoutes_clusteredLig
 {
     (void)environment;
     (void)declaring_class;
+    if (viewFloating == NULL) {
+        return (jint)CNA_RESULT_INVALID_ARGUMENT;
+    }
     CNA_Matrix view_value;
     memset(&view_value, 0, sizeof view_value);
     {
@@ -2869,6 +3062,9 @@ Java_org_openeggbert_cna_internal_generated_NativeEngineLayerRoutes_clusteredLig
 {
     (void)environment;
     (void)declaring_class;
+    if (viewFloating == NULL) {
+        return (jint)CNA_RESULT_INVALID_ARGUMENT;
+    }
     CNA_Matrix view_value;
     memset(&view_value, 0, sizeof view_value);
     {
@@ -3040,6 +3236,9 @@ Java_org_openeggbert_cna_internal_generated_NativeEngineLayerRoutes_clusteredLig
 {
     (void)environment;
     (void)declaring_class;
+    if (out_lightBytes == NULL || out_lightIntegral == NULL || out_lightFloating == NULL) {
+        return (jint)CNA_RESULT_INVALID_ARGUMENT;
+    }
     CNA_ClusteredLightEXT out_light_value;
     memset(&out_light_value, 0, sizeof out_light_value);
     out_light_value.struct_size = (uint32_t)(sizeof out_light_value);
@@ -3089,6 +3288,9 @@ Java_org_openeggbert_cna_internal_generated_NativeEngineLayerRoutes_clusteredLig
 {
     (void)environment;
     (void)declaring_class;
+    if (out_boundsFloating == NULL) {
+        return (jint)CNA_RESULT_INVALID_ARGUMENT;
+    }
     CNA_BoundingBox out_bounds_value;
     memset(&out_bounds_value, 0, sizeof out_bounds_value);
     CNA_Result call_result = cna.clustered_light_grid_cluster_bounds((CNA_ClusteredLightGridHandle)grid, (int32_t)x, (int32_t)y, (int32_t)slice, &out_bounds_value);
@@ -3188,6 +3390,9 @@ Java_org_openeggbert_cna_internal_generated_NativeEngineLayerRoutes_clusteredLig
 {
     (void)environment;
     (void)declaring_class;
+    if (out_matrixFloating == NULL) {
+        return (jint)CNA_RESULT_INVALID_ARGUMENT;
+    }
     CNA_Matrix out_matrix_value;
     memset(&out_matrix_value, 0, sizeof out_matrix_value);
     CNA_Result call_result = cna.clustered_light_grid_get_inverse_projection((CNA_ClusteredLightGridHandle)grid, &out_matrix_value);
@@ -3303,6 +3508,9 @@ Java_org_openeggbert_cna_internal_generated_NativeEngineLayerRoutes_clusteredLig
 {
     (void)environment;
     (void)declaring_class;
+    if (projectionFloating == NULL) {
+        return (jint)CNA_RESULT_INVALID_ARGUMENT;
+    }
     CNA_Matrix projection_value;
     memset(&projection_value, 0, sizeof projection_value);
     {
@@ -3367,6 +3575,9 @@ Java_org_openeggbert_cna_internal_generated_NativeEngineLayerRoutes_clusteredLig
 {
     (void)environment;
     (void)declaring_class;
+    if (lightBytes == NULL || lightIntegral == NULL || lightFloating == NULL) {
+        return (jint)CNA_RESULT_INVALID_ARGUMENT;
+    }
     CNA_ClusteredLightEXT light_value;
     memset(&light_value, 0, sizeof light_value);
     light_value.struct_size = (uint32_t)(sizeof light_value);
@@ -3417,6 +3628,9 @@ Java_org_openeggbert_cna_internal_generated_NativeEngineLayerRoutes_clusteredLig
 {
     (void)environment;
     (void)declaring_class;
+    if (lightBytes == NULL || lightIntegral == NULL || lightFloating == NULL) {
+        return (jint)CNA_RESULT_INVALID_ARGUMENT;
+    }
     CNA_PointLightEXT light_value;
     memset(&light_value, 0, sizeof light_value);
     light_value.struct_size = (uint32_t)(sizeof light_value);
@@ -3461,6 +3675,9 @@ Java_org_openeggbert_cna_internal_generated_NativeEngineLayerRoutes_clusteredLig
 {
     (void)environment;
     (void)declaring_class;
+    if (lightBytes == NULL || lightIntegral == NULL || lightFloating == NULL) {
+        return (jint)CNA_RESULT_INVALID_ARGUMENT;
+    }
     CNA_SpotLightEXT light_value;
     memset(&light_value, 0, sizeof light_value);
     light_value.struct_size = (uint32_t)(sizeof light_value);
@@ -3752,6 +3969,9 @@ Java_org_openeggbert_cna_internal_generated_NativeEngineLayerRoutes_clusteredLig
 {
     (void)environment;
     (void)declaring_class;
+    if (out_lightBytes == NULL || out_lightIntegral == NULL || out_lightFloating == NULL) {
+        return (jint)CNA_RESULT_INVALID_ARGUMENT;
+    }
     CNA_ClusteredLightEXT out_light_value;
     memset(&out_light_value, 0, sizeof out_light_value);
     out_light_value.struct_size = (uint32_t)(sizeof out_light_value);
@@ -3801,6 +4021,9 @@ Java_org_openeggbert_cna_internal_generated_NativeEngineLayerRoutes_clusteredLig
 {
     (void)environment;
     (void)declaring_class;
+    if (out_boundsFloating == NULL) {
+        return (jint)CNA_RESULT_INVALID_ARGUMENT;
+    }
     CNA_BoundingSphere out_bounds_value;
     memset(&out_bounds_value, 0, sizeof out_bounds_value);
     CNA_Result call_result = cna.clustered_light_set_get_bounds_at((CNA_ClusteredLightSetHandle)set, (int32_t)index, &out_bounds_value);
@@ -3856,6 +4079,9 @@ Java_org_openeggbert_cna_internal_generated_NativeEngineLayerRoutes_clusteredLig
 {
     (void)environment;
     (void)declaring_class;
+    if (lightBytes == NULL || lightIntegral == NULL || lightFloating == NULL) {
+        return (jint)CNA_RESULT_INVALID_ARGUMENT;
+    }
     CNA_ClusteredLightEXT light_value;
     memset(&light_value, 0, sizeof light_value);
     light_value.struct_size = (uint32_t)(sizeof light_value);
@@ -3916,6 +4142,9 @@ Java_org_openeggbert_cna_internal_generated_NativeEngineLayerRoutes_clusteredLig
 {
     (void)environment;
     (void)declaring_class;
+    if (lightBytes == NULL || lightIntegral == NULL || lightFloating == NULL) {
+        return (jint)CNA_RESULT_INVALID_ARGUMENT;
+    }
     CNA_ClusteredLightEXT light_value;
     memset(&light_value, 0, sizeof light_value);
     light_value.struct_size = (uint32_t)(sizeof light_value);
@@ -4131,6 +4360,15 @@ Java_org_openeggbert_cna_internal_generated_NativeEngineLayerRoutes_clusteredSha
 {
     (void)environment;
     (void)declaring_class;
+    if (viewFloating == NULL) {
+        return (jint)CNA_RESULT_INVALID_ARGUMENT;
+    }
+    if (projectionFloating == NULL) {
+        return (jint)CNA_RESULT_INVALID_ARGUMENT;
+    }
+    if (camera_positionFloating == NULL) {
+        return (jint)CNA_RESULT_INVALID_ARGUMENT;
+    }
     CNA_Matrix view_value;
     memset(&view_value, 0, sizeof view_value);
     {
@@ -4442,6 +4680,9 @@ Java_org_openeggbert_cna_internal_generated_NativeEngineLayerRoutes_contactShado
 {
     (void)environment;
     (void)declaring_class;
+    if (out_directionFloating == NULL) {
+        return (jint)CNA_RESULT_INVALID_ARGUMENT;
+    }
     CNA_Vector3 out_direction_value;
     memset(&out_direction_value, 0, sizeof out_direction_value);
     CNA_Result call_result = cna.contact_shadow_pass_get_light_direction((CNA_PostProcessPassHandle)pass, &out_direction_value);
@@ -4548,6 +4789,9 @@ Java_org_openeggbert_cna_internal_generated_NativeEngineLayerRoutes_contactShado
 {
     (void)environment;
     (void)declaring_class;
+    if (directionFloating == NULL) {
+        return (jint)CNA_RESULT_INVALID_ARGUMENT;
+    }
     CNA_Vector3 direction_value;
     memset(&direction_value, 0, sizeof direction_value);
     {
@@ -4661,6 +4905,9 @@ Java_org_openeggbert_cna_internal_generated_NativeEngineLayerRoutes_cubeLutGetDo
 {
     (void)environment;
     (void)declaring_class;
+    if (out_valueFloating == NULL) {
+        return (jint)CNA_RESULT_INVALID_ARGUMENT;
+    }
     CNA_Vector3 out_value_value;
     memset(&out_value_value, 0, sizeof out_value_value);
     CNA_Result call_result = cna.cube_lut_get_domain_max((CNA_CubeLutHandle)lut, &out_value_value);
@@ -4683,6 +4930,9 @@ Java_org_openeggbert_cna_internal_generated_NativeEngineLayerRoutes_cubeLutGetDo
 {
     (void)environment;
     (void)declaring_class;
+    if (out_valueFloating == NULL) {
+        return (jint)CNA_RESULT_INVALID_ARGUMENT;
+    }
     CNA_Vector3 out_value_value;
     memset(&out_value_value, 0, sizeof out_value_value);
     CNA_Result call_result = cna.cube_lut_get_domain_min((CNA_CubeLutHandle)lut, &out_value_value);
@@ -4705,6 +4955,9 @@ Java_org_openeggbert_cna_internal_generated_NativeEngineLayerRoutes_cubeLutGetEn
 {
     (void)environment;
     (void)declaring_class;
+    if (out_colorFloating == NULL) {
+        return (jint)CNA_RESULT_INVALID_ARGUMENT;
+    }
     CNA_Vector3 out_color_value;
     memset(&out_color_value, 0, sizeof out_color_value);
     CNA_Result call_result = cna.cube_lut_get_entry((CNA_CubeLutHandle)lut, (int32_t)red, (int32_t)green, (int32_t)blue, &out_color_value);
@@ -4815,6 +5068,9 @@ Java_org_openeggbert_cna_internal_generated_NativeEngineLayerRoutes_cubeShadowMa
 {
     (void)environment;
     (void)declaring_class;
+    if (out_matrixFloating == NULL) {
+        return (jint)CNA_RESULT_INVALID_ARGUMENT;
+    }
     CNA_Matrix out_matrix_value;
     memset(&out_matrix_value, 0, sizeof out_matrix_value);
     CNA_Result call_result = cna.cube_shadow_map_compute_face_projection((float)range, &out_matrix_value);
@@ -4850,6 +5106,12 @@ Java_org_openeggbert_cna_internal_generated_NativeEngineLayerRoutes_cubeShadowMa
 {
     (void)environment;
     (void)declaring_class;
+    if (positionFloating == NULL) {
+        return (jint)CNA_RESULT_INVALID_ARGUMENT;
+    }
+    if (out_matrixFloating == NULL) {
+        return (jint)CNA_RESULT_INVALID_ARGUMENT;
+    }
     CNA_Vector3 position_value;
     memset(&position_value, 0, sizeof position_value);
     {
@@ -4946,6 +5208,9 @@ Java_org_openeggbert_cna_internal_generated_NativeEngineLayerRoutes_cubeShadowMa
 {
     (void)environment;
     (void)declaring_class;
+    if (out_positionFloating == NULL) {
+        return (jint)CNA_RESULT_INVALID_ARGUMENT;
+    }
     CNA_Vector3 out_position_value;
     memset(&out_position_value, 0, sizeof out_position_value);
     CNA_Result call_result = cna.cube_shadow_map_get_light_position((CNA_CubeShadowMapHandle)shadow_map, &out_position_value);
@@ -5074,6 +5339,9 @@ Java_org_openeggbert_cna_internal_generated_NativeEngineLayerRoutes_cubeShadowMa
 {
     (void)environment;
     (void)declaring_class;
+    if (lightBytes == NULL || lightIntegral == NULL || lightFloating == NULL) {
+        return (jint)CNA_RESULT_INVALID_ARGUMENT;
+    }
     CNA_PointLightEXT light_value;
     memset(&light_value, 0, sizeof light_value);
     light_value.struct_size = (uint32_t)(sizeof light_value);
@@ -5112,6 +5380,9 @@ Java_org_openeggbert_cna_internal_generated_NativeEngineLayerRoutes_debugDrawAdd
 {
     (void)environment;
     (void)declaring_class;
+    if (sphereFloating == NULL) {
+        return (jint)CNA_RESULT_INVALID_ARGUMENT;
+    }
     CNA_BoundingSphere sphere_value;
     memset(&sphere_value, 0, sizeof sphere_value);
     {
@@ -5142,6 +5413,9 @@ Java_org_openeggbert_cna_internal_generated_NativeEngineLayerRoutes_debugDrawAdd
 {
     (void)environment;
     (void)declaring_class;
+    if (boundsFloating == NULL) {
+        return (jint)CNA_RESULT_INVALID_ARGUMENT;
+    }
     CNA_BoundingBox bounds_value;
     memset(&bounds_value, 0, sizeof bounds_value);
     {
@@ -5194,6 +5468,9 @@ Java_org_openeggbert_cna_internal_generated_NativeEngineLayerRoutes_debugDrawAdd
 {
     (void)environment;
     (void)declaring_class;
+    if (inverse_viewFloating == NULL) {
+        return (jint)CNA_RESULT_INVALID_ARGUMENT;
+    }
     CNA_Matrix inverse_view_value;
     memset(&inverse_view_value, 0, sizeof inverse_view_value);
     {
@@ -5236,6 +5513,9 @@ Java_org_openeggbert_cna_internal_generated_NativeEngineLayerRoutes_debugDrawAdd
 {
     (void)environment;
     (void)declaring_class;
+    if (positionFloating == NULL) {
+        return (jint)CNA_RESULT_INVALID_ARGUMENT;
+    }
     CNA_Vector3 position_value;
     memset(&position_value, 0, sizeof position_value);
     {
@@ -5265,6 +5545,12 @@ Java_org_openeggbert_cna_internal_generated_NativeEngineLayerRoutes_debugDrawAdd
 {
     (void)environment;
     (void)declaring_class;
+    if (lightBytes == NULL || lightIntegral == NULL || lightFloating == NULL) {
+        return (jint)CNA_RESULT_INVALID_ARGUMENT;
+    }
+    if (atFloating == NULL) {
+        return (jint)CNA_RESULT_INVALID_ARGUMENT;
+    }
     CNA_DirectionalLightEXT light_value;
     memset(&light_value, 0, sizeof light_value);
     light_value.struct_size = (uint32_t)(sizeof light_value);
@@ -5363,6 +5649,12 @@ Java_org_openeggbert_cna_internal_generated_NativeEngineLayerRoutes_debugDrawAdd
 {
     (void)environment;
     (void)declaring_class;
+    if (fromFloating == NULL) {
+        return (jint)CNA_RESULT_INVALID_ARGUMENT;
+    }
+    if (toFloating == NULL) {
+        return (jint)CNA_RESULT_INVALID_ARGUMENT;
+    }
     CNA_Vector3 from_value;
     memset(&from_value, 0, sizeof from_value);
     {
@@ -5401,6 +5693,9 @@ Java_org_openeggbert_cna_internal_generated_NativeEngineLayerRoutes_debugDrawAdd
 {
     (void)environment;
     (void)declaring_class;
+    if (lightBytes == NULL || lightIntegral == NULL || lightFloating == NULL) {
+        return (jint)CNA_RESULT_INVALID_ARGUMENT;
+    }
     CNA_PointLightEXT light_value;
     memset(&light_value, 0, sizeof light_value);
     light_value.struct_size = (uint32_t)(sizeof light_value);
@@ -5469,6 +5764,9 @@ Java_org_openeggbert_cna_internal_generated_NativeEngineLayerRoutes_debugDrawAdd
 {
     (void)environment;
     (void)declaring_class;
+    if (centreFloating == NULL) {
+        return (jint)CNA_RESULT_INVALID_ARGUMENT;
+    }
     CNA_Vector3 centre_value;
     memset(&centre_value, 0, sizeof centre_value);
     {
@@ -5498,6 +5796,9 @@ Java_org_openeggbert_cna_internal_generated_NativeEngineLayerRoutes_debugDrawAdd
 {
     (void)environment;
     (void)declaring_class;
+    if (lightBytes == NULL || lightIntegral == NULL || lightFloating == NULL) {
+        return (jint)CNA_RESULT_INVALID_ARGUMENT;
+    }
     CNA_SpotLightEXT light_value;
     memset(&light_value, 0, sizeof light_value);
     light_value.struct_size = (uint32_t)(sizeof light_value);
@@ -5551,6 +5852,12 @@ Java_org_openeggbert_cna_internal_generated_NativeEngineLayerRoutes_debugDrawBeg
 {
     (void)environment;
     (void)declaring_class;
+    if (viewFloating == NULL) {
+        return (jint)CNA_RESULT_INVALID_ARGUMENT;
+    }
+    if (projectionFloating == NULL) {
+        return (jint)CNA_RESULT_INVALID_ARGUMENT;
+    }
     CNA_Matrix view_value;
     memset(&view_value, 0, sizeof view_value);
     {
@@ -5812,6 +6119,9 @@ Java_org_openeggbert_cna_internal_generated_NativeEngineLayerRoutes_decalPassDra
 {
     (void)environment;
     (void)declaring_class;
+    if (decal_worldFloating == NULL) {
+        return (jint)CNA_RESULT_INVALID_ARGUMENT;
+    }
     CNA_Matrix decal_world_value;
     memset(&decal_world_value, 0, sizeof decal_world_value);
     {
@@ -5876,6 +6186,9 @@ Java_org_openeggbert_cna_internal_generated_NativeEngineLayerRoutes_decalPassGet
 {
     (void)environment;
     (void)declaring_class;
+    if (out_valueFloating == NULL) {
+        return (jint)CNA_RESULT_INVALID_ARGUMENT;
+    }
     CNA_Vector3 out_value_value;
     memset(&out_value_value, 0, sizeof out_value_value);
     CNA_Result call_result = cna.decal_pass_get_tint((CNA_DecalPassHandle)pass, &out_value_value);
@@ -5898,6 +6211,9 @@ Java_org_openeggbert_cna_internal_generated_NativeEngineLayerRoutes_decalPassIsI
 {
     (void)environment;
     (void)declaring_class;
+    if (decal_local_positionFloating == NULL) {
+        return (jint)CNA_RESULT_INVALID_ARGUMENT;
+    }
     CNA_Vector3 decal_local_position_value;
     memset(&decal_local_position_value, 0, sizeof decal_local_position_value);
     {
@@ -5923,6 +6239,12 @@ Java_org_openeggbert_cna_internal_generated_NativeEngineLayerRoutes_decalPassSet
 {
     (void)environment;
     (void)declaring_class;
+    if (viewFloating == NULL) {
+        return (jint)CNA_RESULT_INVALID_ARGUMENT;
+    }
+    if (projectionFloating == NULL) {
+        return (jint)CNA_RESULT_INVALID_ARGUMENT;
+    }
     CNA_Matrix view_value;
     memset(&view_value, 0, sizeof view_value);
     {
@@ -6007,6 +6329,9 @@ Java_org_openeggbert_cna_internal_generated_NativeEngineLayerRoutes_decalPassSet
 {
     (void)environment;
     (void)declaring_class;
+    if (valueFloating == NULL) {
+        return (jint)CNA_RESULT_INVALID_ARGUMENT;
+    }
     CNA_Vector3 value_value;
     memset(&value_value, 0, sizeof value_value);
     {
@@ -6026,6 +6351,12 @@ Java_org_openeggbert_cna_internal_generated_NativeEngineLayerRoutes_depthNormalP
 {
     (void)environment;
     (void)declaring_class;
+    if (viewFloating == NULL) {
+        return (jint)CNA_RESULT_INVALID_ARGUMENT;
+    }
+    if (projectionFloating == NULL) {
+        return (jint)CNA_RESULT_INVALID_ARGUMENT;
+    }
     CNA_Matrix view_value;
     memset(&view_value, 0, sizeof view_value);
     {
@@ -6140,6 +6471,9 @@ Java_org_openeggbert_cna_internal_generated_NativeEngineLayerRoutes_depthNormalP
 {
     (void)environment;
     (void)declaring_class;
+    if (out_velocityFloating == NULL) {
+        return (jint)CNA_RESULT_INVALID_ARGUMENT;
+    }
     CNA_Color texel_value;
     memset(&texel_value, 0, sizeof texel_value);
     {
@@ -6399,6 +6733,12 @@ Java_org_openeggbert_cna_internal_generated_NativeEngineLayerRoutes_depthNormalP
 {
     (void)environment;
     (void)declaring_class;
+    if (previous_viewFloating == NULL) {
+        return (jint)CNA_RESULT_INVALID_ARGUMENT;
+    }
+    if (previous_projectionFloating == NULL) {
+        return (jint)CNA_RESULT_INVALID_ARGUMENT;
+    }
     CNA_Matrix previous_view_value;
     memset(&previous_view_value, 0, sizeof previous_view_value);
     {
@@ -6453,6 +6793,9 @@ Java_org_openeggbert_cna_internal_generated_NativeEngineLayerRoutes_depthNormalP
 {
     (void)environment;
     (void)declaring_class;
+    if (previous_worldFloating == NULL) {
+        return (jint)CNA_RESULT_INVALID_ARGUMENT;
+    }
     CNA_Matrix previous_world_value;
     memset(&previous_world_value, 0, sizeof previous_world_value);
     {
@@ -6673,6 +7016,9 @@ Java_org_openeggbert_cna_internal_generated_NativeEngineLayerRoutes_directionalL
 {
     (void)environment;
     (void)declaring_class;
+    if (out_lightBytes == NULL || out_lightIntegral == NULL || out_lightFloating == NULL) {
+        return (jint)CNA_RESULT_INVALID_ARGUMENT;
+    }
     CNA_DirectionalLightEXT out_light_value;
     memset(&out_light_value, 0, sizeof out_light_value);
     out_light_value.struct_size = (uint32_t)(sizeof out_light_value);
@@ -6715,6 +7061,9 @@ Java_org_openeggbert_cna_internal_generated_NativeEngineLayerRoutes_effectGetLig
 {
     (void)environment;
     (void)declaring_class;
+    if (out_matrixFloating == NULL) {
+        return (jint)CNA_RESULT_INVALID_ARGUMENT;
+    }
     CNA_Matrix out_matrix_value;
     memset(&out_matrix_value, 0, sizeof out_matrix_value);
     CNA_Result call_result = cna.effect_get_light_view_projection_ext((CNA_EffectHandle)effect, &out_matrix_value);
@@ -6750,6 +7099,9 @@ Java_org_openeggbert_cna_internal_generated_NativeEngineLayerRoutes_effectGetPun
 {
     (void)environment;
     (void)declaring_class;
+    if (out_lightIntegral == NULL || out_lightFloating == NULL) {
+        return (jint)CNA_RESULT_INVALID_ARGUMENT;
+    }
     CNA_PunctualLightEXT out_light_value;
     memset(&out_light_value, 0, sizeof out_light_value);
     out_light_value.struct_size = (uint32_t)(sizeof out_light_value);
@@ -6809,6 +7161,9 @@ Java_org_openeggbert_cna_internal_generated_NativeEngineLayerRoutes_effectGetSha
 {
     (void)environment;
     (void)declaring_class;
+    if (out_stateBytes == NULL || out_stateIntegral == NULL || out_stateFloating == NULL) {
+        return (jint)CNA_RESULT_INVALID_ARGUMENT;
+    }
     CNA_ShadowCascadeStateEXT out_state_value;
     memset(&out_state_value, 0, sizeof out_state_value);
     out_state_value.struct_size = (uint32_t)(sizeof out_state_value);
@@ -6994,6 +7349,9 @@ Java_org_openeggbert_cna_internal_generated_NativeEngineLayerRoutes_effectSetIma
 {
     (void)environment;
     (void)declaring_class;
+    if (lightIntegral == NULL || lightFloating == NULL) {
+        return (jint)CNA_RESULT_INVALID_ARGUMENT;
+    }
     CNA_ImageBasedLightEXT light_value;
     memset(&light_value, 0, sizeof light_value);
     light_value.struct_size = (uint32_t)(sizeof light_value);
@@ -7021,6 +7379,9 @@ Java_org_openeggbert_cna_internal_generated_NativeEngineLayerRoutes_effectSetLig
 {
     (void)environment;
     (void)declaring_class;
+    if (light_view_projectionFloating == NULL) {
+        return (jint)CNA_RESULT_INVALID_ARGUMENT;
+    }
     CNA_Matrix light_view_projection_value;
     memset(&light_view_projection_value, 0, sizeof light_view_projection_value);
     {
@@ -7053,6 +7414,9 @@ Java_org_openeggbert_cna_internal_generated_NativeEngineLayerRoutes_effectSetPun
 {
     (void)environment;
     (void)declaring_class;
+    if (lightIntegral == NULL || lightFloating == NULL) {
+        return (jint)CNA_RESULT_INVALID_ARGUMENT;
+    }
     CNA_PunctualLightEXT light_value;
     memset(&light_value, 0, sizeof light_value);
     light_value.struct_size = (uint32_t)(sizeof light_value);
@@ -7108,6 +7472,9 @@ Java_org_openeggbert_cna_internal_generated_NativeEngineLayerRoutes_effectSetSha
 {
     (void)environment;
     (void)declaring_class;
+    if (stateBytes == NULL || stateIntegral == NULL || stateFloating == NULL) {
+        return (jint)CNA_RESULT_INVALID_ARGUMENT;
+    }
     CNA_ShadowCascadeStateEXT state_value;
     memset(&state_value, 0, sizeof state_value);
     state_value.struct_size = (uint32_t)(sizeof state_value);
@@ -7344,6 +7711,9 @@ Java_org_openeggbert_cna_internal_generated_NativeEngineLayerRoutes_environmentP
 {
     (void)environment;
     (void)declaring_class;
+    if (directionFloating == NULL) {
+        return (jint)CNA_RESULT_INVALID_ARGUMENT;
+    }
     CNA_Vector3 direction_value;
     memset(&direction_value, 0, sizeof direction_value);
     {
@@ -7373,6 +7743,9 @@ Java_org_openeggbert_cna_internal_generated_NativeEngineLayerRoutes_environmentP
 {
     (void)environment;
     (void)declaring_class;
+    if (out_directionFloating == NULL) {
+        return (jint)CNA_RESULT_INVALID_ARGUMENT;
+    }
     CNA_Vector3 out_direction_value;
     memset(&out_direction_value, 0, sizeof out_direction_value);
     CNA_Result call_result = cna.environment_processor_face_direction((int32_t)face, (float)u, (float)v, &out_direction_value);
@@ -7443,6 +7816,9 @@ Java_org_openeggbert_cna_internal_generated_NativeEngineLayerRoutes_environmentP
 {
     (void)environment;
     (void)declaring_class;
+    if (positionFloating == NULL) {
+        return (jint)CNA_RESULT_INVALID_ARGUMENT;
+    }
     CNA_Vector3 position_value;
     memset(&position_value, 0, sizeof position_value);
     {
@@ -7488,6 +7864,12 @@ Java_org_openeggbert_cna_internal_generated_NativeEngineLayerRoutes_environmentP
 {
     (void)environment;
     (void)declaring_class;
+    if (normalFloating == NULL) {
+        return (jint)CNA_RESULT_INVALID_ARGUMENT;
+    }
+    if (out_directionFloating == NULL) {
+        return (jint)CNA_RESULT_INVALID_ARGUMENT;
+    }
     CNA_Vector3 normal_value;
     memset(&normal_value, 0, sizeof normal_value);
     {
@@ -7919,6 +8301,9 @@ Java_org_openeggbert_cna_internal_generated_NativeEngineLayerRoutes_frustumCulle
 {
     (void)environment;
     (void)declaring_class;
+    if (out_frustumFloating == NULL) {
+        return (jint)CNA_RESULT_INVALID_ARGUMENT;
+    }
     CNA_BoundingFrustum out_frustum_value;
     memset(&out_frustum_value, 0, sizeof out_frustum_value);
     CNA_Result call_result = cna.frustum_culler_ext_get_frustum((CNA_FrustumCullerEXTHandle)culler, &out_frustum_value);
@@ -7954,6 +8339,9 @@ Java_org_openeggbert_cna_internal_generated_NativeEngineLayerRoutes_frustumCulle
 {
     (void)environment;
     (void)declaring_class;
+    if (boxFloating == NULL) {
+        return (jint)CNA_RESULT_INVALID_ARGUMENT;
+    }
     CNA_BoundingBox box_value;
     memset(&box_value, 0, sizeof box_value);
     {
@@ -7982,6 +8370,9 @@ Java_org_openeggbert_cna_internal_generated_NativeEngineLayerRoutes_frustumCulle
 {
     (void)environment;
     (void)declaring_class;
+    if (sphereFloating == NULL) {
+        return (jint)CNA_RESULT_INVALID_ARGUMENT;
+    }
     CNA_BoundingSphere sphere_value;
     memset(&sphere_value, 0, sizeof sphere_value);
     {
@@ -8008,6 +8399,12 @@ Java_org_openeggbert_cna_internal_generated_NativeEngineLayerRoutes_frustumCulle
 {
     (void)environment;
     (void)declaring_class;
+    if (viewFloating == NULL) {
+        return (jint)CNA_RESULT_INVALID_ARGUMENT;
+    }
+    if (projectionFloating == NULL) {
+        return (jint)CNA_RESULT_INVALID_ARGUMENT;
+    }
     CNA_Matrix view_value;
     memset(&view_value, 0, sizeof view_value);
     {
@@ -8062,6 +8459,9 @@ Java_org_openeggbert_cna_internal_generated_NativeEngineLayerRoutes_frustumCulle
 {
     (void)environment;
     (void)declaring_class;
+    if (view_projectionFloating == NULL) {
+        return (jint)CNA_RESULT_INVALID_ARGUMENT;
+    }
     CNA_Matrix view_projection_value;
     memset(&view_projection_value, 0, sizeof view_projection_value);
     {
@@ -8085,6 +8485,100 @@ Java_org_openeggbert_cna_internal_generated_NativeEngineLayerRoutes_frustumCulle
         view_projection_value.m44 = (float)view_projectionFloating_values[15];
     }
     CNA_Result call_result = cna.frustum_culler_ext_set_view_projection((CNA_FrustumCullerEXTHandle)culler, &view_projection_value);
+    return (jint)call_result;
+}
+
+JNIEXPORT jint JNICALL
+Java_org_openeggbert_cna_internal_generated_NativeEngineLayerRoutes_fullscreenPassCreate(
+    JNIEnv* environment, jclass declaring_class, jlong graphics_device, jlongArray out_pass)
+{
+    (void)environment;
+    (void)declaring_class;
+    CNA_FullscreenPassHandle out_pass_value = 0;
+    CNA_Result call_result = cna.fullscreen_pass_create((CNA_Handle)graphics_device, &out_pass_value);
+    if (call_result == CNA_RESULT_SUCCESS || call_result == CNA_RESULT_BUFFER_TOO_SMALL) {
+        jlong out_pass_element = (jlong)out_pass_value;
+        (*environment)->SetLongArrayRegion(
+            environment, out_pass, 0, 1, &out_pass_element);
+    }
+    return (jint)call_result;
+}
+
+JNIEXPORT jint JNICALL
+Java_org_openeggbert_cna_internal_generated_NativeEngineLayerRoutes_fullscreenPassDestroy(
+    JNIEnv* environment, jclass declaring_class, jlong pass)
+{
+    (void)environment;
+    (void)declaring_class;
+    CNA_Result call_result = cna.fullscreen_pass_destroy((CNA_FullscreenPassHandle)pass);
+    return (jint)call_result;
+}
+
+JNIEXPORT jint JNICALL
+Java_org_openeggbert_cna_internal_generated_NativeEngineLayerRoutes_fullscreenPassDraw(
+    JNIEnv* environment, jclass declaring_class, jlong pass, jlong source, jlong destination, jlong effect, jint width, jint height, jlongArray samplerIntegral, jfloatArray samplerFloating)
+{
+    (void)environment;
+    (void)declaring_class;
+    CNA_SamplerState sampler_value;
+    const CNA_SamplerState* sampler_pointer = NULL;
+    if (samplerIntegral != NULL && samplerFloating != NULL) {
+        memset(&sampler_value, 0, sizeof sampler_value);
+        sampler_value.struct_size = (uint32_t)(sizeof sampler_value);
+        sampler_value.struct_version = UINT32_C(1);
+        {
+            jlong samplerIntegral_values[7];
+            (*environment)->GetLongArrayRegion(environment, samplerIntegral, 0, 7, samplerIntegral_values);
+            sampler_value.address_u = (CNA_TextureAddressMode)samplerIntegral_values[0];
+            sampler_value.address_v = (CNA_TextureAddressMode)samplerIntegral_values[1];
+            sampler_value.address_w = (CNA_TextureAddressMode)samplerIntegral_values[2];
+            sampler_value.filter = (CNA_TextureFilter)samplerIntegral_values[3];
+            sampler_value.max_anisotropy = (int32_t)samplerIntegral_values[4];
+            sampler_value.max_mip_level = (int32_t)samplerIntegral_values[5];
+            sampler_value.reserved = (uint32_t)samplerIntegral_values[6];
+        }
+        {
+            jfloat samplerFloating_values[1];
+            (*environment)->GetFloatArrayRegion(environment, samplerFloating, 0, 1, samplerFloating_values);
+            sampler_value.mip_map_level_of_detail_bias = (float)samplerFloating_values[0];
+        }
+        sampler_pointer = &sampler_value;
+    }
+    CNA_Result call_result = cna.fullscreen_pass_draw((CNA_FullscreenPassHandle)pass, (CNA_Handle)source, (CNA_Handle)destination, (CNA_EffectHandle)effect, (int32_t)width, (int32_t)height, sampler_pointer);
+    return (jint)call_result;
+}
+
+JNIEXPORT jint JNICALL
+Java_org_openeggbert_cna_internal_generated_NativeEngineLayerRoutes_fullscreenPassDrawOverCurrentTarget(
+    JNIEnv* environment, jclass declaring_class, jlong pass, jlong source, jlong effect, jint width, jint height, jlongArray samplerIntegral, jfloatArray samplerFloating)
+{
+    (void)environment;
+    (void)declaring_class;
+    CNA_SamplerState sampler_value;
+    const CNA_SamplerState* sampler_pointer = NULL;
+    if (samplerIntegral != NULL && samplerFloating != NULL) {
+        memset(&sampler_value, 0, sizeof sampler_value);
+        sampler_value.struct_size = (uint32_t)(sizeof sampler_value);
+        sampler_value.struct_version = UINT32_C(1);
+        {
+            jlong samplerIntegral_values[7];
+            (*environment)->GetLongArrayRegion(environment, samplerIntegral, 0, 7, samplerIntegral_values);
+            sampler_value.address_u = (CNA_TextureAddressMode)samplerIntegral_values[0];
+            sampler_value.address_v = (CNA_TextureAddressMode)samplerIntegral_values[1];
+            sampler_value.address_w = (CNA_TextureAddressMode)samplerIntegral_values[2];
+            sampler_value.filter = (CNA_TextureFilter)samplerIntegral_values[3];
+            sampler_value.max_anisotropy = (int32_t)samplerIntegral_values[4];
+            sampler_value.max_mip_level = (int32_t)samplerIntegral_values[5];
+            sampler_value.reserved = (uint32_t)samplerIntegral_values[6];
+        }
+        {
+            jfloat samplerFloating_values[1];
+            (*environment)->GetFloatArrayRegion(environment, samplerFloating, 0, 1, samplerFloating_values);
+            sampler_value.mip_map_level_of_detail_bias = (float)samplerFloating_values[0];
+        }
+        sampler_pointer = &sampler_value;
+    }
+    CNA_Result call_result = cna.fullscreen_pass_draw_over_current_target((CNA_FullscreenPassHandle)pass, (CNA_Handle)source, (CNA_EffectHandle)effect, (int32_t)width, (int32_t)height, sampler_pointer);
     return (jint)call_result;
 }
 
@@ -8174,6 +8668,12 @@ Java_org_openeggbert_cna_internal_generated_NativeEngineLayerRoutes_gltfMaterial
 {
     (void)environment;
     (void)declaring_class;
+    if (sourceFloating == NULL) {
+        return (jint)CNA_RESULT_INVALID_ARGUMENT;
+    }
+    if (texturesIntegral == NULL) {
+        return (jint)CNA_RESULT_INVALID_ARGUMENT;
+    }
     CNA_GltfMaterialExtensionSourceEXT source_value;
     memset(&source_value, 0, sizeof source_value);
     source_value.struct_size = (uint32_t)(sizeof source_value);
@@ -8225,6 +8725,15 @@ Java_org_openeggbert_cna_internal_generated_NativeEngineLayerRoutes_gltfMaterial
 {
     (void)environment;
     (void)declaring_class;
+    if (sourceBytes == NULL || sourceIntegral == NULL || sourceFloating == NULL) {
+        return (jint)CNA_RESULT_INVALID_ARGUMENT;
+    }
+    if (texturesIntegral == NULL) {
+        return (jint)CNA_RESULT_INVALID_ARGUMENT;
+    }
+    if (out_materialBytes == NULL || out_materialIntegral == NULL || out_materialFloating == NULL) {
+        return (jint)CNA_RESULT_INVALID_ARGUMENT;
+    }
     CNA_GltfMaterialSourceEXT source_value;
     memset(&source_value, 0, sizeof source_value);
     source_value.struct_size = (uint32_t)(sizeof source_value);
@@ -8454,6 +8963,9 @@ Java_org_openeggbert_cna_internal_generated_NativeEngineLayerRoutes_gltfMaterial
 {
     (void)environment;
     (void)declaring_class;
+    if (out_sourceFloating == NULL) {
+        return (jint)CNA_RESULT_INVALID_ARGUMENT;
+    }
     CNA_GltfMaterialExtensionSourceEXT out_source_value;
     memset(&out_source_value, 0, sizeof out_source_value);
     out_source_value.struct_size = (uint32_t)(sizeof out_source_value);
@@ -8491,6 +9003,9 @@ Java_org_openeggbert_cna_internal_generated_NativeEngineLayerRoutes_gltfMaterial
 {
     (void)environment;
     (void)declaring_class;
+    if (out_sourceBytes == NULL || out_sourceIntegral == NULL || out_sourceFloating == NULL) {
+        return (jint)CNA_RESULT_INVALID_ARGUMENT;
+    }
     CNA_GltfMaterialSourceEXT out_source_value;
     memset(&out_source_value, 0, sizeof out_source_value);
     out_source_value.struct_size = (uint32_t)(sizeof out_source_value);
@@ -8600,6 +9115,9 @@ Java_org_openeggbert_cna_internal_generated_NativeEngineLayerRoutes_gpuCullableI
 {
     (void)environment;
     (void)declaring_class;
+    if (out_instanceFloating == NULL) {
+        return (jint)CNA_RESULT_INVALID_ARGUMENT;
+    }
     CNA_GpuCullableInstance out_instance_value;
     memset(&out_instance_value, 0, sizeof out_instance_value);
     out_instance_value.struct_size = (uint32_t)(sizeof out_instance_value);
@@ -8703,6 +9221,12 @@ Java_org_openeggbert_cna_internal_generated_NativeEngineLayerRoutes_gpuInstanceC
 {
     (void)environment;
     (void)declaring_class;
+    if (viewFloating == NULL) {
+        return (jint)CNA_RESULT_INVALID_ARGUMENT;
+    }
+    if (projectionFloating == NULL) {
+        return (jint)CNA_RESULT_INVALID_ARGUMENT;
+    }
     CNA_Matrix view_value;
     memset(&view_value, 0, sizeof view_value);
     {
@@ -9116,6 +9640,12 @@ Java_org_openeggbert_cna_internal_generated_NativeEngineLayerRoutes_hdrDisplayOu
 {
     (void)environment;
     (void)declaring_class;
+    if (scene_linearFloating == NULL) {
+        return (jint)CNA_RESULT_INVALID_ARGUMENT;
+    }
+    if (out_colorFloating == NULL) {
+        return (jint)CNA_RESULT_INVALID_ARGUMENT;
+    }
     CNA_Vector3 scene_linear_value;
     memset(&scene_linear_value, 0, sizeof scene_linear_value);
     {
@@ -9227,6 +9757,12 @@ Java_org_openeggbert_cna_internal_generated_NativeEngineLayerRoutes_hdrDisplayOu
 {
     (void)environment;
     (void)declaring_class;
+    if (colorFloating == NULL) {
+        return (jint)CNA_RESULT_INVALID_ARGUMENT;
+    }
+    if (out_colorFloating == NULL) {
+        return (jint)CNA_RESULT_INVALID_ARGUMENT;
+    }
     CNA_Vector3 color_value;
     memset(&color_value, 0, sizeof color_value);
     {
@@ -9336,6 +9872,9 @@ Java_org_openeggbert_cna_internal_generated_NativeEngineLayerRoutes_heightFogPas
 {
     (void)environment;
     (void)declaring_class;
+    if (out_valueFloating == NULL) {
+        return (jint)CNA_RESULT_INVALID_ARGUMENT;
+    }
     CNA_Vector3 out_value_value;
     memset(&out_value_value, 0, sizeof out_value_value);
     CNA_Result call_result = cna.height_fog_pass_get_color((CNA_PostProcessPassHandle)pass, &out_value_value);
@@ -9416,6 +9955,9 @@ Java_org_openeggbert_cna_internal_generated_NativeEngineLayerRoutes_heightFogPas
 {
     (void)environment;
     (void)declaring_class;
+    if (valueFloating == NULL) {
+        return (jint)CNA_RESULT_INVALID_ARGUMENT;
+    }
     CNA_Vector3 value_value;
     memset(&value_value, 0, sizeof value_value);
     {
@@ -9455,6 +9997,9 @@ Java_org_openeggbert_cna_internal_generated_NativeEngineLayerRoutes_imageBasedLi
 {
     (void)environment;
     (void)declaring_class;
+    if (out_lightIntegral == NULL || out_lightFloating == NULL) {
+        return (jint)CNA_RESULT_INVALID_ARGUMENT;
+    }
     CNA_ImageBasedLightEXT out_light_value;
     memset(&out_light_value, 0, sizeof out_light_value);
     out_light_value.struct_size = (uint32_t)(sizeof out_light_value);
@@ -9486,6 +10031,9 @@ Java_org_openeggbert_cna_internal_generated_NativeEngineLayerRoutes_imageBasedLi
 {
     (void)environment;
     (void)declaring_class;
+    if (lightIntegral == NULL || lightFloating == NULL) {
+        return (jint)CNA_RESULT_INVALID_ARGUMENT;
+    }
     CNA_ImageBasedLightEXT light_value;
     memset(&light_value, 0, sizeof light_value);
     light_value.struct_size = (uint32_t)(sizeof light_value);
@@ -10079,6 +10627,12 @@ Java_org_openeggbert_cna_internal_generated_NativeEngineLayerRoutes_lightProbeBa
 {
     (void)environment;
     (void)declaring_class;
+    if (positionFloating == NULL) {
+        return (jint)CNA_RESULT_INVALID_ARGUMENT;
+    }
+    if (out_viewFloating == NULL) {
+        return (jint)CNA_RESULT_INVALID_ARGUMENT;
+    }
     CNA_Vector3 position_value;
     memset(&position_value, 0, sizeof position_value);
     {
@@ -10304,6 +10858,9 @@ Java_org_openeggbert_cna_internal_generated_NativeEngineLayerRoutes_lightProbeEx
 {
     (void)environment;
     (void)declaring_class;
+    if (positionFloating == NULL) {
+        return (jint)CNA_RESULT_INVALID_ARGUMENT;
+    }
     CNA_Vector3 position_value;
     memset(&position_value, 0, sizeof position_value);
     {
@@ -10355,6 +10912,9 @@ Java_org_openeggbert_cna_internal_generated_NativeEngineLayerRoutes_lightProbeEx
 {
     (void)environment;
     (void)declaring_class;
+    if (out_valueFloating == NULL) {
+        return (jint)CNA_RESULT_INVALID_ARGUMENT;
+    }
     CNA_Vector3 out_value_value;
     memset(&out_value_value, 0, sizeof out_value_value);
     CNA_Result call_result = cna.light_probe_ext_get_coefficient((CNA_LightProbeHandle)probe, (int32_t)index, &out_value_value);
@@ -10377,6 +10937,9 @@ Java_org_openeggbert_cna_internal_generated_NativeEngineLayerRoutes_lightProbeEx
 {
     (void)environment;
     (void)declaring_class;
+    if (out_positionFloating == NULL) {
+        return (jint)CNA_RESULT_INVALID_ARGUMENT;
+    }
     CNA_Vector3 out_position_value;
     memset(&out_position_value, 0, sizeof out_position_value);
     CNA_Result call_result = cna.light_probe_ext_get_position((CNA_LightProbeHandle)probe, &out_position_value);
@@ -10447,6 +11010,12 @@ Java_org_openeggbert_cna_internal_generated_NativeEngineLayerRoutes_lightProbeEx
 {
     (void)environment;
     (void)declaring_class;
+    if (normalFloating == NULL) {
+        return (jint)CNA_RESULT_INVALID_ARGUMENT;
+    }
+    if (out_irradianceFloating == NULL) {
+        return (jint)CNA_RESULT_INVALID_ARGUMENT;
+    }
     CNA_Vector3 normal_value;
     memset(&normal_value, 0, sizeof normal_value);
     {
@@ -10504,6 +11073,9 @@ Java_org_openeggbert_cna_internal_generated_NativeEngineLayerRoutes_lightProbeEx
 {
     (void)environment;
     (void)declaring_class;
+    if (valueFloating == NULL) {
+        return (jint)CNA_RESULT_INVALID_ARGUMENT;
+    }
     CNA_Vector3 value_value;
     memset(&value_value, 0, sizeof value_value);
     {
@@ -10523,6 +11095,9 @@ Java_org_openeggbert_cna_internal_generated_NativeEngineLayerRoutes_lightProbeEx
 {
     (void)environment;
     (void)declaring_class;
+    if (positionFloating == NULL) {
+        return (jint)CNA_RESULT_INVALID_ARGUMENT;
+    }
     CNA_Vector3 position_value;
     memset(&position_value, 0, sizeof position_value);
     {
@@ -10552,6 +11127,9 @@ Java_org_openeggbert_cna_internal_generated_NativeEngineLayerRoutes_lightProbeEx
 {
     (void)environment;
     (void)declaring_class;
+    if (directionFloating == NULL) {
+        return (jint)CNA_RESULT_INVALID_ARGUMENT;
+    }
     CNA_Vector3 direction_value;
     memset(&direction_value, 0, sizeof direction_value);
     {
@@ -10577,6 +11155,9 @@ Java_org_openeggbert_cna_internal_generated_NativeEngineLayerRoutes_lightProbeVo
 {
     (void)environment;
     (void)declaring_class;
+    if (positionFloating == NULL) {
+        return (jint)CNA_RESULT_INVALID_ARGUMENT;
+    }
     CNA_Vector3 position_value;
     memset(&position_value, 0, sizeof position_value);
     {
@@ -10602,6 +11183,9 @@ Java_org_openeggbert_cna_internal_generated_NativeEngineLayerRoutes_lightProbeVo
 {
     (void)environment;
     (void)declaring_class;
+    if (boundsFloating == NULL) {
+        return (jint)CNA_RESULT_INVALID_ARGUMENT;
+    }
     CNA_BoundingBox bounds_value;
     memset(&bounds_value, 0, sizeof bounds_value);
     {
@@ -10640,6 +11224,9 @@ Java_org_openeggbert_cna_internal_generated_NativeEngineLayerRoutes_lightProbeVo
 {
     (void)environment;
     (void)declaring_class;
+    if (out_boundsFloating == NULL) {
+        return (jint)CNA_RESULT_INVALID_ARGUMENT;
+    }
     CNA_BoundingBox out_bounds_value;
     memset(&out_bounds_value, 0, sizeof out_bounds_value);
     CNA_Result call_result = cna.light_probe_volume_ext_get_bounds((CNA_LightProbeVolumeHandle)volume, &out_bounds_value);
@@ -10739,6 +11326,9 @@ Java_org_openeggbert_cna_internal_generated_NativeEngineLayerRoutes_lightProbeVo
 {
     (void)environment;
     (void)declaring_class;
+    if (out_positionFloating == NULL) {
+        return (jint)CNA_RESULT_INVALID_ARGUMENT;
+    }
     CNA_Vector3 out_position_value;
     memset(&out_position_value, 0, sizeof out_position_value);
     CNA_Result call_result = cna.light_probe_volume_ext_get_probe_position((CNA_LightProbeVolumeHandle)volume, (int32_t)x, (int32_t)y, (int32_t)z, &out_position_value);
@@ -10761,6 +11351,15 @@ Java_org_openeggbert_cna_internal_generated_NativeEngineLayerRoutes_lightProbeVo
 {
     (void)environment;
     (void)declaring_class;
+    if (positionFloating == NULL) {
+        return (jint)CNA_RESULT_INVALID_ARGUMENT;
+    }
+    if (normalFloating == NULL) {
+        return (jint)CNA_RESULT_INVALID_ARGUMENT;
+    }
+    if (out_irradianceFloating == NULL) {
+        return (jint)CNA_RESULT_INVALID_ARGUMENT;
+    }
     CNA_Vector3 position_value;
     memset(&position_value, 0, sizeof position_value);
     {
@@ -10817,6 +11416,9 @@ Java_org_openeggbert_cna_internal_generated_NativeEngineLayerRoutes_lightProbeVo
 {
     (void)environment;
     (void)declaring_class;
+    if (positionFloating == NULL) {
+        return (jint)CNA_RESULT_INVALID_ARGUMENT;
+    }
     CNA_Vector3 position_value;
     memset(&position_value, 0, sizeof position_value);
     {
@@ -10894,6 +11496,9 @@ Java_org_openeggbert_cna_internal_generated_NativeEngineLayerRoutes_lightShaftPa
 {
     (void)environment;
     (void)declaring_class;
+    if (out_valueFloating == NULL) {
+        return (jint)CNA_RESULT_INVALID_ARGUMENT;
+    }
     CNA_Vector2 out_value_value;
     memset(&out_value_value, 0, sizeof out_value_value);
     CNA_Result call_result = cna.light_shaft_pass_get_light_screen_position((CNA_PostProcessPassHandle)pass, &out_value_value);
@@ -10951,6 +11556,9 @@ Java_org_openeggbert_cna_internal_generated_NativeEngineLayerRoutes_lightShaftPa
 {
     (void)environment;
     (void)declaring_class;
+    if (valueFloating == NULL) {
+        return (jint)CNA_RESULT_INVALID_ARGUMENT;
+    }
     CNA_Vector2 value_value;
     memset(&value_value, 0, sizeof value_value);
     {
@@ -11282,6 +11890,9 @@ Java_org_openeggbert_cna_internal_generated_NativeEngineLayerRoutes_particleEmit
 {
     (void)environment;
     (void)declaring_class;
+    if (out_settingsFloating == NULL) {
+        return (jint)CNA_RESULT_INVALID_ARGUMENT;
+    }
     CNA_ParticleEmitterSettings out_settings_value;
     memset(&out_settings_value, 0, sizeof out_settings_value);
     out_settings_value.struct_size = (uint32_t)(sizeof out_settings_value);
@@ -11329,6 +11940,9 @@ Java_org_openeggbert_cna_internal_generated_NativeEngineLayerRoutes_particleInit
 {
     (void)environment;
     (void)declaring_class;
+    if (out_particleFloating == NULL) {
+        return (jint)CNA_RESULT_INVALID_ARGUMENT;
+    }
     CNA_Particle out_particle_value;
     memset(&out_particle_value, 0, sizeof out_particle_value);
     CNA_Result call_result = cna.particle_init(&out_particle_value);
@@ -11523,6 +12137,12 @@ Java_org_openeggbert_cna_internal_generated_NativeEngineLayerRoutes_particleSyst
 {
     (void)environment;
     (void)declaring_class;
+    if (viewFloating == NULL) {
+        return (jint)CNA_RESULT_INVALID_ARGUMENT;
+    }
+    if (projectionFloating == NULL) {
+        return (jint)CNA_RESULT_INVALID_ARGUMENT;
+    }
     CNA_Matrix view_value;
     memset(&view_value, 0, sizeof view_value);
     {
@@ -11609,6 +12229,9 @@ Java_org_openeggbert_cna_internal_generated_NativeEngineLayerRoutes_particleSyst
 {
     (void)environment;
     (void)declaring_class;
+    if (out_settingsFloating == NULL) {
+        return (jint)CNA_RESULT_INVALID_ARGUMENT;
+    }
     CNA_ParticleEmitterSettings out_settings_value;
     memset(&out_settings_value, 0, sizeof out_settings_value);
     out_settings_value.struct_size = (uint32_t)(sizeof out_settings_value);
@@ -11740,6 +12363,9 @@ Java_org_openeggbert_cna_internal_generated_NativeEngineLayerRoutes_particleSyst
 {
     (void)environment;
     (void)declaring_class;
+    if (settingsFloating == NULL) {
+        return (jint)CNA_RESULT_INVALID_ARGUMENT;
+    }
     CNA_ParticleEmitterSettings settings_value;
     memset(&settings_value, 0, sizeof settings_value);
     settings_value.struct_size = (uint32_t)(sizeof settings_value);
@@ -11804,6 +12430,12 @@ Java_org_openeggbert_cna_internal_generated_NativeEngineLayerRoutes_particleSyst
 {
     (void)environment;
     (void)declaring_class;
+    if (particleFloating == NULL) {
+        return (jint)CNA_RESULT_INVALID_ARGUMENT;
+    }
+    if (settingsFloating == NULL) {
+        return (jint)CNA_RESULT_INVALID_ARGUMENT;
+    }
     CNA_Particle particle_value;
     memset(&particle_value, 0, sizeof particle_value);
     {
@@ -11911,6 +12543,9 @@ Java_org_openeggbert_cna_internal_generated_NativeEngineLayerRoutes_pbrEffectApp
 {
     (void)environment;
     (void)declaring_class;
+    if (materialBytes == NULL || materialIntegral == NULL || materialFloating == NULL) {
+        return (jint)CNA_RESULT_INVALID_ARGUMENT;
+    }
     CNA_PbrMaterialEXT material_value;
     memset(&material_value, 0, sizeof material_value);
     material_value.struct_size = (uint32_t)(sizeof material_value);
@@ -12026,6 +12661,9 @@ Java_org_openeggbert_cna_internal_generated_NativeEngineLayerRoutes_pbrEffectExt
 {
     (void)environment;
     (void)declaring_class;
+    if (out_materialBytes == NULL || out_materialIntegral == NULL || out_materialFloating == NULL) {
+        return (jint)CNA_RESULT_INVALID_ARGUMENT;
+    }
     CNA_PbrMaterialEXT out_material_value;
     memset(&out_material_value, 0, sizeof out_material_value);
     out_material_value.struct_size = (uint32_t)(sizeof out_material_value);
@@ -12146,6 +12784,9 @@ Java_org_openeggbert_cna_internal_generated_NativeEngineLayerRoutes_pbrMaterialA
 {
     (void)environment;
     (void)declaring_class;
+    if (materialBytes == NULL || materialIntegral == NULL || materialFloating == NULL) {
+        return (jint)CNA_RESULT_INVALID_ARGUMENT;
+    }
     CNA_PbrMaterialEXT material_value;
     memset(&material_value, 0, sizeof material_value);
     material_value.struct_size = (uint32_t)(sizeof material_value);
@@ -12261,6 +12902,9 @@ Java_org_openeggbert_cna_internal_generated_NativeEngineLayerRoutes_pbrMaterialE
 {
     (void)environment;
     (void)declaring_class;
+    if (materialBytes == NULL || materialIntegral == NULL || materialFloating == NULL) {
+        return (jint)CNA_RESULT_INVALID_ARGUMENT;
+    }
     CNA_PbrMaterialEXT material_value;
     memset(&material_value, 0, sizeof material_value);
     material_value.struct_size = (uint32_t)(sizeof material_value);
@@ -12388,6 +13032,12 @@ Java_org_openeggbert_cna_internal_generated_NativeEngineLayerRoutes_pbrMaterialE
 {
     (void)environment;
     (void)declaring_class;
+    if (firstBytes == NULL || firstIntegral == NULL || firstFloating == NULL) {
+        return (jint)CNA_RESULT_INVALID_ARGUMENT;
+    }
+    if (secondBytes == NULL || secondIntegral == NULL || secondFloating == NULL) {
+        return (jint)CNA_RESULT_INVALID_ARGUMENT;
+    }
     CNA_PbrMaterialEXT first_value;
     memset(&first_value, 0, sizeof first_value);
     first_value.struct_size = (uint32_t)(sizeof first_value);
@@ -12614,6 +13264,9 @@ Java_org_openeggbert_cna_internal_generated_NativeEngineLayerRoutes_pbrMaterialE
 {
     (void)environment;
     (void)declaring_class;
+    if (materialBytes == NULL || materialIntegral == NULL || materialFloating == NULL) {
+        return (jint)CNA_RESULT_INVALID_ARGUMENT;
+    }
     CNA_PbrMaterialEXT material_value;
     memset(&material_value, 0, sizeof material_value);
     material_value.struct_size = (uint32_t)(sizeof material_value);
@@ -12809,6 +13462,9 @@ Java_org_openeggbert_cna_internal_generated_NativeEngineLayerRoutes_pbrMaterialE
 {
     (void)environment;
     (void)declaring_class;
+    if (out_valueFloating == NULL) {
+        return (jint)CNA_RESULT_INVALID_ARGUMENT;
+    }
     CNA_Vector3 out_value_value;
     memset(&out_value_value, 0, sizeof out_value_value);
     CNA_Result call_result = cna.pbr_material_extensions_get_attenuation_color((CNA_PbrMaterialExtensionsHandle)extensions, &out_value_value);
@@ -12975,6 +13631,9 @@ Java_org_openeggbert_cna_internal_generated_NativeEngineLayerRoutes_pbrMaterialE
 {
     (void)environment;
     (void)declaring_class;
+    if (out_valueFloating == NULL) {
+        return (jint)CNA_RESULT_INVALID_ARGUMENT;
+    }
     CNA_Vector3 out_value_value;
     memset(&out_value_value, 0, sizeof out_value_value);
     CNA_Result call_result = cna.pbr_material_extensions_get_sheen_color_factor((CNA_PbrMaterialExtensionsHandle)extensions, &out_value_value);
@@ -13013,6 +13672,9 @@ Java_org_openeggbert_cna_internal_generated_NativeEngineLayerRoutes_pbrMaterialE
 {
     (void)environment;
     (void)declaring_class;
+    if (out_valueFloating == NULL) {
+        return (jint)CNA_RESULT_INVALID_ARGUMENT;
+    }
     CNA_Vector3 out_value_value;
     memset(&out_value_value, 0, sizeof out_value_value);
     CNA_Result call_result = cna.pbr_material_extensions_get_subsurface_color((CNA_PbrMaterialExtensionsHandle)extensions, &out_value_value);
@@ -13163,6 +13825,9 @@ Java_org_openeggbert_cna_internal_generated_NativeEngineLayerRoutes_pbrMaterialE
 {
     (void)environment;
     (void)declaring_class;
+    if (valueFloating == NULL) {
+        return (jint)CNA_RESULT_INVALID_ARGUMENT;
+    }
     CNA_Vector3 value_value;
     memset(&value_value, 0, sizeof value_value);
     {
@@ -13312,6 +13977,9 @@ Java_org_openeggbert_cna_internal_generated_NativeEngineLayerRoutes_pbrMaterialE
 {
     (void)environment;
     (void)declaring_class;
+    if (valueFloating == NULL) {
+        return (jint)CNA_RESULT_INVALID_ARGUMENT;
+    }
     CNA_Vector3 value_value;
     memset(&value_value, 0, sizeof value_value);
     {
@@ -13361,6 +14029,9 @@ Java_org_openeggbert_cna_internal_generated_NativeEngineLayerRoutes_pbrMaterialE
 {
     (void)environment;
     (void)declaring_class;
+    if (valueFloating == NULL) {
+        return (jint)CNA_RESULT_INVALID_ARGUMENT;
+    }
     CNA_Vector3 value_value;
     memset(&value_value, 0, sizeof value_value);
     {
@@ -13430,6 +14101,9 @@ Java_org_openeggbert_cna_internal_generated_NativeEngineLayerRoutes_pointLightEx
 {
     (void)environment;
     (void)declaring_class;
+    if (out_lightBytes == NULL || out_lightIntegral == NULL || out_lightFloating == NULL) {
+        return (jint)CNA_RESULT_INVALID_ARGUMENT;
+    }
     CNA_PointLightEXT out_light_value;
     memset(&out_light_value, 0, sizeof out_light_value);
     out_light_value.struct_size = (uint32_t)(sizeof out_light_value);
@@ -13483,6 +14157,9 @@ Java_org_openeggbert_cna_internal_generated_NativeEngineLayerRoutes_postProcessC
 {
     (void)environment;
     (void)declaring_class;
+    if (contextBytes == NULL || contextIntegral == NULL || contextFloating == NULL) {
+        return (jint)CNA_RESULT_INVALID_ARGUMENT;
+    }
     CNA_PostProcessContext context_value;
     memset(&context_value, 0, sizeof context_value);
     context_value.struct_size = (uint32_t)(CNA_POST_PROCESS_CONTEXT_SIZE_V1);
@@ -13661,6 +14338,9 @@ Java_org_openeggbert_cna_internal_generated_NativeEngineLayerRoutes_postProcessC
 {
     (void)environment;
     (void)declaring_class;
+    if (out_timingBytes == NULL || out_timingIntegral == NULL || out_timingDoubles == NULL) {
+        return (jint)CNA_RESULT_INVALID_ARGUMENT;
+    }
     CNA_PassTimingEXT out_timing_value;
     memset(&out_timing_value, 0, sizeof out_timing_value);
     out_timing_value.struct_size = (uint32_t)(sizeof out_timing_value);
@@ -13766,6 +14446,9 @@ Java_org_openeggbert_cna_internal_generated_NativeEngineLayerRoutes_postProcessC
 {
     (void)environment;
     (void)declaring_class;
+    if (out_contextBytes == NULL || out_contextIntegral == NULL || out_contextFloating == NULL) {
+        return (jint)CNA_RESULT_INVALID_ARGUMENT;
+    }
     CNA_PostProcessContext out_context_value;
     memset(&out_context_value, 0, sizeof out_context_value);
     out_context_value.struct_size = (uint32_t)(CNA_POST_PROCESS_CONTEXT_SIZE_V1);
@@ -13931,6 +14614,9 @@ Java_org_openeggbert_cna_internal_generated_NativeEngineLayerRoutes_postProcessP
 {
     (void)environment;
     (void)declaring_class;
+    if (contextBytes == NULL || contextIntegral == NULL || contextFloating == NULL) {
+        return (jint)CNA_RESULT_INVALID_ARGUMENT;
+    }
     CNA_PostProcessContext context_value;
     memset(&context_value, 0, sizeof context_value);
     context_value.struct_size = (uint32_t)(CNA_POST_PROCESS_CONTEXT_SIZE_V1);
@@ -14083,6 +14769,9 @@ Java_org_openeggbert_cna_internal_generated_NativeEngineLayerRoutes_punctualLigh
 {
     (void)environment;
     (void)declaring_class;
+    if (out_lightIntegral == NULL || out_lightFloating == NULL) {
+        return (jint)CNA_RESULT_INVALID_ARGUMENT;
+    }
     CNA_PunctualLightEXT out_light_value;
     memset(&out_light_value, 0, sizeof out_light_value);
     out_light_value.struct_size = (uint32_t)(sizeof out_light_value);
@@ -14152,6 +14841,9 @@ Java_org_openeggbert_cna_internal_generated_NativeEngineLayerRoutes_renderPipeli
 {
     (void)environment;
     (void)declaring_class;
+    if (clear_colorIntegral == NULL) {
+        return (jint)CNA_RESULT_INVALID_ARGUMENT;
+    }
     CNA_Color clear_color_value;
     memset(&clear_color_value, 0, sizeof clear_color_value);
     {
@@ -14342,6 +15034,9 @@ Java_org_openeggbert_cna_internal_generated_NativeEngineLayerRoutes_renderPipeli
 {
     (void)environment;
     (void)declaring_class;
+    if (out_timingBytes == NULL || out_timingIntegral == NULL || out_timingDoubles == NULL) {
+        return (jint)CNA_RESULT_INVALID_ARGUMENT;
+    }
     CNA_PassTimingEXT out_timing_value;
     memset(&out_timing_value, 0, sizeof out_timing_value);
     out_timing_value.struct_size = (uint32_t)(sizeof out_timing_value);
@@ -14395,6 +15090,9 @@ Java_org_openeggbert_cna_internal_generated_NativeEngineLayerRoutes_renderPipeli
 {
     (void)environment;
     (void)declaring_class;
+    if (out_settingsBytes == NULL || out_settingsIntegral == NULL || out_settingsFloating == NULL) {
+        return (jint)CNA_RESULT_INVALID_ARGUMENT;
+    }
     CNA_RenderPipelineSettingsEXT out_settings_value;
     memset(&out_settings_value, 0, sizeof out_settings_value);
     out_settings_value.struct_size = (uint32_t)(sizeof out_settings_value);
@@ -14477,6 +15175,9 @@ Java_org_openeggbert_cna_internal_generated_NativeEngineLayerRoutes_renderPipeli
 {
     (void)environment;
     (void)declaring_class;
+    if (out_statisticsBytes == NULL || out_statisticsIntegral == NULL) {
+        return (jint)CNA_RESULT_INVALID_ARGUMENT;
+    }
     CNA_RenderPipelineFrameStatisticsEXT out_statistics_value;
     memset(&out_statistics_value, 0, sizeof out_statistics_value);
     out_statistics_value.struct_size = (uint32_t)(sizeof out_statistics_value);
@@ -14562,6 +15263,12 @@ Java_org_openeggbert_cna_internal_generated_NativeEngineLayerRoutes_renderPipeli
 {
     (void)environment;
     (void)declaring_class;
+    if (viewFloating == NULL) {
+        return (jint)CNA_RESULT_INVALID_ARGUMENT;
+    }
+    if (projectionFloating == NULL) {
+        return (jint)CNA_RESULT_INVALID_ARGUMENT;
+    }
     CNA_Matrix view_value;
     memset(&view_value, 0, sizeof view_value);
     {
@@ -14636,6 +15343,9 @@ Java_org_openeggbert_cna_internal_generated_NativeEngineLayerRoutes_renderPipeli
 {
     (void)environment;
     (void)declaring_class;
+    if (settingsBytes == NULL || settingsIntegral == NULL || settingsFloating == NULL) {
+        return (jint)CNA_RESULT_INVALID_ARGUMENT;
+    }
     CNA_RenderPipelineSettingsEXT settings_value;
     memset(&settings_value, 0, sizeof settings_value);
     settings_value.struct_size = (uint32_t)(sizeof settings_value);
@@ -14723,6 +15433,12 @@ Java_org_openeggbert_cna_internal_generated_NativeEngineLayerRoutes_renderPipeli
 {
     (void)environment;
     (void)declaring_class;
+    if (viewFloating == NULL) {
+        return (jint)CNA_RESULT_INVALID_ARGUMENT;
+    }
+    if (projectionFloating == NULL) {
+        return (jint)CNA_RESULT_INVALID_ARGUMENT;
+    }
     CNA_Matrix view_value;
     memset(&view_value, 0, sizeof view_value);
     {
@@ -14787,6 +15503,9 @@ Java_org_openeggbert_cna_internal_generated_NativeEngineLayerRoutes_renderPipeli
 {
     (void)environment;
     (void)declaring_class;
+    if (settingsBytes == NULL || settingsIntegral == NULL || settingsFloating == NULL) {
+        return (jint)CNA_RESULT_INVALID_ARGUMENT;
+    }
     CNA_RenderPipelineSettingsEXT settings_value;
     memset(&settings_value, 0, sizeof settings_value);
     settings_value.struct_size = (uint32_t)(sizeof settings_value);
@@ -14943,6 +15662,9 @@ Java_org_openeggbert_cna_internal_generated_NativeEngineLayerRoutes_renderPipeli
 {
     (void)environment;
     (void)declaring_class;
+    if (settingsBytes == NULL || settingsIntegral == NULL || settingsFloating == NULL) {
+        return (jint)CNA_RESULT_INVALID_ARGUMENT;
+    }
     CNA_RenderPipelineSettingsEXT settings_value;
     memset(&settings_value, 0, sizeof settings_value);
     settings_value.struct_size = (uint32_t)(sizeof settings_value);
@@ -15088,6 +15810,9 @@ Java_org_openeggbert_cna_internal_generated_NativeEngineLayerRoutes_renderPipeli
 {
     (void)environment;
     (void)declaring_class;
+    if (out_settingsBytes == NULL || out_settingsIntegral == NULL || out_settingsFloating == NULL) {
+        return (jint)CNA_RESULT_INVALID_ARGUMENT;
+    }
     CNA_RenderPipelineSettingsEXT out_settings_value;
     memset(&out_settings_value, 0, sizeof out_settings_value);
     out_settings_value.struct_size = (uint32_t)(sizeof out_settings_value);
@@ -15170,6 +15895,9 @@ Java_org_openeggbert_cna_internal_generated_NativeEngineLayerRoutes_renderPipeli
 {
     (void)environment;
     (void)declaring_class;
+    if (settingsBytes == NULL || settingsIntegral == NULL || settingsFloating == NULL) {
+        return (jint)CNA_RESULT_INVALID_ARGUMENT;
+    }
     CNA_RenderPipelineSettingsEXT settings_value;
     memset(&settings_value, 0, sizeof settings_value);
     settings_value.struct_size = (uint32_t)(sizeof settings_value);
@@ -15556,6 +16284,9 @@ Java_org_openeggbert_cna_internal_generated_NativeEngineLayerRoutes_shadowCascad
 {
     (void)environment;
     (void)declaring_class;
+    if (out_stateBytes == NULL || out_stateIntegral == NULL || out_stateFloating == NULL) {
+        return (jint)CNA_RESULT_INVALID_ARGUMENT;
+    }
     CNA_ShadowCascadeStateEXT out_state_value;
     memset(&out_state_value, 0, sizeof out_state_value);
     out_state_value.struct_size = (uint32_t)(sizeof out_state_value);
@@ -15736,6 +16467,12 @@ Java_org_openeggbert_cna_internal_generated_NativeEngineLayerRoutes_shadowMapBeg
 {
     (void)environment;
     (void)declaring_class;
+    if (lightBytes == NULL || lightIntegral == NULL || lightFloating == NULL) {
+        return (jint)CNA_RESULT_INVALID_ARGUMENT;
+    }
+    if (scene_boundsFloating == NULL) {
+        return (jint)CNA_RESULT_INVALID_ARGUMENT;
+    }
     CNA_DirectionalLightEXT light_value;
     memset(&light_value, 0, sizeof light_value);
     light_value.struct_size = (uint32_t)(sizeof light_value);
@@ -15785,6 +16522,15 @@ Java_org_openeggbert_cna_internal_generated_NativeEngineLayerRoutes_shadowMapCom
 {
     (void)environment;
     (void)declaring_class;
+    if (light_viewFloating == NULL) {
+        return (jint)CNA_RESULT_INVALID_ARGUMENT;
+    }
+    if (scene_boundsFloating == NULL) {
+        return (jint)CNA_RESULT_INVALID_ARGUMENT;
+    }
+    if (out_matrixFloating == NULL) {
+        return (jint)CNA_RESULT_INVALID_ARGUMENT;
+    }
     CNA_Matrix light_view_value;
     memset(&light_view_value, 0, sizeof light_view_value);
     {
@@ -15854,6 +16600,15 @@ Java_org_openeggbert_cna_internal_generated_NativeEngineLayerRoutes_shadowMapCom
 {
     (void)environment;
     (void)declaring_class;
+    if (lightBytes == NULL || lightIntegral == NULL || lightFloating == NULL) {
+        return (jint)CNA_RESULT_INVALID_ARGUMENT;
+    }
+    if (scene_boundsFloating == NULL) {
+        return (jint)CNA_RESULT_INVALID_ARGUMENT;
+    }
+    if (out_matrixFloating == NULL) {
+        return (jint)CNA_RESULT_INVALID_ARGUMENT;
+    }
     CNA_DirectionalLightEXT light_value;
     memset(&light_value, 0, sizeof light_value);
     light_value.struct_size = (uint32_t)(sizeof light_value);
@@ -16012,6 +16767,9 @@ Java_org_openeggbert_cna_internal_generated_NativeEngineLayerRoutes_shadowMapGet
 {
     (void)environment;
     (void)declaring_class;
+    if (out_matrixFloating == NULL) {
+        return (jint)CNA_RESULT_INVALID_ARGUMENT;
+    }
     CNA_Matrix out_matrix_value;
     memset(&out_matrix_value, 0, sizeof out_matrix_value);
     CNA_Result call_result = cna.shadow_map_get_light_view_projection((CNA_ShadowMapHandle)shadow_map, &out_matrix_value);
@@ -16137,6 +16895,9 @@ Java_org_openeggbert_cna_internal_generated_NativeEngineLayerRoutes_skinnedPbrEf
 {
     (void)environment;
     (void)declaring_class;
+    if (materialBytes == NULL || materialIntegral == NULL || materialFloating == NULL) {
+        return (jint)CNA_RESULT_INVALID_ARGUMENT;
+    }
     CNA_PbrMaterialEXT material_value;
     memset(&material_value, 0, sizeof material_value);
     material_value.struct_size = (uint32_t)(sizeof material_value);
@@ -16252,6 +17013,9 @@ Java_org_openeggbert_cna_internal_generated_NativeEngineLayerRoutes_skinnedPbrEf
 {
     (void)environment;
     (void)declaring_class;
+    if (out_materialBytes == NULL || out_materialIntegral == NULL || out_materialFloating == NULL) {
+        return (jint)CNA_RESULT_INVALID_ARGUMENT;
+    }
     CNA_PbrMaterialEXT out_material_value;
     memset(&out_material_value, 0, sizeof out_material_value);
     out_material_value.struct_size = (uint32_t)(sizeof out_material_value);
@@ -16372,6 +17136,15 @@ Java_org_openeggbert_cna_internal_generated_NativeEngineLayerRoutes_skyboxComput
 {
     (void)environment;
     (void)declaring_class;
+    if (viewFloating == NULL) {
+        return (jint)CNA_RESULT_INVALID_ARGUMENT;
+    }
+    if (projectionFloating == NULL) {
+        return (jint)CNA_RESULT_INVALID_ARGUMENT;
+    }
+    if (out_directionFloating == NULL) {
+        return (jint)CNA_RESULT_INVALID_ARGUMENT;
+    }
     CNA_Matrix view_value;
     memset(&view_value, 0, sizeof view_value);
     {
@@ -16464,6 +17237,12 @@ Java_org_openeggbert_cna_internal_generated_NativeEngineLayerRoutes_skyboxDraw(
 {
     (void)environment;
     (void)declaring_class;
+    if (viewFloating == NULL) {
+        return (jint)CNA_RESULT_INVALID_ARGUMENT;
+    }
+    if (projectionFloating == NULL) {
+        return (jint)CNA_RESULT_INVALID_ARGUMENT;
+    }
     CNA_Matrix view_value;
     memset(&view_value, 0, sizeof view_value);
     {
@@ -16534,6 +17313,9 @@ Java_org_openeggbert_cna_internal_generated_NativeEngineLayerRoutes_skyboxGetTin
 {
     (void)environment;
     (void)declaring_class;
+    if (out_tintFloating == NULL) {
+        return (jint)CNA_RESULT_INVALID_ARGUMENT;
+    }
     CNA_Vector3 out_tint_value;
     memset(&out_tint_value, 0, sizeof out_tint_value);
     CNA_Result call_result = cna.skybox_get_tint((CNA_SkyboxHandle)skybox, &out_tint_value);
@@ -16618,6 +17400,9 @@ Java_org_openeggbert_cna_internal_generated_NativeEngineLayerRoutes_skyboxSetTin
 {
     (void)environment;
     (void)declaring_class;
+    if (tintFloating == NULL) {
+        return (jint)CNA_RESULT_INVALID_ARGUMENT;
+    }
     CNA_Vector3 tint_value;
     memset(&tint_value, 0, sizeof tint_value);
     {
@@ -16751,6 +17536,9 @@ Java_org_openeggbert_cna_internal_generated_NativeEngineLayerRoutes_spotLightExt
 {
     (void)environment;
     (void)declaring_class;
+    if (out_lightBytes == NULL || out_lightIntegral == NULL || out_lightFloating == NULL) {
+        return (jint)CNA_RESULT_INVALID_ARGUMENT;
+    }
     CNA_SpotLightEXT out_light_value;
     memset(&out_light_value, 0, sizeof out_light_value);
     out_light_value.struct_size = (uint32_t)(sizeof out_light_value);
@@ -16799,6 +17587,9 @@ Java_org_openeggbert_cna_internal_generated_NativeEngineLayerRoutes_spotShadowMa
 {
     (void)environment;
     (void)declaring_class;
+    if (lightBytes == NULL || lightIntegral == NULL || lightFloating == NULL) {
+        return (jint)CNA_RESULT_INVALID_ARGUMENT;
+    }
     CNA_SpotLightEXT light_value;
     memset(&light_value, 0, sizeof light_value);
     light_value.struct_size = (uint32_t)(sizeof light_value);
@@ -16842,6 +17633,12 @@ Java_org_openeggbert_cna_internal_generated_NativeEngineLayerRoutes_spotShadowMa
 {
     (void)environment;
     (void)declaring_class;
+    if (lightBytes == NULL || lightIntegral == NULL || lightFloating == NULL) {
+        return (jint)CNA_RESULT_INVALID_ARGUMENT;
+    }
+    if (out_matrixFloating == NULL) {
+        return (jint)CNA_RESULT_INVALID_ARGUMENT;
+    }
     CNA_SpotLightEXT light_value;
     memset(&light_value, 0, sizeof light_value);
     light_value.struct_size = (uint32_t)(sizeof light_value);
@@ -16910,6 +17707,12 @@ Java_org_openeggbert_cna_internal_generated_NativeEngineLayerRoutes_spotShadowMa
 {
     (void)environment;
     (void)declaring_class;
+    if (lightBytes == NULL || lightIntegral == NULL || lightFloating == NULL) {
+        return (jint)CNA_RESULT_INVALID_ARGUMENT;
+    }
+    if (out_matrixFloating == NULL) {
+        return (jint)CNA_RESULT_INVALID_ARGUMENT;
+    }
     CNA_SpotLightEXT light_value;
     memset(&light_value, 0, sizeof light_value);
     light_value.struct_size = (uint32_t)(sizeof light_value);
@@ -17030,6 +17833,9 @@ Java_org_openeggbert_cna_internal_generated_NativeEngineLayerRoutes_spotShadowMa
 {
     (void)environment;
     (void)declaring_class;
+    if (out_positionFloating == NULL) {
+        return (jint)CNA_RESULT_INVALID_ARGUMENT;
+    }
     CNA_Vector3 out_position_value;
     memset(&out_position_value, 0, sizeof out_position_value);
     CNA_Result call_result = cna.spot_shadow_map_get_light_position((CNA_SpotShadowMapHandle)shadow_map, &out_position_value);
@@ -17068,6 +17874,9 @@ Java_org_openeggbert_cna_internal_generated_NativeEngineLayerRoutes_spotShadowMa
 {
     (void)environment;
     (void)declaring_class;
+    if (out_matrixFloating == NULL) {
+        return (jint)CNA_RESULT_INVALID_ARGUMENT;
+    }
     CNA_Matrix out_matrix_value;
     memset(&out_matrix_value, 0, sizeof out_matrix_value);
     CNA_Result call_result = cna.spot_shadow_map_get_light_view_projection((CNA_SpotShadowMapHandle)shadow_map, &out_matrix_value);
@@ -17624,6 +18433,12 @@ Java_org_openeggbert_cna_internal_generated_NativeEngineLayerRoutes_thinFilmIrid
 {
     (void)environment;
     (void)declaring_class;
+    if (base_f0Floating == NULL) {
+        return (jint)CNA_RESULT_INVALID_ARGUMENT;
+    }
+    if (out_valueFloating == NULL) {
+        return (jint)CNA_RESULT_INVALID_ARGUMENT;
+    }
     CNA_Vector3 base_f0_value;
     memset(&base_f0_value, 0, sizeof base_f0_value);
     {
@@ -17817,6 +18632,12 @@ Java_org_openeggbert_cna_internal_generated_NativeEngineLayerRoutes_transparentD
 {
     (void)environment;
     (void)declaring_class;
+    if (viewFloating == NULL) {
+        return (jint)CNA_RESULT_INVALID_ARGUMENT;
+    }
+    if (out_positionFloating == NULL) {
+        return (jint)CNA_RESULT_INVALID_ARGUMENT;
+    }
     CNA_Matrix view_value;
     memset(&view_value, 0, sizeof view_value);
     {
@@ -17871,6 +18692,9 @@ Java_org_openeggbert_cna_internal_generated_NativeEngineLayerRoutes_transparentD
 {
     (void)environment;
     (void)declaring_class;
+    if (viewFloating == NULL) {
+        return (jint)CNA_RESULT_INVALID_ARGUMENT;
+    }
     CNA_Matrix view_value;
     memset(&view_value, 0, sizeof view_value);
     {
@@ -17974,6 +18798,12 @@ Java_org_openeggbert_cna_internal_generated_NativeEngineLayerRoutes_transparentD
 {
     (void)environment;
     (void)declaring_class;
+    if (boundsFloating == NULL) {
+        return (jint)CNA_RESULT_INVALID_ARGUMENT;
+    }
+    if (camera_positionFloating == NULL) {
+        return (jint)CNA_RESULT_INVALID_ARGUMENT;
+    }
     CNA_BoundingBox bounds_value;
     memset(&bounds_value, 0, sizeof bounds_value);
     {
@@ -18095,6 +18925,12 @@ Java_org_openeggbert_cna_internal_generated_NativeEngineLayerRoutes_volumetricFo
 {
     (void)environment;
     (void)declaring_class;
+    if (light_directionFloating == NULL) {
+        return (jint)CNA_RESULT_INVALID_ARGUMENT;
+    }
+    if (light_colorFloating == NULL) {
+        return (jint)CNA_RESULT_INVALID_ARGUMENT;
+    }
     CNA_Vector3 light_direction_value;
     memset(&light_direction_value, 0, sizeof light_direction_value);
     {

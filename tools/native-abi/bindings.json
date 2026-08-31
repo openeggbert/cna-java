@@ -1053,6 +1053,16 @@
       ]
     },
     {
+      "name": "cna_ascii_pass_create",
+      "header": "engine_layer.h",
+      "ownership": "borrows the graphics device; returns an owned pass handle, released with cna_post_process_pass_destroy",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_Handle",
+        "CNA_PostProcessPassHandle*"
+      ]
+    },
+    {
       "name": "cna_ascii_post_process_effect_create",
       "header": "graphics_ext.h",
       "ownership": "borrows its inputs; returns an owned handle",
@@ -9980,6 +9990,54 @@
       "parameters": [
         "CNA_FrustumCullerEXTHandle",
         "const CNA_Matrix*"
+      ]
+    },
+    {
+      "name": "cna_fullscreen_pass_create",
+      "header": "engine_layer.h",
+      "ownership": "borrows the graphics device; returns an owned pass handle",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_Handle",
+        "CNA_FullscreenPassHandle*"
+      ]
+    },
+    {
+      "name": "cna_fullscreen_pass_destroy",
+      "header": "engine_layer.h",
+      "ownership": "consumes the pass handle",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_FullscreenPassHandle"
+      ]
+    },
+    {
+      "name": "cna_fullscreen_pass_draw",
+      "header": "engine_layer.h",
+      "ownership": "borrows the pass; the source, destination and effect are all borrowed for the call and nothing is retained",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_FullscreenPassHandle",
+        "CNA_Handle",
+        "CNA_Handle",
+        "CNA_EffectHandle",
+        "int32_t",
+        "int32_t",
+        "const CNA_SamplerState*"
+      ]
+    },
+    {
+      "name": "cna_fullscreen_pass_draw_over_current_target",
+      "header": "engine_layer.h",
+      "ownership": "borrows the pass; the source and effect are borrowed for the call",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_FullscreenPassHandle",
+        "CNA_Handle",
+        "CNA_EffectHandle",
+        "int32_t",
+        "int32_t",
+        "const CNA_SamplerState*"
       ]
     },
     {

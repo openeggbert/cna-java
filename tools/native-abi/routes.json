@@ -3509,6 +3509,10 @@
         }
       },
       {
+        "java": "asciiPassCreate",
+        "symbol": "cna_ascii_pass_create"
+      },
+      {
         "java": "atmosphericSkyCopyModelGlsl",
         "symbol": "cna_atmospheric_sky_copy_model_glsl"
       },
@@ -4769,6 +4773,28 @@
       {
         "java": "frustumCullerExtSetViewProjection",
         "symbol": "cna_frustum_culler_ext_set_view_projection"
+      },
+      {
+        "java": "fullscreenPassCreate",
+        "symbol": "cna_fullscreen_pass_create"
+      },
+      {
+        "java": "fullscreenPassDestroy",
+        "symbol": "cna_fullscreen_pass_destroy"
+      },
+      {
+        "java": "fullscreenPassDraw",
+        "symbol": "cna_fullscreen_pass_draw",
+        "optionalStructs": [
+          "sampler"
+        ]
+      },
+      {
+        "java": "fullscreenPassDrawOverCurrentTarget",
+        "symbol": "cna_fullscreen_pass_draw_over_current_target",
+        "optionalStructs": [
+          "sampler"
+        ]
       },
       {
         "java": "fxaaPassCopyFragmentGlsl",

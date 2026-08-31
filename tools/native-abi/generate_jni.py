@@ -471,6 +471,7 @@ def plan(route: dict, live: dict) -> dict:
                     "lifetime the declaration does not state")
             steps.append({"shape": "struct", "name": name, "ctype": type_name,
                           "input": constant, "inOut": in_out,
+                          "optional": name in route.get("optionalStructs", ()),
                           "versions": version_paths(type_name, live, declared=declared),
                           **groups})
             index += 1
@@ -889,10 +890,34 @@ def render_c(class_name: str, entries: list[dict]) -> str:
                     cleanup.append(unwind[-1])
                 arguments.append(f"{name}_value")
             elif shape == "struct":
-                body.append(f"    {step['ctype']} {name}_value;")
+                optional = step.get("optional", False)
+                carriers = [f"{name}{group.capitalize()}"
+                            for group, _, _, _ in STRUCT_GROUPS if step[group]]
+                if optional:
+                    # CNA documents this structure as optional -- "or null for the default" --
+                    # and a null pointer is a different instruction from an all-zero structure,
+                    # which would mean whatever zero happens to select. Java says "none" by
+                    # passing no arrays, and that becomes NULL rather than a zeroed value.
+                    body.append(f"    {step['ctype']} {name}_value;")
+                    body.append(f"    const {step['ctype']}* {name}_pointer = NULL;")
+                    body.append("    if (" + " && ".join(
+                        f"{field} != NULL" for field in carriers) + ") {")
+                    optional_from = len(body)
+                    arguments.append(f"{name}_pointer")
+                else:
+                    body.append(f"    {step['ctype']} {name}_value;")
+                    if carriers:
+                        # A borrowed array parameter that arrived null would make every
+                        # GetXArrayRegion below raise and then be read as uninitialised stack.
+                        # Refusing here turns a JVM-level fault into the result CNA itself
+                        # would have given for a missing argument.
+                        prologue.append("    if (" + " || ".join(
+                            f"{field} == NULL" for field in carriers) + ") {")
+                        prologue.append("        return (jint)CNA_RESULT_INVALID_ARGUMENT;")
+                        prologue.append("    }")
+                    arguments.append(f"&{name}_value")
                 body.append(f"    memset(&{name}_value, 0, sizeof {name}_value);")
                 body.extend(stamp_versions(f"{name}_value", step["versions"]))
-                arguments.append(f"&{name}_value")
                 for group, jni, java, _ in STRUCT_GROUPS:
                     if not step[group]:
                         continue
@@ -927,6 +952,11 @@ def render_c(class_name: str, entries: list[dict]) -> str:
                     body.append(f"    {name}_value.{path}.byte_length = (uint64_t){view}_size;")
                     unwind.append(release_bytes(view, abort=True))
                     cleanup.append(unwind[-1])
+                if step.get("optional", False):
+                    # Everything marshalled since the guard belongs inside it, indented to say so.
+                    body[optional_from:] = [f"    {line}" for line in body[optional_from:]]
+                    body.append(f"        {name}_pointer = &{name}_value;")
+                    body.append("    }")
         body = (["    (void)environment;", "    (void)declaring_class;"]
                 + prologue + body)
         body.append(f"    CNA_Result call_result = "

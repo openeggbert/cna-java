@@ -114,6 +114,9 @@ Java_org_openeggbert_cna_internal_generated_NativeCnbRoutes_cnbChunkEntryIsManda
 {
     (void)environment;
     (void)declaring_class;
+    if (entryIntegral == NULL) {
+        return (jint)CNA_RESULT_INVALID_ARGUMENT;
+    }
     CNA_CnbChunkEntry entry_value;
     memset(&entry_value, 0, sizeof entry_value);
     entry_value.struct_size = (uint32_t)(sizeof entry_value);
@@ -1069,6 +1072,9 @@ Java_org_openeggbert_cna_internal_generated_NativeCnbRoutes_cnbDecodeVideo(
 {
     (void)environment;
     (void)declaring_class;
+    if (out_infoIntegral == NULL || out_infoFloating == NULL) {
+        return (jint)CNA_RESULT_INVALID_ARGUMENT;
+    }
     CNA_CnbVideoInfo out_info_value;
     memset(&out_info_value, 0, sizeof out_info_value);
     out_info_value.struct_size = (uint32_t)(sizeof out_info_value);
@@ -1411,6 +1417,9 @@ Java_org_openeggbert_cna_internal_generated_NativeCnbRoutes_cnbDocumentGetChunk(
 {
     (void)environment;
     (void)declaring_class;
+    if (out_entryIntegral == NULL) {
+        return (jint)CNA_RESULT_INVALID_ARGUMENT;
+    }
     CNA_CnbChunkEntry out_entry_value;
     memset(&out_entry_value, 0, sizeof out_entry_value);
     out_entry_value.struct_size = (uint32_t)(sizeof out_entry_value);
@@ -1489,6 +1498,9 @@ Java_org_openeggbert_cna_internal_generated_NativeCnbRoutes_cnbDocumentGetExtern
 {
     (void)environment;
     (void)declaring_class;
+    if (out_referenceIntegral == NULL) {
+        return (jint)CNA_RESULT_INVALID_ARGUMENT;
+    }
     jsize what_for_diagnostics_size = (*environment)->GetArrayLength(environment, what_for_diagnostics);
     jbyte* what_for_diagnostics_bytes = (*environment)->GetByteArrayElements(environment, what_for_diagnostics, NULL);
     if (what_for_diagnostics_bytes == NULL) {
@@ -1551,6 +1563,9 @@ Java_org_openeggbert_cna_internal_generated_NativeCnbRoutes_cnbDocumentGetLimits
 {
     (void)environment;
     (void)declaring_class;
+    if (out_limitsIntegral == NULL) {
+        return (jint)CNA_RESULT_INVALID_ARGUMENT;
+    }
     CNA_CnbReadLimits out_limits_value;
     memset(&out_limits_value, 0, sizeof out_limits_value);
     out_limits_value.struct_size = (uint32_t)(sizeof out_limits_value);
@@ -1579,6 +1594,9 @@ Java_org_openeggbert_cna_internal_generated_NativeCnbRoutes_cnbDocumentGetMetada
 {
     (void)environment;
     (void)declaring_class;
+    if (out_metadataBytes == NULL || out_metadataIntegral == NULL) {
+        return (jint)CNA_RESULT_INVALID_ARGUMENT;
+    }
     CNA_CnbMetadata out_metadata_value;
     memset(&out_metadata_value, 0, sizeof out_metadata_value);
     out_metadata_value.struct_size = (uint32_t)(sizeof out_metadata_value);
@@ -1674,6 +1692,9 @@ Java_org_openeggbert_cna_internal_generated_NativeCnbRoutes_cnbDocumentParse(
 {
     (void)environment;
     (void)declaring_class;
+    if (limitsIntegral == NULL) {
+        return (jint)CNA_RESULT_INVALID_ARGUMENT;
+    }
     jsize bytes_size = (*environment)->GetArrayLength(environment, bytes);
     jbyte* bytes_elements = (*environment)->GetByteArrayElements(environment, bytes, NULL);
     if (bytes_elements == NULL) {
@@ -1733,6 +1754,9 @@ Java_org_openeggbert_cna_internal_generated_NativeCnbRoutes_cnbDocumentParseFile
 {
     (void)environment;
     (void)declaring_class;
+    if (limitsIntegral == NULL) {
+        return (jint)CNA_RESULT_INVALID_ARGUMENT;
+    }
     jsize path_size = (*environment)->GetArrayLength(environment, path);
     jbyte* path_bytes = (*environment)->GetByteArrayElements(environment, path, NULL);
     if (path_bytes == NULL) {
@@ -2253,6 +2277,9 @@ Java_org_openeggbert_cna_internal_generated_NativeCnbRoutes_cnbEncodeVideo(
 {
     (void)environment;
     (void)declaring_class;
+    if (infoIntegral == NULL || infoFloating == NULL) {
+        return (jint)CNA_RESULT_INVALID_ARGUMENT;
+    }
     jsize stream_reference_size = (*environment)->GetArrayLength(environment, stream_reference);
     jbyte* stream_reference_bytes = (*environment)->GetByteArrayElements(environment, stream_reference, NULL);
     if (stream_reference_bytes == NULL) {
@@ -2555,6 +2582,9 @@ Java_org_openeggbert_cna_internal_generated_NativeCnbRoutes_cnbImportImageAsText
 {
     (void)environment;
     (void)declaring_class;
+    if (optionsBytes == NULL || optionsIntegral == NULL) {
+        return (jint)CNA_RESULT_INVALID_ARGUMENT;
+    }
     jsize image_path_size = (*environment)->GetArrayLength(environment, image_path);
     jbyte* image_path_bytes = (*environment)->GetByteArrayElements(environment, image_path, NULL);
     if (image_path_bytes == NULL) {
@@ -2852,6 +2882,9 @@ Java_org_openeggbert_cna_internal_generated_NativeCnbRoutes_cnbModelAddLight(
 {
     (void)environment;
     (void)declaring_class;
+    if (lightFloating == NULL) {
+        return (jint)CNA_RESULT_INVALID_ARGUMENT;
+    }
     CNA_CnbModelLight light_value;
     memset(&light_value, 0, sizeof light_value);
     {
@@ -3027,6 +3060,9 @@ Java_org_openeggbert_cna_internal_generated_NativeCnbRoutes_cnbModelAddPart(
 {
     (void)environment;
     (void)declaring_class;
+    if (infoBytes == NULL || infoIntegral == NULL) {
+        return (jint)CNA_RESULT_INVALID_ARGUMENT;
+    }
     CNA_CnbModelPartInfo info_value;
     memset(&info_value, 0, sizeof info_value);
     info_value.struct_size = (uint32_t)(sizeof info_value);
@@ -3866,6 +3902,9 @@ Java_org_openeggbert_cna_internal_generated_NativeCnbRoutes_cnbModelGetBone(
 {
     (void)environment;
     (void)declaring_class;
+    if (out_boneIntegral == NULL || out_boneFloating == NULL) {
+        return (jint)CNA_RESULT_INVALID_ARGUMENT;
+    }
     CNA_CnbModelBone out_bone_value;
     memset(&out_bone_value, 0, sizeof out_bone_value);
     out_bone_value.struct_size = (uint32_t)(sizeof out_bone_value);
@@ -3926,6 +3965,9 @@ Java_org_openeggbert_cna_internal_generated_NativeCnbRoutes_cnbModelGetInfo(
 {
     (void)environment;
     (void)declaring_class;
+    if (out_infoIntegral == NULL) {
+        return (jint)CNA_RESULT_INVALID_ARGUMENT;
+    }
     CNA_CnbModelInfo out_info_value;
     memset(&out_info_value, 0, sizeof out_info_value);
     out_info_value.struct_size = (uint32_t)(sizeof out_info_value);
@@ -3956,6 +3998,9 @@ Java_org_openeggbert_cna_internal_generated_NativeCnbRoutes_cnbModelGetLight(
 {
     (void)environment;
     (void)declaring_class;
+    if (out_lightFloating == NULL) {
+        return (jint)CNA_RESULT_INVALID_ARGUMENT;
+    }
     CNA_CnbModelLight out_light_value;
     memset(&out_light_value, 0, sizeof out_light_value);
     CNA_Result call_result = cna.cnb_model_get_light((CNA_CnbModelDataHandle)model, (uint64_t)index, &out_light_value);
@@ -3981,6 +4026,9 @@ Java_org_openeggbert_cna_internal_generated_NativeCnbRoutes_cnbModelGetMaterial(
 {
     (void)environment;
     (void)declaring_class;
+    if (out_infoBytes == NULL || out_infoIntegral == NULL || out_infoFloating == NULL) {
+        return (jint)CNA_RESULT_INVALID_ARGUMENT;
+    }
     CNA_CnbMaterialInfo out_info_value;
     memset(&out_info_value, 0, sizeof out_info_value);
     out_info_value.struct_size = (uint32_t)(sizeof out_info_value);
@@ -4034,6 +4082,9 @@ Java_org_openeggbert_cna_internal_generated_NativeCnbRoutes_cnbModelGetMaterialS
 {
     (void)environment;
     (void)declaring_class;
+    if (out_samplerBytes == NULL || out_samplerIntegral == NULL) {
+        return (jint)CNA_RESULT_INVALID_ARGUMENT;
+    }
     CNA_CnbSamplerState out_sampler_value;
     memset(&out_sampler_value, 0, sizeof out_sampler_value);
     CNA_Result call_result = cna.cnb_model_get_material_sampler((CNA_CnbModelDataHandle)model, (uint64_t)part, (uint64_t)slot, &out_sampler_value);
@@ -4097,6 +4148,9 @@ Java_org_openeggbert_cna_internal_generated_NativeCnbRoutes_cnbModelGetMaterialT
 {
     (void)environment;
     (void)declaring_class;
+    if (out_transformFloating == NULL) {
+        return (jint)CNA_RESULT_INVALID_ARGUMENT;
+    }
     CNA_CnbTextureTransform out_transform_value;
     memset(&out_transform_value, 0, sizeof out_transform_value);
     CNA_Result call_result = cna.cnb_model_get_material_texture_transform((CNA_CnbModelDataHandle)model, (uint64_t)part, (uint64_t)slot, &out_transform_value);
@@ -4121,6 +4175,9 @@ Java_org_openeggbert_cna_internal_generated_NativeCnbRoutes_cnbModelGetMesh(
 {
     (void)environment;
     (void)declaring_class;
+    if (out_infoIntegral == NULL) {
+        return (jint)CNA_RESULT_INVALID_ARGUMENT;
+    }
     CNA_CnbMeshInfo out_info_value;
     memset(&out_info_value, 0, sizeof out_info_value);
     out_info_value.struct_size = (uint32_t)(sizeof out_info_value);
@@ -4161,6 +4218,9 @@ Java_org_openeggbert_cna_internal_generated_NativeCnbRoutes_cnbModelGetMorph(
 {
     (void)environment;
     (void)declaring_class;
+    if (out_infoBytes == NULL || out_infoIntegral == NULL) {
+        return (jint)CNA_RESULT_INVALID_ARGUMENT;
+    }
     CNA_CnbMorphInfo out_info_value;
     memset(&out_info_value, 0, sizeof out_info_value);
     out_info_value.struct_size = (uint32_t)(sizeof out_info_value);
@@ -4200,6 +4260,9 @@ Java_org_openeggbert_cna_internal_generated_NativeCnbRoutes_cnbModelGetMorphWeig
 {
     (void)environment;
     (void)declaring_class;
+    if (out_infoIntegral == NULL || out_infoDoubles == NULL) {
+        return (jint)CNA_RESULT_INVALID_ARGUMENT;
+    }
     CNA_CnbMorphWeightKeyInfo out_info_value;
     memset(&out_info_value, 0, sizeof out_info_value);
     out_info_value.struct_size = (uint32_t)(sizeof out_info_value);
@@ -4230,6 +4293,9 @@ Java_org_openeggbert_cna_internal_generated_NativeCnbRoutes_cnbModelGetPart(
 {
     (void)environment;
     (void)declaring_class;
+    if (out_infoBytes == NULL || out_infoIntegral == NULL) {
+        return (jint)CNA_RESULT_INVALID_ARGUMENT;
+    }
     CNA_CnbModelPartInfo out_info_value;
     memset(&out_info_value, 0, sizeof out_info_value);
     out_info_value.struct_size = (uint32_t)(sizeof out_info_value);
@@ -4299,6 +4365,9 @@ Java_org_openeggbert_cna_internal_generated_NativeCnbRoutes_cnbModelGetSkeleton(
 {
     (void)environment;
     (void)declaring_class;
+    if (out_infoBytes == NULL || out_infoIntegral == NULL) {
+        return (jint)CNA_RESULT_INVALID_ARGUMENT;
+    }
     CNA_CnbSkeletonInfo out_info_value;
     memset(&out_info_value, 0, sizeof out_info_value);
     out_info_value.struct_size = (uint32_t)(sizeof out_info_value);
@@ -4360,6 +4429,9 @@ Java_org_openeggbert_cna_internal_generated_NativeCnbRoutes_cnbModelSetMaterial(
 {
     (void)environment;
     (void)declaring_class;
+    if (infoBytes == NULL || infoIntegral == NULL || infoFloating == NULL) {
+        return (jint)CNA_RESULT_INVALID_ARGUMENT;
+    }
     CNA_CnbMaterialInfo info_value;
     memset(&info_value, 0, sizeof info_value);
     info_value.struct_size = (uint32_t)(sizeof info_value);
@@ -4408,6 +4480,9 @@ Java_org_openeggbert_cna_internal_generated_NativeCnbRoutes_cnbModelSetMaterialS
 {
     (void)environment;
     (void)declaring_class;
+    if (samplerBytes == NULL || samplerIntegral == NULL) {
+        return (jint)CNA_RESULT_INVALID_ARGUMENT;
+    }
     CNA_CnbSamplerState sampler_value;
     memset(&sampler_value, 0, sizeof sampler_value);
     {
@@ -4462,6 +4537,9 @@ Java_org_openeggbert_cna_internal_generated_NativeCnbRoutes_cnbModelSetMaterialT
 {
     (void)environment;
     (void)declaring_class;
+    if (transformFloating == NULL) {
+        return (jint)CNA_RESULT_INVALID_ARGUMENT;
+    }
     CNA_CnbTextureTransform transform_value;
     memset(&transform_value, 0, sizeof transform_value);
     {
@@ -4483,6 +4561,9 @@ Java_org_openeggbert_cna_internal_generated_NativeCnbRoutes_cnbModelSetMorph(
 {
     (void)environment;
     (void)declaring_class;
+    if (infoBytes == NULL || infoIntegral == NULL) {
+        return (jint)CNA_RESULT_INVALID_ARGUMENT;
+    }
     CNA_CnbMorphInfo info_value;
     memset(&info_value, 0, sizeof info_value);
     info_value.struct_size = (uint32_t)(sizeof info_value);
@@ -4574,6 +4655,9 @@ Java_org_openeggbert_cna_internal_generated_NativeCnbRoutes_cnbModelSetPart(
 {
     (void)environment;
     (void)declaring_class;
+    if (infoBytes == NULL || infoIntegral == NULL) {
+        return (jint)CNA_RESULT_INVALID_ARGUMENT;
+    }
     CNA_CnbModelPartInfo info_value;
     memset(&info_value, 0, sizeof info_value);
     info_value.struct_size = (uint32_t)(sizeof info_value);
@@ -4820,6 +4904,9 @@ Java_org_openeggbert_cna_internal_generated_NativeCnbRoutes_cnbReadLimitsInit(
 {
     (void)environment;
     (void)declaring_class;
+    if (out_limitsIntegral == NULL) {
+        return (jint)CNA_RESULT_INVALID_ARGUMENT;
+    }
     CNA_CnbReadLimits out_limits_value;
     memset(&out_limits_value, 0, sizeof out_limits_value);
     out_limits_value.struct_size = (uint32_t)(sizeof out_limits_value);
@@ -4892,6 +4979,9 @@ Java_org_openeggbert_cna_internal_generated_NativeCnbRoutes_cnbReaderCreate(
 {
     (void)environment;
     (void)declaring_class;
+    if (limitsIntegral == NULL) {
+        return (jint)CNA_RESULT_INVALID_ARGUMENT;
+    }
     jsize data_size = (*environment)->GetArrayLength(environment, data);
     jbyte* data_elements = (*environment)->GetByteArrayElements(environment, data, NULL);
     if (data_elements == NULL) {
@@ -5274,6 +5364,9 @@ Java_org_openeggbert_cna_internal_generated_NativeCnbRoutes_cnbSoundEffectDataCr
 {
     (void)environment;
     (void)declaring_class;
+    if (infoIntegral == NULL) {
+        return (jint)CNA_RESULT_INVALID_ARGUMENT;
+    }
     CNA_CnbSoundEffectInfo info_value;
     memset(&info_value, 0, sizeof info_value);
     info_value.struct_size = (uint32_t)(sizeof info_value);
@@ -5332,6 +5425,9 @@ Java_org_openeggbert_cna_internal_generated_NativeCnbRoutes_cnbSoundEffectDataGe
 {
     (void)environment;
     (void)declaring_class;
+    if (out_infoIntegral == NULL) {
+        return (jint)CNA_RESULT_INVALID_ARGUMENT;
+    }
     CNA_CnbSoundEffectInfo out_info_value;
     memset(&out_info_value, 0, sizeof out_info_value);
     out_info_value.struct_size = (uint32_t)(sizeof out_info_value);
@@ -5359,6 +5455,9 @@ Java_org_openeggbert_cna_internal_generated_NativeCnbRoutes_cnbSpriteFontDataAdd
 {
     (void)environment;
     (void)declaring_class;
+    if (glyphIntegral == NULL || glyphFloating == NULL) {
+        return (jint)CNA_RESULT_INVALID_ARGUMENT;
+    }
     CNA_SpriteFontGlyph glyph_value;
     memset(&glyph_value, 0, sizeof glyph_value);
     glyph_value.struct_size = (uint32_t)(sizeof glyph_value);
@@ -5442,6 +5541,9 @@ Java_org_openeggbert_cna_internal_generated_NativeCnbRoutes_cnbSpriteFontDataGet
 {
     (void)environment;
     (void)declaring_class;
+    if (out_glyphIntegral == NULL || out_glyphFloating == NULL) {
+        return (jint)CNA_RESULT_INVALID_ARGUMENT;
+    }
     CNA_SpriteFontGlyph out_glyph_value;
     memset(&out_glyph_value, 0, sizeof out_glyph_value);
     out_glyph_value.struct_size = (uint32_t)(sizeof out_glyph_value);
@@ -5481,6 +5583,9 @@ Java_org_openeggbert_cna_internal_generated_NativeCnbRoutes_cnbSpriteFontDataGet
 {
     (void)environment;
     (void)declaring_class;
+    if (out_infoBytes == NULL || out_infoIntegral == NULL || out_infoFloating == NULL) {
+        return (jint)CNA_RESULT_INVALID_ARGUMENT;
+    }
     CNA_CnbSpriteFontInfo out_info_value;
     memset(&out_info_value, 0, sizeof out_info_value);
     out_info_value.struct_size = (uint32_t)(sizeof out_info_value);
@@ -5532,6 +5637,9 @@ Java_org_openeggbert_cna_internal_generated_NativeCnbRoutes_cnbSpriteFontDataSet
 {
     (void)environment;
     (void)declaring_class;
+    if (glyphIntegral == NULL || glyphFloating == NULL) {
+        return (jint)CNA_RESULT_INVALID_ARGUMENT;
+    }
     CNA_SpriteFontGlyph glyph_value;
     memset(&glyph_value, 0, sizeof glyph_value);
     glyph_value.struct_size = (uint32_t)(sizeof glyph_value);
@@ -5567,6 +5675,9 @@ Java_org_openeggbert_cna_internal_generated_NativeCnbRoutes_cnbSpriteFontDataSet
 {
     (void)environment;
     (void)declaring_class;
+    if (infoBytes == NULL || infoIntegral == NULL || infoFloating == NULL) {
+        return (jint)CNA_RESULT_INVALID_ARGUMENT;
+    }
     CNA_CnbSpriteFontInfo info_value;
     memset(&info_value, 0, sizeof info_value);
     info_value.struct_size = (uint32_t)(sizeof info_value);
@@ -5718,6 +5829,9 @@ Java_org_openeggbert_cna_internal_generated_NativeCnbRoutes_cnbTextureDataGetInf
 {
     (void)environment;
     (void)declaring_class;
+    if (out_infoIntegral == NULL) {
+        return (jint)CNA_RESULT_INVALID_ARGUMENT;
+    }
     CNA_CnbTextureInfo out_info_value;
     memset(&out_info_value, 0, sizeof out_info_value);
     out_info_value.struct_size = (uint32_t)(sizeof out_info_value);
@@ -5987,6 +6101,9 @@ Java_org_openeggbert_cna_internal_generated_NativeCnbRoutes_cnbWriterGetLimits(
 {
     (void)environment;
     (void)declaring_class;
+    if (out_limitsIntegral == NULL) {
+        return (jint)CNA_RESULT_INVALID_ARGUMENT;
+    }
     CNA_CnbReadLimits out_limits_value;
     memset(&out_limits_value, 0, sizeof out_limits_value);
     out_limits_value.struct_size = (uint32_t)(sizeof out_limits_value);
@@ -6041,6 +6158,9 @@ Java_org_openeggbert_cna_internal_generated_NativeCnbRoutes_cnbWriterSetLimits(
 {
     (void)environment;
     (void)declaring_class;
+    if (limitsIntegral == NULL) {
+        return (jint)CNA_RESULT_INVALID_ARGUMENT;
+    }
     CNA_CnbReadLimits limits_value;
     memset(&limits_value, 0, sizeof limits_value);
     limits_value.struct_size = (uint32_t)(sizeof limits_value);
@@ -6217,6 +6337,9 @@ Java_org_openeggbert_cna_internal_generated_NativeCnbRoutes_curveKeyCollectionGe
 {
     (void)environment;
     (void)declaring_class;
+    if (out_keyIntegral == NULL || out_keyFloating == NULL) {
+        return (jint)CNA_RESULT_INVALID_ARGUMENT;
+    }
     CNA_CurveKey out_key_value;
     memset(&out_key_value, 0, sizeof out_key_value);
     CNA_Result call_result = cna.curve_key_collection_get((CNA_CurveKeyCollectionHandle)collection, (int32_t)index, &out_key_value);
@@ -6262,6 +6385,9 @@ Java_org_openeggbert_cna_internal_generated_NativeCnbRoutes_curveKeyInitFull(
 {
     (void)environment;
     (void)declaring_class;
+    if (out_keyIntegral == NULL || out_keyFloating == NULL) {
+        return (jint)CNA_RESULT_INVALID_ARGUMENT;
+    }
     CNA_CurveKey out_key_value;
     memset(&out_key_value, 0, sizeof out_key_value);
     CNA_Result call_result = cna.curve_key_init_full((float)position, (float)value, (float)tangent_in, (float)tangent_out, (CNA_CurveContinuity)continuity, &out_key_value);

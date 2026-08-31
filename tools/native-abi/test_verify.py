@@ -572,6 +572,47 @@ def test_generator(live: dict) -> None:
     except generator_tool.Unsupported:
         check(True, "a struct carrying a pointer is refused when no prefix is declared")
 
+    # A struct carrier that arrived null would make every GetXArrayRegion below it raise and
+    # then be read as uninitialised stack -- a JVM-level fault for what is an ordinary missing
+    # argument. Every input struct now refuses it with the result CNA would have given.
+    light = plan("cna_effect_set_punctual_light_ext")
+    emitted = generator_tool.render_c("Probe", [light])
+    check("if (lightIntegral == NULL || lightFloating == NULL) {" in emitted,
+          "a null struct carrier is refused before anything is read")
+    check(emitted.index("== NULL") < emitted.index("GetLongArrayRegion"),
+          "and refused before it, not after")
+
+    # An optional structure is a different thing again: CNA documents the full-screen pass's
+    # sampler as "or null for the pass's own default", and a null pointer says that where an
+    # all-zero structure would say wrap-addressed linear filtering, which is a real setting that
+    # happens to look like an absence.
+    sampler = generator_tool.plan(
+        {"java": "probe", "symbol": "cna_fullscreen_pass_draw",
+         "optionalStructs": ["sampler"]}, live)
+    emitted = generator_tool.render_c("Probe", [sampler])
+    check("const CNA_SamplerState* sampler_pointer = NULL;" in emitted,
+          "an optional structure starts as no pointer at all")
+    check("if (samplerIntegral != NULL && samplerFloating != NULL) {" in emitted,
+          "and is built only when Java sent one")
+    check(", sampler_pointer);" in emitted,
+          "so a caller that sent none passes NULL rather than a zeroed structure")
+    without = generator_tool.render_c("Probe", [plan("cna_fullscreen_pass_draw")])
+    check("&sampler_value);" in without,
+          "and a structure not declared optional is still passed by address")
+
+    # The sampler is write-only on this runtime too: no renderer here reads it back, and the
+    # headless one accepts anything, so no Java assertion can catch a carrier packed in the wrong
+    # order. Pinned against the live header instead, exactly as the post-process context is --
+    # these are the positions FullscreenPass writes.
+    sampler_leaves = generator_tool.group_leaves(
+        generator_tool.flatten_struct("CNA_SamplerState", live))
+    check([path for path, _ in sampler_leaves["integral"]]
+          == ["address_u", "address_v", "address_w", "filter", "max_anisotropy",
+              "max_mip_level", "reserved"],
+          "the sampler's integral leaves are the seven FullscreenPass writes, in order")
+    check([path for path, _ in sampler_leaves["floating"]] == ["mip_map_level_of_detail_bias"],
+          "and its one float is the level-of-detail bias")
+
     # The generator refuses a shape it cannot prove rather than guessing at it.
     try:
         plan("cna_text_input_subscribe_text_input_ext")

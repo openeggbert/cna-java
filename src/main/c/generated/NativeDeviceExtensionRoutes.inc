@@ -67,6 +67,9 @@ Java_org_openeggbert_cna_internal_generated_NativeDeviceExtensionRoutes_displayI
 {
     (void)environment;
     (void)declaring_class;
+    if (out_areaIntegral == NULL) {
+        return (jint)CNA_RESULT_INVALID_ARGUMENT;
+    }
     CNA_Rectangle out_area_value;
     memset(&out_area_value, 0, sizeof out_area_value);
     CNA_Result call_result = cna.display_info_get_safe_area_ext((CNA_Handle)game, &out_area_value);
@@ -172,6 +175,9 @@ Java_org_openeggbert_cna_internal_generated_NativeDeviceExtensionRoutes_inputDev
 {
     (void)environment;
     (void)declaring_class;
+    if (out_infoIntegral == NULL) {
+        return (jint)CNA_RESULT_INVALID_ARGUMENT;
+    }
     CNA_InputDeviceInfo out_info_value;
     memset(&out_info_value, 0, sizeof out_info_value);
     out_info_value.struct_size = (uint32_t)(sizeof out_info_value);
@@ -226,6 +232,9 @@ Java_org_openeggbert_cna_internal_generated_NativeDeviceExtensionRoutes_inputDev
 {
     (void)environment;
     (void)declaring_class;
+    if (out_infoIntegral == NULL) {
+        return (jint)CNA_RESULT_INVALID_ARGUMENT;
+    }
     CNA_InputDeviceInfo out_info_value;
     memset(&out_info_value, 0, sizeof out_info_value);
     out_info_value.struct_size = (uint32_t)(sizeof out_info_value);
@@ -280,6 +289,9 @@ Java_org_openeggbert_cna_internal_generated_NativeDeviceExtensionRoutes_inputDev
 {
     (void)environment;
     (void)declaring_class;
+    if (out_infoIntegral == NULL) {
+        return (jint)CNA_RESULT_INVALID_ARGUMENT;
+    }
     CNA_InputDeviceInfo out_info_value;
     memset(&out_info_value, 0, sizeof out_info_value);
     out_info_value.struct_size = (uint32_t)(sizeof out_info_value);

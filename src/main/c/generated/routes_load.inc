@@ -52,6 +52,7 @@
     LOAD(area_light_shading_coverage, "cna_area_light_shading_coverage");
     LOAD(area_light_shading_lobe_scale_for, "cna_area_light_shading_lobe_scale_for");
     LOAD(area_light_shading_quad_of, "cna_area_light_shading_quad_of");
+    LOAD(ascii_pass_create, "cna_ascii_pass_create");
     LOAD(ascii_post_process_effect_create, "cna_ascii_post_process_effect_create");
     LOAD(ascii_post_process_effect_destroy, "cna_ascii_post_process_effect_destroy");
     LOAD(ascii_post_process_effect_draw, "cna_ascii_post_process_effect_draw");
@@ -710,6 +711,10 @@
     LOAD(frustum_culler_ext_is_sphere_visible, "cna_frustum_culler_ext_is_sphere_visible");
     LOAD(frustum_culler_ext_set_camera, "cna_frustum_culler_ext_set_camera");
     LOAD(frustum_culler_ext_set_view_projection, "cna_frustum_culler_ext_set_view_projection");
+    LOAD(fullscreen_pass_create, "cna_fullscreen_pass_create");
+    LOAD(fullscreen_pass_destroy, "cna_fullscreen_pass_destroy");
+    LOAD(fullscreen_pass_draw, "cna_fullscreen_pass_draw");
+    LOAD(fullscreen_pass_draw_over_current_target, "cna_fullscreen_pass_draw_over_current_target");
     LOAD(fxaa_pass_copy_fragment_glsl, "cna_fxaa_pass_copy_fragment_glsl");
     LOAD(fxaa_pass_create, "cna_fxaa_pass_create");
     LOAD(fxaa_pass_edge_threshold_for_quality, "cna_fxaa_pass_edge_threshold_for_quality");

@@ -38,6 +38,9 @@ Java_org_openeggbert_cna_internal_generated_NativeSensorExtensionRoutes_accelero
 {
     (void)environment;
     (void)declaring_class;
+    if (out_readingIntegral == NULL || out_readingFloating == NULL) {
+        return (jint)CNA_RESULT_INVALID_ARGUMENT;
+    }
     CNA_AccelerometerReading out_reading_value;
     memset(&out_reading_value, 0, sizeof out_reading_value);
     out_reading_value.struct_size = (uint32_t)(sizeof out_reading_value);
@@ -189,6 +192,9 @@ Java_org_openeggbert_cna_internal_generated_NativeSensorExtensionRoutes_compassG
 {
     (void)environment;
     (void)declaring_class;
+    if (out_readingIntegral == NULL || out_readingFloating == NULL || out_readingDoubles == NULL) {
+        return (jint)CNA_RESULT_INVALID_ARGUMENT;
+    }
     CNA_CompassReading out_reading_value;
     memset(&out_reading_value, 0, sizeof out_reading_value);
     out_reading_value.struct_size = (uint32_t)(sizeof out_reading_value);
@@ -348,6 +354,9 @@ Java_org_openeggbert_cna_internal_generated_NativeSensorExtensionRoutes_gyroscop
 {
     (void)environment;
     (void)declaring_class;
+    if (out_readingIntegral == NULL || out_readingFloating == NULL) {
+        return (jint)CNA_RESULT_INVALID_ARGUMENT;
+    }
     CNA_GyroscopeReading out_reading_value;
     memset(&out_reading_value, 0, sizeof out_reading_value);
     out_reading_value.struct_size = (uint32_t)(sizeof out_reading_value);
@@ -499,6 +508,9 @@ Java_org_openeggbert_cna_internal_generated_NativeSensorExtensionRoutes_motionGe
 {
     (void)environment;
     (void)declaring_class;
+    if (out_readingIntegral == NULL || out_readingFloating == NULL) {
+        return (jint)CNA_RESULT_INVALID_ARGUMENT;
+    }
     CNA_MotionReading out_reading_value;
     memset(&out_reading_value, 0, sizeof out_reading_value);
     out_reading_value.struct_size = (uint32_t)(sizeof out_reading_value);
@@ -695,6 +707,9 @@ Java_org_openeggbert_cna_internal_generated_NativeSensorExtensionRoutes_sensorsG
 {
     (void)environment;
     (void)declaring_class;
+    if (out_accelerationFloating == NULL) {
+        return (jint)CNA_RESULT_INVALID_ARGUMENT;
+    }
     CNA_Vector3 out_acceleration_value;
     memset(&out_acceleration_value, 0, sizeof out_acceleration_value);
     CNA_Bool out_available_value = 0;
@@ -737,6 +752,9 @@ Java_org_openeggbert_cna_internal_generated_NativeSensorExtensionRoutes_sensorsG
 {
     (void)environment;
     (void)declaring_class;
+    if (out_angular_velocityFloating == NULL) {
+        return (jint)CNA_RESULT_INVALID_ARGUMENT;
+    }
     CNA_Vector3 out_angular_velocity_value;
     memset(&out_angular_velocity_value, 0, sizeof out_angular_velocity_value);
     CNA_Bool out_available_value = 0;
@@ -763,6 +781,9 @@ Java_org_openeggbert_cna_internal_generated_NativeSensorExtensionRoutes_sensorsG
 {
     (void)environment;
     (void)declaring_class;
+    if (out_infoIntegral == NULL) {
+        return (jint)CNA_RESULT_INVALID_ARGUMENT;
+    }
     CNA_SensorInfo out_info_value;
     memset(&out_info_value, 0, sizeof out_info_value);
     out_info_value.struct_size = (uint32_t)(sizeof out_info_value);

@@ -88,6 +88,9 @@ static CNA_Result on_update(CNA_Handle game, const CNA_GameTime* game_time, void
     printf("owning, bad device      %d\n", (int)result);
     printf("effect after refusal    %d\n", (int)cna_effect_destroy(kept));
 
+    CNA_EffectHandle borrowed_effect_alive = 0;
+    (void)cna_basic_effect_create(device, &borrowed_effect_alive);
+
     /* And an effect pass question asked of a pass that is not one. */
     CNA_PostProcessPassHandle blit = 0;
     (void)cna_blit_pass_create(device, &blit);
@@ -98,18 +101,64 @@ static CNA_Result on_update(CNA_Handle game, const CNA_GameTime* game_time, void
         (int)cna_post_process_effect_pass_set_effect(blit, CNA_INVALID_HANDLE));
     (void)cna_post_process_pass_destroy(blit);
 
+
     /* The full-screen pass, whose draw takes a sampler structure. */
     CNA_FullscreenPassHandle fullscreen = 0;
     result = cna_fullscreen_pass_create(device, &fullscreen);
     printf("fullscreen create       %d\n", (int)result);
-    result = cna_fullscreen_pass_draw(fullscreen, CNA_INVALID_HANDLE, CNA_INVALID_HANDLE,
-        CNA_INVALID_HANDLE, 64, 64, NULL);
-    printf("fullscreen draw         %d\n", (int)result);
-    result = cna_fullscreen_pass_draw_over_current_target(fullscreen, CNA_INVALID_HANDLE,
-        CNA_INVALID_HANDLE, 64, 64, NULL);
-    printf("fullscreen draw over    %d\n", (int)result);
+
+    CNA_Texture2DCreateInfo source_info;
+    memset(&source_info, 0, sizeof source_info);
+    source_info.struct_size = (uint32_t)(sizeof source_info);
+    source_info.struct_version = 1U;
+    source_info.width = 32U;
+    source_info.height = 32U;
+    source_info.format = CNA_SURFACE_FORMAT_COLOR;
+    CNA_Handle source = 0;
+    printf("source texture          %d\n",
+        (int)cna_texture2d_create(device, &source_info, &source));
+    CNA_RenderTarget2DCreateInfo target_info;
+    memset(&target_info, 0, sizeof target_info);
+    target_info.struct_size = (uint32_t)(sizeof target_info);
+    target_info.struct_version = 1U;
+    target_info.width = 32U;
+    target_info.height = 32U;
+    target_info.format = CNA_SURFACE_FORMAT_COLOR;
+    CNA_Handle target = 0;
+    printf("destination target      %d\n",
+        (int)cna_render_target2d_create(device, &target_info, &target));
+
+    printf("draw, null source       %d\n", (int)cna_fullscreen_pass_draw(fullscreen,
+        CNA_INVALID_HANDLE, target, CNA_INVALID_HANDLE, 32, 32, NULL));
+    printf("draw, real source       %d\n", (int)cna_fullscreen_pass_draw(fullscreen,
+        source, target, CNA_INVALID_HANDLE, 32, 32, NULL));
+    printf("draw to back buffer     %d\n", (int)cna_fullscreen_pass_draw(fullscreen,
+        source, CNA_INVALID_HANDLE, CNA_INVALID_HANDLE, 32, 32, NULL));
+    printf("draw over current       %d\n",
+        (int)cna_fullscreen_pass_draw_over_current_target(fullscreen, source,
+            CNA_INVALID_HANDLE, 32, 32, NULL));
+
+    CNA_SamplerState sampler;
+    memset(&sampler, 0, sizeof sampler);
+    sampler.struct_size = (uint32_t)(sizeof sampler);
+    sampler.struct_version = 1U;
+    sampler.address_u = CNA_TEXTURE_ADDRESS_CLAMP;
+    sampler.address_v = CNA_TEXTURE_ADDRESS_CLAMP;
+    sampler.address_w = CNA_TEXTURE_ADDRESS_CLAMP;
+    sampler.filter = CNA_TEXTURE_FILTER_POINT;
+    sampler.max_anisotropy = 1;
+    printf("draw with sampler       %d\n", (int)cna_fullscreen_pass_draw(fullscreen,
+        source, target, CNA_INVALID_HANDLE, 32, 32, &sampler));
+    printf("draw with an effect     %d\n", (int)cna_fullscreen_pass_draw(fullscreen,
+        source, target, borrowed_effect_alive, 32, 32, NULL));
+    printf("draw, zero size         %d\n", (int)cna_fullscreen_pass_draw(fullscreen,
+        source, target, CNA_INVALID_HANDLE, 0, 0, NULL));
+
+    (void)cna_render_target_destroy(target);
+    (void)cna_texture2d_destroy(source);
     printf("fullscreen destroy      %d\n", (int)cna_fullscreen_pass_destroy(fullscreen));
 
+    (void)cna_effect_destroy(borrowed_effect_alive);
     return CNA_RESULT_SUCCESS;
 }
 

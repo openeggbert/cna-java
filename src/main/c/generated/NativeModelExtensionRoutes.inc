@@ -225,6 +225,9 @@ Java_org_openeggbert_cna_internal_generated_NativeModelExtensionRoutes_modelBone
 {
     (void)environment;
     (void)declaring_class;
+    if (out_transformFloating == NULL) {
+        return (jint)CNA_RESULT_INVALID_ARGUMENT;
+    }
     CNA_Matrix out_transform_value;
     memset(&out_transform_value, 0, sizeof out_transform_value);
     CNA_Result call_result = cna.model_bone_get_transform((CNA_ModelBoneHandle)bone, &out_transform_value);
@@ -776,6 +779,9 @@ Java_org_openeggbert_cna_internal_generated_NativeModelExtensionRoutes_modelGetB
 {
     (void)environment;
     (void)declaring_class;
+    if (out_sphereFloating == NULL) {
+        return (jint)CNA_RESULT_INVALID_ARGUMENT;
+    }
     CNA_Bool out_has_value_value = 0;
     CNA_BoundingSphere out_sphere_value;
     memset(&out_sphere_value, 0, sizeof out_sphere_value);
@@ -819,6 +825,9 @@ Java_org_openeggbert_cna_internal_generated_NativeModelExtensionRoutes_modelGetC
 {
     (void)environment;
     (void)declaring_class;
+    if (out_cameraIntegral == NULL || out_cameraFloating == NULL) {
+        return (jint)CNA_RESULT_INVALID_ARGUMENT;
+    }
     CNA_ModelCameraEXT out_camera_value;
     memset(&out_camera_value, 0, sizeof out_camera_value);
     out_camera_value.struct_size = (uint32_t)(sizeof out_camera_value);
@@ -1170,6 +1179,9 @@ Java_org_openeggbert_cna_internal_generated_NativeModelExtensionRoutes_modelMesh
 {
     (void)environment;
     (void)declaring_class;
+    if (out_valueFloating == NULL) {
+        return (jint)CNA_RESULT_INVALID_ARGUMENT;
+    }
     CNA_BoundingSphere out_value_value;
     memset(&out_value_value, 0, sizeof out_value_value);
     CNA_Result call_result = cna.model_mesh_get_bounding_sphere((CNA_ModelMeshHandle)mesh, &out_value_value);
