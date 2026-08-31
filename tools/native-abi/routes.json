@@ -6423,6 +6423,10 @@
         "symbol": "cna_lod_group_ext_reset_hysteresis"
       },
       {
+        "java": "lodGroupExtSelect",
+        "symbol": "cna_lod_group_ext_select"
+      },
+      {
         "java": "lodGroupExtSelectIndex",
         "symbol": "cna_lod_group_ext_select_index"
       },

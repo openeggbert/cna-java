@@ -12478,6 +12478,22 @@ Java_org_openeggbert_cna_internal_generated_NativeEngineLayerRoutes_lodGroupExtR
 }
 
 JNIEXPORT jint JNICALL
+Java_org_openeggbert_cna_internal_generated_NativeEngineLayerRoutes_lodGroupExtSelect(
+    JNIEnv* environment, jclass declaring_class, jlong group, jfloat distance, jlongArray out_part)
+{
+    (void)environment;
+    (void)declaring_class;
+    CNA_ModelMeshPartHandle out_part_value = 0;
+    CNA_Result call_result = cna.lod_group_ext_select((CNA_LodGroupEXTHandle)group, (float)distance, &out_part_value);
+    if (call_result == CNA_RESULT_SUCCESS || call_result == CNA_RESULT_BUFFER_TOO_SMALL) {
+        jlong out_part_element = (jlong)out_part_value;
+        (*environment)->SetLongArrayRegion(
+            environment, out_part, 0, 1, &out_part_element);
+    }
+    return (jint)call_result;
+}
+
+JNIEXPORT jint JNICALL
 Java_org_openeggbert_cna_internal_generated_NativeEngineLayerRoutes_lodGroupExtSelectIndex(
     JNIEnv* environment, jclass declaring_class, jlong group, jfloat distance, jintArray out_index)
 {

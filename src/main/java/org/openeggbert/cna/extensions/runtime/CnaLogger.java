@@ -59,6 +59,72 @@ public final class CnaLogger {
         }
     }
 
+    /**
+     * Sends every line CNA writes to a Java sink instead of its own stderr one.
+     *
+     * <p>Process-wide, like the minimum level: a library that installs a sink should restore the
+     * previous state with {@link #resetSink()}. Installing a second sink replaces the first, and
+     * the adapter releases its reference to the one it replaced only after CNA has stopped
+     * calling through it -- so a line already inside CNA's logger finds either the sink it
+     * started with or nothing, never a released reference.
+     *
+     * <p>CNA hands the line over as bytes borrowed for the call; they are copied before the sink
+     * sees them, so nothing here outlives the callback.
+     *
+     * @param sink where lines go
+     * @see LogSink for what a sink must not do
+     */
+    public static void setSink(LogSink sink) {
+        Objects.requireNonNull(sink, "sink");
+        NativeBindings.requireAvailable();
+        int result = NativeBindings.loggerSetSink(new NativeLogSink(sink));
+        if (result != 0) {
+            throw NativeBindings.failure("CnaLogger.setSink", result);
+        }
+    }
+
+    /**
+     * Restores CNA's own stderr sink and releases the Java one.
+     *
+     * <p>Calling it with no sink installed is not an error: it is how a caller that does not know
+     * whether one was installed gets back to the default.
+     */
+    public static void resetSink() {
+        NativeBindings.requireAvailable();
+        int result = NativeBindings.loggerSetSink(null);
+        if (result != 0) {
+            throw NativeBindings.failure("CnaLogger.resetSink", result);
+        }
+    }
+
+    /**
+     * What the adapter calls, which is deliberately not {@link LogSink} itself.
+     *
+     * <p>The native side needs a method taking CNA's own two integers and the raw bytes; a game's
+     * sink should see a {@link LogLevel}, a {@link LogCategory} and a {@code String}. Keeping the
+     * translation here rather than in the JNI adapter means the adapter looks up one fixed
+     * signature on one class it owns, instead of reflecting over whatever a caller passed.
+     */
+    private record NativeLogSink(LogSink sink) {
+
+        /**
+         * Called from whichever CNA thread wrote the line.
+         *
+         * @param level CNA's own numeric level
+         * @param category CNA's own numeric category
+         * @param message the formatted line as UTF-8 bytes
+         */
+        void acceptNativeLine(int level, int category, byte[] message) {
+            LogCategory[] categories = LogCategory.values();
+            // An unknown identity must not become an exception thrown back through CNA's
+            // logger; a line from a category this build has no name for is still a line.
+            LogCategory named = category >= 0 && category < categories.length
+                    ? categories[category] : LogCategory.System;
+            sink.accept(LogLevel.fromValue(level), named,
+                    new String(message, java.nio.charset.StandardCharsets.UTF_8));
+        }
+    }
+
     /** Returns the process-wide minimum level CNA is currently writing. */
     public static LogLevel getMinimumLevel() {
         NativeBindings.requireAvailable();

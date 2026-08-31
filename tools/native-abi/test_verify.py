@@ -294,6 +294,47 @@ def test_binding_status(report: dict, rules: dict) -> None:
                    "STALE_BLOCKER_RULE_DECIDES_NOTHING"),
           "the same rule set with its blockers intact is refused when none decides anything")
 
+    # 4c. A two-call pair is one operation, so its halves are one decision. The failure
+    #     this catches is the one that hid a lifted blocker: _get_type_name_size had a
+    #     rule and _get_type_name_byte_count did not, so eight size halves fell through
+    #     to a header rule while the copy halves beside them carried the true reason.
+    pairs = coverage_tool.size_copy_pairs({record["name"] for record in report["functions"]})
+    check(len(pairs) > 100, "the two-call pairs are found, in all three size spellings")
+    exceptions = rules.get("pairExceptions", [])
+    check(not coverage_tool.pair_problems(report["functions"], exceptions),
+          "every two-call pair is decided as one, bar the exceptions the rules record")
+    check(len(exceptions) == 1,
+          "exactly one pair is decided apart, and it is written down rather than tolerated")
+
+    def apart(field: str, value: str) -> list[str]:
+        copied = copy.deepcopy(report["functions"])
+        by_name = {record["name"]: record for record in copied}
+        size, _ = next((first, second) for first, second in pairs
+                       if (first, second) not in
+                       {(entry["size"], entry["copy"]) for entry in exceptions})
+        by_name[size][field] = value
+        return coverage_tool.pair_problems(copied, exceptions)
+
+    check(prefixed(apart("bound", True), "HALF_BOUND_PAIR"),
+          "a pair with one half bound and the other not is refused")
+    check(prefixed(apart("classification", "NOT_USEFUL_IN_JAVA"), "PAIR_CLASSIFIED_APART")
+          or prefixed(apart("classification", "CNA_EXTENSION_CANDIDATE"),
+                      "PAIR_CLASSIFIED_APART"),
+          "a pair whose halves are classified apart is refused")
+    check(prefixed(apart("bindingStatus", "ACTIONABLE_LOCAL"), "PAIR_DECIDED_APART"),
+          "a pair whose halves carry different binding statuses is refused")
+    check(prefixed(coverage_tool.pair_problems(
+              report["functions"],
+              [{"size": "cna_not_a_route_get_size", "copy": "cna_not_a_route_copy",
+                "reason": "invented"}]),
+          "PAIR_EXCEPTION_NAMES_NOTHING"),
+          "an exception for a pair that does not exist is refused")
+    check(prefixed(coverage_tool.pair_problems(
+              report["functions"],
+              [dict(entry, reason="  ") for entry in exceptions]),
+          "PAIR_EXCEPTION_WITHOUT_REASON"),
+          "an exception that states no reason is refused")
+
     # 5. DEFERRED_TRACKED is the one status that names a backlog task instead of a
     #    measurement, so it is fenced to the purpose that has one.
     def deferral_outside_backlog(value: dict) -> None:

@@ -23,6 +23,7 @@ static void* load_symbol(DynamicLibrary library, const char* name)
 static const char* loader_error(void) { return "LoadLibrary/GetProcAddress failed"; }
 #else
 #include <dlfcn.h>
+#include <sched.h>
 typedef void* DynamicLibrary;
 #if defined(__APPLE__)
 #define CNA_DEFAULT_LIBRARY "libcna_c_api.dylib"
@@ -890,6 +891,9 @@ typedef struct CnaFunctions {
     CNA_JNI_ROUTE(cna_motion_subscribe_current_value_changed)
         motion_subscribe_current_value_changed;
     CNA_JNI_ROUTE(cna_motion_subscribe_calibrate) motion_subscribe_calibrate;
+
+    CNA_JNI_ROUTE(cna_logger_set_sink_ext) logger_set_sink_ext;
+    CNA_JNI_ROUTE(cna_logger_reset_sink_ext) logger_reset_sink_ext;
 
     CNA_JNI_ROUTE(cna_system_tray_add_entry) system_tray_add_entry;
     CNA_JNI_ROUTE(cna_file_dialog_show_open_file_ext) file_dialog_show_open_file_ext;
@@ -3347,6 +3351,8 @@ JNIEXPORT jint JNICALL Java_org_openeggbert_cna_internal_NativeBindings_nativeLo
     LOAD(compass_subscribe_calibrate, "cna_compass_subscribe_calibrate");
     LOAD(motion_subscribe_current_value_changed, "cna_motion_subscribe_current_value_changed");
     LOAD(motion_subscribe_calibrate, "cna_motion_subscribe_calibrate");
+    LOAD(logger_set_sink_ext, "cna_logger_set_sink_ext");
+    LOAD(logger_reset_sink_ext, "cna_logger_reset_sink_ext");
     LOAD(system_tray_add_entry, "cna_system_tray_add_entry");
     LOAD(file_dialog_show_open_file_ext, "cna_file_dialog_show_open_file_ext");
     LOAD(file_dialog_show_save_file_ext, "cna_file_dialog_show_save_file_ext");
@@ -13510,6 +13516,127 @@ Java_org_openeggbert_cna_internal_NativeBindings_nativeRenderPipelineSetShadowSc
  * The tray handler runs on whatever thread the platform delivers the activation on, so the
  * environment is fetched rather than assumed, exactly as the pipeline's is.
  */
+/*
+ * The installed log sink, or NULL. Written only under the JVM-side lock CnaLogger holds, and
+ * read from whatever thread CNA logs on -- so it is atomic, and cleared BEFORE the sink is
+ * uninstalled and deleted, never after: a line already inside CNA's logger must find either the
+ * live reference or nothing at all.
+ */
+static _Atomic(jobject) log_sink_target = NULL;
+
+/*
+ * How many threads are inside the sink right now. Clearing the reference is not enough on its
+ * own: a line that loaded the reference just before it was cleared is still calling through it,
+ * so the global reference cannot be deleted until that call has returned. Installing waits for
+ * this to reach zero, which closes a use-after-free window an atomic pointer alone leaves open.
+ */
+static atomic_int log_sink_readers = 0;
+
+static void log_sink_wait_for_readers(void)
+{
+    /* Bounded by one sink call, and only ever reached when a sink is replaced or cleared while
+       another thread is logging -- rare, and never on the hot path. */
+    while (atomic_load_explicit(&log_sink_readers, memory_order_acquire) != 0) {
+#if defined(_WIN32)
+        Sleep(0);
+#else
+        sched_yield();
+#endif
+    }
+}
+
+static void log_sink(uint32_t level, uint32_t category, CNA_StringView message, void* context)
+{
+    (void)context;
+    const uint64_t byte_length = message.byte_length;
+    atomic_fetch_add_explicit(&log_sink_readers, 1, memory_order_acq_rel);
+    jobject target = atomic_load_explicit(&log_sink_target, memory_order_acquire);
+    if (target == NULL) {
+        atomic_fetch_sub_explicit(&log_sink_readers, 1, memory_order_acq_rel);
+        return;
+    }
+    int attached = 0;
+    JNIEnv* environment = callback_environment(&attached);
+    if (environment == NULL) {
+        atomic_fetch_sub_explicit(&log_sink_readers, 1, memory_order_acq_rel);
+        return;
+    }
+    if ((*environment)->ExceptionCheck(environment) == JNI_FALSE) {
+        /* The bytes are borrowed for the call, so they are copied into a Java array here --
+           which is also what makes the sink safe to hold: nothing of CNA's outlives the call. */
+        jsize length = (jsize)(byte_length > (uint64_t)INT32_MAX ? (uint64_t)INT32_MAX
+                                                                 : byte_length);
+        jbyteArray bytes = (*environment)->NewByteArray(environment, length);
+        if (bytes != NULL) {
+            if (length > 0) {
+                (*environment)->SetByteArrayRegion(
+                    environment, bytes, 0, length, (const jbyte*)message.data);
+            }
+            jclass type = (*environment)->GetObjectClass(environment, target);
+            jmethodID accept = type == NULL ? NULL : (*environment)->GetMethodID(
+                environment, type, "acceptNativeLine", "(II[B)V");
+            if (type != NULL) {
+                (*environment)->DeleteLocalRef(environment, type);
+            }
+            if (accept != NULL) {
+                (*environment)->CallVoidMethod(
+                    environment, target, accept, (jint)level, (jint)category, bytes);
+                /* CNA's sink returns void and must return normally, so an exception has
+                   nowhere to go. Describing and clearing it is the only honest option --
+                   and a sink that throws while reporting a log line must not also take the
+                   process down. */
+                if ((*environment)->ExceptionCheck(environment) == JNI_TRUE) {
+                    (*environment)->ExceptionDescribe(environment);
+                    (*environment)->ExceptionClear(environment);
+                }
+            }
+            (*environment)->DeleteLocalRef(environment, bytes);
+        } else if ((*environment)->ExceptionCheck(environment) == JNI_TRUE) {
+            (*environment)->ExceptionClear(environment);
+        }
+    }
+    finish_callback_environment(attached);
+    atomic_fetch_sub_explicit(&log_sink_readers, 1, memory_order_acq_rel);
+}
+
+JNIEXPORT jint JNICALL
+Java_org_openeggbert_cna_internal_NativeBindings_nativeLoggerSetSink(
+    JNIEnv* environment,
+    jclass type,
+    jobject sink)
+{
+    (void)type;
+    jobject previous = atomic_load_explicit(&log_sink_target, memory_order_acquire);
+    if (sink == NULL) {
+        /* Clear the reference first, then uninstall: a line already in flight sees NULL and
+           returns rather than calling through a global reference this is about to delete. */
+        atomic_store_explicit(&log_sink_target, NULL, memory_order_release);
+        CNA_Result cleared = cna.logger_reset_sink_ext();
+        if (previous != NULL) {
+            log_sink_wait_for_readers();
+            (*environment)->DeleteGlobalRef(environment, previous);
+        }
+        return (jint)cleared;
+    }
+    jobject held = (*environment)->NewGlobalRef(environment, sink);
+    if (held == NULL) {
+        return (jint)CNA_RESULT_OUT_OF_MEMORY;
+    }
+    atomic_store_explicit(&log_sink_target, held, memory_order_release);
+    CNA_Result installed = cna.logger_set_sink_ext(log_sink, NULL);
+    if (installed != CNA_RESULT_SUCCESS) {
+        atomic_store_explicit(&log_sink_target, previous, memory_order_release);
+        log_sink_wait_for_readers();
+        (*environment)->DeleteGlobalRef(environment, held);
+        return (jint)installed;
+    }
+    if (previous != NULL) {
+        log_sink_wait_for_readers();
+        (*environment)->DeleteGlobalRef(environment, previous);
+    }
+    return (jint)CNA_RESULT_SUCCESS;
+}
+
 static void tray_entry_clicked(void* context)
 {
     if (context == NULL) {

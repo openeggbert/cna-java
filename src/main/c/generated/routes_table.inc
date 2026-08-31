@@ -1237,6 +1237,7 @@
     CNA_JNI_ROUTE(cna_lod_group_ext_get_selection_mode) lod_group_ext_get_selection_mode;
     CNA_JNI_ROUTE(cna_lod_group_ext_projected_radius_pixels) lod_group_ext_projected_radius_pixels;
     CNA_JNI_ROUTE(cna_lod_group_ext_reset_hysteresis) lod_group_ext_reset_hysteresis;
+    CNA_JNI_ROUTE(cna_lod_group_ext_select) lod_group_ext_select;
     CNA_JNI_ROUTE(cna_lod_group_ext_select_index) lod_group_ext_select_index;
     CNA_JNI_ROUTE(cna_lod_group_ext_set_hysteresis) lod_group_ext_set_hysteresis;
     CNA_JNI_ROUTE(cna_lod_group_ext_set_screen_space_parameters) lod_group_ext_set_screen_space_parameters;

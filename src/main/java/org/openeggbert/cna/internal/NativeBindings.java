@@ -1532,6 +1532,25 @@ public final class NativeBindings {
             int severity, int kind, byte[] subject, long count, double worstMagnitude,
             byte[][] details, byte[] message);
 
+    /**
+     * Installs or clears the process-wide sink CNA writes its log lines to.
+     *
+     * <p>Hand-written because CNA's sink is a C function pointer, which the generator refuses
+     * rather than guesses at, and because the reference discipline is the whole risk here: the
+     * adapter holds one global reference to the sink and deletes it only after CNA has stopped
+     * calling through it.
+     *
+     * @param sink an object with {@code void acceptNativeLine(int, int, byte[])}, or null to
+     *     restore CNA's own stderr sink
+     * @return CNA's result
+     */
+    public static int loggerSetSink(Object sink) {
+        requireAvailable();
+        return nativeLoggerSetSink(sink);
+    }
+
+    private static native int nativeLoggerSetSink(Object sink);
+
 
     /**
      * Releases a texture handle that names a texture without keeping it alive.

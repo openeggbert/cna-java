@@ -180,19 +180,6 @@
     {
       "match": {
         "symbols": [
-          "cna_lod_group_ext_select"
-        ]
-      },
-      "classification": "CNA_EXTENSION_CANDIDATE",
-      "purposeReason": "Returns the CNA_ModelMeshPartHandle at the selected level. CNA-Java's LodGroup adds every level with CNA's own no-part sentinel, because the Java projection's ModelMeshPart is a managed object with no native handle -- so this route has nothing to return by construction, and selectIndex answers the level the game draws its own mesh at.",
-      "bindingStatus": "DELIBERATE_NON_BINDING",
-      "bindingReason": "The route has nothing to return by construction here: CNA-Java's LodGroup adds every level with CNA's own no-part sentinel, because the Java ModelMeshPart is a managed object with no native handle.",
-      "evidence": "LodGroup.selectIndex answers the level the game draws its own mesh at, which is the part of the answer that exists.",
-      "task": "JAVA-EXT-008"
-    },
-    {
-      "match": {
-        "symbols": [
           "cna_post_process_chain_add_owned_pass"
         ]
       },
@@ -298,18 +285,6 @@
     },
     {
       "match": {
-        "symbols": [
-          "cna_logger_set_sink_ext",
-          "cna_logger_reset_sink_ext"
-        ]
-      },
-      "classification": "CNA_EXTENSION_CANDIDATE",
-      "purposeReason": "cna_logger_set_sink_ext takes a CNA_LogSinkCallback, a C function pointer the generator refuses rather than guesses at. reset_sink_ext takes none, but binding it alone would give Java a route that clears a sink it has no way to install.",
-      "bindingStatus": "DELIBERATE_NON_BINDING",
-      "bindingReason": "cna_logger_set_sink_ext takes a CNA_LogSinkCallback, a C function pointer the generator refuses rather than guesses at, and binding reset_sink_ext alone would give Java a route that clears a sink it has no way to install."
-    },
-    {
-      "match": {
         "header": "core_ext.h"
       },
       "classification": "CNA_EXTENSION_CANDIDATE",
@@ -408,6 +383,15 @@
       },
       "classification": "NOT_USEFUL_IN_JAVA",
       "purposeReason": "The size half of the type-name pair beside it.",
+      "bindingStatus": "DELIBERATE_NON_BINDING",
+      "bindingReason": "Half of a count/copy pair whose copy is deliberately not bound."
+    },
+    {
+      "match": {
+        "contains": "_get_type_name_byte_count"
+      },
+      "classification": "NOT_USEFUL_IN_JAVA",
+      "purposeReason": "The size half of the type-name pair beside it. CNA spells this half two ways -- _size in the older families and _byte_count in the newer ones -- and only the first spelling had a rule, so eight of these were being classified by whatever header rule they fell through to. One of them inherited a blocker that had since been lifted.",
       "bindingStatus": "DELIBERATE_NON_BINDING",
       "bindingReason": "Half of a count/copy pair whose copy is deliberately not bound."
     },
@@ -909,18 +893,6 @@
       "purposeReason": "The colour-matrix effect is a CNA extension.",
       "bindingStatus": "DELIBERATE_NON_BINDING",
       "bindingReason": "Nothing is left unbound here; the rule exists so a new colour-matrix declaration is classified rather than unexplained."
-    },
-    {
-      "match": {
-        "symbols": [
-          "cna_morph_target_data_ext_get_type_name_byte_count",
-          "cna_morph_target_data_ext_copy_type_name"
-        ]
-      },
-      "classification": "NOT_USEFUL_IN_JAVA",
-      "purposeReason": "Reports CNA's own .NET name for the morph-data type.",
-      "bindingStatus": "DELIBERATE_NON_BINDING",
-      "bindingReason": "The answer is the same for every instance of the type, so a Java caller that wants it can write it down; and what it names is a .NET type, which the Java projection is not. Class.getName() answers the question a Java caller is actually asking. The same rule the sensor readings' type names carry."
     },
     {
       "match": {
@@ -1565,5 +1537,12 @@
     "BLOCKED_PLATFORM": "The platform CNA is built for does not implement it.",
     "DELIBERATE_NON_BINDING": "Measured and decided against: binding it would add a boundary without adding behaviour a consumer can reach, or would make an existing guarantee weaker.",
     "DEFERRED_TRACKED": "An XNA-backing route a named backlog task owns. Only a DEFERRED_RUNTIME rule carrying a task may use it, which is what keeps it from becoming a synonym for 'not looked at'."
-  }
+  },
+  "pairExceptions": [
+    {
+      "size": "cna_graphics_renderer_get_available_count_ext",
+      "copy": "cna_graphics_renderer_copy_available_ext",
+      "reason": "The one pair whose halves are honestly decided apart. The copy route answers correctly at every point in a game's life; the count route is correct only until a GraphicsDevice exists and answers zero afterwards, which JAVA-UPSTREAM-018 reproduces in pure C. GraphicsRenderer.available() therefore asks the copy route with zero capacity and reads the count out of the BUFFER_TOO_SMALL answer, so the pair is half bound on purpose and the unbound half names the upstream defect."
+    }
+  ]
 }

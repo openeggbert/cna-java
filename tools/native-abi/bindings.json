@@ -17440,6 +17440,17 @@
       ]
     },
     {
+      "name": "cna_lod_group_ext_select",
+      "header": "engine_layer.h",
+      "ownership": "borrows group; lends back a mesh part the caller already owns, which the group borrowed",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_LodGroupEXTHandle",
+        "float",
+        "CNA_ModelMeshPartHandle*"
+      ]
+    },
+    {
       "name": "cna_lod_group_ext_select_index",
       "header": "engine_layer.h",
       "ownership": "borrows the group; caller integer output",
@@ -17504,12 +17515,29 @@
       ]
     },
     {
+      "name": "cna_logger_reset_sink_ext",
+      "header": "core_ext.h",
+      "ownership": "uninstalls the process-wide callback; the adapter deletes the global reference afterwards",
+      "returnType": "CNA_Result",
+      "parameters": []
+    },
+    {
       "name": "cna_logger_set_minimum_level",
       "header": "core_ext.h",
       "ownership": "borrows its inputs",
       "returnType": "CNA_Result",
       "parameters": [
         "CNA_LogLevel"
+      ]
+    },
+    {
+      "name": "cna_logger_set_sink_ext",
+      "header": "core_ext.h",
+      "ownership": "installs a process-wide callback; the adapter holds a global reference to the Java sink and deletes it when the sink is replaced or cleared",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_LogSinkCallback",
+        "void*"
       ]
     },
     {

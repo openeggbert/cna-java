@@ -1,12 +1,20 @@
 package org.openeggbert.cna.extensions.graphics;
 
+import Microsoft.Xna.Framework.Graphics.BufferUsage;
+import Microsoft.Xna.Framework.Graphics.IndexBuffer;
+import Microsoft.Xna.Framework.Graphics.IndexElementSize;
+import Microsoft.Xna.Framework.Graphics.VertexBuffer;
+import Microsoft.Xna.Framework.Graphics.VertexPositionColor;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.condition.EnabledIfEnvironmentVariable;
+import org.openeggbert.cna.extensions.content.CnaModelMeshPartHandle;
 
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotEquals;
+import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.assertSame;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
@@ -106,6 +114,98 @@ final class LodGroupTests {
                     () -> group.setScreenSpaceParameters(1.0f, 1.0f, 0.0f));
             assertThrows(NullPointerException.class, () -> group.setSelectionMode(null));
         }
+    }
+
+    @Test
+    void aLevelCanCarryTheMeshPartItDrawsAndTheGroupHandsBackTheCallersOwn() {
+        // Needs a device only because a mesh part is made of buffers; the selection itself is
+        // still arithmetic. This is the measurement that says the group can hold the mapping,
+        // which is what the threshold-only form used to leave to the caller.
+        GameProbe.run(probe -> {
+            try (VertexBuffer vertices = new VertexBuffer(probe.device(),
+                            VertexPositionColor.VertexDeclaration, 3, BufferUsage.None);
+                    IndexBuffer indices = new IndexBuffer(probe.device(),
+                            IndexElementSize.SixteenBits, 3, BufferUsage.None);
+                    CnaModelMeshPartHandle near = CnaModelMeshPartHandle.create(
+                            vertices, indices, 3, 1, 0, 0);
+                    CnaModelMeshPartHandle far = CnaModelMeshPartHandle.create(
+                            vertices, indices, 3, 1, 0, 0);
+                    LodGroup group = LodGroup.create()) {
+                assertNull(group.select(10.0f), "an empty group draws nothing");
+
+                group.setHysteresis(0.0f);
+                group.addLevel(10.0f, near);
+                group.addLevel(20.0f, far);
+                group.addLevel(30.0f, null);
+
+                assertSame(near, group.select(5.0f),
+                        "the group hands back the object that was added, not a second view of it");
+                assertSame(far, group.select(15.0f));
+                assertNull(group.select(25.0f),
+                        "a level added with no part deliberately draws nothing");
+                assertEquals(2, group.selectIndex(25.0f),
+                        "which selectIndex tells apart from an empty group's -1");
+
+                // The two selections are one selection: they share the remembered level that
+                // hysteresis damps, so they cannot disagree about which level applies.
+                assertEquals(0, group.selectIndex(5.0f));
+                assertSame(near, group.select(5.0f));
+
+                assertEquals(2, group.retainedPartCount(),
+                        "the level with no part holds nothing");
+
+                group.clear();
+                assertNull(group.select(5.0f));
+                assertEquals(-1, group.selectIndex(5.0f));
+                // Clearing must let the caller's parts go. Nothing in a selection can show this
+                // -- a cleared group answers "no part" whether or not it kept them -- so it is
+                // asserted directly, which is what makes forgetting it a failing test.
+                assertEquals(0, group.retainedPartCount(),
+                        "a cleared group holds none of the caller's parts");
+            }
+        });
+    }
+
+    @Test
+    void aPartAddedToAGroupStaysTheCallersToClose() {
+        GameProbe.run(probe -> {
+            try (VertexBuffer vertices = new VertexBuffer(probe.device(),
+                            VertexPositionColor.VertexDeclaration, 3, BufferUsage.None);
+                    IndexBuffer indices = new IndexBuffer(probe.device(),
+                            IndexElementSize.SixteenBits, 3, BufferUsage.None);
+                    CnaModelMeshPartHandle part = CnaModelMeshPartHandle.create(
+                            vertices, indices, 3, 1, 0, 0)) {
+                LodGroup group = LodGroup.create();
+                group.addLevel(10.0f, part);
+                assertSame(part, group.select(5.0f));
+                // Closing the group borrowed the part and does not close it: the part answers
+                // afterwards, which a released handle would not.
+                group.close();
+                assertEquals(0, group.retainedPartCount(),
+                        "a closed group lets the caller's parts go too");
+                assertEquals(Microsoft.Xna.Framework.Graphics.PrimitiveType.TriangleList,
+                        part.getPrimitiveType());
+            }
+        });
+    }
+
+    @Test
+    void aThresholdIsStillRefusedWhenALevelCarriesAPart() {
+        GameProbe.run(probe -> {
+            try (VertexBuffer vertices = new VertexBuffer(probe.device(),
+                            VertexPositionColor.VertexDeclaration, 3, BufferUsage.None);
+                    IndexBuffer indices = new IndexBuffer(probe.device(),
+                            IndexElementSize.SixteenBits, 3, BufferUsage.None);
+                    CnaModelMeshPartHandle part = CnaModelMeshPartHandle.create(
+                            vertices, indices, 3, 1, 0, 0);
+                    LodGroup group = LodGroup.create()) {
+                assertThrows(IllegalArgumentException.class, () -> group.addLevel(0.0f, part));
+                assertThrows(IllegalArgumentException.class,
+                        () -> group.addLevel(Float.NaN, part));
+                assertEquals(List.of(), group.getThresholds(),
+                        "a refused level was never added");
+            }
+        });
     }
 
     @Test

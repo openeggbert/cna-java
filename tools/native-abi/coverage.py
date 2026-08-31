@@ -408,6 +408,67 @@ def rule_problems(rules: dict, bound: set[str],
     return problems
 
 
+SIZE_ROUTE = re.compile(r"^(?P<prefix>.*)_get_(?P<subject>.*?)"
+                       r"(?:_byte_count|_size|_count)(?P<ext>_ext)?$")
+
+
+def size_copy_pairs(names: set[str]) -> list[tuple[str, str]]:
+    """Pair each size route with the copy route it sizes.
+
+    CNA's two-call protocol is one operation spelled as two routes, so the two halves
+    are one decision.  The size half is spelled three ways -- ``_byte_count``, ``_size``
+    and ``_count`` -- and the ``_ext`` suffix may sit on either half, which is why this
+    tries both spellings of the sibling rather than one.
+    """
+    pairs: list[tuple[str, str]] = []
+    for name in sorted(names):
+        match = SIZE_ROUTE.match(name)
+        if match is None:
+            continue
+        prefix, subject = match.group("prefix"), match.group("subject")
+        extension = match.group("ext") or ""
+        for candidate in (f"{prefix}_copy_{subject}{extension}", f"{prefix}_copy_{subject}"):
+            if candidate in names:
+                pairs.append((name, candidate))
+                break
+    return pairs
+
+
+def pair_problems(entries: list[dict], exceptions: list[dict]) -> list[str]:
+    """Report a two-call pair whose halves were decided differently.
+
+    The failure this exists for is one this session hit: ``_get_type_name_size`` had a
+    rule and ``_get_type_name_byte_count`` did not, so eight size halves fell through to
+    whatever header rule caught them -- and one of them inherited a blocker that had been
+    lifted, while the copy half beside it carried the true reason all along.  A pair is
+    one operation; deciding its halves differently is the shape of that mistake.
+
+    The prose is deliberately not compared.  A size half that says "half of a pair whose
+    copy is deliberately not bound" and a copy half that says why are agreeing, not
+    disagreeing, and requiring identical text would only make the rules repeat themselves.
+    """
+    allowed = {(entry["size"], entry["copy"]) for entry in exceptions}
+    by_name = {entry["name"]: entry for entry in entries}
+    problems: list[str] = []
+    for size, copy in size_copy_pairs(set(by_name)):
+        if (size, copy) in allowed:
+            continue
+        first, second = by_name[size], by_name[copy]
+        if first["bound"] != second["bound"]:
+            problems.append(f"HALF_BOUND_PAIR {size} {copy}")
+        elif first["classification"] != second["classification"]:
+            problems.append(f"PAIR_CLASSIFIED_APART {size} {copy}")
+        elif first["bindingStatus"] != second["bindingStatus"]:
+            problems.append(f"PAIR_DECIDED_APART {size} {copy}")
+    for entry in exceptions:
+        pair = (entry["size"], entry["copy"])
+        if entry["size"] not in by_name or entry["copy"] not in by_name:
+            problems.append(f"PAIR_EXCEPTION_NAMES_NOTHING {pair}")
+        elif not entry.get("reason", "").strip():
+            problems.append(f"PAIR_EXCEPTION_WITHOUT_REASON {pair}")
+    return problems
+
+
 def match_rule(rule: dict, name: str, header: str) -> bool:
     criteria = rule["match"]
     if "header" in criteria and criteria["header"] != header:
@@ -528,7 +589,8 @@ def build(cna_root: Path) -> dict:
         "boundFunctions": sum(1 for record in entries if record["bound"]),
         "classificationCounts": dict(sorted(counts.items())),
         "bindingStatusCounts": dict(sorted(binding_counts.items())),
-        "ruleProblems": rule_problems(rules, set(bound), unbound_matches),
+        "ruleProblems": rule_problems(rules, set(bound), unbound_matches)
+                        + pair_problems(entries, rules.get("pairExceptions", [])),
         "functions": entries,
     }
 

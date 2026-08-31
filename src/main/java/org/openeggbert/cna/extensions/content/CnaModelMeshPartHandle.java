@@ -29,6 +29,14 @@ import java.util.Objects;
  */
 public final class CnaModelMeshPartHandle implements AutoCloseable {
 
+    static {
+        // extensions.graphics's LodGroup holds levels made of these, and a handle that is
+        // package-private cannot be handed to another package any other way. The reader is
+        // registered from here so the handle never appears in a signature.
+        org.openeggbert.cna.internal.ExtensionHandles.registerMeshPartReader(
+                part -> ((CnaModelMeshPartHandle) part).value());
+    }
+
     private final long handle;
 
     /** Whether closing this frees the part, which an alias a model lent back does not. */

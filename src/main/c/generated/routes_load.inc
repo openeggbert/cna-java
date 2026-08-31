@@ -1237,6 +1237,7 @@
     LOAD(lod_group_ext_get_selection_mode, "cna_lod_group_ext_get_selection_mode");
     LOAD(lod_group_ext_projected_radius_pixels, "cna_lod_group_ext_projected_radius_pixels");
     LOAD(lod_group_ext_reset_hysteresis, "cna_lod_group_ext_reset_hysteresis");
+    LOAD(lod_group_ext_select, "cna_lod_group_ext_select");
     LOAD(lod_group_ext_select_index, "cna_lod_group_ext_select_index");
     LOAD(lod_group_ext_set_hysteresis, "cna_lod_group_ext_set_hysteresis");
     LOAD(lod_group_ext_set_screen_space_parameters, "cna_lod_group_ext_set_screen_space_parameters");

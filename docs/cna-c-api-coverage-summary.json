@@ -3,12 +3,12 @@
   "actionableLocal": [],
   "bindingStatusCounts": {
     "BLOCKED_UPSTREAM": 21,
-    "BOUND": 2771,
-    "DEFERRED_TRACKED": 326,
-    "DELIBERATE_NON_BINDING": 936
+    "BOUND": 2774,
+    "DEFERRED_TRACKED": 320,
+    "DELIBERATE_NON_BINDING": 939
   },
   "boundButUnreached": [],
-  "boundFunctions": 2771,
+  "boundFunctions": 2774,
   "boundWithoutJavaCallSite": [],
   "byHeader": {
     "abi.h": {
@@ -112,8 +112,7 @@
       "total": 14
     },
     "index_resources.h": {
-      "DEFERRED_RUNTIME": 1,
-      "NOT_USEFUL_IN_JAVA": 1,
+      "NOT_USEFUL_IN_JAVA": 2,
       "XNA_BACKING": 8,
       "total": 10
     },
@@ -201,9 +200,9 @@
       "total": 41
     },
     "models.h": {
-      "CNA_EXTENSION_CANDIDATE": 181,
+      "CNA_EXTENSION_CANDIDATE": 180,
       "DEFERRED_RUNTIME": 1,
-      "NOT_USEFUL_IN_JAVA": 34,
+      "NOT_USEFUL_IN_JAVA": 35,
       "total": 216
     },
     "net.h": {
@@ -275,14 +274,14 @@
       "total": 49
     },
     "texture.h": {
-      "DEFERRED_RUNTIME": 15,
-      "NOT_USEFUL_IN_JAVA": 1,
+      "DEFERRED_RUNTIME": 14,
+      "NOT_USEFUL_IN_JAVA": 2,
       "XNA_BACKING": 5,
       "total": 21
     },
     "texture_volume.h": {
-      "DEFERRED_RUNTIME": 4,
-      "NOT_USEFUL_IN_JAVA": 2,
+      "DEFERRED_RUNTIME": 2,
+      "NOT_USEFUL_IN_JAVA": 4,
       "XNA_BACKING": 10,
       "total": 16
     },
@@ -291,8 +290,8 @@
       "total": 137
     },
     "vertex_resources.h": {
-      "DEFERRED_RUNTIME": 11,
-      "NOT_USEFUL_IN_JAVA": 2,
+      "DEFERRED_RUNTIME": 9,
+      "NOT_USEFUL_IN_JAVA": 4,
       "XNA_BACKING": 11,
       "total": 24
     },
@@ -315,16 +314,15 @@
   },
   "canonicalFunctions": 4054,
   "classificationCounts": {
-    "CNA_EXTENSION_CANDIDATE": 1850,
-    "DEFERRED_RUNTIME": 327,
+    "CNA_EXTENSION_CANDIDATE": 1849,
+    "DEFERRED_RUNTIME": 321,
     "JAVA_INTERNAL_ONLY": 11,
-    "NOT_USEFUL_IN_JAVA": 880,
+    "NOT_USEFUL_IN_JAVA": 887,
     "XNA_BACKING": 986
   },
   "cnaInventorySha256": "b485d17b1df9a86c6099700baedcd435c8a3f07487af8741b01d8c471956bfe7",
   "deferredTasks": {
     "JAVA-EXT-006": 2,
-    "JAVA-EXT-008": 1,
     "JAVA-EXT-010": 8,
     "JAVA-EXT-012": 1,
     "JAVA-NATIVE-010": 8,
@@ -332,8 +330,8 @@
     "JAVA-NATIVE-013": 25,
     "JAVA-NATIVE-014": 39,
     "JAVA-NATIVE-015": 61,
-    "JAVA-NATIVE-016": 22,
-    "JAVA-NATIVE-017": 12,
+    "JAVA-NATIVE-016": 19,
+    "JAVA-NATIVE-017": 9,
     "JAVA-NATIVE-018": 1,
     "JAVA-NATIVE-019": 32,
     "JAVA-NATIVE-020": 38,
@@ -357,8 +355,8 @@
     },
     "core_ext.h": {
       "BLOCKED_UPSTREAM": 4,
-      "DELIBERATE_NON_BINDING": 16,
-      "total": 20
+      "DELIBERATE_NON_BINDING": 14,
+      "total": 18
     },
     "devices.h": {
       "BLOCKED_UPSTREAM": 15,
@@ -370,8 +368,8 @@
     },
     "engine_layer.h": {
       "BLOCKED_UPSTREAM": 1,
-      "DELIBERATE_NON_BINDING": 12,
-      "total": 13
+      "DELIBERATE_NON_BINDING": 11,
+      "total": 12
     },
     "graphics_ext.h": {
       "DELIBERATE_NON_BINDING": 1,
@@ -382,8 +380,8 @@
       "total": 1
     },
     "models.h": {
-      "DELIBERATE_NON_BINDING": 4,
-      "total": 4
+      "DELIBERATE_NON_BINDING": 3,
+      "total": 3
     },
     "sensors.h": {
       "DELIBERATE_NON_BINDING": 2,

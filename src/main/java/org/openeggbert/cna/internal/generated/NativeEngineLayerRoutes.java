@@ -5418,6 +5418,11 @@ public final class NativeEngineLayerRoutes {
     public static native int lodGroupExtResetHysteresis(long group);
 
     /**
+     * cna_lod_group_ext_select (engine_layer.h).
+     */
+    public static native int lodGroupExtSelect(long group, float distance, long[] outPart);
+
+    /**
      * cna_lod_group_ext_select_index (engine_layer.h).
      */
     public static native int lodGroupExtSelectIndex(long group, float distance, int[] outIndex);
