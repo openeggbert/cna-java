@@ -446,6 +446,23 @@ public final class FacadeFactory {
     }
 
     /**
+     * Adopts an effect CNA created and handed over, as an ordinary XNA {@link Effect}.
+     *
+     * <p>The same registration as {@link #createBorrowedEffect} and deliberately a different name,
+     * because the ownership is the opposite: a shader effect built from source belongs to the
+     * caller, and disposing the facade destroys it rather than giving a borrow back. The two share
+     * a mechanism -- {@code cna_effect_destroy} is how both are released -- and nothing but the
+     * name says which of the two a call site meant, so the name is what says it.
+     *
+     * @param graphicsDevice the device the effect belongs to
+     * @param nativeEffect the handle CNA just returned
+     * @return the facade, which the caller disposes
+     */
+    public static Effect createOwnedEffect(GraphicsDevice graphicsDevice, long nativeEffect) {
+        return createBorrowedEffect(graphicsDevice, nativeEffect);
+    }
+
+    /**
      * Returns the graphics device a content manager loads against.
      *
      * <p>Reached from {@code org.openeggbert.cna.extensions.content}. XNA's ContentManager has no

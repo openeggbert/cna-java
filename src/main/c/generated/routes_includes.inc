@@ -17,3 +17,4 @@
 #include "NativePbrEffectRoutes.inc"
 #include "NativeRuntimeExtensionRoutes.inc"
 #include "NativeSensorExtensionRoutes.inc"
+#include "NativeShaderEffectRoutes.inc"

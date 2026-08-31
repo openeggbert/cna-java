@@ -682,6 +682,54 @@ def test_generator(live: dict) -> None:
                          "long elementByteSize"],
           "both extent parameters stay in the Java signature, because CNA reads both")
 
+    # A counted array whose count is NOT its length. A vec3 uniform array is three tightly packed
+    # floats per element, so a float[] of 3n floats is n vectors -- and both C parameters are just
+    # floats and a count, so nothing in the declaration says which. Undeclared, the generator
+    # passes the length, which would describe an array three times the size the shader declares.
+    packed = generator_tool.plan(
+        {"java": "probe", "symbol": "cna_shader_effect_set_uniform_vec3_array",
+         "elementFloats": {"values": 3}}, live)
+    _, parameters = generator_tool.java_signature(packed)
+    check(parameters == ["long effect", "byte[] name", "float[] values"],
+          "a grouped array is one Java float[] and the count disappears")
+    adapter = generator_tool.render_c("Probe", [packed])
+    check("(int32_t)(values_size / 3)" in adapter,
+          "the count CNA is given is the element count, not the float count")
+    check("if (values_size % 3 != 0) {" in adapter,
+          "and a length that is not a whole number of elements is refused")
+    check("return (jint)CNA_RESULT_INVALID_ARGUMENT;" in adapter,
+          "refused before CNA is called")
+    # The refusal path has to give back everything the earlier parameters pinned, which for this
+    # route is the name's bytes as well as the array's own.
+    refusal = adapter[adapter.index("if (values_size % 3 != 0) {"):]
+    refusal = refusal[:refusal.index("CNA_Result call_result")]
+    check("ReleaseFloatArrayElements" in refusal and "ReleaseByteArrayElements" in refusal,
+          "and the refusal releases the array and the name it had already pinned")
+
+    # Undeclared, the same route passes the float count -- which is the bug the declaration
+    # exists to prevent, and is what makes stating it worth the words.
+    plain = generator_tool.plan(
+        {"java": "probe", "symbol": "cna_shader_effect_set_uniform_vec3_array"}, live)
+    plain_adapter = generator_tool.render_c("Probe", [plain])
+    check("(int32_t)values_size" in plain_adapter and "values_size % " not in plain_adapter,
+          "an undeclared grouping is one element per float, which is what the C says")
+
+    # A grouping of zero or less would divide by zero or pass a negative count.
+    try:
+        generator_tool.plan({"java": "probe", "symbol": "cna_shader_effect_set_uniform_vec3_array",
+                             "elementFloats": {"values": 0}}, live)
+        check(False, "a non-positive elementFloats grouping is refused")
+    except generator_tool.Unsupported:
+        check(True, "a non-positive elementFloats grouping is refused")
+
+    # A trailing int32_t is read as a count only where CNA named it one. Anything else next to a
+    # pointer might be an offset, a stride or a mode, and reading it as a length would be the kind
+    # of guess this generator exists to refuse.
+    check(generator_tool.plan(
+        {"java": "probe", "symbol": "cna_cnb_cnj_result_copy_bytes"}, live)["steps"][1]["shape"]
+        == "array",
+        "a uint64_t capacity beside a copy-out buffer is still read as its length")
+
     # The generator refuses a shape it cannot prove rather than guessing at it.
     try:
         plan("cna_text_input_subscribe_text_input_ext")

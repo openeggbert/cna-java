@@ -7028,6 +7028,109 @@
         "java": "skinnedPbrEffectSetWeightsPerVertex",
         "symbol": "cna_skinned_pbr_effect_set_weights_per_vertex"
       }
+    ],
+    "NativeShaderEffectRoutes": [
+      {
+        "java": "shaderEffectCopyCompileErrorExt",
+        "symbol": "cna_shader_effect_copy_compile_error_ext"
+      },
+      {
+        "java": "shaderEffectCreate",
+        "symbol": "cna_shader_effect_create"
+      },
+      {
+        "java": "shaderEffectGetProjection",
+        "symbol": "cna_shader_effect_get_projection"
+      },
+      {
+        "java": "shaderEffectGetView",
+        "symbol": "cna_shader_effect_get_view"
+      },
+      {
+        "java": "shaderEffectGetWorld",
+        "symbol": "cna_shader_effect_get_world"
+      },
+      {
+        "java": "shaderEffectHasRenderer",
+        "symbol": "cna_shader_effect_has_renderer"
+      },
+      {
+        "java": "shaderEffectIsValid",
+        "symbol": "cna_shader_effect_is_valid"
+      },
+      {
+        "java": "shaderEffectSetProjection",
+        "symbol": "cna_shader_effect_set_projection"
+      },
+      {
+        "java": "shaderEffectSetTexture2d",
+        "symbol": "cna_shader_effect_set_texture2d"
+      },
+      {
+        "java": "shaderEffectSetTexture3d",
+        "symbol": "cna_shader_effect_set_texture3d"
+      },
+      {
+        "java": "shaderEffectSetTextureCube",
+        "symbol": "cna_shader_effect_set_texture_cube"
+      },
+      {
+        "java": "shaderEffectSetUniformFloat",
+        "symbol": "cna_shader_effect_set_uniform_float"
+      },
+      {
+        "java": "shaderEffectSetUniformFloatArray",
+        "symbol": "cna_shader_effect_set_uniform_float_array"
+      },
+      {
+        "java": "shaderEffectSetUniformInt32",
+        "symbol": "cna_shader_effect_set_uniform_int32"
+      },
+      {
+        "java": "shaderEffectSetUniformMat4Array",
+        "symbol": "cna_shader_effect_set_uniform_mat4_array",
+        "elementFloats": {
+          "matrices": 16
+        }
+      },
+      {
+        "java": "shaderEffectSetUniformMatrix",
+        "symbol": "cna_shader_effect_set_uniform_matrix"
+      },
+      {
+        "java": "shaderEffectSetUniformVec3Array",
+        "symbol": "cna_shader_effect_set_uniform_vec3_array",
+        "elementFloats": {
+          "values": 3
+        }
+      },
+      {
+        "java": "shaderEffectSetUniformVector2",
+        "symbol": "cna_shader_effect_set_uniform_vector2"
+      },
+      {
+        "java": "shaderEffectSetUniformVector2Array",
+        "symbol": "cna_shader_effect_set_uniform_vector2_array",
+        "elementFloats": {
+          "values": 2
+        }
+      },
+      {
+        "java": "shaderEffectSetUniformVector3",
+        "symbol": "cna_shader_effect_set_uniform_vector3"
+      },
+      {
+        "java": "shaderEffectSetUniformVector4",
+        "symbol": "cna_shader_effect_set_uniform_vector4"
+      },
+      {
+        "java": "shaderEffectSetView",
+        "symbol": "cna_shader_effect_set_view"
+      },
+      {
+        "java": "shaderEffectSetWorld",
+        "symbol": "cna_shader_effect_set_world"
+      }
     ]
   }
 }

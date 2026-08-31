@@ -1037,3 +1037,34 @@ the zero the scene-callback probe reported was a pipeline with nothing turned on
 
 **A shadow map lends its texture on every renderer**, and answers `is_supported` false only where
 it cannot cast into it.
+
+## shader_effect_uniform_binding.c
+
+`JAVA-UPSTREAM-016`. When does a uniform set on a `ShaderEffect` actually reach the shader?
+
+`cna_shader_effect_set_uniform_*` answers `SUCCESS` whatever else is going on, and on CNA's EasyGL
+renderer the value is silently discarded unless the effect's own GL program happens to be the
+current one. `EasyGLEffectRenderer::SetUniformFloat` and its eight siblings ask for a uniform
+location and write to it without binding first, and `glUniform*` writes to whichever program is
+current.
+
+A fragment shader that writes nothing but a uniform, drawn into a render target and read back:
+
+| renderer | uniform then apply | apply then uniform |
+|---|---|---|
+| HEADLESS | readback refused | readback refused |
+| SOFTWARE | 0,255,0,255 (the source, unshaded) | 0,255,0,255 |
+| OPENGL4 | **0,0,0,255** | **255,0,0,255** |
+| OPENGLES3 | **0,0,0,0** | **255,0,0,255** |
+| OPENGL33 | **0,0,0,0** | **255,0,0,255** |
+
+The same renderer does it correctly one file over: `EasyGLComputeShaderRenderer::SetUniformInt`
+opens with `program_.use()`. Two uniform setters in one renderer, one of which works from a cold
+start and one of which does not -- which is what makes this a defect rather than a contract. CNA's
+own passes are unaffected because they apply their effect as part of drawing; a game reaching the
+routes directly is not, and `ShaderEffect.apply()` is where that is written down.
+
+It also settles what a custom full-screen shader has to look like. The vertex program must match
+what the pass feeds it -- `aPos`, `aTexCoord` and `aColor` at locations nought, one and two, plus a
+`projection` uniform -- which is the eight lines every lens pass inside CNA shares. A shader that
+names its attributes anything else compiles, reports itself valid, and draws nothing.

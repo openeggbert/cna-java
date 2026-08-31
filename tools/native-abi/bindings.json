@@ -21879,6 +21879,30 @@
       ]
     },
     {
+      "name": "cna_shader_effect_copy_compile_error_ext",
+      "header": "effects.h",
+      "ownership": "borrows the effect; fills the caller's buffer and writes no partial string",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_EffectHandle",
+        "char*",
+        "uint64_t",
+        "uint64_t*"
+      ]
+    },
+    {
+      "name": "cna_shader_effect_create",
+      "header": "effects.h",
+      "ownership": "borrows the graphics device and both source views; returns an owned effect handle the game owns as an ordinary graphics resource",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_Handle",
+        "CNA_StringView",
+        "CNA_StringView",
+        "CNA_EffectHandle*"
+      ]
+    },
+    {
       "name": "cna_shader_effect_factory_acquire",
       "header": "engine_layer.h",
       "ownership": "borrows the factory; returns a BORROWED view of a cached effect that the factory keeps owning, released with cna_effect_destroy, and counted -- clear and destroy are refused while one is out",
@@ -21938,6 +21962,233 @@
       "parameters": [
         "CNA_ShaderEffectFactoryHandle",
         "uint64_t*"
+      ]
+    },
+    {
+      "name": "cna_shader_effect_get_projection",
+      "header": "effects.h",
+      "ownership": "borrows the effect; fills the caller's own matrix",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_EffectHandle",
+        "CNA_Matrix*"
+      ]
+    },
+    {
+      "name": "cna_shader_effect_get_view",
+      "header": "effects.h",
+      "ownership": "borrows the effect; fills the caller's own matrix",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_EffectHandle",
+        "CNA_Matrix*"
+      ]
+    },
+    {
+      "name": "cna_shader_effect_get_world",
+      "header": "effects.h",
+      "ownership": "borrows the effect; fills the caller's own matrix",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_EffectHandle",
+        "CNA_Matrix*"
+      ]
+    },
+    {
+      "name": "cna_shader_effect_has_renderer",
+      "header": "effects.h",
+      "ownership": "borrows the effect; returns a value",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_EffectHandle",
+        "CNA_Bool*"
+      ]
+    },
+    {
+      "name": "cna_shader_effect_is_valid",
+      "header": "effects.h",
+      "ownership": "borrows the effect; returns a value",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_EffectHandle",
+        "CNA_Bool*"
+      ]
+    },
+    {
+      "name": "cna_shader_effect_set_projection",
+      "header": "effects.h",
+      "ownership": "borrows the effect",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_EffectHandle",
+        "CNA_Matrix"
+      ]
+    },
+    {
+      "name": "cna_shader_effect_set_texture2d",
+      "header": "effects.h",
+      "ownership": "borrows the effect and the texture; the texture must outlive every draw that samples it",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_EffectHandle",
+        "int32_t",
+        "CNA_Handle"
+      ]
+    },
+    {
+      "name": "cna_shader_effect_set_texture3d",
+      "header": "effects.h",
+      "ownership": "borrows the effect and the texture; the texture must outlive every draw that samples it",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_EffectHandle",
+        "int32_t",
+        "CNA_Handle"
+      ]
+    },
+    {
+      "name": "cna_shader_effect_set_texture_cube",
+      "header": "effects.h",
+      "ownership": "borrows the effect and the texture; the texture must outlive every draw that samples it",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_EffectHandle",
+        "int32_t",
+        "CNA_Handle"
+      ]
+    },
+    {
+      "name": "cna_shader_effect_set_uniform_float",
+      "header": "effects.h",
+      "ownership": "borrows the effect and the name bytes for the duration of the call",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_EffectHandle",
+        "CNA_StringView",
+        "float"
+      ]
+    },
+    {
+      "name": "cna_shader_effect_set_uniform_float_array",
+      "header": "effects.h",
+      "ownership": "borrows the effect, the name bytes and the caller's floats for the duration of the call; CNA copies them",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_EffectHandle",
+        "CNA_StringView",
+        "const float*",
+        "uint64_t"
+      ]
+    },
+    {
+      "name": "cna_shader_effect_set_uniform_int32",
+      "header": "effects.h",
+      "ownership": "borrows the effect and the name bytes for the duration of the call",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_EffectHandle",
+        "CNA_StringView",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "cna_shader_effect_set_uniform_mat4_array",
+      "header": "effects.h",
+      "ownership": "borrows the effect, the name bytes and the caller's floats for the duration of the call; sixteen floats per matrix",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_EffectHandle",
+        "CNA_StringView",
+        "const float*",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "cna_shader_effect_set_uniform_matrix",
+      "header": "effects.h",
+      "ownership": "borrows the effect and the name bytes for the duration of the call",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_EffectHandle",
+        "CNA_StringView",
+        "CNA_Matrix"
+      ]
+    },
+    {
+      "name": "cna_shader_effect_set_uniform_vec3_array",
+      "header": "effects.h",
+      "ownership": "borrows the effect, the name bytes and the caller's floats for the duration of the call; three tightly packed floats per element",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_EffectHandle",
+        "CNA_StringView",
+        "const float*",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "cna_shader_effect_set_uniform_vector2",
+      "header": "effects.h",
+      "ownership": "borrows the effect and the name bytes for the duration of the call",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_EffectHandle",
+        "CNA_StringView",
+        "CNA_Vector2"
+      ]
+    },
+    {
+      "name": "cna_shader_effect_set_uniform_vector2_array",
+      "header": "effects.h",
+      "ownership": "borrows the effect, the name bytes and the caller's floats for the duration of the call; CNA copies them",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_EffectHandle",
+        "CNA_StringView",
+        "const CNA_Vector2*",
+        "uint64_t"
+      ]
+    },
+    {
+      "name": "cna_shader_effect_set_uniform_vector3",
+      "header": "effects.h",
+      "ownership": "borrows the effect and the name bytes for the duration of the call",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_EffectHandle",
+        "CNA_StringView",
+        "CNA_Vector3"
+      ]
+    },
+    {
+      "name": "cna_shader_effect_set_uniform_vector4",
+      "header": "effects.h",
+      "ownership": "borrows the effect and the name bytes for the duration of the call",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_EffectHandle",
+        "CNA_StringView",
+        "CNA_Vector4"
+      ]
+    },
+    {
+      "name": "cna_shader_effect_set_view",
+      "header": "effects.h",
+      "ownership": "borrows the effect",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_EffectHandle",
+        "CNA_Matrix"
+      ]
+    },
+    {
+      "name": "cna_shader_effect_set_world",
+      "header": "effects.h",
+      "ownership": "borrows the effect",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_EffectHandle",
+        "CNA_Matrix"
       ]
     },
     {

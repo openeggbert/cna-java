@@ -39,6 +39,13 @@ the generator reads the parameter's own documentation: one that names a count is
 refused until ``routes.json`` says what it is.  ``arrayLengths`` gives the
 element count; ``singleStructs`` says the count in the prose is the structure's
 own fields rather than a number of structures.
+
+``elementFloats`` is the same problem for a counted array whose count is not its
+length: a ``vec3`` array is "three floats per element, tightly packed", so a Java
+``float[]`` of ``3n`` floats is ``n`` vectors and passing ``3n`` would describe an
+array three times the size the shader declares.  Both parameters are just floats
+and a count, so the grouping cannot be derived; ``routes.json`` states it and the
+adapter refuses a length that is not a multiple of it.
 """
 
 from __future__ import annotations
@@ -509,15 +516,38 @@ def plan(route: dict, live: dict) -> dict:
                           **groups})
             index += 1
             continue
-        if pointers == 1 and following is not None and bare(following["type"]) == ("uint64_t", 0):
-            # CNA passes an array as a pointer immediately followed by its element
-            # count or capacity. Java carries the length in the array itself, so the
-            # count parameter disappears from the Java declaration.
+        if (pointers == 1 and following is not None
+                and (bare(following["type"]) == ("uint64_t", 0)
+                     or (bare(following["type"]) == ("int32_t", 0)
+                         and (following["name"] or "").endswith("count")))):
+            # CNA passes an array as a pointer immediately followed by its element count or
+            # capacity. Java carries the length in the array itself, so the count parameter
+            # disappears from the Java declaration.
+            #
+            # The count is a `uint64_t` in almost every route, and CNA writes a few as a signed
+            # `int32_t` instead. Those are accepted only where the parameter is actually named a
+            # count: a `uint64_t capacity` beside a copy-out buffer is a count too, but a bare
+            # trailing `int32_t` next to a pointer is not necessarily one at all, and reading it
+            # as a length is the kind of guess this generator refuses.
+            #
+            # `elementFloats` is for the case where the count is not the array's length: a vec3
+            # array is "three floats per element, tightly packed", so a Java float[] of 3n floats
+            # is n vectors, and passing 3n would describe an array three times the size of the one
+            # the shader declares. The grouping cannot be read off the declaration -- both
+            # parameters are floats and a count -- so routes.json states it, and the adapter
+            # refuses a length that is not a multiple of it rather than truncating.
+            grouping = int(route.get("elementFloats", {}).get(name, 1))
+            if grouping < 1:
+                raise Unsupported(
+                    f"{route['symbol']}: elementFloats for '{name}' must be positive")
             jni, kind = classify_scalar(type_name, live)
+            count_name = following["name"] or "count"
             steps.append({"shape": "array", "name": name, "jni": jni, "kind": kind,
                           "ctype": type_name, "input": constant,
-                          "count": following["name"] or "count"})
-            available[following["name"] or "count"] = (
+                          "countType": bare(following["type"])[0],
+                          "grouping": grouping,
+                          "count": count_name})
+            available[count_name] = (
                 f"(*environment)->GetArrayLength(environment, {name})")
             index += 2
             continue
@@ -819,7 +849,23 @@ def render_c(class_name: str, entries: list[dict]) -> str:
                 body.append(f"        {name}_values[index] = ({step['ctype']}){name}_elements[index];")
                 body.append("    }")
                 arguments.append(f"{name}_values")
-                arguments.append(f"(uint64_t){name}_size")
+                grouping = step.get("grouping", 1)
+                if grouping != 1:
+                    # A declared grouping means the count CNA takes is not the array's length:
+                    # a vec3 array is three tightly packed floats per element. A length that is
+                    # not a whole number of elements describes an array neither side agrees on,
+                    # so it is refused rather than truncated.
+                    body.append(f"    if ({name}_size % {grouping} != 0) {{")
+                    body.append(f"        free({name}_values);")
+                    body.append(f"        (*environment)->Release{element}ArrayElements(")
+                    body.append(f"            environment, {name}, {name}_elements, JNI_ABORT);")
+                    body.extend(unwind_lines(unwind, ""))
+                    body.append("        return (jint)CNA_RESULT_INVALID_ARGUMENT;")
+                    body.append("    }")
+                count_type = step.get("countType", "uint64_t")
+                arguments.append(
+                    f"({count_type})({name}_size / {grouping})" if grouping != 1
+                    else f"({count_type}){name}_size")
                 writeback = ""
                 if not step["input"]:
                     # The copy back has to happen before the buffer is released, so it
