@@ -235,7 +235,16 @@ tasks.register('nativeAbiToolTests', Exec) {
     }
 }
 
+// A broken {@link} is a compile-time fact that only javadoc checks, and javadoc only ran when
+// something asked for the documentation jar -- which is the template's verification, at the end
+// of a long build. A reference to a method that does not exist survived a whole session that way.
+// Twelve seconds here turns that into an ordinary check failure.
+tasks.named('javadoc') {
+    options.addBooleanOption('Xdoclint:reference', true)
+}
+
 check {
+    dependsOn tasks.named('javadoc')
     dependsOn tasks.named('apiCompatToolTests')
     dependsOn tasks.named('compileCompileProbeJava')
     dependsOn tasks.named('leakGuard')
