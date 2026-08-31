@@ -4519,6 +4519,10 @@
         "symbol": "cna_directional_light_ext_init"
       },
       {
+        "java": "engineLayerCopyVersionString",
+        "symbol": "cna_engine_layer_copy_version_string"
+      },
+      {
         "java": "engineLayerGetVersion",
         "symbol": "cna_engine_layer_get_version"
       },
@@ -4647,6 +4651,50 @@
         "symbol": "cna_fxaa_pass_set_edge_threshold"
       },
       {
+        "java": "gpuCullableInstanceInit",
+        "symbol": "cna_gpu_cullable_instance_init"
+      },
+      {
+        "java": "gpuInstanceCullerCopyInstanceLookupGlsl",
+        "symbol": "cna_gpu_instance_culler_copy_instance_lookup_glsl"
+      },
+      {
+        "java": "gpuInstanceCullerCopyUnsupportedReason",
+        "symbol": "cna_gpu_instance_culler_copy_unsupported_reason"
+      },
+      {
+        "java": "gpuInstanceCullerCreate",
+        "symbol": "cna_gpu_instance_culler_create"
+      },
+      {
+        "java": "gpuInstanceCullerCull",
+        "symbol": "cna_gpu_instance_culler_cull"
+      },
+      {
+        "java": "gpuInstanceCullerDestroy",
+        "symbol": "cna_gpu_instance_culler_destroy"
+      },
+      {
+        "java": "gpuInstanceCullerDraw",
+        "symbol": "cna_gpu_instance_culler_draw"
+      },
+      {
+        "java": "gpuInstanceCullerGetInstanceCount",
+        "symbol": "cna_gpu_instance_culler_get_instance_count"
+      },
+      {
+        "java": "gpuInstanceCullerIsSupported",
+        "symbol": "cna_gpu_instance_culler_is_supported"
+      },
+      {
+        "java": "gpuInstanceCullerReadVisibleCountExt",
+        "symbol": "cna_gpu_instance_culler_read_visible_count_ext"
+      },
+      {
+        "java": "gpuInstanceCullerSetInstances",
+        "symbol": "cna_gpu_instance_culler_set_instances"
+      },
+      {
         "java": "gpuTimerBegin",
         "symbol": "cna_gpu_timer_begin"
       },
@@ -4689,6 +4737,10 @@
       {
         "java": "gpuTimerPoll",
         "symbol": "cna_gpu_timer_poll"
+      },
+      {
+        "java": "graphicsDeviceSupportsShadowSamplingExt",
+        "symbol": "cna_graphics_device_supports_shadow_sampling_ext"
       },
       {
         "java": "hdrDisplayOutputCreate",
@@ -5546,6 +5598,10 @@
         "symbol": "cna_render_pipeline_set_settings"
       },
       {
+        "java": "renderPipelineSetSkybox",
+        "symbol": "cna_render_pipeline_set_skybox"
+      },
+      {
         "java": "renderPipelineSetSkyboxCamera",
         "symbol": "cna_render_pipeline_set_skybox_camera"
       },
@@ -5601,6 +5657,18 @@
       {
         "java": "renderTargetPoolReset",
         "symbol": "cna_render_target_pool_reset"
+      },
+      {
+        "java": "scopedRenderTargetBegin",
+        "symbol": "cna_scoped_render_target_begin"
+      },
+      {
+        "java": "scopedRenderTargetEnd",
+        "symbol": "cna_scoped_render_target_end"
+      },
+      {
+        "java": "scopedRenderTargetGetHasRecordedPrevious",
+        "symbol": "cna_scoped_render_target_get_has_recorded_previous"
       },
       {
         "java": "shadowMapApplyCaster",
@@ -5933,6 +6001,14 @@
       {
         "java": "ssrPassSetThickness",
         "symbol": "cna_ssr_pass_set_thickness"
+      },
+      {
+        "java": "thinFilmIridescenceCopyGlsl",
+        "symbol": "cna_thin_film_iridescence_copy_glsl"
+      },
+      {
+        "java": "thinFilmIridescenceEvaluate",
+        "symbol": "cna_thin_film_iridescence_evaluate"
       },
       {
         "java": "tonemapPassCreate",

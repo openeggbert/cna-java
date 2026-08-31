@@ -643,6 +643,7 @@
     CNA_JNI_ROUTE(cna_display_info_get_safe_area_ext) display_info_get_safe_area_ext;
     CNA_JNI_ROUTE(cna_effect_copy_type_name) effect_copy_type_name;
     CNA_JNI_ROUTE(cna_effect_get_type_name_byte_count) effect_get_type_name_byte_count;
+    CNA_JNI_ROUTE(cna_engine_layer_copy_version_string) engine_layer_copy_version_string;
     CNA_JNI_ROUTE(cna_engine_layer_get_version) engine_layer_get_version;
     CNA_JNI_ROUTE(cna_environment_processor_convert_equirectangular) environment_processor_convert_equirectangular;
     CNA_JNI_ROUTE(cna_environment_processor_create) environment_processor_create;
@@ -735,6 +736,17 @@
     CNA_JNI_ROUTE(cna_gamer_set_display_name) gamer_set_display_name;
     CNA_JNI_ROUTE(cna_gamer_set_tag) gamer_set_tag;
     CNA_JNI_ROUTE(cna_gamer_unsubscribe_ext) gamer_unsubscribe_ext;
+    CNA_JNI_ROUTE(cna_gpu_cullable_instance_init) gpu_cullable_instance_init;
+    CNA_JNI_ROUTE(cna_gpu_instance_culler_copy_instance_lookup_glsl) gpu_instance_culler_copy_instance_lookup_glsl;
+    CNA_JNI_ROUTE(cna_gpu_instance_culler_copy_unsupported_reason) gpu_instance_culler_copy_unsupported_reason;
+    CNA_JNI_ROUTE(cna_gpu_instance_culler_create) gpu_instance_culler_create;
+    CNA_JNI_ROUTE(cna_gpu_instance_culler_cull) gpu_instance_culler_cull;
+    CNA_JNI_ROUTE(cna_gpu_instance_culler_destroy) gpu_instance_culler_destroy;
+    CNA_JNI_ROUTE(cna_gpu_instance_culler_draw) gpu_instance_culler_draw;
+    CNA_JNI_ROUTE(cna_gpu_instance_culler_get_instance_count) gpu_instance_culler_get_instance_count;
+    CNA_JNI_ROUTE(cna_gpu_instance_culler_is_supported) gpu_instance_culler_is_supported;
+    CNA_JNI_ROUTE(cna_gpu_instance_culler_read_visible_count_ext) gpu_instance_culler_read_visible_count_ext;
+    CNA_JNI_ROUTE(cna_gpu_instance_culler_set_instances) gpu_instance_culler_set_instances;
     CNA_JNI_ROUTE(cna_gpu_timer_begin) gpu_timer_begin;
     CNA_JNI_ROUTE(cna_gpu_timer_copy_unsupported_reason) gpu_timer_copy_unsupported_reason;
     CNA_JNI_ROUTE(cna_gpu_timer_create) gpu_timer_create;
@@ -752,6 +764,7 @@
     CNA_JNI_ROUTE(cna_graphics_backend_get_current_maturity) graphics_backend_get_current_maturity;
     CNA_JNI_ROUTE(cna_graphics_backend_maturity_copy_name) graphics_backend_maturity_copy_name;
     CNA_JNI_ROUTE(cna_graphics_backend_maturity_get_name_size) graphics_backend_maturity_get_name_size;
+    CNA_JNI_ROUTE(cna_graphics_device_supports_shadow_sampling_ext) graphics_device_supports_shadow_sampling_ext;
     CNA_JNI_ROUTE(cna_graphics_ext_is_available) graphics_ext_is_available;
     CNA_JNI_ROUTE(cna_graphics_renderer_copy_current_name) graphics_renderer_copy_current_name;
     CNA_JNI_ROUTE(cna_graphics_renderer_get_current_name_size) graphics_renderer_get_current_name_size;
@@ -1324,6 +1337,7 @@
     CNA_JNI_ROUTE(cna_render_pipeline_set_depth_normal_inputs) render_pipeline_set_depth_normal_inputs;
     CNA_JNI_ROUTE(cna_render_pipeline_set_gpu_timing_enabled_ext) render_pipeline_set_gpu_timing_enabled_ext;
     CNA_JNI_ROUTE(cna_render_pipeline_set_settings) render_pipeline_set_settings;
+    CNA_JNI_ROUTE(cna_render_pipeline_set_skybox) render_pipeline_set_skybox;
     CNA_JNI_ROUTE(cna_render_pipeline_set_skybox_camera) render_pipeline_set_skybox_camera;
     CNA_JNI_ROUTE(cna_render_pipeline_set_velocity_input_ext) render_pipeline_set_velocity_input_ext;
     CNA_JNI_ROUTE(cna_render_pipeline_settings_ext_apply_from_string) render_pipeline_settings_ext_apply_from_string;
@@ -1337,6 +1351,9 @@
     CNA_JNI_ROUTE(cna_render_target_pool_get_estimated_bytes) render_target_pool_get_estimated_bytes;
     CNA_JNI_ROUTE(cna_render_target_pool_get_target_count) render_target_pool_get_target_count;
     CNA_JNI_ROUTE(cna_render_target_pool_reset) render_target_pool_reset;
+    CNA_JNI_ROUTE(cna_scoped_render_target_begin) scoped_render_target_begin;
+    CNA_JNI_ROUTE(cna_scoped_render_target_end) scoped_render_target_end;
+    CNA_JNI_ROUTE(cna_scoped_render_target_get_has_recorded_previous) scoped_render_target_get_has_recorded_previous;
     CNA_JNI_ROUTE(cna_sensors_copy_name_at) sensors_copy_name_at;
     CNA_JNI_ROUTE(cna_sensors_get_accelerometer) sensors_get_accelerometer;
     CNA_JNI_ROUTE(cna_sensors_get_count) sensors_get_count;
@@ -1451,6 +1468,8 @@
     CNA_JNI_ROUTE(cna_text_input_start_ext) text_input_start_ext;
     CNA_JNI_ROUTE(cna_text_input_start_with_type_ext) text_input_start_with_type_ext;
     CNA_JNI_ROUTE(cna_text_input_stop_ext) text_input_stop_ext;
+    CNA_JNI_ROUTE(cna_thin_film_iridescence_copy_glsl) thin_film_iridescence_copy_glsl;
+    CNA_JNI_ROUTE(cna_thin_film_iridescence_evaluate) thin_film_iridescence_evaluate;
     CNA_JNI_ROUTE(cna_tonemap_pass_create) tonemap_pass_create;
     CNA_JNI_ROUTE(cna_tonemap_pass_get_deband_strength) tonemap_pass_get_deband_strength;
     CNA_JNI_ROUTE(cna_tonemap_pass_get_exposure) tonemap_pass_get_exposure;

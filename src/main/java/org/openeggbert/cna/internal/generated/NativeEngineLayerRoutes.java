@@ -2956,6 +2956,11 @@ public final class NativeEngineLayerRoutes {
     public static native int directionalLightExtInit(byte[] outLightBytes, long[] outLightIntegral, float[] outLightFloating);
 
     /**
+     * cna_engine_layer_copy_version_string (engine_layer.h).
+     */
+    public static native int engineLayerCopyVersionString(byte[] destination, long[] outBytes);
+
+    /**
      * cna_engine_layer_get_version (engine_layer.h).
      */
     public static native int engineLayerGetVersion(int[] outVersion);
@@ -3249,6 +3254,127 @@ public final class NativeEngineLayerRoutes {
     public static native int fxaaPassSetEdgeThreshold(long pass, float value);
 
     /**
+     * cna_gpu_cullable_instance_init (engine_layer.h).
+     *
+     * <p>outInstanceFloating carries CNA_GpuCullableInstance in this order:
+     * <ol start="0">
+     *   <li>{@code world.m11} (float)</li>
+     *   <li>{@code world.m12} (float)</li>
+     *   <li>{@code world.m13} (float)</li>
+     *   <li>{@code world.m14} (float)</li>
+     *   <li>{@code world.m21} (float)</li>
+     *   <li>{@code world.m22} (float)</li>
+     *   <li>{@code world.m23} (float)</li>
+     *   <li>{@code world.m24} (float)</li>
+     *   <li>{@code world.m31} (float)</li>
+     *   <li>{@code world.m32} (float)</li>
+     *   <li>{@code world.m33} (float)</li>
+     *   <li>{@code world.m34} (float)</li>
+     *   <li>{@code world.m41} (float)</li>
+     *   <li>{@code world.m42} (float)</li>
+     *   <li>{@code world.m43} (float)</li>
+     *   <li>{@code world.m44} (float)</li>
+     *   <li>{@code bounds.min.x} (float)</li>
+     *   <li>{@code bounds.min.y} (float)</li>
+     *   <li>{@code bounds.min.z} (float)</li>
+     *   <li>{@code bounds.max.x} (float)</li>
+     *   <li>{@code bounds.max.y} (float)</li>
+     *   <li>{@code bounds.max.z} (float)</li>
+     * </ol>
+     */
+    public static native int gpuCullableInstanceInit(float[] outInstanceFloating);
+
+    /**
+     * cna_gpu_instance_culler_copy_instance_lookup_glsl (engine_layer.h).
+     */
+    public static native int gpuInstanceCullerCopyInstanceLookupGlsl(byte[] destination, long[] outBytes);
+
+    /**
+     * cna_gpu_instance_culler_copy_unsupported_reason (engine_layer.h).
+     */
+    public static native int gpuInstanceCullerCopyUnsupportedReason(long culler, byte[] destination, long[] outBytes);
+
+    /**
+     * cna_gpu_instance_culler_create (engine_layer.h).
+     */
+    public static native int gpuInstanceCullerCreate(long graphicsDevice, long[] outCuller);
+
+    /**
+     * cna_gpu_instance_culler_cull (engine_layer.h).
+     *
+     * <p>viewFloating carries CNA_Matrix in this order:
+     * <ol start="0">
+     *   <li>{@code m11} (float)</li>
+     *   <li>{@code m12} (float)</li>
+     *   <li>{@code m13} (float)</li>
+     *   <li>{@code m14} (float)</li>
+     *   <li>{@code m21} (float)</li>
+     *   <li>{@code m22} (float)</li>
+     *   <li>{@code m23} (float)</li>
+     *   <li>{@code m24} (float)</li>
+     *   <li>{@code m31} (float)</li>
+     *   <li>{@code m32} (float)</li>
+     *   <li>{@code m33} (float)</li>
+     *   <li>{@code m34} (float)</li>
+     *   <li>{@code m41} (float)</li>
+     *   <li>{@code m42} (float)</li>
+     *   <li>{@code m43} (float)</li>
+     *   <li>{@code m44} (float)</li>
+     * </ol>
+     *
+     * <p>projectionFloating carries CNA_Matrix in this order:
+     * <ol start="0">
+     *   <li>{@code m11} (float)</li>
+     *   <li>{@code m12} (float)</li>
+     *   <li>{@code m13} (float)</li>
+     *   <li>{@code m14} (float)</li>
+     *   <li>{@code m21} (float)</li>
+     *   <li>{@code m22} (float)</li>
+     *   <li>{@code m23} (float)</li>
+     *   <li>{@code m24} (float)</li>
+     *   <li>{@code m31} (float)</li>
+     *   <li>{@code m32} (float)</li>
+     *   <li>{@code m33} (float)</li>
+     *   <li>{@code m34} (float)</li>
+     *   <li>{@code m41} (float)</li>
+     *   <li>{@code m42} (float)</li>
+     *   <li>{@code m43} (float)</li>
+     *   <li>{@code m44} (float)</li>
+     * </ol>
+     */
+    public static native int gpuInstanceCullerCull(long culler, float[] viewFloating, float[] projectionFloating, int indexCount, int firstIndex, int baseVertex);
+
+    /**
+     * cna_gpu_instance_culler_destroy (engine_layer.h).
+     */
+    public static native int gpuInstanceCullerDestroy(long culler);
+
+    /**
+     * cna_gpu_instance_culler_draw (engine_layer.h).
+     */
+    public static native int gpuInstanceCullerDraw(long culler, int primitiveType);
+
+    /**
+     * cna_gpu_instance_culler_get_instance_count (engine_layer.h).
+     */
+    public static native int gpuInstanceCullerGetInstanceCount(long culler, int[] outCount);
+
+    /**
+     * cna_gpu_instance_culler_is_supported (engine_layer.h).
+     */
+    public static native int gpuInstanceCullerIsSupported(long culler, boolean[] outSupported);
+
+    /**
+     * cna_gpu_instance_culler_read_visible_count_ext (engine_layer.h).
+     */
+    public static native int gpuInstanceCullerReadVisibleCountExt(long culler, int[] outCount);
+
+    /**
+     * cna_gpu_instance_culler_set_instances (engine_layer.h).
+     */
+    public static native int gpuInstanceCullerSetInstances(long culler, float[] instancesFloating);
+
+    /**
      * cna_gpu_timer_begin (engine_layer.h).
      */
     public static native int gpuTimerBegin(long timer);
@@ -3302,6 +3428,11 @@ public final class NativeEngineLayerRoutes {
      * cna_gpu_timer_poll (engine_layer.h).
      */
     public static native int gpuTimerPoll(long timer, boolean[] outCollected);
+
+    /**
+     * cna_graphics_device_supports_shadow_sampling_ext (engine_layer.h).
+     */
+    public static native int graphicsDeviceSupportsShadowSamplingExt(long graphicsDevice, boolean[] outSupported);
 
     /**
      * cna_hdr_display_output_create (engine_layer.h).
@@ -5006,6 +5137,11 @@ public final class NativeEngineLayerRoutes {
     public static native int renderPipelineSetSettings(long pipeline, byte[] settingsBytes, long[] settingsIntegral, float[] settingsFloating);
 
     /**
+     * cna_render_pipeline_set_skybox (engine_layer.h).
+     */
+    public static native int renderPipelineSetSkybox(long pipeline, long skybox);
+
+    /**
      * cna_render_pipeline_set_skybox_camera (engine_layer.h).
      *
      * <p>viewFloating carries CNA_Matrix in this order:
@@ -5356,6 +5492,21 @@ public final class NativeEngineLayerRoutes {
      * cna_render_target_pool_reset (engine_layer.h).
      */
     public static native int renderTargetPoolReset(long pool);
+
+    /**
+     * cna_scoped_render_target_begin (engine_layer.h).
+     */
+    public static native int scopedRenderTargetBegin(long graphicsDevice, long destination, long[] outScope);
+
+    /**
+     * cna_scoped_render_target_end (engine_layer.h).
+     */
+    public static native int scopedRenderTargetEnd(long scope);
+
+    /**
+     * cna_scoped_render_target_get_has_recorded_previous (engine_layer.h).
+     */
+    public static native int scopedRenderTargetGetHasRecordedPrevious(long scope, boolean[] outRecorded);
 
     /**
      * cna_shadow_map_apply_caster (engine_layer.h).
@@ -6211,6 +6362,30 @@ public final class NativeEngineLayerRoutes {
      * cna_ssr_pass_set_thickness (engine_layer.h).
      */
     public static native int ssrPassSetThickness(long pass, float value);
+
+    /**
+     * cna_thin_film_iridescence_copy_glsl (engine_layer.h).
+     */
+    public static native int thinFilmIridescenceCopyGlsl(byte[] destination, long[] outBytes);
+
+    /**
+     * cna_thin_film_iridescence_evaluate (engine_layer.h).
+     *
+     * <p>baseF0Floating carries CNA_Vector3 in this order:
+     * <ol start="0">
+     *   <li>{@code x} (float)</li>
+     *   <li>{@code y} (float)</li>
+     *   <li>{@code z} (float)</li>
+     * </ol>
+     *
+     * <p>outValueFloating carries CNA_Vector3 in this order:
+     * <ol start="0">
+     *   <li>{@code x} (float)</li>
+     *   <li>{@code y} (float)</li>
+     *   <li>{@code z} (float)</li>
+     * </ol>
+     */
+    public static native int thinFilmIridescenceEvaluate(float outsideIor, float filmIor, float cosTheta, float thicknessNm, float[] baseF0Floating, float[] outValueFloating);
 
     /**
      * cna_tonemap_pass_create (engine_layer.h).

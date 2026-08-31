@@ -9087,6 +9087,17 @@
       ]
     },
     {
+      "name": "cna_engine_layer_copy_version_string",
+      "header": "engine_layer.h",
+      "ownership": "no handle; a pure function of its arguments",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "char*",
+        "uint64_t",
+        "uint64_t*"
+      ]
+    },
+    {
       "name": "cna_engine_layer_get_version",
       "header": "engine_layer.h",
       "ownership": "no handle; caller integer output",
@@ -10823,6 +10834,122 @@
       "parameters": []
     },
     {
+      "name": "cna_gpu_cullable_instance_init",
+      "header": "engine_layer.h",
+      "ownership": "no handle; fills the caller's instance value",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_GpuCullableInstance*"
+      ]
+    },
+    {
+      "name": "cna_gpu_instance_culler_copy_instance_lookup_glsl",
+      "header": "engine_layer.h",
+      "ownership": "no handle; fills the caller's byte buffer",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "char*",
+        "uint64_t",
+        "uint64_t*"
+      ]
+    },
+    {
+      "name": "cna_gpu_instance_culler_copy_unsupported_reason",
+      "header": "engine_layer.h",
+      "ownership": "borrows the culler; fills the caller's byte buffer",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_GpuInstanceCullerHandle",
+        "char*",
+        "uint64_t",
+        "uint64_t*"
+      ]
+    },
+    {
+      "name": "cna_gpu_instance_culler_create",
+      "header": "engine_layer.h",
+      "ownership": "borrows the graphics device; returns an owned culler handle",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_Handle",
+        "CNA_GpuInstanceCullerHandle*"
+      ]
+    },
+    {
+      "name": "cna_gpu_instance_culler_cull",
+      "header": "engine_layer.h",
+      "ownership": "borrows the culler",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_GpuInstanceCullerHandle",
+        "const CNA_Matrix*",
+        "const CNA_Matrix*",
+        "int32_t",
+        "int32_t",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "cna_gpu_instance_culler_destroy",
+      "header": "engine_layer.h",
+      "ownership": "releases the owned culler handle and its buffers",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_GpuInstanceCullerHandle"
+      ]
+    },
+    {
+      "name": "cna_gpu_instance_culler_draw",
+      "header": "engine_layer.h",
+      "ownership": "borrows the culler",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_GpuInstanceCullerHandle",
+        "CNA_PrimitiveType"
+      ]
+    },
+    {
+      "name": "cna_gpu_instance_culler_get_instance_count",
+      "header": "engine_layer.h",
+      "ownership": "borrows the culler",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_GpuInstanceCullerHandle",
+        "int32_t*"
+      ]
+    },
+    {
+      "name": "cna_gpu_instance_culler_is_supported",
+      "header": "engine_layer.h",
+      "ownership": "borrows the culler",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_GpuInstanceCullerHandle",
+        "CNA_Bool*"
+      ]
+    },
+    {
+      "name": "cna_gpu_instance_culler_read_visible_count_ext",
+      "header": "engine_layer.h",
+      "ownership": "borrows the culler",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_GpuInstanceCullerHandle",
+        "int32_t*"
+      ]
+    },
+    {
+      "name": "cna_gpu_instance_culler_set_instances",
+      "header": "engine_layer.h",
+      "ownership": "borrows the culler",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_GpuInstanceCullerHandle",
+        "const CNA_GpuCullableInstance*",
+        "uint64_t"
+      ]
+    },
+    {
       "name": "cna_gpu_timer_begin",
       "header": "engine_layer.h",
       "ownership": "borrows the timer",
@@ -11992,6 +12119,16 @@
         "CNA_GraphicsDeviceResourceDestroyedCallback",
         "void*",
         "CNA_GraphicsDeviceEventRegistrationHandle*"
+      ]
+    },
+    {
+      "name": "cna_graphics_device_supports_shadow_sampling_ext",
+      "header": "engine_layer.h",
+      "ownership": "borrows the graphics device",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_Handle",
+        "CNA_Bool*"
       ]
     },
     {
@@ -19617,6 +19754,16 @@
       ]
     },
     {
+      "name": "cna_render_pipeline_set_skybox",
+      "header": "engine_layer.h",
+      "ownership": "borrows the pipeline and the caller's skybox; the pipeline never owns it",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_RenderPipelineHandle",
+        "CNA_SkyboxHandle"
+      ]
+    },
+    {
       "name": "cna_render_pipeline_set_skybox_camera",
       "header": "engine_layer.h",
       "ownership": "borrows the pipeline",
@@ -19786,6 +19933,36 @@
       "returnType": "CNA_Result",
       "parameters": [
         "CNA_RenderTargetPoolHandle"
+      ]
+    },
+    {
+      "name": "cna_scoped_render_target_begin",
+      "header": "engine_layer.h",
+      "ownership": "borrows the graphics device and the caller's target; returns an owned scope handle",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_Handle",
+        "CNA_Handle",
+        "CNA_ScopedRenderTargetHandle*"
+      ]
+    },
+    {
+      "name": "cna_scoped_render_target_end",
+      "header": "engine_layer.h",
+      "ownership": "releases the owned scope handle and restores the previous binding",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_ScopedRenderTargetHandle"
+      ]
+    },
+    {
+      "name": "cna_scoped_render_target_get_has_recorded_previous",
+      "header": "engine_layer.h",
+      "ownership": "borrows the scope",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_ScopedRenderTargetHandle",
+        "CNA_Bool*"
       ]
     },
     {
@@ -22676,6 +22853,31 @@
         "const CNA_TextureCubeTransfer*",
         "const CNA_Color*",
         "uint64_t"
+      ]
+    },
+    {
+      "name": "cna_thin_film_iridescence_copy_glsl",
+      "header": "engine_layer.h",
+      "ownership": "no handle; a pure function of its arguments",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "char*",
+        "uint64_t",
+        "uint64_t*"
+      ]
+    },
+    {
+      "name": "cna_thin_film_iridescence_evaluate",
+      "header": "engine_layer.h",
+      "ownership": "no handle; a pure function of its arguments",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "float",
+        "float",
+        "float",
+        "float",
+        "const CNA_Vector3*",
+        "CNA_Vector3*"
       ]
     },
     {

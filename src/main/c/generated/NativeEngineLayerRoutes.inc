@@ -6382,6 +6382,28 @@ Java_org_openeggbert_cna_internal_generated_NativeEngineLayerRoutes_directionalL
 }
 
 JNIEXPORT jint JNICALL
+Java_org_openeggbert_cna_internal_generated_NativeEngineLayerRoutes_engineLayerCopyVersionString(
+    JNIEnv* environment, jclass declaring_class, jbyteArray destination, jlongArray out_bytes)
+{
+    (void)environment;
+    (void)declaring_class;
+    jsize destination_size = (*environment)->GetArrayLength(environment, destination);
+    jbyte* destination_bytes = (*environment)->GetByteArrayElements(environment, destination, NULL);
+    if (destination_bytes == NULL) {
+        return (jint)CNA_RESULT_OUT_OF_MEMORY;
+    }
+    uint64_t destination_written = 0;
+    CNA_Result call_result = cna.engine_layer_copy_version_string((char*)destination_bytes, (uint64_t)destination_size, &destination_written);
+    (*environment)->ReleaseByteArrayElements(environment, destination, destination_bytes, 0);
+    if (call_result == CNA_RESULT_SUCCESS || call_result == CNA_RESULT_BUFFER_TOO_SMALL) {
+        jlong destination_element = (jlong)destination_written;
+        (*environment)->SetLongArrayRegion(
+            environment, out_bytes, 0, 1, &destination_element);
+    }
+    return (jint)call_result;
+}
+
+JNIEXPORT jint JNICALL
 Java_org_openeggbert_cna_internal_generated_NativeEngineLayerRoutes_engineLayerGetVersion(
     JNIEnv* environment, jclass declaring_class, jintArray out_version)
 {
@@ -7270,6 +7292,290 @@ Java_org_openeggbert_cna_internal_generated_NativeEngineLayerRoutes_fxaaPassSetE
 }
 
 JNIEXPORT jint JNICALL
+Java_org_openeggbert_cna_internal_generated_NativeEngineLayerRoutes_gpuCullableInstanceInit(
+    JNIEnv* environment, jclass declaring_class, jfloatArray out_instanceFloating)
+{
+    (void)environment;
+    (void)declaring_class;
+    CNA_GpuCullableInstance out_instance_value;
+    memset(&out_instance_value, 0, sizeof out_instance_value);
+    out_instance_value.struct_size = (uint32_t)(sizeof out_instance_value);
+    out_instance_value.struct_version = UINT32_C(1);
+    CNA_Result call_result = cna.gpu_cullable_instance_init(&out_instance_value);
+    if (call_result == CNA_RESULT_SUCCESS || call_result == CNA_RESULT_BUFFER_TOO_SMALL) {
+        jfloat out_instanceFloating_values[] = {
+            (jfloat)out_instance_value.world.m11,
+            (jfloat)out_instance_value.world.m12,
+            (jfloat)out_instance_value.world.m13,
+            (jfloat)out_instance_value.world.m14,
+            (jfloat)out_instance_value.world.m21,
+            (jfloat)out_instance_value.world.m22,
+            (jfloat)out_instance_value.world.m23,
+            (jfloat)out_instance_value.world.m24,
+            (jfloat)out_instance_value.world.m31,
+            (jfloat)out_instance_value.world.m32,
+            (jfloat)out_instance_value.world.m33,
+            (jfloat)out_instance_value.world.m34,
+            (jfloat)out_instance_value.world.m41,
+            (jfloat)out_instance_value.world.m42,
+            (jfloat)out_instance_value.world.m43,
+            (jfloat)out_instance_value.world.m44,
+            (jfloat)out_instance_value.bounds.min.x,
+            (jfloat)out_instance_value.bounds.min.y,
+            (jfloat)out_instance_value.bounds.min.z,
+            (jfloat)out_instance_value.bounds.max.x,
+            (jfloat)out_instance_value.bounds.max.y,
+            (jfloat)out_instance_value.bounds.max.z
+        };
+        (*environment)->SetFloatArrayRegion(environment, out_instanceFloating, 0,
+            (jsize)(sizeof out_instanceFloating_values / sizeof out_instanceFloating_values[0]),
+            out_instanceFloating_values);
+    }
+    return (jint)call_result;
+}
+
+JNIEXPORT jint JNICALL
+Java_org_openeggbert_cna_internal_generated_NativeEngineLayerRoutes_gpuInstanceCullerCopyInstanceLookupGlsl(
+    JNIEnv* environment, jclass declaring_class, jbyteArray destination, jlongArray out_bytes)
+{
+    (void)environment;
+    (void)declaring_class;
+    jsize destination_size = (*environment)->GetArrayLength(environment, destination);
+    jbyte* destination_bytes = (*environment)->GetByteArrayElements(environment, destination, NULL);
+    if (destination_bytes == NULL) {
+        return (jint)CNA_RESULT_OUT_OF_MEMORY;
+    }
+    uint64_t destination_written = 0;
+    CNA_Result call_result = cna.gpu_instance_culler_copy_instance_lookup_glsl((char*)destination_bytes, (uint64_t)destination_size, &destination_written);
+    (*environment)->ReleaseByteArrayElements(environment, destination, destination_bytes, 0);
+    if (call_result == CNA_RESULT_SUCCESS || call_result == CNA_RESULT_BUFFER_TOO_SMALL) {
+        jlong destination_element = (jlong)destination_written;
+        (*environment)->SetLongArrayRegion(
+            environment, out_bytes, 0, 1, &destination_element);
+    }
+    return (jint)call_result;
+}
+
+JNIEXPORT jint JNICALL
+Java_org_openeggbert_cna_internal_generated_NativeEngineLayerRoutes_gpuInstanceCullerCopyUnsupportedReason(
+    JNIEnv* environment, jclass declaring_class, jlong culler, jbyteArray destination, jlongArray out_bytes)
+{
+    (void)environment;
+    (void)declaring_class;
+    jsize destination_size = (*environment)->GetArrayLength(environment, destination);
+    jbyte* destination_bytes = (*environment)->GetByteArrayElements(environment, destination, NULL);
+    if (destination_bytes == NULL) {
+        return (jint)CNA_RESULT_OUT_OF_MEMORY;
+    }
+    uint64_t destination_written = 0;
+    CNA_Result call_result = cna.gpu_instance_culler_copy_unsupported_reason((CNA_GpuInstanceCullerHandle)culler, (char*)destination_bytes, (uint64_t)destination_size, &destination_written);
+    (*environment)->ReleaseByteArrayElements(environment, destination, destination_bytes, 0);
+    if (call_result == CNA_RESULT_SUCCESS || call_result == CNA_RESULT_BUFFER_TOO_SMALL) {
+        jlong destination_element = (jlong)destination_written;
+        (*environment)->SetLongArrayRegion(
+            environment, out_bytes, 0, 1, &destination_element);
+    }
+    return (jint)call_result;
+}
+
+JNIEXPORT jint JNICALL
+Java_org_openeggbert_cna_internal_generated_NativeEngineLayerRoutes_gpuInstanceCullerCreate(
+    JNIEnv* environment, jclass declaring_class, jlong graphics_device, jlongArray out_culler)
+{
+    (void)environment;
+    (void)declaring_class;
+    CNA_GpuInstanceCullerHandle out_culler_value = 0;
+    CNA_Result call_result = cna.gpu_instance_culler_create((CNA_Handle)graphics_device, &out_culler_value);
+    if (call_result == CNA_RESULT_SUCCESS || call_result == CNA_RESULT_BUFFER_TOO_SMALL) {
+        jlong out_culler_element = (jlong)out_culler_value;
+        (*environment)->SetLongArrayRegion(
+            environment, out_culler, 0, 1, &out_culler_element);
+    }
+    return (jint)call_result;
+}
+
+JNIEXPORT jint JNICALL
+Java_org_openeggbert_cna_internal_generated_NativeEngineLayerRoutes_gpuInstanceCullerCull(
+    JNIEnv* environment, jclass declaring_class, jlong culler, jfloatArray viewFloating, jfloatArray projectionFloating, jint index_count, jint first_index, jint base_vertex)
+{
+    (void)environment;
+    (void)declaring_class;
+    CNA_Matrix view_value;
+    memset(&view_value, 0, sizeof view_value);
+    {
+        jfloat viewFloating_values[16];
+        (*environment)->GetFloatArrayRegion(environment, viewFloating, 0, 16, viewFloating_values);
+        view_value.m11 = (float)viewFloating_values[0];
+        view_value.m12 = (float)viewFloating_values[1];
+        view_value.m13 = (float)viewFloating_values[2];
+        view_value.m14 = (float)viewFloating_values[3];
+        view_value.m21 = (float)viewFloating_values[4];
+        view_value.m22 = (float)viewFloating_values[5];
+        view_value.m23 = (float)viewFloating_values[6];
+        view_value.m24 = (float)viewFloating_values[7];
+        view_value.m31 = (float)viewFloating_values[8];
+        view_value.m32 = (float)viewFloating_values[9];
+        view_value.m33 = (float)viewFloating_values[10];
+        view_value.m34 = (float)viewFloating_values[11];
+        view_value.m41 = (float)viewFloating_values[12];
+        view_value.m42 = (float)viewFloating_values[13];
+        view_value.m43 = (float)viewFloating_values[14];
+        view_value.m44 = (float)viewFloating_values[15];
+    }
+    CNA_Matrix projection_value;
+    memset(&projection_value, 0, sizeof projection_value);
+    {
+        jfloat projectionFloating_values[16];
+        (*environment)->GetFloatArrayRegion(environment, projectionFloating, 0, 16, projectionFloating_values);
+        projection_value.m11 = (float)projectionFloating_values[0];
+        projection_value.m12 = (float)projectionFloating_values[1];
+        projection_value.m13 = (float)projectionFloating_values[2];
+        projection_value.m14 = (float)projectionFloating_values[3];
+        projection_value.m21 = (float)projectionFloating_values[4];
+        projection_value.m22 = (float)projectionFloating_values[5];
+        projection_value.m23 = (float)projectionFloating_values[6];
+        projection_value.m24 = (float)projectionFloating_values[7];
+        projection_value.m31 = (float)projectionFloating_values[8];
+        projection_value.m32 = (float)projectionFloating_values[9];
+        projection_value.m33 = (float)projectionFloating_values[10];
+        projection_value.m34 = (float)projectionFloating_values[11];
+        projection_value.m41 = (float)projectionFloating_values[12];
+        projection_value.m42 = (float)projectionFloating_values[13];
+        projection_value.m43 = (float)projectionFloating_values[14];
+        projection_value.m44 = (float)projectionFloating_values[15];
+    }
+    CNA_Result call_result = cna.gpu_instance_culler_cull((CNA_GpuInstanceCullerHandle)culler, &view_value, &projection_value, (int32_t)index_count, (int32_t)first_index, (int32_t)base_vertex);
+    return (jint)call_result;
+}
+
+JNIEXPORT jint JNICALL
+Java_org_openeggbert_cna_internal_generated_NativeEngineLayerRoutes_gpuInstanceCullerDestroy(
+    JNIEnv* environment, jclass declaring_class, jlong culler)
+{
+    (void)environment;
+    (void)declaring_class;
+    CNA_Result call_result = cna.gpu_instance_culler_destroy((CNA_GpuInstanceCullerHandle)culler);
+    return (jint)call_result;
+}
+
+JNIEXPORT jint JNICALL
+Java_org_openeggbert_cna_internal_generated_NativeEngineLayerRoutes_gpuInstanceCullerDraw(
+    JNIEnv* environment, jclass declaring_class, jlong culler, jint primitive_type)
+{
+    (void)environment;
+    (void)declaring_class;
+    CNA_Result call_result = cna.gpu_instance_culler_draw((CNA_GpuInstanceCullerHandle)culler, (CNA_PrimitiveType)primitive_type);
+    return (jint)call_result;
+}
+
+JNIEXPORT jint JNICALL
+Java_org_openeggbert_cna_internal_generated_NativeEngineLayerRoutes_gpuInstanceCullerGetInstanceCount(
+    JNIEnv* environment, jclass declaring_class, jlong culler, jintArray out_count)
+{
+    (void)environment;
+    (void)declaring_class;
+    int32_t out_count_value = 0;
+    CNA_Result call_result = cna.gpu_instance_culler_get_instance_count((CNA_GpuInstanceCullerHandle)culler, &out_count_value);
+    if (call_result == CNA_RESULT_SUCCESS || call_result == CNA_RESULT_BUFFER_TOO_SMALL) {
+        jint out_count_element = (jint)out_count_value;
+        (*environment)->SetIntArrayRegion(
+            environment, out_count, 0, 1, &out_count_element);
+    }
+    return (jint)call_result;
+}
+
+JNIEXPORT jint JNICALL
+Java_org_openeggbert_cna_internal_generated_NativeEngineLayerRoutes_gpuInstanceCullerIsSupported(
+    JNIEnv* environment, jclass declaring_class, jlong culler, jbooleanArray out_supported)
+{
+    (void)environment;
+    (void)declaring_class;
+    CNA_Bool out_supported_value = 0;
+    CNA_Result call_result = cna.gpu_instance_culler_is_supported((CNA_GpuInstanceCullerHandle)culler, &out_supported_value);
+    if (call_result == CNA_RESULT_SUCCESS || call_result == CNA_RESULT_BUFFER_TOO_SMALL) {
+        jboolean out_supported_element = (jboolean)out_supported_value;
+        (*environment)->SetBooleanArrayRegion(
+            environment, out_supported, 0, 1, &out_supported_element);
+    }
+    return (jint)call_result;
+}
+
+JNIEXPORT jint JNICALL
+Java_org_openeggbert_cna_internal_generated_NativeEngineLayerRoutes_gpuInstanceCullerReadVisibleCountExt(
+    JNIEnv* environment, jclass declaring_class, jlong culler, jintArray out_count)
+{
+    (void)environment;
+    (void)declaring_class;
+    int32_t out_count_value = 0;
+    CNA_Result call_result = cna.gpu_instance_culler_read_visible_count_ext((CNA_GpuInstanceCullerHandle)culler, &out_count_value);
+    if (call_result == CNA_RESULT_SUCCESS || call_result == CNA_RESULT_BUFFER_TOO_SMALL) {
+        jint out_count_element = (jint)out_count_value;
+        (*environment)->SetIntArrayRegion(
+            environment, out_count, 0, 1, &out_count_element);
+    }
+    return (jint)call_result;
+}
+
+JNIEXPORT jint JNICALL
+Java_org_openeggbert_cna_internal_generated_NativeEngineLayerRoutes_gpuInstanceCullerSetInstances(
+    JNIEnv* environment, jclass declaring_class, jlong culler, jfloatArray instancesFloating)
+{
+    (void)environment;
+    (void)declaring_class;
+    jsize instances_count = (*environment)->GetArrayLength(environment, instancesFloating) / 22;
+    if ((*environment)->GetArrayLength(environment, instancesFloating) != instances_count * 22) {
+        return (jint)CNA_RESULT_INVALID_ARGUMENT;
+    }
+    CNA_GpuCullableInstance* instances_values = (CNA_GpuCullableInstance*)calloc(
+        (size_t)instances_count + 1U, sizeof(*instances_values));
+    if (instances_values == NULL) {
+        return (jint)CNA_RESULT_OUT_OF_MEMORY;
+    }
+    {
+        jsize instancesFloating_length = (*environment)->GetArrayLength(environment, instancesFloating);
+        jfloat* instancesFloating_values = (jfloat*)malloc(
+            ((size_t)instancesFloating_length + 1U) * sizeof(*instancesFloating_values));
+        if (instancesFloating_values == NULL) {
+            free(instances_values);
+            return (jint)CNA_RESULT_OUT_OF_MEMORY;
+        }
+        (*environment)->GetFloatArrayRegion(environment, instancesFloating, 0, instancesFloating_length, instancesFloating_values);
+        for (jsize element = 0; element < instances_count; ++element) {
+            instances_values[element].world.m11 = (float)instancesFloating_values[element * 22 + 0];
+            instances_values[element].world.m12 = (float)instancesFloating_values[element * 22 + 1];
+            instances_values[element].world.m13 = (float)instancesFloating_values[element * 22 + 2];
+            instances_values[element].world.m14 = (float)instancesFloating_values[element * 22 + 3];
+            instances_values[element].world.m21 = (float)instancesFloating_values[element * 22 + 4];
+            instances_values[element].world.m22 = (float)instancesFloating_values[element * 22 + 5];
+            instances_values[element].world.m23 = (float)instancesFloating_values[element * 22 + 6];
+            instances_values[element].world.m24 = (float)instancesFloating_values[element * 22 + 7];
+            instances_values[element].world.m31 = (float)instancesFloating_values[element * 22 + 8];
+            instances_values[element].world.m32 = (float)instancesFloating_values[element * 22 + 9];
+            instances_values[element].world.m33 = (float)instancesFloating_values[element * 22 + 10];
+            instances_values[element].world.m34 = (float)instancesFloating_values[element * 22 + 11];
+            instances_values[element].world.m41 = (float)instancesFloating_values[element * 22 + 12];
+            instances_values[element].world.m42 = (float)instancesFloating_values[element * 22 + 13];
+            instances_values[element].world.m43 = (float)instancesFloating_values[element * 22 + 14];
+            instances_values[element].world.m44 = (float)instancesFloating_values[element * 22 + 15];
+            instances_values[element].bounds.min.x = (float)instancesFloating_values[element * 22 + 16];
+            instances_values[element].bounds.min.y = (float)instancesFloating_values[element * 22 + 17];
+            instances_values[element].bounds.min.z = (float)instancesFloating_values[element * 22 + 18];
+            instances_values[element].bounds.max.x = (float)instancesFloating_values[element * 22 + 19];
+            instances_values[element].bounds.max.y = (float)instancesFloating_values[element * 22 + 20];
+            instances_values[element].bounds.max.z = (float)instancesFloating_values[element * 22 + 21];
+        }
+        free(instancesFloating_values);
+    }
+    for (jsize element = 0; element < instances_count; ++element) {
+        instances_values[element].struct_size = (uint32_t)(sizeof instances_values[element]);
+        instances_values[element].struct_version = UINT32_C(1);
+    }
+    CNA_Result call_result = cna.gpu_instance_culler_set_instances((CNA_GpuInstanceCullerHandle)culler, instances_values, (uint64_t)instances_count);
+    free(instances_values);
+    return (jint)call_result;
+}
+
+JNIEXPORT jint JNICALL
 Java_org_openeggbert_cna_internal_generated_NativeEngineLayerRoutes_gpuTimerBegin(
     JNIEnv* environment, jclass declaring_class, jlong timer)
 {
@@ -7429,6 +7735,22 @@ Java_org_openeggbert_cna_internal_generated_NativeEngineLayerRoutes_gpuTimerPoll
         jboolean out_collected_element = (jboolean)out_collected_value;
         (*environment)->SetBooleanArrayRegion(
             environment, out_collected, 0, 1, &out_collected_element);
+    }
+    return (jint)call_result;
+}
+
+JNIEXPORT jint JNICALL
+Java_org_openeggbert_cna_internal_generated_NativeEngineLayerRoutes_graphicsDeviceSupportsShadowSamplingExt(
+    JNIEnv* environment, jclass declaring_class, jlong graphics_device, jbooleanArray out_supported)
+{
+    (void)environment;
+    (void)declaring_class;
+    CNA_Bool out_supported_value = 0;
+    CNA_Result call_result = cna.graphics_device_supports_shadow_sampling_ext((CNA_Handle)graphics_device, &out_supported_value);
+    if (call_result == CNA_RESULT_SUCCESS || call_result == CNA_RESULT_BUFFER_TOO_SMALL) {
+        jboolean out_supported_element = (jboolean)out_supported_value;
+        (*environment)->SetBooleanArrayRegion(
+            environment, out_supported, 0, 1, &out_supported_element);
     }
     return (jint)call_result;
 }
@@ -11398,6 +11720,16 @@ Java_org_openeggbert_cna_internal_generated_NativeEngineLayerRoutes_renderPipeli
 }
 
 JNIEXPORT jint JNICALL
+Java_org_openeggbert_cna_internal_generated_NativeEngineLayerRoutes_renderPipelineSetSkybox(
+    JNIEnv* environment, jclass declaring_class, jlong pipeline, jlong skybox)
+{
+    (void)environment;
+    (void)declaring_class;
+    CNA_Result call_result = cna.render_pipeline_set_skybox((CNA_RenderPipelineHandle)pipeline, (CNA_SkyboxHandle)skybox);
+    return (jint)call_result;
+}
+
+JNIEXPORT jint JNICALL
 Java_org_openeggbert_cna_internal_generated_NativeEngineLayerRoutes_renderPipelineSetSkyboxCamera(
     JNIEnv* environment, jclass declaring_class, jlong pipeline, jfloatArray viewFloating, jfloatArray projectionFloating)
 {
@@ -12070,6 +12402,48 @@ Java_org_openeggbert_cna_internal_generated_NativeEngineLayerRoutes_renderTarget
     (void)environment;
     (void)declaring_class;
     CNA_Result call_result = cna.render_target_pool_reset((CNA_RenderTargetPoolHandle)pool);
+    return (jint)call_result;
+}
+
+JNIEXPORT jint JNICALL
+Java_org_openeggbert_cna_internal_generated_NativeEngineLayerRoutes_scopedRenderTargetBegin(
+    JNIEnv* environment, jclass declaring_class, jlong graphics_device, jlong destination, jlongArray out_scope)
+{
+    (void)environment;
+    (void)declaring_class;
+    CNA_ScopedRenderTargetHandle out_scope_value = 0;
+    CNA_Result call_result = cna.scoped_render_target_begin((CNA_Handle)graphics_device, (CNA_Handle)destination, &out_scope_value);
+    if (call_result == CNA_RESULT_SUCCESS || call_result == CNA_RESULT_BUFFER_TOO_SMALL) {
+        jlong out_scope_element = (jlong)out_scope_value;
+        (*environment)->SetLongArrayRegion(
+            environment, out_scope, 0, 1, &out_scope_element);
+    }
+    return (jint)call_result;
+}
+
+JNIEXPORT jint JNICALL
+Java_org_openeggbert_cna_internal_generated_NativeEngineLayerRoutes_scopedRenderTargetEnd(
+    JNIEnv* environment, jclass declaring_class, jlong scope)
+{
+    (void)environment;
+    (void)declaring_class;
+    CNA_Result call_result = cna.scoped_render_target_end((CNA_ScopedRenderTargetHandle)scope);
+    return (jint)call_result;
+}
+
+JNIEXPORT jint JNICALL
+Java_org_openeggbert_cna_internal_generated_NativeEngineLayerRoutes_scopedRenderTargetGetHasRecordedPrevious(
+    JNIEnv* environment, jclass declaring_class, jlong scope, jbooleanArray out_recorded)
+{
+    (void)environment;
+    (void)declaring_class;
+    CNA_Bool out_recorded_value = 0;
+    CNA_Result call_result = cna.scoped_render_target_get_has_recorded_previous((CNA_ScopedRenderTargetHandle)scope, &out_recorded_value);
+    if (call_result == CNA_RESULT_SUCCESS || call_result == CNA_RESULT_BUFFER_TOO_SMALL) {
+        jboolean out_recorded_element = (jboolean)out_recorded_value;
+        (*environment)->SetBooleanArrayRegion(
+            environment, out_recorded, 0, 1, &out_recorded_element);
+    }
     return (jint)call_result;
 }
 
@@ -13760,6 +14134,59 @@ Java_org_openeggbert_cna_internal_generated_NativeEngineLayerRoutes_ssrPassSetTh
     (void)environment;
     (void)declaring_class;
     CNA_Result call_result = cna.ssr_pass_set_thickness((CNA_PostProcessPassHandle)pass, (float)value);
+    return (jint)call_result;
+}
+
+JNIEXPORT jint JNICALL
+Java_org_openeggbert_cna_internal_generated_NativeEngineLayerRoutes_thinFilmIridescenceCopyGlsl(
+    JNIEnv* environment, jclass declaring_class, jbyteArray destination, jlongArray out_bytes)
+{
+    (void)environment;
+    (void)declaring_class;
+    jsize destination_size = (*environment)->GetArrayLength(environment, destination);
+    jbyte* destination_bytes = (*environment)->GetByteArrayElements(environment, destination, NULL);
+    if (destination_bytes == NULL) {
+        return (jint)CNA_RESULT_OUT_OF_MEMORY;
+    }
+    uint64_t destination_written = 0;
+    CNA_Result call_result = cna.thin_film_iridescence_copy_glsl((char*)destination_bytes, (uint64_t)destination_size, &destination_written);
+    (*environment)->ReleaseByteArrayElements(environment, destination, destination_bytes, 0);
+    if (call_result == CNA_RESULT_SUCCESS || call_result == CNA_RESULT_BUFFER_TOO_SMALL) {
+        jlong destination_element = (jlong)destination_written;
+        (*environment)->SetLongArrayRegion(
+            environment, out_bytes, 0, 1, &destination_element);
+    }
+    return (jint)call_result;
+}
+
+JNIEXPORT jint JNICALL
+Java_org_openeggbert_cna_internal_generated_NativeEngineLayerRoutes_thinFilmIridescenceEvaluate(
+    JNIEnv* environment, jclass declaring_class, jfloat outside_ior, jfloat film_ior, jfloat cos_theta, jfloat thickness_nm, jfloatArray base_f0Floating, jfloatArray out_valueFloating)
+{
+    (void)environment;
+    (void)declaring_class;
+    CNA_Vector3 base_f0_value;
+    memset(&base_f0_value, 0, sizeof base_f0_value);
+    {
+        jfloat base_f0Floating_values[3];
+        (*environment)->GetFloatArrayRegion(environment, base_f0Floating, 0, 3, base_f0Floating_values);
+        base_f0_value.x = (float)base_f0Floating_values[0];
+        base_f0_value.y = (float)base_f0Floating_values[1];
+        base_f0_value.z = (float)base_f0Floating_values[2];
+    }
+    CNA_Vector3 out_value_value;
+    memset(&out_value_value, 0, sizeof out_value_value);
+    CNA_Result call_result = cna.thin_film_iridescence_evaluate((float)outside_ior, (float)film_ior, (float)cos_theta, (float)thickness_nm, &base_f0_value, &out_value_value);
+    if (call_result == CNA_RESULT_SUCCESS || call_result == CNA_RESULT_BUFFER_TOO_SMALL) {
+        jfloat out_valueFloating_values[] = {
+            (jfloat)out_value_value.x,
+            (jfloat)out_value_value.y,
+            (jfloat)out_value_value.z
+        };
+        (*environment)->SetFloatArrayRegion(environment, out_valueFloating, 0,
+            (jsize)(sizeof out_valueFloating_values / sizeof out_valueFloating_values[0]),
+            out_valueFloating_values);
+    }
     return (jint)call_result;
 }
 

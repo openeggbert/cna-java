@@ -244,6 +244,11 @@ public final class Skybox implements AutoCloseable {
                 NativeEngineLayerRoutes.skyboxDestroy(handle));
     }
 
+    /** The native handle, for the pipeline that draws a sky. */
+    long handleForBorrow() {
+        return open();
+    }
+
     private long open() {
         synchronized (this) {
             if (closed) {

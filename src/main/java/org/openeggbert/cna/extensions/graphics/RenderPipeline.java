@@ -47,6 +47,9 @@ public final class RenderPipeline implements AutoCloseable {
     // Retained so a pass cannot be collected while the pipeline still names it. CNA borrows
     // rather than owns, so this list is what makes "the caller keeps it alive" true by default.
     private final List<PostProcessPass> userPasses = new ArrayList<>();
+    // Retained for the same reason the passes are: the pipeline borrows the skybox and never
+    // owns it, so something has to keep it alive while the pipeline names it.
+    private Skybox skybox;
     private boolean closed;
 
     private RenderPipeline(long handle) {
@@ -200,6 +203,33 @@ public final class RenderPipeline implements AutoCloseable {
         synchronized (userPasses) {
             return List.copyOf(userPasses);
         }
+    }
+
+    /**
+     * Gives the pipeline a sky to draw behind the scene.
+     *
+     * <p>Borrowed and retained here: the pipeline never owns the skybox, and this object holds a
+     * reference so it cannot be collected while the pipeline names it.
+     *
+     * @param skybox the sky, or {@code null} for none
+     */
+    public void setSkybox(Skybox skybox) {
+        GraphicsExtension.check("RenderPipeline.setSkybox",
+                NativeEngineLayerRoutes.renderPipelineSetSkybox(open(),
+                        skybox == null ? 0L : skybox.handleForBorrow()));
+        synchronized (this) {
+            this.skybox = skybox;
+        }
+    }
+
+    /**
+     * Returns the sky the pipeline was given.
+     *
+     * @return the skybox, or {@code null} when there is none
+     */
+    public synchronized Skybox getSkybox() {
+        open();
+        return skybox;
     }
 
     /**
@@ -405,6 +435,9 @@ public final class RenderPipeline implements AutoCloseable {
         }
         synchronized (userPasses) {
             userPasses.clear();
+        }
+        synchronized (this) {
+            skybox = null;
         }
         GraphicsExtension.check("RenderPipeline.close",
                 NativeEngineLayerRoutes.renderPipelineDestroy(handle));

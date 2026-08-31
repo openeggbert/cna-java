@@ -643,6 +643,7 @@
     LOAD(display_info_get_safe_area_ext, "cna_display_info_get_safe_area_ext");
     LOAD(effect_copy_type_name, "cna_effect_copy_type_name");
     LOAD(effect_get_type_name_byte_count, "cna_effect_get_type_name_byte_count");
+    LOAD(engine_layer_copy_version_string, "cna_engine_layer_copy_version_string");
     LOAD(engine_layer_get_version, "cna_engine_layer_get_version");
     LOAD(environment_processor_convert_equirectangular, "cna_environment_processor_convert_equirectangular");
     LOAD(environment_processor_create, "cna_environment_processor_create");
@@ -735,6 +736,17 @@
     LOAD(gamer_set_display_name, "cna_gamer_set_display_name");
     LOAD(gamer_set_tag, "cna_gamer_set_tag");
     LOAD(gamer_unsubscribe_ext, "cna_gamer_unsubscribe_ext");
+    LOAD(gpu_cullable_instance_init, "cna_gpu_cullable_instance_init");
+    LOAD(gpu_instance_culler_copy_instance_lookup_glsl, "cna_gpu_instance_culler_copy_instance_lookup_glsl");
+    LOAD(gpu_instance_culler_copy_unsupported_reason, "cna_gpu_instance_culler_copy_unsupported_reason");
+    LOAD(gpu_instance_culler_create, "cna_gpu_instance_culler_create");
+    LOAD(gpu_instance_culler_cull, "cna_gpu_instance_culler_cull");
+    LOAD(gpu_instance_culler_destroy, "cna_gpu_instance_culler_destroy");
+    LOAD(gpu_instance_culler_draw, "cna_gpu_instance_culler_draw");
+    LOAD(gpu_instance_culler_get_instance_count, "cna_gpu_instance_culler_get_instance_count");
+    LOAD(gpu_instance_culler_is_supported, "cna_gpu_instance_culler_is_supported");
+    LOAD(gpu_instance_culler_read_visible_count_ext, "cna_gpu_instance_culler_read_visible_count_ext");
+    LOAD(gpu_instance_culler_set_instances, "cna_gpu_instance_culler_set_instances");
     LOAD(gpu_timer_begin, "cna_gpu_timer_begin");
     LOAD(gpu_timer_copy_unsupported_reason, "cna_gpu_timer_copy_unsupported_reason");
     LOAD(gpu_timer_create, "cna_gpu_timer_create");
@@ -752,6 +764,7 @@
     LOAD(graphics_backend_get_current_maturity, "cna_graphics_backend_get_current_maturity");
     LOAD(graphics_backend_maturity_copy_name, "cna_graphics_backend_maturity_copy_name");
     LOAD(graphics_backend_maturity_get_name_size, "cna_graphics_backend_maturity_get_name_size");
+    LOAD(graphics_device_supports_shadow_sampling_ext, "cna_graphics_device_supports_shadow_sampling_ext");
     LOAD(graphics_ext_is_available, "cna_graphics_ext_is_available");
     LOAD(graphics_renderer_copy_current_name, "cna_graphics_renderer_copy_current_name");
     LOAD(graphics_renderer_get_current_name_size, "cna_graphics_renderer_get_current_name_size");
@@ -1324,6 +1337,7 @@
     LOAD(render_pipeline_set_depth_normal_inputs, "cna_render_pipeline_set_depth_normal_inputs");
     LOAD(render_pipeline_set_gpu_timing_enabled_ext, "cna_render_pipeline_set_gpu_timing_enabled_ext");
     LOAD(render_pipeline_set_settings, "cna_render_pipeline_set_settings");
+    LOAD(render_pipeline_set_skybox, "cna_render_pipeline_set_skybox");
     LOAD(render_pipeline_set_skybox_camera, "cna_render_pipeline_set_skybox_camera");
     LOAD(render_pipeline_set_velocity_input_ext, "cna_render_pipeline_set_velocity_input_ext");
     LOAD(render_pipeline_settings_ext_apply_from_string, "cna_render_pipeline_settings_ext_apply_from_string");
@@ -1337,6 +1351,9 @@
     LOAD(render_target_pool_get_estimated_bytes, "cna_render_target_pool_get_estimated_bytes");
     LOAD(render_target_pool_get_target_count, "cna_render_target_pool_get_target_count");
     LOAD(render_target_pool_reset, "cna_render_target_pool_reset");
+    LOAD(scoped_render_target_begin, "cna_scoped_render_target_begin");
+    LOAD(scoped_render_target_end, "cna_scoped_render_target_end");
+    LOAD(scoped_render_target_get_has_recorded_previous, "cna_scoped_render_target_get_has_recorded_previous");
     LOAD(sensors_copy_name_at, "cna_sensors_copy_name_at");
     LOAD(sensors_get_accelerometer, "cna_sensors_get_accelerometer");
     LOAD(sensors_get_count, "cna_sensors_get_count");
@@ -1451,6 +1468,8 @@
     LOAD(text_input_start_ext, "cna_text_input_start_ext");
     LOAD(text_input_start_with_type_ext, "cna_text_input_start_with_type_ext");
     LOAD(text_input_stop_ext, "cna_text_input_stop_ext");
+    LOAD(thin_film_iridescence_copy_glsl, "cna_thin_film_iridescence_copy_glsl");
+    LOAD(thin_film_iridescence_evaluate, "cna_thin_film_iridescence_evaluate");
     LOAD(tonemap_pass_create, "cna_tonemap_pass_create");
     LOAD(tonemap_pass_get_deband_strength, "cna_tonemap_pass_get_deband_strength");
     LOAD(tonemap_pass_get_exposure, "cna_tonemap_pass_get_exposure");

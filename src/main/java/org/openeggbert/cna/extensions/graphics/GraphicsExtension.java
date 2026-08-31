@@ -20,6 +20,7 @@ public final class GraphicsExtension {
     private static final int RESULT_INVALID_ARGUMENT = 1;
     private static final int RESULT_INVALID_STATE = 3;
     private static final int RESULT_NOT_SUPPORTED = 6;
+    private static final int RESULT_BUFFER_TOO_SMALL = 14;
 
     private GraphicsExtension() {
     }
@@ -58,6 +59,55 @@ public final class GraphicsExtension {
         check("GraphicsExtension.getEngineLayerVersion",
                 NativeEngineLayerRoutes.engineLayerGetVersion(version));
         return version[0];
+    }
+
+    /**
+     * Returns the engine layer's version as CNA spells it.
+     *
+     * <p>The prose companion to {@link #getEngineLayerVersion()}: the number is what a crash log
+     * should carry and this is what a diagnostics screen should show.
+     *
+     * @return the version string
+     * @throws ExtensionNotSupportedException when this build has no engine layer
+     */
+    public static String getEngineLayerVersionString() {
+        requireBackend();
+        long[] bytes = new long[1];
+        int probe = NativeEngineLayerRoutes.engineLayerCopyVersionString(new byte[0], bytes);
+        if (probe != RESULT_BUFFER_TOO_SMALL) {
+            check("GraphicsExtension.getEngineLayerVersionString", probe);
+        }
+        int length = Math.toIntExact(bytes[0]);
+        if (length == 0) {
+            return "";
+        }
+        byte[] destination = new byte[length];
+        check("GraphicsExtension.getEngineLayerVersionString",
+                NativeEngineLayerRoutes.engineLayerCopyVersionString(destination, bytes));
+        return new String(destination, 0, Math.toIntExact(bytes[0]),
+                java.nio.charset.StandardCharsets.UTF_8);
+    }
+
+    /**
+     * Reports whether a device can sample a shadow map with hardware comparison.
+     *
+     * <p>The difference between one texture fetch per shadow sample and several: a renderer
+     * without it filters in the shader, which is slower and is why a game may want a lower
+     * {@link ShadowQuality} there.
+     *
+     * @param graphicsDevice the device to ask about
+     * @return whether hardware shadow sampling is available
+     * @throws ExtensionNotSupportedException when this build has no engine layer
+     */
+    public static boolean supportsShadowSampling(
+            Microsoft.Xna.Framework.Graphics.GraphicsDevice graphicsDevice) {
+        requireBackend();
+        java.util.Objects.requireNonNull(graphicsDevice, "graphicsDevice");
+        boolean[] supported = new boolean[1];
+        check("GraphicsExtension.supportsShadowSampling",
+                NativeEngineLayerRoutes.graphicsDeviceSupportsShadowSamplingExt(
+                        NativeBindings.nativeGraphicsDeviceValue(graphicsDevice), supported));
+        return supported[0];
     }
 
     /**
