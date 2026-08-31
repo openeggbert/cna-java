@@ -6275,6 +6275,18 @@
         "symbol": "cna_light_probe_baker_set_planes"
       },
       {
+        "java": "postProcessEffectPassCreate",
+        "symbol": "cna_post_process_effect_pass_create"
+      },
+      {
+        "java": "postProcessEffectPassCreateOwning",
+        "symbol": "cna_post_process_effect_pass_create_owning"
+      },
+      {
+        "java": "postProcessEffectPassSetEffect",
+        "symbol": "cna_post_process_effect_pass_set_effect"
+      },
+      {
         "java": "shaderEffectFactoryAcquire",
         "symbol": "cna_shader_effect_factory_acquire"
       },

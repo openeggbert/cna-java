@@ -202,7 +202,14 @@ public abstract class PostProcessPass implements AutoCloseable {
         int call(byte[] destination, long[] bytes);
     }
 
-    private long open() {
+    /**
+     * Returns the live handle, refusing a closed pass.
+     *
+     * <p>Package-private rather than private so a subclass with routes of its own -- an
+     * {@link EffectPass} and its effect -- refuses a closed pass the same way this does, instead
+     * of each one inventing its own check.
+     */
+    long open() {
         synchronized (this) {
             if (closed) {
                 throw new IllegalStateException(

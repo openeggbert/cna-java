@@ -1326,6 +1326,9 @@
     LOAD(platform_get_is_apple_ext, "cna_platform_get_is_apple_ext");
     LOAD(platform_get_is_mobile_ext, "cna_platform_get_is_mobile_ext");
     LOAD(point_light_ext_init, "cna_point_light_ext_init");
+    LOAD(post_process_effect_pass_create, "cna_post_process_effect_pass_create");
+    LOAD(post_process_effect_pass_create_owning, "cna_post_process_effect_pass_create_owning");
+    LOAD(post_process_effect_pass_set_effect, "cna_post_process_effect_pass_set_effect");
     LOAD(post_process_pass_copy_name, "cna_post_process_pass_copy_name");
     LOAD(post_process_pass_destroy, "cna_post_process_pass_destroy");
     LOAD(post_process_pass_is_supported, "cna_post_process_pass_is_supported");

@@ -272,3 +272,51 @@ not read a successful acquire as a compiled shader.
 
 The last line is the discipline catching the probe itself: that final `destroy` is refused because
 the effect from `acquire bad source` was never released.
+
+## effect_pass_ownership.c
+
+Does the owning effect-pass constructor really consume its effect, and is there a failure branch
+that leaves it alive?
+
+`cna_post_process_effect_pass_create_owning` is the only consumed-ownership transfer in this part
+of the engine layer, and the Java rule for one is that the owner stops owning on success and keeps
+owning on failure. Both branches have to be real before either can be projected: a success that did
+not actually consume would make the Java side a leak, and a failure nobody can provoke would make
+the other half untestable. Its output on ABI 0.21.0:
+
+```text
+create borrowing        0
+get effect              0  same as set 0  stable across calls 0
+set effect to none      0
+get effect after none   invalid
+destroy borrowing pass  0
+effect alive after      0
+create owning           0
+destroy consumed handle 2
+destroy owning pass     0
+owning, bad device      2
+effect after refusal    0
+get effect of blit      1
+set effect of blit      1
+fullscreen create       0
+fullscreen draw         1
+fullscreen destroy      0
+```
+
+Both branches are real. After a successful `create_owning`, destroying the effect handle answers
+`INVALID_HANDLE` -- it was consumed. After one refused for a bad device, destroying the effect
+answers `SUCCESS` -- the caller still owned it. The borrowing constructor is the other side of the
+same coin: the effect outlives the pass that drew through it.
+
+`get_effect` is the reason that route is **not** bound. Its second line says it: the handle is
+neither the one that was set nor stable across calls, so every call mints a new one -- and the
+header says the handle must not be destroyed. Calling it twice therefore leaks twice with no way to
+give either back. `EffectPass` answers from the effect it retained instead, which is the same
+answer for nothing.
+
+A blit pass refuses both effect-pass questions with `INVALID_ARGUMENT`, so "is an effect pass" is
+CNA's own check rather than a Java type test.
+
+The last three lines are why the full-screen pass is not projected yet: it creates, but both draws
+refuse a null source with `INVALID_ARGUMENT`, and its sampler parameter is a `CNA_SamplerState`
+this binding has no value type for. It needs its own measurement before it earns a Java type.

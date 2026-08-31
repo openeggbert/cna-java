@@ -19616,6 +19616,40 @@
       ]
     },
     {
+      "name": "cna_post_process_effect_pass_create",
+      "header": "engine_layer.h",
+      "ownership": "borrows the graphics device; BORROWS the effect, which must outlive the pass and is left alive when the pass is destroyed; returns an owned pass handle",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_Handle",
+        "CNA_EffectHandle",
+        "CNA_StringView",
+        "CNA_PostProcessPassHandle*"
+      ]
+    },
+    {
+      "name": "cna_post_process_effect_pass_create_owning",
+      "header": "engine_layer.h",
+      "ownership": "borrows the graphics device; CONSUMES the effect handle on success, so the Java owner surrenders only after this returns SUCCESS, and keeps owning it on failure; returns an owned pass handle",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_Handle",
+        "CNA_EffectHandle",
+        "CNA_StringView",
+        "CNA_PostProcessPassHandle*"
+      ]
+    },
+    {
+      "name": "cna_post_process_effect_pass_set_effect",
+      "header": "engine_layer.h",
+      "ownership": "borrows the pass; BORROWS the new effect and does not release the one an owning pass already holds",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_PostProcessPassHandle",
+        "CNA_EffectHandle"
+      ]
+    },
+    {
       "name": "cna_post_process_pass_copy_name",
       "header": "engine_layer.h",
       "ownership": "borrows the pass; fills the caller's byte buffer",

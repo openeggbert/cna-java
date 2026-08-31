@@ -1326,6 +1326,9 @@
     CNA_JNI_ROUTE(cna_platform_get_is_apple_ext) platform_get_is_apple_ext;
     CNA_JNI_ROUTE(cna_platform_get_is_mobile_ext) platform_get_is_mobile_ext;
     CNA_JNI_ROUTE(cna_point_light_ext_init) point_light_ext_init;
+    CNA_JNI_ROUTE(cna_post_process_effect_pass_create) post_process_effect_pass_create;
+    CNA_JNI_ROUTE(cna_post_process_effect_pass_create_owning) post_process_effect_pass_create_owning;
+    CNA_JNI_ROUTE(cna_post_process_effect_pass_set_effect) post_process_effect_pass_set_effect;
     CNA_JNI_ROUTE(cna_post_process_pass_copy_name) post_process_pass_copy_name;
     CNA_JNI_ROUTE(cna_post_process_pass_destroy) post_process_pass_destroy;
     CNA_JNI_ROUTE(cna_post_process_pass_is_supported) post_process_pass_is_supported;

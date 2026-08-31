@@ -5224,6 +5224,21 @@ public final class NativeEngineLayerRoutes {
     public static native int pointLightExtInit(byte[] outLightBytes, long[] outLightIntegral, float[] outLightFloating);
 
     /**
+     * cna_post_process_effect_pass_create (engine_layer.h).
+     */
+    public static native int postProcessEffectPassCreate(long graphicsDevice, long effect, byte[] name, long[] outPass);
+
+    /**
+     * cna_post_process_effect_pass_create_owning (engine_layer.h).
+     */
+    public static native int postProcessEffectPassCreateOwning(long graphicsDevice, long effect, byte[] name, long[] outPass);
+
+    /**
+     * cna_post_process_effect_pass_set_effect (engine_layer.h).
+     */
+    public static native int postProcessEffectPassSetEffect(long pass, long effect);
+
+    /**
      * cna_post_process_pass_copy_name (engine_layer.h).
      */
     public static native int postProcessPassCopyName(long pass, byte[] destination, long[] outBytes);

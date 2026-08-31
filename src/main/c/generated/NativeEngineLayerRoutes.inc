@@ -11981,6 +11981,62 @@ Java_org_openeggbert_cna_internal_generated_NativeEngineLayerRoutes_pointLightEx
 }
 
 JNIEXPORT jint JNICALL
+Java_org_openeggbert_cna_internal_generated_NativeEngineLayerRoutes_postProcessEffectPassCreate(
+    JNIEnv* environment, jclass declaring_class, jlong graphics_device, jlong effect, jbyteArray name, jlongArray out_pass)
+{
+    (void)environment;
+    (void)declaring_class;
+    jsize name_size = (*environment)->GetArrayLength(environment, name);
+    jbyte* name_bytes = (*environment)->GetByteArrayElements(environment, name, NULL);
+    if (name_bytes == NULL) {
+        return (jint)CNA_RESULT_OUT_OF_MEMORY;
+    }
+    CNA_StringView name_view = {(const char*)name_bytes, (uint64_t)name_size};
+    CNA_PostProcessPassHandle out_pass_value = 0;
+    CNA_Result call_result = cna.post_process_effect_pass_create((CNA_Handle)graphics_device, (CNA_EffectHandle)effect, name_view, &out_pass_value);
+    (*environment)->ReleaseByteArrayElements(environment, name, name_bytes, JNI_ABORT);
+    if (call_result == CNA_RESULT_SUCCESS || call_result == CNA_RESULT_BUFFER_TOO_SMALL) {
+        jlong out_pass_element = (jlong)out_pass_value;
+        (*environment)->SetLongArrayRegion(
+            environment, out_pass, 0, 1, &out_pass_element);
+    }
+    return (jint)call_result;
+}
+
+JNIEXPORT jint JNICALL
+Java_org_openeggbert_cna_internal_generated_NativeEngineLayerRoutes_postProcessEffectPassCreateOwning(
+    JNIEnv* environment, jclass declaring_class, jlong graphics_device, jlong effect, jbyteArray name, jlongArray out_pass)
+{
+    (void)environment;
+    (void)declaring_class;
+    jsize name_size = (*environment)->GetArrayLength(environment, name);
+    jbyte* name_bytes = (*environment)->GetByteArrayElements(environment, name, NULL);
+    if (name_bytes == NULL) {
+        return (jint)CNA_RESULT_OUT_OF_MEMORY;
+    }
+    CNA_StringView name_view = {(const char*)name_bytes, (uint64_t)name_size};
+    CNA_PostProcessPassHandle out_pass_value = 0;
+    CNA_Result call_result = cna.post_process_effect_pass_create_owning((CNA_Handle)graphics_device, (CNA_EffectHandle)effect, name_view, &out_pass_value);
+    (*environment)->ReleaseByteArrayElements(environment, name, name_bytes, JNI_ABORT);
+    if (call_result == CNA_RESULT_SUCCESS || call_result == CNA_RESULT_BUFFER_TOO_SMALL) {
+        jlong out_pass_element = (jlong)out_pass_value;
+        (*environment)->SetLongArrayRegion(
+            environment, out_pass, 0, 1, &out_pass_element);
+    }
+    return (jint)call_result;
+}
+
+JNIEXPORT jint JNICALL
+Java_org_openeggbert_cna_internal_generated_NativeEngineLayerRoutes_postProcessEffectPassSetEffect(
+    JNIEnv* environment, jclass declaring_class, jlong pass, jlong effect)
+{
+    (void)environment;
+    (void)declaring_class;
+    CNA_Result call_result = cna.post_process_effect_pass_set_effect((CNA_PostProcessPassHandle)pass, (CNA_EffectHandle)effect);
+    return (jint)call_result;
+}
+
+JNIEXPORT jint JNICALL
 Java_org_openeggbert_cna_internal_generated_NativeEngineLayerRoutes_postProcessPassCopyName(
     JNIEnv* environment, jclass declaring_class, jlong pass, jbyteArray destination, jlongArray out_bytes)
 {
