@@ -443,6 +443,18 @@
         "LodGroupTests"
       ],
       "note": "LodGroup deliberately holds thresholds rather than mesh parts: the Java projection's ModelMeshPart is a managed object with no native handle, so there is nothing to hand CNA and nothing meaningful to receive. selectIndex returns the level and the game draws what it keeps at that index. DebugDraw's six gizmo routes are unbound for a related reason: three take engine-layer handles for families that do not exist in Java yet, and three take light structures that belong with the lighting slice rather than ahead of it. Nothing in DebugDrawTests claims a line was drawn -- this qualification has a HEADLESS renderer -- only that the queue holds what was put in it, which is the part a game's own logic depends on."
+    },
+    {
+      "id": "JAVA-EXT-009",
+      "title": "Decide what RenderPipelineSettings projects, now that there are two of them",
+      "family": "org.openeggbert.cna.extensions.graphics",
+      "authority": "graphics_ext.h, engine_layer.h",
+      "status": "ready",
+      "priority": 6,
+      "currentState": "CNA has two render-pipeline settings structures and the Java type projects the smaller one. graphics_ext.h declares CNA_RenderPipelineSettings with 10 fields -- exposure, gamma, bloom intensity, tonemapping, two quality levels and four toggles -- and that is what RenderPipelineSettings mirrors, field for field, through cna_render_pipeline_settings_init. engine_layer.h declares CNA_RenderPipelineSettingsEXT with 50, adding SSR, depth of field, volumetric fog, light shafts, height fog, motion blur, chromatic aberration, film grain, lens flare, colour grading, FXAA and a transparency mode. The engine layer's own routes -- normalize, apply_render_quality_preset, apply_from_string, and the pipeline's get_settings and set_settings -- all take the larger one.",
+      "expectedState": "A decision, then the work. Either RenderPipelineSettings grows to the EXT structure -- which is what the pipeline actually consumes, so anything less cannot configure one -- or a second type carries it and the smaller one keeps its narrower job. apply_from_string is worth having either way: it applies serialized settings text and reports how many fields it recognised, which is what a game's console command or config file wants, and unrecognised fields are skipped rather than refused so the count is the useful answer.",
+      "blocker": "None technically -- all three value routes plan cleanly. It needs the design call first, because growing a published type from 10 properties to 50 is not something to do by accident, and it decides whether the existing one keeps its name.",
+      "note": "Found while looking for an engine-layer family that could be qualified with no renderer. The three settings value routes are exactly that -- pure functions on a structure -- and they were bound, then unbound again when the two structures turned out to be different. Binding them against the smaller Java type would have silently truncated forty fields."
     }
   ]
 }
