@@ -321,8 +321,8 @@
       "title": "Nine of cnanext's own C API smoke tests fail in the HEADLESS/NULL-audio configuration",
       "family": "cnanext qualification",
       "authority": "ctest -R CApi in cnanext/cmake-build-javanext",
-      "currentState": "94 of 103 pass. The nine that fail are CApiCoverageMatrix, CApiLimitations, CApiReleaseGate, CApi_CoreExtSmoke, CApi_ContentSmoke, CApi_DevicesSmoke, CApi_MediaPlayerSmoke, CApi_AudioSmoke and CApi_AudioUnavailableSmoke. They are cnanext's own tests, and CNA-Java changed nothing in that repository, whose worktree is clean.",
-      "expectedState": "Either the suite passes in this configuration, or cnanext records which of its tests require a different platform, renderer or audio backend.",
+      "currentState": "Remeasured on 2026-08-31 against ABI 0.21.0: 99 of 104 pass, and the five that fail are CApi_CoreExtSmoke, CApi_ContentSmoke, CApi_DevicesSmoke, CApi_AudioSmoke and CApi_AudioUnavailableSmoke. Four of the original nine now pass -- CApiCoverageMatrix, CApiLimitations, CApiReleaseGate and CApi_MediaPlayerSmoke. The first run after rebuilding libcna_c_api reported nine failures again, but four of those were stale test executables compiled against 0.20 headers and linked against the 0.21 library; rebuilding the test targets was needed before the number meant anything, and that is recorded here because the same trap will catch the next reader.",
+      "expectedState": "Either the suite passes in HEADLESS/HEADLESS/NULL, or cnanext records which of its tests need a different platform, renderer or audio backend. CNA-Java does not depend on it: its own 220 tests qualify what this binding uses, and CApi_ContentSmoke's failure is in the same content path JAVA-UPSTREAM-004 reproduces.",
       "blocker": "Not investigated here beyond identifying them: they are upstream tests in a read-only repository, and diagnosing them is cnanext's work, not this binding's. AudioUnavailableSmoke expects playback to be unavailable, which suggests a NULL-audio expectation that no longer matches; CoreExtSmoke asserts renderer classifications.",
       "priority": 10,
       "status": "blocked"
