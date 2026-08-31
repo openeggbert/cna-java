@@ -9074,6 +9074,16 @@
       ]
     },
     {
+      "name": "cna_effect_get_image_based_light_ext",
+      "header": "engine_layer.h",
+      "ownership": "borrows the effect; returns three fresh names for its own textures, each of which retains the effect while it exists and each of which the caller must release",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_EffectHandle",
+        "CNA_ImageBasedLightEXT*"
+      ]
+    },
+    {
       "name": "cna_effect_get_light_view_projection_ext",
       "header": "engine_layer.h",
       "ownership": "borrows the effect; copies the matrix out",

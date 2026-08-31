@@ -1107,6 +1107,23 @@ public final class NativeBindings {
     }
 
     /**
+     * Releases a cube-texture handle that names a cube without keeping it alive.
+     *
+     * <p>The cube form of {@link #releaseBorrowedTextureName}, for the same shape and the same
+     * reason: {@code cna_effect_get_image_based_light_ext} answers with three fresh names for an
+     * effect's own textures, two of which are cubes, and a caller that only needed to know
+     * whether a light was bound gives all three straight back.
+     *
+     * @param nativeTexture the handle the engine layer returned; zero is ignored
+     */
+    public static void releaseBorrowedTextureCubeName(long nativeTexture) {
+        if (nativeTexture == 0L) {
+            return;
+        }
+        destroyTextureCube(nativeTexture);
+    }
+
+    /**
      * Adopts a cube-texture handle as an owning Java facade.
      *
      * <p>The cube form of {@link #createBorrowedRenderTarget}, and it serves both shapes the

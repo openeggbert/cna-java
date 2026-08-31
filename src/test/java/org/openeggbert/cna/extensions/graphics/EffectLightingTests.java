@@ -1,6 +1,7 @@
 package org.openeggbert.cna.extensions.graphics;
 
 import Microsoft.Xna.Framework.Graphics.BasicEffect;
+import Microsoft.Xna.Framework.Graphics.Effect;
 import Microsoft.Xna.Framework.Graphics.GraphicsDevice;
 import Microsoft.Xna.Framework.Graphics.RenderTarget2D;
 import Microsoft.Xna.Framework.Graphics.SkinnedEffect;
@@ -332,6 +333,41 @@ final class EffectLightingTests {
                 assertThrows(IllegalArgumentException.class,
                         () -> EffectLighting.setImageBasedLight(effect,
                                 ImageBasedLight.createDefault()));
+            }
+        });
+    }
+
+    @Test
+    void anEffectSaysWhetherItHasAnImageBasedLightBound() {
+        GameProbe.run(probe -> {
+            GraphicsDevice device = probe.device();
+            try (PbrEffect pbr = new PbrEffect(device);
+                    Microsoft.Xna.Framework.Graphics.TextureCube irradiance =
+                            new Microsoft.Xna.Framework.Graphics.TextureCube(device, 4, false,
+                                    Microsoft.Xna.Framework.Graphics.SurfaceFormat.Color);
+                    Microsoft.Xna.Framework.Graphics.TextureCube specular =
+                            new Microsoft.Xna.Framework.Graphics.TextureCube(device, 4, true,
+                                    Microsoft.Xna.Framework.Graphics.SurfaceFormat.Color);
+                    Microsoft.Xna.Framework.Graphics.Texture2D lut =
+                            new Microsoft.Xna.Framework.Graphics.Texture2D(device, 8, 8)) {
+                Effect effect = pbr.getEffect();
+                assertFalse(EffectLighting.hasImageBasedLight(effect), "nothing is bound yet");
+
+                EffectLighting.setImageBasedLight(effect,
+                        new ImageBasedLight(irradiance, specular, lut, 3, 1f));
+                assertTrue(EffectLighting.hasImageBasedLight(effect),
+                        "the effect knows what it was given");
+
+                // Nothing on the Java side retains what was set -- setImageBasedLight is a static
+                // call over textures the caller owns -- so this question is the only way to ask,
+                // which is what earns it a route of its own.
+                //
+                // Asking repeatedly is safe: each answer is three fresh names for the effect's
+                // own textures and this gives all three back, so a leak or a double release
+                // would show up here first.
+                for (int attempt = 0; attempt < 64; attempt++) {
+                    assertTrue(EffectLighting.hasImageBasedLight(effect));
+                }
             }
         });
     }

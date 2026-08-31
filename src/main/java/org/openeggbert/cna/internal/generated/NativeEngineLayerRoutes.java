@@ -3305,6 +3305,24 @@ public final class NativeEngineLayerRoutes {
     public static native int directionalLightExtInit(byte[] outLightBytes, long[] outLightIntegral, float[] outLightFloating);
 
     /**
+     * cna_effect_get_image_based_light_ext (engine_layer.h).
+     *
+     * <p>outLightIntegral carries CNA_ImageBasedLightEXT in this order:
+     * <ol start="0">
+     *   <li>{@code irradiance} (CNA_Handle)</li>
+     *   <li>{@code prefiltered_specular} (CNA_Handle)</li>
+     *   <li>{@code brdf_lut} (CNA_Handle)</li>
+     *   <li>{@code prefiltered_mip_count} (int32_t)</li>
+     * </ol>
+     *
+     * <p>outLightFloating carries CNA_ImageBasedLightEXT in this order:
+     * <ol start="0">
+     *   <li>{@code intensity} (float)</li>
+     * </ol>
+     */
+    public static native int effectGetImageBasedLightExt(long effect, long[] outLightIntegral, float[] outLightFloating);
+
+    /**
      * cna_effect_get_light_view_projection_ext (engine_layer.h).
      *
      * <p>outMatrixFloating carries CNA_Matrix in this order:

@@ -7656,6 +7656,40 @@ Java_org_openeggbert_cna_internal_generated_NativeEngineLayerRoutes_directionalL
 }
 
 JNIEXPORT jint JNICALL
+Java_org_openeggbert_cna_internal_generated_NativeEngineLayerRoutes_effectGetImageBasedLightExt(
+    JNIEnv* environment, jclass declaring_class, jlong effect, jlongArray out_lightIntegral, jfloatArray out_lightFloating)
+{
+    (void)environment;
+    (void)declaring_class;
+    if (out_lightIntegral == NULL || out_lightFloating == NULL) {
+        return (jint)CNA_RESULT_INVALID_ARGUMENT;
+    }
+    CNA_ImageBasedLightEXT out_light_value;
+    memset(&out_light_value, 0, sizeof out_light_value);
+    out_light_value.struct_size = (uint32_t)(sizeof out_light_value);
+    out_light_value.struct_version = UINT32_C(1);
+    CNA_Result call_result = cna.effect_get_image_based_light_ext((CNA_EffectHandle)effect, &out_light_value);
+    if (call_result == CNA_RESULT_SUCCESS || call_result == CNA_RESULT_BUFFER_TOO_SMALL) {
+        jlong out_lightIntegral_values[] = {
+            (jlong)out_light_value.irradiance,
+            (jlong)out_light_value.prefiltered_specular,
+            (jlong)out_light_value.brdf_lut,
+            (jlong)out_light_value.prefiltered_mip_count
+        };
+        (*environment)->SetLongArrayRegion(environment, out_lightIntegral, 0,
+            (jsize)(sizeof out_lightIntegral_values / sizeof out_lightIntegral_values[0]),
+            out_lightIntegral_values);
+        jfloat out_lightFloating_values[] = {
+            (jfloat)out_light_value.intensity
+        };
+        (*environment)->SetFloatArrayRegion(environment, out_lightFloating, 0,
+            (jsize)(sizeof out_lightFloating_values / sizeof out_lightFloating_values[0]),
+            out_lightFloating_values);
+    }
+    return (jint)call_result;
+}
+
+JNIEXPORT jint JNICALL
 Java_org_openeggbert_cna_internal_generated_NativeEngineLayerRoutes_effectGetLightViewProjectionExt(
     JNIEnv* environment, jclass declaring_class, jlong effect, jfloatArray out_matrixFloating)
 {

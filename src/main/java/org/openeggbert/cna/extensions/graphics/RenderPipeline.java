@@ -437,6 +437,19 @@ public final class RenderPipeline implements AutoCloseable {
 
     /** Releases the pipeline and its targets. Closing twice is a no-op. */
     /**
+     * Returns the shadow map the pipeline was last given.
+     *
+     * <p>Answered from the reference this object retained rather than from CNA. The native getter
+     * exists and is deliberately not bound: it mints a fresh handle onto the same map every call,
+     * which a caller would then have to release, to answer a question the pipeline already knows.
+     *
+     * @return the map, or {@code null} when no shadow scene is set
+     */
+    public synchronized ShadowMap getShadowScene() {
+        return shadowScene;
+    }
+
+    /**
      * Registers the callback the pipeline draws transparent geometry from.
      *
      * <p><strong>It runs only when the settings ask for a transparent pass.</strong>

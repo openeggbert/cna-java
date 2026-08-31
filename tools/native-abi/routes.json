@@ -4754,6 +4754,10 @@
         "symbol": "cna_directional_light_ext_init"
       },
       {
+        "java": "effectGetImageBasedLightExt",
+        "symbol": "cna_effect_get_image_based_light_ext"
+      },
+      {
         "java": "effectGetLightViewProjectionExt",
         "symbol": "cna_effect_get_light_view_projection_ext"
       },

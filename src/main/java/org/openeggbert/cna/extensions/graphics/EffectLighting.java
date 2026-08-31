@@ -200,6 +200,39 @@ public final class EffectLighting {
     }
 
     /**
+     * Reports whether an effect currently has an image-based light bound.
+     *
+     * <p>A boolean rather than the light, and for the reason {@link #hasShadowMap} records: CNA
+     * answers with <em>three fresh names</em> for the effect's own textures rather than the
+     * handles that were set, each keeping the effect alive while it exists and each of which a
+     * caller must release. A Java facade over them would claim an ownership nobody asked for and
+     * would have to be disposed three times; the names are given straight back here, and what a
+     * caller can honestly learn is whether something is bound.
+     *
+     * <p>Unlike a shadow map, nothing on the Java side retains what {@link #setImageBasedLight}
+     * was given -- it is a static call over textures the caller already owns -- so this is the
+     * only way to ask.
+     *
+     * @param effect the effect
+     * @return whether an image-based light is bound
+     * @throws IllegalArgumentException when the effect carries no image-based light at all,
+     *         which is CNA's own refusal for an effect of the wrong kind
+     */
+    public static boolean hasImageBasedLight(Effect effect) {
+        long[] integral = new long[4];
+        float[] floating = new float[1];
+        GraphicsExtension.check("EffectLighting.hasImageBasedLight",
+                NativeEngineLayerRoutes.effectGetImageBasedLightExt(handle(effect), integral,
+                        floating));
+        // All three, as the header requires. The irradiance and prefiltered cubes are cube maps
+        // and the lookup is a two-dimensional texture, so they go back through their own routes.
+        NativeBindings.releaseBorrowedTextureCubeName(integral[0]);
+        NativeBindings.releaseBorrowedTextureCubeName(integral[1]);
+        NativeBindings.releaseBorrowedTextureName(integral[2]);
+        return integral[0] != 0L || integral[1] != 0L || integral[2] != 0L;
+    }
+
+    /**
      * Gives an effect the cascaded-shadow state to sample with.
      *
      * <p>The other half of {@link #setShadowMap}: a single shadow map needs one transform, and a

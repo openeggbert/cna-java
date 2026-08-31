@@ -695,6 +695,7 @@
     CNA_JNI_ROUTE(cna_display_info_get_content_scale_ext) display_info_get_content_scale_ext;
     CNA_JNI_ROUTE(cna_display_info_get_safe_area_ext) display_info_get_safe_area_ext;
     CNA_JNI_ROUTE(cna_effect_copy_type_name) effect_copy_type_name;
+    CNA_JNI_ROUTE(cna_effect_get_image_based_light_ext) effect_get_image_based_light_ext;
     CNA_JNI_ROUTE(cna_effect_get_light_view_projection_ext) effect_get_light_view_projection_ext;
     CNA_JNI_ROUTE(cna_effect_get_punctual_light_ext) effect_get_punctual_light_ext;
     CNA_JNI_ROUTE(cna_effect_get_shadow_cascades_ext) effect_get_shadow_cascades_ext;
