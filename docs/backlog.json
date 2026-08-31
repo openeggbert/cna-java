@@ -392,6 +392,17 @@
       ],
       "priority": 3,
       "status": "done"
+    },
+    {
+      "id": "JAVA-EXT-006",
+      "title": "Project the gamer-services capabilities XNA has no member for",
+      "family": "org.openeggbert.cna.extensions",
+      "authority": "gamer_services.h, net_sessions.h",
+      "currentState": "Unbound and classified as extension candidates by JAVA-NATIVE-023, because binding them into Microsoft.Xna.Framework would have put members there that Microsoft never shipped.",
+      "expectedState": "Three coherent slices under org.openeggbert.cna.extensions. CNA's Guide hands the application the pending on-screen keyboard or message box and asks it to draw, where XNA's Guide draws itself: 14 routes, and the useful shape is a typed pending-request record plus a render call, not a projection of the raw routes. CNA's avatar layer exposes real rendering and the clip and content names behind the canonical presets: 10 routes. And a discovered session carries the host and port it was found at, which AvailableNetworkSession does not name: 4 routes.",
+      "blocker": "None. It needs an API design per slice, not a CNA change.",
+      "priority": 8,
+      "status": "ready"
     }
   ]
 }

@@ -42,7 +42,7 @@ or put non-XNA API inside `Microsoft.Xna.Framework.*`.
 | Allowlist entries | 0 | 0 |
 | CNA C ABI | 0.7.0 | 0.21.0 |
 | Canonical C API functions | not measured | 4,054 |
-| Bound native routes | 723 | 1,570 |
+| Bound native routes | 723 | 1,418 |
 | Unexplained native routes | 3,328 | 0 |
 | Bound routes no JNI entry point reaches | 1 | 0 |
 | Bound routes no Java call site reaches | not measurable | 161 |
@@ -108,6 +108,12 @@ with, every fixture produced by CNA's own encoder.
 **J15, the Content Pipeline decision.** `JAVA-XNA-006` is measured and answered:
 partial/interop, in `docs/content-pipeline-decision.md`.
 
+**J16, the reachability sweep.** `JAVA-NATIVE-023`. Every bound route reaches a Java call site,
+and both reachability facts are hard gates. It also found three leaks on the way:
+`NetworkSessionProperties`, `AvatarDescription` and every `LeaderboardEntry` owned a CNA handle
+that nothing released, and none of the three is disposable in XNA. They are released now on the
+thread CNA will take them from.
+
 **J8, the native inventory.** Every one of the 4,051 canonical C API functions carries an explicit
 classification with zero unexplained, and the public surface that reaches each bound route is
 derived from the JNI call graph and the Java sources rather than declared by hand.
@@ -140,15 +146,15 @@ explicitly reviewed full signature, never a suppression:
 ```text
 HEADER_ABI=0.21.0
 CANONICAL_FUNCTIONS=4054
-BOUND_FUNCTIONS=1570
+BOUND_FUNCTIONS=1418
 MANIFEST_SIGNATURE_CHECK=PASS
 MANIFEST_JNI_BINDING_CHECK=PASS
 JNI_HEADER_DERIVED_SLOT_CHECK=PASS
 LAYOUT_SIGNATURE_PROBE=PASS
 LIBRARY_ABI=0.21.0
-LIBRARY_SYMBOL_CHECK=PASS (1570/1570)
+LIBRARY_SYMBOL_CHECK=PASS (1418/1418)
 ABI_POLICY_CHECK=PASS
-NATIVE_TOOL_TESTS=45 passed, 0 failed
+NATIVE_TOOL_TESTS=47 passed, 0 failed
 ```
 
 Every slot is declared `CNA_JNI_ROUTE(symbol)`, so a signature that moves upstream stops the
@@ -159,14 +165,14 @@ than guessing; `generateJniCheck` fails the build when the committed output goes
 ## Coverage
 
 ```text
-XNA_BACKING              976
-JAVA_INTERNAL_ONLY       170
-CNA_EXTENSION_CANDIDATE 1871
+XNA_BACKING              985
+JAVA_INTERNAL_ONLY         9
+CNA_EXTENSION_CANDIDATE 1902
 DEFERRED_RUNTIME         417
-NOT_USEFUL_IN_JAVA       620
+NOT_USEFUL_IN_JAVA       741
 UNMAPPED_REQUIRES_REVIEW   0
 BOUND_BUT_UNREACHED        0
-BOUND_WITHOUT_JAVA_CALL_SITE 161
+BOUND_WITHOUT_JAVA_CALL_SITE 0
 ```
 
 `NOT_USEFUL_IN_JAVA` is dominated by value math -- vectors, matrices, quaternions, geometry,
@@ -182,10 +188,9 @@ deferred Model routes behind a managed-only `Load<Model>` (`JAVA-NATIVE-011`), t
 layer is the bulk of what is left classified as an extension candidate; it belongs under
 `org.openeggbert.cna.extensions.*`, never inside the strict packages.
 
-`boundButUnreached` -- a loaded symbol no JNI entry point reaches -- is empty and `nativeCoverageCheck`
-now fails when it is not. The weaker question, whether a Java source actually *calls* the entry
-point, was previously unanswerable: a `native` declaration names its own method, so the call scan
-counted every generated declaration as its own call site. With that filtered,
-`boundWithoutJavaCallSite` is 162, concentrated in the GamerServices and Net families, and
-`JAVA-NATIVE-023` owns reaching or unbinding each one. Binding a route nothing calls makes the
-library demand a symbol from `libcna_c_api` for no reason.
+Both reachability questions are now answered and both are gates. `boundButUnreached` -- a loaded
+symbol no JNI entry point reaches -- is empty. So is `boundWithoutJavaCallSite`, the weaker
+question of whether a Java source actually *calls* the entry point, which was unanswerable until
+the call scan stopped counting a `native` declaration as its own call site. It measured 162, and
+`JAVA-NATIVE-023` resolved every one: seven reached, 155 unbound with a stated reason. Binding a
+route nothing calls makes the library demand a symbol from `libcna_c_api` for no reason.

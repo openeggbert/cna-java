@@ -50,10 +50,10 @@ TARGET_TYPES=340     TARGET_MEMBERS=4022
 TOTAL_DIAGNOSTICS=0  ALLOWLIST_ENTRIES=0
 
 NATIVE
-CANONICAL_FUNCTIONS=4054   BOUND_FUNCTIONS=1570
-XNA_BACKING=976  JAVA_INTERNAL_ONLY=170  CNA_EXTENSION_CANDIDATE=1871
-DEFERRED_RUNTIME=417  NOT_USEFUL_IN_JAVA=620  UNEXPLAINED=0
-BOUND_BUT_UNREACHED=0  BOUND_WITHOUT_JAVA_CALL_SITE=161
+CANONICAL_FUNCTIONS=4054   BOUND_FUNCTIONS=1418
+XNA_BACKING=985  JAVA_INTERNAL_ONLY=9  CNA_EXTENSION_CANDIDATE=1902
+DEFERRED_RUNTIME=417  NOT_USEFUL_IN_JAVA=741  UNEXPLAINED=0
+BOUND_BUT_UNREACHED=0  BOUND_WITHOUT_JAVA_CALL_SITE=0
 
 CNA EXTENSIONS
 org.openeggbert.cna.extensions.graphics   pipeline settings, PBR material, ASCII/CRT/depth effects
@@ -135,16 +135,21 @@ unexpected type in the narrower one, so its zero still means what it always mean
 12. `JAVA-XNA-006` is measured and answered in `docs/content-pipeline-decision.md`:
     partial/interop, consume compiled content rather than reimplement Microsoft's build system.
 
+13. `JAVA-NATIVE-023` is done. Every bound route reaches a Java call site: seven were reached
+    and 155 unbound with a stated reason, and both reachability facts are hard gates now. Three
+    leaks turned up on the way -- `NetworkSessionProperties`, `AvatarDescription` and every
+    `LeaderboardEntry` owned a handle nothing released -- and are fixed.
+
 ## Next work, in dependency order
 
 `docs/backlog.json` is the machine-readable source. The highest-value ready tasks are:
 
-1. `JAVA-NATIVE-023` — reach or unbind the 161 routes no Java call site touches, concentrated
-   in the GamerServices and Net families. PacketReader and PacketWriter are the largest slice:
-   28 routes CNA implements that the Java projection currently does managed.
-2. `JAVA-EXT-003` — the remaining `.cnb` asset families: model, sprite font, sound, song, video,
+1. `JAVA-EXT-003` — the remaining `.cnb` asset families: model, sprite font, sound, song, video,
    curve, animation clip and `.cnj`. The loader registry needs a design decision rather than
    more binding, because `cna_cnb_loader_invoke` hands back a `void*`.
+2. `JAVA-EXT-006` — the gamer-services capabilities XNA has no member for, unbound and
+   classified by `JAVA-NATIVE-023`: CNA's application-rendered Guide, its avatar rendering, and
+   a discovered session's host and port.
 3. `JAVA-UPSTREAM-004` — revalidate the CNA model loader when it is fixed, and add
    `CnaModel.Load` on top of it.
 
