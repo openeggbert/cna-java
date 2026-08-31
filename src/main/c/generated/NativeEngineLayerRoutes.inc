@@ -6398,6 +6398,255 @@ Java_org_openeggbert_cna_internal_generated_NativeEngineLayerRoutes_engineLayerG
 }
 
 JNIEXPORT jint JNICALL
+Java_org_openeggbert_cna_internal_generated_NativeEngineLayerRoutes_environmentProcessorConvertEquirectangular(
+    JNIEnv* environment, jclass declaring_class, jlong processor, jlong panorama, jint face_size, jlongArray out_environment)
+{
+    (void)environment;
+    (void)declaring_class;
+    CNA_Handle out_environment_value = 0;
+    CNA_Result call_result = cna.environment_processor_convert_equirectangular((CNA_EnvironmentProcessorHandle)processor, (CNA_Handle)panorama, (int32_t)face_size, &out_environment_value);
+    if (call_result == CNA_RESULT_SUCCESS || call_result == CNA_RESULT_BUFFER_TOO_SMALL) {
+        jlong out_environment_element = (jlong)out_environment_value;
+        (*environment)->SetLongArrayRegion(
+            environment, out_environment, 0, 1, &out_environment_element);
+    }
+    return (jint)call_result;
+}
+
+JNIEXPORT jint JNICALL
+Java_org_openeggbert_cna_internal_generated_NativeEngineLayerRoutes_environmentProcessorCreate(
+    JNIEnv* environment, jclass declaring_class, jlong graphics_device, jlongArray out_processor)
+{
+    (void)environment;
+    (void)declaring_class;
+    CNA_EnvironmentProcessorHandle out_processor_value = 0;
+    CNA_Result call_result = cna.environment_processor_create((CNA_Handle)graphics_device, &out_processor_value);
+    if (call_result == CNA_RESULT_SUCCESS || call_result == CNA_RESULT_BUFFER_TOO_SMALL) {
+        jlong out_processor_element = (jlong)out_processor_value;
+        (*environment)->SetLongArrayRegion(
+            environment, out_processor, 0, 1, &out_processor_element);
+    }
+    return (jint)call_result;
+}
+
+JNIEXPORT jint JNICALL
+Java_org_openeggbert_cna_internal_generated_NativeEngineLayerRoutes_environmentProcessorDestroy(
+    JNIEnv* environment, jclass declaring_class, jlong processor)
+{
+    (void)environment;
+    (void)declaring_class;
+    CNA_Result call_result = cna.environment_processor_destroy((CNA_EnvironmentProcessorHandle)processor);
+    return (jint)call_result;
+}
+
+JNIEXPORT jint JNICALL
+Java_org_openeggbert_cna_internal_generated_NativeEngineLayerRoutes_environmentProcessorDirectionToEquirectangular(
+    JNIEnv* environment, jclass declaring_class, jfloatArray directionFloating, jfloatArray out_u, jfloatArray out_v)
+{
+    (void)environment;
+    (void)declaring_class;
+    CNA_Vector3 direction_value;
+    memset(&direction_value, 0, sizeof direction_value);
+    {
+        jfloat directionFloating_values[3];
+        (*environment)->GetFloatArrayRegion(environment, directionFloating, 0, 3, directionFloating_values);
+        direction_value.x = (float)directionFloating_values[0];
+        direction_value.y = (float)directionFloating_values[1];
+        direction_value.z = (float)directionFloating_values[2];
+    }
+    float out_u_value = 0;
+    float out_v_value = 0;
+    CNA_Result call_result = cna.environment_processor_direction_to_equirectangular(&direction_value, &out_u_value, &out_v_value);
+    if (call_result == CNA_RESULT_SUCCESS || call_result == CNA_RESULT_BUFFER_TOO_SMALL) {
+        jfloat out_u_element = (jfloat)out_u_value;
+        (*environment)->SetFloatArrayRegion(
+            environment, out_u, 0, 1, &out_u_element);
+        jfloat out_v_element = (jfloat)out_v_value;
+        (*environment)->SetFloatArrayRegion(
+            environment, out_v, 0, 1, &out_v_element);
+    }
+    return (jint)call_result;
+}
+
+JNIEXPORT jint JNICALL
+Java_org_openeggbert_cna_internal_generated_NativeEngineLayerRoutes_environmentProcessorFaceDirection(
+    JNIEnv* environment, jclass declaring_class, jint face, jfloat u, jfloat v, jfloatArray out_directionFloating)
+{
+    (void)environment;
+    (void)declaring_class;
+    CNA_Vector3 out_direction_value;
+    memset(&out_direction_value, 0, sizeof out_direction_value);
+    CNA_Result call_result = cna.environment_processor_face_direction((int32_t)face, (float)u, (float)v, &out_direction_value);
+    if (call_result == CNA_RESULT_SUCCESS || call_result == CNA_RESULT_BUFFER_TOO_SMALL) {
+        jfloat out_directionFloating_values[] = {
+            (jfloat)out_direction_value.x,
+            (jfloat)out_direction_value.y,
+            (jfloat)out_direction_value.z
+        };
+        (*environment)->SetFloatArrayRegion(environment, out_directionFloating, 0,
+            (jsize)(sizeof out_directionFloating_values / sizeof out_directionFloating_values[0]),
+            out_directionFloating_values);
+    }
+    return (jint)call_result;
+}
+
+JNIEXPORT jint JNICALL
+Java_org_openeggbert_cna_internal_generated_NativeEngineLayerRoutes_environmentProcessorGenerateBrdfLut(
+    JNIEnv* environment, jclass declaring_class, jlong processor, jint size, jint sample_count, jlongArray out_lut)
+{
+    (void)environment;
+    (void)declaring_class;
+    CNA_Handle out_lut_value = 0;
+    CNA_Result call_result = cna.environment_processor_generate_brdf_lut((CNA_EnvironmentProcessorHandle)processor, (int32_t)size, (int32_t)sample_count, &out_lut_value);
+    if (call_result == CNA_RESULT_SUCCESS || call_result == CNA_RESULT_BUFFER_TOO_SMALL) {
+        jlong out_lut_element = (jlong)out_lut_value;
+        (*environment)->SetLongArrayRegion(
+            environment, out_lut, 0, 1, &out_lut_element);
+    }
+    return (jint)call_result;
+}
+
+JNIEXPORT jint JNICALL
+Java_org_openeggbert_cna_internal_generated_NativeEngineLayerRoutes_environmentProcessorGenerateIrradiance(
+    JNIEnv* environment, jclass declaring_class, jlong processor, jlong environment_parameter, jint size, jint sample_count, jlongArray out_irradiance)
+{
+    (void)environment;
+    (void)declaring_class;
+    CNA_Handle out_irradiance_value = 0;
+    CNA_Result call_result = cna.environment_processor_generate_irradiance((CNA_EnvironmentProcessorHandle)processor, (CNA_Handle)environment_parameter, (int32_t)size, (int32_t)sample_count, &out_irradiance_value);
+    if (call_result == CNA_RESULT_SUCCESS || call_result == CNA_RESULT_BUFFER_TOO_SMALL) {
+        jlong out_irradiance_element = (jlong)out_irradiance_value;
+        (*environment)->SetLongArrayRegion(
+            environment, out_irradiance, 0, 1, &out_irradiance_element);
+    }
+    return (jint)call_result;
+}
+
+JNIEXPORT jint JNICALL
+Java_org_openeggbert_cna_internal_generated_NativeEngineLayerRoutes_environmentProcessorGeneratePrefilteredSpecular(
+    JNIEnv* environment, jclass declaring_class, jlong processor, jlong environment_parameter, jint base_size, jint mip_count, jint sample_count, jlongArray out_specular)
+{
+    (void)environment;
+    (void)declaring_class;
+    CNA_Handle out_specular_value = 0;
+    CNA_Result call_result = cna.environment_processor_generate_prefiltered_specular((CNA_EnvironmentProcessorHandle)processor, (CNA_Handle)environment_parameter, (int32_t)base_size, (int32_t)mip_count, (int32_t)sample_count, &out_specular_value);
+    if (call_result == CNA_RESULT_SUCCESS || call_result == CNA_RESULT_BUFFER_TOO_SMALL) {
+        jlong out_specular_element = (jlong)out_specular_value;
+        (*environment)->SetLongArrayRegion(
+            environment, out_specular, 0, 1, &out_specular_element);
+    }
+    return (jint)call_result;
+}
+
+JNIEXPORT jint JNICALL
+Java_org_openeggbert_cna_internal_generated_NativeEngineLayerRoutes_environmentProcessorGenerateProbe(
+    JNIEnv* environment, jclass declaring_class, jlong processor, jlong environment_parameter, jfloatArray positionFloating, jlongArray out_probe)
+{
+    (void)environment;
+    (void)declaring_class;
+    CNA_Vector3 position_value;
+    memset(&position_value, 0, sizeof position_value);
+    {
+        jfloat positionFloating_values[3];
+        (*environment)->GetFloatArrayRegion(environment, positionFloating, 0, 3, positionFloating_values);
+        position_value.x = (float)positionFloating_values[0];
+        position_value.y = (float)positionFloating_values[1];
+        position_value.z = (float)positionFloating_values[2];
+    }
+    CNA_LightProbeHandle out_probe_value = 0;
+    CNA_Result call_result = cna.environment_processor_generate_probe((CNA_EnvironmentProcessorHandle)processor, (CNA_Handle)environment_parameter, &position_value, &out_probe_value);
+    if (call_result == CNA_RESULT_SUCCESS || call_result == CNA_RESULT_BUFFER_TOO_SMALL) {
+        jlong out_probe_element = (jlong)out_probe_value;
+        (*environment)->SetLongArrayRegion(
+            environment, out_probe, 0, 1, &out_probe_element);
+    }
+    return (jint)call_result;
+}
+
+JNIEXPORT jint JNICALL
+Java_org_openeggbert_cna_internal_generated_NativeEngineLayerRoutes_environmentProcessorHammersley(
+    JNIEnv* environment, jclass declaring_class, jint index, jint count, jfloatArray out_x, jfloatArray out_y)
+{
+    (void)environment;
+    (void)declaring_class;
+    float out_x_value = 0;
+    float out_y_value = 0;
+    CNA_Result call_result = cna.environment_processor_hammersley((int32_t)index, (int32_t)count, &out_x_value, &out_y_value);
+    if (call_result == CNA_RESULT_SUCCESS || call_result == CNA_RESULT_BUFFER_TOO_SMALL) {
+        jfloat out_x_element = (jfloat)out_x_value;
+        (*environment)->SetFloatArrayRegion(
+            environment, out_x, 0, 1, &out_x_element);
+        jfloat out_y_element = (jfloat)out_y_value;
+        (*environment)->SetFloatArrayRegion(
+            environment, out_y, 0, 1, &out_y_element);
+    }
+    return (jint)call_result;
+}
+
+JNIEXPORT jint JNICALL
+Java_org_openeggbert_cna_internal_generated_NativeEngineLayerRoutes_environmentProcessorImportanceSampleGgx(
+    JNIEnv* environment, jclass declaring_class, jfloat x, jfloat y, jfloatArray normalFloating, jfloat roughness, jfloatArray out_directionFloating)
+{
+    (void)environment;
+    (void)declaring_class;
+    CNA_Vector3 normal_value;
+    memset(&normal_value, 0, sizeof normal_value);
+    {
+        jfloat normalFloating_values[3];
+        (*environment)->GetFloatArrayRegion(environment, normalFloating, 0, 3, normalFloating_values);
+        normal_value.x = (float)normalFloating_values[0];
+        normal_value.y = (float)normalFloating_values[1];
+        normal_value.z = (float)normalFloating_values[2];
+    }
+    CNA_Vector3 out_direction_value;
+    memset(&out_direction_value, 0, sizeof out_direction_value);
+    CNA_Result call_result = cna.environment_processor_importance_sample_ggx((float)x, (float)y, &normal_value, (float)roughness, &out_direction_value);
+    if (call_result == CNA_RESULT_SUCCESS || call_result == CNA_RESULT_BUFFER_TOO_SMALL) {
+        jfloat out_directionFloating_values[] = {
+            (jfloat)out_direction_value.x,
+            (jfloat)out_direction_value.y,
+            (jfloat)out_direction_value.z
+        };
+        (*environment)->SetFloatArrayRegion(environment, out_directionFloating, 0,
+            (jsize)(sizeof out_directionFloating_values / sizeof out_directionFloating_values[0]),
+            out_directionFloating_values);
+    }
+    return (jint)call_result;
+}
+
+JNIEXPORT jint JNICALL
+Java_org_openeggbert_cna_internal_generated_NativeEngineLayerRoutes_environmentProcessorMipForRoughness(
+    JNIEnv* environment, jclass declaring_class, jfloat roughness, jint mip_count, jfloatArray out_mip)
+{
+    (void)environment;
+    (void)declaring_class;
+    float out_mip_value = 0;
+    CNA_Result call_result = cna.environment_processor_mip_for_roughness((float)roughness, (int32_t)mip_count, &out_mip_value);
+    if (call_result == CNA_RESULT_SUCCESS || call_result == CNA_RESULT_BUFFER_TOO_SMALL) {
+        jfloat out_mip_element = (jfloat)out_mip_value;
+        (*environment)->SetFloatArrayRegion(
+            environment, out_mip, 0, 1, &out_mip_element);
+    }
+    return (jint)call_result;
+}
+
+JNIEXPORT jint JNICALL
+Java_org_openeggbert_cna_internal_generated_NativeEngineLayerRoutes_environmentProcessorRoughnessForMip(
+    JNIEnv* environment, jclass declaring_class, jfloat mip, jint mip_count, jfloatArray out_roughness)
+{
+    (void)environment;
+    (void)declaring_class;
+    float out_roughness_value = 0;
+    CNA_Result call_result = cna.environment_processor_roughness_for_mip((float)mip, (int32_t)mip_count, &out_roughness_value);
+    if (call_result == CNA_RESULT_SUCCESS || call_result == CNA_RESULT_BUFFER_TOO_SMALL) {
+        jfloat out_roughness_element = (jfloat)out_roughness_value;
+        (*environment)->SetFloatArrayRegion(
+            environment, out_roughness, 0, 1, &out_roughness_element);
+    }
+    return (jint)call_result;
+}
+
+JNIEXPORT jint JNICALL
 Java_org_openeggbert_cna_internal_generated_NativeEngineLayerRoutes_filmGrainPassCreate(
     JNIEnv* environment, jclass declaring_class, jlong graphics_device, jlongArray out_pass)
 {
@@ -12281,6 +12530,281 @@ Java_org_openeggbert_cna_internal_generated_NativeEngineLayerRoutes_shadowMapSiz
         (*environment)->SetIntArrayRegion(
             environment, out_size, 0, 1, &out_size_element);
     }
+    return (jint)call_result;
+}
+
+JNIEXPORT jint JNICALL
+Java_org_openeggbert_cna_internal_generated_NativeEngineLayerRoutes_skyboxComputeViewRay(
+    JNIEnv* environment, jclass declaring_class, jfloatArray viewFloating, jfloatArray projectionFloating, jfloat ndc_x, jfloat ndc_y, jfloat yaw, jfloatArray out_directionFloating)
+{
+    (void)environment;
+    (void)declaring_class;
+    CNA_Matrix view_value;
+    memset(&view_value, 0, sizeof view_value);
+    {
+        jfloat viewFloating_values[16];
+        (*environment)->GetFloatArrayRegion(environment, viewFloating, 0, 16, viewFloating_values);
+        view_value.m11 = (float)viewFloating_values[0];
+        view_value.m12 = (float)viewFloating_values[1];
+        view_value.m13 = (float)viewFloating_values[2];
+        view_value.m14 = (float)viewFloating_values[3];
+        view_value.m21 = (float)viewFloating_values[4];
+        view_value.m22 = (float)viewFloating_values[5];
+        view_value.m23 = (float)viewFloating_values[6];
+        view_value.m24 = (float)viewFloating_values[7];
+        view_value.m31 = (float)viewFloating_values[8];
+        view_value.m32 = (float)viewFloating_values[9];
+        view_value.m33 = (float)viewFloating_values[10];
+        view_value.m34 = (float)viewFloating_values[11];
+        view_value.m41 = (float)viewFloating_values[12];
+        view_value.m42 = (float)viewFloating_values[13];
+        view_value.m43 = (float)viewFloating_values[14];
+        view_value.m44 = (float)viewFloating_values[15];
+    }
+    CNA_Matrix projection_value;
+    memset(&projection_value, 0, sizeof projection_value);
+    {
+        jfloat projectionFloating_values[16];
+        (*environment)->GetFloatArrayRegion(environment, projectionFloating, 0, 16, projectionFloating_values);
+        projection_value.m11 = (float)projectionFloating_values[0];
+        projection_value.m12 = (float)projectionFloating_values[1];
+        projection_value.m13 = (float)projectionFloating_values[2];
+        projection_value.m14 = (float)projectionFloating_values[3];
+        projection_value.m21 = (float)projectionFloating_values[4];
+        projection_value.m22 = (float)projectionFloating_values[5];
+        projection_value.m23 = (float)projectionFloating_values[6];
+        projection_value.m24 = (float)projectionFloating_values[7];
+        projection_value.m31 = (float)projectionFloating_values[8];
+        projection_value.m32 = (float)projectionFloating_values[9];
+        projection_value.m33 = (float)projectionFloating_values[10];
+        projection_value.m34 = (float)projectionFloating_values[11];
+        projection_value.m41 = (float)projectionFloating_values[12];
+        projection_value.m42 = (float)projectionFloating_values[13];
+        projection_value.m43 = (float)projectionFloating_values[14];
+        projection_value.m44 = (float)projectionFloating_values[15];
+    }
+    CNA_Vector3 out_direction_value;
+    memset(&out_direction_value, 0, sizeof out_direction_value);
+    CNA_Result call_result = cna.skybox_compute_view_ray(&view_value, &projection_value, (float)ndc_x, (float)ndc_y, (float)yaw, &out_direction_value);
+    if (call_result == CNA_RESULT_SUCCESS || call_result == CNA_RESULT_BUFFER_TOO_SMALL) {
+        jfloat out_directionFloating_values[] = {
+            (jfloat)out_direction_value.x,
+            (jfloat)out_direction_value.y,
+            (jfloat)out_direction_value.z
+        };
+        (*environment)->SetFloatArrayRegion(environment, out_directionFloating, 0,
+            (jsize)(sizeof out_directionFloating_values / sizeof out_directionFloating_values[0]),
+            out_directionFloating_values);
+    }
+    return (jint)call_result;
+}
+
+JNIEXPORT jint JNICALL
+Java_org_openeggbert_cna_internal_generated_NativeEngineLayerRoutes_skyboxCreate(
+    JNIEnv* environment, jclass declaring_class, jlong graphics_device, jlong environment_parameter, jlongArray out_skybox)
+{
+    (void)environment;
+    (void)declaring_class;
+    CNA_SkyboxHandle out_skybox_value = 0;
+    CNA_Result call_result = cna.skybox_create((CNA_Handle)graphics_device, (CNA_Handle)environment_parameter, &out_skybox_value);
+    if (call_result == CNA_RESULT_SUCCESS || call_result == CNA_RESULT_BUFFER_TOO_SMALL) {
+        jlong out_skybox_element = (jlong)out_skybox_value;
+        (*environment)->SetLongArrayRegion(
+            environment, out_skybox, 0, 1, &out_skybox_element);
+    }
+    return (jint)call_result;
+}
+
+JNIEXPORT jint JNICALL
+Java_org_openeggbert_cna_internal_generated_NativeEngineLayerRoutes_skyboxDestroy(
+    JNIEnv* environment, jclass declaring_class, jlong skybox)
+{
+    (void)environment;
+    (void)declaring_class;
+    CNA_Result call_result = cna.skybox_destroy((CNA_SkyboxHandle)skybox);
+    return (jint)call_result;
+}
+
+JNIEXPORT jint JNICALL
+Java_org_openeggbert_cna_internal_generated_NativeEngineLayerRoutes_skyboxDraw(
+    JNIEnv* environment, jclass declaring_class, jlong skybox, jfloatArray viewFloating, jfloatArray projectionFloating, jint width, jint height)
+{
+    (void)environment;
+    (void)declaring_class;
+    CNA_Matrix view_value;
+    memset(&view_value, 0, sizeof view_value);
+    {
+        jfloat viewFloating_values[16];
+        (*environment)->GetFloatArrayRegion(environment, viewFloating, 0, 16, viewFloating_values);
+        view_value.m11 = (float)viewFloating_values[0];
+        view_value.m12 = (float)viewFloating_values[1];
+        view_value.m13 = (float)viewFloating_values[2];
+        view_value.m14 = (float)viewFloating_values[3];
+        view_value.m21 = (float)viewFloating_values[4];
+        view_value.m22 = (float)viewFloating_values[5];
+        view_value.m23 = (float)viewFloating_values[6];
+        view_value.m24 = (float)viewFloating_values[7];
+        view_value.m31 = (float)viewFloating_values[8];
+        view_value.m32 = (float)viewFloating_values[9];
+        view_value.m33 = (float)viewFloating_values[10];
+        view_value.m34 = (float)viewFloating_values[11];
+        view_value.m41 = (float)viewFloating_values[12];
+        view_value.m42 = (float)viewFloating_values[13];
+        view_value.m43 = (float)viewFloating_values[14];
+        view_value.m44 = (float)viewFloating_values[15];
+    }
+    CNA_Matrix projection_value;
+    memset(&projection_value, 0, sizeof projection_value);
+    {
+        jfloat projectionFloating_values[16];
+        (*environment)->GetFloatArrayRegion(environment, projectionFloating, 0, 16, projectionFloating_values);
+        projection_value.m11 = (float)projectionFloating_values[0];
+        projection_value.m12 = (float)projectionFloating_values[1];
+        projection_value.m13 = (float)projectionFloating_values[2];
+        projection_value.m14 = (float)projectionFloating_values[3];
+        projection_value.m21 = (float)projectionFloating_values[4];
+        projection_value.m22 = (float)projectionFloating_values[5];
+        projection_value.m23 = (float)projectionFloating_values[6];
+        projection_value.m24 = (float)projectionFloating_values[7];
+        projection_value.m31 = (float)projectionFloating_values[8];
+        projection_value.m32 = (float)projectionFloating_values[9];
+        projection_value.m33 = (float)projectionFloating_values[10];
+        projection_value.m34 = (float)projectionFloating_values[11];
+        projection_value.m41 = (float)projectionFloating_values[12];
+        projection_value.m42 = (float)projectionFloating_values[13];
+        projection_value.m43 = (float)projectionFloating_values[14];
+        projection_value.m44 = (float)projectionFloating_values[15];
+    }
+    CNA_Result call_result = cna.skybox_draw((CNA_SkyboxHandle)skybox, &view_value, &projection_value, (int32_t)width, (int32_t)height);
+    return (jint)call_result;
+}
+
+JNIEXPORT jint JNICALL
+Java_org_openeggbert_cna_internal_generated_NativeEngineLayerRoutes_skyboxGetIntensity(
+    JNIEnv* environment, jclass declaring_class, jlong skybox, jfloatArray out_intensity)
+{
+    (void)environment;
+    (void)declaring_class;
+    float out_intensity_value = 0;
+    CNA_Result call_result = cna.skybox_get_intensity((CNA_SkyboxHandle)skybox, &out_intensity_value);
+    if (call_result == CNA_RESULT_SUCCESS || call_result == CNA_RESULT_BUFFER_TOO_SMALL) {
+        jfloat out_intensity_element = (jfloat)out_intensity_value;
+        (*environment)->SetFloatArrayRegion(
+            environment, out_intensity, 0, 1, &out_intensity_element);
+    }
+    return (jint)call_result;
+}
+
+JNIEXPORT jint JNICALL
+Java_org_openeggbert_cna_internal_generated_NativeEngineLayerRoutes_skyboxGetTint(
+    JNIEnv* environment, jclass declaring_class, jlong skybox, jfloatArray out_tintFloating)
+{
+    (void)environment;
+    (void)declaring_class;
+    CNA_Vector3 out_tint_value;
+    memset(&out_tint_value, 0, sizeof out_tint_value);
+    CNA_Result call_result = cna.skybox_get_tint((CNA_SkyboxHandle)skybox, &out_tint_value);
+    if (call_result == CNA_RESULT_SUCCESS || call_result == CNA_RESULT_BUFFER_TOO_SMALL) {
+        jfloat out_tintFloating_values[] = {
+            (jfloat)out_tint_value.x,
+            (jfloat)out_tint_value.y,
+            (jfloat)out_tint_value.z
+        };
+        (*environment)->SetFloatArrayRegion(environment, out_tintFloating, 0,
+            (jsize)(sizeof out_tintFloating_values / sizeof out_tintFloating_values[0]),
+            out_tintFloating_values);
+    }
+    return (jint)call_result;
+}
+
+JNIEXPORT jint JNICALL
+Java_org_openeggbert_cna_internal_generated_NativeEngineLayerRoutes_skyboxGetYaw(
+    JNIEnv* environment, jclass declaring_class, jlong skybox, jfloatArray out_radians)
+{
+    (void)environment;
+    (void)declaring_class;
+    float out_radians_value = 0;
+    CNA_Result call_result = cna.skybox_get_yaw((CNA_SkyboxHandle)skybox, &out_radians_value);
+    if (call_result == CNA_RESULT_SUCCESS || call_result == CNA_RESULT_BUFFER_TOO_SMALL) {
+        jfloat out_radians_element = (jfloat)out_radians_value;
+        (*environment)->SetFloatArrayRegion(
+            environment, out_radians, 0, 1, &out_radians_element);
+    }
+    return (jint)call_result;
+}
+
+JNIEXPORT jint JNICALL
+Java_org_openeggbert_cna_internal_generated_NativeEngineLayerRoutes_skyboxIsSupported(
+    JNIEnv* environment, jclass declaring_class, jlong skybox, jbooleanArray out_supported)
+{
+    (void)environment;
+    (void)declaring_class;
+    CNA_Bool out_supported_value = 0;
+    CNA_Result call_result = cna.skybox_is_supported((CNA_SkyboxHandle)skybox, &out_supported_value);
+    if (call_result == CNA_RESULT_SUCCESS || call_result == CNA_RESULT_BUFFER_TOO_SMALL) {
+        jboolean out_supported_element = (jboolean)out_supported_value;
+        (*environment)->SetBooleanArrayRegion(
+            environment, out_supported, 0, 1, &out_supported_element);
+    }
+    return (jint)call_result;
+}
+
+JNIEXPORT jint JNICALL
+Java_org_openeggbert_cna_internal_generated_NativeEngineLayerRoutes_skyboxSetEnvironment(
+    JNIEnv* environment, jclass declaring_class, jlong skybox, jlong environment_parameter)
+{
+    (void)environment;
+    (void)declaring_class;
+    CNA_Result call_result = cna.skybox_set_environment((CNA_SkyboxHandle)skybox, (CNA_Handle)environment_parameter);
+    return (jint)call_result;
+}
+
+JNIEXPORT jint JNICALL
+Java_org_openeggbert_cna_internal_generated_NativeEngineLayerRoutes_skyboxSetIntensity(
+    JNIEnv* environment, jclass declaring_class, jlong skybox, jfloat intensity)
+{
+    (void)environment;
+    (void)declaring_class;
+    CNA_Result call_result = cna.skybox_set_intensity((CNA_SkyboxHandle)skybox, (float)intensity);
+    return (jint)call_result;
+}
+
+JNIEXPORT jint JNICALL
+Java_org_openeggbert_cna_internal_generated_NativeEngineLayerRoutes_skyboxSetOwnedEnvironment(
+    JNIEnv* environment, jclass declaring_class, jlong skybox, jlong environment_parameter)
+{
+    (void)environment;
+    (void)declaring_class;
+    CNA_Result call_result = cna.skybox_set_owned_environment((CNA_SkyboxHandle)skybox, (CNA_Handle)environment_parameter);
+    return (jint)call_result;
+}
+
+JNIEXPORT jint JNICALL
+Java_org_openeggbert_cna_internal_generated_NativeEngineLayerRoutes_skyboxSetTint(
+    JNIEnv* environment, jclass declaring_class, jlong skybox, jfloatArray tintFloating)
+{
+    (void)environment;
+    (void)declaring_class;
+    CNA_Vector3 tint_value;
+    memset(&tint_value, 0, sizeof tint_value);
+    {
+        jfloat tintFloating_values[3];
+        (*environment)->GetFloatArrayRegion(environment, tintFloating, 0, 3, tintFloating_values);
+        tint_value.x = (float)tintFloating_values[0];
+        tint_value.y = (float)tintFloating_values[1];
+        tint_value.z = (float)tintFloating_values[2];
+    }
+    CNA_Result call_result = cna.skybox_set_tint((CNA_SkyboxHandle)skybox, &tint_value);
+    return (jint)call_result;
+}
+
+JNIEXPORT jint JNICALL
+Java_org_openeggbert_cna_internal_generated_NativeEngineLayerRoutes_skyboxSetYaw(
+    JNIEnv* environment, jclass declaring_class, jlong skybox, jfloat radians)
+{
+    (void)environment;
+    (void)declaring_class;
+    CNA_Result call_result = cna.skybox_set_yaw((CNA_SkyboxHandle)skybox, (float)radians);
     return (jint)call_result;
 }
 

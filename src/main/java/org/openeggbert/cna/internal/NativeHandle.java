@@ -41,6 +41,16 @@ class NativeHandle implements AutoCloseable {
         return ownership;
     }
 
+    /**
+     * Forgets the handle without releasing it.
+     *
+     * <p>For a native object that has been handed to something that now owns it: releasing it
+     * here as well would be a double free, and keeping it would let a later close become one.
+     */
+    synchronized void surrender() {
+        value = 0L;
+    }
+
     @Override
     public synchronized void close() {
         if (value == 0L) {

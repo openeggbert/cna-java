@@ -178,7 +178,7 @@ public final class CubeShadowMap implements AutoCloseable {
         if (texture[0] == 0L) {
             return null;
         }
-        return NativeBindings.createBorrowedTextureCube(graphicsDevice, texture[0]);
+        return NativeBindings.adoptTextureCube(graphicsDevice, texture[0]);
     }
 
     /**

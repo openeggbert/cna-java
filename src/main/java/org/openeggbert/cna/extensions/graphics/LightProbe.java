@@ -330,6 +330,11 @@ public final class LightProbe implements AutoCloseable {
                 NativeEngineLayerRoutes.lightProbeExtDestroy(handle));
     }
 
+    /** Adopts a probe the engine layer created and handed over. */
+    static LightProbe adopt(long handle) {
+        return new LightProbe(handle);
+    }
+
     /** The native handle, for the volume that copies into or out of a probe. */
     long handle() {
         return open();

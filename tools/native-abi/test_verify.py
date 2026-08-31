@@ -428,6 +428,20 @@ def test_generator(live: dict) -> None:
               for entry in single["steps"]),
           "a single structure whose documentation names no count stays a single structure")
 
+    # The adapter's own JNI parameters are called `environment` and `declaring_class`, and CNA
+    # has routes whose parameter is called `environment` too. Two parameters of one C function
+    # cannot share a name, and the first version of this generator emitted exactly that -- the
+    # whole adapter stopped compiling the moment the skybox family was bound.
+    skybox = plan("cna_skybox_set_environment")
+    emitted = generator_tool.render_c("Probe", [skybox])
+    check("jlong environment_parameter" in emitted,
+          "a CNA parameter that collides with the adapter's own is renamed in C")
+    check("JNIEnv* environment," in emitted,
+          "and the adapter keeps its own name")
+    _, parameters = generator_tool.java_signature(skybox)
+    check(any(value == "long environment" for value in parameters),
+          "the Java declaration is untouched, because nothing a caller sees changed")
+
     # An input struct must not be written back over the caller's data.
     haptic = plan("cna_haptic_device_get_is_effect_supported")
     effect = next(step for step in haptic["steps"] if step["shape"] == "struct")

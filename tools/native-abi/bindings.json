@@ -9246,6 +9246,158 @@
       ]
     },
     {
+      "name": "cna_environment_processor_convert_equirectangular",
+      "header": "engine_layer.h",
+      "ownership": "borrows the processor and the caller's input; returns a new object the caller owns",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_EnvironmentProcessorHandle",
+        "CNA_Handle",
+        "int32_t",
+        "CNA_Handle*"
+      ]
+    },
+    {
+      "name": "cna_environment_processor_create",
+      "header": "engine_layer.h",
+      "ownership": "borrows the graphics device; returns an owned processor handle",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_Handle",
+        "CNA_EnvironmentProcessorHandle*"
+      ]
+    },
+    {
+      "name": "cna_environment_processor_destroy",
+      "header": "engine_layer.h",
+      "ownership": "releases the owned processor handle; what it generated is the caller's and is untouched",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_EnvironmentProcessorHandle"
+      ]
+    },
+    {
+      "name": "cna_environment_processor_direction_to_equirectangular",
+      "header": "engine_layer.h",
+      "ownership": "no handle; a pure function of its arguments",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "const CNA_Vector3*",
+        "float*",
+        "float*"
+      ]
+    },
+    {
+      "name": "cna_environment_processor_face_direction",
+      "header": "engine_layer.h",
+      "ownership": "no handle; a pure function of its arguments",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "int32_t",
+        "float",
+        "float",
+        "CNA_Vector3*"
+      ]
+    },
+    {
+      "name": "cna_environment_processor_generate_brdf_lut",
+      "header": "engine_layer.h",
+      "ownership": "borrows the processor and the caller's input; returns a new object the caller owns",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_EnvironmentProcessorHandle",
+        "int32_t",
+        "int32_t",
+        "CNA_Handle*"
+      ]
+    },
+    {
+      "name": "cna_environment_processor_generate_irradiance",
+      "header": "engine_layer.h",
+      "ownership": "borrows the processor and the caller's input; returns a new object the caller owns",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_EnvironmentProcessorHandle",
+        "CNA_Handle",
+        "int32_t",
+        "int32_t",
+        "CNA_Handle*"
+      ]
+    },
+    {
+      "name": "cna_environment_processor_generate_prefiltered_specular",
+      "header": "engine_layer.h",
+      "ownership": "borrows the processor and the caller's input; returns a new object the caller owns",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_EnvironmentProcessorHandle",
+        "CNA_Handle",
+        "int32_t",
+        "int32_t",
+        "int32_t",
+        "CNA_Handle*"
+      ]
+    },
+    {
+      "name": "cna_environment_processor_generate_probe",
+      "header": "engine_layer.h",
+      "ownership": "borrows the processor and the caller's input; returns a new object the caller owns",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_EnvironmentProcessorHandle",
+        "CNA_Handle",
+        "const CNA_Vector3*",
+        "CNA_LightProbeHandle*"
+      ]
+    },
+    {
+      "name": "cna_environment_processor_hammersley",
+      "header": "engine_layer.h",
+      "ownership": "no handle; a pure function of its arguments",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "int32_t",
+        "int32_t",
+        "float*",
+        "float*"
+      ]
+    },
+    {
+      "name": "cna_environment_processor_importance_sample_ggx",
+      "header": "engine_layer.h",
+      "ownership": "no handle; a pure function of its arguments",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "float",
+        "float",
+        "const CNA_Vector3*",
+        "float",
+        "CNA_Vector3*"
+      ]
+    },
+    {
+      "name": "cna_environment_processor_mip_for_roughness",
+      "header": "engine_layer.h",
+      "ownership": "no handle; a pure function of its arguments",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "float",
+        "int32_t",
+        "float*"
+      ]
+    },
+    {
+      "name": "cna_environment_processor_roughness_for_mip",
+      "header": "engine_layer.h",
+      "ownership": "no handle; a pure function of its arguments",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "float",
+        "int32_t",
+        "float*"
+      ]
+    },
+    {
       "name": "cna_error_copy_last_message",
       "header": "core.h",
       "ownership": "caller buffer",
@@ -20242,6 +20394,143 @@
       "parameters": [
         "CNA_EffectHandle",
         "int32_t"
+      ]
+    },
+    {
+      "name": "cna_skybox_compute_view_ray",
+      "header": "engine_layer.h",
+      "ownership": "no handle; a pure function of its arguments",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "const CNA_Matrix*",
+        "const CNA_Matrix*",
+        "float",
+        "float",
+        "float",
+        "CNA_Vector3*"
+      ]
+    },
+    {
+      "name": "cna_skybox_create",
+      "header": "engine_layer.h",
+      "ownership": "borrows the graphics device and the caller's environment; returns an owned skybox handle",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_Handle",
+        "CNA_Handle",
+        "CNA_SkyboxHandle*"
+      ]
+    },
+    {
+      "name": "cna_skybox_destroy",
+      "header": "engine_layer.h",
+      "ownership": "releases the owned skybox handle, and the environment only if it was handed over",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_SkyboxHandle"
+      ]
+    },
+    {
+      "name": "cna_skybox_draw",
+      "header": "engine_layer.h",
+      "ownership": "borrows the skybox",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_SkyboxHandle",
+        "const CNA_Matrix*",
+        "const CNA_Matrix*",
+        "int32_t",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "cna_skybox_get_intensity",
+      "header": "engine_layer.h",
+      "ownership": "borrows the skybox",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_SkyboxHandle",
+        "float*"
+      ]
+    },
+    {
+      "name": "cna_skybox_get_tint",
+      "header": "engine_layer.h",
+      "ownership": "borrows the skybox",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_SkyboxHandle",
+        "CNA_Vector3*"
+      ]
+    },
+    {
+      "name": "cna_skybox_get_yaw",
+      "header": "engine_layer.h",
+      "ownership": "borrows the skybox",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_SkyboxHandle",
+        "float*"
+      ]
+    },
+    {
+      "name": "cna_skybox_is_supported",
+      "header": "engine_layer.h",
+      "ownership": "borrows the skybox",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_SkyboxHandle",
+        "CNA_Bool*"
+      ]
+    },
+    {
+      "name": "cna_skybox_set_environment",
+      "header": "engine_layer.h",
+      "ownership": "borrows the caller's environment; the skybox never owns it",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_SkyboxHandle",
+        "CNA_Handle"
+      ]
+    },
+    {
+      "name": "cna_skybox_set_intensity",
+      "header": "engine_layer.h",
+      "ownership": "borrows the skybox",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_SkyboxHandle",
+        "float"
+      ]
+    },
+    {
+      "name": "cna_skybox_set_owned_environment",
+      "header": "engine_layer.h",
+      "ownership": "consumes the caller's environment handle; the skybox owns it from then on",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_SkyboxHandle",
+        "CNA_Handle"
+      ]
+    },
+    {
+      "name": "cna_skybox_set_tint",
+      "header": "engine_layer.h",
+      "ownership": "borrows the skybox",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_SkyboxHandle",
+        "const CNA_Vector3*"
+      ]
+    },
+    {
+      "name": "cna_skybox_set_yaw",
+      "header": "engine_layer.h",
+      "ownership": "borrows the skybox",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_SkyboxHandle",
+        "float"
       ]
     },
     {

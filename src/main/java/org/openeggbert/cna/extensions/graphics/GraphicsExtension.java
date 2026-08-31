@@ -84,8 +84,14 @@ public final class GraphicsExtension {
             return;
         }
         if (result == RESULT_NOT_SUPPORTED) {
+            // CNA answers NOT_SUPPORTED to two different questions -- a build compiled without
+            // the extended layer, and a renderer that has the layer but cannot do this one
+            // thing -- and does not separate them. Naming only the first was wrong: the
+            // environment processor constructs happily on this renderer and then refuses to
+            // convert a panorama, which is the second.
             throw new ExtensionNotSupportedException(operation
-                    + " needs CNA's extended graphics layer, which this build does not contain");
+                    + " is not available: either this build has no extended graphics layer, or"
+                    + " this renderer cannot do it");
         }
         CnaNativeException failure = NativeBindings.failure(operation, result);
         if (result == RESULT_INVALID_ARGUMENT) {

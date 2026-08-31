@@ -905,16 +905,20 @@ public final class NativeBindings {
     }
 
     /**
-     * Adopts a borrow of an engine-layer cube texture as an owning Java facade.
+     * Adopts a cube-texture handle as an owning Java facade.
      *
-     * <p>The cube form of {@link #createBorrowedRenderTarget}: the borrow is given back with
-     * {@code cna_texturecube_destroy}, which does not dispose the map's own cube.
+     * <p>The cube form of {@link #createBorrowedRenderTarget}, and it serves both shapes the
+     * engine layer produces, because both are given back the same way: a <em>borrow</em> of a
+     * cube shadow map, which {@code cna_texturecube_destroy} returns without disposing the map's
+     * own cube, and a cube map the environment processor <em>created</em>, which the same call
+     * destroys outright. Either way disposing the facade is the correct and only thing to do
+     * with it.
      *
      * @param graphicsDevice the device the cube belongs to
-     * @param nativeTexture the borrowed handle the engine layer just returned
+     * @param nativeTexture the handle the engine layer just returned
      * @return the facade, which the caller disposes
      */
-    public static TextureCube createBorrowedTextureCube(
+    public static TextureCube adoptTextureCube(
             GraphicsDevice graphicsDevice, long nativeTexture) {
         Objects.requireNonNull(graphicsDevice, "graphicsDevice");
         if (nativeTexture == 0L) {
@@ -929,6 +933,62 @@ public final class NativeBindings {
         } catch (RuntimeException failure) {
             closeAfterFailedFacade(texture, failure);
             throw failure;
+        }
+    }
+
+    /**
+     * Adopts a two-dimensional texture handle as an owning Java facade.
+     *
+     * <p>For a texture the engine layer <em>created</em> and handed over -- a generated BRDF
+     * lookup, say -- rather than one it lent. Released with {@code cna_texture2d_destroy}.
+     *
+     * @param graphicsDevice the device the texture belongs to
+     * @param nativeTexture the handle the engine layer just returned
+     * @return the facade, which the caller disposes
+     */
+    public static Texture2D adoptTexture2D(GraphicsDevice graphicsDevice, long nativeTexture) {
+        Objects.requireNonNull(graphicsDevice, "graphicsDevice");
+        if (nativeTexture == 0L) {
+            throw new IllegalArgumentException("nativeTexture");
+        }
+        Texture2D texture = FacadeFactory.createUninitializedTexture2D(graphicsDevice);
+        registerResource(deviceGame(graphicsDevice), texture, nativeTexture,
+                NativeBindings::destroyTexture2D);
+        try {
+            FacadeFactory.initializeTexture2D(texture, textureInfoOrClose(texture));
+            return texture;
+        } catch (RuntimeException failure) {
+            closeAfterFailedFacade(texture, failure);
+            throw failure;
+        }
+    }
+
+    /**
+     * Gives up ownership of a resource's native handle without releasing it.
+     *
+     * <p>For the one shape CNA has where a call <em>consumes</em> a handle: after a successful
+     * transfer the native object belongs to whatever took it, and the Java facade must stop
+     * being its owner or the next {@code Dispose} is a double free. The facade is unregistered
+     * and behaves as closed; the native object lives on under its new owner.
+     *
+     * <p>Called only after the transfer has succeeded. A transfer that failed leaves the Java
+     * object owning what it always owned, which is what makes the failure recoverable.
+     *
+     * @param resource the facade to unregister
+     */
+    public static void surrenderResource(GraphicsResource resource) {
+        Objects.requireNonNull(resource, "resource");
+        NativeResourceHandle handle;
+        synchronized (GAMES) {
+            handle = RESOURCES.remove(resource);
+            Game owner = RESOURCE_OWNERS.remove(resource);
+            List<GraphicsResource> children = GAME_RESOURCES.get(owner);
+            if (children != null) {
+                children.remove(resource);
+            }
+        }
+        if (handle != null) {
+            handle.surrender();
         }
     }
 

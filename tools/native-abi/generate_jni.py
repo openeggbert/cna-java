@@ -61,6 +61,11 @@ JAVA_OF_JNI = {"jbyte": "byte", "jshort": "short", "jint": "int", "jlong": "long
                "jfloat": "float", "jdouble": "double", "jboolean": "boolean"}
 
 
+# The names the generated JNI adapter gives its own two parameters. A CNA parameter that shares
+# one of them would be a duplicate declaration in C, so it is renamed on the way in.
+ADAPTER_RESERVED_NAMES = frozenset({"environment", "declaring_class"})
+
+
 class Unsupported(Exception):
     pass
 
@@ -247,6 +252,17 @@ def plan(route: dict, live: dict) -> dict:
         type_name, pointers = bare(raw)
         constant = raw.startswith("const ")
         name = parameter["name"] or f"argument{index}"
+        if name in ADAPTER_RESERVED_NAMES:
+            # The adapter's own JNI parameters are called `environment` and `declaring_class`,
+            # and CNA has a route whose parameter is called `environment` too. Two parameters of
+            # one function cannot share a name, so the CNA one is suffixed here -- in the C
+            # adapter only. The Java declaration derives its own name separately and is
+            # untouched, so nothing a caller sees changes.
+            name = f"{name}_parameter"
+            parameter = dict(parameter, name=name)
+            parameters = list(parameters)
+            parameters[index] = parameter
+            following = parameters[index + 1] if index + 1 < len(parameters) else None
         following = parameters[index + 1] if index + 1 < len(parameters) else None
 
         if (route.get("nullCallback") and following is not None
@@ -402,7 +418,14 @@ def plan(route: dict, live: dict) -> dict:
 
 
 def java_name(name: str) -> str:
-    """Convert a C parameter name to the Java spelling used in generated declarations."""
+    """Convert a C parameter name to the Java spelling used in generated declarations.
+
+    A parameter renamed to avoid colliding with the adapter's own C parameters gets
+    its CNA name back here: the collision is a C one and Java has none, so a Java
+    declaration should read the way the header does.
+    """
+    if name.endswith("_parameter") and name[: -len("_parameter")] in ADAPTER_RESERVED_NAMES:
+        name = name[: -len("_parameter")]
     pieces = name.split("_")
     return pieces[0] + "".join(piece[:1].upper() + piece[1:] for piece in pieces[1:])
 

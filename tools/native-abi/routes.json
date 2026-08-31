@@ -4523,6 +4523,58 @@
         "symbol": "cna_engine_layer_get_version"
       },
       {
+        "java": "environmentProcessorConvertEquirectangular",
+        "symbol": "cna_environment_processor_convert_equirectangular"
+      },
+      {
+        "java": "environmentProcessorCreate",
+        "symbol": "cna_environment_processor_create"
+      },
+      {
+        "java": "environmentProcessorDestroy",
+        "symbol": "cna_environment_processor_destroy"
+      },
+      {
+        "java": "environmentProcessorDirectionToEquirectangular",
+        "symbol": "cna_environment_processor_direction_to_equirectangular"
+      },
+      {
+        "java": "environmentProcessorFaceDirection",
+        "symbol": "cna_environment_processor_face_direction"
+      },
+      {
+        "java": "environmentProcessorGenerateBrdfLut",
+        "symbol": "cna_environment_processor_generate_brdf_lut"
+      },
+      {
+        "java": "environmentProcessorGenerateIrradiance",
+        "symbol": "cna_environment_processor_generate_irradiance"
+      },
+      {
+        "java": "environmentProcessorGeneratePrefilteredSpecular",
+        "symbol": "cna_environment_processor_generate_prefiltered_specular"
+      },
+      {
+        "java": "environmentProcessorGenerateProbe",
+        "symbol": "cna_environment_processor_generate_probe"
+      },
+      {
+        "java": "environmentProcessorHammersley",
+        "symbol": "cna_environment_processor_hammersley"
+      },
+      {
+        "java": "environmentProcessorImportanceSampleGgx",
+        "symbol": "cna_environment_processor_importance_sample_ggx"
+      },
+      {
+        "java": "environmentProcessorMipForRoughness",
+        "symbol": "cna_environment_processor_mip_for_roughness"
+      },
+      {
+        "java": "environmentProcessorRoughnessForMip",
+        "symbol": "cna_environment_processor_roughness_for_mip"
+      },
+      {
         "java": "filmGrainPassCreate",
         "symbol": "cna_film_grain_pass_create"
       },
@@ -5621,6 +5673,58 @@
       {
         "java": "shadowMapSizeForQuality",
         "symbol": "cna_shadow_map_size_for_quality"
+      },
+      {
+        "java": "skyboxComputeViewRay",
+        "symbol": "cna_skybox_compute_view_ray"
+      },
+      {
+        "java": "skyboxCreate",
+        "symbol": "cna_skybox_create"
+      },
+      {
+        "java": "skyboxDestroy",
+        "symbol": "cna_skybox_destroy"
+      },
+      {
+        "java": "skyboxDraw",
+        "symbol": "cna_skybox_draw"
+      },
+      {
+        "java": "skyboxGetIntensity",
+        "symbol": "cna_skybox_get_intensity"
+      },
+      {
+        "java": "skyboxGetTint",
+        "symbol": "cna_skybox_get_tint"
+      },
+      {
+        "java": "skyboxGetYaw",
+        "symbol": "cna_skybox_get_yaw"
+      },
+      {
+        "java": "skyboxIsSupported",
+        "symbol": "cna_skybox_is_supported"
+      },
+      {
+        "java": "skyboxSetEnvironment",
+        "symbol": "cna_skybox_set_environment"
+      },
+      {
+        "java": "skyboxSetIntensity",
+        "symbol": "cna_skybox_set_intensity"
+      },
+      {
+        "java": "skyboxSetOwnedEnvironment",
+        "symbol": "cna_skybox_set_owned_environment"
+      },
+      {
+        "java": "skyboxSetTint",
+        "symbol": "cna_skybox_set_tint"
+      },
+      {
+        "java": "skyboxSetYaw",
+        "symbol": "cna_skybox_set_yaw"
       },
       {
         "java": "spatialUpscalePassCreate",

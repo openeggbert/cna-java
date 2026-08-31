@@ -2961,6 +2961,106 @@ public final class NativeEngineLayerRoutes {
     public static native int engineLayerGetVersion(int[] outVersion);
 
     /**
+     * cna_environment_processor_convert_equirectangular (engine_layer.h).
+     */
+    public static native int environmentProcessorConvertEquirectangular(long processor, long panorama, int faceSize, long[] outEnvironment);
+
+    /**
+     * cna_environment_processor_create (engine_layer.h).
+     */
+    public static native int environmentProcessorCreate(long graphicsDevice, long[] outProcessor);
+
+    /**
+     * cna_environment_processor_destroy (engine_layer.h).
+     */
+    public static native int environmentProcessorDestroy(long processor);
+
+    /**
+     * cna_environment_processor_direction_to_equirectangular (engine_layer.h).
+     *
+     * <p>directionFloating carries CNA_Vector3 in this order:
+     * <ol start="0">
+     *   <li>{@code x} (float)</li>
+     *   <li>{@code y} (float)</li>
+     *   <li>{@code z} (float)</li>
+     * </ol>
+     */
+    public static native int environmentProcessorDirectionToEquirectangular(float[] directionFloating, float[] outU, float[] outV);
+
+    /**
+     * cna_environment_processor_face_direction (engine_layer.h).
+     *
+     * <p>outDirectionFloating carries CNA_Vector3 in this order:
+     * <ol start="0">
+     *   <li>{@code x} (float)</li>
+     *   <li>{@code y} (float)</li>
+     *   <li>{@code z} (float)</li>
+     * </ol>
+     */
+    public static native int environmentProcessorFaceDirection(int face, float u, float v, float[] outDirectionFloating);
+
+    /**
+     * cna_environment_processor_generate_brdf_lut (engine_layer.h).
+     */
+    public static native int environmentProcessorGenerateBrdfLut(long processor, int size, int sampleCount, long[] outLut);
+
+    /**
+     * cna_environment_processor_generate_irradiance (engine_layer.h).
+     */
+    public static native int environmentProcessorGenerateIrradiance(long processor, long environment, int size, int sampleCount, long[] outIrradiance);
+
+    /**
+     * cna_environment_processor_generate_prefiltered_specular (engine_layer.h).
+     */
+    public static native int environmentProcessorGeneratePrefilteredSpecular(long processor, long environment, int baseSize, int mipCount, int sampleCount, long[] outSpecular);
+
+    /**
+     * cna_environment_processor_generate_probe (engine_layer.h).
+     *
+     * <p>positionFloating carries CNA_Vector3 in this order:
+     * <ol start="0">
+     *   <li>{@code x} (float)</li>
+     *   <li>{@code y} (float)</li>
+     *   <li>{@code z} (float)</li>
+     * </ol>
+     */
+    public static native int environmentProcessorGenerateProbe(long processor, long environment, float[] positionFloating, long[] outProbe);
+
+    /**
+     * cna_environment_processor_hammersley (engine_layer.h).
+     */
+    public static native int environmentProcessorHammersley(int index, int count, float[] outX, float[] outY);
+
+    /**
+     * cna_environment_processor_importance_sample_ggx (engine_layer.h).
+     *
+     * <p>normalFloating carries CNA_Vector3 in this order:
+     * <ol start="0">
+     *   <li>{@code x} (float)</li>
+     *   <li>{@code y} (float)</li>
+     *   <li>{@code z} (float)</li>
+     * </ol>
+     *
+     * <p>outDirectionFloating carries CNA_Vector3 in this order:
+     * <ol start="0">
+     *   <li>{@code x} (float)</li>
+     *   <li>{@code y} (float)</li>
+     *   <li>{@code z} (float)</li>
+     * </ol>
+     */
+    public static native int environmentProcessorImportanceSampleGgx(float x, float y, float[] normalFloating, float roughness, float[] outDirectionFloating);
+
+    /**
+     * cna_environment_processor_mip_for_roughness (engine_layer.h).
+     */
+    public static native int environmentProcessorMipForRoughness(float roughness, int mipCount, float[] outMip);
+
+    /**
+     * cna_environment_processor_roughness_for_mip (engine_layer.h).
+     */
+    public static native int environmentProcessorRoughnessForMip(float mip, int mipCount, float[] outRoughness);
+
+    /**
      * cna_film_grain_pass_create (engine_layer.h).
      */
     public static native int filmGrainPassCreate(long graphicsDevice, long[] outPass);
@@ -5502,6 +5602,172 @@ public final class NativeEngineLayerRoutes {
      * cna_shadow_map_size_for_quality (engine_layer.h).
      */
     public static native int shadowMapSizeForQuality(int quality, int[] outSize);
+
+    /**
+     * cna_skybox_compute_view_ray (engine_layer.h).
+     *
+     * <p>viewFloating carries CNA_Matrix in this order:
+     * <ol start="0">
+     *   <li>{@code m11} (float)</li>
+     *   <li>{@code m12} (float)</li>
+     *   <li>{@code m13} (float)</li>
+     *   <li>{@code m14} (float)</li>
+     *   <li>{@code m21} (float)</li>
+     *   <li>{@code m22} (float)</li>
+     *   <li>{@code m23} (float)</li>
+     *   <li>{@code m24} (float)</li>
+     *   <li>{@code m31} (float)</li>
+     *   <li>{@code m32} (float)</li>
+     *   <li>{@code m33} (float)</li>
+     *   <li>{@code m34} (float)</li>
+     *   <li>{@code m41} (float)</li>
+     *   <li>{@code m42} (float)</li>
+     *   <li>{@code m43} (float)</li>
+     *   <li>{@code m44} (float)</li>
+     * </ol>
+     *
+     * <p>projectionFloating carries CNA_Matrix in this order:
+     * <ol start="0">
+     *   <li>{@code m11} (float)</li>
+     *   <li>{@code m12} (float)</li>
+     *   <li>{@code m13} (float)</li>
+     *   <li>{@code m14} (float)</li>
+     *   <li>{@code m21} (float)</li>
+     *   <li>{@code m22} (float)</li>
+     *   <li>{@code m23} (float)</li>
+     *   <li>{@code m24} (float)</li>
+     *   <li>{@code m31} (float)</li>
+     *   <li>{@code m32} (float)</li>
+     *   <li>{@code m33} (float)</li>
+     *   <li>{@code m34} (float)</li>
+     *   <li>{@code m41} (float)</li>
+     *   <li>{@code m42} (float)</li>
+     *   <li>{@code m43} (float)</li>
+     *   <li>{@code m44} (float)</li>
+     * </ol>
+     *
+     * <p>outDirectionFloating carries CNA_Vector3 in this order:
+     * <ol start="0">
+     *   <li>{@code x} (float)</li>
+     *   <li>{@code y} (float)</li>
+     *   <li>{@code z} (float)</li>
+     * </ol>
+     */
+    public static native int skyboxComputeViewRay(float[] viewFloating, float[] projectionFloating, float ndcX, float ndcY, float yaw, float[] outDirectionFloating);
+
+    /**
+     * cna_skybox_create (engine_layer.h).
+     */
+    public static native int skyboxCreate(long graphicsDevice, long environment, long[] outSkybox);
+
+    /**
+     * cna_skybox_destroy (engine_layer.h).
+     */
+    public static native int skyboxDestroy(long skybox);
+
+    /**
+     * cna_skybox_draw (engine_layer.h).
+     *
+     * <p>viewFloating carries CNA_Matrix in this order:
+     * <ol start="0">
+     *   <li>{@code m11} (float)</li>
+     *   <li>{@code m12} (float)</li>
+     *   <li>{@code m13} (float)</li>
+     *   <li>{@code m14} (float)</li>
+     *   <li>{@code m21} (float)</li>
+     *   <li>{@code m22} (float)</li>
+     *   <li>{@code m23} (float)</li>
+     *   <li>{@code m24} (float)</li>
+     *   <li>{@code m31} (float)</li>
+     *   <li>{@code m32} (float)</li>
+     *   <li>{@code m33} (float)</li>
+     *   <li>{@code m34} (float)</li>
+     *   <li>{@code m41} (float)</li>
+     *   <li>{@code m42} (float)</li>
+     *   <li>{@code m43} (float)</li>
+     *   <li>{@code m44} (float)</li>
+     * </ol>
+     *
+     * <p>projectionFloating carries CNA_Matrix in this order:
+     * <ol start="0">
+     *   <li>{@code m11} (float)</li>
+     *   <li>{@code m12} (float)</li>
+     *   <li>{@code m13} (float)</li>
+     *   <li>{@code m14} (float)</li>
+     *   <li>{@code m21} (float)</li>
+     *   <li>{@code m22} (float)</li>
+     *   <li>{@code m23} (float)</li>
+     *   <li>{@code m24} (float)</li>
+     *   <li>{@code m31} (float)</li>
+     *   <li>{@code m32} (float)</li>
+     *   <li>{@code m33} (float)</li>
+     *   <li>{@code m34} (float)</li>
+     *   <li>{@code m41} (float)</li>
+     *   <li>{@code m42} (float)</li>
+     *   <li>{@code m43} (float)</li>
+     *   <li>{@code m44} (float)</li>
+     * </ol>
+     */
+    public static native int skyboxDraw(long skybox, float[] viewFloating, float[] projectionFloating, int width, int height);
+
+    /**
+     * cna_skybox_get_intensity (engine_layer.h).
+     */
+    public static native int skyboxGetIntensity(long skybox, float[] outIntensity);
+
+    /**
+     * cna_skybox_get_tint (engine_layer.h).
+     *
+     * <p>outTintFloating carries CNA_Vector3 in this order:
+     * <ol start="0">
+     *   <li>{@code x} (float)</li>
+     *   <li>{@code y} (float)</li>
+     *   <li>{@code z} (float)</li>
+     * </ol>
+     */
+    public static native int skyboxGetTint(long skybox, float[] outTintFloating);
+
+    /**
+     * cna_skybox_get_yaw (engine_layer.h).
+     */
+    public static native int skyboxGetYaw(long skybox, float[] outRadians);
+
+    /**
+     * cna_skybox_is_supported (engine_layer.h).
+     */
+    public static native int skyboxIsSupported(long skybox, boolean[] outSupported);
+
+    /**
+     * cna_skybox_set_environment (engine_layer.h).
+     */
+    public static native int skyboxSetEnvironment(long skybox, long environment);
+
+    /**
+     * cna_skybox_set_intensity (engine_layer.h).
+     */
+    public static native int skyboxSetIntensity(long skybox, float intensity);
+
+    /**
+     * cna_skybox_set_owned_environment (engine_layer.h).
+     */
+    public static native int skyboxSetOwnedEnvironment(long skybox, long environment);
+
+    /**
+     * cna_skybox_set_tint (engine_layer.h).
+     *
+     * <p>tintFloating carries CNA_Vector3 in this order:
+     * <ol start="0">
+     *   <li>{@code x} (float)</li>
+     *   <li>{@code y} (float)</li>
+     *   <li>{@code z} (float)</li>
+     * </ol>
+     */
+    public static native int skyboxSetTint(long skybox, float[] tintFloating);
+
+    /**
+     * cna_skybox_set_yaw (engine_layer.h).
+     */
+    public static native int skyboxSetYaw(long skybox, float radians);
 
     /**
      * cna_spatial_upscale_pass_create (engine_layer.h).
