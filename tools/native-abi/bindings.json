@@ -908,6 +908,127 @@
       ]
     },
     {
+      "name": "cna_animation_player_copy_bone_transforms",
+      "header": "models.h",
+      "ownership": "borrows player; copies into the caller buffer",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_AnimationPlayerHandle",
+        "CNA_Matrix*",
+        "uint64_t",
+        "uint64_t*"
+      ]
+    },
+    {
+      "name": "cna_animation_player_copy_current_clip_name",
+      "header": "models.h",
+      "ownership": "borrows player; copies into the caller buffer",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_AnimationPlayerHandle",
+        "char*",
+        "uint64_t",
+        "uint64_t*"
+      ]
+    },
+    {
+      "name": "cna_animation_player_copy_skin_transforms",
+      "header": "models.h",
+      "ownership": "borrows player; copies into the caller buffer",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_AnimationPlayerHandle",
+        "CNA_Matrix*",
+        "uint64_t",
+        "uint64_t*"
+      ]
+    },
+    {
+      "name": "cna_animation_player_copy_world_transforms",
+      "header": "models.h",
+      "ownership": "borrows player; copies into the caller buffer",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_AnimationPlayerHandle",
+        "CNA_Matrix*",
+        "uint64_t",
+        "uint64_t*"
+      ]
+    },
+    {
+      "name": "cna_animation_player_create",
+      "header": "models.h",
+      "ownership": "borrows skinning data, which the player retains; returns an owned player handle",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_SkinningDataHandle",
+        "CNA_AnimationPlayerHandle*"
+      ]
+    },
+    {
+      "name": "cna_animation_player_destroy",
+      "header": "models.h",
+      "ownership": "destroys an owned player handle",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_AnimationPlayerHandle"
+      ]
+    },
+    {
+      "name": "cna_animation_player_get_current_clip_info",
+      "header": "models.h",
+      "ownership": "borrows player; returns three values",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_AnimationPlayerHandle",
+        "CNA_Bool*",
+        "double*",
+        "uint64_t*"
+      ]
+    },
+    {
+      "name": "cna_animation_player_get_current_clip_name_byte_count",
+      "header": "models.h",
+      "ownership": "borrows player; returns a value",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_AnimationPlayerHandle",
+        "uint64_t*"
+      ]
+    },
+    {
+      "name": "cna_animation_player_get_current_position",
+      "header": "models.h",
+      "ownership": "borrows player; returns a value",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_AnimationPlayerHandle",
+        "double*"
+      ]
+    },
+    {
+      "name": "cna_animation_player_start_clip",
+      "header": "models.h",
+      "ownership": "borrows player and the name for the call",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_AnimationPlayerHandle",
+        "CNA_StringView"
+      ]
+    },
+    {
+      "name": "cna_animation_player_update",
+      "header": "models.h",
+      "ownership": "borrows player",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_AnimationPlayerHandle",
+        "double",
+        "CNA_Bool",
+        "CNA_Bool"
+      ]
+    },
+    {
       "name": "cna_area_light_brdf_table_copy_lookup_glsl",
       "header": "engine_layer.h",
       "ownership": "no handle; fills the caller's byte buffer",
@@ -24324,6 +24445,30 @@
       ]
     },
     {
+      "name": "cna_skinned_model_ext_set_clip",
+      "header": "models.h",
+      "ownership": "borrows model, the name and the clip graph for the call",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_SkinnedModelEXTHandle",
+        "CNA_StringView",
+        "const CNA_AnimationClipEXTDescriptor*"
+      ]
+    },
+    {
+      "name": "cna_skinned_model_ext_set_skeleton",
+      "header": "models.h",
+      "ownership": "borrows model and the skeleton arrays for the call",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_SkinnedModelEXTHandle",
+        "int32_t",
+        "const int32_t*",
+        "const CNA_Matrix*",
+        "const CNA_Matrix*"
+      ]
+    },
+    {
       "name": "cna_skinned_pbr_effect_apply_material",
       "header": "engine_layer.h",
       "ownership": "borrows the effect; as the unskinned route, transfers no handle ownership",
@@ -24394,6 +24539,219 @@
       "returnType": "CNA_Result",
       "parameters": [
         "CNA_EffectHandle",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "cna_skinning_data_copy_bind_pose",
+      "header": "models.h",
+      "ownership": "borrows data; copies into the caller buffer",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_SkinningDataHandle",
+        "CNA_Matrix*",
+        "uint64_t",
+        "uint64_t*"
+      ]
+    },
+    {
+      "name": "cna_skinning_data_copy_clip_name_at",
+      "header": "models.h",
+      "ownership": "borrows data; copies into the caller buffer",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_SkinningDataHandle",
+        "uint64_t",
+        "char*",
+        "uint64_t",
+        "uint64_t*"
+      ]
+    },
+    {
+      "name": "cna_skinning_data_copy_clip_track",
+      "header": "models.h",
+      "ownership": "borrows data and the name; copies into the caller buffer",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_SkinningDataHandle",
+        "CNA_StringView",
+        "uint64_t",
+        "int32_t*",
+        "CNA_KeyframeEXT*",
+        "uint64_t",
+        "uint64_t*"
+      ]
+    },
+    {
+      "name": "cna_skinning_data_copy_inverse_bind_pose",
+      "header": "models.h",
+      "ownership": "borrows data; copies into the caller buffer",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_SkinningDataHandle",
+        "CNA_Matrix*",
+        "uint64_t",
+        "uint64_t*"
+      ]
+    },
+    {
+      "name": "cna_skinning_data_copy_skeleton_hierarchy",
+      "header": "models.h",
+      "ownership": "borrows data; copies into the caller buffer",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_SkinningDataHandle",
+        "int32_t*",
+        "uint64_t",
+        "uint64_t*"
+      ]
+    },
+    {
+      "name": "cna_skinning_data_copy_skeleton_root_name_ext",
+      "header": "models.h",
+      "ownership": "borrows data; copies into the caller buffer",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_SkinningDataHandle",
+        "char*",
+        "uint64_t",
+        "uint64_t*"
+      ]
+    },
+    {
+      "name": "cna_skinning_data_copy_skeleton_root_prefix",
+      "header": "models.h",
+      "ownership": "borrows data; copies into the caller buffer",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_SkinningDataHandle",
+        "CNA_Matrix*",
+        "uint64_t",
+        "uint64_t*"
+      ]
+    },
+    {
+      "name": "cna_skinning_data_create",
+      "header": "models.h",
+      "ownership": "deeply copies the descriptor graph; returns an owned skinning-data handle",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "const CNA_SkinningDataDescriptor*",
+        "CNA_SkinningDataHandle*"
+      ]
+    },
+    {
+      "name": "cna_skinning_data_destroy",
+      "header": "models.h",
+      "ownership": "destroys an owned skinning-data handle",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_SkinningDataHandle"
+      ]
+    },
+    {
+      "name": "cna_skinning_data_get_bone_count",
+      "header": "models.h",
+      "ownership": "borrows data; returns a value",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_SkinningDataHandle",
+        "uint64_t*"
+      ]
+    },
+    {
+      "name": "cna_skinning_data_get_clip_count",
+      "header": "models.h",
+      "ownership": "borrows data; returns a value",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_SkinningDataHandle",
+        "uint64_t*"
+      ]
+    },
+    {
+      "name": "cna_skinning_data_get_clip_info",
+      "header": "models.h",
+      "ownership": "borrows data and the name; returns three values",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_SkinningDataHandle",
+        "CNA_StringView",
+        "CNA_Bool*",
+        "double*",
+        "uint64_t*"
+      ]
+    },
+    {
+      "name": "cna_skinning_data_get_clip_name_byte_count_at",
+      "header": "models.h",
+      "ownership": "borrows data; returns a value",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_SkinningDataHandle",
+        "uint64_t",
+        "uint64_t*"
+      ]
+    },
+    {
+      "name": "cna_skinning_data_get_clip_target_space_ext",
+      "header": "models.h",
+      "ownership": "borrows data; returns a value",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_SkinningDataHandle",
+        "uint64_t",
+        "CNA_ClipTargetSpaceEXT*"
+      ]
+    },
+    {
+      "name": "cna_skinning_data_get_skeleton_root_name_byte_count_ext",
+      "header": "models.h",
+      "ownership": "borrows data; returns a value",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_SkinningDataHandle",
+        "uint64_t*"
+      ]
+    },
+    {
+      "name": "cna_skinning_data_get_skeleton_root_node_index_ext",
+      "header": "models.h",
+      "ownership": "borrows data; returns a value",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_SkinningDataHandle",
+        "int32_t*"
+      ]
+    },
+    {
+      "name": "cna_skinning_data_set_clip_target_space_ext",
+      "header": "models.h",
+      "ownership": "borrows data",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_SkinningDataHandle",
+        "uint64_t",
+        "CNA_ClipTargetSpaceEXT"
+      ]
+    },
+    {
+      "name": "cna_skinning_data_set_skeleton_root_name_ext",
+      "header": "models.h",
+      "ownership": "borrows data and the name for the call",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_SkinningDataHandle",
+        "CNA_StringView"
+      ]
+    },
+    {
+      "name": "cna_skinning_data_set_skeleton_root_node_index_ext",
+      "header": "models.h",
+      "ownership": "borrows data",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_SkinningDataHandle",
         "int32_t"
       ]
     },

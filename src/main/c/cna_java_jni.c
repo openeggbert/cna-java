@@ -858,6 +858,12 @@ typedef struct CnaFunctions {
     CNA_JNI_ROUTE(cna_cnb_model_add_animation) cnb_model_add_animation;
     CNA_JNI_ROUTE(cna_model_animations_ext_create) model_animations_ext_create;
 
+    /* Skinning data and a skinned model's skeleton and clips, which take the same descriptor
+       graph one level up: a skeleton, and named clips holding tracks holding keyframes. */
+    CNA_JNI_ROUTE(cna_skinning_data_create) skinning_data_create;
+    CNA_JNI_ROUTE(cna_skinned_model_ext_set_skeleton) skinned_model_ext_set_skeleton;
+    CNA_JNI_ROUTE(cna_skinned_model_ext_set_clip) skinned_model_ext_set_clip;
+
     /* The seven sensor subscriptions. Each takes a C function pointer with its own reading
        shape, and each registration outlives the call that made it -- a sensor raises its event
        whenever a reading arrives -- so the Java handler is pinned by a token the registration
@@ -1861,6 +1867,109 @@ static CNA_Result cna_jni_borrow_clip_set(
         cna_jni_free_clip_set(environment, out_set);
     }
     return answer;
+}
+
+/* A skeleton: one parent index and two matrices per bone.
+ *
+ * Three parallel arrays whose length is one bone count, which C states as a separate parameter
+ * and Java carries in the arrays themselves. Checked against each other before anything is
+ * acquired, because two matrix arrays CNA is told are the same length and are not would make it
+ * read past the end of the shorter one.
+ */
+typedef struct CnaJniSkeleton {
+    CNA_Matrix* bind_pose;
+    CNA_Matrix* inverse_bind_pose;
+    CNA_Matrix* root_prefix;
+    jint* parent_elements;
+    jintArray parents;
+    jsize bone_count;
+    jsize root_prefix_count;
+} CnaJniSkeleton;
+
+static void cna_jni_free_skeleton(JNIEnv* environment, CnaJniSkeleton* skeleton)
+{
+    if (skeleton->parent_elements != NULL) {
+        (*environment)->ReleaseIntArrayElements(
+            environment, skeleton->parents, skeleton->parent_elements, JNI_ABORT);
+        skeleton->parent_elements = NULL;
+    }
+    free(skeleton->bind_pose);
+    skeleton->bind_pose = NULL;
+    free(skeleton->inverse_bind_pose);
+    skeleton->inverse_bind_pose = NULL;
+    free(skeleton->root_prefix);
+    skeleton->root_prefix = NULL;
+}
+
+/* Reads `count` matrices out of a float[] of 16 * count elements, in CNA's own row order. */
+static CNA_Matrix* cna_jni_matrices(JNIEnv* environment, jfloatArray source, jsize count)
+{
+    CNA_Matrix* matrices = (CNA_Matrix*)calloc((size_t)count + 1U, sizeof(*matrices));
+    if (matrices == NULL) {
+        return NULL;
+    }
+    jfloat* elements = (*environment)->GetFloatArrayElements(environment, source, NULL);
+    if (elements == NULL) {
+        free(matrices);
+        return NULL;
+    }
+    for (jsize index = 0; index < count; ++index) {
+        float* destination = &matrices[index].m11;
+        for (int leaf = 0; leaf < 16; ++leaf) {
+            destination[leaf] = (float)elements[(jlong)index * 16 + leaf];
+        }
+    }
+    (*environment)->ReleaseFloatArrayElements(environment, source, elements, JNI_ABORT);
+    return matrices;
+}
+
+static CNA_Result cna_jni_borrow_skeleton(
+    JNIEnv* environment,
+    jintArray parents,
+    jfloatArray bind_pose,
+    jfloatArray inverse_bind_pose,
+    jfloatArray root_prefix,
+    CnaJniSkeleton* out_skeleton)
+{
+    memset(out_skeleton, 0, sizeof(*out_skeleton));
+    if (parents == NULL || bind_pose == NULL || inverse_bind_pose == NULL) {
+        return CNA_RESULT_INVALID_ARGUMENT;
+    }
+    const jsize bone_count = (*environment)->GetArrayLength(environment, parents);
+    if ((*environment)->GetArrayLength(environment, bind_pose) != bone_count * 16
+            || (*environment)->GetArrayLength(environment, inverse_bind_pose)
+                    != bone_count * 16) {
+        return CNA_RESULT_INVALID_ARGUMENT;
+    }
+    /* The root prefix is optional and, when present, must be exactly one matrix per bone --
+       CNA's own rule, checked here rather than left to it. */
+    jsize prefix_count = 0;
+    if (root_prefix != NULL) {
+        const jsize prefix_leaves = (*environment)->GetArrayLength(environment, root_prefix);
+        if (prefix_leaves != 0 && prefix_leaves != bone_count * 16) {
+            return CNA_RESULT_INVALID_ARGUMENT;
+        }
+        prefix_count = prefix_leaves / 16;
+    }
+
+    out_skeleton->parents = parents;
+    out_skeleton->bone_count = bone_count;
+    out_skeleton->root_prefix_count = prefix_count;
+    out_skeleton->parent_elements =
+        (*environment)->GetIntArrayElements(environment, parents, NULL);
+    out_skeleton->bind_pose = cna_jni_matrices(environment, bind_pose, bone_count);
+    out_skeleton->inverse_bind_pose =
+        cna_jni_matrices(environment, inverse_bind_pose, bone_count);
+    if (prefix_count > 0) {
+        out_skeleton->root_prefix = cna_jni_matrices(environment, root_prefix, prefix_count);
+    }
+    if (out_skeleton->parent_elements == NULL || out_skeleton->bind_pose == NULL
+            || out_skeleton->inverse_bind_pose == NULL
+            || (prefix_count > 0 && out_skeleton->root_prefix == NULL)) {
+        cna_jni_free_skeleton(environment, out_skeleton);
+        return CNA_RESULT_OUT_OF_MEMORY;
+    }
+    return CNA_RESULT_SUCCESS;
 }
 
 static CNA_Result set_handle_output(JNIEnv* environment, jlongArray output, CNA_Handle value)
@@ -3047,6 +3156,9 @@ JNIEXPORT jint JNICALL Java_org_openeggbert_cna_internal_NativeBindings_nativeLo
     LOAD(cnb_encode_animation_clip, "cna_cnb_encode_animation_clip");
     LOAD(cnb_model_add_animation, "cna_cnb_model_add_animation");
     LOAD(model_animations_ext_create, "cna_model_animations_ext_create");
+    LOAD(skinning_data_create, "cna_skinning_data_create");
+    LOAD(skinned_model_ext_set_skeleton, "cna_skinned_model_ext_set_skeleton");
+    LOAD(skinned_model_ext_set_clip, "cna_skinned_model_ext_set_clip");
     LOAD(accelerometer_subscribe_current_value_changed,
          "cna_accelerometer_subscribe_current_value_changed");
     LOAD(accelerometer_subscribe_reading_changed,
@@ -13793,6 +13905,127 @@ Java_org_openeggbert_cna_internal_NativeBindings_nativeSensorSubscribe(
         const jlong handle = (jlong)registration;
         (*environment)->SetLongArrayRegion(environment, out_registration, 0, 1, &handle);
     }
+    return (jint)call_result;
+}
+
+/*
+ * Skinning data, and the two routes that build a skinned model's skeleton and clips.
+ *
+ * These are the family JAVA-EXT-007 recorded as having no door in. It had one: the descriptor is
+ * a pointer graph, and a pointer graph whose every array is documented as borrowed for the call
+ * is not an unknown lifetime, only an underivable shape. The generator is still right to refuse
+ * it -- nothing in the C says which keyframes belong to which track, nor how many matrices are
+ * behind a bone count -- and every relationship is checked here before anything is allocated.
+ */
+JNIEXPORT jint JNICALL
+Java_org_openeggbert_cna_internal_NativeBindings_nativeSkinningDataCreate(
+    JNIEnv* environment,
+    jclass type,
+    jintArray parents,
+    jfloatArray bind_pose,
+    jfloatArray inverse_bind_pose,
+    jfloatArray root_prefix,
+    jobjectArray names,
+    jdoubleArray durations,
+    jintArray clip_track_counts,
+    jintArray bone_indices,
+    jintArray keyframe_counts,
+    jdoubleArray times,
+    jfloatArray values,
+    jlongArray out_data)
+{
+    (void)type;
+    CnaJniSkeleton skeleton;
+    CNA_Result borrowed = cna_jni_borrow_skeleton(
+        environment, parents, bind_pose, inverse_bind_pose, root_prefix, &skeleton);
+    if (borrowed != CNA_RESULT_SUCCESS) {
+        return (jint)borrowed;
+    }
+    CnaJniClipSet set;
+    borrowed = cna_jni_borrow_clip_set(environment, names, durations, clip_track_counts,
+                                       bone_indices, keyframe_counts, times, values, &set);
+    if (borrowed != CNA_RESULT_SUCCESS) {
+        cna_jni_free_skeleton(environment, &skeleton);
+        return (jint)borrowed;
+    }
+
+    CNA_SkinningDataDescriptor descriptor;
+    memset(&descriptor, 0, sizeof descriptor);
+    descriptor.bone_count = (int32_t)skeleton.bone_count;
+    descriptor.reserved = 0U;
+    descriptor.skeleton_hierarchy = (const int32_t*)skeleton.parent_elements;
+    descriptor.bind_pose = skeleton.bind_pose;
+    descriptor.inverse_bind_pose = skeleton.inverse_bind_pose;
+    descriptor.skeleton_root_prefix = skeleton.root_prefix;
+    descriptor.skeleton_root_prefix_count = (uint64_t)skeleton.root_prefix_count;
+    descriptor.clips = set.clips;
+    descriptor.clip_count = (uint64_t)set.clip_count;
+
+    CNA_SkinningDataHandle created = 0;
+    const CNA_Result call_result = cna.skinning_data_create(&descriptor, &created);
+    cna_jni_free_clip_set(environment, &set);
+    cna_jni_free_skeleton(environment, &skeleton);
+    if (call_result == CNA_RESULT_SUCCESS) {
+        const jlong handle = (jlong)created;
+        (*environment)->SetLongArrayRegion(environment, out_data, 0, 1, &handle);
+    }
+    return (jint)call_result;
+}
+
+JNIEXPORT jint JNICALL
+Java_org_openeggbert_cna_internal_NativeBindings_nativeSkinnedModelSetSkeleton(
+    JNIEnv* environment,
+    jclass type,
+    jlong model,
+    jintArray parents,
+    jfloatArray bind_pose,
+    jfloatArray inverse_bind_pose)
+{
+    (void)type;
+    CnaJniSkeleton skeleton;
+    const CNA_Result borrowed = cna_jni_borrow_skeleton(
+        environment, parents, bind_pose, inverse_bind_pose, NULL, &skeleton);
+    if (borrowed != CNA_RESULT_SUCCESS) {
+        return (jint)borrowed;
+    }
+    const CNA_Result call_result = cna.skinned_model_ext_set_skeleton(
+        (CNA_SkinnedModelEXTHandle)model, (int32_t)skeleton.bone_count,
+        (const int32_t*)skeleton.parent_elements, skeleton.bind_pose,
+        skeleton.inverse_bind_pose);
+    cna_jni_free_skeleton(environment, &skeleton);
+    return (jint)call_result;
+}
+
+JNIEXPORT jint JNICALL
+Java_org_openeggbert_cna_internal_NativeBindings_nativeSkinnedModelSetClip(
+    JNIEnv* environment,
+    jclass type,
+    jlong model,
+    jbyteArray clip_name,
+    jdouble duration_seconds,
+    jintArray bone_indices,
+    jintArray keyframe_counts,
+    jdoubleArray times,
+    jfloatArray values)
+{
+    (void)type;
+    CnaJniClipGraph graph;
+    const CNA_Result borrowed = cna_jni_borrow_clip(
+        environment, duration_seconds, bone_indices, keyframe_counts, times, values, &graph);
+    if (borrowed != CNA_RESULT_SUCCESS) {
+        return (jint)borrowed;
+    }
+    jsize name_size = (*environment)->GetArrayLength(environment, clip_name);
+    jbyte* name_bytes = (*environment)->GetByteArrayElements(environment, clip_name, NULL);
+    if (name_bytes == NULL) {
+        cna_jni_free_clip(environment, &graph);
+        return (jint)CNA_RESULT_OUT_OF_MEMORY;
+    }
+    CNA_StringView name = {(const char*)name_bytes, (uint64_t)name_size};
+    const CNA_Result call_result = cna.skinned_model_ext_set_clip(
+        (CNA_SkinnedModelEXTHandle)model, name, &graph.clip);
+    (*environment)->ReleaseByteArrayElements(environment, clip_name, name_bytes, JNI_ABORT);
+    cna_jni_free_clip(environment, &graph);
     return (jint)call_result;
 }
 

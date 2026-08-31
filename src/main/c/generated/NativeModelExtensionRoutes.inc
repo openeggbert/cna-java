@@ -7,6 +7,392 @@
  */
 
 JNIEXPORT jint JNICALL
+Java_org_openeggbert_cna_internal_generated_NativeModelExtensionRoutes_animationPlayerCopyBoneTransforms(
+    JNIEnv* environment, jclass declaring_class, jlong player, jfloatArray destinationFloating, jlongArray out_count)
+{
+    (void)environment;
+    (void)declaring_class;
+    jsize destination_count = (*environment)->GetArrayLength(environment, destinationFloating) / 16;
+    if ((*environment)->GetArrayLength(environment, destinationFloating) != destination_count * 16) {
+        return (jint)CNA_RESULT_INVALID_ARGUMENT;
+    }
+    CNA_Matrix* destination_values = (CNA_Matrix*)calloc(
+        (size_t)destination_count + 1U, sizeof(*destination_values));
+    if (destination_values == NULL) {
+        return (jint)CNA_RESULT_OUT_OF_MEMORY;
+    }
+    {
+        jsize destinationFloating_length = (*environment)->GetArrayLength(environment, destinationFloating);
+        jfloat* destinationFloating_values = (jfloat*)malloc(
+            ((size_t)destinationFloating_length + 1U) * sizeof(*destinationFloating_values));
+        if (destinationFloating_values == NULL) {
+            free(destination_values);
+            return (jint)CNA_RESULT_OUT_OF_MEMORY;
+        }
+        (*environment)->GetFloatArrayRegion(environment, destinationFloating, 0, destinationFloating_length, destinationFloating_values);
+        for (jsize element = 0; element < destination_count; ++element) {
+            destination_values[element].m11 = (float)destinationFloating_values[element * 16 + 0];
+            destination_values[element].m12 = (float)destinationFloating_values[element * 16 + 1];
+            destination_values[element].m13 = (float)destinationFloating_values[element * 16 + 2];
+            destination_values[element].m14 = (float)destinationFloating_values[element * 16 + 3];
+            destination_values[element].m21 = (float)destinationFloating_values[element * 16 + 4];
+            destination_values[element].m22 = (float)destinationFloating_values[element * 16 + 5];
+            destination_values[element].m23 = (float)destinationFloating_values[element * 16 + 6];
+            destination_values[element].m24 = (float)destinationFloating_values[element * 16 + 7];
+            destination_values[element].m31 = (float)destinationFloating_values[element * 16 + 8];
+            destination_values[element].m32 = (float)destinationFloating_values[element * 16 + 9];
+            destination_values[element].m33 = (float)destinationFloating_values[element * 16 + 10];
+            destination_values[element].m34 = (float)destinationFloating_values[element * 16 + 11];
+            destination_values[element].m41 = (float)destinationFloating_values[element * 16 + 12];
+            destination_values[element].m42 = (float)destinationFloating_values[element * 16 + 13];
+            destination_values[element].m43 = (float)destinationFloating_values[element * 16 + 14];
+            destination_values[element].m44 = (float)destinationFloating_values[element * 16 + 15];
+        }
+        free(destinationFloating_values);
+    }
+    uint64_t out_count_value = 0;
+    CNA_Result call_result = cna.animation_player_copy_bone_transforms((CNA_AnimationPlayerHandle)player, destination_values, (uint64_t)destination_count, &out_count_value);
+    if (call_result == CNA_RESULT_SUCCESS) {
+        {
+            jfloat* destinationFloating_out = (jfloat*)malloc(
+                ((size_t)destination_count * 16 + 1U) * sizeof(*destinationFloating_out));
+            if (destinationFloating_out != NULL) {
+                for (jsize element = 0; element < destination_count; ++element) {
+                    destinationFloating_out[element * 16 + 0] = (jfloat)destination_values[element].m11;
+                    destinationFloating_out[element * 16 + 1] = (jfloat)destination_values[element].m12;
+                    destinationFloating_out[element * 16 + 2] = (jfloat)destination_values[element].m13;
+                    destinationFloating_out[element * 16 + 3] = (jfloat)destination_values[element].m14;
+                    destinationFloating_out[element * 16 + 4] = (jfloat)destination_values[element].m21;
+                    destinationFloating_out[element * 16 + 5] = (jfloat)destination_values[element].m22;
+                    destinationFloating_out[element * 16 + 6] = (jfloat)destination_values[element].m23;
+                    destinationFloating_out[element * 16 + 7] = (jfloat)destination_values[element].m24;
+                    destinationFloating_out[element * 16 + 8] = (jfloat)destination_values[element].m31;
+                    destinationFloating_out[element * 16 + 9] = (jfloat)destination_values[element].m32;
+                    destinationFloating_out[element * 16 + 10] = (jfloat)destination_values[element].m33;
+                    destinationFloating_out[element * 16 + 11] = (jfloat)destination_values[element].m34;
+                    destinationFloating_out[element * 16 + 12] = (jfloat)destination_values[element].m41;
+                    destinationFloating_out[element * 16 + 13] = (jfloat)destination_values[element].m42;
+                    destinationFloating_out[element * 16 + 14] = (jfloat)destination_values[element].m43;
+                    destinationFloating_out[element * 16 + 15] = (jfloat)destination_values[element].m44;
+                }
+                (*environment)->SetFloatArrayRegion(
+                    environment, destinationFloating, 0,
+                    (jsize)(destination_count * 16), destinationFloating_out);
+                free(destinationFloating_out);
+            }
+        }
+    }
+    free(destination_values);
+    if (call_result == CNA_RESULT_SUCCESS || call_result == CNA_RESULT_BUFFER_TOO_SMALL) {
+        jlong out_count_element = (jlong)out_count_value;
+        (*environment)->SetLongArrayRegion(
+            environment, out_count, 0, 1, &out_count_element);
+    }
+    return (jint)call_result;
+}
+
+JNIEXPORT jint JNICALL
+Java_org_openeggbert_cna_internal_generated_NativeModelExtensionRoutes_animationPlayerCopyCurrentClipName(
+    JNIEnv* environment, jclass declaring_class, jlong player, jbyteArray destination, jlongArray out_byte_count)
+{
+    (void)environment;
+    (void)declaring_class;
+    jsize destination_size = (*environment)->GetArrayLength(environment, destination);
+    jbyte* destination_bytes = (*environment)->GetByteArrayElements(environment, destination, NULL);
+    if (destination_bytes == NULL) {
+        return (jint)CNA_RESULT_OUT_OF_MEMORY;
+    }
+    uint64_t destination_written = 0;
+    CNA_Result call_result = cna.animation_player_copy_current_clip_name((CNA_AnimationPlayerHandle)player, (char*)destination_bytes, (uint64_t)destination_size, &destination_written);
+    (*environment)->ReleaseByteArrayElements(environment, destination, destination_bytes, 0);
+    if (call_result == CNA_RESULT_SUCCESS || call_result == CNA_RESULT_BUFFER_TOO_SMALL) {
+        jlong destination_element = (jlong)destination_written;
+        (*environment)->SetLongArrayRegion(
+            environment, out_byte_count, 0, 1, &destination_element);
+    }
+    return (jint)call_result;
+}
+
+JNIEXPORT jint JNICALL
+Java_org_openeggbert_cna_internal_generated_NativeModelExtensionRoutes_animationPlayerCopySkinTransforms(
+    JNIEnv* environment, jclass declaring_class, jlong player, jfloatArray destinationFloating, jlongArray out_count)
+{
+    (void)environment;
+    (void)declaring_class;
+    jsize destination_count = (*environment)->GetArrayLength(environment, destinationFloating) / 16;
+    if ((*environment)->GetArrayLength(environment, destinationFloating) != destination_count * 16) {
+        return (jint)CNA_RESULT_INVALID_ARGUMENT;
+    }
+    CNA_Matrix* destination_values = (CNA_Matrix*)calloc(
+        (size_t)destination_count + 1U, sizeof(*destination_values));
+    if (destination_values == NULL) {
+        return (jint)CNA_RESULT_OUT_OF_MEMORY;
+    }
+    {
+        jsize destinationFloating_length = (*environment)->GetArrayLength(environment, destinationFloating);
+        jfloat* destinationFloating_values = (jfloat*)malloc(
+            ((size_t)destinationFloating_length + 1U) * sizeof(*destinationFloating_values));
+        if (destinationFloating_values == NULL) {
+            free(destination_values);
+            return (jint)CNA_RESULT_OUT_OF_MEMORY;
+        }
+        (*environment)->GetFloatArrayRegion(environment, destinationFloating, 0, destinationFloating_length, destinationFloating_values);
+        for (jsize element = 0; element < destination_count; ++element) {
+            destination_values[element].m11 = (float)destinationFloating_values[element * 16 + 0];
+            destination_values[element].m12 = (float)destinationFloating_values[element * 16 + 1];
+            destination_values[element].m13 = (float)destinationFloating_values[element * 16 + 2];
+            destination_values[element].m14 = (float)destinationFloating_values[element * 16 + 3];
+            destination_values[element].m21 = (float)destinationFloating_values[element * 16 + 4];
+            destination_values[element].m22 = (float)destinationFloating_values[element * 16 + 5];
+            destination_values[element].m23 = (float)destinationFloating_values[element * 16 + 6];
+            destination_values[element].m24 = (float)destinationFloating_values[element * 16 + 7];
+            destination_values[element].m31 = (float)destinationFloating_values[element * 16 + 8];
+            destination_values[element].m32 = (float)destinationFloating_values[element * 16 + 9];
+            destination_values[element].m33 = (float)destinationFloating_values[element * 16 + 10];
+            destination_values[element].m34 = (float)destinationFloating_values[element * 16 + 11];
+            destination_values[element].m41 = (float)destinationFloating_values[element * 16 + 12];
+            destination_values[element].m42 = (float)destinationFloating_values[element * 16 + 13];
+            destination_values[element].m43 = (float)destinationFloating_values[element * 16 + 14];
+            destination_values[element].m44 = (float)destinationFloating_values[element * 16 + 15];
+        }
+        free(destinationFloating_values);
+    }
+    uint64_t out_count_value = 0;
+    CNA_Result call_result = cna.animation_player_copy_skin_transforms((CNA_AnimationPlayerHandle)player, destination_values, (uint64_t)destination_count, &out_count_value);
+    if (call_result == CNA_RESULT_SUCCESS) {
+        {
+            jfloat* destinationFloating_out = (jfloat*)malloc(
+                ((size_t)destination_count * 16 + 1U) * sizeof(*destinationFloating_out));
+            if (destinationFloating_out != NULL) {
+                for (jsize element = 0; element < destination_count; ++element) {
+                    destinationFloating_out[element * 16 + 0] = (jfloat)destination_values[element].m11;
+                    destinationFloating_out[element * 16 + 1] = (jfloat)destination_values[element].m12;
+                    destinationFloating_out[element * 16 + 2] = (jfloat)destination_values[element].m13;
+                    destinationFloating_out[element * 16 + 3] = (jfloat)destination_values[element].m14;
+                    destinationFloating_out[element * 16 + 4] = (jfloat)destination_values[element].m21;
+                    destinationFloating_out[element * 16 + 5] = (jfloat)destination_values[element].m22;
+                    destinationFloating_out[element * 16 + 6] = (jfloat)destination_values[element].m23;
+                    destinationFloating_out[element * 16 + 7] = (jfloat)destination_values[element].m24;
+                    destinationFloating_out[element * 16 + 8] = (jfloat)destination_values[element].m31;
+                    destinationFloating_out[element * 16 + 9] = (jfloat)destination_values[element].m32;
+                    destinationFloating_out[element * 16 + 10] = (jfloat)destination_values[element].m33;
+                    destinationFloating_out[element * 16 + 11] = (jfloat)destination_values[element].m34;
+                    destinationFloating_out[element * 16 + 12] = (jfloat)destination_values[element].m41;
+                    destinationFloating_out[element * 16 + 13] = (jfloat)destination_values[element].m42;
+                    destinationFloating_out[element * 16 + 14] = (jfloat)destination_values[element].m43;
+                    destinationFloating_out[element * 16 + 15] = (jfloat)destination_values[element].m44;
+                }
+                (*environment)->SetFloatArrayRegion(
+                    environment, destinationFloating, 0,
+                    (jsize)(destination_count * 16), destinationFloating_out);
+                free(destinationFloating_out);
+            }
+        }
+    }
+    free(destination_values);
+    if (call_result == CNA_RESULT_SUCCESS || call_result == CNA_RESULT_BUFFER_TOO_SMALL) {
+        jlong out_count_element = (jlong)out_count_value;
+        (*environment)->SetLongArrayRegion(
+            environment, out_count, 0, 1, &out_count_element);
+    }
+    return (jint)call_result;
+}
+
+JNIEXPORT jint JNICALL
+Java_org_openeggbert_cna_internal_generated_NativeModelExtensionRoutes_animationPlayerCopyWorldTransforms(
+    JNIEnv* environment, jclass declaring_class, jlong player, jfloatArray destinationFloating, jlongArray out_count)
+{
+    (void)environment;
+    (void)declaring_class;
+    jsize destination_count = (*environment)->GetArrayLength(environment, destinationFloating) / 16;
+    if ((*environment)->GetArrayLength(environment, destinationFloating) != destination_count * 16) {
+        return (jint)CNA_RESULT_INVALID_ARGUMENT;
+    }
+    CNA_Matrix* destination_values = (CNA_Matrix*)calloc(
+        (size_t)destination_count + 1U, sizeof(*destination_values));
+    if (destination_values == NULL) {
+        return (jint)CNA_RESULT_OUT_OF_MEMORY;
+    }
+    {
+        jsize destinationFloating_length = (*environment)->GetArrayLength(environment, destinationFloating);
+        jfloat* destinationFloating_values = (jfloat*)malloc(
+            ((size_t)destinationFloating_length + 1U) * sizeof(*destinationFloating_values));
+        if (destinationFloating_values == NULL) {
+            free(destination_values);
+            return (jint)CNA_RESULT_OUT_OF_MEMORY;
+        }
+        (*environment)->GetFloatArrayRegion(environment, destinationFloating, 0, destinationFloating_length, destinationFloating_values);
+        for (jsize element = 0; element < destination_count; ++element) {
+            destination_values[element].m11 = (float)destinationFloating_values[element * 16 + 0];
+            destination_values[element].m12 = (float)destinationFloating_values[element * 16 + 1];
+            destination_values[element].m13 = (float)destinationFloating_values[element * 16 + 2];
+            destination_values[element].m14 = (float)destinationFloating_values[element * 16 + 3];
+            destination_values[element].m21 = (float)destinationFloating_values[element * 16 + 4];
+            destination_values[element].m22 = (float)destinationFloating_values[element * 16 + 5];
+            destination_values[element].m23 = (float)destinationFloating_values[element * 16 + 6];
+            destination_values[element].m24 = (float)destinationFloating_values[element * 16 + 7];
+            destination_values[element].m31 = (float)destinationFloating_values[element * 16 + 8];
+            destination_values[element].m32 = (float)destinationFloating_values[element * 16 + 9];
+            destination_values[element].m33 = (float)destinationFloating_values[element * 16 + 10];
+            destination_values[element].m34 = (float)destinationFloating_values[element * 16 + 11];
+            destination_values[element].m41 = (float)destinationFloating_values[element * 16 + 12];
+            destination_values[element].m42 = (float)destinationFloating_values[element * 16 + 13];
+            destination_values[element].m43 = (float)destinationFloating_values[element * 16 + 14];
+            destination_values[element].m44 = (float)destinationFloating_values[element * 16 + 15];
+        }
+        free(destinationFloating_values);
+    }
+    uint64_t out_count_value = 0;
+    CNA_Result call_result = cna.animation_player_copy_world_transforms((CNA_AnimationPlayerHandle)player, destination_values, (uint64_t)destination_count, &out_count_value);
+    if (call_result == CNA_RESULT_SUCCESS) {
+        {
+            jfloat* destinationFloating_out = (jfloat*)malloc(
+                ((size_t)destination_count * 16 + 1U) * sizeof(*destinationFloating_out));
+            if (destinationFloating_out != NULL) {
+                for (jsize element = 0; element < destination_count; ++element) {
+                    destinationFloating_out[element * 16 + 0] = (jfloat)destination_values[element].m11;
+                    destinationFloating_out[element * 16 + 1] = (jfloat)destination_values[element].m12;
+                    destinationFloating_out[element * 16 + 2] = (jfloat)destination_values[element].m13;
+                    destinationFloating_out[element * 16 + 3] = (jfloat)destination_values[element].m14;
+                    destinationFloating_out[element * 16 + 4] = (jfloat)destination_values[element].m21;
+                    destinationFloating_out[element * 16 + 5] = (jfloat)destination_values[element].m22;
+                    destinationFloating_out[element * 16 + 6] = (jfloat)destination_values[element].m23;
+                    destinationFloating_out[element * 16 + 7] = (jfloat)destination_values[element].m24;
+                    destinationFloating_out[element * 16 + 8] = (jfloat)destination_values[element].m31;
+                    destinationFloating_out[element * 16 + 9] = (jfloat)destination_values[element].m32;
+                    destinationFloating_out[element * 16 + 10] = (jfloat)destination_values[element].m33;
+                    destinationFloating_out[element * 16 + 11] = (jfloat)destination_values[element].m34;
+                    destinationFloating_out[element * 16 + 12] = (jfloat)destination_values[element].m41;
+                    destinationFloating_out[element * 16 + 13] = (jfloat)destination_values[element].m42;
+                    destinationFloating_out[element * 16 + 14] = (jfloat)destination_values[element].m43;
+                    destinationFloating_out[element * 16 + 15] = (jfloat)destination_values[element].m44;
+                }
+                (*environment)->SetFloatArrayRegion(
+                    environment, destinationFloating, 0,
+                    (jsize)(destination_count * 16), destinationFloating_out);
+                free(destinationFloating_out);
+            }
+        }
+    }
+    free(destination_values);
+    if (call_result == CNA_RESULT_SUCCESS || call_result == CNA_RESULT_BUFFER_TOO_SMALL) {
+        jlong out_count_element = (jlong)out_count_value;
+        (*environment)->SetLongArrayRegion(
+            environment, out_count, 0, 1, &out_count_element);
+    }
+    return (jint)call_result;
+}
+
+JNIEXPORT jint JNICALL
+Java_org_openeggbert_cna_internal_generated_NativeModelExtensionRoutes_animationPlayerCreate(
+    JNIEnv* environment, jclass declaring_class, jlong data, jlongArray out_player)
+{
+    (void)environment;
+    (void)declaring_class;
+    CNA_AnimationPlayerHandle out_player_value = 0;
+    CNA_Result call_result = cna.animation_player_create((CNA_SkinningDataHandle)data, &out_player_value);
+    if (call_result == CNA_RESULT_SUCCESS || call_result == CNA_RESULT_BUFFER_TOO_SMALL) {
+        jlong out_player_element = (jlong)out_player_value;
+        (*environment)->SetLongArrayRegion(
+            environment, out_player, 0, 1, &out_player_element);
+    }
+    return (jint)call_result;
+}
+
+JNIEXPORT jint JNICALL
+Java_org_openeggbert_cna_internal_generated_NativeModelExtensionRoutes_animationPlayerDestroy(
+    JNIEnv* environment, jclass declaring_class, jlong player)
+{
+    (void)environment;
+    (void)declaring_class;
+    CNA_Result call_result = cna.animation_player_destroy((CNA_AnimationPlayerHandle)player);
+    return (jint)call_result;
+}
+
+JNIEXPORT jint JNICALL
+Java_org_openeggbert_cna_internal_generated_NativeModelExtensionRoutes_animationPlayerGetCurrentClipInfo(
+    JNIEnv* environment, jclass declaring_class, jlong player, jbooleanArray out_has_clip, jdoubleArray out_duration_seconds, jlongArray out_track_count)
+{
+    (void)environment;
+    (void)declaring_class;
+    CNA_Bool out_has_clip_value = 0;
+    double out_duration_seconds_value = 0;
+    uint64_t out_track_count_value = 0;
+    CNA_Result call_result = cna.animation_player_get_current_clip_info((CNA_AnimationPlayerHandle)player, &out_has_clip_value, &out_duration_seconds_value, &out_track_count_value);
+    if (call_result == CNA_RESULT_SUCCESS || call_result == CNA_RESULT_BUFFER_TOO_SMALL) {
+        jboolean out_has_clip_element = (jboolean)out_has_clip_value;
+        (*environment)->SetBooleanArrayRegion(
+            environment, out_has_clip, 0, 1, &out_has_clip_element);
+        jdouble out_duration_seconds_element = (jdouble)out_duration_seconds_value;
+        (*environment)->SetDoubleArrayRegion(
+            environment, out_duration_seconds, 0, 1, &out_duration_seconds_element);
+        jlong out_track_count_element = (jlong)out_track_count_value;
+        (*environment)->SetLongArrayRegion(
+            environment, out_track_count, 0, 1, &out_track_count_element);
+    }
+    return (jint)call_result;
+}
+
+JNIEXPORT jint JNICALL
+Java_org_openeggbert_cna_internal_generated_NativeModelExtensionRoutes_animationPlayerGetCurrentClipNameByteCount(
+    JNIEnv* environment, jclass declaring_class, jlong player, jlongArray out_byte_count)
+{
+    (void)environment;
+    (void)declaring_class;
+    uint64_t out_byte_count_value = 0;
+    CNA_Result call_result = cna.animation_player_get_current_clip_name_byte_count((CNA_AnimationPlayerHandle)player, &out_byte_count_value);
+    if (call_result == CNA_RESULT_SUCCESS || call_result == CNA_RESULT_BUFFER_TOO_SMALL) {
+        jlong out_byte_count_element = (jlong)out_byte_count_value;
+        (*environment)->SetLongArrayRegion(
+            environment, out_byte_count, 0, 1, &out_byte_count_element);
+    }
+    return (jint)call_result;
+}
+
+JNIEXPORT jint JNICALL
+Java_org_openeggbert_cna_internal_generated_NativeModelExtensionRoutes_animationPlayerGetCurrentPosition(
+    JNIEnv* environment, jclass declaring_class, jlong player, jdoubleArray out_position_seconds)
+{
+    (void)environment;
+    (void)declaring_class;
+    double out_position_seconds_value = 0;
+    CNA_Result call_result = cna.animation_player_get_current_position((CNA_AnimationPlayerHandle)player, &out_position_seconds_value);
+    if (call_result == CNA_RESULT_SUCCESS || call_result == CNA_RESULT_BUFFER_TOO_SMALL) {
+        jdouble out_position_seconds_element = (jdouble)out_position_seconds_value;
+        (*environment)->SetDoubleArrayRegion(
+            environment, out_position_seconds, 0, 1, &out_position_seconds_element);
+    }
+    return (jint)call_result;
+}
+
+JNIEXPORT jint JNICALL
+Java_org_openeggbert_cna_internal_generated_NativeModelExtensionRoutes_animationPlayerStartClip(
+    JNIEnv* environment, jclass declaring_class, jlong player, jbyteArray clip_name)
+{
+    (void)environment;
+    (void)declaring_class;
+    jsize clip_name_size = (*environment)->GetArrayLength(environment, clip_name);
+    jbyte* clip_name_bytes = (*environment)->GetByteArrayElements(environment, clip_name, NULL);
+    if (clip_name_bytes == NULL) {
+        return (jint)CNA_RESULT_OUT_OF_MEMORY;
+    }
+    CNA_StringView clip_name_view = {(const char*)clip_name_bytes, (uint64_t)clip_name_size};
+    CNA_Result call_result = cna.animation_player_start_clip((CNA_AnimationPlayerHandle)player, clip_name_view);
+    (*environment)->ReleaseByteArrayElements(environment, clip_name, clip_name_bytes, JNI_ABORT);
+    return (jint)call_result;
+}
+
+JNIEXPORT jint JNICALL
+Java_org_openeggbert_cna_internal_generated_NativeModelExtensionRoutes_animationPlayerUpdate(
+    JNIEnv* environment, jclass declaring_class, jlong player, jdouble time_seconds, jboolean relative_to_current_time, jboolean loop)
+{
+    (void)environment;
+    (void)declaring_class;
+    CNA_Result call_result = cna.animation_player_update((CNA_AnimationPlayerHandle)player, (double)time_seconds, (CNA_Bool)relative_to_current_time, (CNA_Bool)loop);
+    return (jint)call_result;
+}
+
+JNIEXPORT jint JNICALL
 Java_org_openeggbert_cna_internal_generated_NativeModelExtensionRoutes_effectCopyTypeName(
     JNIEnv* environment, jclass declaring_class, jlong effect, jbyteArray destination, jlongArray out_byte_count)
 {
@@ -1701,5 +2087,633 @@ Java_org_openeggbert_cna_internal_generated_NativeModelExtensionRoutes_modelSetM
     (void)environment;
     (void)declaring_class;
     CNA_Result call_result = cna.model_set_material_variant_ext((CNA_ModelHandle)model, (int32_t)value);
+    return (jint)call_result;
+}
+
+JNIEXPORT jint JNICALL
+Java_org_openeggbert_cna_internal_generated_NativeModelExtensionRoutes_skinningDataCopyBindPose(
+    JNIEnv* environment, jclass declaring_class, jlong data, jfloatArray destinationFloating, jlongArray out_count)
+{
+    (void)environment;
+    (void)declaring_class;
+    jsize destination_count = (*environment)->GetArrayLength(environment, destinationFloating) / 16;
+    if ((*environment)->GetArrayLength(environment, destinationFloating) != destination_count * 16) {
+        return (jint)CNA_RESULT_INVALID_ARGUMENT;
+    }
+    CNA_Matrix* destination_values = (CNA_Matrix*)calloc(
+        (size_t)destination_count + 1U, sizeof(*destination_values));
+    if (destination_values == NULL) {
+        return (jint)CNA_RESULT_OUT_OF_MEMORY;
+    }
+    {
+        jsize destinationFloating_length = (*environment)->GetArrayLength(environment, destinationFloating);
+        jfloat* destinationFloating_values = (jfloat*)malloc(
+            ((size_t)destinationFloating_length + 1U) * sizeof(*destinationFloating_values));
+        if (destinationFloating_values == NULL) {
+            free(destination_values);
+            return (jint)CNA_RESULT_OUT_OF_MEMORY;
+        }
+        (*environment)->GetFloatArrayRegion(environment, destinationFloating, 0, destinationFloating_length, destinationFloating_values);
+        for (jsize element = 0; element < destination_count; ++element) {
+            destination_values[element].m11 = (float)destinationFloating_values[element * 16 + 0];
+            destination_values[element].m12 = (float)destinationFloating_values[element * 16 + 1];
+            destination_values[element].m13 = (float)destinationFloating_values[element * 16 + 2];
+            destination_values[element].m14 = (float)destinationFloating_values[element * 16 + 3];
+            destination_values[element].m21 = (float)destinationFloating_values[element * 16 + 4];
+            destination_values[element].m22 = (float)destinationFloating_values[element * 16 + 5];
+            destination_values[element].m23 = (float)destinationFloating_values[element * 16 + 6];
+            destination_values[element].m24 = (float)destinationFloating_values[element * 16 + 7];
+            destination_values[element].m31 = (float)destinationFloating_values[element * 16 + 8];
+            destination_values[element].m32 = (float)destinationFloating_values[element * 16 + 9];
+            destination_values[element].m33 = (float)destinationFloating_values[element * 16 + 10];
+            destination_values[element].m34 = (float)destinationFloating_values[element * 16 + 11];
+            destination_values[element].m41 = (float)destinationFloating_values[element * 16 + 12];
+            destination_values[element].m42 = (float)destinationFloating_values[element * 16 + 13];
+            destination_values[element].m43 = (float)destinationFloating_values[element * 16 + 14];
+            destination_values[element].m44 = (float)destinationFloating_values[element * 16 + 15];
+        }
+        free(destinationFloating_values);
+    }
+    uint64_t out_count_value = 0;
+    CNA_Result call_result = cna.skinning_data_copy_bind_pose((CNA_SkinningDataHandle)data, destination_values, (uint64_t)destination_count, &out_count_value);
+    if (call_result == CNA_RESULT_SUCCESS) {
+        {
+            jfloat* destinationFloating_out = (jfloat*)malloc(
+                ((size_t)destination_count * 16 + 1U) * sizeof(*destinationFloating_out));
+            if (destinationFloating_out != NULL) {
+                for (jsize element = 0; element < destination_count; ++element) {
+                    destinationFloating_out[element * 16 + 0] = (jfloat)destination_values[element].m11;
+                    destinationFloating_out[element * 16 + 1] = (jfloat)destination_values[element].m12;
+                    destinationFloating_out[element * 16 + 2] = (jfloat)destination_values[element].m13;
+                    destinationFloating_out[element * 16 + 3] = (jfloat)destination_values[element].m14;
+                    destinationFloating_out[element * 16 + 4] = (jfloat)destination_values[element].m21;
+                    destinationFloating_out[element * 16 + 5] = (jfloat)destination_values[element].m22;
+                    destinationFloating_out[element * 16 + 6] = (jfloat)destination_values[element].m23;
+                    destinationFloating_out[element * 16 + 7] = (jfloat)destination_values[element].m24;
+                    destinationFloating_out[element * 16 + 8] = (jfloat)destination_values[element].m31;
+                    destinationFloating_out[element * 16 + 9] = (jfloat)destination_values[element].m32;
+                    destinationFloating_out[element * 16 + 10] = (jfloat)destination_values[element].m33;
+                    destinationFloating_out[element * 16 + 11] = (jfloat)destination_values[element].m34;
+                    destinationFloating_out[element * 16 + 12] = (jfloat)destination_values[element].m41;
+                    destinationFloating_out[element * 16 + 13] = (jfloat)destination_values[element].m42;
+                    destinationFloating_out[element * 16 + 14] = (jfloat)destination_values[element].m43;
+                    destinationFloating_out[element * 16 + 15] = (jfloat)destination_values[element].m44;
+                }
+                (*environment)->SetFloatArrayRegion(
+                    environment, destinationFloating, 0,
+                    (jsize)(destination_count * 16), destinationFloating_out);
+                free(destinationFloating_out);
+            }
+        }
+    }
+    free(destination_values);
+    if (call_result == CNA_RESULT_SUCCESS || call_result == CNA_RESULT_BUFFER_TOO_SMALL) {
+        jlong out_count_element = (jlong)out_count_value;
+        (*environment)->SetLongArrayRegion(
+            environment, out_count, 0, 1, &out_count_element);
+    }
+    return (jint)call_result;
+}
+
+JNIEXPORT jint JNICALL
+Java_org_openeggbert_cna_internal_generated_NativeModelExtensionRoutes_skinningDataCopyClipNameAt(
+    JNIEnv* environment, jclass declaring_class, jlong data, jlong clip_index, jbyteArray destination, jlongArray out_byte_count)
+{
+    (void)environment;
+    (void)declaring_class;
+    jsize destination_size = (*environment)->GetArrayLength(environment, destination);
+    jbyte* destination_bytes = (*environment)->GetByteArrayElements(environment, destination, NULL);
+    if (destination_bytes == NULL) {
+        return (jint)CNA_RESULT_OUT_OF_MEMORY;
+    }
+    uint64_t destination_written = 0;
+    CNA_Result call_result = cna.skinning_data_copy_clip_name_at((CNA_SkinningDataHandle)data, (uint64_t)clip_index, (char*)destination_bytes, (uint64_t)destination_size, &destination_written);
+    (*environment)->ReleaseByteArrayElements(environment, destination, destination_bytes, 0);
+    if (call_result == CNA_RESULT_SUCCESS || call_result == CNA_RESULT_BUFFER_TOO_SMALL) {
+        jlong destination_element = (jlong)destination_written;
+        (*environment)->SetLongArrayRegion(
+            environment, out_byte_count, 0, 1, &destination_element);
+    }
+    return (jint)call_result;
+}
+
+JNIEXPORT jint JNICALL
+Java_org_openeggbert_cna_internal_generated_NativeModelExtensionRoutes_skinningDataCopyClipTrack(
+    JNIEnv* environment, jclass declaring_class, jlong data, jbyteArray name, jlong track_index, jintArray out_bone_index, jfloatArray destinationFloating, jdoubleArray destinationDoubles, jlongArray out_keyframe_count)
+{
+    (void)environment;
+    (void)declaring_class;
+    jsize name_size = (*environment)->GetArrayLength(environment, name);
+    jbyte* name_bytes = (*environment)->GetByteArrayElements(environment, name, NULL);
+    if (name_bytes == NULL) {
+        return (jint)CNA_RESULT_OUT_OF_MEMORY;
+    }
+    CNA_StringView name_view = {(const char*)name_bytes, (uint64_t)name_size};
+    int32_t out_bone_index_value = 0;
+    jsize destination_count = (*environment)->GetArrayLength(environment, destinationFloating) / 10;
+    if ((*environment)->GetArrayLength(environment, destinationFloating) != destination_count * 10 ||
+        (*environment)->GetArrayLength(environment, destinationDoubles) != destination_count * 1) {
+        (*environment)->ReleaseByteArrayElements(environment, name, name_bytes, JNI_ABORT);
+        return (jint)CNA_RESULT_INVALID_ARGUMENT;
+    }
+    CNA_KeyframeEXT* destination_values = (CNA_KeyframeEXT*)calloc(
+        (size_t)destination_count + 1U, sizeof(*destination_values));
+    if (destination_values == NULL) {
+    (*environment)->ReleaseByteArrayElements(environment, name, name_bytes, JNI_ABORT);
+        return (jint)CNA_RESULT_OUT_OF_MEMORY;
+    }
+    {
+        jsize destinationFloating_length = (*environment)->GetArrayLength(environment, destinationFloating);
+        jfloat* destinationFloating_values = (jfloat*)malloc(
+            ((size_t)destinationFloating_length + 1U) * sizeof(*destinationFloating_values));
+        if (destinationFloating_values == NULL) {
+            free(destination_values);
+            (*environment)->ReleaseByteArrayElements(environment, name, name_bytes, JNI_ABORT);
+            return (jint)CNA_RESULT_OUT_OF_MEMORY;
+        }
+        (*environment)->GetFloatArrayRegion(environment, destinationFloating, 0, destinationFloating_length, destinationFloating_values);
+        for (jsize element = 0; element < destination_count; ++element) {
+            destination_values[element].translation.x = (float)destinationFloating_values[element * 10 + 0];
+            destination_values[element].translation.y = (float)destinationFloating_values[element * 10 + 1];
+            destination_values[element].translation.z = (float)destinationFloating_values[element * 10 + 2];
+            destination_values[element].rotation.x = (float)destinationFloating_values[element * 10 + 3];
+            destination_values[element].rotation.y = (float)destinationFloating_values[element * 10 + 4];
+            destination_values[element].rotation.z = (float)destinationFloating_values[element * 10 + 5];
+            destination_values[element].rotation.w = (float)destinationFloating_values[element * 10 + 6];
+            destination_values[element].scale.x = (float)destinationFloating_values[element * 10 + 7];
+            destination_values[element].scale.y = (float)destinationFloating_values[element * 10 + 8];
+            destination_values[element].scale.z = (float)destinationFloating_values[element * 10 + 9];
+        }
+        free(destinationFloating_values);
+    }
+    {
+        jsize destinationDoubles_length = (*environment)->GetArrayLength(environment, destinationDoubles);
+        jdouble* destinationDoubles_values = (jdouble*)malloc(
+            ((size_t)destinationDoubles_length + 1U) * sizeof(*destinationDoubles_values));
+        if (destinationDoubles_values == NULL) {
+            free(destination_values);
+            (*environment)->ReleaseByteArrayElements(environment, name, name_bytes, JNI_ABORT);
+            return (jint)CNA_RESULT_OUT_OF_MEMORY;
+        }
+        (*environment)->GetDoubleArrayRegion(environment, destinationDoubles, 0, destinationDoubles_length, destinationDoubles_values);
+        for (jsize element = 0; element < destination_count; ++element) {
+            destination_values[element].time_seconds = (double)destinationDoubles_values[element * 1 + 0];
+        }
+        free(destinationDoubles_values);
+    }
+    uint64_t out_keyframe_count_value = 0;
+    CNA_Result call_result = cna.skinning_data_copy_clip_track((CNA_SkinningDataHandle)data, name_view, (uint64_t)track_index, &out_bone_index_value, destination_values, (uint64_t)destination_count, &out_keyframe_count_value);
+    (*environment)->ReleaseByteArrayElements(environment, name, name_bytes, JNI_ABORT);
+    if (call_result == CNA_RESULT_SUCCESS) {
+        {
+            jfloat* destinationFloating_out = (jfloat*)malloc(
+                ((size_t)destination_count * 10 + 1U) * sizeof(*destinationFloating_out));
+            if (destinationFloating_out != NULL) {
+                for (jsize element = 0; element < destination_count; ++element) {
+                    destinationFloating_out[element * 10 + 0] = (jfloat)destination_values[element].translation.x;
+                    destinationFloating_out[element * 10 + 1] = (jfloat)destination_values[element].translation.y;
+                    destinationFloating_out[element * 10 + 2] = (jfloat)destination_values[element].translation.z;
+                    destinationFloating_out[element * 10 + 3] = (jfloat)destination_values[element].rotation.x;
+                    destinationFloating_out[element * 10 + 4] = (jfloat)destination_values[element].rotation.y;
+                    destinationFloating_out[element * 10 + 5] = (jfloat)destination_values[element].rotation.z;
+                    destinationFloating_out[element * 10 + 6] = (jfloat)destination_values[element].rotation.w;
+                    destinationFloating_out[element * 10 + 7] = (jfloat)destination_values[element].scale.x;
+                    destinationFloating_out[element * 10 + 8] = (jfloat)destination_values[element].scale.y;
+                    destinationFloating_out[element * 10 + 9] = (jfloat)destination_values[element].scale.z;
+                }
+                (*environment)->SetFloatArrayRegion(
+                    environment, destinationFloating, 0,
+                    (jsize)(destination_count * 10), destinationFloating_out);
+                free(destinationFloating_out);
+            }
+        }
+        {
+            jdouble* destinationDoubles_out = (jdouble*)malloc(
+                ((size_t)destination_count * 1 + 1U) * sizeof(*destinationDoubles_out));
+            if (destinationDoubles_out != NULL) {
+                for (jsize element = 0; element < destination_count; ++element) {
+                    destinationDoubles_out[element * 1 + 0] = (jdouble)destination_values[element].time_seconds;
+                }
+                (*environment)->SetDoubleArrayRegion(
+                    environment, destinationDoubles, 0,
+                    (jsize)(destination_count * 1), destinationDoubles_out);
+                free(destinationDoubles_out);
+            }
+        }
+    }
+    free(destination_values);
+    if (call_result == CNA_RESULT_SUCCESS || call_result == CNA_RESULT_BUFFER_TOO_SMALL) {
+        jint out_bone_index_element = (jint)out_bone_index_value;
+        (*environment)->SetIntArrayRegion(
+            environment, out_bone_index, 0, 1, &out_bone_index_element);
+        jlong out_keyframe_count_element = (jlong)out_keyframe_count_value;
+        (*environment)->SetLongArrayRegion(
+            environment, out_keyframe_count, 0, 1, &out_keyframe_count_element);
+    }
+    return (jint)call_result;
+}
+
+JNIEXPORT jint JNICALL
+Java_org_openeggbert_cna_internal_generated_NativeModelExtensionRoutes_skinningDataCopyInverseBindPose(
+    JNIEnv* environment, jclass declaring_class, jlong data, jfloatArray destinationFloating, jlongArray out_count)
+{
+    (void)environment;
+    (void)declaring_class;
+    jsize destination_count = (*environment)->GetArrayLength(environment, destinationFloating) / 16;
+    if ((*environment)->GetArrayLength(environment, destinationFloating) != destination_count * 16) {
+        return (jint)CNA_RESULT_INVALID_ARGUMENT;
+    }
+    CNA_Matrix* destination_values = (CNA_Matrix*)calloc(
+        (size_t)destination_count + 1U, sizeof(*destination_values));
+    if (destination_values == NULL) {
+        return (jint)CNA_RESULT_OUT_OF_MEMORY;
+    }
+    {
+        jsize destinationFloating_length = (*environment)->GetArrayLength(environment, destinationFloating);
+        jfloat* destinationFloating_values = (jfloat*)malloc(
+            ((size_t)destinationFloating_length + 1U) * sizeof(*destinationFloating_values));
+        if (destinationFloating_values == NULL) {
+            free(destination_values);
+            return (jint)CNA_RESULT_OUT_OF_MEMORY;
+        }
+        (*environment)->GetFloatArrayRegion(environment, destinationFloating, 0, destinationFloating_length, destinationFloating_values);
+        for (jsize element = 0; element < destination_count; ++element) {
+            destination_values[element].m11 = (float)destinationFloating_values[element * 16 + 0];
+            destination_values[element].m12 = (float)destinationFloating_values[element * 16 + 1];
+            destination_values[element].m13 = (float)destinationFloating_values[element * 16 + 2];
+            destination_values[element].m14 = (float)destinationFloating_values[element * 16 + 3];
+            destination_values[element].m21 = (float)destinationFloating_values[element * 16 + 4];
+            destination_values[element].m22 = (float)destinationFloating_values[element * 16 + 5];
+            destination_values[element].m23 = (float)destinationFloating_values[element * 16 + 6];
+            destination_values[element].m24 = (float)destinationFloating_values[element * 16 + 7];
+            destination_values[element].m31 = (float)destinationFloating_values[element * 16 + 8];
+            destination_values[element].m32 = (float)destinationFloating_values[element * 16 + 9];
+            destination_values[element].m33 = (float)destinationFloating_values[element * 16 + 10];
+            destination_values[element].m34 = (float)destinationFloating_values[element * 16 + 11];
+            destination_values[element].m41 = (float)destinationFloating_values[element * 16 + 12];
+            destination_values[element].m42 = (float)destinationFloating_values[element * 16 + 13];
+            destination_values[element].m43 = (float)destinationFloating_values[element * 16 + 14];
+            destination_values[element].m44 = (float)destinationFloating_values[element * 16 + 15];
+        }
+        free(destinationFloating_values);
+    }
+    uint64_t out_count_value = 0;
+    CNA_Result call_result = cna.skinning_data_copy_inverse_bind_pose((CNA_SkinningDataHandle)data, destination_values, (uint64_t)destination_count, &out_count_value);
+    if (call_result == CNA_RESULT_SUCCESS) {
+        {
+            jfloat* destinationFloating_out = (jfloat*)malloc(
+                ((size_t)destination_count * 16 + 1U) * sizeof(*destinationFloating_out));
+            if (destinationFloating_out != NULL) {
+                for (jsize element = 0; element < destination_count; ++element) {
+                    destinationFloating_out[element * 16 + 0] = (jfloat)destination_values[element].m11;
+                    destinationFloating_out[element * 16 + 1] = (jfloat)destination_values[element].m12;
+                    destinationFloating_out[element * 16 + 2] = (jfloat)destination_values[element].m13;
+                    destinationFloating_out[element * 16 + 3] = (jfloat)destination_values[element].m14;
+                    destinationFloating_out[element * 16 + 4] = (jfloat)destination_values[element].m21;
+                    destinationFloating_out[element * 16 + 5] = (jfloat)destination_values[element].m22;
+                    destinationFloating_out[element * 16 + 6] = (jfloat)destination_values[element].m23;
+                    destinationFloating_out[element * 16 + 7] = (jfloat)destination_values[element].m24;
+                    destinationFloating_out[element * 16 + 8] = (jfloat)destination_values[element].m31;
+                    destinationFloating_out[element * 16 + 9] = (jfloat)destination_values[element].m32;
+                    destinationFloating_out[element * 16 + 10] = (jfloat)destination_values[element].m33;
+                    destinationFloating_out[element * 16 + 11] = (jfloat)destination_values[element].m34;
+                    destinationFloating_out[element * 16 + 12] = (jfloat)destination_values[element].m41;
+                    destinationFloating_out[element * 16 + 13] = (jfloat)destination_values[element].m42;
+                    destinationFloating_out[element * 16 + 14] = (jfloat)destination_values[element].m43;
+                    destinationFloating_out[element * 16 + 15] = (jfloat)destination_values[element].m44;
+                }
+                (*environment)->SetFloatArrayRegion(
+                    environment, destinationFloating, 0,
+                    (jsize)(destination_count * 16), destinationFloating_out);
+                free(destinationFloating_out);
+            }
+        }
+    }
+    free(destination_values);
+    if (call_result == CNA_RESULT_SUCCESS || call_result == CNA_RESULT_BUFFER_TOO_SMALL) {
+        jlong out_count_element = (jlong)out_count_value;
+        (*environment)->SetLongArrayRegion(
+            environment, out_count, 0, 1, &out_count_element);
+    }
+    return (jint)call_result;
+}
+
+JNIEXPORT jint JNICALL
+Java_org_openeggbert_cna_internal_generated_NativeModelExtensionRoutes_skinningDataCopySkeletonHierarchy(
+    JNIEnv* environment, jclass declaring_class, jlong data, jintArray destination, jlongArray out_count)
+{
+    (void)environment;
+    (void)declaring_class;
+    jsize destination_size = (*environment)->GetArrayLength(environment, destination);
+    jint* destination_elements = (*environment)->GetIntArrayElements(environment, destination, NULL);
+    if (destination_elements == NULL) {
+        return (jint)CNA_RESULT_OUT_OF_MEMORY;
+    }
+    int32_t* destination_values = (int32_t*)malloc(
+        ((size_t)destination_size + 1U) * sizeof(*destination_values));
+    if (destination_values == NULL) {
+        (*environment)->ReleaseIntArrayElements(
+            environment, destination, destination_elements, JNI_ABORT);
+        return (jint)CNA_RESULT_OUT_OF_MEMORY;
+    }
+    for (jsize index = 0; index < destination_size; ++index) {
+        destination_values[index] = (int32_t)destination_elements[index];
+    }
+    uint64_t out_count_value = 0;
+    CNA_Result call_result = cna.skinning_data_copy_skeleton_hierarchy((CNA_SkinningDataHandle)data, destination_values, (uint64_t)destination_size, &out_count_value);
+    if (call_result == CNA_RESULT_SUCCESS) {
+        for (jsize index = 0; index < destination_size; ++index) {
+            destination_elements[index] = (jint)destination_values[index];
+        }
+    }
+    free(destination_values);
+    (*environment)->ReleaseIntArrayElements(
+        environment, destination, destination_elements, 0);
+    if (call_result == CNA_RESULT_SUCCESS || call_result == CNA_RESULT_BUFFER_TOO_SMALL) {
+        jlong out_count_element = (jlong)out_count_value;
+        (*environment)->SetLongArrayRegion(
+            environment, out_count, 0, 1, &out_count_element);
+    }
+    return (jint)call_result;
+}
+
+JNIEXPORT jint JNICALL
+Java_org_openeggbert_cna_internal_generated_NativeModelExtensionRoutes_skinningDataCopySkeletonRootNameExt(
+    JNIEnv* environment, jclass declaring_class, jlong data, jbyteArray destination, jlongArray out_byte_count)
+{
+    (void)environment;
+    (void)declaring_class;
+    jsize destination_size = (*environment)->GetArrayLength(environment, destination);
+    jbyte* destination_bytes = (*environment)->GetByteArrayElements(environment, destination, NULL);
+    if (destination_bytes == NULL) {
+        return (jint)CNA_RESULT_OUT_OF_MEMORY;
+    }
+    uint64_t destination_written = 0;
+    CNA_Result call_result = cna.skinning_data_copy_skeleton_root_name_ext((CNA_SkinningDataHandle)data, (char*)destination_bytes, (uint64_t)destination_size, &destination_written);
+    (*environment)->ReleaseByteArrayElements(environment, destination, destination_bytes, 0);
+    if (call_result == CNA_RESULT_SUCCESS || call_result == CNA_RESULT_BUFFER_TOO_SMALL) {
+        jlong destination_element = (jlong)destination_written;
+        (*environment)->SetLongArrayRegion(
+            environment, out_byte_count, 0, 1, &destination_element);
+    }
+    return (jint)call_result;
+}
+
+JNIEXPORT jint JNICALL
+Java_org_openeggbert_cna_internal_generated_NativeModelExtensionRoutes_skinningDataCopySkeletonRootPrefix(
+    JNIEnv* environment, jclass declaring_class, jlong data, jfloatArray destinationFloating, jlongArray out_count)
+{
+    (void)environment;
+    (void)declaring_class;
+    jsize destination_count = (*environment)->GetArrayLength(environment, destinationFloating) / 16;
+    if ((*environment)->GetArrayLength(environment, destinationFloating) != destination_count * 16) {
+        return (jint)CNA_RESULT_INVALID_ARGUMENT;
+    }
+    CNA_Matrix* destination_values = (CNA_Matrix*)calloc(
+        (size_t)destination_count + 1U, sizeof(*destination_values));
+    if (destination_values == NULL) {
+        return (jint)CNA_RESULT_OUT_OF_MEMORY;
+    }
+    {
+        jsize destinationFloating_length = (*environment)->GetArrayLength(environment, destinationFloating);
+        jfloat* destinationFloating_values = (jfloat*)malloc(
+            ((size_t)destinationFloating_length + 1U) * sizeof(*destinationFloating_values));
+        if (destinationFloating_values == NULL) {
+            free(destination_values);
+            return (jint)CNA_RESULT_OUT_OF_MEMORY;
+        }
+        (*environment)->GetFloatArrayRegion(environment, destinationFloating, 0, destinationFloating_length, destinationFloating_values);
+        for (jsize element = 0; element < destination_count; ++element) {
+            destination_values[element].m11 = (float)destinationFloating_values[element * 16 + 0];
+            destination_values[element].m12 = (float)destinationFloating_values[element * 16 + 1];
+            destination_values[element].m13 = (float)destinationFloating_values[element * 16 + 2];
+            destination_values[element].m14 = (float)destinationFloating_values[element * 16 + 3];
+            destination_values[element].m21 = (float)destinationFloating_values[element * 16 + 4];
+            destination_values[element].m22 = (float)destinationFloating_values[element * 16 + 5];
+            destination_values[element].m23 = (float)destinationFloating_values[element * 16 + 6];
+            destination_values[element].m24 = (float)destinationFloating_values[element * 16 + 7];
+            destination_values[element].m31 = (float)destinationFloating_values[element * 16 + 8];
+            destination_values[element].m32 = (float)destinationFloating_values[element * 16 + 9];
+            destination_values[element].m33 = (float)destinationFloating_values[element * 16 + 10];
+            destination_values[element].m34 = (float)destinationFloating_values[element * 16 + 11];
+            destination_values[element].m41 = (float)destinationFloating_values[element * 16 + 12];
+            destination_values[element].m42 = (float)destinationFloating_values[element * 16 + 13];
+            destination_values[element].m43 = (float)destinationFloating_values[element * 16 + 14];
+            destination_values[element].m44 = (float)destinationFloating_values[element * 16 + 15];
+        }
+        free(destinationFloating_values);
+    }
+    uint64_t out_count_value = 0;
+    CNA_Result call_result = cna.skinning_data_copy_skeleton_root_prefix((CNA_SkinningDataHandle)data, destination_values, (uint64_t)destination_count, &out_count_value);
+    if (call_result == CNA_RESULT_SUCCESS) {
+        {
+            jfloat* destinationFloating_out = (jfloat*)malloc(
+                ((size_t)destination_count * 16 + 1U) * sizeof(*destinationFloating_out));
+            if (destinationFloating_out != NULL) {
+                for (jsize element = 0; element < destination_count; ++element) {
+                    destinationFloating_out[element * 16 + 0] = (jfloat)destination_values[element].m11;
+                    destinationFloating_out[element * 16 + 1] = (jfloat)destination_values[element].m12;
+                    destinationFloating_out[element * 16 + 2] = (jfloat)destination_values[element].m13;
+                    destinationFloating_out[element * 16 + 3] = (jfloat)destination_values[element].m14;
+                    destinationFloating_out[element * 16 + 4] = (jfloat)destination_values[element].m21;
+                    destinationFloating_out[element * 16 + 5] = (jfloat)destination_values[element].m22;
+                    destinationFloating_out[element * 16 + 6] = (jfloat)destination_values[element].m23;
+                    destinationFloating_out[element * 16 + 7] = (jfloat)destination_values[element].m24;
+                    destinationFloating_out[element * 16 + 8] = (jfloat)destination_values[element].m31;
+                    destinationFloating_out[element * 16 + 9] = (jfloat)destination_values[element].m32;
+                    destinationFloating_out[element * 16 + 10] = (jfloat)destination_values[element].m33;
+                    destinationFloating_out[element * 16 + 11] = (jfloat)destination_values[element].m34;
+                    destinationFloating_out[element * 16 + 12] = (jfloat)destination_values[element].m41;
+                    destinationFloating_out[element * 16 + 13] = (jfloat)destination_values[element].m42;
+                    destinationFloating_out[element * 16 + 14] = (jfloat)destination_values[element].m43;
+                    destinationFloating_out[element * 16 + 15] = (jfloat)destination_values[element].m44;
+                }
+                (*environment)->SetFloatArrayRegion(
+                    environment, destinationFloating, 0,
+                    (jsize)(destination_count * 16), destinationFloating_out);
+                free(destinationFloating_out);
+            }
+        }
+    }
+    free(destination_values);
+    if (call_result == CNA_RESULT_SUCCESS || call_result == CNA_RESULT_BUFFER_TOO_SMALL) {
+        jlong out_count_element = (jlong)out_count_value;
+        (*environment)->SetLongArrayRegion(
+            environment, out_count, 0, 1, &out_count_element);
+    }
+    return (jint)call_result;
+}
+
+JNIEXPORT jint JNICALL
+Java_org_openeggbert_cna_internal_generated_NativeModelExtensionRoutes_skinningDataDestroy(
+    JNIEnv* environment, jclass declaring_class, jlong data)
+{
+    (void)environment;
+    (void)declaring_class;
+    CNA_Result call_result = cna.skinning_data_destroy((CNA_SkinningDataHandle)data);
+    return (jint)call_result;
+}
+
+JNIEXPORT jint JNICALL
+Java_org_openeggbert_cna_internal_generated_NativeModelExtensionRoutes_skinningDataGetBoneCount(
+    JNIEnv* environment, jclass declaring_class, jlong data, jlongArray out_bone_count)
+{
+    (void)environment;
+    (void)declaring_class;
+    uint64_t out_bone_count_value = 0;
+    CNA_Result call_result = cna.skinning_data_get_bone_count((CNA_SkinningDataHandle)data, &out_bone_count_value);
+    if (call_result == CNA_RESULT_SUCCESS || call_result == CNA_RESULT_BUFFER_TOO_SMALL) {
+        jlong out_bone_count_element = (jlong)out_bone_count_value;
+        (*environment)->SetLongArrayRegion(
+            environment, out_bone_count, 0, 1, &out_bone_count_element);
+    }
+    return (jint)call_result;
+}
+
+JNIEXPORT jint JNICALL
+Java_org_openeggbert_cna_internal_generated_NativeModelExtensionRoutes_skinningDataGetClipCount(
+    JNIEnv* environment, jclass declaring_class, jlong data, jlongArray out_clip_count)
+{
+    (void)environment;
+    (void)declaring_class;
+    uint64_t out_clip_count_value = 0;
+    CNA_Result call_result = cna.skinning_data_get_clip_count((CNA_SkinningDataHandle)data, &out_clip_count_value);
+    if (call_result == CNA_RESULT_SUCCESS || call_result == CNA_RESULT_BUFFER_TOO_SMALL) {
+        jlong out_clip_count_element = (jlong)out_clip_count_value;
+        (*environment)->SetLongArrayRegion(
+            environment, out_clip_count, 0, 1, &out_clip_count_element);
+    }
+    return (jint)call_result;
+}
+
+JNIEXPORT jint JNICALL
+Java_org_openeggbert_cna_internal_generated_NativeModelExtensionRoutes_skinningDataGetClipInfo(
+    JNIEnv* environment, jclass declaring_class, jlong data, jbyteArray name, jbooleanArray out_found, jdoubleArray out_duration_seconds, jlongArray out_track_count)
+{
+    (void)environment;
+    (void)declaring_class;
+    jsize name_size = (*environment)->GetArrayLength(environment, name);
+    jbyte* name_bytes = (*environment)->GetByteArrayElements(environment, name, NULL);
+    if (name_bytes == NULL) {
+        return (jint)CNA_RESULT_OUT_OF_MEMORY;
+    }
+    CNA_StringView name_view = {(const char*)name_bytes, (uint64_t)name_size};
+    CNA_Bool out_found_value = 0;
+    double out_duration_seconds_value = 0;
+    uint64_t out_track_count_value = 0;
+    CNA_Result call_result = cna.skinning_data_get_clip_info((CNA_SkinningDataHandle)data, name_view, &out_found_value, &out_duration_seconds_value, &out_track_count_value);
+    (*environment)->ReleaseByteArrayElements(environment, name, name_bytes, JNI_ABORT);
+    if (call_result == CNA_RESULT_SUCCESS || call_result == CNA_RESULT_BUFFER_TOO_SMALL) {
+        jboolean out_found_element = (jboolean)out_found_value;
+        (*environment)->SetBooleanArrayRegion(
+            environment, out_found, 0, 1, &out_found_element);
+        jdouble out_duration_seconds_element = (jdouble)out_duration_seconds_value;
+        (*environment)->SetDoubleArrayRegion(
+            environment, out_duration_seconds, 0, 1, &out_duration_seconds_element);
+        jlong out_track_count_element = (jlong)out_track_count_value;
+        (*environment)->SetLongArrayRegion(
+            environment, out_track_count, 0, 1, &out_track_count_element);
+    }
+    return (jint)call_result;
+}
+
+JNIEXPORT jint JNICALL
+Java_org_openeggbert_cna_internal_generated_NativeModelExtensionRoutes_skinningDataGetClipNameByteCountAt(
+    JNIEnv* environment, jclass declaring_class, jlong data, jlong clip_index, jlongArray out_byte_count)
+{
+    (void)environment;
+    (void)declaring_class;
+    uint64_t out_byte_count_value = 0;
+    CNA_Result call_result = cna.skinning_data_get_clip_name_byte_count_at((CNA_SkinningDataHandle)data, (uint64_t)clip_index, &out_byte_count_value);
+    if (call_result == CNA_RESULT_SUCCESS || call_result == CNA_RESULT_BUFFER_TOO_SMALL) {
+        jlong out_byte_count_element = (jlong)out_byte_count_value;
+        (*environment)->SetLongArrayRegion(
+            environment, out_byte_count, 0, 1, &out_byte_count_element);
+    }
+    return (jint)call_result;
+}
+
+JNIEXPORT jint JNICALL
+Java_org_openeggbert_cna_internal_generated_NativeModelExtensionRoutes_skinningDataGetClipTargetSpaceExt(
+    JNIEnv* environment, jclass declaring_class, jlong data, jlong clip_index, jintArray out_value)
+{
+    (void)environment;
+    (void)declaring_class;
+    CNA_ClipTargetSpaceEXT out_value_value = 0;
+    CNA_Result call_result = cna.skinning_data_get_clip_target_space_ext((CNA_SkinningDataHandle)data, (uint64_t)clip_index, &out_value_value);
+    if (call_result == CNA_RESULT_SUCCESS || call_result == CNA_RESULT_BUFFER_TOO_SMALL) {
+        jint out_value_element = (jint)out_value_value;
+        (*environment)->SetIntArrayRegion(
+            environment, out_value, 0, 1, &out_value_element);
+    }
+    return (jint)call_result;
+}
+
+JNIEXPORT jint JNICALL
+Java_org_openeggbert_cna_internal_generated_NativeModelExtensionRoutes_skinningDataGetSkeletonRootNameByteCountExt(
+    JNIEnv* environment, jclass declaring_class, jlong data, jlongArray out_byte_count)
+{
+    (void)environment;
+    (void)declaring_class;
+    uint64_t out_byte_count_value = 0;
+    CNA_Result call_result = cna.skinning_data_get_skeleton_root_name_byte_count_ext((CNA_SkinningDataHandle)data, &out_byte_count_value);
+    if (call_result == CNA_RESULT_SUCCESS || call_result == CNA_RESULT_BUFFER_TOO_SMALL) {
+        jlong out_byte_count_element = (jlong)out_byte_count_value;
+        (*environment)->SetLongArrayRegion(
+            environment, out_byte_count, 0, 1, &out_byte_count_element);
+    }
+    return (jint)call_result;
+}
+
+JNIEXPORT jint JNICALL
+Java_org_openeggbert_cna_internal_generated_NativeModelExtensionRoutes_skinningDataGetSkeletonRootNodeIndexExt(
+    JNIEnv* environment, jclass declaring_class, jlong data, jintArray out_value)
+{
+    (void)environment;
+    (void)declaring_class;
+    int32_t out_value_value = 0;
+    CNA_Result call_result = cna.skinning_data_get_skeleton_root_node_index_ext((CNA_SkinningDataHandle)data, &out_value_value);
+    if (call_result == CNA_RESULT_SUCCESS || call_result == CNA_RESULT_BUFFER_TOO_SMALL) {
+        jint out_value_element = (jint)out_value_value;
+        (*environment)->SetIntArrayRegion(
+            environment, out_value, 0, 1, &out_value_element);
+    }
+    return (jint)call_result;
+}
+
+JNIEXPORT jint JNICALL
+Java_org_openeggbert_cna_internal_generated_NativeModelExtensionRoutes_skinningDataSetClipTargetSpaceExt(
+    JNIEnv* environment, jclass declaring_class, jlong data, jlong clip_index, jint value)
+{
+    (void)environment;
+    (void)declaring_class;
+    CNA_Result call_result = cna.skinning_data_set_clip_target_space_ext((CNA_SkinningDataHandle)data, (uint64_t)clip_index, (CNA_ClipTargetSpaceEXT)value);
+    return (jint)call_result;
+}
+
+JNIEXPORT jint JNICALL
+Java_org_openeggbert_cna_internal_generated_NativeModelExtensionRoutes_skinningDataSetSkeletonRootNameExt(
+    JNIEnv* environment, jclass declaring_class, jlong data, jbyteArray name)
+{
+    (void)environment;
+    (void)declaring_class;
+    jsize name_size = (*environment)->GetArrayLength(environment, name);
+    jbyte* name_bytes = (*environment)->GetByteArrayElements(environment, name, NULL);
+    if (name_bytes == NULL) {
+        return (jint)CNA_RESULT_OUT_OF_MEMORY;
+    }
+    CNA_StringView name_view = {(const char*)name_bytes, (uint64_t)name_size};
+    CNA_Result call_result = cna.skinning_data_set_skeleton_root_name_ext((CNA_SkinningDataHandle)data, name_view);
+    (*environment)->ReleaseByteArrayElements(environment, name, name_bytes, JNI_ABORT);
+    return (jint)call_result;
+}
+
+JNIEXPORT jint JNICALL
+Java_org_openeggbert_cna_internal_generated_NativeModelExtensionRoutes_skinningDataSetSkeletonRootNodeIndexExt(
+    JNIEnv* environment, jclass declaring_class, jlong data, jint value)
+{
+    (void)environment;
+    (void)declaring_class;
+    CNA_Result call_result = cna.skinning_data_set_skeleton_root_node_index_ext((CNA_SkinningDataHandle)data, (int32_t)value);
     return (jint)call_result;
 }

@@ -2464,6 +2464,50 @@
     ],
     "NativeModelExtensionRoutes": [
       {
+        "java": "animationPlayerCopyBoneTransforms",
+        "symbol": "cna_animation_player_copy_bone_transforms"
+      },
+      {
+        "java": "animationPlayerCopyCurrentClipName",
+        "symbol": "cna_animation_player_copy_current_clip_name"
+      },
+      {
+        "java": "animationPlayerCopySkinTransforms",
+        "symbol": "cna_animation_player_copy_skin_transforms"
+      },
+      {
+        "java": "animationPlayerCopyWorldTransforms",
+        "symbol": "cna_animation_player_copy_world_transforms"
+      },
+      {
+        "java": "animationPlayerCreate",
+        "symbol": "cna_animation_player_create"
+      },
+      {
+        "java": "animationPlayerDestroy",
+        "symbol": "cna_animation_player_destroy"
+      },
+      {
+        "java": "animationPlayerGetCurrentClipInfo",
+        "symbol": "cna_animation_player_get_current_clip_info"
+      },
+      {
+        "java": "animationPlayerGetCurrentClipNameByteCount",
+        "symbol": "cna_animation_player_get_current_clip_name_byte_count"
+      },
+      {
+        "java": "animationPlayerGetCurrentPosition",
+        "symbol": "cna_animation_player_get_current_position"
+      },
+      {
+        "java": "animationPlayerStartClip",
+        "symbol": "cna_animation_player_start_clip"
+      },
+      {
+        "java": "animationPlayerUpdate",
+        "symbol": "cna_animation_player_update"
+      },
+      {
         "java": "effectCopyTypeName",
         "symbol": "cna_effect_copy_type_name"
       },
@@ -2774,6 +2818,78 @@
       {
         "java": "modelSetMaterialVariantExt",
         "symbol": "cna_model_set_material_variant_ext"
+      },
+      {
+        "java": "skinningDataCopyBindPose",
+        "symbol": "cna_skinning_data_copy_bind_pose"
+      },
+      {
+        "java": "skinningDataCopyClipNameAt",
+        "symbol": "cna_skinning_data_copy_clip_name_at"
+      },
+      {
+        "java": "skinningDataCopyClipTrack",
+        "symbol": "cna_skinning_data_copy_clip_track"
+      },
+      {
+        "java": "skinningDataCopyInverseBindPose",
+        "symbol": "cna_skinning_data_copy_inverse_bind_pose"
+      },
+      {
+        "java": "skinningDataCopySkeletonHierarchy",
+        "symbol": "cna_skinning_data_copy_skeleton_hierarchy"
+      },
+      {
+        "java": "skinningDataCopySkeletonRootNameExt",
+        "symbol": "cna_skinning_data_copy_skeleton_root_name_ext"
+      },
+      {
+        "java": "skinningDataCopySkeletonRootPrefix",
+        "symbol": "cna_skinning_data_copy_skeleton_root_prefix"
+      },
+      {
+        "java": "skinningDataDestroy",
+        "symbol": "cna_skinning_data_destroy"
+      },
+      {
+        "java": "skinningDataGetBoneCount",
+        "symbol": "cna_skinning_data_get_bone_count"
+      },
+      {
+        "java": "skinningDataGetClipCount",
+        "symbol": "cna_skinning_data_get_clip_count"
+      },
+      {
+        "java": "skinningDataGetClipInfo",
+        "symbol": "cna_skinning_data_get_clip_info"
+      },
+      {
+        "java": "skinningDataGetClipNameByteCountAt",
+        "symbol": "cna_skinning_data_get_clip_name_byte_count_at"
+      },
+      {
+        "java": "skinningDataGetClipTargetSpaceExt",
+        "symbol": "cna_skinning_data_get_clip_target_space_ext"
+      },
+      {
+        "java": "skinningDataGetSkeletonRootNameByteCountExt",
+        "symbol": "cna_skinning_data_get_skeleton_root_name_byte_count_ext"
+      },
+      {
+        "java": "skinningDataGetSkeletonRootNodeIndexExt",
+        "symbol": "cna_skinning_data_get_skeleton_root_node_index_ext"
+      },
+      {
+        "java": "skinningDataSetClipTargetSpaceExt",
+        "symbol": "cna_skinning_data_set_clip_target_space_ext"
+      },
+      {
+        "java": "skinningDataSetSkeletonRootNameExt",
+        "symbol": "cna_skinning_data_set_skeleton_root_name_ext"
+      },
+      {
+        "java": "skinningDataSetSkeletonRootNodeIndexExt",
+        "symbol": "cna_skinning_data_set_skeleton_root_node_index_ext"
       }
     ],
     "NativeCnbRoutes": [

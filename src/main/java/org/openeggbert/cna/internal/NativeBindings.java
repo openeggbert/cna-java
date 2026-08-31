@@ -1316,6 +1316,85 @@ public final class NativeBindings {
     private static native int nativeSensorSubscribe(int kind, long sensor, long token,
             long[] outRegistration);
 
+    /**
+     * Creates skinning data from a skeleton and a set of named clips.
+     *
+     * <p>Hand-written because CNA takes a descriptor whose fields are pointers to arrays of
+     * descriptors -- skeleton matrices, and named clips holding tracks holding keyframes -- which
+     * the generator refuses. It is right to: nothing in the C says which keyframes belong to
+     * which track, nor how many matrices sit behind a bone count. The lifetimes are not unknown,
+     * though. CNA documents every array as borrowed for the call and the whole descriptor as
+     * deeply copied, so the graph is built here for one call and freed after it.
+     *
+     * @param parents each bone's parent index, one per bone; its length is the bone count
+     * @param bindPose sixteen floats per bone, in CNA's row order
+     * @param inverseBindPose sixteen floats per bone
+     * @param rootPrefix sixteen floats per bone, or null or empty for none
+     * @param names each clip's name as UTF-8 bytes
+     * @param durations each clip's duration
+     * @param clipTrackCounts how many tracks each clip has
+     * @param boneIndices which bone each track drives, across every clip in order
+     * @param keyframeCounts how many keyframes each track has
+     * @param times each keyframe's time
+     * @param values ten floats per keyframe
+     * @param outData receives the owned handle
+     * @return CNA's result
+     */
+    public static int skinningDataCreate(int[] parents, float[] bindPose,
+            float[] inverseBindPose, float[] rootPrefix, byte[][] names, double[] durations,
+            int[] clipTrackCounts, int[] boneIndices, int[] keyframeCounts, double[] times,
+            float[] values, long[] outData) {
+        requireAvailable();
+        return nativeSkinningDataCreate(parents, bindPose, inverseBindPose, rootPrefix, names,
+                durations, clipTrackCounts, boneIndices, keyframeCounts, times, values, outData);
+    }
+
+    /**
+     * Sets a skinned model's skeleton from three parallel arrays.
+     *
+     * @param model the native skinned-model handle
+     * @param parents each bone's parent index; its length is the bone count
+     * @param bindPose sixteen floats per bone
+     * @param inverseBindPose sixteen floats per bone
+     * @return CNA's result
+     */
+    public static int skinnedModelSetSkeleton(long model, int[] parents, float[] bindPose,
+            float[] inverseBindPose) {
+        requireAvailable();
+        return nativeSkinnedModelSetSkeleton(model, parents, bindPose, inverseBindPose);
+    }
+
+    /**
+     * Sets one named clip on a skinned model.
+     *
+     * @param model the native skinned-model handle
+     * @param clipName the clip's name as UTF-8 bytes
+     * @param durationSeconds how long the clip runs
+     * @param boneIndices which bone each track drives
+     * @param keyframeCounts how many keyframes each track has
+     * @param times each keyframe's time
+     * @param values ten floats per keyframe
+     * @return CNA's result
+     */
+    public static int skinnedModelSetClip(long model, byte[] clipName, double durationSeconds,
+            int[] boneIndices, int[] keyframeCounts, double[] times, float[] values) {
+        requireAvailable();
+        return nativeSkinnedModelSetClip(model, clipName, durationSeconds, boneIndices,
+                keyframeCounts, times, values);
+    }
+
+    private static native int nativeSkinningDataCreate(int[] parents, float[] bindPose,
+            float[] inverseBindPose, float[] rootPrefix, byte[][] names, double[] durations,
+            int[] clipTrackCounts, int[] boneIndices, int[] keyframeCounts, double[] times,
+            float[] values, long[] outData);
+
+    private static native int nativeSkinnedModelSetSkeleton(long model, int[] parents,
+            float[] bindPose, float[] inverseBindPose);
+
+    private static native int nativeSkinnedModelSetClip(long model, byte[] clipName,
+            double durationSeconds, int[] boneIndices, int[] keyframeCounts, double[] times,
+            float[] values);
+
 
     /**
      * Releases a texture handle that names a texture without keeping it alive.

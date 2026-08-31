@@ -13,6 +13,61 @@ public final class NativeModelExtensionRoutes {
     }
 
     /**
+     * cna_animation_player_copy_bone_transforms (models.h).
+     */
+    public static native int animationPlayerCopyBoneTransforms(long player, float[] destinationFloating, long[] outCount);
+
+    /**
+     * cna_animation_player_copy_current_clip_name (models.h).
+     */
+    public static native int animationPlayerCopyCurrentClipName(long player, byte[] destination, long[] outByteCount);
+
+    /**
+     * cna_animation_player_copy_skin_transforms (models.h).
+     */
+    public static native int animationPlayerCopySkinTransforms(long player, float[] destinationFloating, long[] outCount);
+
+    /**
+     * cna_animation_player_copy_world_transforms (models.h).
+     */
+    public static native int animationPlayerCopyWorldTransforms(long player, float[] destinationFloating, long[] outCount);
+
+    /**
+     * cna_animation_player_create (models.h).
+     */
+    public static native int animationPlayerCreate(long data, long[] outPlayer);
+
+    /**
+     * cna_animation_player_destroy (models.h).
+     */
+    public static native int animationPlayerDestroy(long player);
+
+    /**
+     * cna_animation_player_get_current_clip_info (models.h).
+     */
+    public static native int animationPlayerGetCurrentClipInfo(long player, boolean[] outHasClip, double[] outDurationSeconds, long[] outTrackCount);
+
+    /**
+     * cna_animation_player_get_current_clip_name_byte_count (models.h).
+     */
+    public static native int animationPlayerGetCurrentClipNameByteCount(long player, long[] outByteCount);
+
+    /**
+     * cna_animation_player_get_current_position (models.h).
+     */
+    public static native int animationPlayerGetCurrentPosition(long player, double[] outPositionSeconds);
+
+    /**
+     * cna_animation_player_start_clip (models.h).
+     */
+    public static native int animationPlayerStartClip(long player, byte[] clipName);
+
+    /**
+     * cna_animation_player_update (models.h).
+     */
+    public static native int animationPlayerUpdate(long player, double timeSeconds, boolean relativeToCurrentTime, boolean loop);
+
+    /**
      * cna_effect_copy_type_name (effects.h).
      */
     public static native int effectCopyTypeName(long effect, byte[] destination, long[] outByteCount);
@@ -485,4 +540,94 @@ public final class NativeModelExtensionRoutes {
      * cna_model_set_material_variant_ext (models.h).
      */
     public static native int modelSetMaterialVariantExt(long model, int value);
+
+    /**
+     * cna_skinning_data_copy_bind_pose (models.h).
+     */
+    public static native int skinningDataCopyBindPose(long data, float[] destinationFloating, long[] outCount);
+
+    /**
+     * cna_skinning_data_copy_clip_name_at (models.h).
+     */
+    public static native int skinningDataCopyClipNameAt(long data, long clipIndex, byte[] destination, long[] outByteCount);
+
+    /**
+     * cna_skinning_data_copy_clip_track (models.h).
+     */
+    public static native int skinningDataCopyClipTrack(long data, byte[] name, long trackIndex, int[] outBoneIndex, float[] destinationFloating, double[] destinationDoubles, long[] outKeyframeCount);
+
+    /**
+     * cna_skinning_data_copy_inverse_bind_pose (models.h).
+     */
+    public static native int skinningDataCopyInverseBindPose(long data, float[] destinationFloating, long[] outCount);
+
+    /**
+     * cna_skinning_data_copy_skeleton_hierarchy (models.h).
+     */
+    public static native int skinningDataCopySkeletonHierarchy(long data, int[] destination, long[] outCount);
+
+    /**
+     * cna_skinning_data_copy_skeleton_root_name_ext (models.h).
+     */
+    public static native int skinningDataCopySkeletonRootNameExt(long data, byte[] destination, long[] outByteCount);
+
+    /**
+     * cna_skinning_data_copy_skeleton_root_prefix (models.h).
+     */
+    public static native int skinningDataCopySkeletonRootPrefix(long data, float[] destinationFloating, long[] outCount);
+
+    /**
+     * cna_skinning_data_destroy (models.h).
+     */
+    public static native int skinningDataDestroy(long data);
+
+    /**
+     * cna_skinning_data_get_bone_count (models.h).
+     */
+    public static native int skinningDataGetBoneCount(long data, long[] outBoneCount);
+
+    /**
+     * cna_skinning_data_get_clip_count (models.h).
+     */
+    public static native int skinningDataGetClipCount(long data, long[] outClipCount);
+
+    /**
+     * cna_skinning_data_get_clip_info (models.h).
+     */
+    public static native int skinningDataGetClipInfo(long data, byte[] name, boolean[] outFound, double[] outDurationSeconds, long[] outTrackCount);
+
+    /**
+     * cna_skinning_data_get_clip_name_byte_count_at (models.h).
+     */
+    public static native int skinningDataGetClipNameByteCountAt(long data, long clipIndex, long[] outByteCount);
+
+    /**
+     * cna_skinning_data_get_clip_target_space_ext (models.h).
+     */
+    public static native int skinningDataGetClipTargetSpaceExt(long data, long clipIndex, int[] outValue);
+
+    /**
+     * cna_skinning_data_get_skeleton_root_name_byte_count_ext (models.h).
+     */
+    public static native int skinningDataGetSkeletonRootNameByteCountExt(long data, long[] outByteCount);
+
+    /**
+     * cna_skinning_data_get_skeleton_root_node_index_ext (models.h).
+     */
+    public static native int skinningDataGetSkeletonRootNodeIndexExt(long data, int[] outValue);
+
+    /**
+     * cna_skinning_data_set_clip_target_space_ext (models.h).
+     */
+    public static native int skinningDataSetClipTargetSpaceExt(long data, long clipIndex, int value);
+
+    /**
+     * cna_skinning_data_set_skeleton_root_name_ext (models.h).
+     */
+    public static native int skinningDataSetSkeletonRootNameExt(long data, byte[] name);
+
+    /**
+     * cna_skinning_data_set_skeleton_root_node_index_ext (models.h).
+     */
+    public static native int skinningDataSetSkeletonRootNodeIndexExt(long data, int value);
 }

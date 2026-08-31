@@ -701,7 +701,7 @@
       "classification": "CNA_EXTENSION_CANDIDATE",
       "purposeReason": "Switches an avatar renderer from CNA's placeholder to a real skinned model and draws a named clip on it. XNA's AvatarRenderer draws the Xbox runtime's own avatar and exposes none of this.",
       "bindingStatus": "ACTIONABLE_LOCAL",
-      "bindingReason": "Both take a CNA_SkinnedModelEXT handle, and this projection has no Java type for one yet. Exposing them over a raw handle is not an option -- an API whose parameter is a native pointer is not one a game can safely use, and half of a two-step contract is worse than none. The skinned-model family is what finishes it.",
+      "bindingReason": "Both take a CNA_SkinnedModelEXT handle and this projection has no Java type for one yet. Exposing them over a raw handle is not an option -- an API whose parameter is a native pointer is not one a game can safely use, and half of a two-step contract is worse than none. The skinned-model facade is what finishes it, and it is local work.",
       "task": "JAVA-EXT-007"
     },
     {
@@ -931,9 +931,9 @@
       },
       "classification": "CNA_EXTENSION_CANDIDATE",
       "purposeReason": "Morph targets are a CNA model extension; XNA 4.0's Model has no morph data. Not bound for the reason JAVA-EXT-007 records and this session rechecked against the live headers: the family is entered through cna_skinning_data_create, which takes a CNA_SkinningDataDescriptor -- a pointer graph the generator refuses rather than guesses at -- and no route takes a clip handle, so there is no other door in. cna_animation_player_create takes the SkinningData handle that door would produce.",
-      "bindingStatus": "BLOCKED_UPSTREAM",
-      "bindingReason": "There is no door in. The family is entered through cna_skinning_data_create, which takes a CNA_SkinningDataDescriptor -- a pointer graph the generator refuses rather than guesses at -- and no route takes a clip handle.",
-      "evidence": "JAVA-EXT-007, rechecked against the live headers: cna_animation_player_create takes the SkinningData handle that door would produce, and nothing produces it.",
+      "bindingStatus": "ACTIONABLE_LOCAL",
+      "bindingReason": "Nothing outside this repository blocks MorphTargetDataEXT. The descriptor graph that was recorded as the family's only door and no way through it is marshalled by hand now -- CnaSkinningData and CnaAnimationPlayer are built on exactly that, and cna_skinned_model_ext_set_skeleton and _set_clip are bound with it -- so what is left is a Java facade over the container: its parts, its textures and its buffers. JAVA-EXT-007 is the task, and it is local work rather than an upstream boundary.",
+      "evidence": "CnaSkinningDataTests builds a two-bone skeleton and two clips through the same descriptor, reads every matrix and keyframe back, and poses the three palettes; four planted defects in the marshaller are caught.",
       "task": "JAVA-EXT-007"
     },
     {
@@ -942,9 +942,9 @@
       },
       "classification": "CNA_EXTENSION_CANDIDATE",
       "purposeReason": "SkinnedModel is a CNA model extension; XNA 4.0 ships skinning only as a sample-level content processor. Not bound for the reason JAVA-EXT-007 records and this session rechecked against the live headers: the family is entered through cna_skinning_data_create, which takes a CNA_SkinningDataDescriptor -- a pointer graph the generator refuses rather than guesses at -- and no route takes a clip handle, so there is no other door in. cna_animation_player_create takes the SkinningData handle that door would produce.",
-      "bindingStatus": "BLOCKED_UPSTREAM",
-      "bindingReason": "There is no door in. The family is entered through cna_skinning_data_create, which takes a CNA_SkinningDataDescriptor -- a pointer graph the generator refuses rather than guesses at -- and no route takes a clip handle.",
-      "evidence": "JAVA-EXT-007, rechecked against the live headers: cna_animation_player_create takes the SkinningData handle that door would produce, and nothing produces it.",
+      "bindingStatus": "ACTIONABLE_LOCAL",
+      "bindingReason": "Nothing outside this repository blocks SkinnedModelEXT. The descriptor graph that was recorded as the family's only door and no way through it is marshalled by hand now -- CnaSkinningData and CnaAnimationPlayer are built on exactly that, and cna_skinned_model_ext_set_skeleton and _set_clip are bound with it -- so what is left is a Java facade over the container: its parts, its textures and its buffers. JAVA-EXT-007 is the task, and it is local work rather than an upstream boundary.",
+      "evidence": "CnaSkinningDataTests builds a two-bone skeleton and two clips through the same descriptor, reads every matrix and keyframe back, and poses the three palettes; four planted defects in the marshaller are caught.",
       "task": "JAVA-EXT-007"
     },
     {
@@ -953,10 +953,8 @@
       },
       "classification": "CNA_EXTENSION_CANDIDATE",
       "purposeReason": "Skinning data is a CNA model extension. Not bound for the reason JAVA-EXT-007 records and this session rechecked against the live headers: the family is entered through cna_skinning_data_create, which takes a CNA_SkinningDataDescriptor -- a pointer graph the generator refuses rather than guesses at -- and no route takes a clip handle, so there is no other door in. cna_animation_player_create takes the SkinningData handle that door would produce.",
-      "bindingStatus": "BLOCKED_UPSTREAM",
-      "bindingReason": "There is no door in. The family is entered through cna_skinning_data_create, which takes a CNA_SkinningDataDescriptor -- a pointer graph the generator refuses rather than guesses at -- and no route takes a clip handle.",
-      "evidence": "JAVA-EXT-007, rechecked against the live headers: cna_animation_player_create takes the SkinningData handle that door would produce, and nothing produces it.",
-      "task": "JAVA-EXT-007"
+      "bindingStatus": "DELIBERATE_NON_BINDING",
+      "bindingReason": "Nothing is left unbound here; this catch-all exists so a new declaration in the family is classified rather than unexplained."
     },
     {
       "match": {
@@ -964,10 +962,8 @@
       },
       "classification": "CNA_EXTENSION_CANDIDATE",
       "purposeReason": "The animation player is a CNA model extension. Not bound for the reason JAVA-EXT-007 records and this session rechecked against the live headers: the family is entered through cna_skinning_data_create, which takes a CNA_SkinningDataDescriptor -- a pointer graph the generator refuses rather than guesses at -- and no route takes a clip handle, so there is no other door in. cna_animation_player_create takes the SkinningData handle that door would produce.",
-      "bindingStatus": "BLOCKED_UPSTREAM",
-      "bindingReason": "There is no door in. The family is entered through cna_skinning_data_create, which takes a CNA_SkinningDataDescriptor -- a pointer graph the generator refuses rather than guesses at -- and no route takes a clip handle.",
-      "evidence": "JAVA-EXT-007, rechecked against the live headers: cna_animation_player_create takes the SkinningData handle that door would produce, and nothing produces it.",
-      "task": "JAVA-EXT-007"
+      "bindingStatus": "DELIBERATE_NON_BINDING",
+      "bindingReason": "Nothing is left unbound here; this catch-all exists so a new declaration in the family is classified rather than unexplained."
     },
     {
       "match": {
