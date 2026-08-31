@@ -29,6 +29,16 @@ public class AvatarRenderer implements AutoCloseable {
         handle = renderer[0];
     }
 
+    /**
+     * Returns the renderer's native handle.
+     *
+     * <p>Package-private on purpose: XNA has no such member, and the handle is
+     * <strong>borrowed</strong> -- this renderer owns it and releases it on Dispose.
+     */
+    long handle() {
+        return handle;
+    }
+
     public AvatarRenderer(AvatarDescription avatarDescription) {
         this(avatarDescription, true);
     }

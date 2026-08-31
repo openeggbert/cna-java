@@ -108,6 +108,11 @@ public final class NativeGamerServicesRoutes {
     public static native int achievementGetPictureSize(long achievement, long[] outBytes);
 
     /**
+     * cna_avatar_animation_copy_real_clip_name_ext (gamer_services.h).
+     */
+    public static native int avatarAnimationCopyRealClipNameExt(long animation, byte[] destination, long[] outBytes);
+
+    /**
      * cna_avatar_animation_create (gamer_services.h).
      */
     public static native int avatarAnimationCreate(int preset, long[] outAnimation);
@@ -177,14 +182,73 @@ public final class NativeGamerServicesRoutes {
     public static native int avatarAnimationGetInfo(long animation, byte[] outInfoBytes, long[] outInfoIntegral);
 
     /**
+     * cna_avatar_animation_get_real_clip_name_size_ext (gamer_services.h).
+     */
+    public static native int avatarAnimationGetRealClipNameSizeExt(long animation, long[] outBytes);
+
+    /**
+     * cna_avatar_animation_preset_copy_clip_name_ext (gamer_services.h).
+     */
+    public static native int avatarAnimationPresetCopyClipNameExt(int preset, byte[] destination, long[] outBytes);
+
+    /**
+     * cna_avatar_animation_preset_get_clip_name_size_ext (gamer_services.h).
+     */
+    public static native int avatarAnimationPresetGetClipNameSizeExt(int preset, long[] outBytes);
+
+    /**
      * cna_avatar_animation_set_current_position (gamer_services.h).
      */
     public static native int avatarAnimationSetCurrentPosition(long animation, long positionTicks);
 
     /**
+     * cna_avatar_animation_set_real_clip_name_ext (gamer_services.h).
+     */
+    public static native int avatarAnimationSetRealClipNameExt(long animation, byte[] clipName);
+
+    /**
      * cna_avatar_animation_update (gamer_services.h).
      */
     public static native int avatarAnimationUpdate(long animation, long elapsedTicks, boolean loop);
+
+    /**
+     * cna_avatar_appearance_init_ext (gamer_services.h).
+     *
+     * <p>outAppearanceIntegral carries CNA_AvatarAppearanceEXT in this order:
+     * <ol start="0">
+     *   <li>{@code skin_color.r} (uint8_t)</li>
+     *   <li>{@code skin_color.g} (uint8_t)</li>
+     *   <li>{@code skin_color.b} (uint8_t)</li>
+     *   <li>{@code skin_color.a} (uint8_t)</li>
+     *   <li>{@code hair_color.r} (uint8_t)</li>
+     *   <li>{@code hair_color.g} (uint8_t)</li>
+     *   <li>{@code hair_color.b} (uint8_t)</li>
+     *   <li>{@code hair_color.a} (uint8_t)</li>
+     *   <li>{@code shirt_color.r} (uint8_t)</li>
+     *   <li>{@code shirt_color.g} (uint8_t)</li>
+     *   <li>{@code shirt_color.b} (uint8_t)</li>
+     *   <li>{@code shirt_color.a} (uint8_t)</li>
+     *   <li>{@code pants_color.r} (uint8_t)</li>
+     *   <li>{@code pants_color.g} (uint8_t)</li>
+     *   <li>{@code pants_color.b} (uint8_t)</li>
+     *   <li>{@code pants_color.a} (uint8_t)</li>
+     *   <li>{@code shoes_color.r} (uint8_t)</li>
+     *   <li>{@code shoes_color.g} (uint8_t)</li>
+     *   <li>{@code shoes_color.b} (uint8_t)</li>
+     *   <li>{@code shoes_color.a} (uint8_t)</li>
+     * </ol>
+     */
+    public static native int avatarAppearanceInitExt(long[] outAppearanceIntegral);
+
+    /**
+     * cna_avatar_body_type_copy_content_name_ext (gamer_services.h).
+     */
+    public static native int avatarBodyTypeCopyContentNameExt(int bodyType, byte[] destination, long[] outBytes);
+
+    /**
+     * cna_avatar_body_type_get_content_name_size_ext (gamer_services.h).
+     */
+    public static native int avatarBodyTypeGetContentNameSizeExt(int bodyType, long[] outBytes);
 
     /**
      * cna_avatar_description_copy_description (gamer_services.h).
@@ -411,6 +475,35 @@ public final class NativeGamerServicesRoutes {
      * </ol>
      */
     public static native int avatarRendererGetTransforms(long renderer, float[] outWorldFloating, float[] outViewFloating, float[] outProjectionFloating);
+
+    /**
+     * cna_avatar_renderer_set_appearance_ext (gamer_services.h).
+     *
+     * <p>appearanceIntegral carries CNA_AvatarAppearanceEXT in this order:
+     * <ol start="0">
+     *   <li>{@code skin_color.r} (uint8_t)</li>
+     *   <li>{@code skin_color.g} (uint8_t)</li>
+     *   <li>{@code skin_color.b} (uint8_t)</li>
+     *   <li>{@code skin_color.a} (uint8_t)</li>
+     *   <li>{@code hair_color.r} (uint8_t)</li>
+     *   <li>{@code hair_color.g} (uint8_t)</li>
+     *   <li>{@code hair_color.b} (uint8_t)</li>
+     *   <li>{@code hair_color.a} (uint8_t)</li>
+     *   <li>{@code shirt_color.r} (uint8_t)</li>
+     *   <li>{@code shirt_color.g} (uint8_t)</li>
+     *   <li>{@code shirt_color.b} (uint8_t)</li>
+     *   <li>{@code shirt_color.a} (uint8_t)</li>
+     *   <li>{@code pants_color.r} (uint8_t)</li>
+     *   <li>{@code pants_color.g} (uint8_t)</li>
+     *   <li>{@code pants_color.b} (uint8_t)</li>
+     *   <li>{@code pants_color.a} (uint8_t)</li>
+     *   <li>{@code shoes_color.r} (uint8_t)</li>
+     *   <li>{@code shoes_color.g} (uint8_t)</li>
+     *   <li>{@code shoes_color.b} (uint8_t)</li>
+     *   <li>{@code shoes_color.a} (uint8_t)</li>
+     * </ol>
+     */
+    public static native int avatarRendererSetAppearanceExt(long renderer, long[] appearanceIntegral);
 
     /**
      * cna_avatar_renderer_set_lighting (gamer_services.h).

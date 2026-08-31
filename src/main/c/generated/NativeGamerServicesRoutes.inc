@@ -315,6 +315,28 @@ Java_org_openeggbert_cna_internal_generated_NativeGamerServicesRoutes_achievemen
 }
 
 JNIEXPORT jint JNICALL
+Java_org_openeggbert_cna_internal_generated_NativeGamerServicesRoutes_avatarAnimationCopyRealClipNameExt(
+    JNIEnv* environment, jclass declaring_class, jlong animation, jbyteArray destination, jlongArray out_bytes)
+{
+    (void)environment;
+    (void)declaring_class;
+    jsize destination_size = (*environment)->GetArrayLength(environment, destination);
+    jbyte* destination_bytes = (*environment)->GetByteArrayElements(environment, destination, NULL);
+    if (destination_bytes == NULL) {
+        return (jint)CNA_RESULT_OUT_OF_MEMORY;
+    }
+    uint64_t destination_written = 0;
+    CNA_Result result = cna.avatar_animation_copy_real_clip_name_ext((CNA_AvatarAnimationHandle)animation, (char*)destination_bytes, (uint64_t)destination_size, &destination_written);
+    (*environment)->ReleaseByteArrayElements(environment, destination, destination_bytes, 0);
+    if (result == CNA_RESULT_SUCCESS || result == CNA_RESULT_BUFFER_TOO_SMALL) {
+        jlong destination_element = (jlong)destination_written;
+        (*environment)->SetLongArrayRegion(
+            environment, out_bytes, 0, 1, &destination_element);
+    }
+    return (jint)result;
+}
+
+JNIEXPORT jint JNICALL
 Java_org_openeggbert_cna_internal_generated_NativeGamerServicesRoutes_avatarAnimationCreate(
     JNIEnv* environment, jclass declaring_class, jint preset, jlongArray out_animation)
 {
@@ -435,6 +457,60 @@ Java_org_openeggbert_cna_internal_generated_NativeGamerServicesRoutes_avatarAnim
 }
 
 JNIEXPORT jint JNICALL
+Java_org_openeggbert_cna_internal_generated_NativeGamerServicesRoutes_avatarAnimationGetRealClipNameSizeExt(
+    JNIEnv* environment, jclass declaring_class, jlong animation, jlongArray out_bytes)
+{
+    (void)environment;
+    (void)declaring_class;
+    uint64_t out_bytes_value = 0;
+    CNA_Result result = cna.avatar_animation_get_real_clip_name_size_ext((CNA_AvatarAnimationHandle)animation, &out_bytes_value);
+    if (result == CNA_RESULT_SUCCESS || result == CNA_RESULT_BUFFER_TOO_SMALL) {
+        jlong out_bytes_element = (jlong)out_bytes_value;
+        (*environment)->SetLongArrayRegion(
+            environment, out_bytes, 0, 1, &out_bytes_element);
+    }
+    return (jint)result;
+}
+
+JNIEXPORT jint JNICALL
+Java_org_openeggbert_cna_internal_generated_NativeGamerServicesRoutes_avatarAnimationPresetCopyClipNameExt(
+    JNIEnv* environment, jclass declaring_class, jint preset, jbyteArray destination, jlongArray out_bytes)
+{
+    (void)environment;
+    (void)declaring_class;
+    jsize destination_size = (*environment)->GetArrayLength(environment, destination);
+    jbyte* destination_bytes = (*environment)->GetByteArrayElements(environment, destination, NULL);
+    if (destination_bytes == NULL) {
+        return (jint)CNA_RESULT_OUT_OF_MEMORY;
+    }
+    uint64_t destination_written = 0;
+    CNA_Result result = cna.avatar_animation_preset_copy_clip_name_ext((CNA_AvatarAnimationPreset)preset, (char*)destination_bytes, (uint64_t)destination_size, &destination_written);
+    (*environment)->ReleaseByteArrayElements(environment, destination, destination_bytes, 0);
+    if (result == CNA_RESULT_SUCCESS || result == CNA_RESULT_BUFFER_TOO_SMALL) {
+        jlong destination_element = (jlong)destination_written;
+        (*environment)->SetLongArrayRegion(
+            environment, out_bytes, 0, 1, &destination_element);
+    }
+    return (jint)result;
+}
+
+JNIEXPORT jint JNICALL
+Java_org_openeggbert_cna_internal_generated_NativeGamerServicesRoutes_avatarAnimationPresetGetClipNameSizeExt(
+    JNIEnv* environment, jclass declaring_class, jint preset, jlongArray out_bytes)
+{
+    (void)environment;
+    (void)declaring_class;
+    uint64_t out_bytes_value = 0;
+    CNA_Result result = cna.avatar_animation_preset_get_clip_name_size_ext((CNA_AvatarAnimationPreset)preset, &out_bytes_value);
+    if (result == CNA_RESULT_SUCCESS || result == CNA_RESULT_BUFFER_TOO_SMALL) {
+        jlong out_bytes_element = (jlong)out_bytes_value;
+        (*environment)->SetLongArrayRegion(
+            environment, out_bytes, 0, 1, &out_bytes_element);
+    }
+    return (jint)result;
+}
+
+JNIEXPORT jint JNICALL
 Java_org_openeggbert_cna_internal_generated_NativeGamerServicesRoutes_avatarAnimationSetCurrentPosition(
     JNIEnv* environment, jclass declaring_class, jlong animation, jlong position_ticks)
 {
@@ -445,12 +521,108 @@ Java_org_openeggbert_cna_internal_generated_NativeGamerServicesRoutes_avatarAnim
 }
 
 JNIEXPORT jint JNICALL
+Java_org_openeggbert_cna_internal_generated_NativeGamerServicesRoutes_avatarAnimationSetRealClipNameExt(
+    JNIEnv* environment, jclass declaring_class, jlong animation, jbyteArray clip_name)
+{
+    (void)environment;
+    (void)declaring_class;
+    jsize clip_name_size = (*environment)->GetArrayLength(environment, clip_name);
+    jbyte* clip_name_bytes = (*environment)->GetByteArrayElements(environment, clip_name, NULL);
+    if (clip_name_bytes == NULL) {
+        return (jint)CNA_RESULT_OUT_OF_MEMORY;
+    }
+    CNA_StringView clip_name_view = {(const char*)clip_name_bytes, (uint64_t)clip_name_size};
+    CNA_Result result = cna.avatar_animation_set_real_clip_name_ext((CNA_AvatarAnimationHandle)animation, clip_name_view);
+    (*environment)->ReleaseByteArrayElements(environment, clip_name, clip_name_bytes, JNI_ABORT);
+    return (jint)result;
+}
+
+JNIEXPORT jint JNICALL
 Java_org_openeggbert_cna_internal_generated_NativeGamerServicesRoutes_avatarAnimationUpdate(
     JNIEnv* environment, jclass declaring_class, jlong animation, jlong elapsed_ticks, jboolean loop)
 {
     (void)environment;
     (void)declaring_class;
     CNA_Result result = cna.avatar_animation_update((CNA_AvatarAnimationHandle)animation, (int64_t)elapsed_ticks, (CNA_Bool)loop);
+    return (jint)result;
+}
+
+JNIEXPORT jint JNICALL
+Java_org_openeggbert_cna_internal_generated_NativeGamerServicesRoutes_avatarAppearanceInitExt(
+    JNIEnv* environment, jclass declaring_class, jlongArray out_appearanceIntegral)
+{
+    (void)environment;
+    (void)declaring_class;
+    CNA_AvatarAppearanceEXT out_appearance_value;
+    memset(&out_appearance_value, 0, sizeof out_appearance_value);
+    out_appearance_value.struct_size = (uint32_t)(sizeof out_appearance_value);
+    out_appearance_value.struct_version = UINT32_C(1);
+    CNA_Result result = cna.avatar_appearance_init_ext(&out_appearance_value);
+    if (result == CNA_RESULT_SUCCESS || result == CNA_RESULT_BUFFER_TOO_SMALL) {
+        jlong out_appearanceIntegral_values[] = {
+            (jlong)out_appearance_value.skin_color.r,
+            (jlong)out_appearance_value.skin_color.g,
+            (jlong)out_appearance_value.skin_color.b,
+            (jlong)out_appearance_value.skin_color.a,
+            (jlong)out_appearance_value.hair_color.r,
+            (jlong)out_appearance_value.hair_color.g,
+            (jlong)out_appearance_value.hair_color.b,
+            (jlong)out_appearance_value.hair_color.a,
+            (jlong)out_appearance_value.shirt_color.r,
+            (jlong)out_appearance_value.shirt_color.g,
+            (jlong)out_appearance_value.shirt_color.b,
+            (jlong)out_appearance_value.shirt_color.a,
+            (jlong)out_appearance_value.pants_color.r,
+            (jlong)out_appearance_value.pants_color.g,
+            (jlong)out_appearance_value.pants_color.b,
+            (jlong)out_appearance_value.pants_color.a,
+            (jlong)out_appearance_value.shoes_color.r,
+            (jlong)out_appearance_value.shoes_color.g,
+            (jlong)out_appearance_value.shoes_color.b,
+            (jlong)out_appearance_value.shoes_color.a
+        };
+        (*environment)->SetLongArrayRegion(environment, out_appearanceIntegral, 0,
+            (jsize)(sizeof out_appearanceIntegral_values / sizeof out_appearanceIntegral_values[0]),
+            out_appearanceIntegral_values);
+    }
+    return (jint)result;
+}
+
+JNIEXPORT jint JNICALL
+Java_org_openeggbert_cna_internal_generated_NativeGamerServicesRoutes_avatarBodyTypeCopyContentNameExt(
+    JNIEnv* environment, jclass declaring_class, jint body_type, jbyteArray destination, jlongArray out_bytes)
+{
+    (void)environment;
+    (void)declaring_class;
+    jsize destination_size = (*environment)->GetArrayLength(environment, destination);
+    jbyte* destination_bytes = (*environment)->GetByteArrayElements(environment, destination, NULL);
+    if (destination_bytes == NULL) {
+        return (jint)CNA_RESULT_OUT_OF_MEMORY;
+    }
+    uint64_t destination_written = 0;
+    CNA_Result result = cna.avatar_body_type_copy_content_name_ext((CNA_AvatarBodyType)body_type, (char*)destination_bytes, (uint64_t)destination_size, &destination_written);
+    (*environment)->ReleaseByteArrayElements(environment, destination, destination_bytes, 0);
+    if (result == CNA_RESULT_SUCCESS || result == CNA_RESULT_BUFFER_TOO_SMALL) {
+        jlong destination_element = (jlong)destination_written;
+        (*environment)->SetLongArrayRegion(
+            environment, out_bytes, 0, 1, &destination_element);
+    }
+    return (jint)result;
+}
+
+JNIEXPORT jint JNICALL
+Java_org_openeggbert_cna_internal_generated_NativeGamerServicesRoutes_avatarBodyTypeGetContentNameSizeExt(
+    JNIEnv* environment, jclass declaring_class, jint body_type, jlongArray out_bytes)
+{
+    (void)environment;
+    (void)declaring_class;
+    uint64_t out_bytes_value = 0;
+    CNA_Result result = cna.avatar_body_type_get_content_name_size_ext((CNA_AvatarBodyType)body_type, &out_bytes_value);
+    if (result == CNA_RESULT_SUCCESS || result == CNA_RESULT_BUFFER_TOO_SMALL) {
+        jlong out_bytes_element = (jlong)out_bytes_value;
+        (*environment)->SetLongArrayRegion(
+            environment, out_bytes, 0, 1, &out_bytes_element);
+    }
     return (jint)result;
 }
 
@@ -924,6 +1096,44 @@ Java_org_openeggbert_cna_internal_generated_NativeGamerServicesRoutes_avatarRend
             (jsize)(sizeof out_projectionFloating_values / sizeof out_projectionFloating_values[0]),
             out_projectionFloating_values);
     }
+    return (jint)result;
+}
+
+JNIEXPORT jint JNICALL
+Java_org_openeggbert_cna_internal_generated_NativeGamerServicesRoutes_avatarRendererSetAppearanceExt(
+    JNIEnv* environment, jclass declaring_class, jlong renderer, jlongArray appearanceIntegral)
+{
+    (void)environment;
+    (void)declaring_class;
+    CNA_AvatarAppearanceEXT appearance_value;
+    memset(&appearance_value, 0, sizeof appearance_value);
+    appearance_value.struct_size = (uint32_t)(sizeof appearance_value);
+    appearance_value.struct_version = UINT32_C(1);
+    {
+        jlong appearanceIntegral_values[20];
+        (*environment)->GetLongArrayRegion(environment, appearanceIntegral, 0, 20, appearanceIntegral_values);
+        appearance_value.skin_color.r = (uint8_t)appearanceIntegral_values[0];
+        appearance_value.skin_color.g = (uint8_t)appearanceIntegral_values[1];
+        appearance_value.skin_color.b = (uint8_t)appearanceIntegral_values[2];
+        appearance_value.skin_color.a = (uint8_t)appearanceIntegral_values[3];
+        appearance_value.hair_color.r = (uint8_t)appearanceIntegral_values[4];
+        appearance_value.hair_color.g = (uint8_t)appearanceIntegral_values[5];
+        appearance_value.hair_color.b = (uint8_t)appearanceIntegral_values[6];
+        appearance_value.hair_color.a = (uint8_t)appearanceIntegral_values[7];
+        appearance_value.shirt_color.r = (uint8_t)appearanceIntegral_values[8];
+        appearance_value.shirt_color.g = (uint8_t)appearanceIntegral_values[9];
+        appearance_value.shirt_color.b = (uint8_t)appearanceIntegral_values[10];
+        appearance_value.shirt_color.a = (uint8_t)appearanceIntegral_values[11];
+        appearance_value.pants_color.r = (uint8_t)appearanceIntegral_values[12];
+        appearance_value.pants_color.g = (uint8_t)appearanceIntegral_values[13];
+        appearance_value.pants_color.b = (uint8_t)appearanceIntegral_values[14];
+        appearance_value.pants_color.a = (uint8_t)appearanceIntegral_values[15];
+        appearance_value.shoes_color.r = (uint8_t)appearanceIntegral_values[16];
+        appearance_value.shoes_color.g = (uint8_t)appearanceIntegral_values[17];
+        appearance_value.shoes_color.b = (uint8_t)appearanceIntegral_values[18];
+        appearance_value.shoes_color.a = (uint8_t)appearanceIntegral_values[19];
+    }
+    CNA_Result result = cna.avatar_renderer_set_appearance_ext((CNA_AvatarRendererHandle)renderer, &appearance_value);
     return (jint)result;
 }
 

@@ -72,6 +72,10 @@
         "symbol": "cna_achievement_get_picture_size"
       },
       {
+        "java": "avatarAnimationCopyRealClipNameExt",
+        "symbol": "cna_avatar_animation_copy_real_clip_name_ext"
+      },
+      {
         "java": "avatarAnimationCreate",
         "symbol": "cna_avatar_animation_create"
       },
@@ -92,12 +96,40 @@
         "symbol": "cna_avatar_animation_get_info"
       },
       {
+        "java": "avatarAnimationGetRealClipNameSizeExt",
+        "symbol": "cna_avatar_animation_get_real_clip_name_size_ext"
+      },
+      {
+        "java": "avatarAnimationPresetCopyClipNameExt",
+        "symbol": "cna_avatar_animation_preset_copy_clip_name_ext"
+      },
+      {
+        "java": "avatarAnimationPresetGetClipNameSizeExt",
+        "symbol": "cna_avatar_animation_preset_get_clip_name_size_ext"
+      },
+      {
         "java": "avatarAnimationSetCurrentPosition",
         "symbol": "cna_avatar_animation_set_current_position"
       },
       {
+        "java": "avatarAnimationSetRealClipNameExt",
+        "symbol": "cna_avatar_animation_set_real_clip_name_ext"
+      },
+      {
         "java": "avatarAnimationUpdate",
         "symbol": "cna_avatar_animation_update"
+      },
+      {
+        "java": "avatarAppearanceInitExt",
+        "symbol": "cna_avatar_appearance_init_ext"
+      },
+      {
+        "java": "avatarBodyTypeCopyContentNameExt",
+        "symbol": "cna_avatar_body_type_copy_content_name_ext"
+      },
+      {
+        "java": "avatarBodyTypeGetContentNameSizeExt",
+        "symbol": "cna_avatar_body_type_get_content_name_size_ext"
       },
       {
         "java": "avatarDescriptionCopyDescription",
@@ -163,6 +195,10 @@
       {
         "java": "avatarRendererGetTransforms",
         "symbol": "cna_avatar_renderer_get_transforms"
+      },
+      {
+        "java": "avatarRendererSetAppearanceExt",
+        "symbol": "cna_avatar_renderer_set_appearance_ext"
       },
       {
         "java": "avatarRendererSetLighting",

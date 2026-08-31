@@ -1261,6 +1261,18 @@
       ]
     },
     {
+      "name": "cna_avatar_animation_copy_real_clip_name_ext",
+      "header": "gamer_services.h",
+      "ownership": "borrows the animation; caller buffer",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_AvatarAnimationHandle",
+        "char*",
+        "uint64_t",
+        "uint64_t*"
+      ]
+    },
+    {
       "name": "cna_avatar_animation_create",
       "header": "gamer_services.h",
       "ownership": "borrows its inputs; returns an owned handle",
@@ -1311,6 +1323,38 @@
       ]
     },
     {
+      "name": "cna_avatar_animation_get_real_clip_name_size_ext",
+      "header": "gamer_services.h",
+      "ownership": "borrows the animation; caller integer output",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_AvatarAnimationHandle",
+        "uint64_t*"
+      ]
+    },
+    {
+      "name": "cna_avatar_animation_preset_copy_clip_name_ext",
+      "header": "gamer_services.h",
+      "ownership": "no handle; caller buffer",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_AvatarAnimationPreset",
+        "char*",
+        "uint64_t",
+        "uint64_t*"
+      ]
+    },
+    {
+      "name": "cna_avatar_animation_preset_get_clip_name_size_ext",
+      "header": "gamer_services.h",
+      "ownership": "no handle; caller integer output",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_AvatarAnimationPreset",
+        "uint64_t*"
+      ]
+    },
+    {
       "name": "cna_avatar_animation_set_current_position",
       "header": "gamer_services.h",
       "ownership": "borrows its inputs",
@@ -1318,6 +1362,16 @@
       "parameters": [
         "CNA_AvatarAnimationHandle",
         "int64_t"
+      ]
+    },
+    {
+      "name": "cna_avatar_animation_set_real_clip_name_ext",
+      "header": "gamer_services.h",
+      "ownership": "borrows the animation; copies the caller's string",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_AvatarAnimationHandle",
+        "CNA_StringView"
       ]
     },
     {
@@ -1329,6 +1383,37 @@
         "CNA_AvatarAnimationHandle",
         "int64_t",
         "CNA_Bool"
+      ]
+    },
+    {
+      "name": "cna_avatar_appearance_init_ext",
+      "header": "gamer_services.h",
+      "ownership": "no handle; caller structure output",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_AvatarAppearanceEXT*"
+      ]
+    },
+    {
+      "name": "cna_avatar_body_type_copy_content_name_ext",
+      "header": "gamer_services.h",
+      "ownership": "no handle; caller buffer",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_AvatarBodyType",
+        "char*",
+        "uint64_t",
+        "uint64_t*"
+      ]
+    },
+    {
+      "name": "cna_avatar_body_type_get_content_name_size_ext",
+      "header": "gamer_services.h",
+      "ownership": "no handle; caller integer output",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_AvatarBodyType",
+        "uint64_t*"
       ]
     },
     {
@@ -1500,6 +1585,16 @@
         "CNA_Matrix*",
         "CNA_Matrix*",
         "CNA_Matrix*"
+      ]
+    },
+    {
+      "name": "cna_avatar_renderer_set_appearance_ext",
+      "header": "gamer_services.h",
+      "ownership": "borrows the renderer; reads the caller's structure",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_AvatarRendererHandle",
+        "const CNA_AvatarAppearanceEXT*"
       ]
     },
     {

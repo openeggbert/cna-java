@@ -1,7 +1,7 @@
 {
   "abiVersion": "0.21.0",
   "boundButUnreached": [],
-  "boundFunctions": 1484,
+  "boundFunctions": 1493,
   "boundWithoutJavaCallSite": [],
   "byHeader": {
     "abi.h": {
@@ -65,9 +65,9 @@
       "total": 857
     },
     "gamer_services.h": {
-      "CNA_EXTENSION_CANDIDATE": 27,
+      "CNA_EXTENSION_CANDIDATE": 28,
       "DEFERRED_RUNTIME": 2,
-      "NOT_USEFUL_IN_JAVA": 51,
+      "NOT_USEFUL_IN_JAVA": 50,
       "XNA_BACKING": 170,
       "total": 250
     },
@@ -285,15 +285,15 @@
   },
   "canonicalFunctions": 4054,
   "classificationCounts": {
-    "CNA_EXTENSION_CANDIDATE": 1915,
+    "CNA_EXTENSION_CANDIDATE": 1916,
     "DEFERRED_RUNTIME": 416,
     "JAVA_INTERNAL_ONLY": 9,
-    "NOT_USEFUL_IN_JAVA": 728,
+    "NOT_USEFUL_IN_JAVA": 727,
     "XNA_BACKING": 986
   },
   "cnaInventorySha256": "be9a2bf818318002adc100ad1db22949b164726d2d124352f3b29aa3fdc48ea2",
   "deferredTasks": {
-    "JAVA-EXT-006": 11,
+    "JAVA-EXT-006": 3,
     "JAVA-NATIVE-010": 8,
     "JAVA-NATIVE-011": 16,
     "JAVA-NATIVE-012": 38,

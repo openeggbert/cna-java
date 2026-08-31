@@ -12,6 +12,8 @@ import Microsoft.Xna.Framework.Content.ContentManager;
 import Microsoft.Xna.Framework.Content.ContentReader;
 import Microsoft.Xna.Framework.Media.MediaPlayer;
 import Microsoft.Xna.Framework.Media.VisualizationData;
+import Microsoft.Xna.Framework.GamerServices.AvatarAnimation;
+import Microsoft.Xna.Framework.GamerServices.AvatarRenderer;
 import Microsoft.Xna.Framework.Media.Video;
 import Microsoft.Xna.Framework.Net.AvailableNetworkSession;
 import Microsoft.Xna.Framework.Media.VideoSoundtrackType;
@@ -43,6 +45,10 @@ public final class FacadeFactory {
     private static final Method AVAILABLE_SESSION_HANDLE = availableSessionHandleMethod();
     private static final Constructor<AvailableNetworkSession> AVAILABLE_SESSION =
             availableSessionConstructor();
+    private static final Method AVATAR_RENDERER_HANDLE =
+            hiddenHandle(AvatarRenderer.class);
+    private static final Method AVATAR_ANIMATION_HANDLE =
+            hiddenHandle(AvatarAnimation.class);
     private static final Method EFFECT_ADOPT_EXTENSION = effectAdoptExtensionMethod();
     private static final Method CONTENT_MANAGER_DEVICE = contentManagerDeviceMethod();
     private static final Method TEXTURE_2D_LEVEL_BYTES = texture2DLevelBytesMethod();
@@ -254,6 +260,47 @@ public final class FacadeFactory {
         } catch (NoSuchMethodException exception) {
             throw new IllegalStateException(
                     "AvailableNetworkSession has no hidden constructor", exception);
+        }
+    }
+
+    /**
+     * Returns the renderer's native handle, borrowed for the length of one call.
+     *
+     * <p>The accessor is package-private in {@code Microsoft.Xna.Framework.GamerServices}
+     * because XNA has no such member. The renderer keeps ownership.
+     */
+    public static long avatarRendererHandle(AvatarRenderer renderer) {
+        return hiddenHandleValue(AVATAR_RENDERER_HANDLE, "AvatarRenderer", renderer);
+    }
+
+    /**
+     * Returns the animation's native handle, borrowed for the length of one call.
+     *
+     * <p>Package-private for the same reason, and the animation keeps ownership.
+     */
+    public static long avatarAnimationHandle(AvatarAnimation animation) {
+        return hiddenHandleValue(AVATAR_ANIMATION_HANDLE, "AvatarAnimation", animation);
+    }
+
+    private static long hiddenHandleValue(Method accessor, String what, Object subject) {
+        try {
+            return (long) accessor.invoke(subject);
+        } catch (IllegalAccessException exception) {
+            throw new IllegalStateException(
+                    "Cannot read the hidden " + what + " handle", exception);
+        } catch (InvocationTargetException exception) {
+            throw facadeFailure(what + " handle read failed", exception);
+        }
+    }
+
+    private static Method hiddenHandle(Class<?> owner) {
+        try {
+            Method method = owner.getDeclaredMethod("handle");
+            method.setAccessible(true);
+            return method;
+        } catch (NoSuchMethodException exception) {
+            throw new IllegalStateException(
+                    owner.getSimpleName() + " has no hidden handle accessor", exception);
         }
     }
 
