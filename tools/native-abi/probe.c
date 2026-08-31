@@ -393,7 +393,7 @@ _Static_assert(offsetof(CNA_GameTime, elapsed_game_time_ticks) == 8U, "CNA_GameT
 _Static_assert(offsetof(CNA_GameTime, is_running_slowly) == 16U, "CNA_GameTime.bool offset");
 _Static_assert(offsetof(CNA_StringView, data) == 0U, "CNA_StringView.data offset");
 _Static_assert(offsetof(CNA_StringView, byte_length) >= sizeof(void*), "CNA_StringView.length offset");
-_Static_assert(CNA_ABI_VERSION == CNA_ABI_VERSION_ENCODE(0, 20, 0), "unexpected CNA header ABI");
+_Static_assert(CNA_ABI_VERSION == CNA_ABI_VERSION_ENCODE(0, 21, 0), "unexpected CNA header ABI");
 
 #define ASSERT_SIGNATURE(name, ...) \
     _Static_assert(_Generic(&(name), __VA_ARGS__: 1, default: 0), \

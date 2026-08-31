@@ -1,5 +1,5 @@
 {
-  "abiVersion": "0.20.0",
+  "abiVersion": "0.21.0",
   "boundButUnreached": [],
   "boundFunctions": 1570,
   "boundWithoutJavaCallSite": [
@@ -189,9 +189,9 @@
       "total": 32
     },
     "content_readers.h": {
-      "CNA_EXTENSION_CANDIDATE": 22,
+      "CNA_EXTENSION_CANDIDATE": 24,
       "DEFERRED_RUNTIME": 38,
-      "total": 60
+      "total": 62
     },
     "core.h": {
       "DEFERRED_RUNTIME": 1,
@@ -207,8 +207,8 @@
       "total": 45
     },
     "devices.h": {
-      "CNA_EXTENSION_CANDIDATE": 61,
-      "total": 61
+      "CNA_EXTENSION_CANDIDATE": 62,
+      "total": 62
     },
     "display.h": {
       "DEFERRED_RUNTIME": 8,
@@ -442,15 +442,15 @@
       "total": 62
     }
   },
-  "canonicalFunctions": 4051,
+  "canonicalFunctions": 4054,
   "classificationCounts": {
-    "CNA_EXTENSION_CANDIDATE": 1868,
+    "CNA_EXTENSION_CANDIDATE": 1871,
     "DEFERRED_RUNTIME": 417,
     "JAVA_INTERNAL_ONLY": 170,
     "NOT_USEFUL_IN_JAVA": 620,
     "XNA_BACKING": 976
   },
-  "cnaInventorySha256": "e9e0be892dbdce49dedf195dac35f604a9263565a74473195d878ee9e580696d",
+  "cnaInventorySha256": "be9a2bf818318002adc100ad1db22949b164726d2d124352f3b29aa3fdc48ea2",
   "deferredTasks": {
     "JAVA-NATIVE-010": 8,
     "JAVA-NATIVE-011": 16,

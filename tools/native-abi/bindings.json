@@ -1,12 +1,12 @@
 {
   "schemaVersion": 2,
-  "compiledAbi": "0.20.0",
+  "compiledAbi": "0.21.0",
   "abiPolicy": {
     "requireExactMajor": true,
     "requireExactMinor": true,
     "rationale": "CNA ABI 0.x is experimental: docs/c-api/ABI_VERSIONING.md states that an incompatible change requires a minor-version increment, so a consumer compiled against one 0.x minor cannot assume the next one is compatible. The patch component is free."
   },
-  "cnaInventorySha256": "e9e0be892dbdce49dedf195dac35f604a9263565a74473195d878ee9e580696d",
+  "cnaInventorySha256": "be9a2bf818318002adc100ad1db22949b164726d2d124352f3b29aa3fdc48ea2",
   "functions": [
     {
       "name": "cna_accelerometer_create",

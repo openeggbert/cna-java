@@ -134,3 +134,47 @@ routes and 156 tests. The work that followed took them further, and `NEXT.md` ca
 current ones. The migration facts above do not move with them: no bound route's signature
 changed, the three behaviour contracts are the three that changed, and the ABI policy is the
 policy.
+
+
+## Addendum: 0.20.0 to 0.21.0, mid-session
+
+CNA moved again while the extension work was in progress. The measurement is the same shape as
+the one above, and the answer is much smaller.
+
+```text
+cnanext HEAD            17b5a90a -> 599d14e5 (branch next)
+header ABI              0.20.0 -> 0.21.0
+canonical functions     4051 -> 4054
+C API inventory SHA-256 e9e0be89... -> be9a2bf8...
+bound routes            1570, unchanged
+signature drift         0 of 1570
+return-type drift       0 of 1570
+header drift            0 of 1570
+removed upstream        none
+```
+
+Three declarations were added and nothing else moved:
+`cna_environment_get_device_type`, and the pair
+`cna_object_dictionary_ext_get_runtime_type_name_size` /
+`cna_object_dictionary_ext_copy_runtime_type_name`. All three fell under coverage rules that
+already existed, so `UNMAPPED_REQUIRES_REVIEW` stayed at zero without a rule being written to
+accommodate them -- which is the check working rather than being satisfied.
+
+What the migration cost was therefore three edits: the manifest's `compiledAbi`, its recorded
+inventory hash, and the ABI identity `probe.c` pins. The exact-minor policy is why those are
+edits rather than nothing: a 0.x minor may be incompatible, so the gate refuses the new library
+until a human has looked, and looking is what this addendum records.
+
+The library was rebuilt from the live checkout before any of it was claimed. `cnanext`'s
+worktree was clean at `599d14e5`, so the artifact is a committed tree rather than someone's
+work in progress; the C API target was rebuilt incrementally in the existing
+`cmake-build-javanext` directory, and the result reports ABI 0.21.0 with 4,054 exported
+`cna_*` symbols. Qualifying 0.21.0 headers against the 0.20.0 library still on disk would have
+described a library nobody ships.
+
+```text
+HEADER_ABI=0.21.0   LIBRARY_ABI=0.21.0   LIBRARY_SYMBOL_CHECK=PASS (1570/1570)
+TESTS=219 SUITES=50 FAILURES=0 ERRORS=0 SKIPPED=0
+selected profile TOTAL_DIAGNOSTICS=0    full profile TOTAL_DIAGNOSTICS=0
+UNMAPPED_REQUIRES_REVIEW=0   BOUND_BUT_UNREACHED=0
+```

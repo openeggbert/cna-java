@@ -127,7 +127,10 @@ def main() -> int:
             continue
         selected.append((java_name, type_contract))
 
-    for java_name, type_contract in sorted(selected):
+    # Sort by the Java name alone. Two reference types can map to one Java name -- a CLR
+    # generic and its non-generic companion do -- and comparing the contracts behind them is
+    # comparing two dictionaries, which Python refuses.
+    for java_name, type_contract in sorted(selected, key=lambda pair: pair[0]):
         print(render(type_contract, rules, java_name))
         print()
     print(f"// TYPES={len(selected)}", file=sys.stderr)
