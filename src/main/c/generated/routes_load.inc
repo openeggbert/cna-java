@@ -191,6 +191,10 @@
     LOAD(cnb_is_known_texture_format, "cna_cnb_is_known_texture_format");
     LOAD(cnb_is_well_formed_chunk_id, "cna_cnb_is_well_formed_chunk_id");
     LOAD(cnb_is_well_formed_utf8, "cna_cnb_is_well_formed_utf8");
+    LOAD(cnb_loader_registry_copy_registered_type_name, "cna_cnb_loader_registry_copy_registered_type_name");
+    LOAD(cnb_loader_registry_get_registered_type_name_size, "cna_cnb_loader_registry_get_registered_type_name_size");
+    LOAD(cnb_loader_registry_is_registered, "cna_cnb_loader_registry_is_registered");
+    LOAD(cnb_loader_registry_register_builtins, "cna_cnb_loader_registry_register_builtins");
     LOAD(cnb_make_chunk_id, "cna_cnb_make_chunk_id");
     LOAD(cnb_model_add_bone, "cna_cnb_model_add_bone");
     LOAD(cnb_model_add_light, "cna_cnb_model_add_light");

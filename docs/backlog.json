@@ -206,14 +206,14 @@
       "title": "Expose the .cnb content format",
       "family": "org.openeggbert.cna.extensions.content",
       "authority": "cnb.h",
-      "currentState": "244 of the 272 routes are bound and reached, and the model family is complete: bones, parts, meshes, the skinning skeleton, baked lights, materials with their two texture index spaces, blend shapes with their weight track, and read-only animations. Eight asset families read and write, five crossing to the XNA type a game uses. CnbImport reads PNG, JPEG, WAV and DDS; Cnj compiles the .cnj documents that say what to do with them. The remaining 28 are the loader registry, the standalone animation-clip codec, and the byte writer.",
-      "expectedState": "The loader registry needs a design decision rather than more binding: cna_cnb_loader_invoke hands back a void* the callback produced, which has no Java meaning, so a Java loader registry has to be a Java-side dispatch over the document rather than a projection of CNA's. Animations stay readable but not writable from Java -- cna_cnb_model_add_animation takes the same nested descriptor graph that blocks JAVA-EXT-007 -- and a clip therefore comes from a .cnj compile or a .cnb file, which the tests exercise end to end.",
+      "currentState": "Done. 248 of the 272 routes are bound and reached, and the loader registry -- the one part that needed a decision rather than more binding -- is answered in docs/cnb-loader-registry-decision.md. Eight asset families read and write, five of them crossing to the XNA type a game uses. The model family is complete. CnbImport reads PNG, JPEG, WAV and DDS; Cnj compiles the .cnj documents that say what to do with them, reporting absorbed sources and external references for a build system. CnbLoaders dispatches a document to the loader that may read it, implementing CNA's identity rule rather than projecting its C-callback table.",
+      "expectedState": "Achieved. What stays unbound is stated with its reason rather than left open: the loader registration and invoke routes need a C callback and return a void* no Java call could receive; cna_cnb_model_add_animation takes a nested descriptor graph the generator refuses rather than guesses at, so animations are read rather than written; and cna_cnb_texture_data_select_representation takes a predicate callback.",
       "priority": 8,
-      "status": "ready",
+      "status": "done",
       "tests": [
         "CnbTests"
       ],
-      "note": "Every fixture is produced by CNA's own encoder and read back by CNA's own parser. The model family was probed in C first -- tools/native-abi/probes/cnb_model_roundtrip.c -- because JAVA-UPSTREAM-004 found CNA's content-manager model loader segfaulting during teardown for any asset with a mesh part. The .cnb path is a different one and survives a build-encode-decode-destroy cycle cleanly, which was measured before 33 routes were bound against it. There is deliberately no CnbModelData.toModel(GraphicsDevice): XNA's Model has no public constructor and CNA offers no route that builds one from this description, so claiming otherwise would mean inventing a Model the content pipeline did not make."
+      "note": "Every .cnb fixture is produced by CNA's own encoder and read back by CNA's own parser, so a successful read means the file is real. The importer and .cnj fixtures are deliberately the opposite -- a PNG written by the JDK, a WAV and a DDS and a BMP written from their published layouts, JSON written by the test -- because there the source format is what is under test and a CNA-authored input would prove nothing. The model family was probed in C first: tools/native-abi/probes/cnb_model_roundtrip.c."
     },
     {
       "id": "JAVA-NATIVE-006",

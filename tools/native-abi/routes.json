@@ -2798,6 +2798,22 @@
         "symbol": "cna_cnb_is_well_formed_utf8"
       },
       {
+        "java": "cnbLoaderRegistryCopyRegisteredTypeName",
+        "symbol": "cna_cnb_loader_registry_copy_registered_type_name"
+      },
+      {
+        "java": "cnbLoaderRegistryGetRegisteredTypeNameSize",
+        "symbol": "cna_cnb_loader_registry_get_registered_type_name_size"
+      },
+      {
+        "java": "cnbLoaderRegistryIsRegistered",
+        "symbol": "cna_cnb_loader_registry_is_registered"
+      },
+      {
+        "java": "cnbLoaderRegistryRegisterBuiltins",
+        "symbol": "cna_cnb_loader_registry_register_builtins"
+      },
+      {
         "java": "cnbMakeChunkId",
         "symbol": "cna_cnb_make_chunk_id"
       },

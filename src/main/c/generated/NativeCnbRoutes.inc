@@ -2715,6 +2715,70 @@ Java_org_openeggbert_cna_internal_generated_NativeCnbRoutes_cnbIsWellFormedUtf8(
 }
 
 JNIEXPORT jint JNICALL
+Java_org_openeggbert_cna_internal_generated_NativeCnbRoutes_cnbLoaderRegistryCopyRegisteredTypeName(
+    JNIEnv* environment, jclass declaring_class, jint asset_type_id, jbyteArray destination, jlongArray out_byte_count)
+{
+    (void)environment;
+    (void)declaring_class;
+    jsize destination_size = (*environment)->GetArrayLength(environment, destination);
+    jbyte* destination_bytes = (*environment)->GetByteArrayElements(environment, destination, NULL);
+    if (destination_bytes == NULL) {
+        return (jint)CNA_RESULT_OUT_OF_MEMORY;
+    }
+    uint64_t destination_written = 0;
+    CNA_Result call_result = cna.cnb_loader_registry_copy_registered_type_name((uint32_t)asset_type_id, (char*)destination_bytes, (uint64_t)destination_size, &destination_written);
+    (*environment)->ReleaseByteArrayElements(environment, destination, destination_bytes, 0);
+    if (call_result == CNA_RESULT_SUCCESS || call_result == CNA_RESULT_BUFFER_TOO_SMALL) {
+        jlong destination_element = (jlong)destination_written;
+        (*environment)->SetLongArrayRegion(
+            environment, out_byte_count, 0, 1, &destination_element);
+    }
+    return (jint)call_result;
+}
+
+JNIEXPORT jint JNICALL
+Java_org_openeggbert_cna_internal_generated_NativeCnbRoutes_cnbLoaderRegistryGetRegisteredTypeNameSize(
+    JNIEnv* environment, jclass declaring_class, jint asset_type_id, jlongArray out_byte_count)
+{
+    (void)environment;
+    (void)declaring_class;
+    uint64_t out_byte_count_value = 0;
+    CNA_Result call_result = cna.cnb_loader_registry_get_registered_type_name_size((uint32_t)asset_type_id, &out_byte_count_value);
+    if (call_result == CNA_RESULT_SUCCESS || call_result == CNA_RESULT_BUFFER_TOO_SMALL) {
+        jlong out_byte_count_element = (jlong)out_byte_count_value;
+        (*environment)->SetLongArrayRegion(
+            environment, out_byte_count, 0, 1, &out_byte_count_element);
+    }
+    return (jint)call_result;
+}
+
+JNIEXPORT jint JNICALL
+Java_org_openeggbert_cna_internal_generated_NativeCnbRoutes_cnbLoaderRegistryIsRegistered(
+    JNIEnv* environment, jclass declaring_class, jint asset_type_id, jbooleanArray out_registered)
+{
+    (void)environment;
+    (void)declaring_class;
+    CNA_Bool out_registered_value = 0;
+    CNA_Result call_result = cna.cnb_loader_registry_is_registered((uint32_t)asset_type_id, &out_registered_value);
+    if (call_result == CNA_RESULT_SUCCESS || call_result == CNA_RESULT_BUFFER_TOO_SMALL) {
+        jboolean out_registered_element = (jboolean)out_registered_value;
+        (*environment)->SetBooleanArrayRegion(
+            environment, out_registered, 0, 1, &out_registered_element);
+    }
+    return (jint)call_result;
+}
+
+JNIEXPORT jint JNICALL
+Java_org_openeggbert_cna_internal_generated_NativeCnbRoutes_cnbLoaderRegistryRegisterBuiltins(
+    JNIEnv* environment, jclass declaring_class)
+{
+    (void)environment;
+    (void)declaring_class;
+    CNA_Result call_result = cna.cnb_loader_registry_register_builtins();
+    return (jint)call_result;
+}
+
+JNIEXPORT jint JNICALL
 Java_org_openeggbert_cna_internal_generated_NativeCnbRoutes_cnbMakeChunkId(
     JNIEnv* environment, jclass declaring_class, jbyte a, jbyte b, jbyte c, jbyte d, jintArray out_id)
 {

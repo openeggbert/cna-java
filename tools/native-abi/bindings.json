@@ -2973,6 +2973,45 @@
       ]
     },
     {
+      "name": "cna_cnb_loader_registry_copy_registered_type_name",
+      "header": "cnb.h",
+      "ownership": "no handle; caller buffer",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "uint32_t",
+        "char*",
+        "uint64_t",
+        "uint64_t*"
+      ]
+    },
+    {
+      "name": "cna_cnb_loader_registry_get_registered_type_name_size",
+      "header": "cnb.h",
+      "ownership": "no handle; caller integer output",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "uint32_t",
+        "uint64_t*"
+      ]
+    },
+    {
+      "name": "cna_cnb_loader_registry_is_registered",
+      "header": "cnb.h",
+      "ownership": "no handle; caller boolean output",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "uint32_t",
+        "CNA_Bool*"
+      ]
+    },
+    {
+      "name": "cna_cnb_loader_registry_register_builtins",
+      "header": "cnb.h",
+      "ownership": "no handle; installs CNA's process-wide codec-only loaders, idempotent",
+      "returnType": "CNA_Result",
+      "parameters": []
+    },
+    {
       "name": "cna_cnb_make_chunk_id",
       "header": "cnb.h",
       "ownership": "no handle; caller identity output",

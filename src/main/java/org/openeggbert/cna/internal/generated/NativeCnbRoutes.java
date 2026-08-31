@@ -656,6 +656,26 @@ public final class NativeCnbRoutes {
     public static native int cnbIsWellFormedUtf8(byte[] text, boolean[] outWellFormed);
 
     /**
+     * cna_cnb_loader_registry_copy_registered_type_name (cnb.h).
+     */
+    public static native int cnbLoaderRegistryCopyRegisteredTypeName(int assetTypeId, byte[] destination, long[] outByteCount);
+
+    /**
+     * cna_cnb_loader_registry_get_registered_type_name_size (cnb.h).
+     */
+    public static native int cnbLoaderRegistryGetRegisteredTypeNameSize(int assetTypeId, long[] outByteCount);
+
+    /**
+     * cna_cnb_loader_registry_is_registered (cnb.h).
+     */
+    public static native int cnbLoaderRegistryIsRegistered(int assetTypeId, boolean[] outRegistered);
+
+    /**
+     * cna_cnb_loader_registry_register_builtins (cnb.h).
+     */
+    public static native int cnbLoaderRegistryRegisterBuiltins();
+
+    /**
      * cna_cnb_make_chunk_id (cnb.h).
      */
     public static native int cnbMakeChunkId(byte a, byte b, byte c, byte d, int[] outId);

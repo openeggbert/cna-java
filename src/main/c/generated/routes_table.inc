@@ -191,6 +191,10 @@
     CNA_JNI_ROUTE(cna_cnb_is_known_texture_format) cnb_is_known_texture_format;
     CNA_JNI_ROUTE(cna_cnb_is_well_formed_chunk_id) cnb_is_well_formed_chunk_id;
     CNA_JNI_ROUTE(cna_cnb_is_well_formed_utf8) cnb_is_well_formed_utf8;
+    CNA_JNI_ROUTE(cna_cnb_loader_registry_copy_registered_type_name) cnb_loader_registry_copy_registered_type_name;
+    CNA_JNI_ROUTE(cna_cnb_loader_registry_get_registered_type_name_size) cnb_loader_registry_get_registered_type_name_size;
+    CNA_JNI_ROUTE(cna_cnb_loader_registry_is_registered) cnb_loader_registry_is_registered;
+    CNA_JNI_ROUTE(cna_cnb_loader_registry_register_builtins) cnb_loader_registry_register_builtins;
     CNA_JNI_ROUTE(cna_cnb_make_chunk_id) cnb_make_chunk_id;
     CNA_JNI_ROUTE(cna_cnb_model_add_bone) cnb_model_add_bone;
     CNA_JNI_ROUTE(cna_cnb_model_add_light) cnb_model_add_light;
