@@ -369,3 +369,36 @@ the out-parameters at zero, and `get_texture_transform_ext` refused a structure 
 zero bytes long -- which looked exactly like a broken getter. A versioned out-parameter is still the
 caller's structure and has to be stamped before the call. The generated adapter does that on every
 route, which is the whole reason this class of mistake does not reach Java.
+
+## compute_and_storage.c
+
+Does the compute family get anywhere on a renderer with no compute?
+
+Worth asking twice, because the family census asked with no device and because the header says
+something that sounded like an opening: *"Creation succeeds even when the source does not compile:
+ask `cna_compute_shader_is_valid` and read `cna_compute_shader_copy_compile_error`."* That is the
+GPU timer's shape -- a family that constructs, reports itself unsupported and says why, which is
+worth projecting with its refusal intact. Asked with a real device, on ABI 0.21.0:
+
+```text
+barrier has, present    0  1
+barrier has, absent     0  0
+indirect draw init      0  count 0 instances 0
+indirect indexed init   0  count 0
+storage buffer create   6
+storage buffer typed    6
+compute shader create   6
+```
+
+It is not the timer's shape. `cna_compute_shader_create` and both storage-buffer constructors
+answer `NOT_SUPPORTED` outright, so there is no object to ask anything of and the compile-error
+route is unreachable here. The sentence in the header describes a renderer that *has* compute and
+rejects the source; this one refuses before that.
+
+The three routes that do work -- the memory-barrier bitmask test and the two indirect-draw
+argument initialisers -- are pure and answer correctly, but they are parts of a family whose other
+twenty-two routes cannot be reached: indirect drawing needs a storage buffer to draw from. Binding
+three helpers with nothing to help would be shipping fragments of an API, so the family is recorded
+as `HARDWARE_PENDING` in `docs/backlog.json` rather than half-projected. It is worth revisiting the
+moment this repository can qualify against a desktop GL 4.3 renderer, where all twenty-five become
+reachable at once.
