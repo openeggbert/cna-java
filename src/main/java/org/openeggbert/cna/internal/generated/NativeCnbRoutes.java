@@ -23,6 +23,11 @@ public final class NativeCnbRoutes {
     public static native int cnbAudioFrameBytes(int format, int channels, int[] outByteCount);
 
     /**
+     * cna_cnb_build_model_from_cnj (cnb.h).
+     */
+    public static native int cnbBuildModelFromCnj(byte[] cnjPath, byte[] contentRoot, long[] outResult);
+
+    /**
      * cna_cnb_checked_add (cnb.h).
      */
     public static native int cnbCheckedAdd(long a, long b, long[] outSum);
@@ -49,6 +54,66 @@ public final class NativeCnbRoutes {
      * </ol>
      */
     public static native int cnbChunkEntryIsMandatory(long[] entryIntegral, boolean[] outMandatory);
+
+    /**
+     * cna_cnb_cnj_result_copy_absorbed_file (cnb.h).
+     */
+    public static native int cnbCnjResultCopyAbsorbedFile(long result, long index, byte[] destination, long[] outByteCount);
+
+    /**
+     * cna_cnb_cnj_result_copy_asset_type_name (cnb.h).
+     */
+    public static native int cnbCnjResultCopyAssetTypeName(long result, byte[] destination, long[] outByteCount);
+
+    /**
+     * cna_cnb_cnj_result_copy_bytes (cnb.h).
+     */
+    public static native int cnbCnjResultCopyBytes(long result, byte[] destination, long[] outByteCount);
+
+    /**
+     * cna_cnb_cnj_result_copy_external_reference (cnb.h).
+     */
+    public static native int cnbCnjResultCopyExternalReference(long result, long index, byte[] destination, long[] outByteCount);
+
+    /**
+     * cna_cnb_cnj_result_destroy (cnb.h).
+     */
+    public static native int cnbCnjResultDestroy(long result);
+
+    /**
+     * cna_cnb_cnj_result_get_absorbed_file_count (cnb.h).
+     */
+    public static native int cnbCnjResultGetAbsorbedFileCount(long result, long[] outCount);
+
+    /**
+     * cna_cnb_cnj_result_get_absorbed_file_size (cnb.h).
+     */
+    public static native int cnbCnjResultGetAbsorbedFileSize(long result, long index, long[] outByteCount);
+
+    /**
+     * cna_cnb_cnj_result_get_asset_type_id (cnb.h).
+     */
+    public static native int cnbCnjResultGetAssetTypeId(long result, int[] outAssetTypeId);
+
+    /**
+     * cna_cnb_cnj_result_get_asset_type_name_size (cnb.h).
+     */
+    public static native int cnbCnjResultGetAssetTypeNameSize(long result, long[] outByteCount);
+
+    /**
+     * cna_cnb_cnj_result_get_external_reference_count (cnb.h).
+     */
+    public static native int cnbCnjResultGetExternalReferenceCount(long result, long[] outCount);
+
+    /**
+     * cna_cnb_cnj_result_get_external_reference_size (cnb.h).
+     */
+    public static native int cnbCnjResultGetExternalReferenceSize(long result, long index, long[] outByteCount);
+
+    /**
+     * cna_cnb_compile_cnj (cnb.h).
+     */
+    public static native int cnbCompileCnj(byte[] cnjPath, byte[] contentRoot, byte[] contentName, long[] outResult);
 
     /**
      * cna_cnb_copy_asset_type_name (cnb.h).
@@ -708,6 +773,46 @@ public final class NativeCnbRoutes {
      * cna_cnb_model_destroy (cnb.h).
      */
     public static native int cnbModelDestroy(long model);
+
+    /**
+     * cna_cnb_model_from_cnj_copy_absorbed_file (cnb.h).
+     */
+    public static native int cnbModelFromCnjCopyAbsorbedFile(long result, long index, byte[] destination, long[] outByteCount);
+
+    /**
+     * cna_cnb_model_from_cnj_copy_external_reference (cnb.h).
+     */
+    public static native int cnbModelFromCnjCopyExternalReference(long result, long index, byte[] destination, long[] outByteCount);
+
+    /**
+     * cna_cnb_model_from_cnj_destroy (cnb.h).
+     */
+    public static native int cnbModelFromCnjDestroy(long result);
+
+    /**
+     * cna_cnb_model_from_cnj_get_absorbed_file_count (cnb.h).
+     */
+    public static native int cnbModelFromCnjGetAbsorbedFileCount(long result, long[] outCount);
+
+    /**
+     * cna_cnb_model_from_cnj_get_absorbed_file_size (cnb.h).
+     */
+    public static native int cnbModelFromCnjGetAbsorbedFileSize(long result, long index, long[] outByteCount);
+
+    /**
+     * cna_cnb_model_from_cnj_get_external_reference_count (cnb.h).
+     */
+    public static native int cnbModelFromCnjGetExternalReferenceCount(long result, long[] outCount);
+
+    /**
+     * cna_cnb_model_from_cnj_get_external_reference_size (cnb.h).
+     */
+    public static native int cnbModelFromCnjGetExternalReferenceSize(long result, long index, long[] outByteCount);
+
+    /**
+     * cna_cnb_model_from_cnj_take_model (cnb.h).
+     */
+    public static native int cnbModelFromCnjTakeModel(long result, long[] outModel);
 
     /**
      * cna_cnb_model_get_bone (cnb.h).

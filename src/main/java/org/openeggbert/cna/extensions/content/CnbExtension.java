@@ -101,6 +101,36 @@ final class CnbExtension {
         return trim(destination, count[0]);
     }
 
+    /** Reads one of CNA's count-then-size-then-copy string lists. */
+    static java.util.List<String> list(
+            String operation, CountRoute count, IndexedSizeRoute size, IndexedCopyRoute copy) {
+        long[] total = new long[1];
+        check(operation, count.read(total));
+        java.util.List<String> values = new java.util.ArrayList<>(Math.toIntExact(total[0]));
+        for (int index = 0; index < total[0]; index++) {
+            int position = index;
+            values.add(text(operation,
+                    bytes -> size.read(position, bytes),
+                    (destination, bytes) -> copy.read(position, destination, bytes)));
+        }
+        return java.util.List.copyOf(values);
+    }
+
+    /** How many entries a list has. */
+    interface CountRoute {
+        int read(long[] outCount);
+    }
+
+    /** The size half of a count/copy string pair, for one entry of a list. */
+    interface IndexedSizeRoute {
+        int read(long index, long[] outBytes);
+    }
+
+    /** The copy half of a count/copy string pair, for one entry of a list. */
+    interface IndexedCopyRoute {
+        int read(long index, byte[] destination, long[] outBytes);
+    }
+
     /** The size half of a count/copy string pair. */
     interface SizeRoute {
         int read(long[] outBytes);

@@ -320,9 +320,9 @@ def test_generator(live: dict) -> None:
     # size protocol -- ask with no buffer, be told the size, ask again -- can never work.
     encode = plan("cna_cnb_encode_texture2d")
     emitted = generator_tool.render_c("Probe", [encode])
-    check("result == CNA_RESULT_BUFFER_TOO_SMALL" in emitted,
+    check("call_result == CNA_RESULT_BUFFER_TOO_SMALL" in emitted,
           "an output is copied back when the caller's buffer was too small")
-    check(emitted.count("if (result == CNA_RESULT_SUCCESS)") == 1,
+    check(emitted.count("if (call_result == CNA_RESULT_SUCCESS)") == 1,
           "the array write-back still happens only on success, because a refused copy wrote "
           "nothing into the buffer")
 

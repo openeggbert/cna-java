@@ -13,13 +13,13 @@ Java_org_openeggbert_cna_internal_generated_NativeNetworkRoutes_availableNetwork
     (void)environment;
     (void)declaring_class;
     CNA_AvailableNetworkSessionHandle out_session_value = 0;
-    CNA_Result result = cna.available_network_session_collection_copy_session((CNA_AvailableNetworkSessionCollectionHandle)collection, (int32_t)index, &out_session_value);
-    if (result == CNA_RESULT_SUCCESS || result == CNA_RESULT_BUFFER_TOO_SMALL) {
+    CNA_Result call_result = cna.available_network_session_collection_copy_session((CNA_AvailableNetworkSessionCollectionHandle)collection, (int32_t)index, &out_session_value);
+    if (call_result == CNA_RESULT_SUCCESS || call_result == CNA_RESULT_BUFFER_TOO_SMALL) {
         jlong out_session_element = (jlong)out_session_value;
         (*environment)->SetLongArrayRegion(
             environment, out_session, 0, 1, &out_session_element);
     }
-    return (jint)result;
+    return (jint)call_result;
 }
 
 JNIEXPORT jint JNICALL
@@ -28,8 +28,8 @@ Java_org_openeggbert_cna_internal_generated_NativeNetworkRoutes_availableNetwork
 {
     (void)environment;
     (void)declaring_class;
-    CNA_Result result = cna.available_network_session_collection_dispose((CNA_AvailableNetworkSessionCollectionHandle)collection);
-    return (jint)result;
+    CNA_Result call_result = cna.available_network_session_collection_dispose((CNA_AvailableNetworkSessionCollectionHandle)collection);
+    return (jint)call_result;
 }
 
 JNIEXPORT jint JNICALL
@@ -39,13 +39,13 @@ Java_org_openeggbert_cna_internal_generated_NativeNetworkRoutes_availableNetwork
     (void)environment;
     (void)declaring_class;
     int32_t out_count_value = 0;
-    CNA_Result result = cna.available_network_session_collection_get_count((CNA_AvailableNetworkSessionCollectionHandle)collection, &out_count_value);
-    if (result == CNA_RESULT_SUCCESS || result == CNA_RESULT_BUFFER_TOO_SMALL) {
+    CNA_Result call_result = cna.available_network_session_collection_get_count((CNA_AvailableNetworkSessionCollectionHandle)collection, &out_count_value);
+    if (call_result == CNA_RESULT_SUCCESS || call_result == CNA_RESULT_BUFFER_TOO_SMALL) {
         jint out_count_element = (jint)out_count_value;
         (*environment)->SetIntArrayRegion(
             environment, out_count, 0, 1, &out_count_element);
     }
-    return (jint)result;
+    return (jint)call_result;
 }
 
 JNIEXPORT jint JNICALL
@@ -55,13 +55,13 @@ Java_org_openeggbert_cna_internal_generated_NativeNetworkRoutes_availableNetwork
     (void)environment;
     (void)declaring_class;
     CNA_Bool out_is_disposed_value = 0;
-    CNA_Result result = cna.available_network_session_collection_get_is_disposed((CNA_AvailableNetworkSessionCollectionHandle)collection, &out_is_disposed_value);
-    if (result == CNA_RESULT_SUCCESS || result == CNA_RESULT_BUFFER_TOO_SMALL) {
+    CNA_Result call_result = cna.available_network_session_collection_get_is_disposed((CNA_AvailableNetworkSessionCollectionHandle)collection, &out_is_disposed_value);
+    if (call_result == CNA_RESULT_SUCCESS || call_result == CNA_RESULT_BUFFER_TOO_SMALL) {
         jboolean out_is_disposed_element = (jboolean)out_is_disposed_value;
         (*environment)->SetBooleanArrayRegion(
             environment, out_is_disposed, 0, 1, &out_is_disposed_element);
     }
-    return (jint)result;
+    return (jint)call_result;
 }
 
 JNIEXPORT jint JNICALL
@@ -76,14 +76,14 @@ Java_org_openeggbert_cna_internal_generated_NativeNetworkRoutes_availableNetwork
         return (jint)CNA_RESULT_OUT_OF_MEMORY;
     }
     uint64_t destination_written = 0;
-    CNA_Result result = cna.available_network_session_copy_connect_address_ext((CNA_AvailableNetworkSessionHandle)session, (char*)destination_bytes, (uint64_t)destination_size, &destination_written);
+    CNA_Result call_result = cna.available_network_session_copy_connect_address_ext((CNA_AvailableNetworkSessionHandle)session, (char*)destination_bytes, (uint64_t)destination_size, &destination_written);
     (*environment)->ReleaseByteArrayElements(environment, destination, destination_bytes, 0);
-    if (result == CNA_RESULT_SUCCESS || result == CNA_RESULT_BUFFER_TOO_SMALL) {
+    if (call_result == CNA_RESULT_SUCCESS || call_result == CNA_RESULT_BUFFER_TOO_SMALL) {
         jlong destination_element = (jlong)destination_written;
         (*environment)->SetLongArrayRegion(
             environment, out_bytes, 0, 1, &destination_element);
     }
-    return (jint)result;
+    return (jint)call_result;
 }
 
 JNIEXPORT jint JNICALL
@@ -98,14 +98,14 @@ Java_org_openeggbert_cna_internal_generated_NativeNetworkRoutes_availableNetwork
         return (jint)CNA_RESULT_OUT_OF_MEMORY;
     }
     uint64_t destination_written = 0;
-    CNA_Result result = cna.available_network_session_copy_host_gamertag((CNA_AvailableNetworkSessionHandle)session, (char*)destination_bytes, (uint64_t)destination_size, &destination_written);
+    CNA_Result call_result = cna.available_network_session_copy_host_gamertag((CNA_AvailableNetworkSessionHandle)session, (char*)destination_bytes, (uint64_t)destination_size, &destination_written);
     (*environment)->ReleaseByteArrayElements(environment, destination, destination_bytes, 0);
-    if (result == CNA_RESULT_SUCCESS || result == CNA_RESULT_BUFFER_TOO_SMALL) {
+    if (call_result == CNA_RESULT_SUCCESS || call_result == CNA_RESULT_BUFFER_TOO_SMALL) {
         jlong destination_element = (jlong)destination_written;
         (*environment)->SetLongArrayRegion(
             environment, out_bytes, 0, 1, &destination_element);
     }
-    return (jint)result;
+    return (jint)call_result;
 }
 
 JNIEXPORT jint JNICALL
@@ -115,13 +115,13 @@ Java_org_openeggbert_cna_internal_generated_NativeNetworkRoutes_availableNetwork
     (void)environment;
     (void)declaring_class;
     CNA_NetworkSessionPropertiesHandle out_properties_value = 0;
-    CNA_Result result = cna.available_network_session_copy_session_properties((CNA_AvailableNetworkSessionHandle)session, &out_properties_value);
-    if (result == CNA_RESULT_SUCCESS || result == CNA_RESULT_BUFFER_TOO_SMALL) {
+    CNA_Result call_result = cna.available_network_session_copy_session_properties((CNA_AvailableNetworkSessionHandle)session, &out_properties_value);
+    if (call_result == CNA_RESULT_SUCCESS || call_result == CNA_RESULT_BUFFER_TOO_SMALL) {
         jlong out_properties_element = (jlong)out_properties_value;
         (*environment)->SetLongArrayRegion(
             environment, out_properties, 0, 1, &out_properties_element);
     }
-    return (jint)result;
+    return (jint)call_result;
 }
 
 JNIEXPORT jint JNICALL
@@ -193,15 +193,15 @@ Java_org_openeggbert_cna_internal_generated_NativeNetworkRoutes_availableNetwork
         quality_of_service_value.bytes_per_second_upstream = (int32_t)quality_of_serviceIntegral_values[4];
     }
     CNA_AvailableNetworkSessionHandle out_session_value = 0;
-    CNA_Result result = cna.available_network_session_create_ext(&create_info_value, &quality_of_service_value, &out_session_value);
+    CNA_Result call_result = cna.available_network_session_create_ext(&create_info_value, &quality_of_service_value, &out_session_value);
     (*environment)->ReleaseByteArrayElements(environment, createInfoHostGamertag, createInfoHostGamertag_bytes, JNI_ABORT);
     (*environment)->ReleaseByteArrayElements(environment, createInfoHostAddress, createInfoHostAddress_bytes, JNI_ABORT);
-    if (result == CNA_RESULT_SUCCESS || result == CNA_RESULT_BUFFER_TOO_SMALL) {
+    if (call_result == CNA_RESULT_SUCCESS || call_result == CNA_RESULT_BUFFER_TOO_SMALL) {
         jlong out_session_element = (jlong)out_session_value;
         (*environment)->SetLongArrayRegion(
             environment, out_session, 0, 1, &out_session_element);
     }
-    return (jint)result;
+    return (jint)call_result;
 }
 
 JNIEXPORT jint JNICALL
@@ -210,8 +210,8 @@ Java_org_openeggbert_cna_internal_generated_NativeNetworkRoutes_availableNetwork
 {
     (void)environment;
     (void)declaring_class;
-    CNA_Result result = cna.available_network_session_destroy((CNA_AvailableNetworkSessionHandle)session);
-    return (jint)result;
+    CNA_Result call_result = cna.available_network_session_destroy((CNA_AvailableNetworkSessionHandle)session);
+    return (jint)call_result;
 }
 
 JNIEXPORT jint JNICALL
@@ -221,13 +221,13 @@ Java_org_openeggbert_cna_internal_generated_NativeNetworkRoutes_availableNetwork
     (void)environment;
     (void)declaring_class;
     uint64_t out_bytes_value = 0;
-    CNA_Result result = cna.available_network_session_get_connect_address_size_ext((CNA_AvailableNetworkSessionHandle)session, &out_bytes_value);
-    if (result == CNA_RESULT_SUCCESS || result == CNA_RESULT_BUFFER_TOO_SMALL) {
+    CNA_Result call_result = cna.available_network_session_get_connect_address_size_ext((CNA_AvailableNetworkSessionHandle)session, &out_bytes_value);
+    if (call_result == CNA_RESULT_SUCCESS || call_result == CNA_RESULT_BUFFER_TOO_SMALL) {
         jlong out_bytes_element = (jlong)out_bytes_value;
         (*environment)->SetLongArrayRegion(
             environment, out_bytes, 0, 1, &out_bytes_element);
     }
-    return (jint)result;
+    return (jint)call_result;
 }
 
 JNIEXPORT jint JNICALL
@@ -237,13 +237,13 @@ Java_org_openeggbert_cna_internal_generated_NativeNetworkRoutes_availableNetwork
     (void)environment;
     (void)declaring_class;
     uint16_t out_value_value = 0;
-    CNA_Result result = cna.available_network_session_get_connect_port_ext((CNA_AvailableNetworkSessionHandle)session, &out_value_value);
-    if (result == CNA_RESULT_SUCCESS || result == CNA_RESULT_BUFFER_TOO_SMALL) {
+    CNA_Result call_result = cna.available_network_session_get_connect_port_ext((CNA_AvailableNetworkSessionHandle)session, &out_value_value);
+    if (call_result == CNA_RESULT_SUCCESS || call_result == CNA_RESULT_BUFFER_TOO_SMALL) {
         jint out_value_element = (jint)out_value_value;
         (*environment)->SetIntArrayRegion(
             environment, out_value, 0, 1, &out_value_element);
     }
-    return (jint)result;
+    return (jint)call_result;
 }
 
 JNIEXPORT jint JNICALL
@@ -253,13 +253,13 @@ Java_org_openeggbert_cna_internal_generated_NativeNetworkRoutes_availableNetwork
     (void)environment;
     (void)declaring_class;
     int32_t out_value_value = 0;
-    CNA_Result result = cna.available_network_session_get_current_gamer_count((CNA_AvailableNetworkSessionHandle)session, &out_value_value);
-    if (result == CNA_RESULT_SUCCESS || result == CNA_RESULT_BUFFER_TOO_SMALL) {
+    CNA_Result call_result = cna.available_network_session_get_current_gamer_count((CNA_AvailableNetworkSessionHandle)session, &out_value_value);
+    if (call_result == CNA_RESULT_SUCCESS || call_result == CNA_RESULT_BUFFER_TOO_SMALL) {
         jint out_value_element = (jint)out_value_value;
         (*environment)->SetIntArrayRegion(
             environment, out_value, 0, 1, &out_value_element);
     }
-    return (jint)result;
+    return (jint)call_result;
 }
 
 JNIEXPORT jint JNICALL
@@ -269,13 +269,13 @@ Java_org_openeggbert_cna_internal_generated_NativeNetworkRoutes_availableNetwork
     (void)environment;
     (void)declaring_class;
     uint64_t out_bytes_value = 0;
-    CNA_Result result = cna.available_network_session_get_host_gamertag_size((CNA_AvailableNetworkSessionHandle)session, &out_bytes_value);
-    if (result == CNA_RESULT_SUCCESS || result == CNA_RESULT_BUFFER_TOO_SMALL) {
+    CNA_Result call_result = cna.available_network_session_get_host_gamertag_size((CNA_AvailableNetworkSessionHandle)session, &out_bytes_value);
+    if (call_result == CNA_RESULT_SUCCESS || call_result == CNA_RESULT_BUFFER_TOO_SMALL) {
         jlong out_bytes_element = (jlong)out_bytes_value;
         (*environment)->SetLongArrayRegion(
             environment, out_bytes, 0, 1, &out_bytes_element);
     }
-    return (jint)result;
+    return (jint)call_result;
 }
 
 JNIEXPORT jint JNICALL
@@ -285,13 +285,13 @@ Java_org_openeggbert_cna_internal_generated_NativeNetworkRoutes_availableNetwork
     (void)environment;
     (void)declaring_class;
     int32_t out_value_value = 0;
-    CNA_Result result = cna.available_network_session_get_open_private_gamer_slots((CNA_AvailableNetworkSessionHandle)session, &out_value_value);
-    if (result == CNA_RESULT_SUCCESS || result == CNA_RESULT_BUFFER_TOO_SMALL) {
+    CNA_Result call_result = cna.available_network_session_get_open_private_gamer_slots((CNA_AvailableNetworkSessionHandle)session, &out_value_value);
+    if (call_result == CNA_RESULT_SUCCESS || call_result == CNA_RESULT_BUFFER_TOO_SMALL) {
         jint out_value_element = (jint)out_value_value;
         (*environment)->SetIntArrayRegion(
             environment, out_value, 0, 1, &out_value_element);
     }
-    return (jint)result;
+    return (jint)call_result;
 }
 
 JNIEXPORT jint JNICALL
@@ -301,13 +301,13 @@ Java_org_openeggbert_cna_internal_generated_NativeNetworkRoutes_availableNetwork
     (void)environment;
     (void)declaring_class;
     int32_t out_value_value = 0;
-    CNA_Result result = cna.available_network_session_get_open_public_gamer_slots((CNA_AvailableNetworkSessionHandle)session, &out_value_value);
-    if (result == CNA_RESULT_SUCCESS || result == CNA_RESULT_BUFFER_TOO_SMALL) {
+    CNA_Result call_result = cna.available_network_session_get_open_public_gamer_slots((CNA_AvailableNetworkSessionHandle)session, &out_value_value);
+    if (call_result == CNA_RESULT_SUCCESS || call_result == CNA_RESULT_BUFFER_TOO_SMALL) {
         jint out_value_element = (jint)out_value_value;
         (*environment)->SetIntArrayRegion(
             environment, out_value, 0, 1, &out_value_element);
     }
-    return (jint)result;
+    return (jint)call_result;
 }
 
 JNIEXPORT jint JNICALL
@@ -320,8 +320,8 @@ Java_org_openeggbert_cna_internal_generated_NativeNetworkRoutes_availableNetwork
     memset(&out_value_value, 0, sizeof out_value_value);
     out_value_value.struct_size = (uint32_t)(sizeof out_value_value);
     out_value_value.struct_version = UINT32_C(1);
-    CNA_Result result = cna.available_network_session_get_quality_of_service((CNA_AvailableNetworkSessionHandle)session, &out_value_value);
-    if (result == CNA_RESULT_SUCCESS || result == CNA_RESULT_BUFFER_TOO_SMALL) {
+    CNA_Result call_result = cna.available_network_session_get_quality_of_service((CNA_AvailableNetworkSessionHandle)session, &out_value_value);
+    if (call_result == CNA_RESULT_SUCCESS || call_result == CNA_RESULT_BUFFER_TOO_SMALL) {
         jbyte out_valueBytes_values[] = {
             (jbyte)out_value_value.reserved[0],
             (jbyte)out_value_value.reserved[1],
@@ -345,7 +345,7 @@ Java_org_openeggbert_cna_internal_generated_NativeNetworkRoutes_availableNetwork
             (jsize)(sizeof out_valueIntegral_values / sizeof out_valueIntegral_values[0]),
             out_valueIntegral_values);
     }
-    return (jint)result;
+    return (jint)call_result;
 }
 
 JNIEXPORT jint JNICALL
@@ -355,13 +355,13 @@ Java_org_openeggbert_cna_internal_generated_NativeNetworkRoutes_availableNetwork
     (void)environment;
     (void)declaring_class;
     CNA_NetworkSessionType out_value_value = 0;
-    CNA_Result result = cna.available_network_session_get_session_type_ext((CNA_AvailableNetworkSessionHandle)session, &out_value_value);
-    if (result == CNA_RESULT_SUCCESS || result == CNA_RESULT_BUFFER_TOO_SMALL) {
+    CNA_Result call_result = cna.available_network_session_get_session_type_ext((CNA_AvailableNetworkSessionHandle)session, &out_value_value);
+    if (call_result == CNA_RESULT_SUCCESS || call_result == CNA_RESULT_BUFFER_TOO_SMALL) {
         jint out_value_element = (jint)out_value_value;
         (*environment)->SetIntArrayRegion(
             environment, out_value, 0, 1, &out_value_element);
     }
-    return (jint)result;
+    return (jint)call_result;
 }
 
 JNIEXPORT jint JNICALL
@@ -370,8 +370,8 @@ Java_org_openeggbert_cna_internal_generated_NativeNetworkRoutes_localNetworkGame
 {
     (void)environment;
     (void)declaring_class;
-    CNA_Result result = cna.local_network_gamer_enable_send_voice((CNA_NetworkGamerHandle)gamer, (CNA_NetworkGamerHandle)remote_gamer, (CNA_Bool)enable);
-    return (jint)result;
+    CNA_Result call_result = cna.local_network_gamer_enable_send_voice((CNA_NetworkGamerHandle)gamer, (CNA_NetworkGamerHandle)remote_gamer, (CNA_Bool)enable);
+    return (jint)call_result;
 }
 
 JNIEXPORT jint JNICALL
@@ -381,13 +381,13 @@ Java_org_openeggbert_cna_internal_generated_NativeNetworkRoutes_localNetworkGame
     (void)environment;
     (void)declaring_class;
     CNA_Bool out_value_value = 0;
-    CNA_Result result = cna.local_network_gamer_get_is_data_available((CNA_NetworkGamerHandle)gamer, &out_value_value);
-    if (result == CNA_RESULT_SUCCESS || result == CNA_RESULT_BUFFER_TOO_SMALL) {
+    CNA_Result call_result = cna.local_network_gamer_get_is_data_available((CNA_NetworkGamerHandle)gamer, &out_value_value);
+    if (call_result == CNA_RESULT_SUCCESS || call_result == CNA_RESULT_BUFFER_TOO_SMALL) {
         jboolean out_value_element = (jboolean)out_value_value;
         (*environment)->SetBooleanArrayRegion(
             environment, out_value, 0, 1, &out_value_element);
     }
-    return (jint)result;
+    return (jint)call_result;
 }
 
 JNIEXPORT jint JNICALL
@@ -397,13 +397,13 @@ Java_org_openeggbert_cna_internal_generated_NativeNetworkRoutes_localNetworkGame
     (void)environment;
     (void)declaring_class;
     CNA_SignedInGamerHandle out_signed_in_gamer_value = 0;
-    CNA_Result result = cna.local_network_gamer_get_signed_in_gamer((CNA_NetworkGamerHandle)gamer, &out_signed_in_gamer_value);
-    if (result == CNA_RESULT_SUCCESS || result == CNA_RESULT_BUFFER_TOO_SMALL) {
+    CNA_Result call_result = cna.local_network_gamer_get_signed_in_gamer((CNA_NetworkGamerHandle)gamer, &out_signed_in_gamer_value);
+    if (call_result == CNA_RESULT_SUCCESS || call_result == CNA_RESULT_BUFFER_TOO_SMALL) {
         jlong out_signed_in_gamer_element = (jlong)out_signed_in_gamer_value;
         (*environment)->SetLongArrayRegion(
             environment, out_signed_in_gamer, 0, 1, &out_signed_in_gamer_element);
     }
-    return (jint)result;
+    return (jint)call_result;
 }
 
 JNIEXPORT jint JNICALL
@@ -429,8 +429,8 @@ Java_org_openeggbert_cna_internal_generated_NativeNetworkRoutes_localNetworkGame
     }
     CNA_NetworkGamerHandle out_sender_value = 0;
     uint64_t out_received_value = 0;
-    CNA_Result result = cna.local_network_gamer_receive_data((CNA_NetworkGamerHandle)gamer, destination_values, (uint64_t)destination_size, &out_sender_value, &out_received_value);
-    if (result == CNA_RESULT_SUCCESS) {
+    CNA_Result call_result = cna.local_network_gamer_receive_data((CNA_NetworkGamerHandle)gamer, destination_values, (uint64_t)destination_size, &out_sender_value, &out_received_value);
+    if (call_result == CNA_RESULT_SUCCESS) {
         for (jsize index = 0; index < destination_size; ++index) {
             destination_elements[index] = (jbyte)destination_values[index];
         }
@@ -438,7 +438,7 @@ Java_org_openeggbert_cna_internal_generated_NativeNetworkRoutes_localNetworkGame
     free(destination_values);
     (*environment)->ReleaseByteArrayElements(
         environment, destination, destination_elements, 0);
-    if (result == CNA_RESULT_SUCCESS || result == CNA_RESULT_BUFFER_TOO_SMALL) {
+    if (call_result == CNA_RESULT_SUCCESS || call_result == CNA_RESULT_BUFFER_TOO_SMALL) {
         jlong out_sender_element = (jlong)out_sender_value;
         (*environment)->SetLongArrayRegion(
             environment, out_sender, 0, 1, &out_sender_element);
@@ -446,7 +446,7 @@ Java_org_openeggbert_cna_internal_generated_NativeNetworkRoutes_localNetworkGame
         (*environment)->SetLongArrayRegion(
             environment, out_received, 0, 1, &out_received_element);
     }
-    return (jint)result;
+    return (jint)call_result;
 }
 
 JNIEXPORT jint JNICALL
@@ -472,8 +472,8 @@ Java_org_openeggbert_cna_internal_generated_NativeNetworkRoutes_localNetworkGame
     }
     CNA_NetworkGamerHandle out_sender_value = 0;
     uint64_t out_received_value = 0;
-    CNA_Result result = cna.local_network_gamer_receive_data_at((CNA_NetworkGamerHandle)gamer, destination_values, (uint64_t)destination_size, (int32_t)offset, &out_sender_value, &out_received_value);
-    if (result == CNA_RESULT_SUCCESS) {
+    CNA_Result call_result = cna.local_network_gamer_receive_data_at((CNA_NetworkGamerHandle)gamer, destination_values, (uint64_t)destination_size, (int32_t)offset, &out_sender_value, &out_received_value);
+    if (call_result == CNA_RESULT_SUCCESS) {
         for (jsize index = 0; index < destination_size; ++index) {
             destination_elements[index] = (jbyte)destination_values[index];
         }
@@ -481,7 +481,7 @@ Java_org_openeggbert_cna_internal_generated_NativeNetworkRoutes_localNetworkGame
     free(destination_values);
     (*environment)->ReleaseByteArrayElements(
         environment, destination, destination_elements, 0);
-    if (result == CNA_RESULT_SUCCESS || result == CNA_RESULT_BUFFER_TOO_SMALL) {
+    if (call_result == CNA_RESULT_SUCCESS || call_result == CNA_RESULT_BUFFER_TOO_SMALL) {
         jlong out_sender_element = (jlong)out_sender_value;
         (*environment)->SetLongArrayRegion(
             environment, out_sender, 0, 1, &out_sender_element);
@@ -489,7 +489,7 @@ Java_org_openeggbert_cna_internal_generated_NativeNetworkRoutes_localNetworkGame
         (*environment)->SetLongArrayRegion(
             environment, out_received, 0, 1, &out_received_element);
     }
-    return (jint)result;
+    return (jint)call_result;
 }
 
 JNIEXPORT jint JNICALL
@@ -513,11 +513,11 @@ Java_org_openeggbert_cna_internal_generated_NativeNetworkRoutes_localNetworkGame
     for (jsize index = 0; index < data_size; ++index) {
         data_values[index] = (uint8_t)data_elements[index];
     }
-    CNA_Result result = cna.local_network_gamer_send_data((CNA_NetworkGamerHandle)gamer, data_values, (uint64_t)data_size, (CNA_SendDataOptions)options);
+    CNA_Result call_result = cna.local_network_gamer_send_data((CNA_NetworkGamerHandle)gamer, data_values, (uint64_t)data_size, (CNA_SendDataOptions)options);
     free(data_values);
     (*environment)->ReleaseByteArrayElements(
         environment, data, data_elements, JNI_ABORT);
-    return (jint)result;
+    return (jint)call_result;
 }
 
 JNIEXPORT jint JNICALL
@@ -541,11 +541,11 @@ Java_org_openeggbert_cna_internal_generated_NativeNetworkRoutes_localNetworkGame
     for (jsize index = 0; index < data_size; ++index) {
         data_values[index] = (uint8_t)data_elements[index];
     }
-    CNA_Result result = cna.local_network_gamer_send_data_range((CNA_NetworkGamerHandle)gamer, data_values, (uint64_t)data_size, (int32_t)offset, (int32_t)length, (CNA_SendDataOptions)options);
+    CNA_Result call_result = cna.local_network_gamer_send_data_range((CNA_NetworkGamerHandle)gamer, data_values, (uint64_t)data_size, (int32_t)offset, (int32_t)length, (CNA_SendDataOptions)options);
     free(data_values);
     (*environment)->ReleaseByteArrayElements(
         environment, data, data_elements, JNI_ABORT);
-    return (jint)result;
+    return (jint)call_result;
 }
 
 JNIEXPORT jint JNICALL
@@ -569,11 +569,11 @@ Java_org_openeggbert_cna_internal_generated_NativeNetworkRoutes_localNetworkGame
     for (jsize index = 0; index < data_size; ++index) {
         data_values[index] = (uint8_t)data_elements[index];
     }
-    CNA_Result result = cna.local_network_gamer_send_data_range_to((CNA_NetworkGamerHandle)gamer, data_values, (uint64_t)data_size, (int32_t)offset, (int32_t)length, (CNA_SendDataOptions)options, (CNA_NetworkGamerHandle)recipient);
+    CNA_Result call_result = cna.local_network_gamer_send_data_range_to((CNA_NetworkGamerHandle)gamer, data_values, (uint64_t)data_size, (int32_t)offset, (int32_t)length, (CNA_SendDataOptions)options, (CNA_NetworkGamerHandle)recipient);
     free(data_values);
     (*environment)->ReleaseByteArrayElements(
         environment, data, data_elements, JNI_ABORT);
-    return (jint)result;
+    return (jint)call_result;
 }
 
 JNIEXPORT jint JNICALL
@@ -597,11 +597,11 @@ Java_org_openeggbert_cna_internal_generated_NativeNetworkRoutes_localNetworkGame
     for (jsize index = 0; index < data_size; ++index) {
         data_values[index] = (uint8_t)data_elements[index];
     }
-    CNA_Result result = cna.local_network_gamer_send_data_to((CNA_NetworkGamerHandle)gamer, data_values, (uint64_t)data_size, (CNA_SendDataOptions)options, (CNA_NetworkGamerHandle)recipient);
+    CNA_Result call_result = cna.local_network_gamer_send_data_to((CNA_NetworkGamerHandle)gamer, data_values, (uint64_t)data_size, (CNA_SendDataOptions)options, (CNA_NetworkGamerHandle)recipient);
     free(data_values);
     (*environment)->ReleaseByteArrayElements(
         environment, data, data_elements, JNI_ABORT);
-    return (jint)result;
+    return (jint)call_result;
 }
 
 JNIEXPORT jint JNICALL
@@ -610,8 +610,8 @@ Java_org_openeggbert_cna_internal_generated_NativeNetworkRoutes_localNetworkGame
 {
     (void)environment;
     (void)declaring_class;
-    CNA_Result result = cna.local_network_gamer_send_party_invites((CNA_NetworkGamerHandle)gamer);
-    return (jint)result;
+    CNA_Result call_result = cna.local_network_gamer_send_party_invites((CNA_NetworkGamerHandle)gamer);
+    return (jint)call_result;
 }
 
 JNIEXPORT jint JNICALL
@@ -622,8 +622,8 @@ Java_org_openeggbert_cna_internal_generated_NativeNetworkRoutes_netGetLastJoinEr
     (void)declaring_class;
     CNA_NetworkSessionJoinError out_join_error_value = 0;
     CNA_Bool out_has_join_error_value = 0;
-    CNA_Result result = cna.net_get_last_join_error(&out_join_error_value, &out_has_join_error_value);
-    if (result == CNA_RESULT_SUCCESS || result == CNA_RESULT_BUFFER_TOO_SMALL) {
+    CNA_Result call_result = cna.net_get_last_join_error(&out_join_error_value, &out_has_join_error_value);
+    if (call_result == CNA_RESULT_SUCCESS || call_result == CNA_RESULT_BUFFER_TOO_SMALL) {
         jint out_join_error_element = (jint)out_join_error_value;
         (*environment)->SetIntArrayRegion(
             environment, out_join_error, 0, 1, &out_join_error_element);
@@ -631,7 +631,7 @@ Java_org_openeggbert_cna_internal_generated_NativeNetworkRoutes_netGetLastJoinEr
         (*environment)->SetBooleanArrayRegion(
             environment, out_has_join_error, 0, 1, &out_has_join_error_element);
     }
-    return (jint)result;
+    return (jint)call_result;
 }
 
 JNIEXPORT jint JNICALL
@@ -641,13 +641,13 @@ Java_org_openeggbert_cna_internal_generated_NativeNetworkRoutes_networkGamerCopy
     (void)environment;
     (void)declaring_class;
     CNA_NetworkMachineHandle out_machine_value = 0;
-    CNA_Result result = cna.network_gamer_copy_machine((CNA_NetworkGamerHandle)gamer, &out_machine_value);
-    if (result == CNA_RESULT_SUCCESS || result == CNA_RESULT_BUFFER_TOO_SMALL) {
+    CNA_Result call_result = cna.network_gamer_copy_machine((CNA_NetworkGamerHandle)gamer, &out_machine_value);
+    if (call_result == CNA_RESULT_SUCCESS || call_result == CNA_RESULT_BUFFER_TOO_SMALL) {
         jlong out_machine_element = (jlong)out_machine_value;
         (*environment)->SetLongArrayRegion(
             environment, out_machine, 0, 1, &out_machine_element);
     }
-    return (jint)result;
+    return (jint)call_result;
 }
 
 JNIEXPORT jint JNICALL
@@ -657,13 +657,13 @@ Java_org_openeggbert_cna_internal_generated_NativeNetworkRoutes_networkGamerGetH
     (void)environment;
     (void)declaring_class;
     CNA_Bool out_value_value = 0;
-    CNA_Result result = cna.network_gamer_get_has_left_session((CNA_NetworkGamerHandle)gamer, &out_value_value);
-    if (result == CNA_RESULT_SUCCESS || result == CNA_RESULT_BUFFER_TOO_SMALL) {
+    CNA_Result call_result = cna.network_gamer_get_has_left_session((CNA_NetworkGamerHandle)gamer, &out_value_value);
+    if (call_result == CNA_RESULT_SUCCESS || call_result == CNA_RESULT_BUFFER_TOO_SMALL) {
         jboolean out_value_element = (jboolean)out_value_value;
         (*environment)->SetBooleanArrayRegion(
             environment, out_value, 0, 1, &out_value_element);
     }
-    return (jint)result;
+    return (jint)call_result;
 }
 
 JNIEXPORT jint JNICALL
@@ -673,13 +673,13 @@ Java_org_openeggbert_cna_internal_generated_NativeNetworkRoutes_networkGamerGetH
     (void)environment;
     (void)declaring_class;
     CNA_Bool out_value_value = 0;
-    CNA_Result result = cna.network_gamer_get_has_voice((CNA_NetworkGamerHandle)gamer, &out_value_value);
-    if (result == CNA_RESULT_SUCCESS || result == CNA_RESULT_BUFFER_TOO_SMALL) {
+    CNA_Result call_result = cna.network_gamer_get_has_voice((CNA_NetworkGamerHandle)gamer, &out_value_value);
+    if (call_result == CNA_RESULT_SUCCESS || call_result == CNA_RESULT_BUFFER_TOO_SMALL) {
         jboolean out_value_element = (jboolean)out_value_value;
         (*environment)->SetBooleanArrayRegion(
             environment, out_value, 0, 1, &out_value_element);
     }
-    return (jint)result;
+    return (jint)call_result;
 }
 
 JNIEXPORT jint JNICALL
@@ -689,13 +689,13 @@ Java_org_openeggbert_cna_internal_generated_NativeNetworkRoutes_networkGamerGetI
     (void)environment;
     (void)declaring_class;
     uint8_t out_value_value = 0;
-    CNA_Result result = cna.network_gamer_get_id((CNA_NetworkGamerHandle)gamer, &out_value_value);
-    if (result == CNA_RESULT_SUCCESS || result == CNA_RESULT_BUFFER_TOO_SMALL) {
+    CNA_Result call_result = cna.network_gamer_get_id((CNA_NetworkGamerHandle)gamer, &out_value_value);
+    if (call_result == CNA_RESULT_SUCCESS || call_result == CNA_RESULT_BUFFER_TOO_SMALL) {
         jbyte out_value_element = (jbyte)out_value_value;
         (*environment)->SetByteArrayRegion(
             environment, out_value, 0, 1, &out_value_element);
     }
-    return (jint)result;
+    return (jint)call_result;
 }
 
 JNIEXPORT jint JNICALL
@@ -705,13 +705,13 @@ Java_org_openeggbert_cna_internal_generated_NativeNetworkRoutes_networkGamerGetI
     (void)environment;
     (void)declaring_class;
     CNA_Bool out_value_value = 0;
-    CNA_Result result = cna.network_gamer_get_is_guest((CNA_NetworkGamerHandle)gamer, &out_value_value);
-    if (result == CNA_RESULT_SUCCESS || result == CNA_RESULT_BUFFER_TOO_SMALL) {
+    CNA_Result call_result = cna.network_gamer_get_is_guest((CNA_NetworkGamerHandle)gamer, &out_value_value);
+    if (call_result == CNA_RESULT_SUCCESS || call_result == CNA_RESULT_BUFFER_TOO_SMALL) {
         jboolean out_value_element = (jboolean)out_value_value;
         (*environment)->SetBooleanArrayRegion(
             environment, out_value, 0, 1, &out_value_element);
     }
-    return (jint)result;
+    return (jint)call_result;
 }
 
 JNIEXPORT jint JNICALL
@@ -721,13 +721,13 @@ Java_org_openeggbert_cna_internal_generated_NativeNetworkRoutes_networkGamerGetI
     (void)environment;
     (void)declaring_class;
     CNA_Bool out_value_value = 0;
-    CNA_Result result = cna.network_gamer_get_is_host((CNA_NetworkGamerHandle)gamer, &out_value_value);
-    if (result == CNA_RESULT_SUCCESS || result == CNA_RESULT_BUFFER_TOO_SMALL) {
+    CNA_Result call_result = cna.network_gamer_get_is_host((CNA_NetworkGamerHandle)gamer, &out_value_value);
+    if (call_result == CNA_RESULT_SUCCESS || call_result == CNA_RESULT_BUFFER_TOO_SMALL) {
         jboolean out_value_element = (jboolean)out_value_value;
         (*environment)->SetBooleanArrayRegion(
             environment, out_value, 0, 1, &out_value_element);
     }
-    return (jint)result;
+    return (jint)call_result;
 }
 
 JNIEXPORT jint JNICALL
@@ -737,13 +737,13 @@ Java_org_openeggbert_cna_internal_generated_NativeNetworkRoutes_networkGamerGetI
     (void)environment;
     (void)declaring_class;
     CNA_Bool out_value_value = 0;
-    CNA_Result result = cna.network_gamer_get_is_local((CNA_NetworkGamerHandle)gamer, &out_value_value);
-    if (result == CNA_RESULT_SUCCESS || result == CNA_RESULT_BUFFER_TOO_SMALL) {
+    CNA_Result call_result = cna.network_gamer_get_is_local((CNA_NetworkGamerHandle)gamer, &out_value_value);
+    if (call_result == CNA_RESULT_SUCCESS || call_result == CNA_RESULT_BUFFER_TOO_SMALL) {
         jboolean out_value_element = (jboolean)out_value_value;
         (*environment)->SetBooleanArrayRegion(
             environment, out_value, 0, 1, &out_value_element);
     }
-    return (jint)result;
+    return (jint)call_result;
 }
 
 JNIEXPORT jint JNICALL
@@ -753,13 +753,13 @@ Java_org_openeggbert_cna_internal_generated_NativeNetworkRoutes_networkGamerGetI
     (void)environment;
     (void)declaring_class;
     CNA_Bool out_value_value = 0;
-    CNA_Result result = cna.network_gamer_get_is_muted_by_local_user((CNA_NetworkGamerHandle)gamer, &out_value_value);
-    if (result == CNA_RESULT_SUCCESS || result == CNA_RESULT_BUFFER_TOO_SMALL) {
+    CNA_Result call_result = cna.network_gamer_get_is_muted_by_local_user((CNA_NetworkGamerHandle)gamer, &out_value_value);
+    if (call_result == CNA_RESULT_SUCCESS || call_result == CNA_RESULT_BUFFER_TOO_SMALL) {
         jboolean out_value_element = (jboolean)out_value_value;
         (*environment)->SetBooleanArrayRegion(
             environment, out_value, 0, 1, &out_value_element);
     }
-    return (jint)result;
+    return (jint)call_result;
 }
 
 JNIEXPORT jint JNICALL
@@ -769,13 +769,13 @@ Java_org_openeggbert_cna_internal_generated_NativeNetworkRoutes_networkGamerGetI
     (void)environment;
     (void)declaring_class;
     CNA_Bool out_value_value = 0;
-    CNA_Result result = cna.network_gamer_get_is_private_slot((CNA_NetworkGamerHandle)gamer, &out_value_value);
-    if (result == CNA_RESULT_SUCCESS || result == CNA_RESULT_BUFFER_TOO_SMALL) {
+    CNA_Result call_result = cna.network_gamer_get_is_private_slot((CNA_NetworkGamerHandle)gamer, &out_value_value);
+    if (call_result == CNA_RESULT_SUCCESS || call_result == CNA_RESULT_BUFFER_TOO_SMALL) {
         jboolean out_value_element = (jboolean)out_value_value;
         (*environment)->SetBooleanArrayRegion(
             environment, out_value, 0, 1, &out_value_element);
     }
-    return (jint)result;
+    return (jint)call_result;
 }
 
 JNIEXPORT jint JNICALL
@@ -785,13 +785,13 @@ Java_org_openeggbert_cna_internal_generated_NativeNetworkRoutes_networkGamerGetI
     (void)environment;
     (void)declaring_class;
     CNA_Bool out_value_value = 0;
-    CNA_Result result = cna.network_gamer_get_is_ready((CNA_NetworkGamerHandle)gamer, &out_value_value);
-    if (result == CNA_RESULT_SUCCESS || result == CNA_RESULT_BUFFER_TOO_SMALL) {
+    CNA_Result call_result = cna.network_gamer_get_is_ready((CNA_NetworkGamerHandle)gamer, &out_value_value);
+    if (call_result == CNA_RESULT_SUCCESS || call_result == CNA_RESULT_BUFFER_TOO_SMALL) {
         jboolean out_value_element = (jboolean)out_value_value;
         (*environment)->SetBooleanArrayRegion(
             environment, out_value, 0, 1, &out_value_element);
     }
-    return (jint)result;
+    return (jint)call_result;
 }
 
 JNIEXPORT jint JNICALL
@@ -801,13 +801,13 @@ Java_org_openeggbert_cna_internal_generated_NativeNetworkRoutes_networkGamerGetI
     (void)environment;
     (void)declaring_class;
     CNA_Bool out_value_value = 0;
-    CNA_Result result = cna.network_gamer_get_is_talking((CNA_NetworkGamerHandle)gamer, &out_value_value);
-    if (result == CNA_RESULT_SUCCESS || result == CNA_RESULT_BUFFER_TOO_SMALL) {
+    CNA_Result call_result = cna.network_gamer_get_is_talking((CNA_NetworkGamerHandle)gamer, &out_value_value);
+    if (call_result == CNA_RESULT_SUCCESS || call_result == CNA_RESULT_BUFFER_TOO_SMALL) {
         jboolean out_value_element = (jboolean)out_value_value;
         (*environment)->SetBooleanArrayRegion(
             environment, out_value, 0, 1, &out_value_element);
     }
-    return (jint)result;
+    return (jint)call_result;
 }
 
 JNIEXPORT jint JNICALL
@@ -817,13 +817,13 @@ Java_org_openeggbert_cna_internal_generated_NativeNetworkRoutes_networkGamerGetR
     (void)environment;
     (void)declaring_class;
     int64_t out_ticks_value = 0;
-    CNA_Result result = cna.network_gamer_get_roundtrip_ticks((CNA_NetworkGamerHandle)gamer, &out_ticks_value);
-    if (result == CNA_RESULT_SUCCESS || result == CNA_RESULT_BUFFER_TOO_SMALL) {
+    CNA_Result call_result = cna.network_gamer_get_roundtrip_ticks((CNA_NetworkGamerHandle)gamer, &out_ticks_value);
+    if (call_result == CNA_RESULT_SUCCESS || call_result == CNA_RESULT_BUFFER_TOO_SMALL) {
         jlong out_ticks_element = (jlong)out_ticks_value;
         (*environment)->SetLongArrayRegion(
             environment, out_ticks, 0, 1, &out_ticks_element);
     }
-    return (jint)result;
+    return (jint)call_result;
 }
 
 JNIEXPORT jint JNICALL
@@ -833,13 +833,13 @@ Java_org_openeggbert_cna_internal_generated_NativeNetworkRoutes_networkGamerGetS
     (void)environment;
     (void)declaring_class;
     CNA_Handle out_session_value = 0;
-    CNA_Result result = cna.network_gamer_get_session((CNA_NetworkGamerHandle)gamer, &out_session_value);
-    if (result == CNA_RESULT_SUCCESS || result == CNA_RESULT_BUFFER_TOO_SMALL) {
+    CNA_Result call_result = cna.network_gamer_get_session((CNA_NetworkGamerHandle)gamer, &out_session_value);
+    if (call_result == CNA_RESULT_SUCCESS || call_result == CNA_RESULT_BUFFER_TOO_SMALL) {
         jlong out_session_element = (jlong)out_session_value;
         (*environment)->SetLongArrayRegion(
             environment, out_session, 0, 1, &out_session_element);
     }
-    return (jint)result;
+    return (jint)call_result;
 }
 
 JNIEXPORT jint JNICALL
@@ -848,8 +848,8 @@ Java_org_openeggbert_cna_internal_generated_NativeNetworkRoutes_networkGamerSetI
 {
     (void)environment;
     (void)declaring_class;
-    CNA_Result result = cna.network_gamer_set_is_ready((CNA_NetworkGamerHandle)gamer, (CNA_Bool)value);
-    return (jint)result;
+    CNA_Result call_result = cna.network_gamer_set_is_ready((CNA_NetworkGamerHandle)gamer, (CNA_Bool)value);
+    return (jint)call_result;
 }
 
 JNIEXPORT jint JNICALL
@@ -858,8 +858,8 @@ Java_org_openeggbert_cna_internal_generated_NativeNetworkRoutes_networkGamerSetM
 {
     (void)environment;
     (void)declaring_class;
-    CNA_Result result = cna.network_gamer_set_machine((CNA_NetworkGamerHandle)gamer, (CNA_NetworkMachineHandle)machine);
-    return (jint)result;
+    CNA_Result call_result = cna.network_gamer_set_machine((CNA_NetworkGamerHandle)gamer, (CNA_NetworkMachineHandle)machine);
+    return (jint)call_result;
 }
 
 JNIEXPORT jint JNICALL
@@ -869,13 +869,13 @@ Java_org_openeggbert_cna_internal_generated_NativeNetworkRoutes_networkMachineGe
     (void)environment;
     (void)declaring_class;
     CNA_NetworkGamerHandle out_gamer_value = 0;
-    CNA_Result result = cna.network_machine_get_gamer((CNA_NetworkMachineHandle)machine, (int32_t)index, &out_gamer_value);
-    if (result == CNA_RESULT_SUCCESS || result == CNA_RESULT_BUFFER_TOO_SMALL) {
+    CNA_Result call_result = cna.network_machine_get_gamer((CNA_NetworkMachineHandle)machine, (int32_t)index, &out_gamer_value);
+    if (call_result == CNA_RESULT_SUCCESS || call_result == CNA_RESULT_BUFFER_TOO_SMALL) {
         jlong out_gamer_element = (jlong)out_gamer_value;
         (*environment)->SetLongArrayRegion(
             environment, out_gamer, 0, 1, &out_gamer_element);
     }
-    return (jint)result;
+    return (jint)call_result;
 }
 
 JNIEXPORT jint JNICALL
@@ -885,13 +885,13 @@ Java_org_openeggbert_cna_internal_generated_NativeNetworkRoutes_networkMachineGe
     (void)environment;
     (void)declaring_class;
     int32_t out_count_value = 0;
-    CNA_Result result = cna.network_machine_get_gamer_count((CNA_NetworkMachineHandle)machine, &out_count_value);
-    if (result == CNA_RESULT_SUCCESS || result == CNA_RESULT_BUFFER_TOO_SMALL) {
+    CNA_Result call_result = cna.network_machine_get_gamer_count((CNA_NetworkMachineHandle)machine, &out_count_value);
+    if (call_result == CNA_RESULT_SUCCESS || call_result == CNA_RESULT_BUFFER_TOO_SMALL) {
         jint out_count_element = (jint)out_count_value;
         (*environment)->SetIntArrayRegion(
             environment, out_count, 0, 1, &out_count_element);
     }
-    return (jint)result;
+    return (jint)call_result;
 }
 
 JNIEXPORT jint JNICALL
@@ -900,8 +900,8 @@ Java_org_openeggbert_cna_internal_generated_NativeNetworkRoutes_networkMachineRe
 {
     (void)environment;
     (void)declaring_class;
-    CNA_Result result = cna.network_machine_remove_from_session((CNA_NetworkMachineHandle)machine);
-    return (jint)result;
+    CNA_Result call_result = cna.network_machine_remove_from_session((CNA_NetworkMachineHandle)machine);
+    return (jint)call_result;
 }
 
 JNIEXPORT jint JNICALL
@@ -910,8 +910,8 @@ Java_org_openeggbert_cna_internal_generated_NativeNetworkRoutes_networkSessionAd
 {
     (void)environment;
     (void)declaring_class;
-    CNA_Result result = cna.network_session_add_local_gamer((CNA_NetworkSessionHandle)session, (CNA_Handle)signed_in_gamer);
-    return (jint)result;
+    CNA_Result call_result = cna.network_session_add_local_gamer((CNA_NetworkSessionHandle)session, (CNA_Handle)signed_in_gamer);
+    return (jint)call_result;
 }
 
 JNIEXPORT jint JNICALL
@@ -921,13 +921,13 @@ Java_org_openeggbert_cna_internal_generated_NativeNetworkRoutes_networkSessionCo
     (void)environment;
     (void)declaring_class;
     CNA_NetworkSessionPropertiesHandle out_properties_value = 0;
-    CNA_Result result = cna.network_session_copy_session_properties((CNA_NetworkSessionHandle)session, &out_properties_value);
-    if (result == CNA_RESULT_SUCCESS || result == CNA_RESULT_BUFFER_TOO_SMALL) {
+    CNA_Result call_result = cna.network_session_copy_session_properties((CNA_NetworkSessionHandle)session, &out_properties_value);
+    if (call_result == CNA_RESULT_SUCCESS || call_result == CNA_RESULT_BUFFER_TOO_SMALL) {
         jlong out_properties_element = (jlong)out_properties_value;
         (*environment)->SetLongArrayRegion(
             environment, out_properties, 0, 1, &out_properties_element);
     }
-    return (jint)result;
+    return (jint)call_result;
 }
 
 JNIEXPORT jint JNICALL
@@ -937,13 +937,13 @@ Java_org_openeggbert_cna_internal_generated_NativeNetworkRoutes_networkSessionCr
     (void)environment;
     (void)declaring_class;
     CNA_NetworkSessionHandle out_session_value = 0;
-    CNA_Result result = cna.network_session_create((CNA_NetworkSessionType)session_type, (int32_t)max_local_gamers, (int32_t)max_gamers, &out_session_value);
-    if (result == CNA_RESULT_SUCCESS || result == CNA_RESULT_BUFFER_TOO_SMALL) {
+    CNA_Result call_result = cna.network_session_create((CNA_NetworkSessionType)session_type, (int32_t)max_local_gamers, (int32_t)max_gamers, &out_session_value);
+    if (call_result == CNA_RESULT_SUCCESS || call_result == CNA_RESULT_BUFFER_TOO_SMALL) {
         jlong out_session_element = (jlong)out_session_value;
         (*environment)->SetLongArrayRegion(
             environment, out_session, 0, 1, &out_session_element);
     }
-    return (jint)result;
+    return (jint)call_result;
 }
 
 JNIEXPORT jint JNICALL
@@ -968,16 +968,16 @@ Java_org_openeggbert_cna_internal_generated_NativeNetworkRoutes_networkSessionCr
         local_gamers_values[index] = (CNA_Handle)local_gamers_elements[index];
     }
     CNA_NetworkSessionHandle out_session_value = 0;
-    CNA_Result result = cna.network_session_create_with_local_gamers((CNA_NetworkSessionType)session_type, local_gamers_values, (uint64_t)local_gamers_size, (int32_t)max_gamers, (int32_t)private_gamer_slots, (CNA_NetworkSessionPropertiesHandle)session_properties, &out_session_value);
+    CNA_Result call_result = cna.network_session_create_with_local_gamers((CNA_NetworkSessionType)session_type, local_gamers_values, (uint64_t)local_gamers_size, (int32_t)max_gamers, (int32_t)private_gamer_slots, (CNA_NetworkSessionPropertiesHandle)session_properties, &out_session_value);
     free(local_gamers_values);
     (*environment)->ReleaseLongArrayElements(
         environment, local_gamers, local_gamers_elements, JNI_ABORT);
-    if (result == CNA_RESULT_SUCCESS || result == CNA_RESULT_BUFFER_TOO_SMALL) {
+    if (call_result == CNA_RESULT_SUCCESS || call_result == CNA_RESULT_BUFFER_TOO_SMALL) {
         jlong out_session_element = (jlong)out_session_value;
         (*environment)->SetLongArrayRegion(
             environment, out_session, 0, 1, &out_session_element);
     }
-    return (jint)result;
+    return (jint)call_result;
 }
 
 JNIEXPORT jint JNICALL
@@ -987,13 +987,13 @@ Java_org_openeggbert_cna_internal_generated_NativeNetworkRoutes_networkSessionCr
     (void)environment;
     (void)declaring_class;
     CNA_NetworkSessionHandle out_session_value = 0;
-    CNA_Result result = cna.network_session_create_with_properties((CNA_NetworkSessionType)session_type, (int32_t)max_local_gamers, (int32_t)max_gamers, (int32_t)private_gamer_slots, (CNA_NetworkSessionPropertiesHandle)session_properties, &out_session_value);
-    if (result == CNA_RESULT_SUCCESS || result == CNA_RESULT_BUFFER_TOO_SMALL) {
+    CNA_Result call_result = cna.network_session_create_with_properties((CNA_NetworkSessionType)session_type, (int32_t)max_local_gamers, (int32_t)max_gamers, (int32_t)private_gamer_slots, (CNA_NetworkSessionPropertiesHandle)session_properties, &out_session_value);
+    if (call_result == CNA_RESULT_SUCCESS || call_result == CNA_RESULT_BUFFER_TOO_SMALL) {
         jlong out_session_element = (jlong)out_session_value;
         (*environment)->SetLongArrayRegion(
             environment, out_session, 0, 1, &out_session_element);
     }
-    return (jint)result;
+    return (jint)call_result;
 }
 
 JNIEXPORT jint JNICALL
@@ -1002,8 +1002,8 @@ Java_org_openeggbert_cna_internal_generated_NativeNetworkRoutes_networkSessionDe
 {
     (void)environment;
     (void)declaring_class;
-    CNA_Result result = cna.network_session_destroy((CNA_NetworkSessionHandle)session);
-    return (jint)result;
+    CNA_Result call_result = cna.network_session_destroy((CNA_NetworkSessionHandle)session);
+    return (jint)call_result;
 }
 
 JNIEXPORT jint JNICALL
@@ -1012,8 +1012,8 @@ Java_org_openeggbert_cna_internal_generated_NativeNetworkRoutes_networkSessionDi
 {
     (void)environment;
     (void)declaring_class;
-    CNA_Result result = cna.network_session_dispose((CNA_NetworkSessionHandle)session);
-    return (jint)result;
+    CNA_Result call_result = cna.network_session_dispose((CNA_NetworkSessionHandle)session);
+    return (jint)call_result;
 }
 
 JNIEXPORT jint JNICALL
@@ -1022,8 +1022,8 @@ Java_org_openeggbert_cna_internal_generated_NativeNetworkRoutes_networkSessionEn
 {
     (void)environment;
     (void)declaring_class;
-    CNA_Result result = cna.network_session_end_game((CNA_NetworkSessionHandle)session);
-    return (jint)result;
+    CNA_Result call_result = cna.network_session_end_game((CNA_NetworkSessionHandle)session);
+    return (jint)call_result;
 }
 
 JNIEXPORT jint JNICALL
@@ -1033,13 +1033,13 @@ Java_org_openeggbert_cna_internal_generated_NativeNetworkRoutes_networkSessionFi
     (void)environment;
     (void)declaring_class;
     CNA_AvailableNetworkSessionCollectionHandle out_collection_value = 0;
-    CNA_Result result = cna.network_session_find((CNA_NetworkSessionType)session_type, (int32_t)max_local_gamers, (CNA_NetworkSessionPropertiesHandle)search_properties, &out_collection_value);
-    if (result == CNA_RESULT_SUCCESS || result == CNA_RESULT_BUFFER_TOO_SMALL) {
+    CNA_Result call_result = cna.network_session_find((CNA_NetworkSessionType)session_type, (int32_t)max_local_gamers, (CNA_NetworkSessionPropertiesHandle)search_properties, &out_collection_value);
+    if (call_result == CNA_RESULT_SUCCESS || call_result == CNA_RESULT_BUFFER_TOO_SMALL) {
         jlong out_collection_element = (jlong)out_collection_value;
         (*environment)->SetLongArrayRegion(
             environment, out_collection, 0, 1, &out_collection_element);
     }
-    return (jint)result;
+    return (jint)call_result;
 }
 
 JNIEXPORT jint JNICALL
@@ -1049,13 +1049,13 @@ Java_org_openeggbert_cna_internal_generated_NativeNetworkRoutes_networkSessionFi
     (void)environment;
     (void)declaring_class;
     CNA_NetworkGamerHandle out_gamer_value = 0;
-    CNA_Result result = cna.network_session_find_gamer_by_id((CNA_NetworkSessionHandle)session, (uint8_t)gamer_id, &out_gamer_value);
-    if (result == CNA_RESULT_SUCCESS || result == CNA_RESULT_BUFFER_TOO_SMALL) {
+    CNA_Result call_result = cna.network_session_find_gamer_by_id((CNA_NetworkSessionHandle)session, (uint8_t)gamer_id, &out_gamer_value);
+    if (call_result == CNA_RESULT_SUCCESS || call_result == CNA_RESULT_BUFFER_TOO_SMALL) {
         jlong out_gamer_element = (jlong)out_gamer_value;
         (*environment)->SetLongArrayRegion(
             environment, out_gamer, 0, 1, &out_gamer_element);
     }
-    return (jint)result;
+    return (jint)call_result;
 }
 
 JNIEXPORT jint JNICALL
@@ -1080,16 +1080,16 @@ Java_org_openeggbert_cna_internal_generated_NativeNetworkRoutes_networkSessionFi
         local_gamers_values[index] = (CNA_Handle)local_gamers_elements[index];
     }
     CNA_AvailableNetworkSessionCollectionHandle out_collection_value = 0;
-    CNA_Result result = cna.network_session_find_with_local_gamers((CNA_NetworkSessionType)session_type, local_gamers_values, (uint64_t)local_gamers_size, (CNA_NetworkSessionPropertiesHandle)search_properties, &out_collection_value);
+    CNA_Result call_result = cna.network_session_find_with_local_gamers((CNA_NetworkSessionType)session_type, local_gamers_values, (uint64_t)local_gamers_size, (CNA_NetworkSessionPropertiesHandle)search_properties, &out_collection_value);
     free(local_gamers_values);
     (*environment)->ReleaseLongArrayElements(
         environment, local_gamers, local_gamers_elements, JNI_ABORT);
-    if (result == CNA_RESULT_SUCCESS || result == CNA_RESULT_BUFFER_TOO_SMALL) {
+    if (call_result == CNA_RESULT_SUCCESS || call_result == CNA_RESULT_BUFFER_TOO_SMALL) {
         jlong out_collection_element = (jlong)out_collection_value;
         (*environment)->SetLongArrayRegion(
             environment, out_collection, 0, 1, &out_collection_element);
     }
-    return (jint)result;
+    return (jint)call_result;
 }
 
 JNIEXPORT jint JNICALL
@@ -1099,13 +1099,13 @@ Java_org_openeggbert_cna_internal_generated_NativeNetworkRoutes_networkSessionGe
     (void)environment;
     (void)declaring_class;
     CNA_Bool out_value_value = 0;
-    CNA_Result result = cna.network_session_get_allow_host_migration((CNA_NetworkSessionHandle)session, &out_value_value);
-    if (result == CNA_RESULT_SUCCESS || result == CNA_RESULT_BUFFER_TOO_SMALL) {
+    CNA_Result call_result = cna.network_session_get_allow_host_migration((CNA_NetworkSessionHandle)session, &out_value_value);
+    if (call_result == CNA_RESULT_SUCCESS || call_result == CNA_RESULT_BUFFER_TOO_SMALL) {
         jboolean out_value_element = (jboolean)out_value_value;
         (*environment)->SetBooleanArrayRegion(
             environment, out_value, 0, 1, &out_value_element);
     }
-    return (jint)result;
+    return (jint)call_result;
 }
 
 JNIEXPORT jint JNICALL
@@ -1115,13 +1115,13 @@ Java_org_openeggbert_cna_internal_generated_NativeNetworkRoutes_networkSessionGe
     (void)environment;
     (void)declaring_class;
     CNA_Bool out_value_value = 0;
-    CNA_Result result = cna.network_session_get_allow_join_in_progress((CNA_NetworkSessionHandle)session, &out_value_value);
-    if (result == CNA_RESULT_SUCCESS || result == CNA_RESULT_BUFFER_TOO_SMALL) {
+    CNA_Result call_result = cna.network_session_get_allow_join_in_progress((CNA_NetworkSessionHandle)session, &out_value_value);
+    if (call_result == CNA_RESULT_SUCCESS || call_result == CNA_RESULT_BUFFER_TOO_SMALL) {
         jboolean out_value_element = (jboolean)out_value_value;
         (*environment)->SetBooleanArrayRegion(
             environment, out_value, 0, 1, &out_value_element);
     }
-    return (jint)result;
+    return (jint)call_result;
 }
 
 JNIEXPORT jint JNICALL
@@ -1131,13 +1131,13 @@ Java_org_openeggbert_cna_internal_generated_NativeNetworkRoutes_networkSessionGe
     (void)environment;
     (void)declaring_class;
     int32_t out_value_value = 0;
-    CNA_Result result = cna.network_session_get_bytes_per_second_received((CNA_NetworkSessionHandle)session, &out_value_value);
-    if (result == CNA_RESULT_SUCCESS || result == CNA_RESULT_BUFFER_TOO_SMALL) {
+    CNA_Result call_result = cna.network_session_get_bytes_per_second_received((CNA_NetworkSessionHandle)session, &out_value_value);
+    if (call_result == CNA_RESULT_SUCCESS || call_result == CNA_RESULT_BUFFER_TOO_SMALL) {
         jint out_value_element = (jint)out_value_value;
         (*environment)->SetIntArrayRegion(
             environment, out_value, 0, 1, &out_value_element);
     }
-    return (jint)result;
+    return (jint)call_result;
 }
 
 JNIEXPORT jint JNICALL
@@ -1147,13 +1147,13 @@ Java_org_openeggbert_cna_internal_generated_NativeNetworkRoutes_networkSessionGe
     (void)environment;
     (void)declaring_class;
     int32_t out_value_value = 0;
-    CNA_Result result = cna.network_session_get_bytes_per_second_sent((CNA_NetworkSessionHandle)session, &out_value_value);
-    if (result == CNA_RESULT_SUCCESS || result == CNA_RESULT_BUFFER_TOO_SMALL) {
+    CNA_Result call_result = cna.network_session_get_bytes_per_second_sent((CNA_NetworkSessionHandle)session, &out_value_value);
+    if (call_result == CNA_RESULT_SUCCESS || call_result == CNA_RESULT_BUFFER_TOO_SMALL) {
         jint out_value_element = (jint)out_value_value;
         (*environment)->SetIntArrayRegion(
             environment, out_value, 0, 1, &out_value_element);
     }
-    return (jint)result;
+    return (jint)call_result;
 }
 
 JNIEXPORT jint JNICALL
@@ -1163,13 +1163,13 @@ Java_org_openeggbert_cna_internal_generated_NativeNetworkRoutes_networkSessionGe
     (void)environment;
     (void)declaring_class;
     CNA_NetworkGamerHandle out_gamer_value = 0;
-    CNA_Result result = cna.network_session_get_gamer((CNA_NetworkSessionHandle)session, (uint32_t)roster, (int32_t)index, &out_gamer_value);
-    if (result == CNA_RESULT_SUCCESS || result == CNA_RESULT_BUFFER_TOO_SMALL) {
+    CNA_Result call_result = cna.network_session_get_gamer((CNA_NetworkSessionHandle)session, (uint32_t)roster, (int32_t)index, &out_gamer_value);
+    if (call_result == CNA_RESULT_SUCCESS || call_result == CNA_RESULT_BUFFER_TOO_SMALL) {
         jlong out_gamer_element = (jlong)out_gamer_value;
         (*environment)->SetLongArrayRegion(
             environment, out_gamer, 0, 1, &out_gamer_element);
     }
-    return (jint)result;
+    return (jint)call_result;
 }
 
 JNIEXPORT jint JNICALL
@@ -1179,13 +1179,13 @@ Java_org_openeggbert_cna_internal_generated_NativeNetworkRoutes_networkSessionGe
     (void)environment;
     (void)declaring_class;
     int32_t out_count_value = 0;
-    CNA_Result result = cna.network_session_get_gamer_count((CNA_NetworkSessionHandle)session, (uint32_t)roster, &out_count_value);
-    if (result == CNA_RESULT_SUCCESS || result == CNA_RESULT_BUFFER_TOO_SMALL) {
+    CNA_Result call_result = cna.network_session_get_gamer_count((CNA_NetworkSessionHandle)session, (uint32_t)roster, &out_count_value);
+    if (call_result == CNA_RESULT_SUCCESS || call_result == CNA_RESULT_BUFFER_TOO_SMALL) {
         jint out_count_element = (jint)out_count_value;
         (*environment)->SetIntArrayRegion(
             environment, out_count, 0, 1, &out_count_element);
     }
-    return (jint)result;
+    return (jint)call_result;
 }
 
 JNIEXPORT jint JNICALL
@@ -1195,13 +1195,13 @@ Java_org_openeggbert_cna_internal_generated_NativeNetworkRoutes_networkSessionGe
     (void)environment;
     (void)declaring_class;
     CNA_NetworkGamerHandle out_gamer_value = 0;
-    CNA_Result result = cna.network_session_get_host((CNA_NetworkSessionHandle)session, &out_gamer_value);
-    if (result == CNA_RESULT_SUCCESS || result == CNA_RESULT_BUFFER_TOO_SMALL) {
+    CNA_Result call_result = cna.network_session_get_host((CNA_NetworkSessionHandle)session, &out_gamer_value);
+    if (call_result == CNA_RESULT_SUCCESS || call_result == CNA_RESULT_BUFFER_TOO_SMALL) {
         jlong out_gamer_element = (jlong)out_gamer_value;
         (*environment)->SetLongArrayRegion(
             environment, out_gamer, 0, 1, &out_gamer_element);
     }
-    return (jint)result;
+    return (jint)call_result;
 }
 
 JNIEXPORT jint JNICALL
@@ -1211,13 +1211,13 @@ Java_org_openeggbert_cna_internal_generated_NativeNetworkRoutes_networkSessionGe
     (void)environment;
     (void)declaring_class;
     CNA_Bool out_is_disposed_value = 0;
-    CNA_Result result = cna.network_session_get_is_disposed((CNA_NetworkSessionHandle)session, &out_is_disposed_value);
-    if (result == CNA_RESULT_SUCCESS || result == CNA_RESULT_BUFFER_TOO_SMALL) {
+    CNA_Result call_result = cna.network_session_get_is_disposed((CNA_NetworkSessionHandle)session, &out_is_disposed_value);
+    if (call_result == CNA_RESULT_SUCCESS || call_result == CNA_RESULT_BUFFER_TOO_SMALL) {
         jboolean out_is_disposed_element = (jboolean)out_is_disposed_value;
         (*environment)->SetBooleanArrayRegion(
             environment, out_is_disposed, 0, 1, &out_is_disposed_element);
     }
-    return (jint)result;
+    return (jint)call_result;
 }
 
 JNIEXPORT jint JNICALL
@@ -1227,13 +1227,13 @@ Java_org_openeggbert_cna_internal_generated_NativeNetworkRoutes_networkSessionGe
     (void)environment;
     (void)declaring_class;
     CNA_Bool out_value_value = 0;
-    CNA_Result result = cna.network_session_get_is_everyone_ready((CNA_NetworkSessionHandle)session, &out_value_value);
-    if (result == CNA_RESULT_SUCCESS || result == CNA_RESULT_BUFFER_TOO_SMALL) {
+    CNA_Result call_result = cna.network_session_get_is_everyone_ready((CNA_NetworkSessionHandle)session, &out_value_value);
+    if (call_result == CNA_RESULT_SUCCESS || call_result == CNA_RESULT_BUFFER_TOO_SMALL) {
         jboolean out_value_element = (jboolean)out_value_value;
         (*environment)->SetBooleanArrayRegion(
             environment, out_value, 0, 1, &out_value_element);
     }
-    return (jint)result;
+    return (jint)call_result;
 }
 
 JNIEXPORT jint JNICALL
@@ -1243,13 +1243,13 @@ Java_org_openeggbert_cna_internal_generated_NativeNetworkRoutes_networkSessionGe
     (void)environment;
     (void)declaring_class;
     CNA_Bool out_value_value = 0;
-    CNA_Result result = cna.network_session_get_is_host((CNA_NetworkSessionHandle)session, &out_value_value);
-    if (result == CNA_RESULT_SUCCESS || result == CNA_RESULT_BUFFER_TOO_SMALL) {
+    CNA_Result call_result = cna.network_session_get_is_host((CNA_NetworkSessionHandle)session, &out_value_value);
+    if (call_result == CNA_RESULT_SUCCESS || call_result == CNA_RESULT_BUFFER_TOO_SMALL) {
         jboolean out_value_element = (jboolean)out_value_value;
         (*environment)->SetBooleanArrayRegion(
             environment, out_value, 0, 1, &out_value_element);
     }
-    return (jint)result;
+    return (jint)call_result;
 }
 
 JNIEXPORT jint JNICALL
@@ -1259,13 +1259,13 @@ Java_org_openeggbert_cna_internal_generated_NativeNetworkRoutes_networkSessionGe
     (void)environment;
     (void)declaring_class;
     int32_t out_value_value = 0;
-    CNA_Result result = cna.network_session_get_max_gamers((CNA_NetworkSessionHandle)session, &out_value_value);
-    if (result == CNA_RESULT_SUCCESS || result == CNA_RESULT_BUFFER_TOO_SMALL) {
+    CNA_Result call_result = cna.network_session_get_max_gamers((CNA_NetworkSessionHandle)session, &out_value_value);
+    if (call_result == CNA_RESULT_SUCCESS || call_result == CNA_RESULT_BUFFER_TOO_SMALL) {
         jint out_value_element = (jint)out_value_value;
         (*environment)->SetIntArrayRegion(
             environment, out_value, 0, 1, &out_value_element);
     }
-    return (jint)result;
+    return (jint)call_result;
 }
 
 JNIEXPORT jint JNICALL
@@ -1275,13 +1275,13 @@ Java_org_openeggbert_cna_internal_generated_NativeNetworkRoutes_networkSessionGe
     (void)environment;
     (void)declaring_class;
     int32_t out_value_value = 0;
-    CNA_Result result = cna.network_session_get_private_gamer_slots((CNA_NetworkSessionHandle)session, &out_value_value);
-    if (result == CNA_RESULT_SUCCESS || result == CNA_RESULT_BUFFER_TOO_SMALL) {
+    CNA_Result call_result = cna.network_session_get_private_gamer_slots((CNA_NetworkSessionHandle)session, &out_value_value);
+    if (call_result == CNA_RESULT_SUCCESS || call_result == CNA_RESULT_BUFFER_TOO_SMALL) {
         jint out_value_element = (jint)out_value_value;
         (*environment)->SetIntArrayRegion(
             environment, out_value, 0, 1, &out_value_element);
     }
-    return (jint)result;
+    return (jint)call_result;
 }
 
 JNIEXPORT jint JNICALL
@@ -1291,13 +1291,13 @@ Java_org_openeggbert_cna_internal_generated_NativeNetworkRoutes_networkSessionGe
     (void)environment;
     (void)declaring_class;
     CNA_NetworkSessionState out_value_value = 0;
-    CNA_Result result = cna.network_session_get_session_state((CNA_NetworkSessionHandle)session, &out_value_value);
-    if (result == CNA_RESULT_SUCCESS || result == CNA_RESULT_BUFFER_TOO_SMALL) {
+    CNA_Result call_result = cna.network_session_get_session_state((CNA_NetworkSessionHandle)session, &out_value_value);
+    if (call_result == CNA_RESULT_SUCCESS || call_result == CNA_RESULT_BUFFER_TOO_SMALL) {
         jint out_value_element = (jint)out_value_value;
         (*environment)->SetIntArrayRegion(
             environment, out_value, 0, 1, &out_value_element);
     }
-    return (jint)result;
+    return (jint)call_result;
 }
 
 JNIEXPORT jint JNICALL
@@ -1307,13 +1307,13 @@ Java_org_openeggbert_cna_internal_generated_NativeNetworkRoutes_networkSessionGe
     (void)environment;
     (void)declaring_class;
     CNA_NetworkSessionType out_value_value = 0;
-    CNA_Result result = cna.network_session_get_session_type((CNA_NetworkSessionHandle)session, &out_value_value);
-    if (result == CNA_RESULT_SUCCESS || result == CNA_RESULT_BUFFER_TOO_SMALL) {
+    CNA_Result call_result = cna.network_session_get_session_type((CNA_NetworkSessionHandle)session, &out_value_value);
+    if (call_result == CNA_RESULT_SUCCESS || call_result == CNA_RESULT_BUFFER_TOO_SMALL) {
         jint out_value_element = (jint)out_value_value;
         (*environment)->SetIntArrayRegion(
             environment, out_value, 0, 1, &out_value_element);
     }
-    return (jint)result;
+    return (jint)call_result;
 }
 
 JNIEXPORT jint JNICALL
@@ -1323,13 +1323,13 @@ Java_org_openeggbert_cna_internal_generated_NativeNetworkRoutes_networkSessionGe
     (void)environment;
     (void)declaring_class;
     int64_t out_ticks_value = 0;
-    CNA_Result result = cna.network_session_get_simulated_latency_ticks((CNA_NetworkSessionHandle)session, &out_ticks_value);
-    if (result == CNA_RESULT_SUCCESS || result == CNA_RESULT_BUFFER_TOO_SMALL) {
+    CNA_Result call_result = cna.network_session_get_simulated_latency_ticks((CNA_NetworkSessionHandle)session, &out_ticks_value);
+    if (call_result == CNA_RESULT_SUCCESS || call_result == CNA_RESULT_BUFFER_TOO_SMALL) {
         jlong out_ticks_element = (jlong)out_ticks_value;
         (*environment)->SetLongArrayRegion(
             environment, out_ticks, 0, 1, &out_ticks_element);
     }
-    return (jint)result;
+    return (jint)call_result;
 }
 
 JNIEXPORT jint JNICALL
@@ -1339,13 +1339,13 @@ Java_org_openeggbert_cna_internal_generated_NativeNetworkRoutes_networkSessionGe
     (void)environment;
     (void)declaring_class;
     float out_value_value = 0;
-    CNA_Result result = cna.network_session_get_simulated_packet_loss((CNA_NetworkSessionHandle)session, &out_value_value);
-    if (result == CNA_RESULT_SUCCESS || result == CNA_RESULT_BUFFER_TOO_SMALL) {
+    CNA_Result call_result = cna.network_session_get_simulated_packet_loss((CNA_NetworkSessionHandle)session, &out_value_value);
+    if (call_result == CNA_RESULT_SUCCESS || call_result == CNA_RESULT_BUFFER_TOO_SMALL) {
         jfloat out_value_element = (jfloat)out_value_value;
         (*environment)->SetFloatArrayRegion(
             environment, out_value, 0, 1, &out_value_element);
     }
-    return (jint)result;
+    return (jint)call_result;
 }
 
 JNIEXPORT jint JNICALL
@@ -1355,13 +1355,13 @@ Java_org_openeggbert_cna_internal_generated_NativeNetworkRoutes_networkSessionJo
     (void)environment;
     (void)declaring_class;
     CNA_NetworkSessionHandle out_session_value = 0;
-    CNA_Result result = cna.network_session_join((CNA_AvailableNetworkSessionHandle)available_session, &out_session_value);
-    if (result == CNA_RESULT_SUCCESS || result == CNA_RESULT_BUFFER_TOO_SMALL) {
+    CNA_Result call_result = cna.network_session_join((CNA_AvailableNetworkSessionHandle)available_session, &out_session_value);
+    if (call_result == CNA_RESULT_SUCCESS || call_result == CNA_RESULT_BUFFER_TOO_SMALL) {
         jlong out_session_element = (jlong)out_session_value;
         (*environment)->SetLongArrayRegion(
             environment, out_session, 0, 1, &out_session_element);
     }
-    return (jint)result;
+    return (jint)call_result;
 }
 
 JNIEXPORT jint JNICALL
@@ -1371,13 +1371,13 @@ Java_org_openeggbert_cna_internal_generated_NativeNetworkRoutes_networkSessionJo
     (void)environment;
     (void)declaring_class;
     CNA_NetworkSessionHandle out_session_value = 0;
-    CNA_Result result = cna.network_session_join_invited((int32_t)max_local_gamers, &out_session_value);
-    if (result == CNA_RESULT_SUCCESS || result == CNA_RESULT_BUFFER_TOO_SMALL) {
+    CNA_Result call_result = cna.network_session_join_invited((int32_t)max_local_gamers, &out_session_value);
+    if (call_result == CNA_RESULT_SUCCESS || call_result == CNA_RESULT_BUFFER_TOO_SMALL) {
         jlong out_session_element = (jlong)out_session_value;
         (*environment)->SetLongArrayRegion(
             environment, out_session, 0, 1, &out_session_element);
     }
-    return (jint)result;
+    return (jint)call_result;
 }
 
 JNIEXPORT jint JNICALL
@@ -1402,16 +1402,16 @@ Java_org_openeggbert_cna_internal_generated_NativeNetworkRoutes_networkSessionJo
         local_gamers_values[index] = (CNA_Handle)local_gamers_elements[index];
     }
     CNA_NetworkSessionHandle out_session_value = 0;
-    CNA_Result result = cna.network_session_join_invited_with_local_gamers(local_gamers_values, (uint64_t)local_gamers_size, &out_session_value);
+    CNA_Result call_result = cna.network_session_join_invited_with_local_gamers(local_gamers_values, (uint64_t)local_gamers_size, &out_session_value);
     free(local_gamers_values);
     (*environment)->ReleaseLongArrayElements(
         environment, local_gamers, local_gamers_elements, JNI_ABORT);
-    if (result == CNA_RESULT_SUCCESS || result == CNA_RESULT_BUFFER_TOO_SMALL) {
+    if (call_result == CNA_RESULT_SUCCESS || call_result == CNA_RESULT_BUFFER_TOO_SMALL) {
         jlong out_session_element = (jlong)out_session_value;
         (*environment)->SetLongArrayRegion(
             environment, out_session, 0, 1, &out_session_element);
     }
-    return (jint)result;
+    return (jint)call_result;
 }
 
 JNIEXPORT jint JNICALL
@@ -1420,8 +1420,8 @@ Java_org_openeggbert_cna_internal_generated_NativeNetworkRoutes_networkSessionPr
 {
     (void)environment;
     (void)declaring_class;
-    CNA_Result result = cna.network_session_properties_clear((CNA_NetworkSessionPropertiesHandle)properties);
-    return (jint)result;
+    CNA_Result call_result = cna.network_session_properties_clear((CNA_NetworkSessionPropertiesHandle)properties);
+    return (jint)call_result;
 }
 
 JNIEXPORT jint JNICALL
@@ -1446,13 +1446,13 @@ Java_org_openeggbert_cna_internal_generated_NativeNetworkRoutes_networkSessionPr
         value_value.value = (int32_t)valueIntegral_values[1];
     }
     CNA_Bool out_contains_value = 0;
-    CNA_Result result = cna.network_session_properties_contains((CNA_NetworkSessionPropertiesHandle)properties, value_value, &out_contains_value);
-    if (result == CNA_RESULT_SUCCESS || result == CNA_RESULT_BUFFER_TOO_SMALL) {
+    CNA_Result call_result = cna.network_session_properties_contains((CNA_NetworkSessionPropertiesHandle)properties, value_value, &out_contains_value);
+    if (call_result == CNA_RESULT_SUCCESS || call_result == CNA_RESULT_BUFFER_TOO_SMALL) {
         jboolean out_contains_element = (jboolean)out_contains_value;
         (*environment)->SetBooleanArrayRegion(
             environment, out_contains, 0, 1, &out_contains_element);
     }
-    return (jint)result;
+    return (jint)call_result;
 }
 
 JNIEXPORT jint JNICALL
@@ -1499,8 +1499,8 @@ Java_org_openeggbert_cna_internal_generated_NativeNetworkRoutes_networkSessionPr
         free(destinationIntegral_values);
     }
     uint64_t out_count_value = 0;
-    CNA_Result result = cna.network_session_properties_copy_to((CNA_NetworkSessionPropertiesHandle)properties, destination_values, (uint64_t)destination_count, (int32_t)index, &out_count_value);
-    if (result == CNA_RESULT_SUCCESS) {
+    CNA_Result call_result = cna.network_session_properties_copy_to((CNA_NetworkSessionPropertiesHandle)properties, destination_values, (uint64_t)destination_count, (int32_t)index, &out_count_value);
+    if (call_result == CNA_RESULT_SUCCESS) {
         {
             jbyte* destinationBytes_out = (jbyte*)malloc(
                 ((size_t)destination_count * 3 + 1U) * sizeof(*destinationBytes_out));
@@ -1532,12 +1532,12 @@ Java_org_openeggbert_cna_internal_generated_NativeNetworkRoutes_networkSessionPr
         }
     }
     free(destination_values);
-    if (result == CNA_RESULT_SUCCESS || result == CNA_RESULT_BUFFER_TOO_SMALL) {
+    if (call_result == CNA_RESULT_SUCCESS || call_result == CNA_RESULT_BUFFER_TOO_SMALL) {
         jlong out_count_element = (jlong)out_count_value;
         (*environment)->SetLongArrayRegion(
             environment, out_count, 0, 1, &out_count_element);
     }
-    return (jint)result;
+    return (jint)call_result;
 }
 
 JNIEXPORT jint JNICALL
@@ -1547,13 +1547,13 @@ Java_org_openeggbert_cna_internal_generated_NativeNetworkRoutes_networkSessionPr
     (void)environment;
     (void)declaring_class;
     CNA_NetworkSessionPropertiesHandle out_properties_value = 0;
-    CNA_Result result = cna.network_session_properties_create(&out_properties_value);
-    if (result == CNA_RESULT_SUCCESS || result == CNA_RESULT_BUFFER_TOO_SMALL) {
+    CNA_Result call_result = cna.network_session_properties_create(&out_properties_value);
+    if (call_result == CNA_RESULT_SUCCESS || call_result == CNA_RESULT_BUFFER_TOO_SMALL) {
         jlong out_properties_element = (jlong)out_properties_value;
         (*environment)->SetLongArrayRegion(
             environment, out_properties, 0, 1, &out_properties_element);
     }
-    return (jint)result;
+    return (jint)call_result;
 }
 
 JNIEXPORT jint JNICALL
@@ -1562,8 +1562,8 @@ Java_org_openeggbert_cna_internal_generated_NativeNetworkRoutes_networkSessionPr
 {
     (void)environment;
     (void)declaring_class;
-    CNA_Result result = cna.network_session_properties_destroy((CNA_NetworkSessionPropertiesHandle)properties);
-    return (jint)result;
+    CNA_Result call_result = cna.network_session_properties_destroy((CNA_NetworkSessionPropertiesHandle)properties);
+    return (jint)call_result;
 }
 
 JNIEXPORT jint JNICALL
@@ -1573,13 +1573,13 @@ Java_org_openeggbert_cna_internal_generated_NativeNetworkRoutes_networkSessionPr
     (void)environment;
     (void)declaring_class;
     int32_t out_count_value = 0;
-    CNA_Result result = cna.network_session_properties_get_count((CNA_NetworkSessionPropertiesHandle)properties, &out_count_value);
-    if (result == CNA_RESULT_SUCCESS || result == CNA_RESULT_BUFFER_TOO_SMALL) {
+    CNA_Result call_result = cna.network_session_properties_get_count((CNA_NetworkSessionPropertiesHandle)properties, &out_count_value);
+    if (call_result == CNA_RESULT_SUCCESS || call_result == CNA_RESULT_BUFFER_TOO_SMALL) {
         jint out_count_element = (jint)out_count_value;
         (*environment)->SetIntArrayRegion(
             environment, out_count, 0, 1, &out_count_element);
     }
-    return (jint)result;
+    return (jint)call_result;
 }
 
 JNIEXPORT jint JNICALL
@@ -1590,8 +1590,8 @@ Java_org_openeggbert_cna_internal_generated_NativeNetworkRoutes_networkSessionPr
     (void)declaring_class;
     CNA_OptionalInt32 out_value_value;
     memset(&out_value_value, 0, sizeof out_value_value);
-    CNA_Result result = cna.network_session_properties_get_item((CNA_NetworkSessionPropertiesHandle)properties, (int32_t)index, &out_value_value);
-    if (result == CNA_RESULT_SUCCESS || result == CNA_RESULT_BUFFER_TOO_SMALL) {
+    CNA_Result call_result = cna.network_session_properties_get_item((CNA_NetworkSessionPropertiesHandle)properties, (int32_t)index, &out_value_value);
+    if (call_result == CNA_RESULT_SUCCESS || call_result == CNA_RESULT_BUFFER_TOO_SMALL) {
         jbyte out_valueBytes_values[] = {
             (jbyte)out_value_value.reserved[0],
             (jbyte)out_value_value.reserved[1],
@@ -1608,7 +1608,7 @@ Java_org_openeggbert_cna_internal_generated_NativeNetworkRoutes_networkSessionPr
             (jsize)(sizeof out_valueIntegral_values / sizeof out_valueIntegral_values[0]),
             out_valueIntegral_values);
     }
-    return (jint)result;
+    return (jint)call_result;
 }
 
 JNIEXPORT jint JNICALL
@@ -1633,13 +1633,13 @@ Java_org_openeggbert_cna_internal_generated_NativeNetworkRoutes_networkSessionPr
         value_value.value = (int32_t)valueIntegral_values[1];
     }
     int32_t out_index_value = 0;
-    CNA_Result result = cna.network_session_properties_index_of((CNA_NetworkSessionPropertiesHandle)properties, value_value, &out_index_value);
-    if (result == CNA_RESULT_SUCCESS || result == CNA_RESULT_BUFFER_TOO_SMALL) {
+    CNA_Result call_result = cna.network_session_properties_index_of((CNA_NetworkSessionPropertiesHandle)properties, value_value, &out_index_value);
+    if (call_result == CNA_RESULT_SUCCESS || call_result == CNA_RESULT_BUFFER_TOO_SMALL) {
         jint out_index_element = (jint)out_index_value;
         (*environment)->SetIntArrayRegion(
             environment, out_index, 0, 1, &out_index_element);
     }
-    return (jint)result;
+    return (jint)call_result;
 }
 
 JNIEXPORT jint JNICALL
@@ -1663,8 +1663,8 @@ Java_org_openeggbert_cna_internal_generated_NativeNetworkRoutes_networkSessionPr
         value_value.has_value = (CNA_Bool)valueIntegral_values[0];
         value_value.value = (int32_t)valueIntegral_values[1];
     }
-    CNA_Result result = cna.network_session_properties_insert((CNA_NetworkSessionPropertiesHandle)properties, (int32_t)index, value_value);
-    return (jint)result;
+    CNA_Result call_result = cna.network_session_properties_insert((CNA_NetworkSessionPropertiesHandle)properties, (int32_t)index, value_value);
+    return (jint)call_result;
 }
 
 JNIEXPORT jint JNICALL
@@ -1673,8 +1673,8 @@ Java_org_openeggbert_cna_internal_generated_NativeNetworkRoutes_networkSessionPr
 {
     (void)environment;
     (void)declaring_class;
-    CNA_Result result = cna.network_session_properties_remove_at((CNA_NetworkSessionPropertiesHandle)properties, (int32_t)index);
-    return (jint)result;
+    CNA_Result call_result = cna.network_session_properties_remove_at((CNA_NetworkSessionPropertiesHandle)properties, (int32_t)index);
+    return (jint)call_result;
 }
 
 JNIEXPORT jint JNICALL
@@ -1698,8 +1698,8 @@ Java_org_openeggbert_cna_internal_generated_NativeNetworkRoutes_networkSessionPr
         value_value.has_value = (CNA_Bool)valueIntegral_values[0];
         value_value.value = (int32_t)valueIntegral_values[1];
     }
-    CNA_Result result = cna.network_session_properties_set_item((CNA_NetworkSessionPropertiesHandle)properties, (int32_t)index, value_value);
-    return (jint)result;
+    CNA_Result call_result = cna.network_session_properties_set_item((CNA_NetworkSessionPropertiesHandle)properties, (int32_t)index, value_value);
+    return (jint)call_result;
 }
 
 JNIEXPORT jint JNICALL
@@ -1708,8 +1708,8 @@ Java_org_openeggbert_cna_internal_generated_NativeNetworkRoutes_networkSessionRe
 {
     (void)environment;
     (void)declaring_class;
-    CNA_Result result = cna.network_session_reset_ready((CNA_NetworkSessionHandle)session);
-    return (jint)result;
+    CNA_Result call_result = cna.network_session_reset_ready((CNA_NetworkSessionHandle)session);
+    return (jint)call_result;
 }
 
 JNIEXPORT jint JNICALL
@@ -1718,8 +1718,8 @@ Java_org_openeggbert_cna_internal_generated_NativeNetworkRoutes_networkSessionSe
 {
     (void)environment;
     (void)declaring_class;
-    CNA_Result result = cna.network_session_set_allow_host_migration((CNA_NetworkSessionHandle)session, (CNA_Bool)value);
-    return (jint)result;
+    CNA_Result call_result = cna.network_session_set_allow_host_migration((CNA_NetworkSessionHandle)session, (CNA_Bool)value);
+    return (jint)call_result;
 }
 
 JNIEXPORT jint JNICALL
@@ -1728,8 +1728,8 @@ Java_org_openeggbert_cna_internal_generated_NativeNetworkRoutes_networkSessionSe
 {
     (void)environment;
     (void)declaring_class;
-    CNA_Result result = cna.network_session_set_allow_join_in_progress((CNA_NetworkSessionHandle)session, (CNA_Bool)value);
-    return (jint)result;
+    CNA_Result call_result = cna.network_session_set_allow_join_in_progress((CNA_NetworkSessionHandle)session, (CNA_Bool)value);
+    return (jint)call_result;
 }
 
 JNIEXPORT jint JNICALL
@@ -1738,8 +1738,8 @@ Java_org_openeggbert_cna_internal_generated_NativeNetworkRoutes_networkSessionSe
 {
     (void)environment;
     (void)declaring_class;
-    CNA_Result result = cna.network_session_set_max_gamers((CNA_NetworkSessionHandle)session, (int32_t)value);
-    return (jint)result;
+    CNA_Result call_result = cna.network_session_set_max_gamers((CNA_NetworkSessionHandle)session, (int32_t)value);
+    return (jint)call_result;
 }
 
 JNIEXPORT jint JNICALL
@@ -1748,8 +1748,8 @@ Java_org_openeggbert_cna_internal_generated_NativeNetworkRoutes_networkSessionSe
 {
     (void)environment;
     (void)declaring_class;
-    CNA_Result result = cna.network_session_set_private_gamer_slots((CNA_NetworkSessionHandle)session, (int32_t)value);
-    return (jint)result;
+    CNA_Result call_result = cna.network_session_set_private_gamer_slots((CNA_NetworkSessionHandle)session, (int32_t)value);
+    return (jint)call_result;
 }
 
 JNIEXPORT jint JNICALL
@@ -1758,8 +1758,8 @@ Java_org_openeggbert_cna_internal_generated_NativeNetworkRoutes_networkSessionSe
 {
     (void)environment;
     (void)declaring_class;
-    CNA_Result result = cna.network_session_set_simulated_latency_ticks((CNA_NetworkSessionHandle)session, (int64_t)ticks);
-    return (jint)result;
+    CNA_Result call_result = cna.network_session_set_simulated_latency_ticks((CNA_NetworkSessionHandle)session, (int64_t)ticks);
+    return (jint)call_result;
 }
 
 JNIEXPORT jint JNICALL
@@ -1768,8 +1768,8 @@ Java_org_openeggbert_cna_internal_generated_NativeNetworkRoutes_networkSessionSe
 {
     (void)environment;
     (void)declaring_class;
-    CNA_Result result = cna.network_session_set_simulated_packet_loss((CNA_NetworkSessionHandle)session, (float)value);
-    return (jint)result;
+    CNA_Result call_result = cna.network_session_set_simulated_packet_loss((CNA_NetworkSessionHandle)session, (float)value);
+    return (jint)call_result;
 }
 
 JNIEXPORT jint JNICALL
@@ -1778,8 +1778,8 @@ Java_org_openeggbert_cna_internal_generated_NativeNetworkRoutes_networkSessionSt
 {
     (void)environment;
     (void)declaring_class;
-    CNA_Result result = cna.network_session_start_game((CNA_NetworkSessionHandle)session);
-    return (jint)result;
+    CNA_Result call_result = cna.network_session_start_game((CNA_NetworkSessionHandle)session);
+    return (jint)call_result;
 }
 
 JNIEXPORT jint JNICALL
@@ -1788,8 +1788,8 @@ Java_org_openeggbert_cna_internal_generated_NativeNetworkRoutes_networkSessionUn
 {
     (void)environment;
     (void)declaring_class;
-    CNA_Result result = cna.network_session_unsubscribe((CNA_NetworkSessionEventRegistrationHandle)registration);
-    return (jint)result;
+    CNA_Result call_result = cna.network_session_unsubscribe((CNA_NetworkSessionEventRegistrationHandle)registration);
+    return (jint)call_result;
 }
 
 JNIEXPORT jint JNICALL
@@ -1798,6 +1798,6 @@ Java_org_openeggbert_cna_internal_generated_NativeNetworkRoutes_networkSessionUp
 {
     (void)environment;
     (void)declaring_class;
-    CNA_Result result = cna.network_session_update((CNA_NetworkSessionHandle)session);
-    return (jint)result;
+    CNA_Result call_result = cna.network_session_update((CNA_NetworkSessionHandle)session);
+    return (jint)call_result;
 }

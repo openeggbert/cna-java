@@ -13,13 +13,13 @@ Java_org_openeggbert_cna_internal_generated_NativeGamerServicesRoutes_achievemen
     (void)environment;
     (void)declaring_class;
     CNA_Bool out_contains_value = 0;
-    CNA_Result result = cna.achievement_collection_contains((CNA_AchievementCollectionHandle)collection, (CNA_AchievementHandle)achievement, &out_contains_value);
-    if (result == CNA_RESULT_SUCCESS || result == CNA_RESULT_BUFFER_TOO_SMALL) {
+    CNA_Result call_result = cna.achievement_collection_contains((CNA_AchievementCollectionHandle)collection, (CNA_AchievementHandle)achievement, &out_contains_value);
+    if (call_result == CNA_RESULT_SUCCESS || call_result == CNA_RESULT_BUFFER_TOO_SMALL) {
         jboolean out_contains_element = (jboolean)out_contains_value;
         (*environment)->SetBooleanArrayRegion(
             environment, out_contains, 0, 1, &out_contains_element);
     }
-    return (jint)result;
+    return (jint)call_result;
 }
 
 JNIEXPORT jint JNICALL
@@ -28,8 +28,8 @@ Java_org_openeggbert_cna_internal_generated_NativeGamerServicesRoutes_achievemen
 {
     (void)environment;
     (void)declaring_class;
-    CNA_Result result = cna.achievement_collection_destroy((CNA_AchievementCollectionHandle)collection);
-    return (jint)result;
+    CNA_Result call_result = cna.achievement_collection_destroy((CNA_AchievementCollectionHandle)collection);
+    return (jint)call_result;
 }
 
 JNIEXPORT jint JNICALL
@@ -39,13 +39,13 @@ Java_org_openeggbert_cna_internal_generated_NativeGamerServicesRoutes_achievemen
     (void)environment;
     (void)declaring_class;
     CNA_AchievementHandle out_achievement_value = 0;
-    CNA_Result result = cna.achievement_collection_get_at((CNA_AchievementCollectionHandle)collection, (int32_t)index, &out_achievement_value);
-    if (result == CNA_RESULT_SUCCESS || result == CNA_RESULT_BUFFER_TOO_SMALL) {
+    CNA_Result call_result = cna.achievement_collection_get_at((CNA_AchievementCollectionHandle)collection, (int32_t)index, &out_achievement_value);
+    if (call_result == CNA_RESULT_SUCCESS || call_result == CNA_RESULT_BUFFER_TOO_SMALL) {
         jlong out_achievement_element = (jlong)out_achievement_value;
         (*environment)->SetLongArrayRegion(
             environment, out_achievement, 0, 1, &out_achievement_element);
     }
-    return (jint)result;
+    return (jint)call_result;
 }
 
 JNIEXPORT jint JNICALL
@@ -61,14 +61,14 @@ Java_org_openeggbert_cna_internal_generated_NativeGamerServicesRoutes_achievemen
     }
     CNA_StringView key_view = {(const char*)key_bytes, (uint64_t)key_size};
     CNA_AchievementHandle out_achievement_value = 0;
-    CNA_Result result = cna.achievement_collection_get_by_key((CNA_AchievementCollectionHandle)collection, key_view, &out_achievement_value);
+    CNA_Result call_result = cna.achievement_collection_get_by_key((CNA_AchievementCollectionHandle)collection, key_view, &out_achievement_value);
     (*environment)->ReleaseByteArrayElements(environment, key, key_bytes, JNI_ABORT);
-    if (result == CNA_RESULT_SUCCESS || result == CNA_RESULT_BUFFER_TOO_SMALL) {
+    if (call_result == CNA_RESULT_SUCCESS || call_result == CNA_RESULT_BUFFER_TOO_SMALL) {
         jlong out_achievement_element = (jlong)out_achievement_value;
         (*environment)->SetLongArrayRegion(
             environment, out_achievement, 0, 1, &out_achievement_element);
     }
-    return (jint)result;
+    return (jint)call_result;
 }
 
 JNIEXPORT jint JNICALL
@@ -78,13 +78,13 @@ Java_org_openeggbert_cna_internal_generated_NativeGamerServicesRoutes_achievemen
     (void)environment;
     (void)declaring_class;
     int32_t out_count_value = 0;
-    CNA_Result result = cna.achievement_collection_get_count((CNA_AchievementCollectionHandle)collection, &out_count_value);
-    if (result == CNA_RESULT_SUCCESS || result == CNA_RESULT_BUFFER_TOO_SMALL) {
+    CNA_Result call_result = cna.achievement_collection_get_count((CNA_AchievementCollectionHandle)collection, &out_count_value);
+    if (call_result == CNA_RESULT_SUCCESS || call_result == CNA_RESULT_BUFFER_TOO_SMALL) {
         jint out_count_element = (jint)out_count_value;
         (*environment)->SetIntArrayRegion(
             environment, out_count, 0, 1, &out_count_element);
     }
-    return (jint)result;
+    return (jint)call_result;
 }
 
 JNIEXPORT jint JNICALL
@@ -94,13 +94,13 @@ Java_org_openeggbert_cna_internal_generated_NativeGamerServicesRoutes_achievemen
     (void)environment;
     (void)declaring_class;
     CNA_Bool out_is_disposed_value = 0;
-    CNA_Result result = cna.achievement_collection_get_is_disposed((CNA_AchievementCollectionHandle)collection, &out_is_disposed_value);
-    if (result == CNA_RESULT_SUCCESS || result == CNA_RESULT_BUFFER_TOO_SMALL) {
+    CNA_Result call_result = cna.achievement_collection_get_is_disposed((CNA_AchievementCollectionHandle)collection, &out_is_disposed_value);
+    if (call_result == CNA_RESULT_SUCCESS || call_result == CNA_RESULT_BUFFER_TOO_SMALL) {
         jboolean out_is_disposed_element = (jboolean)out_is_disposed_value;
         (*environment)->SetBooleanArrayRegion(
             environment, out_is_disposed, 0, 1, &out_is_disposed_element);
     }
-    return (jint)result;
+    return (jint)call_result;
 }
 
 JNIEXPORT jint JNICALL
@@ -110,13 +110,13 @@ Java_org_openeggbert_cna_internal_generated_NativeGamerServicesRoutes_achievemen
     (void)environment;
     (void)declaring_class;
     int32_t out_index_value = 0;
-    CNA_Result result = cna.achievement_collection_index_of((CNA_AchievementCollectionHandle)collection, (CNA_AchievementHandle)achievement, &out_index_value);
-    if (result == CNA_RESULT_SUCCESS || result == CNA_RESULT_BUFFER_TOO_SMALL) {
+    CNA_Result call_result = cna.achievement_collection_index_of((CNA_AchievementCollectionHandle)collection, (CNA_AchievementHandle)achievement, &out_index_value);
+    if (call_result == CNA_RESULT_SUCCESS || call_result == CNA_RESULT_BUFFER_TOO_SMALL) {
         jint out_index_element = (jint)out_index_value;
         (*environment)->SetIntArrayRegion(
             environment, out_index, 0, 1, &out_index_element);
     }
-    return (jint)result;
+    return (jint)call_result;
 }
 
 JNIEXPORT jint JNICALL
@@ -131,14 +131,14 @@ Java_org_openeggbert_cna_internal_generated_NativeGamerServicesRoutes_achievemen
         return (jint)CNA_RESULT_OUT_OF_MEMORY;
     }
     uint64_t destination_written = 0;
-    CNA_Result result = cna.achievement_copy_description((CNA_AchievementHandle)achievement, (char*)destination_bytes, (uint64_t)destination_size, &destination_written);
+    CNA_Result call_result = cna.achievement_copy_description((CNA_AchievementHandle)achievement, (char*)destination_bytes, (uint64_t)destination_size, &destination_written);
     (*environment)->ReleaseByteArrayElements(environment, destination, destination_bytes, 0);
-    if (result == CNA_RESULT_SUCCESS || result == CNA_RESULT_BUFFER_TOO_SMALL) {
+    if (call_result == CNA_RESULT_SUCCESS || call_result == CNA_RESULT_BUFFER_TOO_SMALL) {
         jlong destination_element = (jlong)destination_written;
         (*environment)->SetLongArrayRegion(
             environment, out_bytes, 0, 1, &destination_element);
     }
-    return (jint)result;
+    return (jint)call_result;
 }
 
 JNIEXPORT jint JNICALL
@@ -153,14 +153,14 @@ Java_org_openeggbert_cna_internal_generated_NativeGamerServicesRoutes_achievemen
         return (jint)CNA_RESULT_OUT_OF_MEMORY;
     }
     uint64_t destination_written = 0;
-    CNA_Result result = cna.achievement_copy_how_to_earn((CNA_AchievementHandle)achievement, (char*)destination_bytes, (uint64_t)destination_size, &destination_written);
+    CNA_Result call_result = cna.achievement_copy_how_to_earn((CNA_AchievementHandle)achievement, (char*)destination_bytes, (uint64_t)destination_size, &destination_written);
     (*environment)->ReleaseByteArrayElements(environment, destination, destination_bytes, 0);
-    if (result == CNA_RESULT_SUCCESS || result == CNA_RESULT_BUFFER_TOO_SMALL) {
+    if (call_result == CNA_RESULT_SUCCESS || call_result == CNA_RESULT_BUFFER_TOO_SMALL) {
         jlong destination_element = (jlong)destination_written;
         (*environment)->SetLongArrayRegion(
             environment, out_bytes, 0, 1, &destination_element);
     }
-    return (jint)result;
+    return (jint)call_result;
 }
 
 JNIEXPORT jint JNICALL
@@ -175,14 +175,14 @@ Java_org_openeggbert_cna_internal_generated_NativeGamerServicesRoutes_achievemen
         return (jint)CNA_RESULT_OUT_OF_MEMORY;
     }
     uint64_t destination_written = 0;
-    CNA_Result result = cna.achievement_copy_key((CNA_AchievementHandle)achievement, (char*)destination_bytes, (uint64_t)destination_size, &destination_written);
+    CNA_Result call_result = cna.achievement_copy_key((CNA_AchievementHandle)achievement, (char*)destination_bytes, (uint64_t)destination_size, &destination_written);
     (*environment)->ReleaseByteArrayElements(environment, destination, destination_bytes, 0);
-    if (result == CNA_RESULT_SUCCESS || result == CNA_RESULT_BUFFER_TOO_SMALL) {
+    if (call_result == CNA_RESULT_SUCCESS || call_result == CNA_RESULT_BUFFER_TOO_SMALL) {
         jlong destination_element = (jlong)destination_written;
         (*environment)->SetLongArrayRegion(
             environment, out_bytes, 0, 1, &destination_element);
     }
-    return (jint)result;
+    return (jint)call_result;
 }
 
 JNIEXPORT jint JNICALL
@@ -197,14 +197,14 @@ Java_org_openeggbert_cna_internal_generated_NativeGamerServicesRoutes_achievemen
         return (jint)CNA_RESULT_OUT_OF_MEMORY;
     }
     uint64_t destination_written = 0;
-    CNA_Result result = cna.achievement_copy_name((CNA_AchievementHandle)achievement, (char*)destination_bytes, (uint64_t)destination_size, &destination_written);
+    CNA_Result call_result = cna.achievement_copy_name((CNA_AchievementHandle)achievement, (char*)destination_bytes, (uint64_t)destination_size, &destination_written);
     (*environment)->ReleaseByteArrayElements(environment, destination, destination_bytes, 0);
-    if (result == CNA_RESULT_SUCCESS || result == CNA_RESULT_BUFFER_TOO_SMALL) {
+    if (call_result == CNA_RESULT_SUCCESS || call_result == CNA_RESULT_BUFFER_TOO_SMALL) {
         jlong destination_element = (jlong)destination_written;
         (*environment)->SetLongArrayRegion(
             environment, out_bytes, 0, 1, &destination_element);
     }
-    return (jint)result;
+    return (jint)call_result;
 }
 
 JNIEXPORT jint JNICALL
@@ -214,13 +214,13 @@ Java_org_openeggbert_cna_internal_generated_NativeGamerServicesRoutes_achievemen
     (void)environment;
     (void)declaring_class;
     uint64_t out_bytes_value = 0;
-    CNA_Result result = cna.achievement_get_description_size((CNA_AchievementHandle)achievement, &out_bytes_value);
-    if (result == CNA_RESULT_SUCCESS || result == CNA_RESULT_BUFFER_TOO_SMALL) {
+    CNA_Result call_result = cna.achievement_get_description_size((CNA_AchievementHandle)achievement, &out_bytes_value);
+    if (call_result == CNA_RESULT_SUCCESS || call_result == CNA_RESULT_BUFFER_TOO_SMALL) {
         jlong out_bytes_element = (jlong)out_bytes_value;
         (*environment)->SetLongArrayRegion(
             environment, out_bytes, 0, 1, &out_bytes_element);
     }
-    return (jint)result;
+    return (jint)call_result;
 }
 
 JNIEXPORT jint JNICALL
@@ -230,13 +230,13 @@ Java_org_openeggbert_cna_internal_generated_NativeGamerServicesRoutes_achievemen
     (void)environment;
     (void)declaring_class;
     uint64_t out_bytes_value = 0;
-    CNA_Result result = cna.achievement_get_how_to_earn_size((CNA_AchievementHandle)achievement, &out_bytes_value);
-    if (result == CNA_RESULT_SUCCESS || result == CNA_RESULT_BUFFER_TOO_SMALL) {
+    CNA_Result call_result = cna.achievement_get_how_to_earn_size((CNA_AchievementHandle)achievement, &out_bytes_value);
+    if (call_result == CNA_RESULT_SUCCESS || call_result == CNA_RESULT_BUFFER_TOO_SMALL) {
         jlong out_bytes_element = (jlong)out_bytes_value;
         (*environment)->SetLongArrayRegion(
             environment, out_bytes, 0, 1, &out_bytes_element);
     }
-    return (jint)result;
+    return (jint)call_result;
 }
 
 JNIEXPORT jint JNICALL
@@ -249,8 +249,8 @@ Java_org_openeggbert_cna_internal_generated_NativeGamerServicesRoutes_achievemen
     memset(&out_info_value, 0, sizeof out_info_value);
     out_info_value.struct_size = (uint32_t)(sizeof out_info_value);
     out_info_value.struct_version = UINT32_C(1);
-    CNA_Result result = cna.achievement_get_info((CNA_AchievementHandle)achievement, &out_info_value);
-    if (result == CNA_RESULT_SUCCESS || result == CNA_RESULT_BUFFER_TOO_SMALL) {
+    CNA_Result call_result = cna.achievement_get_info((CNA_AchievementHandle)achievement, &out_info_value);
+    if (call_result == CNA_RESULT_SUCCESS || call_result == CNA_RESULT_BUFFER_TOO_SMALL) {
         jlong out_infoIntegral_values[] = {
             (jlong)out_info_value.gamer_score,
             (jlong)out_info_value.display_before_earned,
@@ -263,7 +263,7 @@ Java_org_openeggbert_cna_internal_generated_NativeGamerServicesRoutes_achievemen
             (jsize)(sizeof out_infoIntegral_values / sizeof out_infoIntegral_values[0]),
             out_infoIntegral_values);
     }
-    return (jint)result;
+    return (jint)call_result;
 }
 
 JNIEXPORT jint JNICALL
@@ -273,13 +273,13 @@ Java_org_openeggbert_cna_internal_generated_NativeGamerServicesRoutes_achievemen
     (void)environment;
     (void)declaring_class;
     uint64_t out_bytes_value = 0;
-    CNA_Result result = cna.achievement_get_key_size((CNA_AchievementHandle)achievement, &out_bytes_value);
-    if (result == CNA_RESULT_SUCCESS || result == CNA_RESULT_BUFFER_TOO_SMALL) {
+    CNA_Result call_result = cna.achievement_get_key_size((CNA_AchievementHandle)achievement, &out_bytes_value);
+    if (call_result == CNA_RESULT_SUCCESS || call_result == CNA_RESULT_BUFFER_TOO_SMALL) {
         jlong out_bytes_element = (jlong)out_bytes_value;
         (*environment)->SetLongArrayRegion(
             environment, out_bytes, 0, 1, &out_bytes_element);
     }
-    return (jint)result;
+    return (jint)call_result;
 }
 
 JNIEXPORT jint JNICALL
@@ -289,13 +289,13 @@ Java_org_openeggbert_cna_internal_generated_NativeGamerServicesRoutes_achievemen
     (void)environment;
     (void)declaring_class;
     uint64_t out_bytes_value = 0;
-    CNA_Result result = cna.achievement_get_name_size((CNA_AchievementHandle)achievement, &out_bytes_value);
-    if (result == CNA_RESULT_SUCCESS || result == CNA_RESULT_BUFFER_TOO_SMALL) {
+    CNA_Result call_result = cna.achievement_get_name_size((CNA_AchievementHandle)achievement, &out_bytes_value);
+    if (call_result == CNA_RESULT_SUCCESS || call_result == CNA_RESULT_BUFFER_TOO_SMALL) {
         jlong out_bytes_element = (jlong)out_bytes_value;
         (*environment)->SetLongArrayRegion(
             environment, out_bytes, 0, 1, &out_bytes_element);
     }
-    return (jint)result;
+    return (jint)call_result;
 }
 
 JNIEXPORT jint JNICALL
@@ -305,13 +305,13 @@ Java_org_openeggbert_cna_internal_generated_NativeGamerServicesRoutes_achievemen
     (void)environment;
     (void)declaring_class;
     uint64_t out_bytes_value = 0;
-    CNA_Result result = cna.achievement_get_picture_size((CNA_AchievementHandle)achievement, &out_bytes_value);
-    if (result == CNA_RESULT_SUCCESS || result == CNA_RESULT_BUFFER_TOO_SMALL) {
+    CNA_Result call_result = cna.achievement_get_picture_size((CNA_AchievementHandle)achievement, &out_bytes_value);
+    if (call_result == CNA_RESULT_SUCCESS || call_result == CNA_RESULT_BUFFER_TOO_SMALL) {
         jlong out_bytes_element = (jlong)out_bytes_value;
         (*environment)->SetLongArrayRegion(
             environment, out_bytes, 0, 1, &out_bytes_element);
     }
-    return (jint)result;
+    return (jint)call_result;
 }
 
 JNIEXPORT jint JNICALL
@@ -326,14 +326,14 @@ Java_org_openeggbert_cna_internal_generated_NativeGamerServicesRoutes_avatarAnim
         return (jint)CNA_RESULT_OUT_OF_MEMORY;
     }
     uint64_t destination_written = 0;
-    CNA_Result result = cna.avatar_animation_copy_real_clip_name_ext((CNA_AvatarAnimationHandle)animation, (char*)destination_bytes, (uint64_t)destination_size, &destination_written);
+    CNA_Result call_result = cna.avatar_animation_copy_real_clip_name_ext((CNA_AvatarAnimationHandle)animation, (char*)destination_bytes, (uint64_t)destination_size, &destination_written);
     (*environment)->ReleaseByteArrayElements(environment, destination, destination_bytes, 0);
-    if (result == CNA_RESULT_SUCCESS || result == CNA_RESULT_BUFFER_TOO_SMALL) {
+    if (call_result == CNA_RESULT_SUCCESS || call_result == CNA_RESULT_BUFFER_TOO_SMALL) {
         jlong destination_element = (jlong)destination_written;
         (*environment)->SetLongArrayRegion(
             environment, out_bytes, 0, 1, &destination_element);
     }
-    return (jint)result;
+    return (jint)call_result;
 }
 
 JNIEXPORT jint JNICALL
@@ -343,13 +343,13 @@ Java_org_openeggbert_cna_internal_generated_NativeGamerServicesRoutes_avatarAnim
     (void)environment;
     (void)declaring_class;
     CNA_AvatarAnimationHandle out_animation_value = 0;
-    CNA_Result result = cna.avatar_animation_create((CNA_AvatarAnimationPreset)preset, &out_animation_value);
-    if (result == CNA_RESULT_SUCCESS || result == CNA_RESULT_BUFFER_TOO_SMALL) {
+    CNA_Result call_result = cna.avatar_animation_create((CNA_AvatarAnimationPreset)preset, &out_animation_value);
+    if (call_result == CNA_RESULT_SUCCESS || call_result == CNA_RESULT_BUFFER_TOO_SMALL) {
         jlong out_animation_element = (jlong)out_animation_value;
         (*environment)->SetLongArrayRegion(
             environment, out_animation, 0, 1, &out_animation_element);
     }
-    return (jint)result;
+    return (jint)call_result;
 }
 
 JNIEXPORT jint JNICALL
@@ -358,8 +358,8 @@ Java_org_openeggbert_cna_internal_generated_NativeGamerServicesRoutes_avatarAnim
 {
     (void)environment;
     (void)declaring_class;
-    CNA_Result result = cna.avatar_animation_destroy((CNA_AvatarAnimationHandle)animation);
-    return (jint)result;
+    CNA_Result call_result = cna.avatar_animation_destroy((CNA_AvatarAnimationHandle)animation);
+    return (jint)call_result;
 }
 
 JNIEXPORT jint JNICALL
@@ -370,8 +370,8 @@ Java_org_openeggbert_cna_internal_generated_NativeGamerServicesRoutes_avatarAnim
     (void)declaring_class;
     CNA_Matrix out_transform_value;
     memset(&out_transform_value, 0, sizeof out_transform_value);
-    CNA_Result result = cna.avatar_animation_get_bone_transform_at((CNA_AvatarAnimationHandle)animation, (int32_t)index, &out_transform_value);
-    if (result == CNA_RESULT_SUCCESS || result == CNA_RESULT_BUFFER_TOO_SMALL) {
+    CNA_Result call_result = cna.avatar_animation_get_bone_transform_at((CNA_AvatarAnimationHandle)animation, (int32_t)index, &out_transform_value);
+    if (call_result == CNA_RESULT_SUCCESS || call_result == CNA_RESULT_BUFFER_TOO_SMALL) {
         jfloat out_transformFloating_values[] = {
             (jfloat)out_transform_value.m11,
             (jfloat)out_transform_value.m12,
@@ -394,7 +394,7 @@ Java_org_openeggbert_cna_internal_generated_NativeGamerServicesRoutes_avatarAnim
             (jsize)(sizeof out_transformFloating_values / sizeof out_transformFloating_values[0]),
             out_transformFloating_values);
     }
-    return (jint)result;
+    return (jint)call_result;
 }
 
 JNIEXPORT jint JNICALL
@@ -407,8 +407,8 @@ Java_org_openeggbert_cna_internal_generated_NativeGamerServicesRoutes_avatarAnim
     memset(&out_expression_value, 0, sizeof out_expression_value);
     out_expression_value.struct_size = (uint32_t)(sizeof out_expression_value);
     out_expression_value.struct_version = UINT32_C(1);
-    CNA_Result result = cna.avatar_animation_get_expression((CNA_AvatarAnimationHandle)animation, &out_expression_value);
-    if (result == CNA_RESULT_SUCCESS || result == CNA_RESULT_BUFFER_TOO_SMALL) {
+    CNA_Result call_result = cna.avatar_animation_get_expression((CNA_AvatarAnimationHandle)animation, &out_expression_value);
+    if (call_result == CNA_RESULT_SUCCESS || call_result == CNA_RESULT_BUFFER_TOO_SMALL) {
         jlong out_expressionIntegral_values[] = {
             (jlong)out_expression_value.mouth,
             (jlong)out_expression_value.left_eye,
@@ -420,7 +420,7 @@ Java_org_openeggbert_cna_internal_generated_NativeGamerServicesRoutes_avatarAnim
             (jsize)(sizeof out_expressionIntegral_values / sizeof out_expressionIntegral_values[0]),
             out_expressionIntegral_values);
     }
-    return (jint)result;
+    return (jint)call_result;
 }
 
 JNIEXPORT jint JNICALL
@@ -433,8 +433,8 @@ Java_org_openeggbert_cna_internal_generated_NativeGamerServicesRoutes_avatarAnim
     memset(&out_info_value, 0, sizeof out_info_value);
     out_info_value.struct_size = (uint32_t)(sizeof out_info_value);
     out_info_value.struct_version = UINT32_C(1);
-    CNA_Result result = cna.avatar_animation_get_info((CNA_AvatarAnimationHandle)animation, &out_info_value);
-    if (result == CNA_RESULT_SUCCESS || result == CNA_RESULT_BUFFER_TOO_SMALL) {
+    CNA_Result call_result = cna.avatar_animation_get_info((CNA_AvatarAnimationHandle)animation, &out_info_value);
+    if (call_result == CNA_RESULT_SUCCESS || call_result == CNA_RESULT_BUFFER_TOO_SMALL) {
         jbyte out_infoBytes_values[] = {
             (jbyte)out_info_value.reserved[0],
             (jbyte)out_info_value.reserved[1],
@@ -453,7 +453,7 @@ Java_org_openeggbert_cna_internal_generated_NativeGamerServicesRoutes_avatarAnim
             (jsize)(sizeof out_infoIntegral_values / sizeof out_infoIntegral_values[0]),
             out_infoIntegral_values);
     }
-    return (jint)result;
+    return (jint)call_result;
 }
 
 JNIEXPORT jint JNICALL
@@ -463,13 +463,13 @@ Java_org_openeggbert_cna_internal_generated_NativeGamerServicesRoutes_avatarAnim
     (void)environment;
     (void)declaring_class;
     uint64_t out_bytes_value = 0;
-    CNA_Result result = cna.avatar_animation_get_real_clip_name_size_ext((CNA_AvatarAnimationHandle)animation, &out_bytes_value);
-    if (result == CNA_RESULT_SUCCESS || result == CNA_RESULT_BUFFER_TOO_SMALL) {
+    CNA_Result call_result = cna.avatar_animation_get_real_clip_name_size_ext((CNA_AvatarAnimationHandle)animation, &out_bytes_value);
+    if (call_result == CNA_RESULT_SUCCESS || call_result == CNA_RESULT_BUFFER_TOO_SMALL) {
         jlong out_bytes_element = (jlong)out_bytes_value;
         (*environment)->SetLongArrayRegion(
             environment, out_bytes, 0, 1, &out_bytes_element);
     }
-    return (jint)result;
+    return (jint)call_result;
 }
 
 JNIEXPORT jint JNICALL
@@ -484,14 +484,14 @@ Java_org_openeggbert_cna_internal_generated_NativeGamerServicesRoutes_avatarAnim
         return (jint)CNA_RESULT_OUT_OF_MEMORY;
     }
     uint64_t destination_written = 0;
-    CNA_Result result = cna.avatar_animation_preset_copy_clip_name_ext((CNA_AvatarAnimationPreset)preset, (char*)destination_bytes, (uint64_t)destination_size, &destination_written);
+    CNA_Result call_result = cna.avatar_animation_preset_copy_clip_name_ext((CNA_AvatarAnimationPreset)preset, (char*)destination_bytes, (uint64_t)destination_size, &destination_written);
     (*environment)->ReleaseByteArrayElements(environment, destination, destination_bytes, 0);
-    if (result == CNA_RESULT_SUCCESS || result == CNA_RESULT_BUFFER_TOO_SMALL) {
+    if (call_result == CNA_RESULT_SUCCESS || call_result == CNA_RESULT_BUFFER_TOO_SMALL) {
         jlong destination_element = (jlong)destination_written;
         (*environment)->SetLongArrayRegion(
             environment, out_bytes, 0, 1, &destination_element);
     }
-    return (jint)result;
+    return (jint)call_result;
 }
 
 JNIEXPORT jint JNICALL
@@ -501,13 +501,13 @@ Java_org_openeggbert_cna_internal_generated_NativeGamerServicesRoutes_avatarAnim
     (void)environment;
     (void)declaring_class;
     uint64_t out_bytes_value = 0;
-    CNA_Result result = cna.avatar_animation_preset_get_clip_name_size_ext((CNA_AvatarAnimationPreset)preset, &out_bytes_value);
-    if (result == CNA_RESULT_SUCCESS || result == CNA_RESULT_BUFFER_TOO_SMALL) {
+    CNA_Result call_result = cna.avatar_animation_preset_get_clip_name_size_ext((CNA_AvatarAnimationPreset)preset, &out_bytes_value);
+    if (call_result == CNA_RESULT_SUCCESS || call_result == CNA_RESULT_BUFFER_TOO_SMALL) {
         jlong out_bytes_element = (jlong)out_bytes_value;
         (*environment)->SetLongArrayRegion(
             environment, out_bytes, 0, 1, &out_bytes_element);
     }
-    return (jint)result;
+    return (jint)call_result;
 }
 
 JNIEXPORT jint JNICALL
@@ -516,8 +516,8 @@ Java_org_openeggbert_cna_internal_generated_NativeGamerServicesRoutes_avatarAnim
 {
     (void)environment;
     (void)declaring_class;
-    CNA_Result result = cna.avatar_animation_set_current_position((CNA_AvatarAnimationHandle)animation, (int64_t)position_ticks);
-    return (jint)result;
+    CNA_Result call_result = cna.avatar_animation_set_current_position((CNA_AvatarAnimationHandle)animation, (int64_t)position_ticks);
+    return (jint)call_result;
 }
 
 JNIEXPORT jint JNICALL
@@ -532,9 +532,9 @@ Java_org_openeggbert_cna_internal_generated_NativeGamerServicesRoutes_avatarAnim
         return (jint)CNA_RESULT_OUT_OF_MEMORY;
     }
     CNA_StringView clip_name_view = {(const char*)clip_name_bytes, (uint64_t)clip_name_size};
-    CNA_Result result = cna.avatar_animation_set_real_clip_name_ext((CNA_AvatarAnimationHandle)animation, clip_name_view);
+    CNA_Result call_result = cna.avatar_animation_set_real_clip_name_ext((CNA_AvatarAnimationHandle)animation, clip_name_view);
     (*environment)->ReleaseByteArrayElements(environment, clip_name, clip_name_bytes, JNI_ABORT);
-    return (jint)result;
+    return (jint)call_result;
 }
 
 JNIEXPORT jint JNICALL
@@ -543,8 +543,8 @@ Java_org_openeggbert_cna_internal_generated_NativeGamerServicesRoutes_avatarAnim
 {
     (void)environment;
     (void)declaring_class;
-    CNA_Result result = cna.avatar_animation_update((CNA_AvatarAnimationHandle)animation, (int64_t)elapsed_ticks, (CNA_Bool)loop);
-    return (jint)result;
+    CNA_Result call_result = cna.avatar_animation_update((CNA_AvatarAnimationHandle)animation, (int64_t)elapsed_ticks, (CNA_Bool)loop);
+    return (jint)call_result;
 }
 
 JNIEXPORT jint JNICALL
@@ -557,8 +557,8 @@ Java_org_openeggbert_cna_internal_generated_NativeGamerServicesRoutes_avatarAppe
     memset(&out_appearance_value, 0, sizeof out_appearance_value);
     out_appearance_value.struct_size = (uint32_t)(sizeof out_appearance_value);
     out_appearance_value.struct_version = UINT32_C(1);
-    CNA_Result result = cna.avatar_appearance_init_ext(&out_appearance_value);
-    if (result == CNA_RESULT_SUCCESS || result == CNA_RESULT_BUFFER_TOO_SMALL) {
+    CNA_Result call_result = cna.avatar_appearance_init_ext(&out_appearance_value);
+    if (call_result == CNA_RESULT_SUCCESS || call_result == CNA_RESULT_BUFFER_TOO_SMALL) {
         jlong out_appearanceIntegral_values[] = {
             (jlong)out_appearance_value.skin_color.r,
             (jlong)out_appearance_value.skin_color.g,
@@ -585,7 +585,7 @@ Java_org_openeggbert_cna_internal_generated_NativeGamerServicesRoutes_avatarAppe
             (jsize)(sizeof out_appearanceIntegral_values / sizeof out_appearanceIntegral_values[0]),
             out_appearanceIntegral_values);
     }
-    return (jint)result;
+    return (jint)call_result;
 }
 
 JNIEXPORT jint JNICALL
@@ -600,14 +600,14 @@ Java_org_openeggbert_cna_internal_generated_NativeGamerServicesRoutes_avatarBody
         return (jint)CNA_RESULT_OUT_OF_MEMORY;
     }
     uint64_t destination_written = 0;
-    CNA_Result result = cna.avatar_body_type_copy_content_name_ext((CNA_AvatarBodyType)body_type, (char*)destination_bytes, (uint64_t)destination_size, &destination_written);
+    CNA_Result call_result = cna.avatar_body_type_copy_content_name_ext((CNA_AvatarBodyType)body_type, (char*)destination_bytes, (uint64_t)destination_size, &destination_written);
     (*environment)->ReleaseByteArrayElements(environment, destination, destination_bytes, 0);
-    if (result == CNA_RESULT_SUCCESS || result == CNA_RESULT_BUFFER_TOO_SMALL) {
+    if (call_result == CNA_RESULT_SUCCESS || call_result == CNA_RESULT_BUFFER_TOO_SMALL) {
         jlong destination_element = (jlong)destination_written;
         (*environment)->SetLongArrayRegion(
             environment, out_bytes, 0, 1, &destination_element);
     }
-    return (jint)result;
+    return (jint)call_result;
 }
 
 JNIEXPORT jint JNICALL
@@ -617,13 +617,13 @@ Java_org_openeggbert_cna_internal_generated_NativeGamerServicesRoutes_avatarBody
     (void)environment;
     (void)declaring_class;
     uint64_t out_bytes_value = 0;
-    CNA_Result result = cna.avatar_body_type_get_content_name_size_ext((CNA_AvatarBodyType)body_type, &out_bytes_value);
-    if (result == CNA_RESULT_SUCCESS || result == CNA_RESULT_BUFFER_TOO_SMALL) {
+    CNA_Result call_result = cna.avatar_body_type_get_content_name_size_ext((CNA_AvatarBodyType)body_type, &out_bytes_value);
+    if (call_result == CNA_RESULT_SUCCESS || call_result == CNA_RESULT_BUFFER_TOO_SMALL) {
         jlong out_bytes_element = (jlong)out_bytes_value;
         (*environment)->SetLongArrayRegion(
             environment, out_bytes, 0, 1, &out_bytes_element);
     }
-    return (jint)result;
+    return (jint)call_result;
 }
 
 JNIEXPORT jint JNICALL
@@ -648,8 +648,8 @@ Java_org_openeggbert_cna_internal_generated_NativeGamerServicesRoutes_avatarDesc
         destination_values[index] = (uint8_t)destination_elements[index];
     }
     uint64_t out_bytes_value = 0;
-    CNA_Result result = cna.avatar_description_copy_description((CNA_AvatarDescriptionHandle)description, destination_values, (uint64_t)destination_size, &out_bytes_value);
-    if (result == CNA_RESULT_SUCCESS) {
+    CNA_Result call_result = cna.avatar_description_copy_description((CNA_AvatarDescriptionHandle)description, destination_values, (uint64_t)destination_size, &out_bytes_value);
+    if (call_result == CNA_RESULT_SUCCESS) {
         for (jsize index = 0; index < destination_size; ++index) {
             destination_elements[index] = (jbyte)destination_values[index];
         }
@@ -657,12 +657,12 @@ Java_org_openeggbert_cna_internal_generated_NativeGamerServicesRoutes_avatarDesc
     free(destination_values);
     (*environment)->ReleaseByteArrayElements(
         environment, destination, destination_elements, 0);
-    if (result == CNA_RESULT_SUCCESS || result == CNA_RESULT_BUFFER_TOO_SMALL) {
+    if (call_result == CNA_RESULT_SUCCESS || call_result == CNA_RESULT_BUFFER_TOO_SMALL) {
         jlong out_bytes_element = (jlong)out_bytes_value;
         (*environment)->SetLongArrayRegion(
             environment, out_bytes, 0, 1, &out_bytes_element);
     }
-    return (jint)result;
+    return (jint)call_result;
 }
 
 JNIEXPORT jint JNICALL
@@ -687,16 +687,16 @@ Java_org_openeggbert_cna_internal_generated_NativeGamerServicesRoutes_avatarDesc
         description_values[index] = (uint8_t)description_elements[index];
     }
     CNA_AvatarDescriptionHandle out_description_value = 0;
-    CNA_Result result = cna.avatar_description_create(description_values, (uint64_t)description_size, &out_description_value);
+    CNA_Result call_result = cna.avatar_description_create(description_values, (uint64_t)description_size, &out_description_value);
     free(description_values);
     (*environment)->ReleaseByteArrayElements(
         environment, description, description_elements, JNI_ABORT);
-    if (result == CNA_RESULT_SUCCESS || result == CNA_RESULT_BUFFER_TOO_SMALL) {
+    if (call_result == CNA_RESULT_SUCCESS || call_result == CNA_RESULT_BUFFER_TOO_SMALL) {
         jlong out_description_element = (jlong)out_description_value;
         (*environment)->SetLongArrayRegion(
             environment, out_description, 0, 1, &out_description_element);
     }
-    return (jint)result;
+    return (jint)call_result;
 }
 
 JNIEXPORT jint JNICALL
@@ -706,13 +706,13 @@ Java_org_openeggbert_cna_internal_generated_NativeGamerServicesRoutes_avatarDesc
     (void)environment;
     (void)declaring_class;
     CNA_AvatarDescriptionHandle out_description_value = 0;
-    CNA_Result result = cna.avatar_description_create_random(&out_description_value);
-    if (result == CNA_RESULT_SUCCESS || result == CNA_RESULT_BUFFER_TOO_SMALL) {
+    CNA_Result call_result = cna.avatar_description_create_random(&out_description_value);
+    if (call_result == CNA_RESULT_SUCCESS || call_result == CNA_RESULT_BUFFER_TOO_SMALL) {
         jlong out_description_element = (jlong)out_description_value;
         (*environment)->SetLongArrayRegion(
             environment, out_description, 0, 1, &out_description_element);
     }
-    return (jint)result;
+    return (jint)call_result;
 }
 
 JNIEXPORT jint JNICALL
@@ -722,13 +722,13 @@ Java_org_openeggbert_cna_internal_generated_NativeGamerServicesRoutes_avatarDesc
     (void)environment;
     (void)declaring_class;
     CNA_AvatarDescriptionHandle out_description_value = 0;
-    CNA_Result result = cna.avatar_description_create_random_for_body_type((CNA_AvatarBodyType)body_type, &out_description_value);
-    if (result == CNA_RESULT_SUCCESS || result == CNA_RESULT_BUFFER_TOO_SMALL) {
+    CNA_Result call_result = cna.avatar_description_create_random_for_body_type((CNA_AvatarBodyType)body_type, &out_description_value);
+    if (call_result == CNA_RESULT_SUCCESS || call_result == CNA_RESULT_BUFFER_TOO_SMALL) {
         jlong out_description_element = (jlong)out_description_value;
         (*environment)->SetLongArrayRegion(
             environment, out_description, 0, 1, &out_description_element);
     }
-    return (jint)result;
+    return (jint)call_result;
 }
 
 JNIEXPORT jint JNICALL
@@ -737,8 +737,8 @@ Java_org_openeggbert_cna_internal_generated_NativeGamerServicesRoutes_avatarDesc
 {
     (void)environment;
     (void)declaring_class;
-    CNA_Result result = cna.avatar_description_destroy((CNA_AvatarDescriptionHandle)description);
-    return (jint)result;
+    CNA_Result call_result = cna.avatar_description_destroy((CNA_AvatarDescriptionHandle)description);
+    return (jint)call_result;
 }
 
 JNIEXPORT jint JNICALL
@@ -748,13 +748,13 @@ Java_org_openeggbert_cna_internal_generated_NativeGamerServicesRoutes_avatarDesc
     (void)environment;
     (void)declaring_class;
     CNA_AvatarDescriptionHandle out_description_value = 0;
-    CNA_Result result = cna.avatar_description_get_from_gamer((CNA_GamerHandle)gamer, NULL, NULL, &out_description_value);
-    if (result == CNA_RESULT_SUCCESS || result == CNA_RESULT_BUFFER_TOO_SMALL) {
+    CNA_Result call_result = cna.avatar_description_get_from_gamer((CNA_GamerHandle)gamer, NULL, NULL, &out_description_value);
+    if (call_result == CNA_RESULT_SUCCESS || call_result == CNA_RESULT_BUFFER_TOO_SMALL) {
         jlong out_description_element = (jlong)out_description_value;
         (*environment)->SetLongArrayRegion(
             environment, out_description, 0, 1, &out_description_element);
     }
-    return (jint)result;
+    return (jint)call_result;
 }
 
 JNIEXPORT jint JNICALL
@@ -767,8 +767,8 @@ Java_org_openeggbert_cna_internal_generated_NativeGamerServicesRoutes_avatarDesc
     memset(&out_info_value, 0, sizeof out_info_value);
     out_info_value.struct_size = (uint32_t)(sizeof out_info_value);
     out_info_value.struct_version = UINT32_C(1);
-    CNA_Result result = cna.avatar_description_get_info((CNA_AvatarDescriptionHandle)description, &out_info_value);
-    if (result == CNA_RESULT_SUCCESS || result == CNA_RESULT_BUFFER_TOO_SMALL) {
+    CNA_Result call_result = cna.avatar_description_get_info((CNA_AvatarDescriptionHandle)description, &out_info_value);
+    if (call_result == CNA_RESULT_SUCCESS || call_result == CNA_RESULT_BUFFER_TOO_SMALL) {
         jbyte out_infoBytes_values[] = {
             (jbyte)out_info_value.reserved[0],
             (jbyte)out_info_value.reserved[1],
@@ -796,7 +796,7 @@ Java_org_openeggbert_cna_internal_generated_NativeGamerServicesRoutes_avatarDesc
             (jsize)(sizeof out_infoFloating_values / sizeof out_infoFloating_values[0]),
             out_infoFloating_values);
     }
-    return (jint)result;
+    return (jint)call_result;
 }
 
 JNIEXPORT jint JNICALL
@@ -806,13 +806,13 @@ Java_org_openeggbert_cna_internal_generated_NativeGamerServicesRoutes_avatarRend
     (void)environment;
     (void)declaring_class;
     CNA_AvatarRendererHandle out_renderer_value = 0;
-    CNA_Result result = cna.avatar_renderer_create((CNA_AvatarDescriptionHandle)description, (CNA_Bool)use_loading_effect, &out_renderer_value);
-    if (result == CNA_RESULT_SUCCESS || result == CNA_RESULT_BUFFER_TOO_SMALL) {
+    CNA_Result call_result = cna.avatar_renderer_create((CNA_AvatarDescriptionHandle)description, (CNA_Bool)use_loading_effect, &out_renderer_value);
+    if (call_result == CNA_RESULT_SUCCESS || call_result == CNA_RESULT_BUFFER_TOO_SMALL) {
         jlong out_renderer_element = (jlong)out_renderer_value;
         (*environment)->SetLongArrayRegion(
             environment, out_renderer, 0, 1, &out_renderer_element);
     }
-    return (jint)result;
+    return (jint)call_result;
 }
 
 JNIEXPORT jint JNICALL
@@ -821,8 +821,8 @@ Java_org_openeggbert_cna_internal_generated_NativeGamerServicesRoutes_avatarRend
 {
     (void)environment;
     (void)declaring_class;
-    CNA_Result result = cna.avatar_renderer_destroy((CNA_AvatarRendererHandle)renderer);
-    return (jint)result;
+    CNA_Result call_result = cna.avatar_renderer_destroy((CNA_AvatarRendererHandle)renderer);
+    return (jint)call_result;
 }
 
 JNIEXPORT jint JNICALL
@@ -831,8 +831,8 @@ Java_org_openeggbert_cna_internal_generated_NativeGamerServicesRoutes_avatarRend
 {
     (void)environment;
     (void)declaring_class;
-    CNA_Result result = cna.avatar_renderer_draw_animation((CNA_AvatarRendererHandle)renderer, (CNA_AvatarAnimationHandle)animation);
-    return (jint)result;
+    CNA_Result call_result = cna.avatar_renderer_draw_animation((CNA_AvatarRendererHandle)renderer, (CNA_AvatarAnimationHandle)animation);
+    return (jint)call_result;
 }
 
 JNIEXPORT jint JNICALL
@@ -889,9 +889,9 @@ Java_org_openeggbert_cna_internal_generated_NativeGamerServicesRoutes_avatarRend
         expression_value.left_eyebrow = (CNA_AvatarEyebrow)expressionIntegral_values[3];
         expression_value.right_eyebrow = (CNA_AvatarEyebrow)expressionIntegral_values[4];
     }
-    CNA_Result result = cna.avatar_renderer_draw_bones((CNA_AvatarRendererHandle)renderer, bones_values, (uint64_t)bones_count, &expression_value);
+    CNA_Result call_result = cna.avatar_renderer_draw_bones((CNA_AvatarRendererHandle)renderer, bones_values, (uint64_t)bones_count, &expression_value);
     free(bones_values);
-    return (jint)result;
+    return (jint)call_result;
 }
 
 JNIEXPORT jint JNICALL
@@ -902,8 +902,8 @@ Java_org_openeggbert_cna_internal_generated_NativeGamerServicesRoutes_avatarRend
     (void)declaring_class;
     CNA_Matrix out_transform_value;
     memset(&out_transform_value, 0, sizeof out_transform_value);
-    CNA_Result result = cna.avatar_renderer_get_bind_pose_at((CNA_AvatarRendererHandle)renderer, (int32_t)index, &out_transform_value);
-    if (result == CNA_RESULT_SUCCESS || result == CNA_RESULT_BUFFER_TOO_SMALL) {
+    CNA_Result call_result = cna.avatar_renderer_get_bind_pose_at((CNA_AvatarRendererHandle)renderer, (int32_t)index, &out_transform_value);
+    if (call_result == CNA_RESULT_SUCCESS || call_result == CNA_RESULT_BUFFER_TOO_SMALL) {
         jfloat out_transformFloating_values[] = {
             (jfloat)out_transform_value.m11,
             (jfloat)out_transform_value.m12,
@@ -926,7 +926,7 @@ Java_org_openeggbert_cna_internal_generated_NativeGamerServicesRoutes_avatarRend
             (jsize)(sizeof out_transformFloating_values / sizeof out_transformFloating_values[0]),
             out_transformFloating_values);
     }
-    return (jint)result;
+    return (jint)call_result;
 }
 
 JNIEXPORT jint JNICALL
@@ -939,8 +939,8 @@ Java_org_openeggbert_cna_internal_generated_NativeGamerServicesRoutes_avatarRend
     memset(&out_info_value, 0, sizeof out_info_value);
     out_info_value.struct_size = (uint32_t)(sizeof out_info_value);
     out_info_value.struct_version = UINT32_C(1);
-    CNA_Result result = cna.avatar_renderer_get_info((CNA_AvatarRendererHandle)renderer, &out_info_value);
-    if (result == CNA_RESULT_SUCCESS || result == CNA_RESULT_BUFFER_TOO_SMALL) {
+    CNA_Result call_result = cna.avatar_renderer_get_info((CNA_AvatarRendererHandle)renderer, &out_info_value);
+    if (call_result == CNA_RESULT_SUCCESS || call_result == CNA_RESULT_BUFFER_TOO_SMALL) {
         jbyte out_infoBytes_values[] = {
             (jbyte)out_info_value.reserved[0],
             (jbyte)out_info_value.reserved[1]
@@ -957,7 +957,7 @@ Java_org_openeggbert_cna_internal_generated_NativeGamerServicesRoutes_avatarRend
             (jsize)(sizeof out_infoIntegral_values / sizeof out_infoIntegral_values[0]),
             out_infoIntegral_values);
     }
-    return (jint)result;
+    return (jint)call_result;
 }
 
 JNIEXPORT jint JNICALL
@@ -972,8 +972,8 @@ Java_org_openeggbert_cna_internal_generated_NativeGamerServicesRoutes_avatarRend
     memset(&out_light_direction_value, 0, sizeof out_light_direction_value);
     CNA_Vector3 out_ambient_light_color_value;
     memset(&out_ambient_light_color_value, 0, sizeof out_ambient_light_color_value);
-    CNA_Result result = cna.avatar_renderer_get_lighting((CNA_AvatarRendererHandle)renderer, &out_light_color_value, &out_light_direction_value, &out_ambient_light_color_value);
-    if (result == CNA_RESULT_SUCCESS || result == CNA_RESULT_BUFFER_TOO_SMALL) {
+    CNA_Result call_result = cna.avatar_renderer_get_lighting((CNA_AvatarRendererHandle)renderer, &out_light_color_value, &out_light_direction_value, &out_ambient_light_color_value);
+    if (call_result == CNA_RESULT_SUCCESS || call_result == CNA_RESULT_BUFFER_TOO_SMALL) {
         jfloat out_light_colorFloating_values[] = {
             (jfloat)out_light_color_value.x,
             (jfloat)out_light_color_value.y,
@@ -999,7 +999,7 @@ Java_org_openeggbert_cna_internal_generated_NativeGamerServicesRoutes_avatarRend
             (jsize)(sizeof out_ambient_light_colorFloating_values / sizeof out_ambient_light_colorFloating_values[0]),
             out_ambient_light_colorFloating_values);
     }
-    return (jint)result;
+    return (jint)call_result;
 }
 
 JNIEXPORT jint JNICALL
@@ -1009,13 +1009,13 @@ Java_org_openeggbert_cna_internal_generated_NativeGamerServicesRoutes_avatarRend
     (void)environment;
     (void)declaring_class;
     int32_t out_parent_index_value = 0;
-    CNA_Result result = cna.avatar_renderer_get_parent_bone_at((CNA_AvatarRendererHandle)renderer, (int32_t)index, &out_parent_index_value);
-    if (result == CNA_RESULT_SUCCESS || result == CNA_RESULT_BUFFER_TOO_SMALL) {
+    CNA_Result call_result = cna.avatar_renderer_get_parent_bone_at((CNA_AvatarRendererHandle)renderer, (int32_t)index, &out_parent_index_value);
+    if (call_result == CNA_RESULT_SUCCESS || call_result == CNA_RESULT_BUFFER_TOO_SMALL) {
         jint out_parent_index_element = (jint)out_parent_index_value;
         (*environment)->SetIntArrayRegion(
             environment, out_parent_index, 0, 1, &out_parent_index_element);
     }
-    return (jint)result;
+    return (jint)call_result;
 }
 
 JNIEXPORT jint JNICALL
@@ -1030,8 +1030,8 @@ Java_org_openeggbert_cna_internal_generated_NativeGamerServicesRoutes_avatarRend
     memset(&out_view_value, 0, sizeof out_view_value);
     CNA_Matrix out_projection_value;
     memset(&out_projection_value, 0, sizeof out_projection_value);
-    CNA_Result result = cna.avatar_renderer_get_transforms((CNA_AvatarRendererHandle)renderer, &out_world_value, &out_view_value, &out_projection_value);
-    if (result == CNA_RESULT_SUCCESS || result == CNA_RESULT_BUFFER_TOO_SMALL) {
+    CNA_Result call_result = cna.avatar_renderer_get_transforms((CNA_AvatarRendererHandle)renderer, &out_world_value, &out_view_value, &out_projection_value);
+    if (call_result == CNA_RESULT_SUCCESS || call_result == CNA_RESULT_BUFFER_TOO_SMALL) {
         jfloat out_worldFloating_values[] = {
             (jfloat)out_world_value.m11,
             (jfloat)out_world_value.m12,
@@ -1096,7 +1096,7 @@ Java_org_openeggbert_cna_internal_generated_NativeGamerServicesRoutes_avatarRend
             (jsize)(sizeof out_projectionFloating_values / sizeof out_projectionFloating_values[0]),
             out_projectionFloating_values);
     }
-    return (jint)result;
+    return (jint)call_result;
 }
 
 JNIEXPORT jint JNICALL
@@ -1133,8 +1133,8 @@ Java_org_openeggbert_cna_internal_generated_NativeGamerServicesRoutes_avatarRend
         appearance_value.shoes_color.b = (uint8_t)appearanceIntegral_values[18];
         appearance_value.shoes_color.a = (uint8_t)appearanceIntegral_values[19];
     }
-    CNA_Result result = cna.avatar_renderer_set_appearance_ext((CNA_AvatarRendererHandle)renderer, &appearance_value);
-    return (jint)result;
+    CNA_Result call_result = cna.avatar_renderer_set_appearance_ext((CNA_AvatarRendererHandle)renderer, &appearance_value);
+    return (jint)call_result;
 }
 
 JNIEXPORT jint JNICALL
@@ -1170,8 +1170,8 @@ Java_org_openeggbert_cna_internal_generated_NativeGamerServicesRoutes_avatarRend
         ambient_light_color_value.y = (float)ambient_light_colorFloating_values[1];
         ambient_light_color_value.z = (float)ambient_light_colorFloating_values[2];
     }
-    CNA_Result result = cna.avatar_renderer_set_lighting((CNA_AvatarRendererHandle)renderer, &light_color_value, &light_direction_value, &ambient_light_color_value);
-    return (jint)result;
+    CNA_Result call_result = cna.avatar_renderer_set_lighting((CNA_AvatarRendererHandle)renderer, &light_color_value, &light_direction_value, &ambient_light_color_value);
+    return (jint)call_result;
 }
 
 JNIEXPORT jint JNICALL
@@ -1246,8 +1246,8 @@ Java_org_openeggbert_cna_internal_generated_NativeGamerServicesRoutes_avatarRend
         projection_value.m43 = (float)projectionFloating_values[14];
         projection_value.m44 = (float)projectionFloating_values[15];
     }
-    CNA_Result result = cna.avatar_renderer_set_transforms((CNA_AvatarRendererHandle)renderer, &world_value, &view_value, &projection_value);
-    return (jint)result;
+    CNA_Result call_result = cna.avatar_renderer_set_transforms((CNA_AvatarRendererHandle)renderer, &world_value, &view_value, &projection_value);
+    return (jint)call_result;
 }
 
 JNIEXPORT jint JNICALL
@@ -1257,13 +1257,13 @@ Java_org_openeggbert_cna_internal_generated_NativeGamerServicesRoutes_friendColl
     (void)environment;
     (void)declaring_class;
     CNA_Bool out_is_disposed_value = 0;
-    CNA_Result result = cna.friend_collection_get_is_disposed((CNA_GamerCollectionHandle)collection, &out_is_disposed_value);
-    if (result == CNA_RESULT_SUCCESS || result == CNA_RESULT_BUFFER_TOO_SMALL) {
+    CNA_Result call_result = cna.friend_collection_get_is_disposed((CNA_GamerCollectionHandle)collection, &out_is_disposed_value);
+    if (call_result == CNA_RESULT_SUCCESS || call_result == CNA_RESULT_BUFFER_TOO_SMALL) {
         jboolean out_is_disposed_element = (jboolean)out_is_disposed_value;
         (*environment)->SetBooleanArrayRegion(
             environment, out_is_disposed, 0, 1, &out_is_disposed_element);
     }
-    return (jint)result;
+    return (jint)call_result;
 }
 
 JNIEXPORT jint JNICALL
@@ -1278,14 +1278,14 @@ Java_org_openeggbert_cna_internal_generated_NativeGamerServicesRoutes_friendGame
         return (jint)CNA_RESULT_OUT_OF_MEMORY;
     }
     uint64_t destination_written = 0;
-    CNA_Result result = cna.friend_gamer_copy_presence((CNA_GamerHandle)gamer, (char*)destination_bytes, (uint64_t)destination_size, &destination_written);
+    CNA_Result call_result = cna.friend_gamer_copy_presence((CNA_GamerHandle)gamer, (char*)destination_bytes, (uint64_t)destination_size, &destination_written);
     (*environment)->ReleaseByteArrayElements(environment, destination, destination_bytes, 0);
-    if (result == CNA_RESULT_SUCCESS || result == CNA_RESULT_BUFFER_TOO_SMALL) {
+    if (call_result == CNA_RESULT_SUCCESS || call_result == CNA_RESULT_BUFFER_TOO_SMALL) {
         jlong destination_element = (jlong)destination_written;
         (*environment)->SetLongArrayRegion(
             environment, out_bytes, 0, 1, &destination_element);
     }
-    return (jint)result;
+    return (jint)call_result;
 }
 
 JNIEXPORT jint JNICALL
@@ -1298,8 +1298,8 @@ Java_org_openeggbert_cna_internal_generated_NativeGamerServicesRoutes_friendGame
     memset(&out_info_value, 0, sizeof out_info_value);
     out_info_value.struct_size = (uint32_t)(sizeof out_info_value);
     out_info_value.struct_version = UINT32_C(1);
-    CNA_Result result = cna.friend_gamer_get_info((CNA_GamerHandle)gamer, &out_info_value);
-    if (result == CNA_RESULT_SUCCESS || result == CNA_RESULT_BUFFER_TOO_SMALL) {
+    CNA_Result call_result = cna.friend_gamer_get_info((CNA_GamerHandle)gamer, &out_info_value);
+    if (call_result == CNA_RESULT_SUCCESS || call_result == CNA_RESULT_BUFFER_TOO_SMALL) {
         jbyte out_infoBytes_values[] = {
             (jbyte)out_info_value.reserved[0],
             (jbyte)out_info_value.reserved[1],
@@ -1327,7 +1327,7 @@ Java_org_openeggbert_cna_internal_generated_NativeGamerServicesRoutes_friendGame
             (jsize)(sizeof out_infoIntegral_values / sizeof out_infoIntegral_values[0]),
             out_infoIntegral_values);
     }
-    return (jint)result;
+    return (jint)call_result;
 }
 
 JNIEXPORT jint JNICALL
@@ -1337,13 +1337,13 @@ Java_org_openeggbert_cna_internal_generated_NativeGamerServicesRoutes_friendGame
     (void)environment;
     (void)declaring_class;
     uint64_t out_bytes_value = 0;
-    CNA_Result result = cna.friend_gamer_get_presence_size((CNA_GamerHandle)gamer, &out_bytes_value);
-    if (result == CNA_RESULT_SUCCESS || result == CNA_RESULT_BUFFER_TOO_SMALL) {
+    CNA_Result call_result = cna.friend_gamer_get_presence_size((CNA_GamerHandle)gamer, &out_bytes_value);
+    if (call_result == CNA_RESULT_SUCCESS || call_result == CNA_RESULT_BUFFER_TOO_SMALL) {
         jlong out_bytes_element = (jlong)out_bytes_value;
         (*environment)->SetLongArrayRegion(
             environment, out_bytes, 0, 1, &out_bytes_element);
     }
-    return (jint)result;
+    return (jint)call_result;
 }
 
 JNIEXPORT jint JNICALL
@@ -1353,13 +1353,13 @@ Java_org_openeggbert_cna_internal_generated_NativeGamerServicesRoutes_gamerColle
     (void)environment;
     (void)declaring_class;
     CNA_GamerEnumeratorHandle out_enumerator_value = 0;
-    CNA_Result result = cna.gamer_collection_create_enumerator((CNA_GamerCollectionHandle)collection, &out_enumerator_value);
-    if (result == CNA_RESULT_SUCCESS || result == CNA_RESULT_BUFFER_TOO_SMALL) {
+    CNA_Result call_result = cna.gamer_collection_create_enumerator((CNA_GamerCollectionHandle)collection, &out_enumerator_value);
+    if (call_result == CNA_RESULT_SUCCESS || call_result == CNA_RESULT_BUFFER_TOO_SMALL) {
         jlong out_enumerator_element = (jlong)out_enumerator_value;
         (*environment)->SetLongArrayRegion(
             environment, out_enumerator, 0, 1, &out_enumerator_element);
     }
-    return (jint)result;
+    return (jint)call_result;
 }
 
 JNIEXPORT jint JNICALL
@@ -1368,8 +1368,8 @@ Java_org_openeggbert_cna_internal_generated_NativeGamerServicesRoutes_gamerColle
 {
     (void)environment;
     (void)declaring_class;
-    CNA_Result result = cna.gamer_collection_destroy((CNA_GamerCollectionHandle)collection);
-    return (jint)result;
+    CNA_Result call_result = cna.gamer_collection_destroy((CNA_GamerCollectionHandle)collection);
+    return (jint)call_result;
 }
 
 JNIEXPORT jint JNICALL
@@ -1379,13 +1379,13 @@ Java_org_openeggbert_cna_internal_generated_NativeGamerServicesRoutes_gamerColle
     (void)environment;
     (void)declaring_class;
     CNA_GamerHandle out_gamer_value = 0;
-    CNA_Result result = cna.gamer_collection_get_at((CNA_GamerCollectionHandle)collection, (int32_t)index, &out_gamer_value);
-    if (result == CNA_RESULT_SUCCESS || result == CNA_RESULT_BUFFER_TOO_SMALL) {
+    CNA_Result call_result = cna.gamer_collection_get_at((CNA_GamerCollectionHandle)collection, (int32_t)index, &out_gamer_value);
+    if (call_result == CNA_RESULT_SUCCESS || call_result == CNA_RESULT_BUFFER_TOO_SMALL) {
         jlong out_gamer_element = (jlong)out_gamer_value;
         (*environment)->SetLongArrayRegion(
             environment, out_gamer, 0, 1, &out_gamer_element);
     }
-    return (jint)result;
+    return (jint)call_result;
 }
 
 JNIEXPORT jint JNICALL
@@ -1395,13 +1395,13 @@ Java_org_openeggbert_cna_internal_generated_NativeGamerServicesRoutes_gamerColle
     (void)environment;
     (void)declaring_class;
     int32_t out_count_value = 0;
-    CNA_Result result = cna.gamer_collection_get_count((CNA_GamerCollectionHandle)collection, &out_count_value);
-    if (result == CNA_RESULT_SUCCESS || result == CNA_RESULT_BUFFER_TOO_SMALL) {
+    CNA_Result call_result = cna.gamer_collection_get_count((CNA_GamerCollectionHandle)collection, &out_count_value);
+    if (call_result == CNA_RESULT_SUCCESS || call_result == CNA_RESULT_BUFFER_TOO_SMALL) {
         jint out_count_element = (jint)out_count_value;
         (*environment)->SetIntArrayRegion(
             environment, out_count, 0, 1, &out_count_element);
     }
-    return (jint)result;
+    return (jint)call_result;
 }
 
 JNIEXPORT jint JNICALL
@@ -1416,14 +1416,14 @@ Java_org_openeggbert_cna_internal_generated_NativeGamerServicesRoutes_gamerCopyD
         return (jint)CNA_RESULT_OUT_OF_MEMORY;
     }
     uint64_t destination_written = 0;
-    CNA_Result result = cna.gamer_copy_display_name((CNA_GamerHandle)gamer, (char*)destination_bytes, (uint64_t)destination_size, &destination_written);
+    CNA_Result call_result = cna.gamer_copy_display_name((CNA_GamerHandle)gamer, (char*)destination_bytes, (uint64_t)destination_size, &destination_written);
     (*environment)->ReleaseByteArrayElements(environment, destination, destination_bytes, 0);
-    if (result == CNA_RESULT_SUCCESS || result == CNA_RESULT_BUFFER_TOO_SMALL) {
+    if (call_result == CNA_RESULT_SUCCESS || call_result == CNA_RESULT_BUFFER_TOO_SMALL) {
         jlong destination_element = (jlong)destination_written;
         (*environment)->SetLongArrayRegion(
             environment, out_bytes, 0, 1, &destination_element);
     }
-    return (jint)result;
+    return (jint)call_result;
 }
 
 JNIEXPORT jint JNICALL
@@ -1438,14 +1438,14 @@ Java_org_openeggbert_cna_internal_generated_NativeGamerServicesRoutes_gamerCopyG
         return (jint)CNA_RESULT_OUT_OF_MEMORY;
     }
     uint64_t destination_written = 0;
-    CNA_Result result = cna.gamer_copy_gamertag((CNA_GamerHandle)gamer, (char*)destination_bytes, (uint64_t)destination_size, &destination_written);
+    CNA_Result call_result = cna.gamer_copy_gamertag((CNA_GamerHandle)gamer, (char*)destination_bytes, (uint64_t)destination_size, &destination_written);
     (*environment)->ReleaseByteArrayElements(environment, destination, destination_bytes, 0);
-    if (result == CNA_RESULT_SUCCESS || result == CNA_RESULT_BUFFER_TOO_SMALL) {
+    if (call_result == CNA_RESULT_SUCCESS || call_result == CNA_RESULT_BUFFER_TOO_SMALL) {
         jlong destination_element = (jlong)destination_written;
         (*environment)->SetLongArrayRegion(
             environment, out_bytes, 0, 1, &destination_element);
     }
-    return (jint)result;
+    return (jint)call_result;
 }
 
 JNIEXPORT jint JNICALL
@@ -1466,15 +1466,15 @@ Java_org_openeggbert_cna_internal_generated_NativeGamerServicesRoutes_gamerCopyP
         return (jint)CNA_RESULT_OUT_OF_MEMORY;
     }
     uint64_t destination_written = 0;
-    CNA_Result result = cna.gamer_copy_partner_token(audience_uri_view, (char*)destination_bytes, (uint64_t)destination_size, &destination_written);
+    CNA_Result call_result = cna.gamer_copy_partner_token(audience_uri_view, (char*)destination_bytes, (uint64_t)destination_size, &destination_written);
     (*environment)->ReleaseByteArrayElements(environment, audience_uri, audience_uri_bytes, JNI_ABORT);
     (*environment)->ReleaseByteArrayElements(environment, destination, destination_bytes, 0);
-    if (result == CNA_RESULT_SUCCESS || result == CNA_RESULT_BUFFER_TOO_SMALL) {
+    if (call_result == CNA_RESULT_SUCCESS || call_result == CNA_RESULT_BUFFER_TOO_SMALL) {
         jlong destination_element = (jlong)destination_written;
         (*environment)->SetLongArrayRegion(
             environment, out_bytes, 0, 1, &destination_element);
     }
-    return (jint)result;
+    return (jint)call_result;
 }
 
 JNIEXPORT jint JNICALL
@@ -1489,14 +1489,14 @@ Java_org_openeggbert_cna_internal_generated_NativeGamerServicesRoutes_gamerCopyT
         return (jint)CNA_RESULT_OUT_OF_MEMORY;
     }
     uint64_t destination_written = 0;
-    CNA_Result result = cna.gamer_copy_text((CNA_GamerHandle)gamer, (char*)destination_bytes, (uint64_t)destination_size, &destination_written);
+    CNA_Result call_result = cna.gamer_copy_text((CNA_GamerHandle)gamer, (char*)destination_bytes, (uint64_t)destination_size, &destination_written);
     (*environment)->ReleaseByteArrayElements(environment, destination, destination_bytes, 0);
-    if (result == CNA_RESULT_SUCCESS || result == CNA_RESULT_BUFFER_TOO_SMALL) {
+    if (call_result == CNA_RESULT_SUCCESS || call_result == CNA_RESULT_BUFFER_TOO_SMALL) {
         jlong destination_element = (jlong)destination_written;
         (*environment)->SetLongArrayRegion(
             environment, out_bytes, 0, 1, &destination_element);
     }
-    return (jint)result;
+    return (jint)call_result;
 }
 
 JNIEXPORT jint JNICALL
@@ -1505,8 +1505,8 @@ Java_org_openeggbert_cna_internal_generated_NativeGamerServicesRoutes_gamerEnume
 {
     (void)environment;
     (void)declaring_class;
-    CNA_Result result = cna.gamer_enumerator_destroy((CNA_GamerEnumeratorHandle)enumerator);
-    return (jint)result;
+    CNA_Result call_result = cna.gamer_enumerator_destroy((CNA_GamerEnumeratorHandle)enumerator);
+    return (jint)call_result;
 }
 
 JNIEXPORT jint JNICALL
@@ -1516,13 +1516,13 @@ Java_org_openeggbert_cna_internal_generated_NativeGamerServicesRoutes_gamerEnume
     (void)environment;
     (void)declaring_class;
     CNA_GamerHandle out_gamer_value = 0;
-    CNA_Result result = cna.gamer_enumerator_get_current((CNA_GamerEnumeratorHandle)enumerator, &out_gamer_value);
-    if (result == CNA_RESULT_SUCCESS || result == CNA_RESULT_BUFFER_TOO_SMALL) {
+    CNA_Result call_result = cna.gamer_enumerator_get_current((CNA_GamerEnumeratorHandle)enumerator, &out_gamer_value);
+    if (call_result == CNA_RESULT_SUCCESS || call_result == CNA_RESULT_BUFFER_TOO_SMALL) {
         jlong out_gamer_element = (jlong)out_gamer_value;
         (*environment)->SetLongArrayRegion(
             environment, out_gamer, 0, 1, &out_gamer_element);
     }
-    return (jint)result;
+    return (jint)call_result;
 }
 
 JNIEXPORT jint JNICALL
@@ -1532,13 +1532,13 @@ Java_org_openeggbert_cna_internal_generated_NativeGamerServicesRoutes_gamerEnume
     (void)environment;
     (void)declaring_class;
     CNA_Bool out_has_current_value = 0;
-    CNA_Result result = cna.gamer_enumerator_move_next((CNA_GamerEnumeratorHandle)enumerator, &out_has_current_value);
-    if (result == CNA_RESULT_SUCCESS || result == CNA_RESULT_BUFFER_TOO_SMALL) {
+    CNA_Result call_result = cna.gamer_enumerator_move_next((CNA_GamerEnumeratorHandle)enumerator, &out_has_current_value);
+    if (call_result == CNA_RESULT_SUCCESS || call_result == CNA_RESULT_BUFFER_TOO_SMALL) {
         jboolean out_has_current_element = (jboolean)out_has_current_value;
         (*environment)->SetBooleanArrayRegion(
             environment, out_has_current, 0, 1, &out_has_current_element);
     }
-    return (jint)result;
+    return (jint)call_result;
 }
 
 JNIEXPORT jint JNICALL
@@ -1548,13 +1548,13 @@ Java_org_openeggbert_cna_internal_generated_NativeGamerServicesRoutes_gamerGetDi
     (void)environment;
     (void)declaring_class;
     uint64_t out_bytes_value = 0;
-    CNA_Result result = cna.gamer_get_display_name_size((CNA_GamerHandle)gamer, &out_bytes_value);
-    if (result == CNA_RESULT_SUCCESS || result == CNA_RESULT_BUFFER_TOO_SMALL) {
+    CNA_Result call_result = cna.gamer_get_display_name_size((CNA_GamerHandle)gamer, &out_bytes_value);
+    if (call_result == CNA_RESULT_SUCCESS || call_result == CNA_RESULT_BUFFER_TOO_SMALL) {
         jlong out_bytes_element = (jlong)out_bytes_value;
         (*environment)->SetLongArrayRegion(
             environment, out_bytes, 0, 1, &out_bytes_element);
     }
-    return (jint)result;
+    return (jint)call_result;
 }
 
 JNIEXPORT jint JNICALL
@@ -1570,14 +1570,14 @@ Java_org_openeggbert_cna_internal_generated_NativeGamerServicesRoutes_gamerGetFr
     }
     CNA_StringView gamertag_view = {(const char*)gamertag_bytes, (uint64_t)gamertag_size};
     CNA_GamerHandle out_gamer_value = 0;
-    CNA_Result result = cna.gamer_get_from_gamertag(gamertag_view, &out_gamer_value);
+    CNA_Result call_result = cna.gamer_get_from_gamertag(gamertag_view, &out_gamer_value);
     (*environment)->ReleaseByteArrayElements(environment, gamertag, gamertag_bytes, JNI_ABORT);
-    if (result == CNA_RESULT_SUCCESS || result == CNA_RESULT_BUFFER_TOO_SMALL) {
+    if (call_result == CNA_RESULT_SUCCESS || call_result == CNA_RESULT_BUFFER_TOO_SMALL) {
         jlong out_gamer_element = (jlong)out_gamer_value;
         (*environment)->SetLongArrayRegion(
             environment, out_gamer, 0, 1, &out_gamer_element);
     }
-    return (jint)result;
+    return (jint)call_result;
 }
 
 JNIEXPORT jint JNICALL
@@ -1587,13 +1587,13 @@ Java_org_openeggbert_cna_internal_generated_NativeGamerServicesRoutes_gamerGetGa
     (void)environment;
     (void)declaring_class;
     uint64_t out_bytes_value = 0;
-    CNA_Result result = cna.gamer_get_gamertag_size((CNA_GamerHandle)gamer, &out_bytes_value);
-    if (result == CNA_RESULT_SUCCESS || result == CNA_RESULT_BUFFER_TOO_SMALL) {
+    CNA_Result call_result = cna.gamer_get_gamertag_size((CNA_GamerHandle)gamer, &out_bytes_value);
+    if (call_result == CNA_RESULT_SUCCESS || call_result == CNA_RESULT_BUFFER_TOO_SMALL) {
         jlong out_bytes_element = (jlong)out_bytes_value;
         (*environment)->SetLongArrayRegion(
             environment, out_bytes, 0, 1, &out_bytes_element);
     }
-    return (jint)result;
+    return (jint)call_result;
 }
 
 JNIEXPORT jint JNICALL
@@ -1603,13 +1603,13 @@ Java_org_openeggbert_cna_internal_generated_NativeGamerServicesRoutes_gamerGetIs
     (void)environment;
     (void)declaring_class;
     CNA_Bool out_is_disposed_value = 0;
-    CNA_Result result = cna.gamer_get_is_disposed((CNA_GamerHandle)gamer, &out_is_disposed_value);
-    if (result == CNA_RESULT_SUCCESS || result == CNA_RESULT_BUFFER_TOO_SMALL) {
+    CNA_Result call_result = cna.gamer_get_is_disposed((CNA_GamerHandle)gamer, &out_is_disposed_value);
+    if (call_result == CNA_RESULT_SUCCESS || call_result == CNA_RESULT_BUFFER_TOO_SMALL) {
         jboolean out_is_disposed_element = (jboolean)out_is_disposed_value;
         (*environment)->SetBooleanArrayRegion(
             environment, out_is_disposed, 0, 1, &out_is_disposed_element);
     }
-    return (jint)result;
+    return (jint)call_result;
 }
 
 JNIEXPORT jint JNICALL
@@ -1625,14 +1625,14 @@ Java_org_openeggbert_cna_internal_generated_NativeGamerServicesRoutes_gamerGetPa
     }
     CNA_StringView audience_uri_view = {(const char*)audience_uri_bytes, (uint64_t)audience_uri_size};
     uint64_t out_bytes_value = 0;
-    CNA_Result result = cna.gamer_get_partner_token_size(audience_uri_view, &out_bytes_value);
+    CNA_Result call_result = cna.gamer_get_partner_token_size(audience_uri_view, &out_bytes_value);
     (*environment)->ReleaseByteArrayElements(environment, audience_uri, audience_uri_bytes, JNI_ABORT);
-    if (result == CNA_RESULT_SUCCESS || result == CNA_RESULT_BUFFER_TOO_SMALL) {
+    if (call_result == CNA_RESULT_SUCCESS || call_result == CNA_RESULT_BUFFER_TOO_SMALL) {
         jlong out_bytes_element = (jlong)out_bytes_value;
         (*environment)->SetLongArrayRegion(
             environment, out_bytes, 0, 1, &out_bytes_element);
     }
-    return (jint)result;
+    return (jint)call_result;
 }
 
 JNIEXPORT jint JNICALL
@@ -1642,13 +1642,13 @@ Java_org_openeggbert_cna_internal_generated_NativeGamerServicesRoutes_gamerGetPr
     (void)environment;
     (void)declaring_class;
     CNA_GamerProfileHandle out_profile_value = 0;
-    CNA_Result result = cna.gamer_get_profile((CNA_GamerHandle)gamer, &out_profile_value);
-    if (result == CNA_RESULT_SUCCESS || result == CNA_RESULT_BUFFER_TOO_SMALL) {
+    CNA_Result call_result = cna.gamer_get_profile((CNA_GamerHandle)gamer, &out_profile_value);
+    if (call_result == CNA_RESULT_SUCCESS || call_result == CNA_RESULT_BUFFER_TOO_SMALL) {
         jlong out_profile_element = (jlong)out_profile_value;
         (*environment)->SetLongArrayRegion(
             environment, out_profile, 0, 1, &out_profile_element);
     }
-    return (jint)result;
+    return (jint)call_result;
 }
 
 JNIEXPORT jint JNICALL
@@ -1658,13 +1658,13 @@ Java_org_openeggbert_cna_internal_generated_NativeGamerServicesRoutes_gamerGetSi
     (void)environment;
     (void)declaring_class;
     CNA_SignedInGamerHandle out_gamer_value = 0;
-    CNA_Result result = cna.gamer_get_signed_in_gamer_at((int32_t)index, &out_gamer_value);
-    if (result == CNA_RESULT_SUCCESS || result == CNA_RESULT_BUFFER_TOO_SMALL) {
+    CNA_Result call_result = cna.gamer_get_signed_in_gamer_at((int32_t)index, &out_gamer_value);
+    if (call_result == CNA_RESULT_SUCCESS || call_result == CNA_RESULT_BUFFER_TOO_SMALL) {
         jlong out_gamer_element = (jlong)out_gamer_value;
         (*environment)->SetLongArrayRegion(
             environment, out_gamer, 0, 1, &out_gamer_element);
     }
-    return (jint)result;
+    return (jint)call_result;
 }
 
 JNIEXPORT jint JNICALL
@@ -1675,8 +1675,8 @@ Java_org_openeggbert_cna_internal_generated_NativeGamerServicesRoutes_gamerGetSi
     (void)declaring_class;
     CNA_Bool out_has_gamer_value = 0;
     CNA_SignedInGamerHandle out_gamer_value = 0;
-    CNA_Result result = cna.gamer_get_signed_in_gamer_at_player_index((CNA_PlayerIndex)player_index, &out_has_gamer_value, &out_gamer_value);
-    if (result == CNA_RESULT_SUCCESS || result == CNA_RESULT_BUFFER_TOO_SMALL) {
+    CNA_Result call_result = cna.gamer_get_signed_in_gamer_at_player_index((CNA_PlayerIndex)player_index, &out_has_gamer_value, &out_gamer_value);
+    if (call_result == CNA_RESULT_SUCCESS || call_result == CNA_RESULT_BUFFER_TOO_SMALL) {
         jboolean out_has_gamer_element = (jboolean)out_has_gamer_value;
         (*environment)->SetBooleanArrayRegion(
             environment, out_has_gamer, 0, 1, &out_has_gamer_element);
@@ -1684,7 +1684,7 @@ Java_org_openeggbert_cna_internal_generated_NativeGamerServicesRoutes_gamerGetSi
         (*environment)->SetLongArrayRegion(
             environment, out_gamer, 0, 1, &out_gamer_element);
     }
-    return (jint)result;
+    return (jint)call_result;
 }
 
 JNIEXPORT jint JNICALL
@@ -1694,13 +1694,13 @@ Java_org_openeggbert_cna_internal_generated_NativeGamerServicesRoutes_gamerGetSi
     (void)environment;
     (void)declaring_class;
     int32_t out_count_value = 0;
-    CNA_Result result = cna.gamer_get_signed_in_gamer_count(&out_count_value);
-    if (result == CNA_RESULT_SUCCESS || result == CNA_RESULT_BUFFER_TOO_SMALL) {
+    CNA_Result call_result = cna.gamer_get_signed_in_gamer_count(&out_count_value);
+    if (call_result == CNA_RESULT_SUCCESS || call_result == CNA_RESULT_BUFFER_TOO_SMALL) {
         jint out_count_element = (jint)out_count_value;
         (*environment)->SetIntArrayRegion(
             environment, out_count, 0, 1, &out_count_element);
     }
-    return (jint)result;
+    return (jint)call_result;
 }
 
 JNIEXPORT jint JNICALL
@@ -1710,13 +1710,13 @@ Java_org_openeggbert_cna_internal_generated_NativeGamerServicesRoutes_gamerGetTa
     (void)environment;
     (void)declaring_class;
     uint64_t out_tag_value = 0;
-    CNA_Result result = cna.gamer_get_tag((CNA_GamerHandle)gamer, &out_tag_value);
-    if (result == CNA_RESULT_SUCCESS || result == CNA_RESULT_BUFFER_TOO_SMALL) {
+    CNA_Result call_result = cna.gamer_get_tag((CNA_GamerHandle)gamer, &out_tag_value);
+    if (call_result == CNA_RESULT_SUCCESS || call_result == CNA_RESULT_BUFFER_TOO_SMALL) {
         jlong out_tag_element = (jlong)out_tag_value;
         (*environment)->SetLongArrayRegion(
             environment, out_tag, 0, 1, &out_tag_element);
     }
-    return (jint)result;
+    return (jint)call_result;
 }
 
 JNIEXPORT jint JNICALL
@@ -1726,13 +1726,13 @@ Java_org_openeggbert_cna_internal_generated_NativeGamerServicesRoutes_gamerGetTe
     (void)environment;
     (void)declaring_class;
     uint64_t out_bytes_value = 0;
-    CNA_Result result = cna.gamer_get_text_size((CNA_GamerHandle)gamer, &out_bytes_value);
-    if (result == CNA_RESULT_SUCCESS || result == CNA_RESULT_BUFFER_TOO_SMALL) {
+    CNA_Result call_result = cna.gamer_get_text_size((CNA_GamerHandle)gamer, &out_bytes_value);
+    if (call_result == CNA_RESULT_SUCCESS || call_result == CNA_RESULT_BUFFER_TOO_SMALL) {
         jlong out_bytes_element = (jlong)out_bytes_value;
         (*environment)->SetLongArrayRegion(
             environment, out_bytes, 0, 1, &out_bytes_element);
     }
-    return (jint)result;
+    return (jint)call_result;
 }
 
 JNIEXPORT jint JNICALL
@@ -1747,14 +1747,14 @@ Java_org_openeggbert_cna_internal_generated_NativeGamerServicesRoutes_gamerProfi
         return (jint)CNA_RESULT_OUT_OF_MEMORY;
     }
     uint64_t destination_written = 0;
-    CNA_Result result = cna.gamer_profile_copy_motto((CNA_GamerProfileHandle)profile, (char*)destination_bytes, (uint64_t)destination_size, &destination_written);
+    CNA_Result call_result = cna.gamer_profile_copy_motto((CNA_GamerProfileHandle)profile, (char*)destination_bytes, (uint64_t)destination_size, &destination_written);
     (*environment)->ReleaseByteArrayElements(environment, destination, destination_bytes, 0);
-    if (result == CNA_RESULT_SUCCESS || result == CNA_RESULT_BUFFER_TOO_SMALL) {
+    if (call_result == CNA_RESULT_SUCCESS || call_result == CNA_RESULT_BUFFER_TOO_SMALL) {
         jlong destination_element = (jlong)destination_written;
         (*environment)->SetLongArrayRegion(
             environment, out_bytes, 0, 1, &destination_element);
     }
-    return (jint)result;
+    return (jint)call_result;
 }
 
 JNIEXPORT jint JNICALL
@@ -1769,14 +1769,14 @@ Java_org_openeggbert_cna_internal_generated_NativeGamerServicesRoutes_gamerProfi
         return (jint)CNA_RESULT_OUT_OF_MEMORY;
     }
     uint64_t destination_written = 0;
-    CNA_Result result = cna.gamer_profile_copy_region_name((CNA_GamerProfileHandle)profile, (char*)destination_bytes, (uint64_t)destination_size, &destination_written);
+    CNA_Result call_result = cna.gamer_profile_copy_region_name((CNA_GamerProfileHandle)profile, (char*)destination_bytes, (uint64_t)destination_size, &destination_written);
     (*environment)->ReleaseByteArrayElements(environment, destination, destination_bytes, 0);
-    if (result == CNA_RESULT_SUCCESS || result == CNA_RESULT_BUFFER_TOO_SMALL) {
+    if (call_result == CNA_RESULT_SUCCESS || call_result == CNA_RESULT_BUFFER_TOO_SMALL) {
         jlong destination_element = (jlong)destination_written;
         (*environment)->SetLongArrayRegion(
             environment, out_bytes, 0, 1, &destination_element);
     }
-    return (jint)result;
+    return (jint)call_result;
 }
 
 JNIEXPORT jint JNICALL
@@ -1785,8 +1785,8 @@ Java_org_openeggbert_cna_internal_generated_NativeGamerServicesRoutes_gamerProfi
 {
     (void)environment;
     (void)declaring_class;
-    CNA_Result result = cna.gamer_profile_destroy((CNA_GamerProfileHandle)profile);
-    return (jint)result;
+    CNA_Result call_result = cna.gamer_profile_destroy((CNA_GamerProfileHandle)profile);
+    return (jint)call_result;
 }
 
 JNIEXPORT jint JNICALL
@@ -1799,8 +1799,8 @@ Java_org_openeggbert_cna_internal_generated_NativeGamerServicesRoutes_gamerProfi
     memset(&out_info_value, 0, sizeof out_info_value);
     out_info_value.struct_size = (uint32_t)(sizeof out_info_value);
     out_info_value.struct_version = UINT32_C(1);
-    CNA_Result result = cna.gamer_profile_get_info((CNA_GamerProfileHandle)profile, &out_info_value);
-    if (result == CNA_RESULT_SUCCESS || result == CNA_RESULT_BUFFER_TOO_SMALL) {
+    CNA_Result call_result = cna.gamer_profile_get_info((CNA_GamerProfileHandle)profile, &out_info_value);
+    if (call_result == CNA_RESULT_SUCCESS || call_result == CNA_RESULT_BUFFER_TOO_SMALL) {
         jbyte out_infoBytes_values[] = {
             (jbyte)out_info_value.reserved[0],
             (jbyte)out_info_value.reserved[1],
@@ -1826,7 +1826,7 @@ Java_org_openeggbert_cna_internal_generated_NativeGamerServicesRoutes_gamerProfi
             (jsize)(sizeof out_infoFloating_values / sizeof out_infoFloating_values[0]),
             out_infoFloating_values);
     }
-    return (jint)result;
+    return (jint)call_result;
 }
 
 JNIEXPORT jint JNICALL
@@ -1836,13 +1836,13 @@ Java_org_openeggbert_cna_internal_generated_NativeGamerServicesRoutes_gamerProfi
     (void)environment;
     (void)declaring_class;
     uint64_t out_bytes_value = 0;
-    CNA_Result result = cna.gamer_profile_get_motto_size((CNA_GamerProfileHandle)profile, &out_bytes_value);
-    if (result == CNA_RESULT_SUCCESS || result == CNA_RESULT_BUFFER_TOO_SMALL) {
+    CNA_Result call_result = cna.gamer_profile_get_motto_size((CNA_GamerProfileHandle)profile, &out_bytes_value);
+    if (call_result == CNA_RESULT_SUCCESS || call_result == CNA_RESULT_BUFFER_TOO_SMALL) {
         jlong out_bytes_element = (jlong)out_bytes_value;
         (*environment)->SetLongArrayRegion(
             environment, out_bytes, 0, 1, &out_bytes_element);
     }
-    return (jint)result;
+    return (jint)call_result;
 }
 
 JNIEXPORT jint JNICALL
@@ -1853,8 +1853,8 @@ Java_org_openeggbert_cna_internal_generated_NativeGamerServicesRoutes_gamerProfi
     (void)declaring_class;
     CNA_Bool out_has_picture_value = 0;
     uint64_t out_bytes_value = 0;
-    CNA_Result result = cna.gamer_profile_get_picture_size((CNA_GamerProfileHandle)profile, &out_has_picture_value, &out_bytes_value);
-    if (result == CNA_RESULT_SUCCESS || result == CNA_RESULT_BUFFER_TOO_SMALL) {
+    CNA_Result call_result = cna.gamer_profile_get_picture_size((CNA_GamerProfileHandle)profile, &out_has_picture_value, &out_bytes_value);
+    if (call_result == CNA_RESULT_SUCCESS || call_result == CNA_RESULT_BUFFER_TOO_SMALL) {
         jboolean out_has_picture_element = (jboolean)out_has_picture_value;
         (*environment)->SetBooleanArrayRegion(
             environment, out_has_picture, 0, 1, &out_has_picture_element);
@@ -1862,7 +1862,7 @@ Java_org_openeggbert_cna_internal_generated_NativeGamerServicesRoutes_gamerProfi
         (*environment)->SetLongArrayRegion(
             environment, out_bytes, 0, 1, &out_bytes_element);
     }
-    return (jint)result;
+    return (jint)call_result;
 }
 
 JNIEXPORT jint JNICALL
@@ -1872,13 +1872,13 @@ Java_org_openeggbert_cna_internal_generated_NativeGamerServicesRoutes_gamerProfi
     (void)environment;
     (void)declaring_class;
     uint64_t out_bytes_value = 0;
-    CNA_Result result = cna.gamer_profile_get_region_name_size((CNA_GamerProfileHandle)profile, &out_bytes_value);
-    if (result == CNA_RESULT_SUCCESS || result == CNA_RESULT_BUFFER_TOO_SMALL) {
+    CNA_Result call_result = cna.gamer_profile_get_region_name_size((CNA_GamerProfileHandle)profile, &out_bytes_value);
+    if (call_result == CNA_RESULT_SUCCESS || call_result == CNA_RESULT_BUFFER_TOO_SMALL) {
         jlong out_bytes_element = (jlong)out_bytes_value;
         (*environment)->SetLongArrayRegion(
             environment, out_bytes, 0, 1, &out_bytes_element);
     }
-    return (jint)result;
+    return (jint)call_result;
 }
 
 JNIEXPORT jint JNICALL
@@ -1888,13 +1888,13 @@ Java_org_openeggbert_cna_internal_generated_NativeGamerServicesRoutes_gamerServi
     (void)environment;
     (void)declaring_class;
     CNA_Bool out_is_initialized_value = 0;
-    CNA_Result result = cna.gamer_services_dispatcher_get_is_initialized(&out_is_initialized_value);
-    if (result == CNA_RESULT_SUCCESS || result == CNA_RESULT_BUFFER_TOO_SMALL) {
+    CNA_Result call_result = cna.gamer_services_dispatcher_get_is_initialized(&out_is_initialized_value);
+    if (call_result == CNA_RESULT_SUCCESS || call_result == CNA_RESULT_BUFFER_TOO_SMALL) {
         jboolean out_is_initialized_element = (jboolean)out_is_initialized_value;
         (*environment)->SetBooleanArrayRegion(
             environment, out_is_initialized, 0, 1, &out_is_initialized_element);
     }
-    return (jint)result;
+    return (jint)call_result;
 }
 
 JNIEXPORT jint JNICALL
@@ -1904,13 +1904,13 @@ Java_org_openeggbert_cna_internal_generated_NativeGamerServicesRoutes_gamerServi
     (void)environment;
     (void)declaring_class;
     uint64_t out_window_handle_value = 0;
-    CNA_Result result = cna.gamer_services_dispatcher_get_window_handle(&out_window_handle_value);
-    if (result == CNA_RESULT_SUCCESS || result == CNA_RESULT_BUFFER_TOO_SMALL) {
+    CNA_Result call_result = cna.gamer_services_dispatcher_get_window_handle(&out_window_handle_value);
+    if (call_result == CNA_RESULT_SUCCESS || call_result == CNA_RESULT_BUFFER_TOO_SMALL) {
         jlong out_window_handle_element = (jlong)out_window_handle_value;
         (*environment)->SetLongArrayRegion(
             environment, out_window_handle, 0, 1, &out_window_handle_element);
     }
-    return (jint)result;
+    return (jint)call_result;
 }
 
 JNIEXPORT jint JNICALL
@@ -1925,9 +1925,9 @@ Java_org_openeggbert_cna_internal_generated_NativeGamerServicesRoutes_gamerSetDi
         return (jint)CNA_RESULT_OUT_OF_MEMORY;
     }
     CNA_StringView display_name_view = {(const char*)display_name_bytes, (uint64_t)display_name_size};
-    CNA_Result result = cna.gamer_set_display_name((CNA_GamerHandle)gamer, display_name_view);
+    CNA_Result call_result = cna.gamer_set_display_name((CNA_GamerHandle)gamer, display_name_view);
     (*environment)->ReleaseByteArrayElements(environment, display_name, display_name_bytes, JNI_ABORT);
-    return (jint)result;
+    return (jint)call_result;
 }
 
 JNIEXPORT jint JNICALL
@@ -1936,8 +1936,8 @@ Java_org_openeggbert_cna_internal_generated_NativeGamerServicesRoutes_gamerSetTa
 {
     (void)environment;
     (void)declaring_class;
-    CNA_Result result = cna.gamer_set_tag((CNA_GamerHandle)gamer, (uint64_t)tag);
-    return (jint)result;
+    CNA_Result call_result = cna.gamer_set_tag((CNA_GamerHandle)gamer, (uint64_t)tag);
+    return (jint)call_result;
 }
 
 JNIEXPORT jint JNICALL
@@ -1946,8 +1946,8 @@ Java_org_openeggbert_cna_internal_generated_NativeGamerServicesRoutes_gamerUnsub
 {
     (void)environment;
     (void)declaring_class;
-    CNA_Result result = cna.gamer_unsubscribe_ext((CNA_Handle)registration);
-    return (jint)result;
+    CNA_Result call_result = cna.gamer_unsubscribe_ext((CNA_Handle)registration);
+    return (jint)call_result;
 }
 
 JNIEXPORT jint JNICALL
@@ -1974,11 +1974,11 @@ Java_org_openeggbert_cna_internal_generated_NativeGamerServicesRoutes_guideBegin
         return (jint)CNA_RESULT_OUT_OF_MEMORY;
     }
     CNA_StringView default_text_view = {(const char*)default_text_bytes, (uint64_t)default_text_size};
-    CNA_Result result = cna.guide_begin_show_keyboard_input((CNA_PlayerIndex)player, title_view, description_view, default_text_view, (CNA_Bool)use_password_mode, NULL, NULL);
+    CNA_Result call_result = cna.guide_begin_show_keyboard_input((CNA_PlayerIndex)player, title_view, description_view, default_text_view, (CNA_Bool)use_password_mode, NULL, NULL);
     (*environment)->ReleaseByteArrayElements(environment, title, title_bytes, JNI_ABORT);
     (*environment)->ReleaseByteArrayElements(environment, description, description_bytes, JNI_ABORT);
     (*environment)->ReleaseByteArrayElements(environment, default_text, default_text_bytes, JNI_ABORT);
-    return (jint)result;
+    return (jint)call_result;
 }
 
 JNIEXPORT jint JNICALL
@@ -1993,14 +1993,14 @@ Java_org_openeggbert_cna_internal_generated_NativeGamerServicesRoutes_guideCopyP
         return (jint)CNA_RESULT_OUT_OF_MEMORY;
     }
     uint64_t destination_written = 0;
-    CNA_Result result = cna.guide_copy_pending_keyboard_input_description_ext((char*)destination_bytes, (uint64_t)destination_size, &destination_written);
+    CNA_Result call_result = cna.guide_copy_pending_keyboard_input_description_ext((char*)destination_bytes, (uint64_t)destination_size, &destination_written);
     (*environment)->ReleaseByteArrayElements(environment, destination, destination_bytes, 0);
-    if (result == CNA_RESULT_SUCCESS || result == CNA_RESULT_BUFFER_TOO_SMALL) {
+    if (call_result == CNA_RESULT_SUCCESS || call_result == CNA_RESULT_BUFFER_TOO_SMALL) {
         jlong destination_element = (jlong)destination_written;
         (*environment)->SetLongArrayRegion(
             environment, out_bytes, 0, 1, &destination_element);
     }
-    return (jint)result;
+    return (jint)call_result;
 }
 
 JNIEXPORT jint JNICALL
@@ -2015,14 +2015,14 @@ Java_org_openeggbert_cna_internal_generated_NativeGamerServicesRoutes_guideCopyP
         return (jint)CNA_RESULT_OUT_OF_MEMORY;
     }
     uint64_t destination_written = 0;
-    CNA_Result result = cna.guide_copy_pending_keyboard_input_display_text_ext((char*)destination_bytes, (uint64_t)destination_size, &destination_written);
+    CNA_Result call_result = cna.guide_copy_pending_keyboard_input_display_text_ext((char*)destination_bytes, (uint64_t)destination_size, &destination_written);
     (*environment)->ReleaseByteArrayElements(environment, destination, destination_bytes, 0);
-    if (result == CNA_RESULT_SUCCESS || result == CNA_RESULT_BUFFER_TOO_SMALL) {
+    if (call_result == CNA_RESULT_SUCCESS || call_result == CNA_RESULT_BUFFER_TOO_SMALL) {
         jlong destination_element = (jlong)destination_written;
         (*environment)->SetLongArrayRegion(
             environment, out_bytes, 0, 1, &destination_element);
     }
-    return (jint)result;
+    return (jint)call_result;
 }
 
 JNIEXPORT jint JNICALL
@@ -2037,14 +2037,14 @@ Java_org_openeggbert_cna_internal_generated_NativeGamerServicesRoutes_guideCopyP
         return (jint)CNA_RESULT_OUT_OF_MEMORY;
     }
     uint64_t destination_written = 0;
-    CNA_Result result = cna.guide_copy_pending_keyboard_input_title_ext((char*)destination_bytes, (uint64_t)destination_size, &destination_written);
+    CNA_Result call_result = cna.guide_copy_pending_keyboard_input_title_ext((char*)destination_bytes, (uint64_t)destination_size, &destination_written);
     (*environment)->ReleaseByteArrayElements(environment, destination, destination_bytes, 0);
-    if (result == CNA_RESULT_SUCCESS || result == CNA_RESULT_BUFFER_TOO_SMALL) {
+    if (call_result == CNA_RESULT_SUCCESS || call_result == CNA_RESULT_BUFFER_TOO_SMALL) {
         jlong destination_element = (jlong)destination_written;
         (*environment)->SetLongArrayRegion(
             environment, out_bytes, 0, 1, &destination_element);
     }
-    return (jint)result;
+    return (jint)call_result;
 }
 
 JNIEXPORT jint JNICALL
@@ -2053,8 +2053,8 @@ Java_org_openeggbert_cna_internal_generated_NativeGamerServicesRoutes_guideDelay
 {
     (void)environment;
     (void)declaring_class;
-    CNA_Result result = cna.guide_delay_notifications((int64_t)delay_ticks);
-    return (jint)result;
+    CNA_Result call_result = cna.guide_delay_notifications((int64_t)delay_ticks);
+    return (jint)call_result;
 }
 
 JNIEXPORT jint JNICALL
@@ -2069,14 +2069,14 @@ Java_org_openeggbert_cna_internal_generated_NativeGamerServicesRoutes_guideEndSh
         return (jint)CNA_RESULT_OUT_OF_MEMORY;
     }
     uint64_t destination_written = 0;
-    CNA_Result result = cna.guide_end_show_keyboard_input((char*)destination_bytes, (uint64_t)destination_size, &destination_written);
+    CNA_Result call_result = cna.guide_end_show_keyboard_input((char*)destination_bytes, (uint64_t)destination_size, &destination_written);
     (*environment)->ReleaseByteArrayElements(environment, destination, destination_bytes, 0);
-    if (result == CNA_RESULT_SUCCESS || result == CNA_RESULT_BUFFER_TOO_SMALL) {
+    if (call_result == CNA_RESULT_SUCCESS || call_result == CNA_RESULT_BUFFER_TOO_SMALL) {
         jlong destination_element = (jlong)destination_written;
         (*environment)->SetLongArrayRegion(
             environment, out_bytes, 0, 1, &destination_element);
     }
-    return (jint)result;
+    return (jint)call_result;
 }
 
 JNIEXPORT jint JNICALL
@@ -2086,13 +2086,13 @@ Java_org_openeggbert_cna_internal_generated_NativeGamerServicesRoutes_guideEndSh
     (void)environment;
     (void)declaring_class;
     uint64_t out_bytes_value = 0;
-    CNA_Result result = cna.guide_end_show_keyboard_input_size(&out_bytes_value);
-    if (result == CNA_RESULT_SUCCESS || result == CNA_RESULT_BUFFER_TOO_SMALL) {
+    CNA_Result call_result = cna.guide_end_show_keyboard_input_size(&out_bytes_value);
+    if (call_result == CNA_RESULT_SUCCESS || call_result == CNA_RESULT_BUFFER_TOO_SMALL) {
         jlong out_bytes_element = (jlong)out_bytes_value;
         (*environment)->SetLongArrayRegion(
             environment, out_bytes, 0, 1, &out_bytes_element);
     }
-    return (jint)result;
+    return (jint)call_result;
 }
 
 JNIEXPORT jint JNICALL
@@ -2103,8 +2103,8 @@ Java_org_openeggbert_cna_internal_generated_NativeGamerServicesRoutes_guideEndSh
     (void)declaring_class;
     CNA_Bool out_has_choice_value = 0;
     int32_t out_button_index_value = 0;
-    CNA_Result result = cna.guide_end_show_message_box(&out_has_choice_value, &out_button_index_value);
-    if (result == CNA_RESULT_SUCCESS || result == CNA_RESULT_BUFFER_TOO_SMALL) {
+    CNA_Result call_result = cna.guide_end_show_message_box(&out_has_choice_value, &out_button_index_value);
+    if (call_result == CNA_RESULT_SUCCESS || call_result == CNA_RESULT_BUFFER_TOO_SMALL) {
         jboolean out_has_choice_element = (jboolean)out_has_choice_value;
         (*environment)->SetBooleanArrayRegion(
             environment, out_has_choice, 0, 1, &out_has_choice_element);
@@ -2112,7 +2112,7 @@ Java_org_openeggbert_cna_internal_generated_NativeGamerServicesRoutes_guideEndSh
         (*environment)->SetIntArrayRegion(
             environment, out_button_index, 0, 1, &out_button_index_element);
     }
-    return (jint)result;
+    return (jint)call_result;
 }
 
 JNIEXPORT jint JNICALL
@@ -2122,13 +2122,13 @@ Java_org_openeggbert_cna_internal_generated_NativeGamerServicesRoutes_guideGetHa
     (void)environment;
     (void)declaring_class;
     CNA_Bool out_has_pending_value = 0;
-    CNA_Result result = cna.guide_get_has_pending_keyboard_input_ext(&out_has_pending_value);
-    if (result == CNA_RESULT_SUCCESS || result == CNA_RESULT_BUFFER_TOO_SMALL) {
+    CNA_Result call_result = cna.guide_get_has_pending_keyboard_input_ext(&out_has_pending_value);
+    if (call_result == CNA_RESULT_SUCCESS || call_result == CNA_RESULT_BUFFER_TOO_SMALL) {
         jboolean out_has_pending_element = (jboolean)out_has_pending_value;
         (*environment)->SetBooleanArrayRegion(
             environment, out_has_pending, 0, 1, &out_has_pending_element);
     }
-    return (jint)result;
+    return (jint)call_result;
 }
 
 JNIEXPORT jint JNICALL
@@ -2138,13 +2138,13 @@ Java_org_openeggbert_cna_internal_generated_NativeGamerServicesRoutes_guideGetHa
     (void)environment;
     (void)declaring_class;
     CNA_Bool out_has_pending_value = 0;
-    CNA_Result result = cna.guide_get_has_pending_message_box_ext(&out_has_pending_value);
-    if (result == CNA_RESULT_SUCCESS || result == CNA_RESULT_BUFFER_TOO_SMALL) {
+    CNA_Result call_result = cna.guide_get_has_pending_message_box_ext(&out_has_pending_value);
+    if (call_result == CNA_RESULT_SUCCESS || call_result == CNA_RESULT_BUFFER_TOO_SMALL) {
         jboolean out_has_pending_element = (jboolean)out_has_pending_value;
         (*environment)->SetBooleanArrayRegion(
             environment, out_has_pending, 0, 1, &out_has_pending_element);
     }
-    return (jint)result;
+    return (jint)call_result;
 }
 
 JNIEXPORT jint JNICALL
@@ -2154,13 +2154,13 @@ Java_org_openeggbert_cna_internal_generated_NativeGamerServicesRoutes_guideGetIs
     (void)environment;
     (void)declaring_class;
     CNA_Bool out_is_enabled_value = 0;
-    CNA_Result result = cna.guide_get_is_screen_saver_enabled(&out_is_enabled_value);
-    if (result == CNA_RESULT_SUCCESS || result == CNA_RESULT_BUFFER_TOO_SMALL) {
+    CNA_Result call_result = cna.guide_get_is_screen_saver_enabled(&out_is_enabled_value);
+    if (call_result == CNA_RESULT_SUCCESS || call_result == CNA_RESULT_BUFFER_TOO_SMALL) {
         jboolean out_is_enabled_element = (jboolean)out_is_enabled_value;
         (*environment)->SetBooleanArrayRegion(
             environment, out_is_enabled, 0, 1, &out_is_enabled_element);
     }
-    return (jint)result;
+    return (jint)call_result;
 }
 
 JNIEXPORT jint JNICALL
@@ -2170,13 +2170,13 @@ Java_org_openeggbert_cna_internal_generated_NativeGamerServicesRoutes_guideGetIs
     (void)environment;
     (void)declaring_class;
     CNA_Bool out_is_trial_mode_value = 0;
-    CNA_Result result = cna.guide_get_is_trial_mode(&out_is_trial_mode_value);
-    if (result == CNA_RESULT_SUCCESS || result == CNA_RESULT_BUFFER_TOO_SMALL) {
+    CNA_Result call_result = cna.guide_get_is_trial_mode(&out_is_trial_mode_value);
+    if (call_result == CNA_RESULT_SUCCESS || call_result == CNA_RESULT_BUFFER_TOO_SMALL) {
         jboolean out_is_trial_mode_element = (jboolean)out_is_trial_mode_value;
         (*environment)->SetBooleanArrayRegion(
             environment, out_is_trial_mode, 0, 1, &out_is_trial_mode_element);
     }
-    return (jint)result;
+    return (jint)call_result;
 }
 
 JNIEXPORT jint JNICALL
@@ -2186,13 +2186,13 @@ Java_org_openeggbert_cna_internal_generated_NativeGamerServicesRoutes_guideGetIs
     (void)environment;
     (void)declaring_class;
     CNA_Bool out_is_visible_value = 0;
-    CNA_Result result = cna.guide_get_is_visible(&out_is_visible_value);
-    if (result == CNA_RESULT_SUCCESS || result == CNA_RESULT_BUFFER_TOO_SMALL) {
+    CNA_Result call_result = cna.guide_get_is_visible(&out_is_visible_value);
+    if (call_result == CNA_RESULT_SUCCESS || call_result == CNA_RESULT_BUFFER_TOO_SMALL) {
         jboolean out_is_visible_element = (jboolean)out_is_visible_value;
         (*environment)->SetBooleanArrayRegion(
             environment, out_is_visible, 0, 1, &out_is_visible_element);
     }
-    return (jint)result;
+    return (jint)call_result;
 }
 
 JNIEXPORT jint JNICALL
@@ -2202,13 +2202,13 @@ Java_org_openeggbert_cna_internal_generated_NativeGamerServicesRoutes_guideGetNo
     (void)environment;
     (void)declaring_class;
     CNA_NotificationPosition out_position_value = 0;
-    CNA_Result result = cna.guide_get_notification_position(&out_position_value);
-    if (result == CNA_RESULT_SUCCESS || result == CNA_RESULT_BUFFER_TOO_SMALL) {
+    CNA_Result call_result = cna.guide_get_notification_position(&out_position_value);
+    if (call_result == CNA_RESULT_SUCCESS || call_result == CNA_RESULT_BUFFER_TOO_SMALL) {
         jint out_position_element = (jint)out_position_value;
         (*environment)->SetIntArrayRegion(
             environment, out_position, 0, 1, &out_position_element);
     }
-    return (jint)result;
+    return (jint)call_result;
 }
 
 JNIEXPORT jint JNICALL
@@ -2218,13 +2218,13 @@ Java_org_openeggbert_cna_internal_generated_NativeGamerServicesRoutes_guideGetPe
     (void)environment;
     (void)declaring_class;
     uint64_t out_bytes_value = 0;
-    CNA_Result result = cna.guide_get_pending_keyboard_input_description_size_ext(&out_bytes_value);
-    if (result == CNA_RESULT_SUCCESS || result == CNA_RESULT_BUFFER_TOO_SMALL) {
+    CNA_Result call_result = cna.guide_get_pending_keyboard_input_description_size_ext(&out_bytes_value);
+    if (call_result == CNA_RESULT_SUCCESS || call_result == CNA_RESULT_BUFFER_TOO_SMALL) {
         jlong out_bytes_element = (jlong)out_bytes_value;
         (*environment)->SetLongArrayRegion(
             environment, out_bytes, 0, 1, &out_bytes_element);
     }
-    return (jint)result;
+    return (jint)call_result;
 }
 
 JNIEXPORT jint JNICALL
@@ -2234,13 +2234,13 @@ Java_org_openeggbert_cna_internal_generated_NativeGamerServicesRoutes_guideGetPe
     (void)environment;
     (void)declaring_class;
     uint64_t out_bytes_value = 0;
-    CNA_Result result = cna.guide_get_pending_keyboard_input_display_text_size_ext(&out_bytes_value);
-    if (result == CNA_RESULT_SUCCESS || result == CNA_RESULT_BUFFER_TOO_SMALL) {
+    CNA_Result call_result = cna.guide_get_pending_keyboard_input_display_text_size_ext(&out_bytes_value);
+    if (call_result == CNA_RESULT_SUCCESS || call_result == CNA_RESULT_BUFFER_TOO_SMALL) {
         jlong out_bytes_element = (jlong)out_bytes_value;
         (*environment)->SetLongArrayRegion(
             environment, out_bytes, 0, 1, &out_bytes_element);
     }
-    return (jint)result;
+    return (jint)call_result;
 }
 
 JNIEXPORT jint JNICALL
@@ -2250,13 +2250,13 @@ Java_org_openeggbert_cna_internal_generated_NativeGamerServicesRoutes_guideGetPe
     (void)environment;
     (void)declaring_class;
     uint64_t out_bytes_value = 0;
-    CNA_Result result = cna.guide_get_pending_keyboard_input_title_size_ext(&out_bytes_value);
-    if (result == CNA_RESULT_SUCCESS || result == CNA_RESULT_BUFFER_TOO_SMALL) {
+    CNA_Result call_result = cna.guide_get_pending_keyboard_input_title_size_ext(&out_bytes_value);
+    if (call_result == CNA_RESULT_SUCCESS || call_result == CNA_RESULT_BUFFER_TOO_SMALL) {
         jlong out_bytes_element = (jlong)out_bytes_value;
         (*environment)->SetLongArrayRegion(
             environment, out_bytes, 0, 1, &out_bytes_element);
     }
-    return (jint)result;
+    return (jint)call_result;
 }
 
 JNIEXPORT jint JNICALL
@@ -2266,13 +2266,13 @@ Java_org_openeggbert_cna_internal_generated_NativeGamerServicesRoutes_guideGetPe
     (void)environment;
     (void)declaring_class;
     int32_t out_focus_button_value = 0;
-    CNA_Result result = cna.guide_get_pending_message_box_focus_button_ext(&out_focus_button_value);
-    if (result == CNA_RESULT_SUCCESS || result == CNA_RESULT_BUFFER_TOO_SMALL) {
+    CNA_Result call_result = cna.guide_get_pending_message_box_focus_button_ext(&out_focus_button_value);
+    if (call_result == CNA_RESULT_SUCCESS || call_result == CNA_RESULT_BUFFER_TOO_SMALL) {
         jint out_focus_button_element = (jint)out_focus_button_value;
         (*environment)->SetIntArrayRegion(
             environment, out_focus_button, 0, 1, &out_focus_button_element);
     }
-    return (jint)result;
+    return (jint)call_result;
 }
 
 JNIEXPORT jint JNICALL
@@ -2282,13 +2282,13 @@ Java_org_openeggbert_cna_internal_generated_NativeGamerServicesRoutes_guideGetSi
     (void)environment;
     (void)declaring_class;
     CNA_Bool out_simulate_value = 0;
-    CNA_Result result = cna.guide_get_simulate_trial_mode(&out_simulate_value);
-    if (result == CNA_RESULT_SUCCESS || result == CNA_RESULT_BUFFER_TOO_SMALL) {
+    CNA_Result call_result = cna.guide_get_simulate_trial_mode(&out_simulate_value);
+    if (call_result == CNA_RESULT_SUCCESS || call_result == CNA_RESULT_BUFFER_TOO_SMALL) {
         jboolean out_simulate_element = (jboolean)out_simulate_value;
         (*environment)->SetBooleanArrayRegion(
             environment, out_simulate, 0, 1, &out_simulate_element);
     }
-    return (jint)result;
+    return (jint)call_result;
 }
 
 JNIEXPORT jint JNICALL
@@ -2297,8 +2297,8 @@ Java_org_openeggbert_cna_internal_generated_NativeGamerServicesRoutes_guideRende
 {
     (void)environment;
     (void)declaring_class;
-    CNA_Result result = cna.guide_render_pending_keyboard_input_ext((CNA_Handle)device, (CNA_Handle)sprite_batch, (CNA_Handle)font, (CNA_Handle)white_pixel);
-    return (jint)result;
+    CNA_Result call_result = cna.guide_render_pending_keyboard_input_ext((CNA_Handle)device, (CNA_Handle)sprite_batch, (CNA_Handle)font, (CNA_Handle)white_pixel);
+    return (jint)call_result;
 }
 
 JNIEXPORT jint JNICALL
@@ -2307,8 +2307,8 @@ Java_org_openeggbert_cna_internal_generated_NativeGamerServicesRoutes_guideRende
 {
     (void)environment;
     (void)declaring_class;
-    CNA_Result result = cna.guide_render_pending_message_box_ext((CNA_Handle)device, (CNA_Handle)sprite_batch, (CNA_Handle)font, (CNA_Handle)white_pixel);
-    return (jint)result;
+    CNA_Result call_result = cna.guide_render_pending_message_box_ext((CNA_Handle)device, (CNA_Handle)sprite_batch, (CNA_Handle)font, (CNA_Handle)white_pixel);
+    return (jint)call_result;
 }
 
 JNIEXPORT jint JNICALL
@@ -2317,8 +2317,8 @@ Java_org_openeggbert_cna_internal_generated_NativeGamerServicesRoutes_guideReset
 {
     (void)environment;
     (void)declaring_class;
-    CNA_Result result = cna.guide_reset_pending_keyboard_input_ext();
-    return (jint)result;
+    CNA_Result call_result = cna.guide_reset_pending_keyboard_input_ext();
+    return (jint)call_result;
 }
 
 JNIEXPORT jint JNICALL
@@ -2327,8 +2327,8 @@ Java_org_openeggbert_cna_internal_generated_NativeGamerServicesRoutes_guideReset
 {
     (void)environment;
     (void)declaring_class;
-    CNA_Result result = cna.guide_reset_pending_message_box_ext();
-    return (jint)result;
+    CNA_Result call_result = cna.guide_reset_pending_message_box_ext();
+    return (jint)call_result;
 }
 
 JNIEXPORT jint JNICALL
@@ -2337,8 +2337,8 @@ Java_org_openeggbert_cna_internal_generated_NativeGamerServicesRoutes_guideSetIs
 {
     (void)environment;
     (void)declaring_class;
-    CNA_Result result = cna.guide_set_is_screen_saver_enabled((CNA_Bool)is_enabled);
-    return (jint)result;
+    CNA_Result call_result = cna.guide_set_is_screen_saver_enabled((CNA_Bool)is_enabled);
+    return (jint)call_result;
 }
 
 JNIEXPORT jint JNICALL
@@ -2347,8 +2347,8 @@ Java_org_openeggbert_cna_internal_generated_NativeGamerServicesRoutes_guideSetIs
 {
     (void)environment;
     (void)declaring_class;
-    CNA_Result result = cna.guide_set_is_trial_mode((CNA_Bool)is_trial_mode);
-    return (jint)result;
+    CNA_Result call_result = cna.guide_set_is_trial_mode((CNA_Bool)is_trial_mode);
+    return (jint)call_result;
 }
 
 JNIEXPORT jint JNICALL
@@ -2357,8 +2357,8 @@ Java_org_openeggbert_cna_internal_generated_NativeGamerServicesRoutes_guideSetIs
 {
     (void)environment;
     (void)declaring_class;
-    CNA_Result result = cna.guide_set_is_visible((CNA_Bool)is_visible);
-    return (jint)result;
+    CNA_Result call_result = cna.guide_set_is_visible((CNA_Bool)is_visible);
+    return (jint)call_result;
 }
 
 JNIEXPORT jint JNICALL
@@ -2367,8 +2367,8 @@ Java_org_openeggbert_cna_internal_generated_NativeGamerServicesRoutes_guideSetNo
 {
     (void)environment;
     (void)declaring_class;
-    CNA_Result result = cna.guide_set_notification_position((CNA_NotificationPosition)position);
-    return (jint)result;
+    CNA_Result call_result = cna.guide_set_notification_position((CNA_NotificationPosition)position);
+    return (jint)call_result;
 }
 
 JNIEXPORT jint JNICALL
@@ -2377,8 +2377,8 @@ Java_org_openeggbert_cna_internal_generated_NativeGamerServicesRoutes_guideSetSi
 {
     (void)environment;
     (void)declaring_class;
-    CNA_Result result = cna.guide_set_simulate_trial_mode((CNA_Bool)simulate);
-    return (jint)result;
+    CNA_Result call_result = cna.guide_set_simulate_trial_mode((CNA_Bool)simulate);
+    return (jint)call_result;
 }
 
 JNIEXPORT jint JNICALL
@@ -2387,8 +2387,8 @@ Java_org_openeggbert_cna_internal_generated_NativeGamerServicesRoutes_guideShowA
 {
     (void)environment;
     (void)declaring_class;
-    CNA_Result result = cna.guide_show_achievements_ext((CNA_PlayerIndex)player);
-    return (jint)result;
+    CNA_Result call_result = cna.guide_show_achievements_ext((CNA_PlayerIndex)player);
+    return (jint)call_result;
 }
 
 JNIEXPORT jint JNICALL
@@ -2418,12 +2418,12 @@ Java_org_openeggbert_cna_internal_generated_NativeGamerServicesRoutes_guideShowC
     for (jsize index = 0; index < recipients_size; ++index) {
         recipients_values[index] = (CNA_GamerHandle)recipients_elements[index];
     }
-    CNA_Result result = cna.guide_show_compose_message((CNA_PlayerIndex)player, text_view, recipients_values, (uint64_t)recipients_size);
+    CNA_Result call_result = cna.guide_show_compose_message((CNA_PlayerIndex)player, text_view, recipients_values, (uint64_t)recipients_size);
     (*environment)->ReleaseByteArrayElements(environment, text, text_bytes, JNI_ABORT);
     free(recipients_values);
     (*environment)->ReleaseLongArrayElements(
         environment, recipients, recipients_elements, JNI_ABORT);
-    return (jint)result;
+    return (jint)call_result;
 }
 
 JNIEXPORT jint JNICALL
@@ -2432,8 +2432,8 @@ Java_org_openeggbert_cna_internal_generated_NativeGamerServicesRoutes_guideShowF
 {
     (void)environment;
     (void)declaring_class;
-    CNA_Result result = cna.guide_show_friend_request((CNA_PlayerIndex)player, (CNA_GamerHandle)gamer);
-    return (jint)result;
+    CNA_Result call_result = cna.guide_show_friend_request((CNA_PlayerIndex)player, (CNA_GamerHandle)gamer);
+    return (jint)call_result;
 }
 
 JNIEXPORT jint JNICALL
@@ -2442,8 +2442,8 @@ Java_org_openeggbert_cna_internal_generated_NativeGamerServicesRoutes_guideShowF
 {
     (void)environment;
     (void)declaring_class;
-    CNA_Result result = cna.guide_show_friends((CNA_PlayerIndex)player);
-    return (jint)result;
+    CNA_Result call_result = cna.guide_show_friends((CNA_PlayerIndex)player);
+    return (jint)call_result;
 }
 
 JNIEXPORT jint JNICALL
@@ -2467,11 +2467,11 @@ Java_org_openeggbert_cna_internal_generated_NativeGamerServicesRoutes_guideShowG
     for (jsize index = 0; index < recipients_size; ++index) {
         recipients_values[index] = (CNA_GamerHandle)recipients_elements[index];
     }
-    CNA_Result result = cna.guide_show_game_invite((CNA_PlayerIndex)player, recipients_values, (uint64_t)recipients_size);
+    CNA_Result call_result = cna.guide_show_game_invite((CNA_PlayerIndex)player, recipients_values, (uint64_t)recipients_size);
     free(recipients_values);
     (*environment)->ReleaseLongArrayElements(
         environment, recipients, recipients_elements, JNI_ABORT);
-    return (jint)result;
+    return (jint)call_result;
 }
 
 JNIEXPORT jint JNICALL
@@ -2486,9 +2486,9 @@ Java_org_openeggbert_cna_internal_generated_NativeGamerServicesRoutes_guideShowG
         return (jint)CNA_RESULT_OUT_OF_MEMORY;
     }
     CNA_StringView session_id_view = {(const char*)session_id_bytes, (uint64_t)session_id_size};
-    CNA_Result result = cna.guide_show_game_invite_for_session(session_id_view);
+    CNA_Result call_result = cna.guide_show_game_invite_for_session(session_id_view);
     (*environment)->ReleaseByteArrayElements(environment, session_id, session_id_bytes, JNI_ABORT);
-    return (jint)result;
+    return (jint)call_result;
 }
 
 JNIEXPORT jint JNICALL
@@ -2497,8 +2497,8 @@ Java_org_openeggbert_cna_internal_generated_NativeGamerServicesRoutes_guideShowG
 {
     (void)environment;
     (void)declaring_class;
-    CNA_Result result = cna.guide_show_gamer_card((CNA_PlayerIndex)player, (CNA_GamerHandle)gamer);
-    return (jint)result;
+    CNA_Result call_result = cna.guide_show_gamer_card((CNA_PlayerIndex)player, (CNA_GamerHandle)gamer);
+    return (jint)call_result;
 }
 
 JNIEXPORT jint JNICALL
@@ -2507,8 +2507,8 @@ Java_org_openeggbert_cna_internal_generated_NativeGamerServicesRoutes_guideShowM
 {
     (void)environment;
     (void)declaring_class;
-    CNA_Result result = cna.guide_show_marketplace((CNA_PlayerIndex)player);
-    return (jint)result;
+    CNA_Result call_result = cna.guide_show_marketplace((CNA_PlayerIndex)player);
+    return (jint)call_result;
 }
 
 JNIEXPORT jint JNICALL
@@ -2517,8 +2517,8 @@ Java_org_openeggbert_cna_internal_generated_NativeGamerServicesRoutes_guideShowM
 {
     (void)environment;
     (void)declaring_class;
-    CNA_Result result = cna.guide_show_messages((CNA_PlayerIndex)player);
-    return (jint)result;
+    CNA_Result call_result = cna.guide_show_messages((CNA_PlayerIndex)player);
+    return (jint)call_result;
 }
 
 JNIEXPORT jint JNICALL
@@ -2527,8 +2527,8 @@ Java_org_openeggbert_cna_internal_generated_NativeGamerServicesRoutes_guideShowP
 {
     (void)environment;
     (void)declaring_class;
-    CNA_Result result = cna.guide_show_party((CNA_PlayerIndex)player);
-    return (jint)result;
+    CNA_Result call_result = cna.guide_show_party((CNA_PlayerIndex)player);
+    return (jint)call_result;
 }
 
 JNIEXPORT jint JNICALL
@@ -2537,8 +2537,8 @@ Java_org_openeggbert_cna_internal_generated_NativeGamerServicesRoutes_guideShowP
 {
     (void)environment;
     (void)declaring_class;
-    CNA_Result result = cna.guide_show_party_sessions((CNA_PlayerIndex)player);
-    return (jint)result;
+    CNA_Result call_result = cna.guide_show_party_sessions((CNA_PlayerIndex)player);
+    return (jint)call_result;
 }
 
 JNIEXPORT jint JNICALL
@@ -2547,8 +2547,8 @@ Java_org_openeggbert_cna_internal_generated_NativeGamerServicesRoutes_guideShowP
 {
     (void)environment;
     (void)declaring_class;
-    CNA_Result result = cna.guide_show_player_review((CNA_PlayerIndex)player, (CNA_GamerHandle)gamer);
-    return (jint)result;
+    CNA_Result call_result = cna.guide_show_player_review((CNA_PlayerIndex)player, (CNA_GamerHandle)gamer);
+    return (jint)call_result;
 }
 
 JNIEXPORT jint JNICALL
@@ -2557,8 +2557,8 @@ Java_org_openeggbert_cna_internal_generated_NativeGamerServicesRoutes_guideShowP
 {
     (void)environment;
     (void)declaring_class;
-    CNA_Result result = cna.guide_show_players((CNA_PlayerIndex)player);
-    return (jint)result;
+    CNA_Result call_result = cna.guide_show_players((CNA_PlayerIndex)player);
+    return (jint)call_result;
 }
 
 JNIEXPORT jint JNICALL
@@ -2567,8 +2567,8 @@ Java_org_openeggbert_cna_internal_generated_NativeGamerServicesRoutes_guideShowS
 {
     (void)environment;
     (void)declaring_class;
-    CNA_Result result = cna.guide_show_sign_in((int32_t)pane_count, (CNA_Bool)online_only);
-    return (jint)result;
+    CNA_Result call_result = cna.guide_show_sign_in((int32_t)pane_count, (CNA_Bool)online_only);
+    return (jint)call_result;
 }
 
 JNIEXPORT jint JNICALL
@@ -2577,8 +2577,8 @@ Java_org_openeggbert_cna_internal_generated_NativeGamerServicesRoutes_guideSimul
 {
     (void)environment;
     (void)declaring_class;
-    CNA_Result result = cna.guide_simulate_keyboard_input_cancel_ext();
-    return (jint)result;
+    CNA_Result call_result = cna.guide_simulate_keyboard_input_cancel_ext();
+    return (jint)call_result;
 }
 
 JNIEXPORT jint JNICALL
@@ -2587,8 +2587,8 @@ Java_org_openeggbert_cna_internal_generated_NativeGamerServicesRoutes_guideSimul
 {
     (void)environment;
     (void)declaring_class;
-    CNA_Result result = cna.guide_simulate_message_box_click_ext((int32_t)button_index);
-    return (jint)result;
+    CNA_Result call_result = cna.guide_simulate_message_box_click_ext((int32_t)button_index);
+    return (jint)call_result;
 }
 
 JNIEXPORT jint JNICALL
@@ -2598,13 +2598,13 @@ Java_org_openeggbert_cna_internal_generated_NativeGamerServicesRoutes_guideWasKe
     (void)environment;
     (void)declaring_class;
     CNA_Bool out_was_canceled_value = 0;
-    CNA_Result result = cna.guide_was_keyboard_input_canceled_ext(&out_was_canceled_value);
-    if (result == CNA_RESULT_SUCCESS || result == CNA_RESULT_BUFFER_TOO_SMALL) {
+    CNA_Result call_result = cna.guide_was_keyboard_input_canceled_ext(&out_was_canceled_value);
+    if (call_result == CNA_RESULT_SUCCESS || call_result == CNA_RESULT_BUFFER_TOO_SMALL) {
         jboolean out_was_canceled_element = (jboolean)out_was_canceled_value;
         (*environment)->SetBooleanArrayRegion(
             environment, out_was_canceled, 0, 1, &out_was_canceled_element);
     }
-    return (jint)result;
+    return (jint)call_result;
 }
 
 JNIEXPORT jint JNICALL
@@ -2614,13 +2614,13 @@ Java_org_openeggbert_cna_internal_generated_NativeGamerServicesRoutes_leaderboar
     (void)environment;
     (void)declaring_class;
     CNA_LeaderboardEntryHandle out_entry_value = 0;
-    CNA_Result result = cna.leaderboard_entry_create_ext((CNA_GamerHandle)gamer, (int64_t)rating, (int32_t)ranking, &out_entry_value);
-    if (result == CNA_RESULT_SUCCESS || result == CNA_RESULT_BUFFER_TOO_SMALL) {
+    CNA_Result call_result = cna.leaderboard_entry_create_ext((CNA_GamerHandle)gamer, (int64_t)rating, (int32_t)ranking, &out_entry_value);
+    if (call_result == CNA_RESULT_SUCCESS || call_result == CNA_RESULT_BUFFER_TOO_SMALL) {
         jlong out_entry_element = (jlong)out_entry_value;
         (*environment)->SetLongArrayRegion(
             environment, out_entry, 0, 1, &out_entry_element);
     }
-    return (jint)result;
+    return (jint)call_result;
 }
 
 JNIEXPORT jint JNICALL
@@ -2629,8 +2629,8 @@ Java_org_openeggbert_cna_internal_generated_NativeGamerServicesRoutes_leaderboar
 {
     (void)environment;
     (void)declaring_class;
-    CNA_Result result = cna.leaderboard_entry_destroy((CNA_LeaderboardEntryHandle)entry);
-    return (jint)result;
+    CNA_Result call_result = cna.leaderboard_entry_destroy((CNA_LeaderboardEntryHandle)entry);
+    return (jint)call_result;
 }
 
 JNIEXPORT jint JNICALL
@@ -2640,13 +2640,13 @@ Java_org_openeggbert_cna_internal_generated_NativeGamerServicesRoutes_leaderboar
     (void)environment;
     (void)declaring_class;
     CNA_PropertyDictionaryHandle out_columns_value = 0;
-    CNA_Result result = cna.leaderboard_entry_get_columns((CNA_LeaderboardEntryHandle)entry, &out_columns_value);
-    if (result == CNA_RESULT_SUCCESS || result == CNA_RESULT_BUFFER_TOO_SMALL) {
+    CNA_Result call_result = cna.leaderboard_entry_get_columns((CNA_LeaderboardEntryHandle)entry, &out_columns_value);
+    if (call_result == CNA_RESULT_SUCCESS || call_result == CNA_RESULT_BUFFER_TOO_SMALL) {
         jlong out_columns_element = (jlong)out_columns_value;
         (*environment)->SetLongArrayRegion(
             environment, out_columns, 0, 1, &out_columns_element);
     }
-    return (jint)result;
+    return (jint)call_result;
 }
 
 JNIEXPORT jint JNICALL
@@ -2657,8 +2657,8 @@ Java_org_openeggbert_cna_internal_generated_NativeGamerServicesRoutes_leaderboar
     (void)declaring_class;
     CNA_Bool out_has_gamer_value = 0;
     CNA_GamerHandle out_gamer_value = 0;
-    CNA_Result result = cna.leaderboard_entry_get_gamer((CNA_LeaderboardEntryHandle)entry, &out_has_gamer_value, &out_gamer_value);
-    if (result == CNA_RESULT_SUCCESS || result == CNA_RESULT_BUFFER_TOO_SMALL) {
+    CNA_Result call_result = cna.leaderboard_entry_get_gamer((CNA_LeaderboardEntryHandle)entry, &out_has_gamer_value, &out_gamer_value);
+    if (call_result == CNA_RESULT_SUCCESS || call_result == CNA_RESULT_BUFFER_TOO_SMALL) {
         jboolean out_has_gamer_element = (jboolean)out_has_gamer_value;
         (*environment)->SetBooleanArrayRegion(
             environment, out_has_gamer, 0, 1, &out_has_gamer_element);
@@ -2666,7 +2666,7 @@ Java_org_openeggbert_cna_internal_generated_NativeGamerServicesRoutes_leaderboar
         (*environment)->SetLongArrayRegion(
             environment, out_gamer, 0, 1, &out_gamer_element);
     }
-    return (jint)result;
+    return (jint)call_result;
 }
 
 JNIEXPORT jint JNICALL
@@ -2679,8 +2679,8 @@ Java_org_openeggbert_cna_internal_generated_NativeGamerServicesRoutes_leaderboar
     memset(&out_info_value, 0, sizeof out_info_value);
     out_info_value.struct_size = (uint32_t)(sizeof out_info_value);
     out_info_value.struct_version = UINT32_C(1);
-    CNA_Result result = cna.leaderboard_entry_get_info((CNA_LeaderboardEntryHandle)entry, &out_info_value);
-    if (result == CNA_RESULT_SUCCESS || result == CNA_RESULT_BUFFER_TOO_SMALL) {
+    CNA_Result call_result = cna.leaderboard_entry_get_info((CNA_LeaderboardEntryHandle)entry, &out_info_value);
+    if (call_result == CNA_RESULT_SUCCESS || call_result == CNA_RESULT_BUFFER_TOO_SMALL) {
         jbyte out_infoBytes_values[] = {
             (jbyte)out_info_value.reserved[0],
             (jbyte)out_info_value.reserved[1],
@@ -2698,7 +2698,7 @@ Java_org_openeggbert_cna_internal_generated_NativeGamerServicesRoutes_leaderboar
             (jsize)(sizeof out_infoIntegral_values / sizeof out_infoIntegral_values[0]),
             out_infoIntegral_values);
     }
-    return (jint)result;
+    return (jint)call_result;
 }
 
 JNIEXPORT jint JNICALL
@@ -2707,8 +2707,8 @@ Java_org_openeggbert_cna_internal_generated_NativeGamerServicesRoutes_leaderboar
 {
     (void)environment;
     (void)declaring_class;
-    CNA_Result result = cna.leaderboard_entry_set_rating((CNA_LeaderboardEntryHandle)entry, (int64_t)rating);
-    return (jint)result;
+    CNA_Result call_result = cna.leaderboard_entry_set_rating((CNA_LeaderboardEntryHandle)entry, (int64_t)rating);
+    return (jint)call_result;
 }
 
 JNIEXPORT jint JNICALL
@@ -2717,8 +2717,8 @@ Java_org_openeggbert_cna_internal_generated_NativeGamerServicesRoutes_leaderboar
 {
     (void)environment;
     (void)declaring_class;
-    CNA_Result result = cna.leaderboard_reader_destroy((CNA_LeaderboardReaderHandle)reader);
-    return (jint)result;
+    CNA_Result call_result = cna.leaderboard_reader_destroy((CNA_LeaderboardReaderHandle)reader);
+    return (jint)call_result;
 }
 
 JNIEXPORT jint JNICALL
@@ -2728,13 +2728,13 @@ Java_org_openeggbert_cna_internal_generated_NativeGamerServicesRoutes_leaderboar
     (void)environment;
     (void)declaring_class;
     CNA_LeaderboardEntryHandle out_entry_value = 0;
-    CNA_Result result = cna.leaderboard_reader_get_entry_at((CNA_LeaderboardReaderHandle)reader, (int32_t)index, &out_entry_value);
-    if (result == CNA_RESULT_SUCCESS || result == CNA_RESULT_BUFFER_TOO_SMALL) {
+    CNA_Result call_result = cna.leaderboard_reader_get_entry_at((CNA_LeaderboardReaderHandle)reader, (int32_t)index, &out_entry_value);
+    if (call_result == CNA_RESULT_SUCCESS || call_result == CNA_RESULT_BUFFER_TOO_SMALL) {
         jlong out_entry_element = (jlong)out_entry_value;
         (*environment)->SetLongArrayRegion(
             environment, out_entry, 0, 1, &out_entry_element);
     }
-    return (jint)result;
+    return (jint)call_result;
 }
 
 JNIEXPORT jint JNICALL
@@ -2747,8 +2747,8 @@ Java_org_openeggbert_cna_internal_generated_NativeGamerServicesRoutes_leaderboar
     memset(&out_identity_value, 0, sizeof out_identity_value);
     out_identity_value.struct_size = (uint32_t)(sizeof out_identity_value);
     out_identity_value.struct_version = UINT32_C(1);
-    CNA_Result result = cna.leaderboard_reader_get_identity((CNA_LeaderboardReaderHandle)reader, &out_identity_value);
-    if (result == CNA_RESULT_SUCCESS || result == CNA_RESULT_BUFFER_TOO_SMALL) {
+    CNA_Result call_result = cna.leaderboard_reader_get_identity((CNA_LeaderboardReaderHandle)reader, &out_identity_value);
+    if (call_result == CNA_RESULT_SUCCESS || call_result == CNA_RESULT_BUFFER_TOO_SMALL) {
         jbyte out_identityBytes_values[] = {
             (jbyte)out_identity_value.key[0],
             (jbyte)out_identity_value.key[1],
@@ -2825,7 +2825,7 @@ Java_org_openeggbert_cna_internal_generated_NativeGamerServicesRoutes_leaderboar
             (jsize)(sizeof out_identityIntegral_values / sizeof out_identityIntegral_values[0]),
             out_identityIntegral_values);
     }
-    return (jint)result;
+    return (jint)call_result;
 }
 
 JNIEXPORT jint JNICALL
@@ -2838,8 +2838,8 @@ Java_org_openeggbert_cna_internal_generated_NativeGamerServicesRoutes_leaderboar
     memset(&out_info_value, 0, sizeof out_info_value);
     out_info_value.struct_size = (uint32_t)(sizeof out_info_value);
     out_info_value.struct_version = UINT32_C(1);
-    CNA_Result result = cna.leaderboard_reader_get_info((CNA_LeaderboardReaderHandle)reader, &out_info_value);
-    if (result == CNA_RESULT_SUCCESS || result == CNA_RESULT_BUFFER_TOO_SMALL) {
+    CNA_Result call_result = cna.leaderboard_reader_get_info((CNA_LeaderboardReaderHandle)reader, &out_info_value);
+    if (call_result == CNA_RESULT_SUCCESS || call_result == CNA_RESULT_BUFFER_TOO_SMALL) {
         jlong out_infoIntegral_values[] = {
             (jlong)out_info_value.page_start,
             (jlong)out_info_value.total_leaderboard_size,
@@ -2853,7 +2853,7 @@ Java_org_openeggbert_cna_internal_generated_NativeGamerServicesRoutes_leaderboar
             (jsize)(sizeof out_infoIntegral_values / sizeof out_infoIntegral_values[0]),
             out_infoIntegral_values);
     }
-    return (jint)result;
+    return (jint)call_result;
 }
 
 JNIEXPORT jint JNICALL
@@ -2862,8 +2862,8 @@ Java_org_openeggbert_cna_internal_generated_NativeGamerServicesRoutes_leaderboar
 {
     (void)environment;
     (void)declaring_class;
-    CNA_Result result = cna.leaderboard_reader_page_down((CNA_LeaderboardReaderHandle)reader);
-    return (jint)result;
+    CNA_Result call_result = cna.leaderboard_reader_page_down((CNA_LeaderboardReaderHandle)reader);
+    return (jint)call_result;
 }
 
 JNIEXPORT jint JNICALL
@@ -2872,8 +2872,8 @@ Java_org_openeggbert_cna_internal_generated_NativeGamerServicesRoutes_leaderboar
 {
     (void)environment;
     (void)declaring_class;
-    CNA_Result result = cna.leaderboard_reader_page_up((CNA_LeaderboardReaderHandle)reader);
-    return (jint)result;
+    CNA_Result call_result = cna.leaderboard_reader_page_up((CNA_LeaderboardReaderHandle)reader);
+    return (jint)call_result;
 }
 
 JNIEXPORT jint JNICALL
@@ -2960,13 +2960,13 @@ Java_org_openeggbert_cna_internal_generated_NativeGamerServicesRoutes_leaderboar
         identity_value.game_mode = (int32_t)identityIntegral_values[0];
     }
     CNA_LeaderboardReaderHandle out_reader_value = 0;
-    CNA_Result result = cna.leaderboard_reader_read(&identity_value, (int32_t)page_start, (int32_t)page_size, &out_reader_value);
-    if (result == CNA_RESULT_SUCCESS || result == CNA_RESULT_BUFFER_TOO_SMALL) {
+    CNA_Result call_result = cna.leaderboard_reader_read(&identity_value, (int32_t)page_start, (int32_t)page_size, &out_reader_value);
+    if (call_result == CNA_RESULT_SUCCESS || call_result == CNA_RESULT_BUFFER_TOO_SMALL) {
         jlong out_reader_element = (jlong)out_reader_value;
         (*environment)->SetLongArrayRegion(
             environment, out_reader, 0, 1, &out_reader_element);
     }
-    return (jint)result;
+    return (jint)call_result;
 }
 
 JNIEXPORT jint JNICALL
@@ -3068,16 +3068,16 @@ Java_org_openeggbert_cna_internal_generated_NativeGamerServicesRoutes_leaderboar
         gamers_values[index] = (CNA_GamerHandle)gamers_elements[index];
     }
     CNA_LeaderboardReaderHandle out_reader_value = 0;
-    CNA_Result result = cna.leaderboard_reader_read_from_gamers(&identity_value, gamers_values, (uint64_t)gamers_size, (CNA_GamerHandle)pivot_gamer, (int32_t)page_size, &out_reader_value);
+    CNA_Result call_result = cna.leaderboard_reader_read_from_gamers(&identity_value, gamers_values, (uint64_t)gamers_size, (CNA_GamerHandle)pivot_gamer, (int32_t)page_size, &out_reader_value);
     free(gamers_values);
     (*environment)->ReleaseLongArrayElements(
         environment, gamers, gamers_elements, JNI_ABORT);
-    if (result == CNA_RESULT_SUCCESS || result == CNA_RESULT_BUFFER_TOO_SMALL) {
+    if (call_result == CNA_RESULT_SUCCESS || call_result == CNA_RESULT_BUFFER_TOO_SMALL) {
         jlong out_reader_element = (jlong)out_reader_value;
         (*environment)->SetLongArrayRegion(
             environment, out_reader, 0, 1, &out_reader_element);
     }
-    return (jint)result;
+    return (jint)call_result;
 }
 
 JNIEXPORT jint JNICALL
@@ -3164,13 +3164,13 @@ Java_org_openeggbert_cna_internal_generated_NativeGamerServicesRoutes_leaderboar
         identity_value.game_mode = (int32_t)identityIntegral_values[0];
     }
     CNA_LeaderboardReaderHandle out_reader_value = 0;
-    CNA_Result result = cna.leaderboard_reader_read_from_pivot(&identity_value, (CNA_GamerHandle)pivot_gamer, (int32_t)page_size, &out_reader_value);
-    if (result == CNA_RESULT_SUCCESS || result == CNA_RESULT_BUFFER_TOO_SMALL) {
+    CNA_Result call_result = cna.leaderboard_reader_read_from_pivot(&identity_value, (CNA_GamerHandle)pivot_gamer, (int32_t)page_size, &out_reader_value);
+    if (call_result == CNA_RESULT_SUCCESS || call_result == CNA_RESULT_BUFFER_TOO_SMALL) {
         jlong out_reader_element = (jlong)out_reader_value;
         (*environment)->SetLongArrayRegion(
             environment, out_reader, 0, 1, &out_reader_element);
     }
-    return (jint)result;
+    return (jint)call_result;
 }
 
 JNIEXPORT jint JNICALL
@@ -3179,8 +3179,8 @@ Java_org_openeggbert_cna_internal_generated_NativeGamerServicesRoutes_propertyDi
 {
     (void)environment;
     (void)declaring_class;
-    CNA_Result result = cna.property_dictionary_clear((CNA_PropertyDictionaryHandle)dictionary);
-    return (jint)result;
+    CNA_Result call_result = cna.property_dictionary_clear((CNA_PropertyDictionaryHandle)dictionary);
+    return (jint)call_result;
 }
 
 JNIEXPORT jint JNICALL
@@ -3196,14 +3196,14 @@ Java_org_openeggbert_cna_internal_generated_NativeGamerServicesRoutes_propertyDi
     }
     CNA_StringView key_view = {(const char*)key_bytes, (uint64_t)key_size};
     CNA_Bool out_contains_value = 0;
-    CNA_Result result = cna.property_dictionary_contains_key((CNA_PropertyDictionaryHandle)dictionary, key_view, &out_contains_value);
+    CNA_Result call_result = cna.property_dictionary_contains_key((CNA_PropertyDictionaryHandle)dictionary, key_view, &out_contains_value);
     (*environment)->ReleaseByteArrayElements(environment, key, key_bytes, JNI_ABORT);
-    if (result == CNA_RESULT_SUCCESS || result == CNA_RESULT_BUFFER_TOO_SMALL) {
+    if (call_result == CNA_RESULT_SUCCESS || call_result == CNA_RESULT_BUFFER_TOO_SMALL) {
         jboolean out_contains_element = (jboolean)out_contains_value;
         (*environment)->SetBooleanArrayRegion(
             environment, out_contains, 0, 1, &out_contains_element);
     }
-    return (jint)result;
+    return (jint)call_result;
 }
 
 JNIEXPORT jint JNICALL
@@ -3218,14 +3218,14 @@ Java_org_openeggbert_cna_internal_generated_NativeGamerServicesRoutes_propertyDi
         return (jint)CNA_RESULT_OUT_OF_MEMORY;
     }
     uint64_t destination_written = 0;
-    CNA_Result result = cna.property_dictionary_copy_key_at((CNA_PropertyDictionaryHandle)dictionary, (int32_t)index, (char*)destination_bytes, (uint64_t)destination_size, &destination_written);
+    CNA_Result call_result = cna.property_dictionary_copy_key_at((CNA_PropertyDictionaryHandle)dictionary, (int32_t)index, (char*)destination_bytes, (uint64_t)destination_size, &destination_written);
     (*environment)->ReleaseByteArrayElements(environment, destination, destination_bytes, 0);
-    if (result == CNA_RESULT_SUCCESS || result == CNA_RESULT_BUFFER_TOO_SMALL) {
+    if (call_result == CNA_RESULT_SUCCESS || call_result == CNA_RESULT_BUFFER_TOO_SMALL) {
         jlong destination_element = (jlong)destination_written;
         (*environment)->SetLongArrayRegion(
             environment, out_bytes, 0, 1, &destination_element);
     }
-    return (jint)result;
+    return (jint)call_result;
 }
 
 JNIEXPORT jint JNICALL
@@ -3246,15 +3246,15 @@ Java_org_openeggbert_cna_internal_generated_NativeGamerServicesRoutes_propertyDi
         return (jint)CNA_RESULT_OUT_OF_MEMORY;
     }
     uint64_t destination_written = 0;
-    CNA_Result result = cna.property_dictionary_copy_string((CNA_PropertyDictionaryHandle)dictionary, key_view, (char*)destination_bytes, (uint64_t)destination_size, &destination_written);
+    CNA_Result call_result = cna.property_dictionary_copy_string((CNA_PropertyDictionaryHandle)dictionary, key_view, (char*)destination_bytes, (uint64_t)destination_size, &destination_written);
     (*environment)->ReleaseByteArrayElements(environment, key, key_bytes, JNI_ABORT);
     (*environment)->ReleaseByteArrayElements(environment, destination, destination_bytes, 0);
-    if (result == CNA_RESULT_SUCCESS || result == CNA_RESULT_BUFFER_TOO_SMALL) {
+    if (call_result == CNA_RESULT_SUCCESS || call_result == CNA_RESULT_BUFFER_TOO_SMALL) {
         jlong destination_element = (jlong)destination_written;
         (*environment)->SetLongArrayRegion(
             environment, out_bytes, 0, 1, &destination_element);
     }
-    return (jint)result;
+    return (jint)call_result;
 }
 
 JNIEXPORT jint JNICALL
@@ -3264,13 +3264,13 @@ Java_org_openeggbert_cna_internal_generated_NativeGamerServicesRoutes_propertyDi
     (void)environment;
     (void)declaring_class;
     int32_t out_count_value = 0;
-    CNA_Result result = cna.property_dictionary_get_count((CNA_PropertyDictionaryHandle)dictionary, &out_count_value);
-    if (result == CNA_RESULT_SUCCESS || result == CNA_RESULT_BUFFER_TOO_SMALL) {
+    CNA_Result call_result = cna.property_dictionary_get_count((CNA_PropertyDictionaryHandle)dictionary, &out_count_value);
+    if (call_result == CNA_RESULT_SUCCESS || call_result == CNA_RESULT_BUFFER_TOO_SMALL) {
         jint out_count_element = (jint)out_count_value;
         (*environment)->SetIntArrayRegion(
             environment, out_count, 0, 1, &out_count_element);
     }
-    return (jint)result;
+    return (jint)call_result;
 }
 
 JNIEXPORT jint JNICALL
@@ -3286,14 +3286,14 @@ Java_org_openeggbert_cna_internal_generated_NativeGamerServicesRoutes_propertyDi
     }
     CNA_StringView key_view = {(const char*)key_bytes, (uint64_t)key_size};
     int64_t out_ticks_value = 0;
-    CNA_Result result = cna.property_dictionary_get_date_time_ticks((CNA_PropertyDictionaryHandle)dictionary, key_view, &out_ticks_value);
+    CNA_Result call_result = cna.property_dictionary_get_date_time_ticks((CNA_PropertyDictionaryHandle)dictionary, key_view, &out_ticks_value);
     (*environment)->ReleaseByteArrayElements(environment, key, key_bytes, JNI_ABORT);
-    if (result == CNA_RESULT_SUCCESS || result == CNA_RESULT_BUFFER_TOO_SMALL) {
+    if (call_result == CNA_RESULT_SUCCESS || call_result == CNA_RESULT_BUFFER_TOO_SMALL) {
         jlong out_ticks_element = (jlong)out_ticks_value;
         (*environment)->SetLongArrayRegion(
             environment, out_ticks, 0, 1, &out_ticks_element);
     }
-    return (jint)result;
+    return (jint)call_result;
 }
 
 JNIEXPORT jint JNICALL
@@ -3309,14 +3309,14 @@ Java_org_openeggbert_cna_internal_generated_NativeGamerServicesRoutes_propertyDi
     }
     CNA_StringView key_view = {(const char*)key_bytes, (uint64_t)key_size};
     double out_value_value = 0;
-    CNA_Result result = cna.property_dictionary_get_double((CNA_PropertyDictionaryHandle)dictionary, key_view, &out_value_value);
+    CNA_Result call_result = cna.property_dictionary_get_double((CNA_PropertyDictionaryHandle)dictionary, key_view, &out_value_value);
     (*environment)->ReleaseByteArrayElements(environment, key, key_bytes, JNI_ABORT);
-    if (result == CNA_RESULT_SUCCESS || result == CNA_RESULT_BUFFER_TOO_SMALL) {
+    if (call_result == CNA_RESULT_SUCCESS || call_result == CNA_RESULT_BUFFER_TOO_SMALL) {
         jdouble out_value_element = (jdouble)out_value_value;
         (*environment)->SetDoubleArrayRegion(
             environment, out_value, 0, 1, &out_value_element);
     }
-    return (jint)result;
+    return (jint)call_result;
 }
 
 JNIEXPORT jint JNICALL
@@ -3332,14 +3332,14 @@ Java_org_openeggbert_cna_internal_generated_NativeGamerServicesRoutes_propertyDi
     }
     CNA_StringView key_view = {(const char*)key_bytes, (uint64_t)key_size};
     int32_t out_value_value = 0;
-    CNA_Result result = cna.property_dictionary_get_int32((CNA_PropertyDictionaryHandle)dictionary, key_view, &out_value_value);
+    CNA_Result call_result = cna.property_dictionary_get_int32((CNA_PropertyDictionaryHandle)dictionary, key_view, &out_value_value);
     (*environment)->ReleaseByteArrayElements(environment, key, key_bytes, JNI_ABORT);
-    if (result == CNA_RESULT_SUCCESS || result == CNA_RESULT_BUFFER_TOO_SMALL) {
+    if (call_result == CNA_RESULT_SUCCESS || call_result == CNA_RESULT_BUFFER_TOO_SMALL) {
         jint out_value_element = (jint)out_value_value;
         (*environment)->SetIntArrayRegion(
             environment, out_value, 0, 1, &out_value_element);
     }
-    return (jint)result;
+    return (jint)call_result;
 }
 
 JNIEXPORT jint JNICALL
@@ -3355,14 +3355,14 @@ Java_org_openeggbert_cna_internal_generated_NativeGamerServicesRoutes_propertyDi
     }
     CNA_StringView key_view = {(const char*)key_bytes, (uint64_t)key_size};
     int64_t out_value_value = 0;
-    CNA_Result result = cna.property_dictionary_get_int64((CNA_PropertyDictionaryHandle)dictionary, key_view, &out_value_value);
+    CNA_Result call_result = cna.property_dictionary_get_int64((CNA_PropertyDictionaryHandle)dictionary, key_view, &out_value_value);
     (*environment)->ReleaseByteArrayElements(environment, key, key_bytes, JNI_ABORT);
-    if (result == CNA_RESULT_SUCCESS || result == CNA_RESULT_BUFFER_TOO_SMALL) {
+    if (call_result == CNA_RESULT_SUCCESS || call_result == CNA_RESULT_BUFFER_TOO_SMALL) {
         jlong out_value_element = (jlong)out_value_value;
         (*environment)->SetLongArrayRegion(
             environment, out_value, 0, 1, &out_value_element);
     }
-    return (jint)result;
+    return (jint)call_result;
 }
 
 JNIEXPORT jint JNICALL
@@ -3372,13 +3372,13 @@ Java_org_openeggbert_cna_internal_generated_NativeGamerServicesRoutes_propertyDi
     (void)environment;
     (void)declaring_class;
     uint64_t out_bytes_value = 0;
-    CNA_Result result = cna.property_dictionary_get_key_size_at((CNA_PropertyDictionaryHandle)dictionary, (int32_t)index, &out_bytes_value);
-    if (result == CNA_RESULT_SUCCESS || result == CNA_RESULT_BUFFER_TOO_SMALL) {
+    CNA_Result call_result = cna.property_dictionary_get_key_size_at((CNA_PropertyDictionaryHandle)dictionary, (int32_t)index, &out_bytes_value);
+    if (call_result == CNA_RESULT_SUCCESS || call_result == CNA_RESULT_BUFFER_TOO_SMALL) {
         jlong out_bytes_element = (jlong)out_bytes_value;
         (*environment)->SetLongArrayRegion(
             environment, out_bytes, 0, 1, &out_bytes_element);
     }
-    return (jint)result;
+    return (jint)call_result;
 }
 
 JNIEXPORT jint JNICALL
@@ -3394,14 +3394,14 @@ Java_org_openeggbert_cna_internal_generated_NativeGamerServicesRoutes_propertyDi
     }
     CNA_StringView key_view = {(const char*)key_bytes, (uint64_t)key_size};
     CNA_LeaderboardOutcome out_outcome_value = 0;
-    CNA_Result result = cna.property_dictionary_get_outcome((CNA_PropertyDictionaryHandle)dictionary, key_view, &out_outcome_value);
+    CNA_Result call_result = cna.property_dictionary_get_outcome((CNA_PropertyDictionaryHandle)dictionary, key_view, &out_outcome_value);
     (*environment)->ReleaseByteArrayElements(environment, key, key_bytes, JNI_ABORT);
-    if (result == CNA_RESULT_SUCCESS || result == CNA_RESULT_BUFFER_TOO_SMALL) {
+    if (call_result == CNA_RESULT_SUCCESS || call_result == CNA_RESULT_BUFFER_TOO_SMALL) {
         jint out_outcome_element = (jint)out_outcome_value;
         (*environment)->SetIntArrayRegion(
             environment, out_outcome, 0, 1, &out_outcome_element);
     }
-    return (jint)result;
+    return (jint)call_result;
 }
 
 JNIEXPORT jint JNICALL
@@ -3417,14 +3417,14 @@ Java_org_openeggbert_cna_internal_generated_NativeGamerServicesRoutes_propertyDi
     }
     CNA_StringView key_view = {(const char*)key_bytes, (uint64_t)key_size};
     float out_value_value = 0;
-    CNA_Result result = cna.property_dictionary_get_single((CNA_PropertyDictionaryHandle)dictionary, key_view, &out_value_value);
+    CNA_Result call_result = cna.property_dictionary_get_single((CNA_PropertyDictionaryHandle)dictionary, key_view, &out_value_value);
     (*environment)->ReleaseByteArrayElements(environment, key, key_bytes, JNI_ABORT);
-    if (result == CNA_RESULT_SUCCESS || result == CNA_RESULT_BUFFER_TOO_SMALL) {
+    if (call_result == CNA_RESULT_SUCCESS || call_result == CNA_RESULT_BUFFER_TOO_SMALL) {
         jfloat out_value_element = (jfloat)out_value_value;
         (*environment)->SetFloatArrayRegion(
             environment, out_value, 0, 1, &out_value_element);
     }
-    return (jint)result;
+    return (jint)call_result;
 }
 
 JNIEXPORT jint JNICALL
@@ -3441,9 +3441,9 @@ Java_org_openeggbert_cna_internal_generated_NativeGamerServicesRoutes_propertyDi
     CNA_StringView key_view = {(const char*)key_bytes, (uint64_t)key_size};
     CNA_Bool out_has_stream_value = 0;
     uint64_t out_bytes_value = 0;
-    CNA_Result result = cna.property_dictionary_get_stream_size_ext((CNA_PropertyDictionaryHandle)dictionary, key_view, &out_has_stream_value, &out_bytes_value);
+    CNA_Result call_result = cna.property_dictionary_get_stream_size_ext((CNA_PropertyDictionaryHandle)dictionary, key_view, &out_has_stream_value, &out_bytes_value);
     (*environment)->ReleaseByteArrayElements(environment, key, key_bytes, JNI_ABORT);
-    if (result == CNA_RESULT_SUCCESS || result == CNA_RESULT_BUFFER_TOO_SMALL) {
+    if (call_result == CNA_RESULT_SUCCESS || call_result == CNA_RESULT_BUFFER_TOO_SMALL) {
         jboolean out_has_stream_element = (jboolean)out_has_stream_value;
         (*environment)->SetBooleanArrayRegion(
             environment, out_has_stream, 0, 1, &out_has_stream_element);
@@ -3451,7 +3451,7 @@ Java_org_openeggbert_cna_internal_generated_NativeGamerServicesRoutes_propertyDi
         (*environment)->SetLongArrayRegion(
             environment, out_bytes, 0, 1, &out_bytes_element);
     }
-    return (jint)result;
+    return (jint)call_result;
 }
 
 JNIEXPORT jint JNICALL
@@ -3467,14 +3467,14 @@ Java_org_openeggbert_cna_internal_generated_NativeGamerServicesRoutes_propertyDi
     }
     CNA_StringView key_view = {(const char*)key_bytes, (uint64_t)key_size};
     uint64_t out_bytes_value = 0;
-    CNA_Result result = cna.property_dictionary_get_string_size((CNA_PropertyDictionaryHandle)dictionary, key_view, &out_bytes_value);
+    CNA_Result call_result = cna.property_dictionary_get_string_size((CNA_PropertyDictionaryHandle)dictionary, key_view, &out_bytes_value);
     (*environment)->ReleaseByteArrayElements(environment, key, key_bytes, JNI_ABORT);
-    if (result == CNA_RESULT_SUCCESS || result == CNA_RESULT_BUFFER_TOO_SMALL) {
+    if (call_result == CNA_RESULT_SUCCESS || call_result == CNA_RESULT_BUFFER_TOO_SMALL) {
         jlong out_bytes_element = (jlong)out_bytes_value;
         (*environment)->SetLongArrayRegion(
             environment, out_bytes, 0, 1, &out_bytes_element);
     }
-    return (jint)result;
+    return (jint)call_result;
 }
 
 JNIEXPORT jint JNICALL
@@ -3490,14 +3490,14 @@ Java_org_openeggbert_cna_internal_generated_NativeGamerServicesRoutes_propertyDi
     }
     CNA_StringView key_view = {(const char*)key_bytes, (uint64_t)key_size};
     int64_t out_ticks_value = 0;
-    CNA_Result result = cna.property_dictionary_get_time_span_ticks((CNA_PropertyDictionaryHandle)dictionary, key_view, &out_ticks_value);
+    CNA_Result call_result = cna.property_dictionary_get_time_span_ticks((CNA_PropertyDictionaryHandle)dictionary, key_view, &out_ticks_value);
     (*environment)->ReleaseByteArrayElements(environment, key, key_bytes, JNI_ABORT);
-    if (result == CNA_RESULT_SUCCESS || result == CNA_RESULT_BUFFER_TOO_SMALL) {
+    if (call_result == CNA_RESULT_SUCCESS || call_result == CNA_RESULT_BUFFER_TOO_SMALL) {
         jlong out_ticks_element = (jlong)out_ticks_value;
         (*environment)->SetLongArrayRegion(
             environment, out_ticks, 0, 1, &out_ticks_element);
     }
-    return (jint)result;
+    return (jint)call_result;
 }
 
 JNIEXPORT jint JNICALL
@@ -3513,14 +3513,14 @@ Java_org_openeggbert_cna_internal_generated_NativeGamerServicesRoutes_propertyDi
     }
     CNA_StringView key_view = {(const char*)key_bytes, (uint64_t)key_size};
     CNA_Bool out_removed_value = 0;
-    CNA_Result result = cna.property_dictionary_remove((CNA_PropertyDictionaryHandle)dictionary, key_view, &out_removed_value);
+    CNA_Result call_result = cna.property_dictionary_remove((CNA_PropertyDictionaryHandle)dictionary, key_view, &out_removed_value);
     (*environment)->ReleaseByteArrayElements(environment, key, key_bytes, JNI_ABORT);
-    if (result == CNA_RESULT_SUCCESS || result == CNA_RESULT_BUFFER_TOO_SMALL) {
+    if (call_result == CNA_RESULT_SUCCESS || call_result == CNA_RESULT_BUFFER_TOO_SMALL) {
         jboolean out_removed_element = (jboolean)out_removed_value;
         (*environment)->SetBooleanArrayRegion(
             environment, out_removed, 0, 1, &out_removed_element);
     }
-    return (jint)result;
+    return (jint)call_result;
 }
 
 JNIEXPORT jint JNICALL
@@ -3535,9 +3535,9 @@ Java_org_openeggbert_cna_internal_generated_NativeGamerServicesRoutes_propertyDi
         return (jint)CNA_RESULT_OUT_OF_MEMORY;
     }
     CNA_StringView key_view = {(const char*)key_bytes, (uint64_t)key_size};
-    CNA_Result result = cna.property_dictionary_set_date_time_ticks((CNA_PropertyDictionaryHandle)dictionary, key_view, (int64_t)ticks);
+    CNA_Result call_result = cna.property_dictionary_set_date_time_ticks((CNA_PropertyDictionaryHandle)dictionary, key_view, (int64_t)ticks);
     (*environment)->ReleaseByteArrayElements(environment, key, key_bytes, JNI_ABORT);
-    return (jint)result;
+    return (jint)call_result;
 }
 
 JNIEXPORT jint JNICALL
@@ -3552,9 +3552,9 @@ Java_org_openeggbert_cna_internal_generated_NativeGamerServicesRoutes_propertyDi
         return (jint)CNA_RESULT_OUT_OF_MEMORY;
     }
     CNA_StringView key_view = {(const char*)key_bytes, (uint64_t)key_size};
-    CNA_Result result = cna.property_dictionary_set_double((CNA_PropertyDictionaryHandle)dictionary, key_view, (double)value);
+    CNA_Result call_result = cna.property_dictionary_set_double((CNA_PropertyDictionaryHandle)dictionary, key_view, (double)value);
     (*environment)->ReleaseByteArrayElements(environment, key, key_bytes, JNI_ABORT);
-    return (jint)result;
+    return (jint)call_result;
 }
 
 JNIEXPORT jint JNICALL
@@ -3569,9 +3569,9 @@ Java_org_openeggbert_cna_internal_generated_NativeGamerServicesRoutes_propertyDi
         return (jint)CNA_RESULT_OUT_OF_MEMORY;
     }
     CNA_StringView key_view = {(const char*)key_bytes, (uint64_t)key_size};
-    CNA_Result result = cna.property_dictionary_set_int32((CNA_PropertyDictionaryHandle)dictionary, key_view, (int32_t)value);
+    CNA_Result call_result = cna.property_dictionary_set_int32((CNA_PropertyDictionaryHandle)dictionary, key_view, (int32_t)value);
     (*environment)->ReleaseByteArrayElements(environment, key, key_bytes, JNI_ABORT);
-    return (jint)result;
+    return (jint)call_result;
 }
 
 JNIEXPORT jint JNICALL
@@ -3586,9 +3586,9 @@ Java_org_openeggbert_cna_internal_generated_NativeGamerServicesRoutes_propertyDi
         return (jint)CNA_RESULT_OUT_OF_MEMORY;
     }
     CNA_StringView key_view = {(const char*)key_bytes, (uint64_t)key_size};
-    CNA_Result result = cna.property_dictionary_set_int64((CNA_PropertyDictionaryHandle)dictionary, key_view, (int64_t)value);
+    CNA_Result call_result = cna.property_dictionary_set_int64((CNA_PropertyDictionaryHandle)dictionary, key_view, (int64_t)value);
     (*environment)->ReleaseByteArrayElements(environment, key, key_bytes, JNI_ABORT);
-    return (jint)result;
+    return (jint)call_result;
 }
 
 JNIEXPORT jint JNICALL
@@ -3603,9 +3603,9 @@ Java_org_openeggbert_cna_internal_generated_NativeGamerServicesRoutes_propertyDi
         return (jint)CNA_RESULT_OUT_OF_MEMORY;
     }
     CNA_StringView key_view = {(const char*)key_bytes, (uint64_t)key_size};
-    CNA_Result result = cna.property_dictionary_set_outcome((CNA_PropertyDictionaryHandle)dictionary, key_view, (CNA_LeaderboardOutcome)outcome);
+    CNA_Result call_result = cna.property_dictionary_set_outcome((CNA_PropertyDictionaryHandle)dictionary, key_view, (CNA_LeaderboardOutcome)outcome);
     (*environment)->ReleaseByteArrayElements(environment, key, key_bytes, JNI_ABORT);
-    return (jint)result;
+    return (jint)call_result;
 }
 
 JNIEXPORT jint JNICALL
@@ -3620,9 +3620,9 @@ Java_org_openeggbert_cna_internal_generated_NativeGamerServicesRoutes_propertyDi
         return (jint)CNA_RESULT_OUT_OF_MEMORY;
     }
     CNA_StringView key_view = {(const char*)key_bytes, (uint64_t)key_size};
-    CNA_Result result = cna.property_dictionary_set_single((CNA_PropertyDictionaryHandle)dictionary, key_view, (float)value);
+    CNA_Result call_result = cna.property_dictionary_set_single((CNA_PropertyDictionaryHandle)dictionary, key_view, (float)value);
     (*environment)->ReleaseByteArrayElements(environment, key, key_bytes, JNI_ABORT);
-    return (jint)result;
+    return (jint)call_result;
 }
 
 JNIEXPORT jint JNICALL
@@ -3643,10 +3643,10 @@ Java_org_openeggbert_cna_internal_generated_NativeGamerServicesRoutes_propertyDi
         return (jint)CNA_RESULT_OUT_OF_MEMORY;
     }
     CNA_StringView value_view = {(const char*)value_bytes, (uint64_t)value_size};
-    CNA_Result result = cna.property_dictionary_set_string((CNA_PropertyDictionaryHandle)dictionary, key_view, value_view);
+    CNA_Result call_result = cna.property_dictionary_set_string((CNA_PropertyDictionaryHandle)dictionary, key_view, value_view);
     (*environment)->ReleaseByteArrayElements(environment, key, key_bytes, JNI_ABORT);
     (*environment)->ReleaseByteArrayElements(environment, value, value_bytes, JNI_ABORT);
-    return (jint)result;
+    return (jint)call_result;
 }
 
 JNIEXPORT jint JNICALL
@@ -3661,9 +3661,9 @@ Java_org_openeggbert_cna_internal_generated_NativeGamerServicesRoutes_propertyDi
         return (jint)CNA_RESULT_OUT_OF_MEMORY;
     }
     CNA_StringView key_view = {(const char*)key_bytes, (uint64_t)key_size};
-    CNA_Result result = cna.property_dictionary_set_time_span_ticks((CNA_PropertyDictionaryHandle)dictionary, key_view, (int64_t)ticks);
+    CNA_Result call_result = cna.property_dictionary_set_time_span_ticks((CNA_PropertyDictionaryHandle)dictionary, key_view, (int64_t)ticks);
     (*environment)->ReleaseByteArrayElements(environment, key, key_bytes, JNI_ABORT);
-    return (jint)result;
+    return (jint)call_result;
 }
 
 JNIEXPORT jint JNICALL
@@ -3680,9 +3680,9 @@ Java_org_openeggbert_cna_internal_generated_NativeGamerServicesRoutes_propertyDi
     CNA_StringView key_view = {(const char*)key_bytes, (uint64_t)key_size};
     CNA_Bool out_found_value = 0;
     CNA_PropertyValueKind out_kind_value = 0;
-    CNA_Result result = cna.property_dictionary_try_get_value_kind_ext((CNA_PropertyDictionaryHandle)dictionary, key_view, &out_found_value, &out_kind_value);
+    CNA_Result call_result = cna.property_dictionary_try_get_value_kind_ext((CNA_PropertyDictionaryHandle)dictionary, key_view, &out_found_value, &out_kind_value);
     (*environment)->ReleaseByteArrayElements(environment, key, key_bytes, JNI_ABORT);
-    if (result == CNA_RESULT_SUCCESS || result == CNA_RESULT_BUFFER_TOO_SMALL) {
+    if (call_result == CNA_RESULT_SUCCESS || call_result == CNA_RESULT_BUFFER_TOO_SMALL) {
         jboolean out_found_element = (jboolean)out_found_value;
         (*environment)->SetBooleanArrayRegion(
             environment, out_found, 0, 1, &out_found_element);
@@ -3690,7 +3690,7 @@ Java_org_openeggbert_cna_internal_generated_NativeGamerServicesRoutes_propertyDi
         (*environment)->SetIntArrayRegion(
             environment, out_kind, 0, 1, &out_kind_element);
     }
-    return (jint)result;
+    return (jint)call_result;
 }
 
 JNIEXPORT jint JNICALL
@@ -3705,9 +3705,9 @@ Java_org_openeggbert_cna_internal_generated_NativeGamerServicesRoutes_signedInGa
         return (jint)CNA_RESULT_OUT_OF_MEMORY;
     }
     CNA_StringView achievement_key_view = {(const char*)achievement_key_bytes, (uint64_t)achievement_key_size};
-    CNA_Result result = cna.signed_in_gamer_award_achievement((CNA_SignedInGamerHandle)gamer, achievement_key_view);
+    CNA_Result call_result = cna.signed_in_gamer_award_achievement((CNA_SignedInGamerHandle)gamer, achievement_key_view);
     (*environment)->ReleaseByteArrayElements(environment, achievement_key, achievement_key_bytes, JNI_ABORT);
-    return (jint)result;
+    return (jint)call_result;
 }
 
 JNIEXPORT jint JNICALL
@@ -3717,13 +3717,13 @@ Java_org_openeggbert_cna_internal_generated_NativeGamerServicesRoutes_signedInGa
     (void)environment;
     (void)declaring_class;
     CNA_AchievementCollectionHandle out_achievements_value = 0;
-    CNA_Result result = cna.signed_in_gamer_get_achievements((CNA_SignedInGamerHandle)gamer, &out_achievements_value);
-    if (result == CNA_RESULT_SUCCESS || result == CNA_RESULT_BUFFER_TOO_SMALL) {
+    CNA_Result call_result = cna.signed_in_gamer_get_achievements((CNA_SignedInGamerHandle)gamer, &out_achievements_value);
+    if (call_result == CNA_RESULT_SUCCESS || call_result == CNA_RESULT_BUFFER_TOO_SMALL) {
         jlong out_achievements_element = (jlong)out_achievements_value;
         (*environment)->SetLongArrayRegion(
             environment, out_achievements, 0, 1, &out_achievements_element);
     }
-    return (jint)result;
+    return (jint)call_result;
 }
 
 JNIEXPORT jint JNICALL
@@ -3733,13 +3733,13 @@ Java_org_openeggbert_cna_internal_generated_NativeGamerServicesRoutes_signedInGa
     (void)environment;
     (void)declaring_class;
     CNA_GamerCollectionHandle out_friends_value = 0;
-    CNA_Result result = cna.signed_in_gamer_get_friends((CNA_SignedInGamerHandle)gamer, &out_friends_value);
-    if (result == CNA_RESULT_SUCCESS || result == CNA_RESULT_BUFFER_TOO_SMALL) {
+    CNA_Result call_result = cna.signed_in_gamer_get_friends((CNA_SignedInGamerHandle)gamer, &out_friends_value);
+    if (call_result == CNA_RESULT_SUCCESS || call_result == CNA_RESULT_BUFFER_TOO_SMALL) {
         jlong out_friends_element = (jlong)out_friends_value;
         (*environment)->SetLongArrayRegion(
             environment, out_friends, 0, 1, &out_friends_element);
     }
-    return (jint)result;
+    return (jint)call_result;
 }
 
 JNIEXPORT jint JNICALL
@@ -3752,8 +3752,8 @@ Java_org_openeggbert_cna_internal_generated_NativeGamerServicesRoutes_signedInGa
     memset(&out_defaults_value, 0, sizeof out_defaults_value);
     out_defaults_value.struct_size = (uint32_t)(sizeof out_defaults_value);
     out_defaults_value.struct_version = UINT32_C(1);
-    CNA_Result result = cna.signed_in_gamer_get_game_defaults((CNA_SignedInGamerHandle)gamer, &out_defaults_value);
-    if (result == CNA_RESULT_SUCCESS || result == CNA_RESULT_BUFFER_TOO_SMALL) {
+    CNA_Result call_result = cna.signed_in_gamer_get_game_defaults((CNA_SignedInGamerHandle)gamer, &out_defaults_value);
+    if (call_result == CNA_RESULT_SUCCESS || call_result == CNA_RESULT_BUFFER_TOO_SMALL) {
         jbyte out_defaultsBytes_values[] = {
             (jbyte)out_defaults_value.reserved[0],
             (jbyte)out_defaults_value.reserved[1],
@@ -3788,7 +3788,7 @@ Java_org_openeggbert_cna_internal_generated_NativeGamerServicesRoutes_signedInGa
             (jsize)(sizeof out_defaultsIntegral_values / sizeof out_defaultsIntegral_values[0]),
             out_defaultsIntegral_values);
     }
-    return (jint)result;
+    return (jint)call_result;
 }
 
 JNIEXPORT jint JNICALL
@@ -3798,13 +3798,13 @@ Java_org_openeggbert_cna_internal_generated_NativeGamerServicesRoutes_signedInGa
     (void)environment;
     (void)declaring_class;
     CNA_Bool out_is_guest_value = 0;
-    CNA_Result result = cna.signed_in_gamer_get_is_guest((CNA_SignedInGamerHandle)gamer, &out_is_guest_value);
-    if (result == CNA_RESULT_SUCCESS || result == CNA_RESULT_BUFFER_TOO_SMALL) {
+    CNA_Result call_result = cna.signed_in_gamer_get_is_guest((CNA_SignedInGamerHandle)gamer, &out_is_guest_value);
+    if (call_result == CNA_RESULT_SUCCESS || call_result == CNA_RESULT_BUFFER_TOO_SMALL) {
         jboolean out_is_guest_element = (jboolean)out_is_guest_value;
         (*environment)->SetBooleanArrayRegion(
             environment, out_is_guest, 0, 1, &out_is_guest_element);
     }
-    return (jint)result;
+    return (jint)call_result;
 }
 
 JNIEXPORT jint JNICALL
@@ -3814,13 +3814,13 @@ Java_org_openeggbert_cna_internal_generated_NativeGamerServicesRoutes_signedInGa
     (void)environment;
     (void)declaring_class;
     CNA_Bool out_is_signed_in_to_live_value = 0;
-    CNA_Result result = cna.signed_in_gamer_get_is_signed_in_to_live((CNA_SignedInGamerHandle)gamer, &out_is_signed_in_to_live_value);
-    if (result == CNA_RESULT_SUCCESS || result == CNA_RESULT_BUFFER_TOO_SMALL) {
+    CNA_Result call_result = cna.signed_in_gamer_get_is_signed_in_to_live((CNA_SignedInGamerHandle)gamer, &out_is_signed_in_to_live_value);
+    if (call_result == CNA_RESULT_SUCCESS || call_result == CNA_RESULT_BUFFER_TOO_SMALL) {
         jboolean out_is_signed_in_to_live_element = (jboolean)out_is_signed_in_to_live_value;
         (*environment)->SetBooleanArrayRegion(
             environment, out_is_signed_in_to_live, 0, 1, &out_is_signed_in_to_live_element);
     }
-    return (jint)result;
+    return (jint)call_result;
 }
 
 JNIEXPORT jint JNICALL
@@ -3830,13 +3830,13 @@ Java_org_openeggbert_cna_internal_generated_NativeGamerServicesRoutes_signedInGa
     (void)environment;
     (void)declaring_class;
     int32_t out_party_size_value = 0;
-    CNA_Result result = cna.signed_in_gamer_get_party_size((CNA_SignedInGamerHandle)gamer, &out_party_size_value);
-    if (result == CNA_RESULT_SUCCESS || result == CNA_RESULT_BUFFER_TOO_SMALL) {
+    CNA_Result call_result = cna.signed_in_gamer_get_party_size((CNA_SignedInGamerHandle)gamer, &out_party_size_value);
+    if (call_result == CNA_RESULT_SUCCESS || call_result == CNA_RESULT_BUFFER_TOO_SMALL) {
         jint out_party_size_element = (jint)out_party_size_value;
         (*environment)->SetIntArrayRegion(
             environment, out_party_size, 0, 1, &out_party_size_element);
     }
-    return (jint)result;
+    return (jint)call_result;
 }
 
 JNIEXPORT jint JNICALL
@@ -3846,13 +3846,13 @@ Java_org_openeggbert_cna_internal_generated_NativeGamerServicesRoutes_signedInGa
     (void)environment;
     (void)declaring_class;
     CNA_PlayerIndex out_player_index_value = 0;
-    CNA_Result result = cna.signed_in_gamer_get_player_index((CNA_SignedInGamerHandle)gamer, &out_player_index_value);
-    if (result == CNA_RESULT_SUCCESS || result == CNA_RESULT_BUFFER_TOO_SMALL) {
+    CNA_Result call_result = cna.signed_in_gamer_get_player_index((CNA_SignedInGamerHandle)gamer, &out_player_index_value);
+    if (call_result == CNA_RESULT_SUCCESS || call_result == CNA_RESULT_BUFFER_TOO_SMALL) {
         jint out_player_index_element = (jint)out_player_index_value;
         (*environment)->SetIntArrayRegion(
             environment, out_player_index, 0, 1, &out_player_index_element);
     }
-    return (jint)result;
+    return (jint)call_result;
 }
 
 JNIEXPORT jint JNICALL
@@ -3865,8 +3865,8 @@ Java_org_openeggbert_cna_internal_generated_NativeGamerServicesRoutes_signedInGa
     memset(&out_presence_value, 0, sizeof out_presence_value);
     out_presence_value.struct_size = (uint32_t)(sizeof out_presence_value);
     out_presence_value.struct_version = UINT32_C(1);
-    CNA_Result result = cna.signed_in_gamer_get_presence((CNA_SignedInGamerHandle)gamer, &out_presence_value);
-    if (result == CNA_RESULT_SUCCESS || result == CNA_RESULT_BUFFER_TOO_SMALL) {
+    CNA_Result call_result = cna.signed_in_gamer_get_presence((CNA_SignedInGamerHandle)gamer, &out_presence_value);
+    if (call_result == CNA_RESULT_SUCCESS || call_result == CNA_RESULT_BUFFER_TOO_SMALL) {
         jlong out_presenceIntegral_values[] = {
             (jlong)out_presence_value.presence_mode,
             (jlong)out_presence_value.presence_value
@@ -3875,7 +3875,7 @@ Java_org_openeggbert_cna_internal_generated_NativeGamerServicesRoutes_signedInGa
             (jsize)(sizeof out_presenceIntegral_values / sizeof out_presenceIntegral_values[0]),
             out_presenceIntegral_values);
     }
-    return (jint)result;
+    return (jint)call_result;
 }
 
 JNIEXPORT jint JNICALL
@@ -3888,8 +3888,8 @@ Java_org_openeggbert_cna_internal_generated_NativeGamerServicesRoutes_signedInGa
     memset(&out_privileges_value, 0, sizeof out_privileges_value);
     out_privileges_value.struct_size = (uint32_t)(sizeof out_privileges_value);
     out_privileges_value.struct_version = UINT32_C(1);
-    CNA_Result result = cna.signed_in_gamer_get_privileges((CNA_SignedInGamerHandle)gamer, &out_privileges_value);
-    if (result == CNA_RESULT_SUCCESS || result == CNA_RESULT_BUFFER_TOO_SMALL) {
+    CNA_Result call_result = cna.signed_in_gamer_get_privileges((CNA_SignedInGamerHandle)gamer, &out_privileges_value);
+    if (call_result == CNA_RESULT_SUCCESS || call_result == CNA_RESULT_BUFFER_TOO_SMALL) {
         jbyte out_privilegesBytes_values[] = {
             (jbyte)out_privileges_value.reserved[0],
             (jbyte)out_privileges_value.reserved[1],
@@ -3912,7 +3912,7 @@ Java_org_openeggbert_cna_internal_generated_NativeGamerServicesRoutes_signedInGa
             (jsize)(sizeof out_privilegesIntegral_values / sizeof out_privilegesIntegral_values[0]),
             out_privilegesIntegral_values);
     }
-    return (jint)result;
+    return (jint)call_result;
 }
 
 JNIEXPORT jint JNICALL
@@ -3922,13 +3922,13 @@ Java_org_openeggbert_cna_internal_generated_NativeGamerServicesRoutes_signedInGa
     (void)environment;
     (void)declaring_class;
     CNA_Bool out_is_friend_value = 0;
-    CNA_Result result = cna.signed_in_gamer_is_friend((CNA_SignedInGamerHandle)gamer, (CNA_GamerHandle)other, &out_is_friend_value);
-    if (result == CNA_RESULT_SUCCESS || result == CNA_RESULT_BUFFER_TOO_SMALL) {
+    CNA_Result call_result = cna.signed_in_gamer_is_friend((CNA_SignedInGamerHandle)gamer, (CNA_GamerHandle)other, &out_is_friend_value);
+    if (call_result == CNA_RESULT_SUCCESS || call_result == CNA_RESULT_BUFFER_TOO_SMALL) {
         jboolean out_is_friend_element = (jboolean)out_is_friend_value;
         (*environment)->SetBooleanArrayRegion(
             environment, out_is_friend, 0, 1, &out_is_friend_element);
     }
-    return (jint)result;
+    return (jint)call_result;
 }
 
 JNIEXPORT jint JNICALL
@@ -3938,13 +3938,13 @@ Java_org_openeggbert_cna_internal_generated_NativeGamerServicesRoutes_signedInGa
     (void)environment;
     (void)declaring_class;
     CNA_Bool out_is_headset_value = 0;
-    CNA_Result result = cna.signed_in_gamer_is_headset((CNA_SignedInGamerHandle)gamer, (uint64_t)microphone_index, &out_is_headset_value);
-    if (result == CNA_RESULT_SUCCESS || result == CNA_RESULT_BUFFER_TOO_SMALL) {
+    CNA_Result call_result = cna.signed_in_gamer_is_headset((CNA_SignedInGamerHandle)gamer, (uint64_t)microphone_index, &out_is_headset_value);
+    if (call_result == CNA_RESULT_SUCCESS || call_result == CNA_RESULT_BUFFER_TOO_SMALL) {
         jboolean out_is_headset_element = (jboolean)out_is_headset_value;
         (*environment)->SetBooleanArrayRegion(
             environment, out_is_headset, 0, 1, &out_is_headset_element);
     }
-    return (jint)result;
+    return (jint)call_result;
 }
 
 JNIEXPORT jint JNICALL
@@ -3953,8 +3953,8 @@ Java_org_openeggbert_cna_internal_generated_NativeGamerServicesRoutes_signedInGa
 {
     (void)environment;
     (void)declaring_class;
-    CNA_Result result = cna.signed_in_gamer_set_party_size((CNA_SignedInGamerHandle)gamer, (int32_t)party_size);
-    return (jint)result;
+    CNA_Result call_result = cna.signed_in_gamer_set_party_size((CNA_SignedInGamerHandle)gamer, (int32_t)party_size);
+    return (jint)call_result;
 }
 
 JNIEXPORT jint JNICALL
@@ -3973,6 +3973,6 @@ Java_org_openeggbert_cna_internal_generated_NativeGamerServicesRoutes_signedInGa
         presence_value.presence_mode = (CNA_GamerPresenceMode)presenceIntegral_values[0];
         presence_value.presence_value = (int32_t)presenceIntegral_values[1];
     }
-    CNA_Result result = cna.signed_in_gamer_set_presence((CNA_SignedInGamerHandle)gamer, &presence_value);
-    return (jint)result;
+    CNA_Result call_result = cna.signed_in_gamer_set_presence((CNA_SignedInGamerHandle)gamer, &presence_value);
+    return (jint)call_result;
 }

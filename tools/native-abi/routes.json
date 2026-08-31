@@ -2386,6 +2386,10 @@
         "symbol": "cna_cnb_audio_frame_bytes"
       },
       {
+        "java": "cnbBuildModelFromCnj",
+        "symbol": "cna_cnb_build_model_from_cnj"
+      },
+      {
         "java": "cnbCheckedAdd",
         "symbol": "cna_cnb_checked_add"
       },
@@ -2396,6 +2400,54 @@
       {
         "java": "cnbChunkEntryIsMandatory",
         "symbol": "cna_cnb_chunk_entry_is_mandatory"
+      },
+      {
+        "java": "cnbCnjResultCopyAbsorbedFile",
+        "symbol": "cna_cnb_cnj_result_copy_absorbed_file"
+      },
+      {
+        "java": "cnbCnjResultCopyAssetTypeName",
+        "symbol": "cna_cnb_cnj_result_copy_asset_type_name"
+      },
+      {
+        "java": "cnbCnjResultCopyBytes",
+        "symbol": "cna_cnb_cnj_result_copy_bytes"
+      },
+      {
+        "java": "cnbCnjResultCopyExternalReference",
+        "symbol": "cna_cnb_cnj_result_copy_external_reference"
+      },
+      {
+        "java": "cnbCnjResultDestroy",
+        "symbol": "cna_cnb_cnj_result_destroy"
+      },
+      {
+        "java": "cnbCnjResultGetAbsorbedFileCount",
+        "symbol": "cna_cnb_cnj_result_get_absorbed_file_count"
+      },
+      {
+        "java": "cnbCnjResultGetAbsorbedFileSize",
+        "symbol": "cna_cnb_cnj_result_get_absorbed_file_size"
+      },
+      {
+        "java": "cnbCnjResultGetAssetTypeId",
+        "symbol": "cna_cnb_cnj_result_get_asset_type_id"
+      },
+      {
+        "java": "cnbCnjResultGetAssetTypeNameSize",
+        "symbol": "cna_cnb_cnj_result_get_asset_type_name_size"
+      },
+      {
+        "java": "cnbCnjResultGetExternalReferenceCount",
+        "symbol": "cna_cnb_cnj_result_get_external_reference_count"
+      },
+      {
+        "java": "cnbCnjResultGetExternalReferenceSize",
+        "symbol": "cna_cnb_cnj_result_get_external_reference_size"
+      },
+      {
+        "java": "cnbCompileCnj",
+        "symbol": "cna_cnb_compile_cnj"
       },
       {
         "java": "cnbCopyAssetTypeName",
@@ -2821,6 +2873,38 @@
       {
         "java": "cnbModelDestroy",
         "symbol": "cna_cnb_model_destroy"
+      },
+      {
+        "java": "cnbModelFromCnjCopyAbsorbedFile",
+        "symbol": "cna_cnb_model_from_cnj_copy_absorbed_file"
+      },
+      {
+        "java": "cnbModelFromCnjCopyExternalReference",
+        "symbol": "cna_cnb_model_from_cnj_copy_external_reference"
+      },
+      {
+        "java": "cnbModelFromCnjDestroy",
+        "symbol": "cna_cnb_model_from_cnj_destroy"
+      },
+      {
+        "java": "cnbModelFromCnjGetAbsorbedFileCount",
+        "symbol": "cna_cnb_model_from_cnj_get_absorbed_file_count"
+      },
+      {
+        "java": "cnbModelFromCnjGetAbsorbedFileSize",
+        "symbol": "cna_cnb_model_from_cnj_get_absorbed_file_size"
+      },
+      {
+        "java": "cnbModelFromCnjGetExternalReferenceCount",
+        "symbol": "cna_cnb_model_from_cnj_get_external_reference_count"
+      },
+      {
+        "java": "cnbModelFromCnjGetExternalReferenceSize",
+        "symbol": "cna_cnb_model_from_cnj_get_external_reference_size"
+      },
+      {
+        "java": "cnbModelFromCnjTakeModel",
+        "symbol": "cna_cnb_model_from_cnj_take_model"
       },
       {
         "java": "cnbModelGetBone",

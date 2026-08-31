@@ -429,7 +429,9 @@ def render_c(class_name: str, entries: list[dict]) -> str:
     for entry in entries:
         symbol = entry["symbol"]
         # The declaring-class parameter is spelled distinctively: a CNA parameter really is
-        # named `type` in places, and a plain `type` here would collide with it.
+        # named `type` in places, and a plain `type` here would collide with it. The call's own
+        # return value is spelled `call_result` for the same reason -- cna_cnb_cnj_result_* takes
+        # a handle parameter named `result`, and a plain `result` shadowed it.
         parameters = ["JNIEnv* environment", "jclass declaring_class"]
         body: list[str] = []
         # Refusals that must run before anything is acquired, so a rejected call leaks nothing.
@@ -546,7 +548,7 @@ def render_c(class_name: str, entries: list[dict]) -> str:
                     # The copy back has to happen before the buffer is released, so it
                     # belongs in the cleanup sequence rather than in the epilogue.
                     writeback = (
-                        f"    if (result == CNA_RESULT_SUCCESS) {{\n"
+                        f"    if (call_result == CNA_RESULT_SUCCESS) {{\n"
                         f"        for (jsize index = 0; index < {name}_size; ++index) {{\n"
                         f"            {name}_elements[index] = ({step['jni']}){name}_values[index];\n"
                         f"        }}\n"
@@ -606,7 +608,7 @@ def render_c(class_name: str, entries: list[dict]) -> str:
                     # sequence rather than in the success epilogue. Every element of
                     # the requested capacity is written: calloc zeroed the tail, and
                     # the route's own out-count says how much of it CNA filled.
-                    writeback = ["    if (result == CNA_RESULT_SUCCESS) {"]
+                    writeback = ["    if (call_result == CNA_RESULT_SUCCESS) {"]
                     for group, jni, java in groups:
                         field = f"{name}{group.capitalize()}"
                         writeback.append("        {")
@@ -697,7 +699,8 @@ def render_c(class_name: str, entries: list[dict]) -> str:
                     cleanup.append(release_bytes(view, abort=True))
         body = (["    (void)environment;", "    (void)declaring_class;"]
                 + prologue + body)
-        body.append(f"    CNA_Result result = cna.{slot_of(symbol)}({', '.join(arguments)});")
+        body.append(f"    CNA_Result call_result = "
+                    f"cna.{slot_of(symbol)}({', '.join(arguments)});")
         body.extend(cleanup)
         if epilogue:
             # Scalar and structure outputs are also copied back on BUFFER_TOO_SMALL. CNA
@@ -706,11 +709,11 @@ def render_c(class_name: str, entries: list[dict]) -> str:
             # told the size, ask again. Writing outputs only on success would leave the caller
             # with a zero and no way to size the buffer. The buffer itself is untouched, because
             # CNA performs no partial write, so only these outputs cross.
-            body.append("    if (result == CNA_RESULT_SUCCESS "
-                        "|| result == CNA_RESULT_BUFFER_TOO_SMALL) {")
+            body.append("    if (call_result == CNA_RESULT_SUCCESS "
+                        "|| call_result == CNA_RESULT_BUFFER_TOO_SMALL) {")
             body.extend(epilogue)
             body.append("    }")
-        body.append("    return (jint)result;")
+        body.append("    return (jint)call_result;")
 
         lines.append("JNIEXPORT jint JNICALL")
         lines.append(f"Java_org_openeggbert_cna_internal_generated_{class_name}_{entry['java']}(")

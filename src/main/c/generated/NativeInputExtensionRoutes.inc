@@ -18,14 +18,14 @@ Java_org_openeggbert_cna_internal_generated_NativeInputExtensionRoutes_gamepadCo
         return (jint)CNA_RESULT_OUT_OF_MEMORY;
     }
     uint64_t destination_written = 0;
-    CNA_Result result = cna.gamepad_copy_guid_ext((CNA_Handle)game, (CNA_PlayerIndex)player_index, (char*)destination_bytes, (uint64_t)destination_size, &destination_written);
+    CNA_Result call_result = cna.gamepad_copy_guid_ext((CNA_Handle)game, (CNA_PlayerIndex)player_index, (char*)destination_bytes, (uint64_t)destination_size, &destination_written);
     (*environment)->ReleaseByteArrayElements(environment, destination, destination_bytes, 0);
-    if (result == CNA_RESULT_SUCCESS || result == CNA_RESULT_BUFFER_TOO_SMALL) {
+    if (call_result == CNA_RESULT_SUCCESS || call_result == CNA_RESULT_BUFFER_TOO_SMALL) {
         jlong destination_element = (jlong)destination_written;
         (*environment)->SetLongArrayRegion(
             environment, out_bytes, 0, 1, &destination_element);
     }
-    return (jint)result;
+    return (jint)call_result;
 }
 
 JNIEXPORT jint JNICALL
@@ -40,14 +40,14 @@ Java_org_openeggbert_cna_internal_generated_NativeInputExtensionRoutes_gamepadCo
         return (jint)CNA_RESULT_OUT_OF_MEMORY;
     }
     uint64_t destination_written = 0;
-    CNA_Result result = cna.gamepad_copy_name_ext((CNA_Handle)game, (CNA_PlayerIndex)player_index, (char*)destination_bytes, (uint64_t)destination_size, &destination_written);
+    CNA_Result call_result = cna.gamepad_copy_name_ext((CNA_Handle)game, (CNA_PlayerIndex)player_index, (char*)destination_bytes, (uint64_t)destination_size, &destination_written);
     (*environment)->ReleaseByteArrayElements(environment, destination, destination_bytes, 0);
-    if (result == CNA_RESULT_SUCCESS || result == CNA_RESULT_BUFFER_TOO_SMALL) {
+    if (call_result == CNA_RESULT_SUCCESS || call_result == CNA_RESULT_BUFFER_TOO_SMALL) {
         jlong destination_element = (jlong)destination_written;
         (*environment)->SetLongArrayRegion(
             environment, out_bytes, 0, 1, &destination_element);
     }
-    return (jint)result;
+    return (jint)call_result;
 }
 
 JNIEXPORT jint JNICALL
@@ -62,14 +62,14 @@ Java_org_openeggbert_cna_internal_generated_NativeInputExtensionRoutes_gamepadCo
         return (jint)CNA_RESULT_OUT_OF_MEMORY;
     }
     uint64_t destination_written = 0;
-    CNA_Result result = cna.gamepad_copy_path_ext((CNA_Handle)game, (CNA_PlayerIndex)player_index, (char*)destination_bytes, (uint64_t)destination_size, &destination_written);
+    CNA_Result call_result = cna.gamepad_copy_path_ext((CNA_Handle)game, (CNA_PlayerIndex)player_index, (char*)destination_bytes, (uint64_t)destination_size, &destination_written);
     (*environment)->ReleaseByteArrayElements(environment, destination, destination_bytes, 0);
-    if (result == CNA_RESULT_SUCCESS || result == CNA_RESULT_BUFFER_TOO_SMALL) {
+    if (call_result == CNA_RESULT_SUCCESS || call_result == CNA_RESULT_BUFFER_TOO_SMALL) {
         jlong destination_element = (jlong)destination_written;
         (*environment)->SetLongArrayRegion(
             environment, out_bytes, 0, 1, &destination_element);
     }
-    return (jint)result;
+    return (jint)call_result;
 }
 
 JNIEXPORT jint JNICALL
@@ -84,14 +84,14 @@ Java_org_openeggbert_cna_internal_generated_NativeInputExtensionRoutes_gamepadCo
         return (jint)CNA_RESULT_OUT_OF_MEMORY;
     }
     uint64_t destination_written = 0;
-    CNA_Result result = cna.gamepad_copy_serial_ext((CNA_Handle)game, (CNA_PlayerIndex)player_index, (char*)destination_bytes, (uint64_t)destination_size, &destination_written);
+    CNA_Result call_result = cna.gamepad_copy_serial_ext((CNA_Handle)game, (CNA_PlayerIndex)player_index, (char*)destination_bytes, (uint64_t)destination_size, &destination_written);
     (*environment)->ReleaseByteArrayElements(environment, destination, destination_bytes, 0);
-    if (result == CNA_RESULT_SUCCESS || result == CNA_RESULT_BUFFER_TOO_SMALL) {
+    if (call_result == CNA_RESULT_SUCCESS || call_result == CNA_RESULT_BUFFER_TOO_SMALL) {
         jlong destination_element = (jlong)destination_written;
         (*environment)->SetLongArrayRegion(
             environment, out_bytes, 0, 1, &destination_element);
     }
-    return (jint)result;
+    return (jint)call_result;
 }
 
 JNIEXPORT jint JNICALL
@@ -103,8 +103,8 @@ Java_org_openeggbert_cna_internal_generated_NativeInputExtensionRoutes_gamepadGe
     CNA_Vector3 out_acceleration_value;
     memset(&out_acceleration_value, 0, sizeof out_acceleration_value);
     CNA_Bool out_available_value = 0;
-    CNA_Result result = cna.gamepad_get_accelerometer_ext((CNA_Handle)game, (CNA_PlayerIndex)player_index, &out_acceleration_value, &out_available_value);
-    if (result == CNA_RESULT_SUCCESS || result == CNA_RESULT_BUFFER_TOO_SMALL) {
+    CNA_Result call_result = cna.gamepad_get_accelerometer_ext((CNA_Handle)game, (CNA_PlayerIndex)player_index, &out_acceleration_value, &out_available_value);
+    if (call_result == CNA_RESULT_SUCCESS || call_result == CNA_RESULT_BUFFER_TOO_SMALL) {
         jfloat out_accelerationFloating_values[] = {
             (jfloat)out_acceleration_value.x,
             (jfloat)out_acceleration_value.y,
@@ -117,7 +117,7 @@ Java_org_openeggbert_cna_internal_generated_NativeInputExtensionRoutes_gamepadGe
         (*environment)->SetBooleanArrayRegion(
             environment, out_available, 0, 1, &out_available_element);
     }
-    return (jint)result;
+    return (jint)call_result;
 }
 
 JNIEXPORT jint JNICALL
@@ -127,13 +127,13 @@ Java_org_openeggbert_cna_internal_generated_NativeInputExtensionRoutes_gamepadGe
     (void)environment;
     (void)declaring_class;
     CNA_GamePadButtonLabel out_label_value = 0;
-    CNA_Result result = cna.gamepad_get_button_label_ext((CNA_Handle)game, (CNA_PlayerIndex)player_index, (CNA_GamePadButtonFlags)button, &out_label_value);
-    if (result == CNA_RESULT_SUCCESS || result == CNA_RESULT_BUFFER_TOO_SMALL) {
+    CNA_Result call_result = cna.gamepad_get_button_label_ext((CNA_Handle)game, (CNA_PlayerIndex)player_index, (CNA_GamePadButtonFlags)button, &out_label_value);
+    if (call_result == CNA_RESULT_SUCCESS || call_result == CNA_RESULT_BUFFER_TOO_SMALL) {
         jint out_label_element = (jint)out_label_value;
         (*environment)->SetIntArrayRegion(
             environment, out_label, 0, 1, &out_label_element);
     }
-    return (jint)result;
+    return (jint)call_result;
 }
 
 JNIEXPORT jint JNICALL
@@ -143,13 +143,13 @@ Java_org_openeggbert_cna_internal_generated_NativeInputExtensionRoutes_gamepadGe
     (void)environment;
     (void)declaring_class;
     CNA_GamePadConnectionState out_state_value = 0;
-    CNA_Result result = cna.gamepad_get_connection_state_ext((CNA_Handle)game, (CNA_PlayerIndex)player_index, &out_state_value);
-    if (result == CNA_RESULT_SUCCESS || result == CNA_RESULT_BUFFER_TOO_SMALL) {
+    CNA_Result call_result = cna.gamepad_get_connection_state_ext((CNA_Handle)game, (CNA_PlayerIndex)player_index, &out_state_value);
+    if (call_result == CNA_RESULT_SUCCESS || call_result == CNA_RESULT_BUFFER_TOO_SMALL) {
         jint out_state_element = (jint)out_state_value;
         (*environment)->SetIntArrayRegion(
             environment, out_state, 0, 1, &out_state_element);
     }
-    return (jint)result;
+    return (jint)call_result;
 }
 
 JNIEXPORT jint JNICALL
@@ -159,13 +159,13 @@ Java_org_openeggbert_cna_internal_generated_NativeInputExtensionRoutes_gamepadGe
     (void)environment;
     (void)declaring_class;
     uint16_t out_version_value = 0;
-    CNA_Result result = cna.gamepad_get_firmware_version_ext((CNA_Handle)game, (CNA_PlayerIndex)player_index, &out_version_value);
-    if (result == CNA_RESULT_SUCCESS || result == CNA_RESULT_BUFFER_TOO_SMALL) {
+    CNA_Result call_result = cna.gamepad_get_firmware_version_ext((CNA_Handle)game, (CNA_PlayerIndex)player_index, &out_version_value);
+    if (call_result == CNA_RESULT_SUCCESS || call_result == CNA_RESULT_BUFFER_TOO_SMALL) {
         jint out_version_element = (jint)out_version_value;
         (*environment)->SetIntArrayRegion(
             environment, out_version, 0, 1, &out_version_element);
     }
-    return (jint)result;
+    return (jint)call_result;
 }
 
 JNIEXPORT jint JNICALL
@@ -175,13 +175,13 @@ Java_org_openeggbert_cna_internal_generated_NativeInputExtensionRoutes_gamepadGe
     (void)environment;
     (void)declaring_class;
     uint64_t out_bytes_value = 0;
-    CNA_Result result = cna.gamepad_get_guid_size_ext((CNA_Handle)game, (CNA_PlayerIndex)player_index, &out_bytes_value);
-    if (result == CNA_RESULT_SUCCESS || result == CNA_RESULT_BUFFER_TOO_SMALL) {
+    CNA_Result call_result = cna.gamepad_get_guid_size_ext((CNA_Handle)game, (CNA_PlayerIndex)player_index, &out_bytes_value);
+    if (call_result == CNA_RESULT_SUCCESS || call_result == CNA_RESULT_BUFFER_TOO_SMALL) {
         jlong out_bytes_element = (jlong)out_bytes_value;
         (*environment)->SetLongArrayRegion(
             environment, out_bytes, 0, 1, &out_bytes_element);
     }
-    return (jint)result;
+    return (jint)call_result;
 }
 
 JNIEXPORT jint JNICALL
@@ -193,8 +193,8 @@ Java_org_openeggbert_cna_internal_generated_NativeInputExtensionRoutes_gamepadGe
     CNA_Vector3 out_gyro_value;
     memset(&out_gyro_value, 0, sizeof out_gyro_value);
     CNA_Bool out_available_value = 0;
-    CNA_Result result = cna.gamepad_get_gyro_ext((CNA_Handle)game, (CNA_PlayerIndex)player_index, &out_gyro_value, &out_available_value);
-    if (result == CNA_RESULT_SUCCESS || result == CNA_RESULT_BUFFER_TOO_SMALL) {
+    CNA_Result call_result = cna.gamepad_get_gyro_ext((CNA_Handle)game, (CNA_PlayerIndex)player_index, &out_gyro_value, &out_available_value);
+    if (call_result == CNA_RESULT_SUCCESS || call_result == CNA_RESULT_BUFFER_TOO_SMALL) {
         jfloat out_gyroFloating_values[] = {
             (jfloat)out_gyro_value.x,
             (jfloat)out_gyro_value.y,
@@ -207,7 +207,7 @@ Java_org_openeggbert_cna_internal_generated_NativeInputExtensionRoutes_gamepadGe
         (*environment)->SetBooleanArrayRegion(
             environment, out_available, 0, 1, &out_available_element);
     }
-    return (jint)result;
+    return (jint)call_result;
 }
 
 JNIEXPORT jint JNICALL
@@ -217,13 +217,13 @@ Java_org_openeggbert_cna_internal_generated_NativeInputExtensionRoutes_gamepadGe
     (void)environment;
     (void)declaring_class;
     uint64_t out_bytes_value = 0;
-    CNA_Result result = cna.gamepad_get_name_size_ext((CNA_Handle)game, (CNA_PlayerIndex)player_index, &out_bytes_value);
-    if (result == CNA_RESULT_SUCCESS || result == CNA_RESULT_BUFFER_TOO_SMALL) {
+    CNA_Result call_result = cna.gamepad_get_name_size_ext((CNA_Handle)game, (CNA_PlayerIndex)player_index, &out_bytes_value);
+    if (call_result == CNA_RESULT_SUCCESS || call_result == CNA_RESULT_BUFFER_TOO_SMALL) {
         jlong out_bytes_element = (jlong)out_bytes_value;
         (*environment)->SetLongArrayRegion(
             environment, out_bytes, 0, 1, &out_bytes_element);
     }
-    return (jint)result;
+    return (jint)call_result;
 }
 
 JNIEXPORT jint JNICALL
@@ -233,13 +233,13 @@ Java_org_openeggbert_cna_internal_generated_NativeInputExtensionRoutes_gamepadGe
     (void)environment;
     (void)declaring_class;
     uint64_t out_bytes_value = 0;
-    CNA_Result result = cna.gamepad_get_path_size_ext((CNA_Handle)game, (CNA_PlayerIndex)player_index, &out_bytes_value);
-    if (result == CNA_RESULT_SUCCESS || result == CNA_RESULT_BUFFER_TOO_SMALL) {
+    CNA_Result call_result = cna.gamepad_get_path_size_ext((CNA_Handle)game, (CNA_PlayerIndex)player_index, &out_bytes_value);
+    if (call_result == CNA_RESULT_SUCCESS || call_result == CNA_RESULT_BUFFER_TOO_SMALL) {
         jlong out_bytes_element = (jlong)out_bytes_value;
         (*environment)->SetLongArrayRegion(
             environment, out_bytes, 0, 1, &out_bytes_element);
     }
-    return (jint)result;
+    return (jint)call_result;
 }
 
 JNIEXPORT jint JNICALL
@@ -249,13 +249,13 @@ Java_org_openeggbert_cna_internal_generated_NativeInputExtensionRoutes_gamepadGe
     (void)environment;
     (void)declaring_class;
     int32_t out_index_value = 0;
-    CNA_Result result = cna.gamepad_get_player_index_ext((CNA_Handle)game, (CNA_PlayerIndex)player_index, &out_index_value);
-    if (result == CNA_RESULT_SUCCESS || result == CNA_RESULT_BUFFER_TOO_SMALL) {
+    CNA_Result call_result = cna.gamepad_get_player_index_ext((CNA_Handle)game, (CNA_PlayerIndex)player_index, &out_index_value);
+    if (call_result == CNA_RESULT_SUCCESS || call_result == CNA_RESULT_BUFFER_TOO_SMALL) {
         jint out_index_element = (jint)out_index_value;
         (*environment)->SetIntArrayRegion(
             environment, out_index, 0, 1, &out_index_element);
     }
-    return (jint)result;
+    return (jint)call_result;
 }
 
 JNIEXPORT jint JNICALL
@@ -266,8 +266,8 @@ Java_org_openeggbert_cna_internal_generated_NativeInputExtensionRoutes_gamepadGe
     (void)declaring_class;
     CNA_PowerState out_state_value = 0;
     int32_t out_percent_value = 0;
-    CNA_Result result = cna.gamepad_get_power_info_ext((CNA_Handle)game, (CNA_PlayerIndex)player_index, &out_state_value, &out_percent_value);
-    if (result == CNA_RESULT_SUCCESS || result == CNA_RESULT_BUFFER_TOO_SMALL) {
+    CNA_Result call_result = cna.gamepad_get_power_info_ext((CNA_Handle)game, (CNA_PlayerIndex)player_index, &out_state_value, &out_percent_value);
+    if (call_result == CNA_RESULT_SUCCESS || call_result == CNA_RESULT_BUFFER_TOO_SMALL) {
         jint out_state_element = (jint)out_state_value;
         (*environment)->SetIntArrayRegion(
             environment, out_state, 0, 1, &out_state_element);
@@ -275,7 +275,7 @@ Java_org_openeggbert_cna_internal_generated_NativeInputExtensionRoutes_gamepadGe
         (*environment)->SetIntArrayRegion(
             environment, out_percent, 0, 1, &out_percent_element);
     }
-    return (jint)result;
+    return (jint)call_result;
 }
 
 JNIEXPORT jint JNICALL
@@ -285,13 +285,13 @@ Java_org_openeggbert_cna_internal_generated_NativeInputExtensionRoutes_gamepadGe
     (void)environment;
     (void)declaring_class;
     uint64_t out_bytes_value = 0;
-    CNA_Result result = cna.gamepad_get_serial_size_ext((CNA_Handle)game, (CNA_PlayerIndex)player_index, &out_bytes_value);
-    if (result == CNA_RESULT_SUCCESS || result == CNA_RESULT_BUFFER_TOO_SMALL) {
+    CNA_Result call_result = cna.gamepad_get_serial_size_ext((CNA_Handle)game, (CNA_PlayerIndex)player_index, &out_bytes_value);
+    if (call_result == CNA_RESULT_SUCCESS || call_result == CNA_RESULT_BUFFER_TOO_SMALL) {
         jlong out_bytes_element = (jlong)out_bytes_value;
         (*environment)->SetLongArrayRegion(
             environment, out_bytes, 0, 1, &out_bytes_element);
     }
-    return (jint)result;
+    return (jint)call_result;
 }
 
 JNIEXPORT jint JNICALL
@@ -301,13 +301,13 @@ Java_org_openeggbert_cna_internal_generated_NativeInputExtensionRoutes_gamepadGe
     (void)environment;
     (void)declaring_class;
     uint64_t out_handle_value = 0;
-    CNA_Result result = cna.gamepad_get_steam_handle_ext((CNA_Handle)game, (CNA_PlayerIndex)player_index, &out_handle_value);
-    if (result == CNA_RESULT_SUCCESS || result == CNA_RESULT_BUFFER_TOO_SMALL) {
+    CNA_Result call_result = cna.gamepad_get_steam_handle_ext((CNA_Handle)game, (CNA_PlayerIndex)player_index, &out_handle_value);
+    if (call_result == CNA_RESULT_SUCCESS || call_result == CNA_RESULT_BUFFER_TOO_SMALL) {
         jlong out_handle_element = (jlong)out_handle_value;
         (*environment)->SetLongArrayRegion(
             environment, out_handle, 0, 1, &out_handle_element);
     }
-    return (jint)result;
+    return (jint)call_result;
 }
 
 JNIEXPORT jint JNICALL
@@ -317,13 +317,13 @@ Java_org_openeggbert_cna_internal_generated_NativeInputExtensionRoutes_gamepadGe
     (void)environment;
     (void)declaring_class;
     int32_t out_count_value = 0;
-    CNA_Result result = cna.gamepad_get_touchpad_count_ext((CNA_Handle)game, (CNA_PlayerIndex)player_index, &out_count_value);
-    if (result == CNA_RESULT_SUCCESS || result == CNA_RESULT_BUFFER_TOO_SMALL) {
+    CNA_Result call_result = cna.gamepad_get_touchpad_count_ext((CNA_Handle)game, (CNA_PlayerIndex)player_index, &out_count_value);
+    if (call_result == CNA_RESULT_SUCCESS || call_result == CNA_RESULT_BUFFER_TOO_SMALL) {
         jint out_count_element = (jint)out_count_value;
         (*environment)->SetIntArrayRegion(
             environment, out_count, 0, 1, &out_count_element);
     }
-    return (jint)result;
+    return (jint)call_result;
 }
 
 JNIEXPORT jint JNICALL
@@ -333,13 +333,13 @@ Java_org_openeggbert_cna_internal_generated_NativeInputExtensionRoutes_gamepadGe
     (void)environment;
     (void)declaring_class;
     int32_t out_count_value = 0;
-    CNA_Result result = cna.gamepad_get_touchpad_finger_count_ext((CNA_Handle)game, (CNA_PlayerIndex)player_index, (int32_t)touchpad, &out_count_value);
-    if (result == CNA_RESULT_SUCCESS || result == CNA_RESULT_BUFFER_TOO_SMALL) {
+    CNA_Result call_result = cna.gamepad_get_touchpad_finger_count_ext((CNA_Handle)game, (CNA_PlayerIndex)player_index, (int32_t)touchpad, &out_count_value);
+    if (call_result == CNA_RESULT_SUCCESS || call_result == CNA_RESULT_BUFFER_TOO_SMALL) {
         jint out_count_element = (jint)out_count_value;
         (*environment)->SetIntArrayRegion(
             environment, out_count, 0, 1, &out_count_element);
     }
-    return (jint)result;
+    return (jint)call_result;
 }
 
 JNIEXPORT jint JNICALL
@@ -351,8 +351,8 @@ Java_org_openeggbert_cna_internal_generated_NativeInputExtensionRoutes_gamepadGe
     CNA_GamePadTouchpadFinger out_finger_value;
     memset(&out_finger_value, 0, sizeof out_finger_value);
     CNA_Bool out_available_value = 0;
-    CNA_Result result = cna.gamepad_get_touchpad_finger_ext((CNA_Handle)game, (CNA_PlayerIndex)player_index, (int32_t)touchpad, (int32_t)finger, &out_finger_value, &out_available_value);
-    if (result == CNA_RESULT_SUCCESS || result == CNA_RESULT_BUFFER_TOO_SMALL) {
+    CNA_Result call_result = cna.gamepad_get_touchpad_finger_ext((CNA_Handle)game, (CNA_PlayerIndex)player_index, (int32_t)touchpad, (int32_t)finger, &out_finger_value, &out_available_value);
+    if (call_result == CNA_RESULT_SUCCESS || call_result == CNA_RESULT_BUFFER_TOO_SMALL) {
         jbyte out_fingerBytes_values[] = {
             (jbyte)out_finger_value.reserved[0],
             (jbyte)out_finger_value.reserved[1],
@@ -379,7 +379,7 @@ Java_org_openeggbert_cna_internal_generated_NativeInputExtensionRoutes_gamepadGe
         (*environment)->SetBooleanArrayRegion(
             environment, out_available, 0, 1, &out_available_element);
     }
-    return (jint)result;
+    return (jint)call_result;
 }
 
 JNIEXPORT jint JNICALL
@@ -398,8 +398,8 @@ Java_org_openeggbert_cna_internal_generated_NativeInputExtensionRoutes_gamepadSe
         color_value.b = (uint8_t)colorIntegral_values[2];
         color_value.a = (uint8_t)colorIntegral_values[3];
     }
-    CNA_Result result = cna.gamepad_set_light_bar_ext((CNA_Handle)game, (CNA_PlayerIndex)player_index, color_value);
-    return (jint)result;
+    CNA_Result call_result = cna.gamepad_set_light_bar_ext((CNA_Handle)game, (CNA_PlayerIndex)player_index, color_value);
+    return (jint)call_result;
 }
 
 JNIEXPORT jint JNICALL
@@ -409,13 +409,13 @@ Java_org_openeggbert_cna_internal_generated_NativeInputExtensionRoutes_gamepadSe
     (void)environment;
     (void)declaring_class;
     CNA_Bool out_applied_value = 0;
-    CNA_Result result = cna.gamepad_set_player_index_ext((CNA_Handle)game, (CNA_PlayerIndex)player_index, (int32_t)index, &out_applied_value);
-    if (result == CNA_RESULT_SUCCESS || result == CNA_RESULT_BUFFER_TOO_SMALL) {
+    CNA_Result call_result = cna.gamepad_set_player_index_ext((CNA_Handle)game, (CNA_PlayerIndex)player_index, (int32_t)index, &out_applied_value);
+    if (call_result == CNA_RESULT_SUCCESS || call_result == CNA_RESULT_BUFFER_TOO_SMALL) {
         jboolean out_applied_element = (jboolean)out_applied_value;
         (*environment)->SetBooleanArrayRegion(
             environment, out_applied, 0, 1, &out_applied_element);
     }
-    return (jint)result;
+    return (jint)call_result;
 }
 
 JNIEXPORT jint JNICALL
@@ -425,13 +425,13 @@ Java_org_openeggbert_cna_internal_generated_NativeInputExtensionRoutes_gamepadSe
     (void)environment;
     (void)declaring_class;
     CNA_Bool out_applied_value = 0;
-    CNA_Result result = cna.gamepad_set_trigger_vibration_ext((CNA_Handle)game, (CNA_PlayerIndex)player_index, (float)left_trigger, (float)right_trigger, &out_applied_value);
-    if (result == CNA_RESULT_SUCCESS || result == CNA_RESULT_BUFFER_TOO_SMALL) {
+    CNA_Result call_result = cna.gamepad_set_trigger_vibration_ext((CNA_Handle)game, (CNA_PlayerIndex)player_index, (float)left_trigger, (float)right_trigger, &out_applied_value);
+    if (call_result == CNA_RESULT_SUCCESS || call_result == CNA_RESULT_BUFFER_TOO_SMALL) {
         jboolean out_applied_element = (jboolean)out_applied_value;
         (*environment)->SetBooleanArrayRegion(
             environment, out_applied, 0, 1, &out_applied_element);
     }
-    return (jint)result;
+    return (jint)call_result;
 }
 
 JNIEXPORT jint JNICALL
@@ -446,14 +446,14 @@ Java_org_openeggbert_cna_internal_generated_NativeInputExtensionRoutes_hapticDev
         return (jint)CNA_RESULT_OUT_OF_MEMORY;
     }
     uint64_t destination_written = 0;
-    CNA_Result result = cna.haptic_device_copy_name((CNA_HapticDeviceHandle)device, (char*)destination_bytes, (uint64_t)destination_size, &destination_written);
+    CNA_Result call_result = cna.haptic_device_copy_name((CNA_HapticDeviceHandle)device, (char*)destination_bytes, (uint64_t)destination_size, &destination_written);
     (*environment)->ReleaseByteArrayElements(environment, destination, destination_bytes, 0);
-    if (result == CNA_RESULT_SUCCESS || result == CNA_RESULT_BUFFER_TOO_SMALL) {
+    if (call_result == CNA_RESULT_SUCCESS || call_result == CNA_RESULT_BUFFER_TOO_SMALL) {
         jlong destination_element = (jlong)destination_written;
         (*environment)->SetLongArrayRegion(
             environment, out_bytes, 0, 1, &destination_element);
     }
-    return (jint)result;
+    return (jint)call_result;
 }
 
 JNIEXPORT jint JNICALL
@@ -530,16 +530,16 @@ Java_org_openeggbert_cna_internal_generated_NativeInputExtensionRoutes_hapticDev
         custom_data_values[index] = (uint16_t)custom_data_elements[index];
     }
     int32_t out_effect_id_value = 0;
-    CNA_Result result = cna.haptic_device_create_effect((CNA_HapticDeviceHandle)device, &effect_value, custom_data_values, (uint64_t)custom_data_size, &out_effect_id_value);
+    CNA_Result call_result = cna.haptic_device_create_effect((CNA_HapticDeviceHandle)device, &effect_value, custom_data_values, (uint64_t)custom_data_size, &out_effect_id_value);
     free(custom_data_values);
     (*environment)->ReleaseIntArrayElements(
         environment, custom_data, custom_data_elements, JNI_ABORT);
-    if (result == CNA_RESULT_SUCCESS || result == CNA_RESULT_BUFFER_TOO_SMALL) {
+    if (call_result == CNA_RESULT_SUCCESS || call_result == CNA_RESULT_BUFFER_TOO_SMALL) {
         jint out_effect_id_element = (jint)out_effect_id_value;
         (*environment)->SetIntArrayRegion(
             environment, out_effect_id, 0, 1, &out_effect_id_element);
     }
-    return (jint)result;
+    return (jint)call_result;
 }
 
 JNIEXPORT jint JNICALL
@@ -548,8 +548,8 @@ Java_org_openeggbert_cna_internal_generated_NativeInputExtensionRoutes_hapticDev
 {
     (void)environment;
     (void)declaring_class;
-    CNA_Result result = cna.haptic_device_destroy((CNA_HapticDeviceHandle)device);
-    return (jint)result;
+    CNA_Result call_result = cna.haptic_device_destroy((CNA_HapticDeviceHandle)device);
+    return (jint)call_result;
 }
 
 JNIEXPORT jint JNICALL
@@ -558,8 +558,8 @@ Java_org_openeggbert_cna_internal_generated_NativeInputExtensionRoutes_hapticDev
 {
     (void)environment;
     (void)declaring_class;
-    CNA_Result result = cna.haptic_device_destroy_effect((CNA_HapticDeviceHandle)device, (int32_t)effect_id);
-    return (jint)result;
+    CNA_Result call_result = cna.haptic_device_destroy_effect((CNA_HapticDeviceHandle)device, (int32_t)effect_id);
+    return (jint)call_result;
 }
 
 JNIEXPORT jint JNICALL
@@ -572,8 +572,8 @@ Java_org_openeggbert_cna_internal_generated_NativeInputExtensionRoutes_hapticDev
     memset(&out_capabilities_value, 0, sizeof out_capabilities_value);
     out_capabilities_value.struct_size = (uint32_t)(sizeof out_capabilities_value);
     out_capabilities_value.struct_version = UINT32_C(1);
-    CNA_Result result = cna.haptic_device_get_capabilities((CNA_HapticDeviceHandle)device, &out_capabilities_value);
-    if (result == CNA_RESULT_SUCCESS || result == CNA_RESULT_BUFFER_TOO_SMALL) {
+    CNA_Result call_result = cna.haptic_device_get_capabilities((CNA_HapticDeviceHandle)device, &out_capabilities_value);
+    if (call_result == CNA_RESULT_SUCCESS || call_result == CNA_RESULT_BUFFER_TOO_SMALL) {
         jbyte out_capabilitiesBytes_values[] = {
             (jbyte)out_capabilities_value.reserved[0],
             (jbyte)out_capabilities_value.reserved[1]
@@ -593,7 +593,7 @@ Java_org_openeggbert_cna_internal_generated_NativeInputExtensionRoutes_hapticDev
             (jsize)(sizeof out_capabilitiesIntegral_values / sizeof out_capabilitiesIntegral_values[0]),
             out_capabilitiesIntegral_values);
     }
-    return (jint)result;
+    return (jint)call_result;
 }
 
 JNIEXPORT jint JNICALL
@@ -603,13 +603,13 @@ Java_org_openeggbert_cna_internal_generated_NativeInputExtensionRoutes_hapticDev
     (void)environment;
     (void)declaring_class;
     CNA_Bool out_playing_value = 0;
-    CNA_Result result = cna.haptic_device_get_effect_status((CNA_HapticDeviceHandle)device, (int32_t)effect_id, &out_playing_value);
-    if (result == CNA_RESULT_SUCCESS || result == CNA_RESULT_BUFFER_TOO_SMALL) {
+    CNA_Result call_result = cna.haptic_device_get_effect_status((CNA_HapticDeviceHandle)device, (int32_t)effect_id, &out_playing_value);
+    if (call_result == CNA_RESULT_SUCCESS || call_result == CNA_RESULT_BUFFER_TOO_SMALL) {
         jboolean out_playing_element = (jboolean)out_playing_value;
         (*environment)->SetBooleanArrayRegion(
             environment, out_playing, 0, 1, &out_playing_element);
     }
-    return (jint)result;
+    return (jint)call_result;
 }
 
 JNIEXPORT jint JNICALL
@@ -686,16 +686,16 @@ Java_org_openeggbert_cna_internal_generated_NativeInputExtensionRoutes_hapticDev
         custom_data_values[index] = (uint16_t)custom_data_elements[index];
     }
     CNA_Bool out_supported_value = 0;
-    CNA_Result result = cna.haptic_device_get_is_effect_supported((CNA_HapticDeviceHandle)device, &effect_value, custom_data_values, (uint64_t)custom_data_size, &out_supported_value);
+    CNA_Result call_result = cna.haptic_device_get_is_effect_supported((CNA_HapticDeviceHandle)device, &effect_value, custom_data_values, (uint64_t)custom_data_size, &out_supported_value);
     free(custom_data_values);
     (*environment)->ReleaseIntArrayElements(
         environment, custom_data, custom_data_elements, JNI_ABORT);
-    if (result == CNA_RESULT_SUCCESS || result == CNA_RESULT_BUFFER_TOO_SMALL) {
+    if (call_result == CNA_RESULT_SUCCESS || call_result == CNA_RESULT_BUFFER_TOO_SMALL) {
         jboolean out_supported_element = (jboolean)out_supported_value;
         (*environment)->SetBooleanArrayRegion(
             environment, out_supported, 0, 1, &out_supported_element);
     }
-    return (jint)result;
+    return (jint)call_result;
 }
 
 JNIEXPORT jint JNICALL
@@ -705,13 +705,13 @@ Java_org_openeggbert_cna_internal_generated_NativeInputExtensionRoutes_hapticDev
     (void)environment;
     (void)declaring_class;
     CNA_Bool out_open_value = 0;
-    CNA_Result result = cna.haptic_device_get_is_open((CNA_HapticDeviceHandle)device, &out_open_value);
-    if (result == CNA_RESULT_SUCCESS || result == CNA_RESULT_BUFFER_TOO_SMALL) {
+    CNA_Result call_result = cna.haptic_device_get_is_open((CNA_HapticDeviceHandle)device, &out_open_value);
+    if (call_result == CNA_RESULT_SUCCESS || call_result == CNA_RESULT_BUFFER_TOO_SMALL) {
         jboolean out_open_element = (jboolean)out_open_value;
         (*environment)->SetBooleanArrayRegion(
             environment, out_open, 0, 1, &out_open_element);
     }
-    return (jint)result;
+    return (jint)call_result;
 }
 
 JNIEXPORT jint JNICALL
@@ -721,13 +721,13 @@ Java_org_openeggbert_cna_internal_generated_NativeInputExtensionRoutes_hapticDev
     (void)environment;
     (void)declaring_class;
     uint64_t out_bytes_value = 0;
-    CNA_Result result = cna.haptic_device_get_name_size((CNA_HapticDeviceHandle)device, &out_bytes_value);
-    if (result == CNA_RESULT_SUCCESS || result == CNA_RESULT_BUFFER_TOO_SMALL) {
+    CNA_Result call_result = cna.haptic_device_get_name_size((CNA_HapticDeviceHandle)device, &out_bytes_value);
+    if (call_result == CNA_RESULT_SUCCESS || call_result == CNA_RESULT_BUFFER_TOO_SMALL) {
         jlong out_bytes_element = (jlong)out_bytes_value;
         (*environment)->SetLongArrayRegion(
             environment, out_bytes, 0, 1, &out_bytes_element);
     }
-    return (jint)result;
+    return (jint)call_result;
 }
 
 JNIEXPORT jint JNICALL
@@ -737,13 +737,13 @@ Java_org_openeggbert_cna_internal_generated_NativeInputExtensionRoutes_hapticDev
     (void)environment;
     (void)declaring_class;
     CNA_Bool out_applied_value = 0;
-    CNA_Result result = cna.haptic_device_init_rumble((CNA_HapticDeviceHandle)device, &out_applied_value);
-    if (result == CNA_RESULT_SUCCESS || result == CNA_RESULT_BUFFER_TOO_SMALL) {
+    CNA_Result call_result = cna.haptic_device_init_rumble((CNA_HapticDeviceHandle)device, &out_applied_value);
+    if (call_result == CNA_RESULT_SUCCESS || call_result == CNA_RESULT_BUFFER_TOO_SMALL) {
         jboolean out_applied_element = (jboolean)out_applied_value;
         (*environment)->SetBooleanArrayRegion(
             environment, out_applied, 0, 1, &out_applied_element);
     }
-    return (jint)result;
+    return (jint)call_result;
 }
 
 JNIEXPORT jint JNICALL
@@ -753,13 +753,13 @@ Java_org_openeggbert_cna_internal_generated_NativeInputExtensionRoutes_hapticDev
     (void)environment;
     (void)declaring_class;
     CNA_Bool out_applied_value = 0;
-    CNA_Result result = cna.haptic_device_pause((CNA_HapticDeviceHandle)device, &out_applied_value);
-    if (result == CNA_RESULT_SUCCESS || result == CNA_RESULT_BUFFER_TOO_SMALL) {
+    CNA_Result call_result = cna.haptic_device_pause((CNA_HapticDeviceHandle)device, &out_applied_value);
+    if (call_result == CNA_RESULT_SUCCESS || call_result == CNA_RESULT_BUFFER_TOO_SMALL) {
         jboolean out_applied_element = (jboolean)out_applied_value;
         (*environment)->SetBooleanArrayRegion(
             environment, out_applied, 0, 1, &out_applied_element);
     }
-    return (jint)result;
+    return (jint)call_result;
 }
 
 JNIEXPORT jint JNICALL
@@ -769,13 +769,13 @@ Java_org_openeggbert_cna_internal_generated_NativeInputExtensionRoutes_hapticDev
     (void)environment;
     (void)declaring_class;
     CNA_Bool out_applied_value = 0;
-    CNA_Result result = cna.haptic_device_play_rumble((CNA_HapticDeviceHandle)device, (float)strength, (uint32_t)length_ms, &out_applied_value);
-    if (result == CNA_RESULT_SUCCESS || result == CNA_RESULT_BUFFER_TOO_SMALL) {
+    CNA_Result call_result = cna.haptic_device_play_rumble((CNA_HapticDeviceHandle)device, (float)strength, (uint32_t)length_ms, &out_applied_value);
+    if (call_result == CNA_RESULT_SUCCESS || call_result == CNA_RESULT_BUFFER_TOO_SMALL) {
         jboolean out_applied_element = (jboolean)out_applied_value;
         (*environment)->SetBooleanArrayRegion(
             environment, out_applied, 0, 1, &out_applied_element);
     }
-    return (jint)result;
+    return (jint)call_result;
 }
 
 JNIEXPORT jint JNICALL
@@ -785,13 +785,13 @@ Java_org_openeggbert_cna_internal_generated_NativeInputExtensionRoutes_hapticDev
     (void)environment;
     (void)declaring_class;
     CNA_Bool out_applied_value = 0;
-    CNA_Result result = cna.haptic_device_resume((CNA_HapticDeviceHandle)device, &out_applied_value);
-    if (result == CNA_RESULT_SUCCESS || result == CNA_RESULT_BUFFER_TOO_SMALL) {
+    CNA_Result call_result = cna.haptic_device_resume((CNA_HapticDeviceHandle)device, &out_applied_value);
+    if (call_result == CNA_RESULT_SUCCESS || call_result == CNA_RESULT_BUFFER_TOO_SMALL) {
         jboolean out_applied_element = (jboolean)out_applied_value;
         (*environment)->SetBooleanArrayRegion(
             environment, out_applied, 0, 1, &out_applied_element);
     }
-    return (jint)result;
+    return (jint)call_result;
 }
 
 JNIEXPORT jint JNICALL
@@ -801,13 +801,13 @@ Java_org_openeggbert_cna_internal_generated_NativeInputExtensionRoutes_hapticDev
     (void)environment;
     (void)declaring_class;
     CNA_Bool out_applied_value = 0;
-    CNA_Result result = cna.haptic_device_run_effect((CNA_HapticDeviceHandle)device, (int32_t)effect_id, (uint32_t)iterations, &out_applied_value);
-    if (result == CNA_RESULT_SUCCESS || result == CNA_RESULT_BUFFER_TOO_SMALL) {
+    CNA_Result call_result = cna.haptic_device_run_effect((CNA_HapticDeviceHandle)device, (int32_t)effect_id, (uint32_t)iterations, &out_applied_value);
+    if (call_result == CNA_RESULT_SUCCESS || call_result == CNA_RESULT_BUFFER_TOO_SMALL) {
         jboolean out_applied_element = (jboolean)out_applied_value;
         (*environment)->SetBooleanArrayRegion(
             environment, out_applied, 0, 1, &out_applied_element);
     }
-    return (jint)result;
+    return (jint)call_result;
 }
 
 JNIEXPORT jint JNICALL
@@ -817,13 +817,13 @@ Java_org_openeggbert_cna_internal_generated_NativeInputExtensionRoutes_hapticDev
     (void)environment;
     (void)declaring_class;
     CNA_Bool out_applied_value = 0;
-    CNA_Result result = cna.haptic_device_set_autocenter((CNA_HapticDeviceHandle)device, (int32_t)autocenter, &out_applied_value);
-    if (result == CNA_RESULT_SUCCESS || result == CNA_RESULT_BUFFER_TOO_SMALL) {
+    CNA_Result call_result = cna.haptic_device_set_autocenter((CNA_HapticDeviceHandle)device, (int32_t)autocenter, &out_applied_value);
+    if (call_result == CNA_RESULT_SUCCESS || call_result == CNA_RESULT_BUFFER_TOO_SMALL) {
         jboolean out_applied_element = (jboolean)out_applied_value;
         (*environment)->SetBooleanArrayRegion(
             environment, out_applied, 0, 1, &out_applied_element);
     }
-    return (jint)result;
+    return (jint)call_result;
 }
 
 JNIEXPORT jint JNICALL
@@ -833,13 +833,13 @@ Java_org_openeggbert_cna_internal_generated_NativeInputExtensionRoutes_hapticDev
     (void)environment;
     (void)declaring_class;
     CNA_Bool out_applied_value = 0;
-    CNA_Result result = cna.haptic_device_set_gain((CNA_HapticDeviceHandle)device, (int32_t)gain, &out_applied_value);
-    if (result == CNA_RESULT_SUCCESS || result == CNA_RESULT_BUFFER_TOO_SMALL) {
+    CNA_Result call_result = cna.haptic_device_set_gain((CNA_HapticDeviceHandle)device, (int32_t)gain, &out_applied_value);
+    if (call_result == CNA_RESULT_SUCCESS || call_result == CNA_RESULT_BUFFER_TOO_SMALL) {
         jboolean out_applied_element = (jboolean)out_applied_value;
         (*environment)->SetBooleanArrayRegion(
             environment, out_applied, 0, 1, &out_applied_element);
     }
-    return (jint)result;
+    return (jint)call_result;
 }
 
 JNIEXPORT jint JNICALL
@@ -849,13 +849,13 @@ Java_org_openeggbert_cna_internal_generated_NativeInputExtensionRoutes_hapticDev
     (void)environment;
     (void)declaring_class;
     CNA_Bool out_applied_value = 0;
-    CNA_Result result = cna.haptic_device_stop_all_effects((CNA_HapticDeviceHandle)device, &out_applied_value);
-    if (result == CNA_RESULT_SUCCESS || result == CNA_RESULT_BUFFER_TOO_SMALL) {
+    CNA_Result call_result = cna.haptic_device_stop_all_effects((CNA_HapticDeviceHandle)device, &out_applied_value);
+    if (call_result == CNA_RESULT_SUCCESS || call_result == CNA_RESULT_BUFFER_TOO_SMALL) {
         jboolean out_applied_element = (jboolean)out_applied_value;
         (*environment)->SetBooleanArrayRegion(
             environment, out_applied, 0, 1, &out_applied_element);
     }
-    return (jint)result;
+    return (jint)call_result;
 }
 
 JNIEXPORT jint JNICALL
@@ -865,13 +865,13 @@ Java_org_openeggbert_cna_internal_generated_NativeInputExtensionRoutes_hapticDev
     (void)environment;
     (void)declaring_class;
     CNA_Bool out_applied_value = 0;
-    CNA_Result result = cna.haptic_device_stop_effect((CNA_HapticDeviceHandle)device, (int32_t)effect_id, &out_applied_value);
-    if (result == CNA_RESULT_SUCCESS || result == CNA_RESULT_BUFFER_TOO_SMALL) {
+    CNA_Result call_result = cna.haptic_device_stop_effect((CNA_HapticDeviceHandle)device, (int32_t)effect_id, &out_applied_value);
+    if (call_result == CNA_RESULT_SUCCESS || call_result == CNA_RESULT_BUFFER_TOO_SMALL) {
         jboolean out_applied_element = (jboolean)out_applied_value;
         (*environment)->SetBooleanArrayRegion(
             environment, out_applied, 0, 1, &out_applied_element);
     }
-    return (jint)result;
+    return (jint)call_result;
 }
 
 JNIEXPORT jint JNICALL
@@ -881,13 +881,13 @@ Java_org_openeggbert_cna_internal_generated_NativeInputExtensionRoutes_hapticDev
     (void)environment;
     (void)declaring_class;
     CNA_Bool out_applied_value = 0;
-    CNA_Result result = cna.haptic_device_stop_rumble((CNA_HapticDeviceHandle)device, &out_applied_value);
-    if (result == CNA_RESULT_SUCCESS || result == CNA_RESULT_BUFFER_TOO_SMALL) {
+    CNA_Result call_result = cna.haptic_device_stop_rumble((CNA_HapticDeviceHandle)device, &out_applied_value);
+    if (call_result == CNA_RESULT_SUCCESS || call_result == CNA_RESULT_BUFFER_TOO_SMALL) {
         jboolean out_applied_element = (jboolean)out_applied_value;
         (*environment)->SetBooleanArrayRegion(
             environment, out_applied, 0, 1, &out_applied_element);
     }
-    return (jint)result;
+    return (jint)call_result;
 }
 
 JNIEXPORT jint JNICALL
@@ -964,16 +964,16 @@ Java_org_openeggbert_cna_internal_generated_NativeInputExtensionRoutes_hapticDev
         custom_data_values[index] = (uint16_t)custom_data_elements[index];
     }
     CNA_Bool out_applied_value = 0;
-    CNA_Result result = cna.haptic_device_update_effect((CNA_HapticDeviceHandle)device, (int32_t)effect_id, &effect_value, custom_data_values, (uint64_t)custom_data_size, &out_applied_value);
+    CNA_Result call_result = cna.haptic_device_update_effect((CNA_HapticDeviceHandle)device, (int32_t)effect_id, &effect_value, custom_data_values, (uint64_t)custom_data_size, &out_applied_value);
     free(custom_data_values);
     (*environment)->ReleaseIntArrayElements(
         environment, custom_data, custom_data_elements, JNI_ABORT);
-    if (result == CNA_RESULT_SUCCESS || result == CNA_RESULT_BUFFER_TOO_SMALL) {
+    if (call_result == CNA_RESULT_SUCCESS || call_result == CNA_RESULT_BUFFER_TOO_SMALL) {
         jboolean out_applied_element = (jboolean)out_applied_value;
         (*environment)->SetBooleanArrayRegion(
             environment, out_applied, 0, 1, &out_applied_element);
     }
-    return (jint)result;
+    return (jint)call_result;
 }
 
 JNIEXPORT jint JNICALL
@@ -988,14 +988,14 @@ Java_org_openeggbert_cna_internal_generated_NativeInputExtensionRoutes_hapticsCo
         return (jint)CNA_RESULT_OUT_OF_MEMORY;
     }
     uint64_t destination_written = 0;
-    CNA_Result result = cna.haptics_copy_name_at((CNA_Handle)game, (uint32_t)index, (char*)destination_bytes, (uint64_t)destination_size, &destination_written);
+    CNA_Result call_result = cna.haptics_copy_name_at((CNA_Handle)game, (uint32_t)index, (char*)destination_bytes, (uint64_t)destination_size, &destination_written);
     (*environment)->ReleaseByteArrayElements(environment, destination, destination_bytes, 0);
-    if (result == CNA_RESULT_SUCCESS || result == CNA_RESULT_BUFFER_TOO_SMALL) {
+    if (call_result == CNA_RESULT_SUCCESS || call_result == CNA_RESULT_BUFFER_TOO_SMALL) {
         jlong destination_element = (jlong)destination_written;
         (*environment)->SetLongArrayRegion(
             environment, out_bytes, 0, 1, &destination_element);
     }
-    return (jint)result;
+    return (jint)call_result;
 }
 
 JNIEXPORT jint JNICALL
@@ -1005,13 +1005,13 @@ Java_org_openeggbert_cna_internal_generated_NativeInputExtensionRoutes_hapticsGe
     (void)environment;
     (void)declaring_class;
     uint32_t out_count_value = 0;
-    CNA_Result result = cna.haptics_get_count((CNA_Handle)game, &out_count_value);
-    if (result == CNA_RESULT_SUCCESS || result == CNA_RESULT_BUFFER_TOO_SMALL) {
+    CNA_Result call_result = cna.haptics_get_count((CNA_Handle)game, &out_count_value);
+    if (call_result == CNA_RESULT_SUCCESS || call_result == CNA_RESULT_BUFFER_TOO_SMALL) {
         jint out_count_element = (jint)out_count_value;
         (*environment)->SetIntArrayRegion(
             environment, out_count, 0, 1, &out_count_element);
     }
-    return (jint)result;
+    return (jint)call_result;
 }
 
 JNIEXPORT jint JNICALL
@@ -1021,13 +1021,13 @@ Java_org_openeggbert_cna_internal_generated_NativeInputExtensionRoutes_hapticsGe
     (void)environment;
     (void)declaring_class;
     uint32_t out_id_value = 0;
-    CNA_Result result = cna.haptics_get_id_at((CNA_Handle)game, (uint32_t)index, &out_id_value);
-    if (result == CNA_RESULT_SUCCESS || result == CNA_RESULT_BUFFER_TOO_SMALL) {
+    CNA_Result call_result = cna.haptics_get_id_at((CNA_Handle)game, (uint32_t)index, &out_id_value);
+    if (call_result == CNA_RESULT_SUCCESS || call_result == CNA_RESULT_BUFFER_TOO_SMALL) {
         jint out_id_element = (jint)out_id_value;
         (*environment)->SetIntArrayRegion(
             environment, out_id, 0, 1, &out_id_element);
     }
-    return (jint)result;
+    return (jint)call_result;
 }
 
 JNIEXPORT jint JNICALL
@@ -1037,13 +1037,13 @@ Java_org_openeggbert_cna_internal_generated_NativeInputExtensionRoutes_hapticsGe
     (void)environment;
     (void)declaring_class;
     CNA_Bool out_haptic_value = 0;
-    CNA_Result result = cna.haptics_get_is_joystick_haptic((CNA_Handle)game, (uint32_t)joystick_id, &out_haptic_value);
-    if (result == CNA_RESULT_SUCCESS || result == CNA_RESULT_BUFFER_TOO_SMALL) {
+    CNA_Result call_result = cna.haptics_get_is_joystick_haptic((CNA_Handle)game, (uint32_t)joystick_id, &out_haptic_value);
+    if (call_result == CNA_RESULT_SUCCESS || call_result == CNA_RESULT_BUFFER_TOO_SMALL) {
         jboolean out_haptic_element = (jboolean)out_haptic_value;
         (*environment)->SetBooleanArrayRegion(
             environment, out_haptic, 0, 1, &out_haptic_element);
     }
-    return (jint)result;
+    return (jint)call_result;
 }
 
 JNIEXPORT jint JNICALL
@@ -1053,13 +1053,13 @@ Java_org_openeggbert_cna_internal_generated_NativeInputExtensionRoutes_hapticsGe
     (void)environment;
     (void)declaring_class;
     CNA_Bool out_haptic_value = 0;
-    CNA_Result result = cna.haptics_get_is_mouse_haptic((CNA_Handle)game, &out_haptic_value);
-    if (result == CNA_RESULT_SUCCESS || result == CNA_RESULT_BUFFER_TOO_SMALL) {
+    CNA_Result call_result = cna.haptics_get_is_mouse_haptic((CNA_Handle)game, &out_haptic_value);
+    if (call_result == CNA_RESULT_SUCCESS || call_result == CNA_RESULT_BUFFER_TOO_SMALL) {
         jboolean out_haptic_element = (jboolean)out_haptic_value;
         (*environment)->SetBooleanArrayRegion(
             environment, out_haptic, 0, 1, &out_haptic_element);
     }
-    return (jint)result;
+    return (jint)call_result;
 }
 
 JNIEXPORT jint JNICALL
@@ -1069,13 +1069,13 @@ Java_org_openeggbert_cna_internal_generated_NativeInputExtensionRoutes_hapticsGe
     (void)environment;
     (void)declaring_class;
     uint64_t out_bytes_value = 0;
-    CNA_Result result = cna.haptics_get_name_size_at((CNA_Handle)game, (uint32_t)index, &out_bytes_value);
-    if (result == CNA_RESULT_SUCCESS || result == CNA_RESULT_BUFFER_TOO_SMALL) {
+    CNA_Result call_result = cna.haptics_get_name_size_at((CNA_Handle)game, (uint32_t)index, &out_bytes_value);
+    if (call_result == CNA_RESULT_SUCCESS || call_result == CNA_RESULT_BUFFER_TOO_SMALL) {
         jlong out_bytes_element = (jlong)out_bytes_value;
         (*environment)->SetLongArrayRegion(
             environment, out_bytes, 0, 1, &out_bytes_element);
     }
-    return (jint)result;
+    return (jint)call_result;
 }
 
 JNIEXPORT jint JNICALL
@@ -1085,13 +1085,13 @@ Java_org_openeggbert_cna_internal_generated_NativeInputExtensionRoutes_hapticsOp
     (void)environment;
     (void)declaring_class;
     CNA_HapticDeviceHandle out_device_value = 0;
-    CNA_Result result = cna.haptics_open((CNA_Handle)game, (uint32_t)id, &out_device_value);
-    if (result == CNA_RESULT_SUCCESS || result == CNA_RESULT_BUFFER_TOO_SMALL) {
+    CNA_Result call_result = cna.haptics_open((CNA_Handle)game, (uint32_t)id, &out_device_value);
+    if (call_result == CNA_RESULT_SUCCESS || call_result == CNA_RESULT_BUFFER_TOO_SMALL) {
         jlong out_device_element = (jlong)out_device_value;
         (*environment)->SetLongArrayRegion(
             environment, out_device, 0, 1, &out_device_element);
     }
-    return (jint)result;
+    return (jint)call_result;
 }
 
 JNIEXPORT jint JNICALL
@@ -1101,13 +1101,13 @@ Java_org_openeggbert_cna_internal_generated_NativeInputExtensionRoutes_hapticsOp
     (void)environment;
     (void)declaring_class;
     CNA_HapticDeviceHandle out_device_value = 0;
-    CNA_Result result = cna.haptics_open_from_joystick((CNA_Handle)game, (uint32_t)joystick_id, &out_device_value);
-    if (result == CNA_RESULT_SUCCESS || result == CNA_RESULT_BUFFER_TOO_SMALL) {
+    CNA_Result call_result = cna.haptics_open_from_joystick((CNA_Handle)game, (uint32_t)joystick_id, &out_device_value);
+    if (call_result == CNA_RESULT_SUCCESS || call_result == CNA_RESULT_BUFFER_TOO_SMALL) {
         jlong out_device_element = (jlong)out_device_value;
         (*environment)->SetLongArrayRegion(
             environment, out_device, 0, 1, &out_device_element);
     }
-    return (jint)result;
+    return (jint)call_result;
 }
 
 JNIEXPORT jint JNICALL
@@ -1117,13 +1117,13 @@ Java_org_openeggbert_cna_internal_generated_NativeInputExtensionRoutes_hapticsOp
     (void)environment;
     (void)declaring_class;
     CNA_HapticDeviceHandle out_device_value = 0;
-    CNA_Result result = cna.haptics_open_from_mouse((CNA_Handle)game, &out_device_value);
-    if (result == CNA_RESULT_SUCCESS || result == CNA_RESULT_BUFFER_TOO_SMALL) {
+    CNA_Result call_result = cna.haptics_open_from_mouse((CNA_Handle)game, &out_device_value);
+    if (call_result == CNA_RESULT_SUCCESS || call_result == CNA_RESULT_BUFFER_TOO_SMALL) {
         jlong out_device_element = (jlong)out_device_value;
         (*environment)->SetLongArrayRegion(
             environment, out_device, 0, 1, &out_device_element);
     }
-    return (jint)result;
+    return (jint)call_result;
 }
 
 JNIEXPORT jint JNICALL
@@ -1148,8 +1148,8 @@ Java_org_openeggbert_cna_internal_generated_NativeInputExtensionRoutes_joystickS
         destination_values[index] = (int16_t)destination_elements[index];
     }
     uint64_t out_count_value = 0;
-    CNA_Result result = cna.joystick_state_copy_axes((CNA_JoystickStateHandle)state, destination_values, (uint64_t)destination_size, &out_count_value);
-    if (result == CNA_RESULT_SUCCESS) {
+    CNA_Result call_result = cna.joystick_state_copy_axes((CNA_JoystickStateHandle)state, destination_values, (uint64_t)destination_size, &out_count_value);
+    if (call_result == CNA_RESULT_SUCCESS) {
         for (jsize index = 0; index < destination_size; ++index) {
             destination_elements[index] = (jshort)destination_values[index];
         }
@@ -1157,12 +1157,12 @@ Java_org_openeggbert_cna_internal_generated_NativeInputExtensionRoutes_joystickS
     free(destination_values);
     (*environment)->ReleaseShortArrayElements(
         environment, destination, destination_elements, 0);
-    if (result == CNA_RESULT_SUCCESS || result == CNA_RESULT_BUFFER_TOO_SMALL) {
+    if (call_result == CNA_RESULT_SUCCESS || call_result == CNA_RESULT_BUFFER_TOO_SMALL) {
         jlong out_count_element = (jlong)out_count_value;
         (*environment)->SetLongArrayRegion(
             environment, out_count, 0, 1, &out_count_element);
     }
-    return (jint)result;
+    return (jint)call_result;
 }
 
 JNIEXPORT jint JNICALL
@@ -1193,8 +1193,8 @@ Java_org_openeggbert_cna_internal_generated_NativeInputExtensionRoutes_joystickS
         free(destinationIntegral_values);
     }
     uint64_t out_count_value = 0;
-    CNA_Result result = cna.joystick_state_copy_balls((CNA_JoystickStateHandle)state, destination_values, (uint64_t)destination_count, &out_count_value);
-    if (result == CNA_RESULT_SUCCESS) {
+    CNA_Result call_result = cna.joystick_state_copy_balls((CNA_JoystickStateHandle)state, destination_values, (uint64_t)destination_count, &out_count_value);
+    if (call_result == CNA_RESULT_SUCCESS) {
         {
             jlong* destinationIntegral_out = (jlong*)malloc(
                 ((size_t)destination_count * 2 + 1U) * sizeof(*destinationIntegral_out));
@@ -1211,12 +1211,12 @@ Java_org_openeggbert_cna_internal_generated_NativeInputExtensionRoutes_joystickS
         }
     }
     free(destination_values);
-    if (result == CNA_RESULT_SUCCESS || result == CNA_RESULT_BUFFER_TOO_SMALL) {
+    if (call_result == CNA_RESULT_SUCCESS || call_result == CNA_RESULT_BUFFER_TOO_SMALL) {
         jlong out_count_element = (jlong)out_count_value;
         (*environment)->SetLongArrayRegion(
             environment, out_count, 0, 1, &out_count_element);
     }
-    return (jint)result;
+    return (jint)call_result;
 }
 
 JNIEXPORT jint JNICALL
@@ -1241,8 +1241,8 @@ Java_org_openeggbert_cna_internal_generated_NativeInputExtensionRoutes_joystickS
         destination_values[index] = (CNA_Bool)destination_elements[index];
     }
     uint64_t out_count_value = 0;
-    CNA_Result result = cna.joystick_state_copy_buttons((CNA_JoystickStateHandle)state, destination_values, (uint64_t)destination_size, &out_count_value);
-    if (result == CNA_RESULT_SUCCESS) {
+    CNA_Result call_result = cna.joystick_state_copy_buttons((CNA_JoystickStateHandle)state, destination_values, (uint64_t)destination_size, &out_count_value);
+    if (call_result == CNA_RESULT_SUCCESS) {
         for (jsize index = 0; index < destination_size; ++index) {
             destination_elements[index] = (jboolean)destination_values[index];
         }
@@ -1250,12 +1250,12 @@ Java_org_openeggbert_cna_internal_generated_NativeInputExtensionRoutes_joystickS
     free(destination_values);
     (*environment)->ReleaseBooleanArrayElements(
         environment, destination, destination_elements, 0);
-    if (result == CNA_RESULT_SUCCESS || result == CNA_RESULT_BUFFER_TOO_SMALL) {
+    if (call_result == CNA_RESULT_SUCCESS || call_result == CNA_RESULT_BUFFER_TOO_SMALL) {
         jlong out_count_element = (jlong)out_count_value;
         (*environment)->SetLongArrayRegion(
             environment, out_count, 0, 1, &out_count_element);
     }
-    return (jint)result;
+    return (jint)call_result;
 }
 
 JNIEXPORT jint JNICALL
@@ -1280,8 +1280,8 @@ Java_org_openeggbert_cna_internal_generated_NativeInputExtensionRoutes_joystickS
         destination_values[index] = (CNA_JoystickHatPosition)destination_elements[index];
     }
     uint64_t out_count_value = 0;
-    CNA_Result result = cna.joystick_state_copy_hats((CNA_JoystickStateHandle)state, destination_values, (uint64_t)destination_size, &out_count_value);
-    if (result == CNA_RESULT_SUCCESS) {
+    CNA_Result call_result = cna.joystick_state_copy_hats((CNA_JoystickStateHandle)state, destination_values, (uint64_t)destination_size, &out_count_value);
+    if (call_result == CNA_RESULT_SUCCESS) {
         for (jsize index = 0; index < destination_size; ++index) {
             destination_elements[index] = (jint)destination_values[index];
         }
@@ -1289,12 +1289,12 @@ Java_org_openeggbert_cna_internal_generated_NativeInputExtensionRoutes_joystickS
     free(destination_values);
     (*environment)->ReleaseIntArrayElements(
         environment, destination, destination_elements, 0);
-    if (result == CNA_RESULT_SUCCESS || result == CNA_RESULT_BUFFER_TOO_SMALL) {
+    if (call_result == CNA_RESULT_SUCCESS || call_result == CNA_RESULT_BUFFER_TOO_SMALL) {
         jlong out_count_element = (jlong)out_count_value;
         (*environment)->SetLongArrayRegion(
             environment, out_count, 0, 1, &out_count_element);
     }
-    return (jint)result;
+    return (jint)call_result;
 }
 
 JNIEXPORT jint JNICALL
@@ -1303,8 +1303,8 @@ Java_org_openeggbert_cna_internal_generated_NativeInputExtensionRoutes_joystickS
 {
     (void)environment;
     (void)declaring_class;
-    CNA_Result result = cna.joystick_state_destroy((CNA_JoystickStateHandle)state);
-    return (jint)result;
+    CNA_Result call_result = cna.joystick_state_destroy((CNA_JoystickStateHandle)state);
+    return (jint)call_result;
 }
 
 JNIEXPORT jint JNICALL
@@ -1314,13 +1314,13 @@ Java_org_openeggbert_cna_internal_generated_NativeInputExtensionRoutes_joystickS
     (void)environment;
     (void)declaring_class;
     uint32_t out_count_value = 0;
-    CNA_Result result = cna.joystick_state_get_axis_count((CNA_JoystickStateHandle)state, &out_count_value);
-    if (result == CNA_RESULT_SUCCESS || result == CNA_RESULT_BUFFER_TOO_SMALL) {
+    CNA_Result call_result = cna.joystick_state_get_axis_count((CNA_JoystickStateHandle)state, &out_count_value);
+    if (call_result == CNA_RESULT_SUCCESS || call_result == CNA_RESULT_BUFFER_TOO_SMALL) {
         jint out_count_element = (jint)out_count_value;
         (*environment)->SetIntArrayRegion(
             environment, out_count, 0, 1, &out_count_element);
     }
-    return (jint)result;
+    return (jint)call_result;
 }
 
 JNIEXPORT jint JNICALL
@@ -1330,13 +1330,13 @@ Java_org_openeggbert_cna_internal_generated_NativeInputExtensionRoutes_joystickS
     (void)environment;
     (void)declaring_class;
     uint32_t out_count_value = 0;
-    CNA_Result result = cna.joystick_state_get_ball_count((CNA_JoystickStateHandle)state, &out_count_value);
-    if (result == CNA_RESULT_SUCCESS || result == CNA_RESULT_BUFFER_TOO_SMALL) {
+    CNA_Result call_result = cna.joystick_state_get_ball_count((CNA_JoystickStateHandle)state, &out_count_value);
+    if (call_result == CNA_RESULT_SUCCESS || call_result == CNA_RESULT_BUFFER_TOO_SMALL) {
         jint out_count_element = (jint)out_count_value;
         (*environment)->SetIntArrayRegion(
             environment, out_count, 0, 1, &out_count_element);
     }
-    return (jint)result;
+    return (jint)call_result;
 }
 
 JNIEXPORT jint JNICALL
@@ -1346,13 +1346,13 @@ Java_org_openeggbert_cna_internal_generated_NativeInputExtensionRoutes_joystickS
     (void)environment;
     (void)declaring_class;
     uint32_t out_count_value = 0;
-    CNA_Result result = cna.joystick_state_get_button_count((CNA_JoystickStateHandle)state, &out_count_value);
-    if (result == CNA_RESULT_SUCCESS || result == CNA_RESULT_BUFFER_TOO_SMALL) {
+    CNA_Result call_result = cna.joystick_state_get_button_count((CNA_JoystickStateHandle)state, &out_count_value);
+    if (call_result == CNA_RESULT_SUCCESS || call_result == CNA_RESULT_BUFFER_TOO_SMALL) {
         jint out_count_element = (jint)out_count_value;
         (*environment)->SetIntArrayRegion(
             environment, out_count, 0, 1, &out_count_element);
     }
-    return (jint)result;
+    return (jint)call_result;
 }
 
 JNIEXPORT jint JNICALL
@@ -1362,13 +1362,13 @@ Java_org_openeggbert_cna_internal_generated_NativeInputExtensionRoutes_joystickS
     (void)environment;
     (void)declaring_class;
     uint32_t out_count_value = 0;
-    CNA_Result result = cna.joystick_state_get_hat_count((CNA_JoystickStateHandle)state, &out_count_value);
-    if (result == CNA_RESULT_SUCCESS || result == CNA_RESULT_BUFFER_TOO_SMALL) {
+    CNA_Result call_result = cna.joystick_state_get_hat_count((CNA_JoystickStateHandle)state, &out_count_value);
+    if (call_result == CNA_RESULT_SUCCESS || call_result == CNA_RESULT_BUFFER_TOO_SMALL) {
         jint out_count_element = (jint)out_count_value;
         (*environment)->SetIntArrayRegion(
             environment, out_count, 0, 1, &out_count_element);
     }
-    return (jint)result;
+    return (jint)call_result;
 }
 
 JNIEXPORT jint JNICALL
@@ -1378,13 +1378,13 @@ Java_org_openeggbert_cna_internal_generated_NativeInputExtensionRoutes_joysticks
     (void)environment;
     (void)declaring_class;
     CNA_JoystickStateHandle out_state_value = 0;
-    CNA_Result result = cna.joysticks_capture_state((CNA_Handle)game, (uint32_t)id, &out_state_value);
-    if (result == CNA_RESULT_SUCCESS || result == CNA_RESULT_BUFFER_TOO_SMALL) {
+    CNA_Result call_result = cna.joysticks_capture_state((CNA_Handle)game, (uint32_t)id, &out_state_value);
+    if (call_result == CNA_RESULT_SUCCESS || call_result == CNA_RESULT_BUFFER_TOO_SMALL) {
         jlong out_state_element = (jlong)out_state_value;
         (*environment)->SetLongArrayRegion(
             environment, out_state, 0, 1, &out_state_element);
     }
-    return (jint)result;
+    return (jint)call_result;
 }
 
 JNIEXPORT jint JNICALL
@@ -1399,14 +1399,14 @@ Java_org_openeggbert_cna_internal_generated_NativeInputExtensionRoutes_joysticks
         return (jint)CNA_RESULT_OUT_OF_MEMORY;
     }
     uint64_t destination_written = 0;
-    CNA_Result result = cna.joysticks_copy_capabilities_guid((CNA_Handle)game, (uint32_t)id, (char*)destination_bytes, (uint64_t)destination_size, &destination_written);
+    CNA_Result call_result = cna.joysticks_copy_capabilities_guid((CNA_Handle)game, (uint32_t)id, (char*)destination_bytes, (uint64_t)destination_size, &destination_written);
     (*environment)->ReleaseByteArrayElements(environment, destination, destination_bytes, 0);
-    if (result == CNA_RESULT_SUCCESS || result == CNA_RESULT_BUFFER_TOO_SMALL) {
+    if (call_result == CNA_RESULT_SUCCESS || call_result == CNA_RESULT_BUFFER_TOO_SMALL) {
         jlong destination_element = (jlong)destination_written;
         (*environment)->SetLongArrayRegion(
             environment, out_bytes, 0, 1, &destination_element);
     }
-    return (jint)result;
+    return (jint)call_result;
 }
 
 JNIEXPORT jint JNICALL
@@ -1421,14 +1421,14 @@ Java_org_openeggbert_cna_internal_generated_NativeInputExtensionRoutes_joysticks
         return (jint)CNA_RESULT_OUT_OF_MEMORY;
     }
     uint64_t destination_written = 0;
-    CNA_Result result = cna.joysticks_copy_capabilities_name((CNA_Handle)game, (uint32_t)id, (char*)destination_bytes, (uint64_t)destination_size, &destination_written);
+    CNA_Result call_result = cna.joysticks_copy_capabilities_name((CNA_Handle)game, (uint32_t)id, (char*)destination_bytes, (uint64_t)destination_size, &destination_written);
     (*environment)->ReleaseByteArrayElements(environment, destination, destination_bytes, 0);
-    if (result == CNA_RESULT_SUCCESS || result == CNA_RESULT_BUFFER_TOO_SMALL) {
+    if (call_result == CNA_RESULT_SUCCESS || call_result == CNA_RESULT_BUFFER_TOO_SMALL) {
         jlong destination_element = (jlong)destination_written;
         (*environment)->SetLongArrayRegion(
             environment, out_bytes, 0, 1, &destination_element);
     }
-    return (jint)result;
+    return (jint)call_result;
 }
 
 JNIEXPORT jint JNICALL
@@ -1443,14 +1443,14 @@ Java_org_openeggbert_cna_internal_generated_NativeInputExtensionRoutes_joysticks
         return (jint)CNA_RESULT_OUT_OF_MEMORY;
     }
     uint64_t destination_written = 0;
-    CNA_Result result = cna.joysticks_copy_name_at((CNA_Handle)game, (uint32_t)index, (char*)destination_bytes, (uint64_t)destination_size, &destination_written);
+    CNA_Result call_result = cna.joysticks_copy_name_at((CNA_Handle)game, (uint32_t)index, (char*)destination_bytes, (uint64_t)destination_size, &destination_written);
     (*environment)->ReleaseByteArrayElements(environment, destination, destination_bytes, 0);
-    if (result == CNA_RESULT_SUCCESS || result == CNA_RESULT_BUFFER_TOO_SMALL) {
+    if (call_result == CNA_RESULT_SUCCESS || call_result == CNA_RESULT_BUFFER_TOO_SMALL) {
         jlong destination_element = (jlong)destination_written;
         (*environment)->SetLongArrayRegion(
             environment, out_bytes, 0, 1, &destination_element);
     }
-    return (jint)result;
+    return (jint)call_result;
 }
 
 JNIEXPORT jint JNICALL
@@ -1463,8 +1463,8 @@ Java_org_openeggbert_cna_internal_generated_NativeInputExtensionRoutes_joysticks
     memset(&out_capabilities_value, 0, sizeof out_capabilities_value);
     out_capabilities_value.struct_size = (uint32_t)(sizeof out_capabilities_value);
     out_capabilities_value.struct_version = UINT32_C(1);
-    CNA_Result result = cna.joysticks_get_capabilities((CNA_Handle)game, (uint32_t)id, &out_capabilities_value);
-    if (result == CNA_RESULT_SUCCESS || result == CNA_RESULT_BUFFER_TOO_SMALL) {
+    CNA_Result call_result = cna.joysticks_get_capabilities((CNA_Handle)game, (uint32_t)id, &out_capabilities_value);
+    if (call_result == CNA_RESULT_SUCCESS || call_result == CNA_RESULT_BUFFER_TOO_SMALL) {
         jbyte out_capabilitiesBytes_values[] = {
             (jbyte)out_capabilities_value.reserved[0],
             (jbyte)out_capabilities_value.reserved[1],
@@ -1487,7 +1487,7 @@ Java_org_openeggbert_cna_internal_generated_NativeInputExtensionRoutes_joysticks
             (jsize)(sizeof out_capabilitiesIntegral_values / sizeof out_capabilitiesIntegral_values[0]),
             out_capabilitiesIntegral_values);
     }
-    return (jint)result;
+    return (jint)call_result;
 }
 
 JNIEXPORT jint JNICALL
@@ -1497,13 +1497,13 @@ Java_org_openeggbert_cna_internal_generated_NativeInputExtensionRoutes_joysticks
     (void)environment;
     (void)declaring_class;
     uint64_t out_bytes_value = 0;
-    CNA_Result result = cna.joysticks_get_capabilities_guid_size((CNA_Handle)game, (uint32_t)id, &out_bytes_value);
-    if (result == CNA_RESULT_SUCCESS || result == CNA_RESULT_BUFFER_TOO_SMALL) {
+    CNA_Result call_result = cna.joysticks_get_capabilities_guid_size((CNA_Handle)game, (uint32_t)id, &out_bytes_value);
+    if (call_result == CNA_RESULT_SUCCESS || call_result == CNA_RESULT_BUFFER_TOO_SMALL) {
         jlong out_bytes_element = (jlong)out_bytes_value;
         (*environment)->SetLongArrayRegion(
             environment, out_bytes, 0, 1, &out_bytes_element);
     }
-    return (jint)result;
+    return (jint)call_result;
 }
 
 JNIEXPORT jint JNICALL
@@ -1513,13 +1513,13 @@ Java_org_openeggbert_cna_internal_generated_NativeInputExtensionRoutes_joysticks
     (void)environment;
     (void)declaring_class;
     uint64_t out_bytes_value = 0;
-    CNA_Result result = cna.joysticks_get_capabilities_name_size((CNA_Handle)game, (uint32_t)id, &out_bytes_value);
-    if (result == CNA_RESULT_SUCCESS || result == CNA_RESULT_BUFFER_TOO_SMALL) {
+    CNA_Result call_result = cna.joysticks_get_capabilities_name_size((CNA_Handle)game, (uint32_t)id, &out_bytes_value);
+    if (call_result == CNA_RESULT_SUCCESS || call_result == CNA_RESULT_BUFFER_TOO_SMALL) {
         jlong out_bytes_element = (jlong)out_bytes_value;
         (*environment)->SetLongArrayRegion(
             environment, out_bytes, 0, 1, &out_bytes_element);
     }
-    return (jint)result;
+    return (jint)call_result;
 }
 
 JNIEXPORT jint JNICALL
@@ -1529,13 +1529,13 @@ Java_org_openeggbert_cna_internal_generated_NativeInputExtensionRoutes_joysticks
     (void)environment;
     (void)declaring_class;
     uint32_t out_count_value = 0;
-    CNA_Result result = cna.joysticks_get_count((CNA_Handle)game, &out_count_value);
-    if (result == CNA_RESULT_SUCCESS || result == CNA_RESULT_BUFFER_TOO_SMALL) {
+    CNA_Result call_result = cna.joysticks_get_count((CNA_Handle)game, &out_count_value);
+    if (call_result == CNA_RESULT_SUCCESS || call_result == CNA_RESULT_BUFFER_TOO_SMALL) {
         jint out_count_element = (jint)out_count_value;
         (*environment)->SetIntArrayRegion(
             environment, out_count, 0, 1, &out_count_element);
     }
-    return (jint)result;
+    return (jint)call_result;
 }
 
 JNIEXPORT jint JNICALL
@@ -1548,8 +1548,8 @@ Java_org_openeggbert_cna_internal_generated_NativeInputExtensionRoutes_joysticks
     memset(&out_info_value, 0, sizeof out_info_value);
     out_info_value.struct_size = (uint32_t)(sizeof out_info_value);
     out_info_value.struct_version = UINT32_C(1);
-    CNA_Result result = cna.joysticks_get_info_at((CNA_Handle)game, (uint32_t)index, &out_info_value);
-    if (result == CNA_RESULT_SUCCESS || result == CNA_RESULT_BUFFER_TOO_SMALL) {
+    CNA_Result call_result = cna.joysticks_get_info_at((CNA_Handle)game, (uint32_t)index, &out_info_value);
+    if (call_result == CNA_RESULT_SUCCESS || call_result == CNA_RESULT_BUFFER_TOO_SMALL) {
         jlong out_infoIntegral_values[] = {
             (jlong)out_info_value.id,
             (jlong)out_info_value.type
@@ -1558,7 +1558,7 @@ Java_org_openeggbert_cna_internal_generated_NativeInputExtensionRoutes_joysticks
             (jsize)(sizeof out_infoIntegral_values / sizeof out_infoIntegral_values[0]),
             out_infoIntegral_values);
     }
-    return (jint)result;
+    return (jint)call_result;
 }
 
 JNIEXPORT jint JNICALL
@@ -1568,13 +1568,13 @@ Java_org_openeggbert_cna_internal_generated_NativeInputExtensionRoutes_joysticks
     (void)environment;
     (void)declaring_class;
     uint64_t out_bytes_value = 0;
-    CNA_Result result = cna.joysticks_get_name_size_at((CNA_Handle)game, (uint32_t)index, &out_bytes_value);
-    if (result == CNA_RESULT_SUCCESS || result == CNA_RESULT_BUFFER_TOO_SMALL) {
+    CNA_Result call_result = cna.joysticks_get_name_size_at((CNA_Handle)game, (uint32_t)index, &out_bytes_value);
+    if (call_result == CNA_RESULT_SUCCESS || call_result == CNA_RESULT_BUFFER_TOO_SMALL) {
         jlong out_bytes_element = (jlong)out_bytes_value;
         (*environment)->SetLongArrayRegion(
             environment, out_bytes, 0, 1, &out_bytes_element);
     }
-    return (jint)result;
+    return (jint)call_result;
 }
 
 JNIEXPORT jint JNICALL
@@ -1583,8 +1583,8 @@ Java_org_openeggbert_cna_internal_generated_NativeInputExtensionRoutes_joysticks
 {
     (void)environment;
     (void)declaring_class;
-    CNA_Result result = cna.joysticks_raise_connected_ext((CNA_Handle)game, (uint32_t)id);
-    return (jint)result;
+    CNA_Result call_result = cna.joysticks_raise_connected_ext((CNA_Handle)game, (uint32_t)id);
+    return (jint)call_result;
 }
 
 JNIEXPORT jint JNICALL
@@ -1593,8 +1593,8 @@ Java_org_openeggbert_cna_internal_generated_NativeInputExtensionRoutes_joysticks
 {
     (void)environment;
     (void)declaring_class;
-    CNA_Result result = cna.joysticks_raise_disconnected_ext((CNA_Handle)game, (uint32_t)id);
-    return (jint)result;
+    CNA_Result call_result = cna.joysticks_raise_disconnected_ext((CNA_Handle)game, (uint32_t)id);
+    return (jint)call_result;
 }
 
 JNIEXPORT jint JNICALL
@@ -1609,14 +1609,14 @@ Java_org_openeggbert_cna_internal_generated_NativeInputExtensionRoutes_keyboardC
         return (jint)CNA_RESULT_OUT_OF_MEMORY;
     }
     uint64_t destination_written = 0;
-    CNA_Result result = cna.keyboard_copy_key_name_ext((CNA_Handle)game, (CNA_Key)key, (char*)destination_bytes, (uint64_t)destination_size, &destination_written);
+    CNA_Result call_result = cna.keyboard_copy_key_name_ext((CNA_Handle)game, (CNA_Key)key, (char*)destination_bytes, (uint64_t)destination_size, &destination_written);
     (*environment)->ReleaseByteArrayElements(environment, destination, destination_bytes, 0);
-    if (result == CNA_RESULT_SUCCESS || result == CNA_RESULT_BUFFER_TOO_SMALL) {
+    if (call_result == CNA_RESULT_SUCCESS || call_result == CNA_RESULT_BUFFER_TOO_SMALL) {
         jlong destination_element = (jlong)destination_written;
         (*environment)->SetLongArrayRegion(
             environment, out_bytes, 0, 1, &destination_element);
     }
-    return (jint)result;
+    return (jint)call_result;
 }
 
 JNIEXPORT jint JNICALL
@@ -1631,14 +1631,14 @@ Java_org_openeggbert_cna_internal_generated_NativeInputExtensionRoutes_keyboardC
         return (jint)CNA_RESULT_OUT_OF_MEMORY;
     }
     uint64_t destination_written = 0;
-    CNA_Result result = cna.keyboard_copy_scancode_name_ext((CNA_Handle)game, (CNA_Key)key, (char*)destination_bytes, (uint64_t)destination_size, &destination_written);
+    CNA_Result call_result = cna.keyboard_copy_scancode_name_ext((CNA_Handle)game, (CNA_Key)key, (char*)destination_bytes, (uint64_t)destination_size, &destination_written);
     (*environment)->ReleaseByteArrayElements(environment, destination, destination_bytes, 0);
-    if (result == CNA_RESULT_SUCCESS || result == CNA_RESULT_BUFFER_TOO_SMALL) {
+    if (call_result == CNA_RESULT_SUCCESS || call_result == CNA_RESULT_BUFFER_TOO_SMALL) {
         jlong destination_element = (jlong)destination_written;
         (*environment)->SetLongArrayRegion(
             environment, out_bytes, 0, 1, &destination_element);
     }
-    return (jint)result;
+    return (jint)call_result;
 }
 
 JNIEXPORT jint JNICALL
@@ -1654,14 +1654,14 @@ Java_org_openeggbert_cna_internal_generated_NativeInputExtensionRoutes_keyboardG
     }
     CNA_StringView name_view = {(const char*)name_bytes, (uint64_t)name_size};
     CNA_Key out_key_value = 0;
-    CNA_Result result = cna.keyboard_get_key_from_name_ext((CNA_Handle)game, name_view, &out_key_value);
+    CNA_Result call_result = cna.keyboard_get_key_from_name_ext((CNA_Handle)game, name_view, &out_key_value);
     (*environment)->ReleaseByteArrayElements(environment, name, name_bytes, JNI_ABORT);
-    if (result == CNA_RESULT_SUCCESS || result == CNA_RESULT_BUFFER_TOO_SMALL) {
+    if (call_result == CNA_RESULT_SUCCESS || call_result == CNA_RESULT_BUFFER_TOO_SMALL) {
         jint out_key_element = (jint)out_key_value;
         (*environment)->SetIntArrayRegion(
             environment, out_key, 0, 1, &out_key_element);
     }
-    return (jint)result;
+    return (jint)call_result;
 }
 
 JNIEXPORT jint JNICALL
@@ -1671,13 +1671,13 @@ Java_org_openeggbert_cna_internal_generated_NativeInputExtensionRoutes_keyboardG
     (void)environment;
     (void)declaring_class;
     CNA_Key out_key_value = 0;
-    CNA_Result result = cna.keyboard_get_key_from_scancode_ext((CNA_Handle)game, (CNA_Key)scancode, &out_key_value);
-    if (result == CNA_RESULT_SUCCESS || result == CNA_RESULT_BUFFER_TOO_SMALL) {
+    CNA_Result call_result = cna.keyboard_get_key_from_scancode_ext((CNA_Handle)game, (CNA_Key)scancode, &out_key_value);
+    if (call_result == CNA_RESULT_SUCCESS || call_result == CNA_RESULT_BUFFER_TOO_SMALL) {
         jint out_key_element = (jint)out_key_value;
         (*environment)->SetIntArrayRegion(
             environment, out_key, 0, 1, &out_key_element);
     }
-    return (jint)result;
+    return (jint)call_result;
 }
 
 JNIEXPORT jint JNICALL
@@ -1687,13 +1687,13 @@ Java_org_openeggbert_cna_internal_generated_NativeInputExtensionRoutes_keyboardG
     (void)environment;
     (void)declaring_class;
     uint64_t out_bytes_value = 0;
-    CNA_Result result = cna.keyboard_get_key_name_size_ext((CNA_Handle)game, (CNA_Key)key, &out_bytes_value);
-    if (result == CNA_RESULT_SUCCESS || result == CNA_RESULT_BUFFER_TOO_SMALL) {
+    CNA_Result call_result = cna.keyboard_get_key_name_size_ext((CNA_Handle)game, (CNA_Key)key, &out_bytes_value);
+    if (call_result == CNA_RESULT_SUCCESS || call_result == CNA_RESULT_BUFFER_TOO_SMALL) {
         jlong out_bytes_element = (jlong)out_bytes_value;
         (*environment)->SetLongArrayRegion(
             environment, out_bytes, 0, 1, &out_bytes_element);
     }
-    return (jint)result;
+    return (jint)call_result;
 }
 
 JNIEXPORT jint JNICALL
@@ -1703,13 +1703,13 @@ Java_org_openeggbert_cna_internal_generated_NativeInputExtensionRoutes_keyboardG
     (void)environment;
     (void)declaring_class;
     CNA_KeyModifiers out_modifiers_value = 0;
-    CNA_Result result = cna.keyboard_get_mod_state_ext((CNA_Handle)game, &out_modifiers_value);
-    if (result == CNA_RESULT_SUCCESS || result == CNA_RESULT_BUFFER_TOO_SMALL) {
+    CNA_Result call_result = cna.keyboard_get_mod_state_ext((CNA_Handle)game, &out_modifiers_value);
+    if (call_result == CNA_RESULT_SUCCESS || call_result == CNA_RESULT_BUFFER_TOO_SMALL) {
         jint out_modifiers_element = (jint)out_modifiers_value;
         (*environment)->SetIntArrayRegion(
             environment, out_modifiers, 0, 1, &out_modifiers_element);
     }
-    return (jint)result;
+    return (jint)call_result;
 }
 
 JNIEXPORT jint JNICALL
@@ -1725,14 +1725,14 @@ Java_org_openeggbert_cna_internal_generated_NativeInputExtensionRoutes_keyboardG
     }
     CNA_StringView name_view = {(const char*)name_bytes, (uint64_t)name_size};
     CNA_Key out_key_value = 0;
-    CNA_Result result = cna.keyboard_get_scancode_from_name_ext((CNA_Handle)game, name_view, &out_key_value);
+    CNA_Result call_result = cna.keyboard_get_scancode_from_name_ext((CNA_Handle)game, name_view, &out_key_value);
     (*environment)->ReleaseByteArrayElements(environment, name, name_bytes, JNI_ABORT);
-    if (result == CNA_RESULT_SUCCESS || result == CNA_RESULT_BUFFER_TOO_SMALL) {
+    if (call_result == CNA_RESULT_SUCCESS || call_result == CNA_RESULT_BUFFER_TOO_SMALL) {
         jint out_key_element = (jint)out_key_value;
         (*environment)->SetIntArrayRegion(
             environment, out_key, 0, 1, &out_key_element);
     }
-    return (jint)result;
+    return (jint)call_result;
 }
 
 JNIEXPORT jint JNICALL
@@ -1742,13 +1742,13 @@ Java_org_openeggbert_cna_internal_generated_NativeInputExtensionRoutes_keyboardG
     (void)environment;
     (void)declaring_class;
     uint64_t out_bytes_value = 0;
-    CNA_Result result = cna.keyboard_get_scancode_name_size_ext((CNA_Handle)game, (CNA_Key)key, &out_bytes_value);
-    if (result == CNA_RESULT_SUCCESS || result == CNA_RESULT_BUFFER_TOO_SMALL) {
+    CNA_Result call_result = cna.keyboard_get_scancode_name_size_ext((CNA_Handle)game, (CNA_Key)key, &out_bytes_value);
+    if (call_result == CNA_RESULT_SUCCESS || call_result == CNA_RESULT_BUFFER_TOO_SMALL) {
         jlong out_bytes_element = (jlong)out_bytes_value;
         (*environment)->SetLongArrayRegion(
             environment, out_bytes, 0, 1, &out_bytes_element);
     }
-    return (jint)result;
+    return (jint)call_result;
 }
 
 JNIEXPORT jint JNICALL
@@ -1758,13 +1758,13 @@ Java_org_openeggbert_cna_internal_generated_NativeInputExtensionRoutes_mouseCurs
     (void)environment;
     (void)declaring_class;
     CNA_MouseCursorHandle out_cursor_value = 0;
-    CNA_Result result = cna.mouse_cursor_create_ext(&out_cursor_value);
-    if (result == CNA_RESULT_SUCCESS || result == CNA_RESULT_BUFFER_TOO_SMALL) {
+    CNA_Result call_result = cna.mouse_cursor_create_ext(&out_cursor_value);
+    if (call_result == CNA_RESULT_SUCCESS || call_result == CNA_RESULT_BUFFER_TOO_SMALL) {
         jlong out_cursor_element = (jlong)out_cursor_value;
         (*environment)->SetLongArrayRegion(
             environment, out_cursor, 0, 1, &out_cursor_element);
     }
-    return (jint)result;
+    return (jint)call_result;
 }
 
 JNIEXPORT jint JNICALL
@@ -1774,13 +1774,13 @@ Java_org_openeggbert_cna_internal_generated_NativeInputExtensionRoutes_mouseCurs
     (void)environment;
     (void)declaring_class;
     CNA_MouseCursorHandle out_cursor_value = 0;
-    CNA_Result result = cna.mouse_cursor_create_from_texture2d((CNA_Handle)game, (CNA_Handle)texture, (int32_t)origin_x, (int32_t)origin_y, &out_cursor_value);
-    if (result == CNA_RESULT_SUCCESS || result == CNA_RESULT_BUFFER_TOO_SMALL) {
+    CNA_Result call_result = cna.mouse_cursor_create_from_texture2d((CNA_Handle)game, (CNA_Handle)texture, (int32_t)origin_x, (int32_t)origin_y, &out_cursor_value);
+    if (call_result == CNA_RESULT_SUCCESS || call_result == CNA_RESULT_BUFFER_TOO_SMALL) {
         jlong out_cursor_element = (jlong)out_cursor_value;
         (*environment)->SetLongArrayRegion(
             environment, out_cursor, 0, 1, &out_cursor_element);
     }
-    return (jint)result;
+    return (jint)call_result;
 }
 
 JNIEXPORT jint JNICALL
@@ -1789,8 +1789,8 @@ Java_org_openeggbert_cna_internal_generated_NativeInputExtensionRoutes_mouseCurs
 {
     (void)environment;
     (void)declaring_class;
-    CNA_Result result = cna.mouse_cursor_destroy((CNA_MouseCursorHandle)cursor);
-    return (jint)result;
+    CNA_Result call_result = cna.mouse_cursor_destroy((CNA_MouseCursorHandle)cursor);
+    return (jint)call_result;
 }
 
 JNIEXPORT jint JNICALL
@@ -1799,8 +1799,8 @@ Java_org_openeggbert_cna_internal_generated_NativeInputExtensionRoutes_mouseCurs
 {
     (void)environment;
     (void)declaring_class;
-    CNA_Result result = cna.mouse_cursor_dispose((CNA_MouseCursorHandle)cursor);
-    return (jint)result;
+    CNA_Result call_result = cna.mouse_cursor_dispose((CNA_MouseCursorHandle)cursor);
+    return (jint)call_result;
 }
 
 JNIEXPORT jint JNICALL
@@ -1810,13 +1810,13 @@ Java_org_openeggbert_cna_internal_generated_NativeInputExtensionRoutes_mouseCurs
     (void)environment;
     (void)declaring_class;
     CNA_MouseCursorHandle out_cursor_value = 0;
-    CNA_Result result = cna.mouse_cursor_get_stock_ext((CNA_Handle)game, (CNA_MouseCursorStock)stock, &out_cursor_value);
-    if (result == CNA_RESULT_SUCCESS || result == CNA_RESULT_BUFFER_TOO_SMALL) {
+    CNA_Result call_result = cna.mouse_cursor_get_stock_ext((CNA_Handle)game, (CNA_MouseCursorStock)stock, &out_cursor_value);
+    if (call_result == CNA_RESULT_SUCCESS || call_result == CNA_RESULT_BUFFER_TOO_SMALL) {
         jlong out_cursor_element = (jlong)out_cursor_value;
         (*environment)->SetLongArrayRegion(
             environment, out_cursor, 0, 1, &out_cursor_element);
     }
-    return (jint)result;
+    return (jint)call_result;
 }
 
 JNIEXPORT jint JNICALL
@@ -1827,8 +1827,8 @@ Java_org_openeggbert_cna_internal_generated_NativeInputExtensionRoutes_mouseGetG
     (void)declaring_class;
     int32_t out_x_value = 0;
     int32_t out_y_value = 0;
-    CNA_Result result = cna.mouse_get_global_position_ext((CNA_Handle)game, &out_x_value, &out_y_value);
-    if (result == CNA_RESULT_SUCCESS || result == CNA_RESULT_BUFFER_TOO_SMALL) {
+    CNA_Result call_result = cna.mouse_get_global_position_ext((CNA_Handle)game, &out_x_value, &out_y_value);
+    if (call_result == CNA_RESULT_SUCCESS || call_result == CNA_RESULT_BUFFER_TOO_SMALL) {
         jint out_x_element = (jint)out_x_value;
         (*environment)->SetIntArrayRegion(
             environment, out_x, 0, 1, &out_x_element);
@@ -1836,7 +1836,7 @@ Java_org_openeggbert_cna_internal_generated_NativeInputExtensionRoutes_mouseGetG
         (*environment)->SetIntArrayRegion(
             environment, out_y, 0, 1, &out_y_element);
     }
-    return (jint)result;
+    return (jint)call_result;
 }
 
 JNIEXPORT jint JNICALL
@@ -1846,13 +1846,13 @@ Java_org_openeggbert_cna_internal_generated_NativeInputExtensionRoutes_mouseGetI
     (void)environment;
     (void)declaring_class;
     CNA_Bool out_enabled_value = 0;
-    CNA_Result result = cna.mouse_get_is_relative_mouse_mode_ext((CNA_Handle)game, &out_enabled_value);
-    if (result == CNA_RESULT_SUCCESS || result == CNA_RESULT_BUFFER_TOO_SMALL) {
+    CNA_Result call_result = cna.mouse_get_is_relative_mouse_mode_ext((CNA_Handle)game, &out_enabled_value);
+    if (call_result == CNA_RESULT_SUCCESS || call_result == CNA_RESULT_BUFFER_TOO_SMALL) {
         jboolean out_enabled_element = (jboolean)out_enabled_value;
         (*environment)->SetBooleanArrayRegion(
             environment, out_enabled, 0, 1, &out_enabled_element);
     }
-    return (jint)result;
+    return (jint)call_result;
 }
 
 JNIEXPORT jint JNICALL
@@ -1861,8 +1861,8 @@ Java_org_openeggbert_cna_internal_generated_NativeInputExtensionRoutes_mouseRais
 {
     (void)environment;
     (void)declaring_class;
-    CNA_Result result = cna.mouse_raise_clicked_ext((CNA_Handle)game, (int32_t)button);
-    return (jint)result;
+    CNA_Result call_result = cna.mouse_raise_clicked_ext((CNA_Handle)game, (int32_t)button);
+    return (jint)call_result;
 }
 
 JNIEXPORT jint JNICALL
@@ -1872,13 +1872,13 @@ Java_org_openeggbert_cna_internal_generated_NativeInputExtensionRoutes_mouseSetC
     (void)environment;
     (void)declaring_class;
     CNA_Bool out_applied_value = 0;
-    CNA_Result result = cna.mouse_set_capture_ext((CNA_Handle)game, (CNA_Bool)enabled, &out_applied_value);
-    if (result == CNA_RESULT_SUCCESS || result == CNA_RESULT_BUFFER_TOO_SMALL) {
+    CNA_Result call_result = cna.mouse_set_capture_ext((CNA_Handle)game, (CNA_Bool)enabled, &out_applied_value);
+    if (call_result == CNA_RESULT_SUCCESS || call_result == CNA_RESULT_BUFFER_TOO_SMALL) {
         jboolean out_applied_element = (jboolean)out_applied_value;
         (*environment)->SetBooleanArrayRegion(
             environment, out_applied, 0, 1, &out_applied_element);
     }
-    return (jint)result;
+    return (jint)call_result;
 }
 
 JNIEXPORT jint JNICALL
@@ -1887,8 +1887,8 @@ Java_org_openeggbert_cna_internal_generated_NativeInputExtensionRoutes_mouseSetC
 {
     (void)environment;
     (void)declaring_class;
-    CNA_Result result = cna.mouse_set_cursor_ext((CNA_Handle)game, (CNA_MouseCursorHandle)cursor);
-    return (jint)result;
+    CNA_Result call_result = cna.mouse_set_cursor_ext((CNA_Handle)game, (CNA_MouseCursorHandle)cursor);
+    return (jint)call_result;
 }
 
 JNIEXPORT jint JNICALL
@@ -1897,8 +1897,8 @@ Java_org_openeggbert_cna_internal_generated_NativeInputExtensionRoutes_mouseSetI
 {
     (void)environment;
     (void)declaring_class;
-    CNA_Result result = cna.mouse_set_is_relative_mouse_mode_ext((CNA_Handle)game, (CNA_Bool)enabled);
-    return (jint)result;
+    CNA_Result call_result = cna.mouse_set_is_relative_mouse_mode_ext((CNA_Handle)game, (CNA_Bool)enabled);
+    return (jint)call_result;
 }
 
 JNIEXPORT jint JNICALL
@@ -1908,13 +1908,13 @@ Java_org_openeggbert_cna_internal_generated_NativeInputExtensionRoutes_mouseWarp
     (void)environment;
     (void)declaring_class;
     CNA_Bool out_applied_value = 0;
-    CNA_Result result = cna.mouse_warp_global_ext((CNA_Handle)game, (int32_t)x, (int32_t)y, &out_applied_value);
-    if (result == CNA_RESULT_SUCCESS || result == CNA_RESULT_BUFFER_TOO_SMALL) {
+    CNA_Result call_result = cna.mouse_warp_global_ext((CNA_Handle)game, (int32_t)x, (int32_t)y, &out_applied_value);
+    if (call_result == CNA_RESULT_SUCCESS || call_result == CNA_RESULT_BUFFER_TOO_SMALL) {
         jboolean out_applied_element = (jboolean)out_applied_value;
         (*environment)->SetBooleanArrayRegion(
             environment, out_applied, 0, 1, &out_applied_element);
     }
-    return (jint)result;
+    return (jint)call_result;
 }
 
 JNIEXPORT jint JNICALL
@@ -1924,13 +1924,13 @@ Java_org_openeggbert_cna_internal_generated_NativeInputExtensionRoutes_textInput
     (void)environment;
     (void)declaring_class;
     CNA_Bool out_active_value = 0;
-    CNA_Result result = cna.text_input_is_active_ext((CNA_Handle)game, &out_active_value);
-    if (result == CNA_RESULT_SUCCESS || result == CNA_RESULT_BUFFER_TOO_SMALL) {
+    CNA_Result call_result = cna.text_input_is_active_ext((CNA_Handle)game, &out_active_value);
+    if (call_result == CNA_RESULT_SUCCESS || call_result == CNA_RESULT_BUFFER_TOO_SMALL) {
         jboolean out_active_element = (jboolean)out_active_value;
         (*environment)->SetBooleanArrayRegion(
             environment, out_active, 0, 1, &out_active_element);
     }
-    return (jint)result;
+    return (jint)call_result;
 }
 
 JNIEXPORT jint JNICALL
@@ -1940,13 +1940,13 @@ Java_org_openeggbert_cna_internal_generated_NativeInputExtensionRoutes_textInput
     (void)environment;
     (void)declaring_class;
     CNA_Bool out_shown_value = 0;
-    CNA_Result result = cna.text_input_is_screen_keyboard_shown_ext((CNA_Handle)game, &out_shown_value);
-    if (result == CNA_RESULT_SUCCESS || result == CNA_RESULT_BUFFER_TOO_SMALL) {
+    CNA_Result call_result = cna.text_input_is_screen_keyboard_shown_ext((CNA_Handle)game, &out_shown_value);
+    if (call_result == CNA_RESULT_SUCCESS || call_result == CNA_RESULT_BUFFER_TOO_SMALL) {
         jboolean out_shown_element = (jboolean)out_shown_value;
         (*environment)->SetBooleanArrayRegion(
             environment, out_shown, 0, 1, &out_shown_element);
     }
-    return (jint)result;
+    return (jint)call_result;
 }
 
 JNIEXPORT jint JNICALL
@@ -1961,9 +1961,9 @@ Java_org_openeggbert_cna_internal_generated_NativeInputExtensionRoutes_textInput
         return (jint)CNA_RESULT_OUT_OF_MEMORY;
     }
     CNA_StringView text_view = {(const char*)text_bytes, (uint64_t)text_size};
-    CNA_Result result = cna.text_input_raise_text_editing_ext((CNA_Handle)game, text_view, (int32_t)start, (int32_t)length);
+    CNA_Result call_result = cna.text_input_raise_text_editing_ext((CNA_Handle)game, text_view, (int32_t)start, (int32_t)length);
     (*environment)->ReleaseByteArrayElements(environment, text, text_bytes, JNI_ABORT);
-    return (jint)result;
+    return (jint)call_result;
 }
 
 JNIEXPORT jint JNICALL
@@ -1972,8 +1972,8 @@ Java_org_openeggbert_cna_internal_generated_NativeInputExtensionRoutes_textInput
 {
     (void)environment;
     (void)declaring_class;
-    CNA_Result result = cna.text_input_raise_text_input_ext((CNA_Handle)game, (uint16_t)code_unit);
-    return (jint)result;
+    CNA_Result call_result = cna.text_input_raise_text_input_ext((CNA_Handle)game, (uint16_t)code_unit);
+    return (jint)call_result;
 }
 
 JNIEXPORT jint JNICALL
@@ -1992,8 +1992,8 @@ Java_org_openeggbert_cna_internal_generated_NativeInputExtensionRoutes_textInput
         rectangle_value.width = (int32_t)rectangleIntegral_values[2];
         rectangle_value.height = (int32_t)rectangleIntegral_values[3];
     }
-    CNA_Result result = cna.text_input_set_input_rectangle_ext((CNA_Handle)game, rectangle_value);
-    return (jint)result;
+    CNA_Result call_result = cna.text_input_set_input_rectangle_ext((CNA_Handle)game, rectangle_value);
+    return (jint)call_result;
 }
 
 JNIEXPORT jint JNICALL
@@ -2002,8 +2002,8 @@ Java_org_openeggbert_cna_internal_generated_NativeInputExtensionRoutes_textInput
 {
     (void)environment;
     (void)declaring_class;
-    CNA_Result result = cna.text_input_start_ext((CNA_Handle)game);
-    return (jint)result;
+    CNA_Result call_result = cna.text_input_start_ext((CNA_Handle)game);
+    return (jint)call_result;
 }
 
 JNIEXPORT jint JNICALL
@@ -2012,8 +2012,8 @@ Java_org_openeggbert_cna_internal_generated_NativeInputExtensionRoutes_textInput
 {
     (void)environment;
     (void)declaring_class;
-    CNA_Result result = cna.text_input_start_with_type_ext((CNA_Handle)game, (CNA_TextInputType)type);
-    return (jint)result;
+    CNA_Result call_result = cna.text_input_start_with_type_ext((CNA_Handle)game, (CNA_TextInputType)type);
+    return (jint)call_result;
 }
 
 JNIEXPORT jint JNICALL
@@ -2022,8 +2022,8 @@ Java_org_openeggbert_cna_internal_generated_NativeInputExtensionRoutes_textInput
 {
     (void)environment;
     (void)declaring_class;
-    CNA_Result result = cna.text_input_stop_ext((CNA_Handle)game);
-    return (jint)result;
+    CNA_Result call_result = cna.text_input_stop_ext((CNA_Handle)game);
+    return (jint)call_result;
 }
 
 JNIEXPORT jint JNICALL
@@ -2033,13 +2033,13 @@ Java_org_openeggbert_cna_internal_generated_NativeInputExtensionRoutes_touchPane
     (void)environment;
     (void)declaring_class;
     CNA_Bool out_enabled_value = 0;
-    CNA_Result result = cna.touch_panel_get_mouse_touch_emulation_enabled_ext((CNA_Handle)game, &out_enabled_value);
-    if (result == CNA_RESULT_SUCCESS || result == CNA_RESULT_BUFFER_TOO_SMALL) {
+    CNA_Result call_result = cna.touch_panel_get_mouse_touch_emulation_enabled_ext((CNA_Handle)game, &out_enabled_value);
+    if (call_result == CNA_RESULT_SUCCESS || call_result == CNA_RESULT_BUFFER_TOO_SMALL) {
         jboolean out_enabled_element = (jboolean)out_enabled_value;
         (*environment)->SetBooleanArrayRegion(
             environment, out_enabled, 0, 1, &out_enabled_element);
     }
-    return (jint)result;
+    return (jint)call_result;
 }
 
 JNIEXPORT jint JNICALL
@@ -2049,13 +2049,13 @@ Java_org_openeggbert_cna_internal_generated_NativeInputExtensionRoutes_touchPane
     (void)environment;
     (void)declaring_class;
     CNA_Bool out_exists_value = 0;
-    CNA_Result result = cna.touch_panel_get_touch_device_exists_ext((CNA_Handle)game, &out_exists_value);
-    if (result == CNA_RESULT_SUCCESS || result == CNA_RESULT_BUFFER_TOO_SMALL) {
+    CNA_Result call_result = cna.touch_panel_get_touch_device_exists_ext((CNA_Handle)game, &out_exists_value);
+    if (call_result == CNA_RESULT_SUCCESS || call_result == CNA_RESULT_BUFFER_TOO_SMALL) {
         jboolean out_exists_element = (jboolean)out_exists_value;
         (*environment)->SetBooleanArrayRegion(
             environment, out_exists, 0, 1, &out_exists_element);
     }
-    return (jint)result;
+    return (jint)call_result;
 }
 
 JNIEXPORT jint JNICALL
@@ -2064,6 +2064,6 @@ Java_org_openeggbert_cna_internal_generated_NativeInputExtensionRoutes_touchPane
 {
     (void)environment;
     (void)declaring_class;
-    CNA_Result result = cna.touch_panel_set_mouse_touch_emulation_enabled_ext((CNA_Handle)game, (CNA_Bool)enabled);
-    return (jint)result;
+    CNA_Result call_result = cna.touch_panel_set_mouse_touch_emulation_enabled_ext((CNA_Handle)game, (CNA_Bool)enabled);
+    return (jint)call_result;
 }

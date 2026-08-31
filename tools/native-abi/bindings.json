@@ -1823,6 +1823,17 @@
       ]
     },
     {
+      "name": "cna_cnb_build_model_from_cnj",
+      "header": "cnb.h",
+      "ownership": "no handle; reads the caller's paths, returns an owned compile-result handle",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_StringView",
+        "CNA_StringView",
+        "CNA_CnbModelFromCnjHandle*"
+      ]
+    },
+    {
       "name": "cna_cnb_checked_add",
       "header": "cnb.h",
       "ownership": "no handle; caller integer output",
@@ -1852,6 +1863,139 @@
       "parameters": [
         "const CNA_CnbChunkEntry*",
         "CNA_Bool*"
+      ]
+    },
+    {
+      "name": "cna_cnb_cnj_result_copy_absorbed_file",
+      "header": "cnb.h",
+      "ownership": "borrows the compile result; caller buffer",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_CnjToCnbResultHandle",
+        "uint64_t",
+        "char*",
+        "uint64_t",
+        "uint64_t*"
+      ]
+    },
+    {
+      "name": "cna_cnb_cnj_result_copy_asset_type_name",
+      "header": "cnb.h",
+      "ownership": "borrows the compile result; caller buffer",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_CnjToCnbResultHandle",
+        "char*",
+        "uint64_t",
+        "uint64_t*"
+      ]
+    },
+    {
+      "name": "cna_cnb_cnj_result_copy_bytes",
+      "header": "cnb.h",
+      "ownership": "borrows the compile result; caller buffer",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_CnjToCnbResultHandle",
+        "uint8_t*",
+        "uint64_t",
+        "uint64_t*"
+      ]
+    },
+    {
+      "name": "cna_cnb_cnj_result_copy_external_reference",
+      "header": "cnb.h",
+      "ownership": "borrows the compile result; caller buffer",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_CnjToCnbResultHandle",
+        "uint64_t",
+        "char*",
+        "uint64_t",
+        "uint64_t*"
+      ]
+    },
+    {
+      "name": "cna_cnb_cnj_result_destroy",
+      "header": "cnb.h",
+      "ownership": "releases the owned compile-result handle",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_CnjToCnbResultHandle"
+      ]
+    },
+    {
+      "name": "cna_cnb_cnj_result_get_absorbed_file_count",
+      "header": "cnb.h",
+      "ownership": "borrows the compile result; caller integer output",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_CnjToCnbResultHandle",
+        "uint64_t*"
+      ]
+    },
+    {
+      "name": "cna_cnb_cnj_result_get_absorbed_file_size",
+      "header": "cnb.h",
+      "ownership": "borrows the compile result; caller integer output",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_CnjToCnbResultHandle",
+        "uint64_t",
+        "uint64_t*"
+      ]
+    },
+    {
+      "name": "cna_cnb_cnj_result_get_asset_type_id",
+      "header": "cnb.h",
+      "ownership": "borrows the compile result; caller identity output",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_CnjToCnbResultHandle",
+        "uint32_t*"
+      ]
+    },
+    {
+      "name": "cna_cnb_cnj_result_get_asset_type_name_size",
+      "header": "cnb.h",
+      "ownership": "borrows the compile result; caller integer output",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_CnjToCnbResultHandle",
+        "uint64_t*"
+      ]
+    },
+    {
+      "name": "cna_cnb_cnj_result_get_external_reference_count",
+      "header": "cnb.h",
+      "ownership": "borrows the compile result; caller integer output",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_CnjToCnbResultHandle",
+        "uint64_t*"
+      ]
+    },
+    {
+      "name": "cna_cnb_cnj_result_get_external_reference_size",
+      "header": "cnb.h",
+      "ownership": "borrows the compile result; caller integer output",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_CnjToCnbResultHandle",
+        "uint64_t",
+        "uint64_t*"
+      ]
+    },
+    {
+      "name": "cna_cnb_compile_cnj",
+      "header": "cnb.h",
+      "ownership": "no handle; reads the caller's paths, returns an owned compile-result handle",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_StringView",
+        "CNA_StringView",
+        "CNA_StringView",
+        "CNA_CnjToCnbResultHandle*"
       ]
     },
     {
@@ -3047,6 +3191,93 @@
       "returnType": "CNA_Result",
       "parameters": [
         "CNA_CnbModelDataHandle"
+      ]
+    },
+    {
+      "name": "cna_cnb_model_from_cnj_copy_absorbed_file",
+      "header": "cnb.h",
+      "ownership": "borrows the compile result; caller buffer",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_CnbModelFromCnjHandle",
+        "uint64_t",
+        "char*",
+        "uint64_t",
+        "uint64_t*"
+      ]
+    },
+    {
+      "name": "cna_cnb_model_from_cnj_copy_external_reference",
+      "header": "cnb.h",
+      "ownership": "borrows the compile result; caller buffer",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_CnbModelFromCnjHandle",
+        "uint64_t",
+        "char*",
+        "uint64_t",
+        "uint64_t*"
+      ]
+    },
+    {
+      "name": "cna_cnb_model_from_cnj_destroy",
+      "header": "cnb.h",
+      "ownership": "releases the owned compile-result handle",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_CnbModelFromCnjHandle"
+      ]
+    },
+    {
+      "name": "cna_cnb_model_from_cnj_get_absorbed_file_count",
+      "header": "cnb.h",
+      "ownership": "borrows the compile result; caller integer output",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_CnbModelFromCnjHandle",
+        "uint64_t*"
+      ]
+    },
+    {
+      "name": "cna_cnb_model_from_cnj_get_absorbed_file_size",
+      "header": "cnb.h",
+      "ownership": "borrows the compile result; caller integer output",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_CnbModelFromCnjHandle",
+        "uint64_t",
+        "uint64_t*"
+      ]
+    },
+    {
+      "name": "cna_cnb_model_from_cnj_get_external_reference_count",
+      "header": "cnb.h",
+      "ownership": "borrows the compile result; caller integer output",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_CnbModelFromCnjHandle",
+        "uint64_t*"
+      ]
+    },
+    {
+      "name": "cna_cnb_model_from_cnj_get_external_reference_size",
+      "header": "cnb.h",
+      "ownership": "borrows the compile result; caller integer output",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_CnbModelFromCnjHandle",
+        "uint64_t",
+        "uint64_t*"
+      ]
+    },
+    {
+      "name": "cna_cnb_model_from_cnj_take_model",
+      "header": "cnb.h",
+      "ownership": "borrows the compile result and moves its model out into an owned model-data handle",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_CnbModelFromCnjHandle",
+        "CNA_CnbModelDataHandle*"
       ]
     },
     {

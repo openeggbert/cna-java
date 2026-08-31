@@ -13,13 +13,13 @@ Java_org_openeggbert_cna_internal_generated_NativeGraphicsExtensionRoutes_asciiP
     (void)environment;
     (void)declaring_class;
     CNA_AsciiPostProcessEffectHandle out_effect_value = 0;
-    CNA_Result result = cna.ascii_post_process_effect_create((CNA_Handle)graphics_device, &out_effect_value);
-    if (result == CNA_RESULT_SUCCESS || result == CNA_RESULT_BUFFER_TOO_SMALL) {
+    CNA_Result call_result = cna.ascii_post_process_effect_create((CNA_Handle)graphics_device, &out_effect_value);
+    if (call_result == CNA_RESULT_SUCCESS || call_result == CNA_RESULT_BUFFER_TOO_SMALL) {
         jlong out_effect_element = (jlong)out_effect_value;
         (*environment)->SetLongArrayRegion(
             environment, out_effect, 0, 1, &out_effect_element);
     }
-    return (jint)result;
+    return (jint)call_result;
 }
 
 JNIEXPORT jint JNICALL
@@ -28,8 +28,8 @@ Java_org_openeggbert_cna_internal_generated_NativeGraphicsExtensionRoutes_asciiP
 {
     (void)environment;
     (void)declaring_class;
-    CNA_Result result = cna.ascii_post_process_effect_destroy((CNA_AsciiPostProcessEffectHandle)effect);
-    return (jint)result;
+    CNA_Result call_result = cna.ascii_post_process_effect_destroy((CNA_AsciiPostProcessEffectHandle)effect);
+    return (jint)call_result;
 }
 
 JNIEXPORT jint JNICALL
@@ -48,8 +48,8 @@ Java_org_openeggbert_cna_internal_generated_NativeGraphicsExtensionRoutes_asciiP
         destination_rectangle_value.width = (int32_t)destination_rectangleIntegral_values[2];
         destination_rectangle_value.height = (int32_t)destination_rectangleIntegral_values[3];
     }
-    CNA_Result result = cna.ascii_post_process_effect_draw((CNA_AsciiPostProcessEffectHandle)effect, (CNA_Handle)source, &destination_rectangle_value);
-    return (jint)result;
+    CNA_Result call_result = cna.ascii_post_process_effect_draw((CNA_AsciiPostProcessEffectHandle)effect, (CNA_Handle)source, &destination_rectangle_value);
+    return (jint)call_result;
 }
 
 JNIEXPORT jint JNICALL
@@ -60,8 +60,8 @@ Java_org_openeggbert_cna_internal_generated_NativeGraphicsExtensionRoutes_asciiP
     (void)declaring_class;
     int32_t out_width_value = 0;
     int32_t out_height_value = 0;
-    CNA_Result result = cna.ascii_post_process_effect_get_cell_size((CNA_AsciiPostProcessEffectHandle)effect, &out_width_value, &out_height_value);
-    if (result == CNA_RESULT_SUCCESS || result == CNA_RESULT_BUFFER_TOO_SMALL) {
+    CNA_Result call_result = cna.ascii_post_process_effect_get_cell_size((CNA_AsciiPostProcessEffectHandle)effect, &out_width_value, &out_height_value);
+    if (call_result == CNA_RESULT_SUCCESS || call_result == CNA_RESULT_BUFFER_TOO_SMALL) {
         jint out_width_element = (jint)out_width_value;
         (*environment)->SetIntArrayRegion(
             environment, out_width, 0, 1, &out_width_element);
@@ -69,7 +69,7 @@ Java_org_openeggbert_cna_internal_generated_NativeGraphicsExtensionRoutes_asciiP
         (*environment)->SetIntArrayRegion(
             environment, out_height, 0, 1, &out_height_element);
     }
-    return (jint)result;
+    return (jint)call_result;
 }
 
 JNIEXPORT jint JNICALL
@@ -80,8 +80,8 @@ Java_org_openeggbert_cna_internal_generated_NativeGraphicsExtensionRoutes_asciiP
     (void)declaring_class;
     int32_t out_columns_value = 0;
     int32_t out_rows_value = 0;
-    CNA_Result result = cna.ascii_post_process_effect_get_last_grid_dimensions((CNA_AsciiPostProcessEffectHandle)effect, &out_columns_value, &out_rows_value);
-    if (result == CNA_RESULT_SUCCESS || result == CNA_RESULT_BUFFER_TOO_SMALL) {
+    CNA_Result call_result = cna.ascii_post_process_effect_get_last_grid_dimensions((CNA_AsciiPostProcessEffectHandle)effect, &out_columns_value, &out_rows_value);
+    if (call_result == CNA_RESULT_SUCCESS || call_result == CNA_RESULT_BUFFER_TOO_SMALL) {
         jint out_columns_element = (jint)out_columns_value;
         (*environment)->SetIntArrayRegion(
             environment, out_columns, 0, 1, &out_columns_element);
@@ -89,7 +89,7 @@ Java_org_openeggbert_cna_internal_generated_NativeGraphicsExtensionRoutes_asciiP
         (*environment)->SetIntArrayRegion(
             environment, out_rows, 0, 1, &out_rows_element);
     }
-    return (jint)result;
+    return (jint)call_result;
 }
 
 JNIEXPORT jint JNICALL
@@ -99,13 +99,13 @@ Java_org_openeggbert_cna_internal_generated_NativeGraphicsExtensionRoutes_asciiP
     (void)environment;
     (void)declaring_class;
     CNA_AsciiQuantizeMode out_mode_value = 0;
-    CNA_Result result = cna.ascii_post_process_effect_get_quantize_mode((CNA_AsciiPostProcessEffectHandle)effect, &out_mode_value);
-    if (result == CNA_RESULT_SUCCESS || result == CNA_RESULT_BUFFER_TOO_SMALL) {
+    CNA_Result call_result = cna.ascii_post_process_effect_get_quantize_mode((CNA_AsciiPostProcessEffectHandle)effect, &out_mode_value);
+    if (call_result == CNA_RESULT_SUCCESS || call_result == CNA_RESULT_BUFFER_TOO_SMALL) {
         jint out_mode_element = (jint)out_mode_value;
         (*environment)->SetIntArrayRegion(
             environment, out_mode, 0, 1, &out_mode_element);
     }
-    return (jint)result;
+    return (jint)call_result;
 }
 
 JNIEXPORT jint JNICALL
@@ -114,8 +114,8 @@ Java_org_openeggbert_cna_internal_generated_NativeGraphicsExtensionRoutes_asciiP
 {
     (void)environment;
     (void)declaring_class;
-    CNA_Result result = cna.ascii_post_process_effect_set_cell_size((CNA_AsciiPostProcessEffectHandle)effect, (int32_t)width, (int32_t)height);
-    return (jint)result;
+    CNA_Result call_result = cna.ascii_post_process_effect_set_cell_size((CNA_AsciiPostProcessEffectHandle)effect, (int32_t)width, (int32_t)height);
+    return (jint)call_result;
 }
 
 JNIEXPORT jint JNICALL
@@ -124,8 +124,8 @@ Java_org_openeggbert_cna_internal_generated_NativeGraphicsExtensionRoutes_asciiP
 {
     (void)environment;
     (void)declaring_class;
-    CNA_Result result = cna.ascii_post_process_effect_set_quantize_mode((CNA_AsciiPostProcessEffectHandle)effect, (CNA_AsciiQuantizeMode)mode);
-    return (jint)result;
+    CNA_Result call_result = cna.ascii_post_process_effect_set_quantize_mode((CNA_AsciiPostProcessEffectHandle)effect, (CNA_AsciiQuantizeMode)mode);
+    return (jint)call_result;
 }
 
 JNIEXPORT jint JNICALL
@@ -135,13 +135,13 @@ Java_org_openeggbert_cna_internal_generated_NativeGraphicsExtensionRoutes_crtEff
     (void)environment;
     (void)declaring_class;
     CNA_EffectHandle out_effect_value = 0;
-    CNA_Result result = cna.crt_effect_create((CNA_Handle)graphics_device, &out_effect_value);
-    if (result == CNA_RESULT_SUCCESS || result == CNA_RESULT_BUFFER_TOO_SMALL) {
+    CNA_Result call_result = cna.crt_effect_create((CNA_Handle)graphics_device, &out_effect_value);
+    if (call_result == CNA_RESULT_SUCCESS || call_result == CNA_RESULT_BUFFER_TOO_SMALL) {
         jlong out_effect_element = (jlong)out_effect_value;
         (*environment)->SetLongArrayRegion(
             environment, out_effect, 0, 1, &out_effect_element);
     }
-    return (jint)result;
+    return (jint)call_result;
 }
 
 JNIEXPORT jint JNICALL
@@ -151,13 +151,13 @@ Java_org_openeggbert_cna_internal_generated_NativeGraphicsExtensionRoutes_crtEff
     (void)environment;
     (void)declaring_class;
     float out_value_value = 0;
-    CNA_Result result = cna.crt_effect_get_curvature((CNA_EffectHandle)effect, &out_value_value);
-    if (result == CNA_RESULT_SUCCESS || result == CNA_RESULT_BUFFER_TOO_SMALL) {
+    CNA_Result call_result = cna.crt_effect_get_curvature((CNA_EffectHandle)effect, &out_value_value);
+    if (call_result == CNA_RESULT_SUCCESS || call_result == CNA_RESULT_BUFFER_TOO_SMALL) {
         jfloat out_value_element = (jfloat)out_value_value;
         (*environment)->SetFloatArrayRegion(
             environment, out_value, 0, 1, &out_value_element);
     }
-    return (jint)result;
+    return (jint)call_result;
 }
 
 JNIEXPORT jint JNICALL
@@ -167,13 +167,13 @@ Java_org_openeggbert_cna_internal_generated_NativeGraphicsExtensionRoutes_crtEff
     (void)environment;
     (void)declaring_class;
     float out_value_value = 0;
-    CNA_Result result = cna.crt_effect_get_mask_intensity((CNA_EffectHandle)effect, &out_value_value);
-    if (result == CNA_RESULT_SUCCESS || result == CNA_RESULT_BUFFER_TOO_SMALL) {
+    CNA_Result call_result = cna.crt_effect_get_mask_intensity((CNA_EffectHandle)effect, &out_value_value);
+    if (call_result == CNA_RESULT_SUCCESS || call_result == CNA_RESULT_BUFFER_TOO_SMALL) {
         jfloat out_value_element = (jfloat)out_value_value;
         (*environment)->SetFloatArrayRegion(
             environment, out_value, 0, 1, &out_value_element);
     }
-    return (jint)result;
+    return (jint)call_result;
 }
 
 JNIEXPORT jint JNICALL
@@ -183,13 +183,13 @@ Java_org_openeggbert_cna_internal_generated_NativeGraphicsExtensionRoutes_crtEff
     (void)environment;
     (void)declaring_class;
     CNA_CRTMaskType out_mask_type_value = 0;
-    CNA_Result result = cna.crt_effect_get_mask_type((CNA_EffectHandle)effect, &out_mask_type_value);
-    if (result == CNA_RESULT_SUCCESS || result == CNA_RESULT_BUFFER_TOO_SMALL) {
+    CNA_Result call_result = cna.crt_effect_get_mask_type((CNA_EffectHandle)effect, &out_mask_type_value);
+    if (call_result == CNA_RESULT_SUCCESS || call_result == CNA_RESULT_BUFFER_TOO_SMALL) {
         jint out_mask_type_element = (jint)out_mask_type_value;
         (*environment)->SetIntArrayRegion(
             environment, out_mask_type, 0, 1, &out_mask_type_element);
     }
-    return (jint)result;
+    return (jint)call_result;
 }
 
 JNIEXPORT jint JNICALL
@@ -199,13 +199,13 @@ Java_org_openeggbert_cna_internal_generated_NativeGraphicsExtensionRoutes_crtEff
     (void)environment;
     (void)declaring_class;
     float out_value_value = 0;
-    CNA_Result result = cna.crt_effect_get_scanline_intensity((CNA_EffectHandle)effect, &out_value_value);
-    if (result == CNA_RESULT_SUCCESS || result == CNA_RESULT_BUFFER_TOO_SMALL) {
+    CNA_Result call_result = cna.crt_effect_get_scanline_intensity((CNA_EffectHandle)effect, &out_value_value);
+    if (call_result == CNA_RESULT_SUCCESS || call_result == CNA_RESULT_BUFFER_TOO_SMALL) {
         jfloat out_value_element = (jfloat)out_value_value;
         (*environment)->SetFloatArrayRegion(
             environment, out_value, 0, 1, &out_value_element);
     }
-    return (jint)result;
+    return (jint)call_result;
 }
 
 JNIEXPORT jint JNICALL
@@ -215,13 +215,13 @@ Java_org_openeggbert_cna_internal_generated_NativeGraphicsExtensionRoutes_crtEff
     (void)environment;
     (void)declaring_class;
     float out_value_value = 0;
-    CNA_Result result = cna.crt_effect_get_vignette_intensity((CNA_EffectHandle)effect, &out_value_value);
-    if (result == CNA_RESULT_SUCCESS || result == CNA_RESULT_BUFFER_TOO_SMALL) {
+    CNA_Result call_result = cna.crt_effect_get_vignette_intensity((CNA_EffectHandle)effect, &out_value_value);
+    if (call_result == CNA_RESULT_SUCCESS || call_result == CNA_RESULT_BUFFER_TOO_SMALL) {
         jfloat out_value_element = (jfloat)out_value_value;
         (*environment)->SetFloatArrayRegion(
             environment, out_value, 0, 1, &out_value_element);
     }
-    return (jint)result;
+    return (jint)call_result;
 }
 
 JNIEXPORT jint JNICALL
@@ -230,8 +230,8 @@ Java_org_openeggbert_cna_internal_generated_NativeGraphicsExtensionRoutes_crtEff
 {
     (void)environment;
     (void)declaring_class;
-    CNA_Result result = cna.crt_effect_set_curvature((CNA_EffectHandle)effect, (float)value);
-    return (jint)result;
+    CNA_Result call_result = cna.crt_effect_set_curvature((CNA_EffectHandle)effect, (float)value);
+    return (jint)call_result;
 }
 
 JNIEXPORT jint JNICALL
@@ -240,8 +240,8 @@ Java_org_openeggbert_cna_internal_generated_NativeGraphicsExtensionRoutes_crtEff
 {
     (void)environment;
     (void)declaring_class;
-    CNA_Result result = cna.crt_effect_set_mask_intensity((CNA_EffectHandle)effect, (float)value);
-    return (jint)result;
+    CNA_Result call_result = cna.crt_effect_set_mask_intensity((CNA_EffectHandle)effect, (float)value);
+    return (jint)call_result;
 }
 
 JNIEXPORT jint JNICALL
@@ -250,8 +250,8 @@ Java_org_openeggbert_cna_internal_generated_NativeGraphicsExtensionRoutes_crtEff
 {
     (void)environment;
     (void)declaring_class;
-    CNA_Result result = cna.crt_effect_set_mask_type((CNA_EffectHandle)effect, (CNA_CRTMaskType)mask_type);
-    return (jint)result;
+    CNA_Result call_result = cna.crt_effect_set_mask_type((CNA_EffectHandle)effect, (CNA_CRTMaskType)mask_type);
+    return (jint)call_result;
 }
 
 JNIEXPORT jint JNICALL
@@ -260,8 +260,8 @@ Java_org_openeggbert_cna_internal_generated_NativeGraphicsExtensionRoutes_crtEff
 {
     (void)environment;
     (void)declaring_class;
-    CNA_Result result = cna.crt_effect_set_scanline_intensity((CNA_EffectHandle)effect, (float)value);
-    return (jint)result;
+    CNA_Result call_result = cna.crt_effect_set_scanline_intensity((CNA_EffectHandle)effect, (float)value);
+    return (jint)call_result;
 }
 
 JNIEXPORT jint JNICALL
@@ -270,8 +270,8 @@ Java_org_openeggbert_cna_internal_generated_NativeGraphicsExtensionRoutes_crtEff
 {
     (void)environment;
     (void)declaring_class;
-    CNA_Result result = cna.crt_effect_set_vignette_intensity((CNA_EffectHandle)effect, (float)value);
-    return (jint)result;
+    CNA_Result call_result = cna.crt_effect_set_vignette_intensity((CNA_EffectHandle)effect, (float)value);
+    return (jint)call_result;
 }
 
 JNIEXPORT jint JNICALL
@@ -281,13 +281,13 @@ Java_org_openeggbert_cna_internal_generated_NativeGraphicsExtensionRoutes_depthE
     (void)environment;
     (void)declaring_class;
     CNA_EffectHandle out_effect_value = 0;
-    CNA_Result result = cna.depth_effect_create((CNA_Handle)graphics_device, &out_effect_value);
-    if (result == CNA_RESULT_SUCCESS || result == CNA_RESULT_BUFFER_TOO_SMALL) {
+    CNA_Result call_result = cna.depth_effect_create((CNA_Handle)graphics_device, &out_effect_value);
+    if (call_result == CNA_RESULT_SUCCESS || call_result == CNA_RESULT_BUFFER_TOO_SMALL) {
         jlong out_effect_element = (jlong)out_effect_value;
         (*environment)->SetLongArrayRegion(
             environment, out_effect, 0, 1, &out_effect_element);
     }
-    return (jint)result;
+    return (jint)call_result;
 }
 
 JNIEXPORT jint JNICALL
@@ -297,13 +297,13 @@ Java_org_openeggbert_cna_internal_generated_NativeGraphicsExtensionRoutes_depthE
     (void)environment;
     (void)declaring_class;
     CNA_DitherMode out_dither_mode_value = 0;
-    CNA_Result result = cna.depth_effect_get_dither_mode((CNA_EffectHandle)effect, &out_dither_mode_value);
-    if (result == CNA_RESULT_SUCCESS || result == CNA_RESULT_BUFFER_TOO_SMALL) {
+    CNA_Result call_result = cna.depth_effect_get_dither_mode((CNA_EffectHandle)effect, &out_dither_mode_value);
+    if (call_result == CNA_RESULT_SUCCESS || call_result == CNA_RESULT_BUFFER_TOO_SMALL) {
         jint out_dither_mode_element = (jint)out_dither_mode_value;
         (*environment)->SetIntArrayRegion(
             environment, out_dither_mode, 0, 1, &out_dither_mode_element);
     }
-    return (jint)result;
+    return (jint)call_result;
 }
 
 JNIEXPORT jint JNICALL
@@ -313,13 +313,13 @@ Java_org_openeggbert_cna_internal_generated_NativeGraphicsExtensionRoutes_depthE
     (void)environment;
     (void)declaring_class;
     CNA_DepthEffectMode out_mode_value = 0;
-    CNA_Result result = cna.depth_effect_get_mode((CNA_EffectHandle)effect, &out_mode_value);
-    if (result == CNA_RESULT_SUCCESS || result == CNA_RESULT_BUFFER_TOO_SMALL) {
+    CNA_Result call_result = cna.depth_effect_get_mode((CNA_EffectHandle)effect, &out_mode_value);
+    if (call_result == CNA_RESULT_SUCCESS || call_result == CNA_RESULT_BUFFER_TOO_SMALL) {
         jint out_mode_element = (jint)out_mode_value;
         (*environment)->SetIntArrayRegion(
             environment, out_mode, 0, 1, &out_mode_element);
     }
-    return (jint)result;
+    return (jint)call_result;
 }
 
 JNIEXPORT jint JNICALL
@@ -328,8 +328,8 @@ Java_org_openeggbert_cna_internal_generated_NativeGraphicsExtensionRoutes_depthE
 {
     (void)environment;
     (void)declaring_class;
-    CNA_Result result = cna.depth_effect_set_dither_mode((CNA_EffectHandle)effect, (CNA_DitherMode)dither_mode);
-    return (jint)result;
+    CNA_Result call_result = cna.depth_effect_set_dither_mode((CNA_EffectHandle)effect, (CNA_DitherMode)dither_mode);
+    return (jint)call_result;
 }
 
 JNIEXPORT jint JNICALL
@@ -338,8 +338,8 @@ Java_org_openeggbert_cna_internal_generated_NativeGraphicsExtensionRoutes_depthE
 {
     (void)environment;
     (void)declaring_class;
-    CNA_Result result = cna.depth_effect_set_mode((CNA_EffectHandle)effect, (CNA_DepthEffectMode)mode);
-    return (jint)result;
+    CNA_Result call_result = cna.depth_effect_set_mode((CNA_EffectHandle)effect, (CNA_DepthEffectMode)mode);
+    return (jint)call_result;
 }
 
 JNIEXPORT jint JNICALL
@@ -349,13 +349,13 @@ Java_org_openeggbert_cna_internal_generated_NativeGraphicsExtensionRoutes_graphi
     (void)environment;
     (void)declaring_class;
     CNA_Bool out_available_value = 0;
-    CNA_Result result = cna.graphics_ext_is_available(&out_available_value);
-    if (result == CNA_RESULT_SUCCESS || result == CNA_RESULT_BUFFER_TOO_SMALL) {
+    CNA_Result call_result = cna.graphics_ext_is_available(&out_available_value);
+    if (call_result == CNA_RESULT_SUCCESS || call_result == CNA_RESULT_BUFFER_TOO_SMALL) {
         jboolean out_available_element = (jboolean)out_available_value;
         (*environment)->SetBooleanArrayRegion(
             environment, out_available, 0, 1, &out_available_element);
     }
-    return (jint)result;
+    return (jint)call_result;
 }
 
 JNIEXPORT jint JNICALL
@@ -366,8 +366,8 @@ Java_org_openeggbert_cna_internal_generated_NativeGraphicsExtensionRoutes_pbrMat
     (void)declaring_class;
     CNA_PbrMaterial out_material_value;
     memset(&out_material_value, 0, sizeof out_material_value);
-    CNA_Result result = cna.pbr_material_init(&out_material_value);
-    if (result == CNA_RESULT_SUCCESS || result == CNA_RESULT_BUFFER_TOO_SMALL) {
+    CNA_Result call_result = cna.pbr_material_init(&out_material_value);
+    if (call_result == CNA_RESULT_SUCCESS || call_result == CNA_RESULT_BUFFER_TOO_SMALL) {
         jbyte out_materialBytes_values[] = {
             (jbyte)out_material_value.reserved[0],
             (jbyte)out_material_value.reserved[1],
@@ -406,7 +406,7 @@ Java_org_openeggbert_cna_internal_generated_NativeGraphicsExtensionRoutes_pbrMat
             (jsize)(sizeof out_materialFloating_values / sizeof out_materialFloating_values[0]),
             out_materialFloating_values);
     }
-    return (jint)result;
+    return (jint)call_result;
 }
 
 JNIEXPORT jint JNICALL
@@ -417,8 +417,8 @@ Java_org_openeggbert_cna_internal_generated_NativeGraphicsExtensionRoutes_render
     (void)declaring_class;
     CNA_RenderPipelineSettings out_settings_value;
     memset(&out_settings_value, 0, sizeof out_settings_value);
-    CNA_Result result = cna.render_pipeline_settings_init(&out_settings_value);
-    if (result == CNA_RESULT_SUCCESS || result == CNA_RESULT_BUFFER_TOO_SMALL) {
+    CNA_Result call_result = cna.render_pipeline_settings_init(&out_settings_value);
+    if (call_result == CNA_RESULT_SUCCESS || call_result == CNA_RESULT_BUFFER_TOO_SMALL) {
         jlong out_settingsIntegral_values[] = {
             (jlong)out_settings_value.tonemapping_mode,
             (jlong)out_settings_value.render_quality,
@@ -440,5 +440,5 @@ Java_org_openeggbert_cna_internal_generated_NativeGraphicsExtensionRoutes_render
             (jsize)(sizeof out_settingsFloating_values / sizeof out_settingsFloating_values[0]),
             out_settingsFloating_values);
     }
-    return (jint)result;
+    return (jint)call_result;
 }
