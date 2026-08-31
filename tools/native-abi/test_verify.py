@@ -235,6 +235,28 @@ def test_generator(live: dict) -> None:
     check(adapter.count("ReleaseByteArrayElements(environment, createInfoHostAddress") == 1,
           "the pinned bytes are released exactly once")
 
+    # A route that acquires more than one thing must release what it holds when a later
+    # acquisition fails. Before this, the second failed pin of a four-array route returned
+    # straight out and stranded the first -- on an out-of-memory path, which is when leaking is
+    # least affordable.
+    multi = plan("cna_available_network_session_create_ext")
+    adapter = generator_tool.render_c("Probe", [multi])
+    first = adapter.index("createInfoHostGamertag_bytes == NULL")
+    second = adapter.index("createInfoHostAddress_bytes == NULL")
+    check("ReleaseByteArrayElements" not in adapter[first:adapter.index("}", first)],
+          "the first acquisition's failure has nothing to release")
+    check("createInfoHostGamertag_bytes, JNI_ABORT"
+          in adapter[second:adapter.index("return (jint)CNA_RESULT_OUT_OF_MEMORY", second)],
+          "a later acquisition's failure releases the earlier one")
+
+    # And each is still released exactly once on the success path. The earlier one appears
+    # twice in the file because the later one's failure branch also releases it; the last
+    # acquisition appears once, because a pin that failed has nothing to give back.
+    check(adapter.count("ReleaseByteArrayElements(environment, createInfoHostGamertag, ") == 2,
+          "an earlier acquisition is released on the success path and on the later failure")
+    check(adapter.count("ReleaseByteArrayElements(environment, createInfoHostAddress, ") == 1,
+          "the last acquisition is released once, because a pin that failed acquired nothing")
+
     # An input array whose length CNA states in prose rather than in a count parameter. The
     # generator will not infer it -- a wrong guess is a read past the end inside CNA -- so
     # routes.json declares it and the adapter checks the caller's array against the declaration.

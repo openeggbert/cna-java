@@ -436,6 +436,10 @@ def render_c(class_name: str, entries: list[dict]) -> str:
         body: list[str] = []
         # Refusals that must run before anything is acquired, so a rejected call leaks nothing.
         prologue: list[str] = []
+        # Unconditional releases for everything acquired so far, in acquisition order. An early
+        # return part way through marshalling replays them in reverse; the guarded write-backs in
+        # `cleanup` cannot be used for that, because they name the call's result.
+        unwind: list[str] = []
         arguments: list[str] = []
         epilogue: list[str] = []
         cleanup: list[str] = []
@@ -458,7 +462,8 @@ def render_c(class_name: str, entries: list[dict]) -> str:
                     f"            environment, {name}, 0, 1, &{name}_element);")
             elif shape == "string":
                 parameters.append(f"jbyteArray {name}")
-                body.extend(borrow_bytes(name))
+                body.extend(borrow_bytes(name, unwind))
+                unwind.append(release_bytes(name, abort=True))
                 body.append(f"    CNA_StringView {name}_view = "
                             f"{{(const char*){name}_bytes, (uint64_t){name}_size}};")
                 arguments.append(f"{name}_view")
@@ -466,7 +471,8 @@ def render_c(class_name: str, entries: list[dict]) -> str:
             elif shape == "text":
                 parameters.append(f"jbyteArray {name}")
                 parameters.append(f"jlongArray {step['written']}")
-                body.extend(borrow_bytes(name))
+                body.extend(borrow_bytes(name, unwind))
+                unwind.append(release_bytes(name, abort=False))
                 body.append(f"    uint64_t {name}_written = 0;")
                 arguments.append(f"(char*){name}_bytes")
                 arguments.append(f"(uint64_t){name}_size")
@@ -500,6 +506,7 @@ def render_c(class_name: str, entries: list[dict]) -> str:
                 body.append(f"        {name}_elements = (*environment)->Get{element}"
                             f"ArrayElements(environment, {name}, NULL);")
                 body.append(f"        if ({name}_elements == NULL) {{")
+                body.extend(unwind_lines(unwind, "        "))
                 body.append("            return (jint)CNA_RESULT_OUT_OF_MEMORY;")
                 body.append("        }")
                 body.append(f"        {name}_values = ({step['ctype']}*)malloc(")
@@ -507,6 +514,7 @@ def render_c(class_name: str, entries: list[dict]) -> str:
                 body.append(f"        if ({name}_values == NULL) {{")
                 body.append(f"            (*environment)->Release{element}ArrayElements(")
                 body.append(f"                environment, {name}, {name}_elements, JNI_ABORT);")
+                body.extend(unwind_lines(unwind, "        "))
                 body.append("            return (jint)CNA_RESULT_OUT_OF_MEMORY;")
                 body.append("        }")
                 body.append(f"        for (jsize index = 0; index < {name}_size; ++index) {{")
@@ -515,12 +523,13 @@ def render_c(class_name: str, entries: list[dict]) -> str:
                 body.append("        }")
                 body.append("    }")
                 arguments.append(f"{name}_values")
-                cleanup.append(
+                unwind.append(
                     f"    if ({name}_elements != NULL) {{\n"
                     f"        (*environment)->Release{element}ArrayElements(\n"
                     f"            environment, {name}, {name}_elements, JNI_ABORT);\n"
                     f"    }}\n"
                     f"    free({name}_values);")
+                cleanup.append(unwind[-1])
             elif shape == "array":
                 parameters.append(f"{step['jni']}Array {name}")
                 element = JAVA_OF_JNI[step["jni"]].capitalize()
@@ -529,6 +538,7 @@ def render_c(class_name: str, entries: list[dict]) -> str:
                 body.append(f"    {step['jni']}* {name}_elements = "
                             f"(*environment)->Get{element}ArrayElements(environment, {name}, NULL);")
                 body.append(f"    if ({name}_elements == NULL) {{")
+                body.extend(unwind_lines(unwind, ""))
                 body.append("        return (jint)CNA_RESULT_OUT_OF_MEMORY;")
                 body.append("    }")
                 body.append(f"    {step['ctype']}* {name}_values = ({step['ctype']}*)malloc(")
@@ -536,6 +546,7 @@ def render_c(class_name: str, entries: list[dict]) -> str:
                 body.append(f"    if ({name}_values == NULL) {{")
                 body.append(f"        (*environment)->Release{element}ArrayElements(")
                 body.append(f"            environment, {name}, {name}_elements, JNI_ABORT);")
+                body.extend(unwind_lines(unwind, ""))
                 body.append("        return (jint)CNA_RESULT_OUT_OF_MEMORY;")
                 body.append("    }")
                 body.append(f"    for (jsize index = 0; index < {name}_size; ++index) {{")
@@ -559,6 +570,10 @@ def render_c(class_name: str, entries: list[dict]) -> str:
                     f"    (*environment)->Release{element}ArrayElements(\n"
                     f"        environment, {name}, {name}_elements, "
                     f"{'JNI_ABORT' if step['input'] else '0'});")
+                unwind.append(
+                    f"    free({name}_values);\n"
+                    f"    (*environment)->Release{element}ArrayElements(\n"
+                    f"        environment, {name}, {name}_elements, JNI_ABORT);")
             elif shape == "struct_array":
                 groups = [(group, jni, java) for group, jni, java, _ in STRUCT_GROUPS
                           if step[group]]
@@ -571,8 +586,10 @@ def render_c(class_name: str, entries: list[dict]) -> str:
                 body.append(f"    {step['ctype']}* {name}_values = ({step['ctype']}*)calloc(")
                 body.append(f"        (size_t){name}_count + 1U, sizeof(*{name}_values));")
                 body.append(f"    if ({name}_values == NULL) {{")
+                body.extend(unwind_lines(unwind, ""))
                 body.append("        return (jint)CNA_RESULT_OUT_OF_MEMORY;")
                 body.append("    }")
+                unwind.append(f"    free({name}_values);")
                 for group, jni, java in groups:
                     field = f"{name}{group.capitalize()}"
                     body.append(f"    {{")
@@ -582,7 +599,7 @@ def render_c(class_name: str, entries: list[dict]) -> str:
                     body.append(f"            ((size_t){field}_length + 1U) * "
                                 f"sizeof(*{field}_values));")
                     body.append(f"        if ({field}_values == NULL) {{")
-                    body.append(f"            free({name}_values);")
+                    body.extend(unwind_lines(unwind, "        "))
                     body.append("            return (jint)CNA_RESULT_OUT_OF_MEMORY;")
                     body.append("        }")
                     body.append(f"        (*environment)->Get{java}ArrayRegion(environment, "
@@ -654,10 +671,11 @@ def render_c(class_name: str, entries: list[dict]) -> str:
                 for path, _ in step.get("views", ()):
                     view = view_parameter(step["name"], path)
                     parameters.append(f"jbyteArray {view}")
-                    body.extend(borrow_bytes(view))
+                    body.extend(borrow_bytes(view, unwind))
                     body.append(f"    {name}_value.{path}.data = (const char*){view}_bytes;")
                     body.append(f"    {name}_value.{path}.byte_length = (uint64_t){view}_size;")
-                    cleanup.append(release_bytes(view, abort=True))
+                    unwind.append(release_bytes(view, abort=True))
+                    cleanup.append(unwind[-1])
                 arguments.append(f"{name}_value")
             elif shape == "struct":
                 body.append(f"    {step['ctype']} {name}_value;")
@@ -693,10 +711,11 @@ def render_c(class_name: str, entries: list[dict]) -> str:
                     # does not state.
                     view = view_parameter(step["name"], path)
                     parameters.append(f"jbyteArray {view}")
-                    body.extend(borrow_bytes(view))
+                    body.extend(borrow_bytes(view, unwind))
                     body.append(f"    {name}_value.{path}.data = (const char*){view}_bytes;")
                     body.append(f"    {name}_value.{path}.byte_length = (uint64_t){view}_size;")
-                    cleanup.append(release_bytes(view, abort=True))
+                    unwind.append(release_bytes(view, abort=True))
+                    cleanup.append(unwind[-1])
         body = (["    (void)environment;", "    (void)declaring_class;"]
                 + prologue + body)
         body.append(f"    CNA_Result call_result = "
@@ -725,15 +744,28 @@ def render_c(class_name: str, entries: list[dict]) -> str:
     return "\n".join(lines)
 
 
-def borrow_bytes(name: str) -> list[str]:
-    return [
+def unwind_lines(unwind: list[str], indent: str) -> list[str]:
+    """Release everything acquired so far, most recent first.
+
+    An early return in the middle of marshalling would otherwise strand whatever the earlier
+    parameters had already pinned or allocated. The paths that reach here are out-of-memory
+    ones, which is exactly when leaking is least affordable.
+    """
+    return [indent + line for statement in reversed(unwind)
+            for line in statement.splitlines()]
+
+
+def borrow_bytes(name: str, unwind: list[str] | None = None) -> list[str]:
+    lines = [
         f"    jsize {name}_size = (*environment)->GetArrayLength(environment, {name});",
         f"    jbyte* {name}_bytes = "
         f"(*environment)->GetByteArrayElements(environment, {name}, NULL);",
         f"    if ({name}_bytes == NULL) {{",
-        "        return (jint)CNA_RESULT_OUT_OF_MEMORY;",
-        "    }",
     ]
+    lines.extend(unwind_lines(unwind or [], "    "))
+    lines.append("        return (jint)CNA_RESULT_OUT_OF_MEMORY;")
+    lines.append("    }")
+    return lines
 
 
 def release_bytes(name: str, *, abort: bool) -> str:

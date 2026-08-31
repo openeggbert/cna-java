@@ -164,6 +164,7 @@ Java_org_openeggbert_cna_internal_generated_NativeNetworkRoutes_availableNetwork
     jsize createInfoHostAddress_size = (*environment)->GetArrayLength(environment, createInfoHostAddress);
     jbyte* createInfoHostAddress_bytes = (*environment)->GetByteArrayElements(environment, createInfoHostAddress, NULL);
     if (createInfoHostAddress_bytes == NULL) {
+        (*environment)->ReleaseByteArrayElements(environment, createInfoHostGamertag, createInfoHostGamertag_bytes, JNI_ABORT);
         return (jint)CNA_RESULT_OUT_OF_MEMORY;
     }
     create_info_value.host_address.data = (const char*)createInfoHostAddress_bytes;

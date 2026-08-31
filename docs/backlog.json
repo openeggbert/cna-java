@@ -390,8 +390,8 @@
       "title": "Two gates could not see an ABI migration go wrong",
       "family": "native boundary",
       "authority": "tools/native-abi/verify.py, build.gradle",
-      "currentState": "Fixed. NativeBindings.COMPILED_ABI_VERSION is what a game hits at load time and was hand-maintained: the 0.21.0 migration moved the manifest and the probe and left it at 0.20, which every gate passed and which then refused the library. And the test task treated neither native library as an input, so rebuilding libcna_c_api left the suite up to date and reporting the previous run's results against a different library.",
-      "expectedState": "nativeAbiCheck fails on JAVA_COMPILED_ABI_DRIFT, with a negative-mutation test; the test task declares both native libraries as inputs.",
+      "currentState": "Done. The generator keeps an unwind list of unconditional releases in acquisition order, and every early return replays it in reverse. It could not reuse the existing cleanup list, which is why this was recorded rather than fixed in passing: some of those statements are guarded on the call's result, which is not declared yet at the point an acquisition can fail.",
+      "expectedState": "Every early return releases what it holds, and the success path still releases each acquisition exactly once. Three tool tests check both, on the four-array route that made the defect ordinary rather than rare.",
       "tests": [
         "tools/native-abi/test_verify.py",
         "nativeAbiCheck"

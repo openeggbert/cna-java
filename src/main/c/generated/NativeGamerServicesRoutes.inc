@@ -1463,6 +1463,7 @@ Java_org_openeggbert_cna_internal_generated_NativeGamerServicesRoutes_gamerCopyP
     jsize destination_size = (*environment)->GetArrayLength(environment, destination);
     jbyte* destination_bytes = (*environment)->GetByteArrayElements(environment, destination, NULL);
     if (destination_bytes == NULL) {
+        (*environment)->ReleaseByteArrayElements(environment, audience_uri, audience_uri_bytes, JNI_ABORT);
         return (jint)CNA_RESULT_OUT_OF_MEMORY;
     }
     uint64_t destination_written = 0;
@@ -1965,12 +1966,15 @@ Java_org_openeggbert_cna_internal_generated_NativeGamerServicesRoutes_guideBegin
     jsize description_size = (*environment)->GetArrayLength(environment, description);
     jbyte* description_bytes = (*environment)->GetByteArrayElements(environment, description, NULL);
     if (description_bytes == NULL) {
+        (*environment)->ReleaseByteArrayElements(environment, title, title_bytes, JNI_ABORT);
         return (jint)CNA_RESULT_OUT_OF_MEMORY;
     }
     CNA_StringView description_view = {(const char*)description_bytes, (uint64_t)description_size};
     jsize default_text_size = (*environment)->GetArrayLength(environment, default_text);
     jbyte* default_text_bytes = (*environment)->GetByteArrayElements(environment, default_text, NULL);
     if (default_text_bytes == NULL) {
+        (*environment)->ReleaseByteArrayElements(environment, description, description_bytes, JNI_ABORT);
+        (*environment)->ReleaseByteArrayElements(environment, title, title_bytes, JNI_ABORT);
         return (jint)CNA_RESULT_OUT_OF_MEMORY;
     }
     CNA_StringView default_text_view = {(const char*)default_text_bytes, (uint64_t)default_text_size};
@@ -2406,6 +2410,7 @@ Java_org_openeggbert_cna_internal_generated_NativeGamerServicesRoutes_guideShowC
     jsize recipients_size = (*environment)->GetArrayLength(environment, recipients);
     jlong* recipients_elements = (*environment)->GetLongArrayElements(environment, recipients, NULL);
     if (recipients_elements == NULL) {
+    (*environment)->ReleaseByteArrayElements(environment, text, text_bytes, JNI_ABORT);
         return (jint)CNA_RESULT_OUT_OF_MEMORY;
     }
     CNA_GamerHandle* recipients_values = (CNA_GamerHandle*)malloc(
@@ -2413,6 +2418,7 @@ Java_org_openeggbert_cna_internal_generated_NativeGamerServicesRoutes_guideShowC
     if (recipients_values == NULL) {
         (*environment)->ReleaseLongArrayElements(
             environment, recipients, recipients_elements, JNI_ABORT);
+    (*environment)->ReleaseByteArrayElements(environment, text, text_bytes, JNI_ABORT);
         return (jint)CNA_RESULT_OUT_OF_MEMORY;
     }
     for (jsize index = 0; index < recipients_size; ++index) {
@@ -3243,6 +3249,7 @@ Java_org_openeggbert_cna_internal_generated_NativeGamerServicesRoutes_propertyDi
     jsize destination_size = (*environment)->GetArrayLength(environment, destination);
     jbyte* destination_bytes = (*environment)->GetByteArrayElements(environment, destination, NULL);
     if (destination_bytes == NULL) {
+        (*environment)->ReleaseByteArrayElements(environment, key, key_bytes, JNI_ABORT);
         return (jint)CNA_RESULT_OUT_OF_MEMORY;
     }
     uint64_t destination_written = 0;
@@ -3640,6 +3647,7 @@ Java_org_openeggbert_cna_internal_generated_NativeGamerServicesRoutes_propertyDi
     jsize value_size = (*environment)->GetArrayLength(environment, value);
     jbyte* value_bytes = (*environment)->GetByteArrayElements(environment, value, NULL);
     if (value_bytes == NULL) {
+        (*environment)->ReleaseByteArrayElements(environment, key, key_bytes, JNI_ABORT);
         return (jint)CNA_RESULT_OUT_OF_MEMORY;
     }
     CNA_StringView value_view = {(const char*)value_bytes, (uint64_t)value_size};

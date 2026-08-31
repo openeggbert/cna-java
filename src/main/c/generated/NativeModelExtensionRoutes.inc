@@ -540,6 +540,9 @@ Java_org_openeggbert_cna_internal_generated_NativeModelExtensionRoutes_modelCrea
     jsize meshes_size = (*environment)->GetArrayLength(environment, meshes);
     jlong* meshes_elements = (*environment)->GetLongArrayElements(environment, meshes, NULL);
     if (meshes_elements == NULL) {
+    free(bones_values);
+    (*environment)->ReleaseLongArrayElements(
+        environment, bones, bones_elements, JNI_ABORT);
         return (jint)CNA_RESULT_OUT_OF_MEMORY;
     }
     CNA_ModelMeshHandle* meshes_values = (CNA_ModelMeshHandle*)malloc(
@@ -547,6 +550,9 @@ Java_org_openeggbert_cna_internal_generated_NativeModelExtensionRoutes_modelCrea
     if (meshes_values == NULL) {
         (*environment)->ReleaseLongArrayElements(
             environment, meshes, meshes_elements, JNI_ABORT);
+    free(bones_values);
+    (*environment)->ReleaseLongArrayElements(
+        environment, bones, bones_elements, JNI_ABORT);
         return (jint)CNA_RESULT_OUT_OF_MEMORY;
     }
     for (jsize index = 0; index < meshes_size; ++index) {
@@ -555,6 +561,12 @@ Java_org_openeggbert_cna_internal_generated_NativeModelExtensionRoutes_modelCrea
     jsize mesh_parents_size = (*environment)->GetArrayLength(environment, mesh_parents);
     jlong* mesh_parents_elements = (*environment)->GetLongArrayElements(environment, mesh_parents, NULL);
     if (mesh_parents_elements == NULL) {
+    free(meshes_values);
+    (*environment)->ReleaseLongArrayElements(
+        environment, meshes, meshes_elements, JNI_ABORT);
+    free(bones_values);
+    (*environment)->ReleaseLongArrayElements(
+        environment, bones, bones_elements, JNI_ABORT);
         return (jint)CNA_RESULT_OUT_OF_MEMORY;
     }
     CNA_ModelBoneHandle* mesh_parents_values = (CNA_ModelBoneHandle*)malloc(
@@ -562,6 +574,12 @@ Java_org_openeggbert_cna_internal_generated_NativeModelExtensionRoutes_modelCrea
     if (mesh_parents_values == NULL) {
         (*environment)->ReleaseLongArrayElements(
             environment, mesh_parents, mesh_parents_elements, JNI_ABORT);
+    free(meshes_values);
+    (*environment)->ReleaseLongArrayElements(
+        environment, meshes, meshes_elements, JNI_ABORT);
+    free(bones_values);
+    (*environment)->ReleaseLongArrayElements(
+        environment, bones, bones_elements, JNI_ABORT);
         return (jint)CNA_RESULT_OUT_OF_MEMORY;
     }
     for (jsize index = 0; index < mesh_parents_size; ++index) {
@@ -1102,6 +1120,7 @@ Java_org_openeggbert_cna_internal_generated_NativeModelExtensionRoutes_modelMesh
     jsize parts_size = (*environment)->GetArrayLength(environment, parts);
     jlong* parts_elements = (*environment)->GetLongArrayElements(environment, parts, NULL);
     if (parts_elements == NULL) {
+    (*environment)->ReleaseByteArrayElements(environment, name, name_bytes, JNI_ABORT);
         return (jint)CNA_RESULT_OUT_OF_MEMORY;
     }
     CNA_ModelMeshPartHandle* parts_values = (CNA_ModelMeshPartHandle*)malloc(
@@ -1109,6 +1128,7 @@ Java_org_openeggbert_cna_internal_generated_NativeModelExtensionRoutes_modelMesh
     if (parts_values == NULL) {
         (*environment)->ReleaseLongArrayElements(
             environment, parts, parts_elements, JNI_ABORT);
+    (*environment)->ReleaseByteArrayElements(environment, name, name_bytes, JNI_ABORT);
         return (jint)CNA_RESULT_OUT_OF_MEMORY;
     }
     for (jsize index = 0; index < parts_size; ++index) {

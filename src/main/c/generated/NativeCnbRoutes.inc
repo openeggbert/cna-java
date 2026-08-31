@@ -60,6 +60,7 @@ Java_org_openeggbert_cna_internal_generated_NativeCnbRoutes_cnbBuildModelFromCnj
     jsize content_root_size = (*environment)->GetArrayLength(environment, content_root);
     jbyte* content_root_bytes = (*environment)->GetByteArrayElements(environment, content_root, NULL);
     if (content_root_bytes == NULL) {
+        (*environment)->ReleaseByteArrayElements(environment, cnj_path, cnj_path_bytes, JNI_ABORT);
         return (jint)CNA_RESULT_OUT_OF_MEMORY;
     }
     CNA_StringView content_root_view = {(const char*)content_root_bytes, (uint64_t)content_root_size};
@@ -366,12 +367,15 @@ Java_org_openeggbert_cna_internal_generated_NativeCnbRoutes_cnbCompileCnj(
     jsize content_root_size = (*environment)->GetArrayLength(environment, content_root);
     jbyte* content_root_bytes = (*environment)->GetByteArrayElements(environment, content_root, NULL);
     if (content_root_bytes == NULL) {
+        (*environment)->ReleaseByteArrayElements(environment, cnj_path, cnj_path_bytes, JNI_ABORT);
         return (jint)CNA_RESULT_OUT_OF_MEMORY;
     }
     CNA_StringView content_root_view = {(const char*)content_root_bytes, (uint64_t)content_root_size};
     jsize content_name_size = (*environment)->GetArrayLength(environment, content_name);
     jbyte* content_name_bytes = (*environment)->GetByteArrayElements(environment, content_name, NULL);
     if (content_name_bytes == NULL) {
+        (*environment)->ReleaseByteArrayElements(environment, content_root, content_root_bytes, JNI_ABORT);
+        (*environment)->ReleaseByteArrayElements(environment, cnj_path, cnj_path_bytes, JNI_ABORT);
         return (jint)CNA_RESULT_OUT_OF_MEMORY;
     }
     CNA_StringView content_name_view = {(const char*)content_name_bytes, (uint64_t)content_name_size};
@@ -478,6 +482,9 @@ Java_org_openeggbert_cna_internal_generated_NativeCnbRoutes_cnbCopyCompressed(
     jsize destination_size = (*environment)->GetArrayLength(environment, destination);
     jbyte* destination_elements = (*environment)->GetByteArrayElements(environment, destination, NULL);
     if (destination_elements == NULL) {
+    free(raw_values);
+    (*environment)->ReleaseByteArrayElements(
+        environment, raw, raw_elements, JNI_ABORT);
         return (jint)CNA_RESULT_OUT_OF_MEMORY;
     }
     uint8_t* destination_values = (uint8_t*)malloc(
@@ -485,6 +492,9 @@ Java_org_openeggbert_cna_internal_generated_NativeCnbRoutes_cnbCopyCompressed(
     if (destination_values == NULL) {
         (*environment)->ReleaseByteArrayElements(
             environment, destination, destination_elements, JNI_ABORT);
+    free(raw_values);
+    (*environment)->ReleaseByteArrayElements(
+        environment, raw, raw_elements, JNI_ABORT);
         return (jint)CNA_RESULT_OUT_OF_MEMORY;
     }
     for (jsize index = 0; index < destination_size; ++index) {
@@ -557,6 +567,9 @@ Java_org_openeggbert_cna_internal_generated_NativeCnbRoutes_cnbCopyDecompressed(
     jsize destination_size = (*environment)->GetArrayLength(environment, destination);
     jbyte* destination_elements = (*environment)->GetByteArrayElements(environment, destination, NULL);
     if (destination_elements == NULL) {
+    free(stored_values);
+    (*environment)->ReleaseByteArrayElements(
+        environment, stored, stored_elements, JNI_ABORT);
         return (jint)CNA_RESULT_OUT_OF_MEMORY;
     }
     uint8_t* destination_values = (uint8_t*)malloc(
@@ -564,6 +577,9 @@ Java_org_openeggbert_cna_internal_generated_NativeCnbRoutes_cnbCopyDecompressed(
     if (destination_values == NULL) {
         (*environment)->ReleaseByteArrayElements(
             environment, destination, destination_elements, JNI_ABORT);
+    free(stored_values);
+    (*environment)->ReleaseByteArrayElements(
+        environment, stored, stored_elements, JNI_ABORT);
         return (jint)CNA_RESULT_OUT_OF_MEMORY;
     }
     for (jsize index = 0; index < destination_size; ++index) {
@@ -644,6 +660,7 @@ Java_org_openeggbert_cna_internal_generated_NativeCnbRoutes_cnbCopyLogicalNamePr
     jsize destination_size = (*environment)->GetArrayLength(environment, destination);
     jbyte* destination_bytes = (*environment)->GetByteArrayElements(environment, destination, NULL);
     if (destination_bytes == NULL) {
+        (*environment)->ReleaseByteArrayElements(environment, logical_name, logical_name_bytes, JNI_ABORT);
         return (jint)CNA_RESULT_OUT_OF_MEMORY;
     }
     uint64_t destination_written = 0;
@@ -838,6 +855,9 @@ Java_org_openeggbert_cna_internal_generated_NativeCnbRoutes_cnbDecodeDdsAsTextur
     jsize origin_size = (*environment)->GetArrayLength(environment, origin);
     jbyte* origin_bytes = (*environment)->GetByteArrayElements(environment, origin, NULL);
     if (origin_bytes == NULL) {
+        free(bytes_values);
+        (*environment)->ReleaseByteArrayElements(
+            environment, bytes, bytes_elements, JNI_ABORT);
         return (jint)CNA_RESULT_OUT_OF_MEMORY;
     }
     CNA_StringView origin_view = {(const char*)origin_bytes, (uint64_t)origin_size};
@@ -1137,6 +1157,9 @@ Java_org_openeggbert_cna_internal_generated_NativeCnbRoutes_cnbDecodeWavAsSoundE
     jsize origin_size = (*environment)->GetArrayLength(environment, origin);
     jbyte* origin_bytes = (*environment)->GetByteArrayElements(environment, origin, NULL);
     if (origin_bytes == NULL) {
+        free(bytes_values);
+        (*environment)->ReleaseByteArrayElements(
+            environment, bytes, bytes_elements, JNI_ABORT);
         return (jint)CNA_RESULT_OUT_OF_MEMORY;
     }
     CNA_StringView origin_view = {(const char*)origin_bytes, (uint64_t)origin_size};
@@ -1669,6 +1692,9 @@ Java_org_openeggbert_cna_internal_generated_NativeCnbRoutes_cnbDocumentParse(
     jsize origin_size = (*environment)->GetArrayLength(environment, origin);
     jbyte* origin_bytes = (*environment)->GetByteArrayElements(environment, origin, NULL);
     if (origin_bytes == NULL) {
+        free(bytes_values);
+        (*environment)->ReleaseByteArrayElements(
+            environment, bytes, bytes_elements, JNI_ABORT);
         return (jint)CNA_RESULT_OUT_OF_MEMORY;
     }
     CNA_StringView origin_view = {(const char*)origin_bytes, (uint64_t)origin_size};
@@ -1831,6 +1857,7 @@ Java_org_openeggbert_cna_internal_generated_NativeCnbRoutes_cnbEncodeCurve(
     jsize destination_size = (*environment)->GetArrayLength(environment, destination);
     jbyte* destination_elements = (*environment)->GetByteArrayElements(environment, destination, NULL);
     if (destination_elements == NULL) {
+    (*environment)->ReleaseByteArrayElements(environment, content_name, content_name_bytes, JNI_ABORT);
         return (jint)CNA_RESULT_OUT_OF_MEMORY;
     }
     uint8_t* destination_values = (uint8_t*)malloc(
@@ -1838,6 +1865,7 @@ Java_org_openeggbert_cna_internal_generated_NativeCnbRoutes_cnbEncodeCurve(
     if (destination_values == NULL) {
         (*environment)->ReleaseByteArrayElements(
             environment, destination, destination_elements, JNI_ABORT);
+    (*environment)->ReleaseByteArrayElements(environment, content_name, content_name_bytes, JNI_ABORT);
         return (jint)CNA_RESULT_OUT_OF_MEMORY;
     }
     for (jsize index = 0; index < destination_size; ++index) {
@@ -1877,6 +1905,7 @@ Java_org_openeggbert_cna_internal_generated_NativeCnbRoutes_cnbEncodeModel(
     jsize destination_size = (*environment)->GetArrayLength(environment, destination);
     jbyte* destination_elements = (*environment)->GetByteArrayElements(environment, destination, NULL);
     if (destination_elements == NULL) {
+    (*environment)->ReleaseByteArrayElements(environment, content_name, content_name_bytes, JNI_ABORT);
         return (jint)CNA_RESULT_OUT_OF_MEMORY;
     }
     uint8_t* destination_values = (uint8_t*)malloc(
@@ -1884,6 +1913,7 @@ Java_org_openeggbert_cna_internal_generated_NativeCnbRoutes_cnbEncodeModel(
     if (destination_values == NULL) {
         (*environment)->ReleaseByteArrayElements(
             environment, destination, destination_elements, JNI_ABORT);
+    (*environment)->ReleaseByteArrayElements(environment, content_name, content_name_bytes, JNI_ABORT);
         return (jint)CNA_RESULT_OUT_OF_MEMORY;
     }
     for (jsize index = 0; index < destination_size; ++index) {
@@ -1923,18 +1953,24 @@ Java_org_openeggbert_cna_internal_generated_NativeCnbRoutes_cnbEncodeSong(
     jsize name_size = (*environment)->GetArrayLength(environment, name);
     jbyte* name_bytes = (*environment)->GetByteArrayElements(environment, name, NULL);
     if (name_bytes == NULL) {
+        (*environment)->ReleaseByteArrayElements(environment, stream_reference, stream_reference_bytes, JNI_ABORT);
         return (jint)CNA_RESULT_OUT_OF_MEMORY;
     }
     CNA_StringView name_view = {(const char*)name_bytes, (uint64_t)name_size};
     jsize content_name_size = (*environment)->GetArrayLength(environment, content_name);
     jbyte* content_name_bytes = (*environment)->GetByteArrayElements(environment, content_name, NULL);
     if (content_name_bytes == NULL) {
+        (*environment)->ReleaseByteArrayElements(environment, name, name_bytes, JNI_ABORT);
+        (*environment)->ReleaseByteArrayElements(environment, stream_reference, stream_reference_bytes, JNI_ABORT);
         return (jint)CNA_RESULT_OUT_OF_MEMORY;
     }
     CNA_StringView content_name_view = {(const char*)content_name_bytes, (uint64_t)content_name_size};
     jsize destination_size = (*environment)->GetArrayLength(environment, destination);
     jbyte* destination_elements = (*environment)->GetByteArrayElements(environment, destination, NULL);
     if (destination_elements == NULL) {
+    (*environment)->ReleaseByteArrayElements(environment, content_name, content_name_bytes, JNI_ABORT);
+    (*environment)->ReleaseByteArrayElements(environment, name, name_bytes, JNI_ABORT);
+    (*environment)->ReleaseByteArrayElements(environment, stream_reference, stream_reference_bytes, JNI_ABORT);
         return (jint)CNA_RESULT_OUT_OF_MEMORY;
     }
     uint8_t* destination_values = (uint8_t*)malloc(
@@ -1942,6 +1978,9 @@ Java_org_openeggbert_cna_internal_generated_NativeCnbRoutes_cnbEncodeSong(
     if (destination_values == NULL) {
         (*environment)->ReleaseByteArrayElements(
             environment, destination, destination_elements, JNI_ABORT);
+    (*environment)->ReleaseByteArrayElements(environment, content_name, content_name_bytes, JNI_ABORT);
+    (*environment)->ReleaseByteArrayElements(environment, name, name_bytes, JNI_ABORT);
+    (*environment)->ReleaseByteArrayElements(environment, stream_reference, stream_reference_bytes, JNI_ABORT);
         return (jint)CNA_RESULT_OUT_OF_MEMORY;
     }
     for (jsize index = 0; index < destination_size; ++index) {
@@ -1983,6 +2022,7 @@ Java_org_openeggbert_cna_internal_generated_NativeCnbRoutes_cnbEncodeSoundEffect
     jsize destination_size = (*environment)->GetArrayLength(environment, destination);
     jbyte* destination_elements = (*environment)->GetByteArrayElements(environment, destination, NULL);
     if (destination_elements == NULL) {
+    (*environment)->ReleaseByteArrayElements(environment, content_name, content_name_bytes, JNI_ABORT);
         return (jint)CNA_RESULT_OUT_OF_MEMORY;
     }
     uint8_t* destination_values = (uint8_t*)malloc(
@@ -1990,6 +2030,7 @@ Java_org_openeggbert_cna_internal_generated_NativeCnbRoutes_cnbEncodeSoundEffect
     if (destination_values == NULL) {
         (*environment)->ReleaseByteArrayElements(
             environment, destination, destination_elements, JNI_ABORT);
+    (*environment)->ReleaseByteArrayElements(environment, content_name, content_name_bytes, JNI_ABORT);
         return (jint)CNA_RESULT_OUT_OF_MEMORY;
     }
     for (jsize index = 0; index < destination_size; ++index) {
@@ -2029,6 +2070,7 @@ Java_org_openeggbert_cna_internal_generated_NativeCnbRoutes_cnbEncodeSpriteFont(
     jsize destination_size = (*environment)->GetArrayLength(environment, destination);
     jbyte* destination_elements = (*environment)->GetByteArrayElements(environment, destination, NULL);
     if (destination_elements == NULL) {
+    (*environment)->ReleaseByteArrayElements(environment, content_name, content_name_bytes, JNI_ABORT);
         return (jint)CNA_RESULT_OUT_OF_MEMORY;
     }
     uint8_t* destination_values = (uint8_t*)malloc(
@@ -2036,6 +2078,7 @@ Java_org_openeggbert_cna_internal_generated_NativeCnbRoutes_cnbEncodeSpriteFont(
     if (destination_values == NULL) {
         (*environment)->ReleaseByteArrayElements(
             environment, destination, destination_elements, JNI_ABORT);
+    (*environment)->ReleaseByteArrayElements(environment, content_name, content_name_bytes, JNI_ABORT);
         return (jint)CNA_RESULT_OUT_OF_MEMORY;
     }
     for (jsize index = 0; index < destination_size; ++index) {
@@ -2075,6 +2118,7 @@ Java_org_openeggbert_cna_internal_generated_NativeCnbRoutes_cnbEncodeTexture2d(
     jsize destination_size = (*environment)->GetArrayLength(environment, destination);
     jbyte* destination_elements = (*environment)->GetByteArrayElements(environment, destination, NULL);
     if (destination_elements == NULL) {
+    (*environment)->ReleaseByteArrayElements(environment, content_name, content_name_bytes, JNI_ABORT);
         return (jint)CNA_RESULT_OUT_OF_MEMORY;
     }
     uint8_t* destination_values = (uint8_t*)malloc(
@@ -2082,6 +2126,7 @@ Java_org_openeggbert_cna_internal_generated_NativeCnbRoutes_cnbEncodeTexture2d(
     if (destination_values == NULL) {
         (*environment)->ReleaseByteArrayElements(
             environment, destination, destination_elements, JNI_ABORT);
+    (*environment)->ReleaseByteArrayElements(environment, content_name, content_name_bytes, JNI_ABORT);
         return (jint)CNA_RESULT_OUT_OF_MEMORY;
     }
     for (jsize index = 0; index < destination_size; ++index) {
@@ -2121,6 +2166,7 @@ Java_org_openeggbert_cna_internal_generated_NativeCnbRoutes_cnbEncodeTexture3d(
     jsize destination_size = (*environment)->GetArrayLength(environment, destination);
     jbyte* destination_elements = (*environment)->GetByteArrayElements(environment, destination, NULL);
     if (destination_elements == NULL) {
+    (*environment)->ReleaseByteArrayElements(environment, content_name, content_name_bytes, JNI_ABORT);
         return (jint)CNA_RESULT_OUT_OF_MEMORY;
     }
     uint8_t* destination_values = (uint8_t*)malloc(
@@ -2128,6 +2174,7 @@ Java_org_openeggbert_cna_internal_generated_NativeCnbRoutes_cnbEncodeTexture3d(
     if (destination_values == NULL) {
         (*environment)->ReleaseByteArrayElements(
             environment, destination, destination_elements, JNI_ABORT);
+    (*environment)->ReleaseByteArrayElements(environment, content_name, content_name_bytes, JNI_ABORT);
         return (jint)CNA_RESULT_OUT_OF_MEMORY;
     }
     for (jsize index = 0; index < destination_size; ++index) {
@@ -2167,6 +2214,7 @@ Java_org_openeggbert_cna_internal_generated_NativeCnbRoutes_cnbEncodeTextureCube
     jsize destination_size = (*environment)->GetArrayLength(environment, destination);
     jbyte* destination_elements = (*environment)->GetByteArrayElements(environment, destination, NULL);
     if (destination_elements == NULL) {
+    (*environment)->ReleaseByteArrayElements(environment, content_name, content_name_bytes, JNI_ABORT);
         return (jint)CNA_RESULT_OUT_OF_MEMORY;
     }
     uint8_t* destination_values = (uint8_t*)malloc(
@@ -2174,6 +2222,7 @@ Java_org_openeggbert_cna_internal_generated_NativeCnbRoutes_cnbEncodeTextureCube
     if (destination_values == NULL) {
         (*environment)->ReleaseByteArrayElements(
             environment, destination, destination_elements, JNI_ABORT);
+    (*environment)->ReleaseByteArrayElements(environment, content_name, content_name_bytes, JNI_ABORT);
         return (jint)CNA_RESULT_OUT_OF_MEMORY;
     }
     for (jsize index = 0; index < destination_size; ++index) {
@@ -2231,12 +2280,15 @@ Java_org_openeggbert_cna_internal_generated_NativeCnbRoutes_cnbEncodeVideo(
     jsize content_name_size = (*environment)->GetArrayLength(environment, content_name);
     jbyte* content_name_bytes = (*environment)->GetByteArrayElements(environment, content_name, NULL);
     if (content_name_bytes == NULL) {
+        (*environment)->ReleaseByteArrayElements(environment, stream_reference, stream_reference_bytes, JNI_ABORT);
         return (jint)CNA_RESULT_OUT_OF_MEMORY;
     }
     CNA_StringView content_name_view = {(const char*)content_name_bytes, (uint64_t)content_name_size};
     jsize destination_size = (*environment)->GetArrayLength(environment, destination);
     jbyte* destination_elements = (*environment)->GetByteArrayElements(environment, destination, NULL);
     if (destination_elements == NULL) {
+    (*environment)->ReleaseByteArrayElements(environment, content_name, content_name_bytes, JNI_ABORT);
+    (*environment)->ReleaseByteArrayElements(environment, stream_reference, stream_reference_bytes, JNI_ABORT);
         return (jint)CNA_RESULT_OUT_OF_MEMORY;
     }
     uint8_t* destination_values = (uint8_t*)malloc(
@@ -2244,6 +2296,8 @@ Java_org_openeggbert_cna_internal_generated_NativeCnbRoutes_cnbEncodeVideo(
     if (destination_values == NULL) {
         (*environment)->ReleaseByteArrayElements(
             environment, destination, destination_elements, JNI_ABORT);
+    (*environment)->ReleaseByteArrayElements(environment, content_name, content_name_bytes, JNI_ABORT);
+    (*environment)->ReleaseByteArrayElements(environment, stream_reference, stream_reference_bytes, JNI_ABORT);
         return (jint)CNA_RESULT_OUT_OF_MEMORY;
     }
     for (jsize index = 0; index < destination_size; ++index) {
@@ -2697,6 +2751,7 @@ Java_org_openeggbert_cna_internal_generated_NativeCnbRoutes_cnbModelAddBone(
         jsize transform_size = (*environment)->GetArrayLength(environment, transform);
         transform_elements = (*environment)->GetFloatArrayElements(environment, transform, NULL);
         if (transform_elements == NULL) {
+            (*environment)->ReleaseByteArrayElements(environment, name, name_bytes, JNI_ABORT);
             return (jint)CNA_RESULT_OUT_OF_MEMORY;
         }
         transform_values = (float*)malloc(
@@ -2704,6 +2759,7 @@ Java_org_openeggbert_cna_internal_generated_NativeCnbRoutes_cnbModelAddBone(
         if (transform_values == NULL) {
             (*environment)->ReleaseFloatArrayElements(
                 environment, transform, transform_elements, JNI_ABORT);
+            (*environment)->ReleaseByteArrayElements(environment, name, name_bytes, JNI_ABORT);
             return (jint)CNA_RESULT_OUT_OF_MEMORY;
         }
         for (jsize index = 0; index < transform_size; ++index) {
@@ -2769,6 +2825,7 @@ Java_org_openeggbert_cna_internal_generated_NativeCnbRoutes_cnbModelAddMesh(
     jsize part_indices_size = (*environment)->GetArrayLength(environment, part_indices);
     jint* part_indices_elements = (*environment)->GetIntArrayElements(environment, part_indices, NULL);
     if (part_indices_elements == NULL) {
+    (*environment)->ReleaseByteArrayElements(environment, name, name_bytes, JNI_ABORT);
         return (jint)CNA_RESULT_OUT_OF_MEMORY;
     }
     uint32_t* part_indices_values = (uint32_t*)malloc(
@@ -2776,6 +2833,7 @@ Java_org_openeggbert_cna_internal_generated_NativeCnbRoutes_cnbModelAddMesh(
     if (part_indices_values == NULL) {
         (*environment)->ReleaseIntArrayElements(
             environment, part_indices, part_indices_elements, JNI_ABORT);
+    (*environment)->ReleaseByteArrayElements(environment, name, name_bytes, JNI_ABORT);
         return (jint)CNA_RESULT_OUT_OF_MEMORY;
     }
     for (jsize index = 0; index < part_indices_size; ++index) {
@@ -2833,6 +2891,7 @@ Java_org_openeggbert_cna_internal_generated_NativeCnbRoutes_cnbModelAddPart(
     jsize external_effect_size = (*environment)->GetArrayLength(environment, external_effect);
     jbyte* external_effect_bytes = (*environment)->GetByteArrayElements(environment, external_effect, NULL);
     if (external_effect_bytes == NULL) {
+        (*environment)->ReleaseByteArrayElements(environment, name, name_bytes, JNI_ABORT);
         return (jint)CNA_RESULT_OUT_OF_MEMORY;
     }
     CNA_StringView external_effect_view = {(const char*)external_effect_bytes, (uint64_t)external_effect_size};
@@ -3980,6 +4039,9 @@ Java_org_openeggbert_cna_internal_generated_NativeCnbRoutes_cnbModelSetSkeleton(
         jsize bind_pose_size = (*environment)->GetArrayLength(environment, bind_pose);
         bind_pose_elements = (*environment)->GetFloatArrayElements(environment, bind_pose, NULL);
         if (bind_pose_elements == NULL) {
+            free(hierarchy_values);
+            (*environment)->ReleaseIntArrayElements(
+                environment, hierarchy, hierarchy_elements, JNI_ABORT);
             return (jint)CNA_RESULT_OUT_OF_MEMORY;
         }
         bind_pose_values = (float*)malloc(
@@ -3987,6 +4049,9 @@ Java_org_openeggbert_cna_internal_generated_NativeCnbRoutes_cnbModelSetSkeleton(
         if (bind_pose_values == NULL) {
             (*environment)->ReleaseFloatArrayElements(
                 environment, bind_pose, bind_pose_elements, JNI_ABORT);
+            free(hierarchy_values);
+            (*environment)->ReleaseIntArrayElements(
+                environment, hierarchy, hierarchy_elements, JNI_ABORT);
             return (jint)CNA_RESULT_OUT_OF_MEMORY;
         }
         for (jsize index = 0; index < bind_pose_size; ++index) {
@@ -3999,6 +4064,14 @@ Java_org_openeggbert_cna_internal_generated_NativeCnbRoutes_cnbModelSetSkeleton(
         jsize inverse_bind_pose_size = (*environment)->GetArrayLength(environment, inverse_bind_pose);
         inverse_bind_pose_elements = (*environment)->GetFloatArrayElements(environment, inverse_bind_pose, NULL);
         if (inverse_bind_pose_elements == NULL) {
+            if (bind_pose_elements != NULL) {
+                (*environment)->ReleaseFloatArrayElements(
+                    environment, bind_pose, bind_pose_elements, JNI_ABORT);
+            }
+            free(bind_pose_values);
+            free(hierarchy_values);
+            (*environment)->ReleaseIntArrayElements(
+                environment, hierarchy, hierarchy_elements, JNI_ABORT);
             return (jint)CNA_RESULT_OUT_OF_MEMORY;
         }
         inverse_bind_pose_values = (float*)malloc(
@@ -4006,6 +4079,14 @@ Java_org_openeggbert_cna_internal_generated_NativeCnbRoutes_cnbModelSetSkeleton(
         if (inverse_bind_pose_values == NULL) {
             (*environment)->ReleaseFloatArrayElements(
                 environment, inverse_bind_pose, inverse_bind_pose_elements, JNI_ABORT);
+            if (bind_pose_elements != NULL) {
+                (*environment)->ReleaseFloatArrayElements(
+                    environment, bind_pose, bind_pose_elements, JNI_ABORT);
+            }
+            free(bind_pose_values);
+            free(hierarchy_values);
+            (*environment)->ReleaseIntArrayElements(
+                environment, hierarchy, hierarchy_elements, JNI_ABORT);
             return (jint)CNA_RESULT_OUT_OF_MEMORY;
         }
         for (jsize index = 0; index < inverse_bind_pose_size; ++index) {
@@ -4018,6 +4099,19 @@ Java_org_openeggbert_cna_internal_generated_NativeCnbRoutes_cnbModelSetSkeleton(
         jsize root_prefix_size = (*environment)->GetArrayLength(environment, root_prefix);
         root_prefix_elements = (*environment)->GetFloatArrayElements(environment, root_prefix, NULL);
         if (root_prefix_elements == NULL) {
+            if (inverse_bind_pose_elements != NULL) {
+                (*environment)->ReleaseFloatArrayElements(
+                    environment, inverse_bind_pose, inverse_bind_pose_elements, JNI_ABORT);
+            }
+            free(inverse_bind_pose_values);
+            if (bind_pose_elements != NULL) {
+                (*environment)->ReleaseFloatArrayElements(
+                    environment, bind_pose, bind_pose_elements, JNI_ABORT);
+            }
+            free(bind_pose_values);
+            free(hierarchy_values);
+            (*environment)->ReleaseIntArrayElements(
+                environment, hierarchy, hierarchy_elements, JNI_ABORT);
             return (jint)CNA_RESULT_OUT_OF_MEMORY;
         }
         root_prefix_values = (float*)malloc(
@@ -4025,6 +4119,19 @@ Java_org_openeggbert_cna_internal_generated_NativeCnbRoutes_cnbModelSetSkeleton(
         if (root_prefix_values == NULL) {
             (*environment)->ReleaseFloatArrayElements(
                 environment, root_prefix, root_prefix_elements, JNI_ABORT);
+            if (inverse_bind_pose_elements != NULL) {
+                (*environment)->ReleaseFloatArrayElements(
+                    environment, inverse_bind_pose, inverse_bind_pose_elements, JNI_ABORT);
+            }
+            free(inverse_bind_pose_values);
+            if (bind_pose_elements != NULL) {
+                (*environment)->ReleaseFloatArrayElements(
+                    environment, bind_pose, bind_pose_elements, JNI_ABORT);
+            }
+            free(bind_pose_values);
+            free(hierarchy_values);
+            (*environment)->ReleaseIntArrayElements(
+                environment, hierarchy, hierarchy_elements, JNI_ABORT);
             return (jint)CNA_RESULT_OUT_OF_MEMORY;
         }
         for (jsize index = 0; index < root_prefix_size; ++index) {
@@ -4149,6 +4256,9 @@ Java_org_openeggbert_cna_internal_generated_NativeCnbRoutes_cnbReaderCreate(
     jsize context_size = (*environment)->GetArrayLength(environment, context);
     jbyte* context_bytes = (*environment)->GetByteArrayElements(environment, context, NULL);
     if (context_bytes == NULL) {
+        free(data_values);
+        (*environment)->ReleaseByteArrayElements(
+            environment, data, data_elements, JNI_ABORT);
         return (jint)CNA_RESULT_OUT_OF_MEMORY;
     }
     CNA_StringView context_view = {(const char*)context_bytes, (uint64_t)context_size};
@@ -5311,6 +5421,7 @@ Java_org_openeggbert_cna_internal_generated_NativeCnbRoutes_cnbWriterSetMetadata
     jsize content_name_size = (*environment)->GetArrayLength(environment, content_name);
     jbyte* content_name_bytes = (*environment)->GetByteArrayElements(environment, content_name, NULL);
     if (content_name_bytes == NULL) {
+        (*environment)->ReleaseByteArrayElements(environment, asset_type_name, asset_type_name_bytes, JNI_ABORT);
         return (jint)CNA_RESULT_OUT_OF_MEMORY;
     }
     CNA_StringView content_name_view = {(const char*)content_name_bytes, (uint64_t)content_name_size};
