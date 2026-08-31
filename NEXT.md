@@ -50,11 +50,13 @@ TARGET_TYPES=340     TARGET_MEMBERS=4022
 TOTAL_DIAGNOSTICS=0  ALLOWLIST_ENTRIES=0
 
 NATIVE
-CANONICAL_FUNCTIONS=4054   BOUND_FUNCTIONS=1621
+CANONICAL_FUNCTIONS=4054   BOUND_FUNCTIONS=2410
 XNA_BACKING=986  JAVA_INTERNAL_ONLY=9  CNA_EXTENSION_CANDIDATE=1916
 DEFERRED_RUNTIME=416  NOT_USEFUL_IN_JAVA=727  UNEXPLAINED=0
 BOUND_BUT_UNREACHED=0  BOUND_WITHOUT_JAVA_CALL_SITE=0
-LIBRARY_SYMBOL_CHECK=PASS (1621/1621)   NATIVE_TOOL_TESTS=70
+LIBRARY_SYMBOL_CHECK=PASS (2410/2410)   NATIVE_TOOL_TESTS=125
+ENGINE LAYER (engine_layer.h)   778 of 857 bound and reached
+EFFECTS (effects.h)             212 of 290 bound and reached
 
 CNA EXTENSIONS
 org.openeggbert.cna.extensions.graphics   pipeline settings, PBR material, ASCII/CRT/depth effects
@@ -78,11 +80,26 @@ org.openeggbert.cna.extensions.net        where a discovered session is, and des
 org.openeggbert.cna.extensions.gamerservices  CNA's application-rendered Guide
 org.openeggbert.cna.extensions.avatars    real-avatar colours, an animation's clip, and the
                                           content behind XNA's canonical presets
-org.openeggbert.cna.extensions.graphics   also CNA's engine layer: LOD groups, the debug line
-                                          renderer, and the fifty-field settings a render
-                                          pipeline actually takes
+org.openeggbert.cna.extensions.graphics   also CNA's engine layer, 778 of its 857 routes: the
+                                          render pipeline and its sixteen post-process passes
+                                          and a standalone chain to run them in, LOD groups,
+                                          frustum culling, instancing, the debug renderer, GPU
+                                          timing, the three light types and clustered forward
+                                          lighting, all four shadow maps with the cascade state
+                                          an effect reads, light probes and their baker's
+                                          cameras, decals, particles, the depth/normal prepass,
+                                          atmospheric sky, HDR presentation, order-independent
+                                          transparency, spatial upscaling, the render-target
+                                          pool, area lights with the table their shader samples,
+                                          image-based lighting, GPU instance culling, colour
+                                          grading, the back-to-front transparent draw list, the
+                                          physically-based effect and its skinned form with the
+                                          glTF material they carry and the bridge that builds
+                                          one, the named shader-effect cache, the screen-filling
+                                          draw, and the lighting parameters CNA's stock effects
+                                          take beyond XNA's
 
-TESTS=275 SUITES=60 FAILURES=0 ERRORS=0 SKIPPED=0
+TESTS=455 SUITES=88 FAILURES=0 ERRORS=0 SKIPPED=0
 ```
 
 The selected profile is now a **subset gate**: a type the wider profile declares is not an
@@ -125,6 +142,17 @@ unexpected type in the narrower one, so its zero still means what it always mean
   `SystemInformation` is the host saying it does not know, not a measurement.
 - Everything in `docs/runtime-capabilities.json` still holds for the previously measured
   families.
+- **Two engine-layer values are write-only and cannot be checked at runtime.** The post-process
+  context and the full-screen pass's sampler both cross into CNA and never come back: no route
+  reads either one, and this renderer accepts any sampler without doing anything observable with
+  it. A planted swap of the sampler's address modes passed every Java test. Their leaf offsets
+  are pinned against the live header by the generator tool tests instead, which is the only place
+  that check can honestly live.
+- **No engine-layer claim here is about a rendered pixel.** The HEADLESS renderer runs no shader,
+  so every pass, every effect and every draw is qualified by what the objects know about
+  themselves and by which calls CNA accepts or refuses. The families whose whole answer would be
+  an image -- compute, automatic exposure, probe baking -- are recorded as HARDWARE_PENDING with
+  the measurement that says so, not projected and hoped for.
 
 ## What changed after that
 
@@ -174,14 +202,53 @@ unexpected type in the narrower one, so its zero still means what it always mean
     than by guessing: LOD groups need no device, the debug renderer needs a real one, and the
     render-pipeline settings are arithmetic.
 
+## What changed after that
+
+18. `JAVA-EXT-008` went from three families to most of the layer: 778 of the 857 routes are bound
+    and reached, and every one of the remaining 79 has a written reason. Twelve more families
+    landed this session -- the effect lighting parameters, the transparent draw list, the
+    light-probe baker's cameras, the shader-effect cache, the user effect pass, the cascade
+    state, the physically-based effect and its glTF material, the glTF bridge, the standalone
+    post-process chain, the screen-filling draw and the ASCII pass -- and each was chosen by
+    probing what this runtime can actually do before any Java was written.
+19. The generator learned five shapes, each with tool tests and each still refusing what it
+    cannot derive: fixed arrays inside a structure, whether the extent is a literal or one of
+    CNA's own macros and whether the elements are scalars or structures; version stamping for
+    every element of an array of versioned structures, which was silently missing; a declared
+    version prefix, so a structure that grew a pointer field can still be filled in as the
+    version CNA documents as its mandatory prefix; a refusal for a null struct carrier, which
+    would otherwise have been read as uninitialised stack; and an optional structure, so "none"
+    reaches CNA as a null pointer rather than an all-zero value. 70 tool tests became 125.
+20. The transparent draw list is the first family whose entries are C callbacks, and it has the
+    first hand-written JNI trampoline. It takes no global references and has nothing to leak:
+    the callbacks only run inside one call, so they are passed in for its duration and the
+    context is an index. A thrown exception is left pending and surfaces at the Java call that
+    caused it. The whole suite runs clean under `-Xcheck:jni`.
+21. Three upstream findings, each reproduced in pure C before it was claimed.
+    `JAVA-UPSTREAM-010`: a texture applied through a PBR material never reaches the C API's
+    handle registry, so a read-modify-write of a material silently unbinds every map.
+    `JAVA-UPSTREAM-011`: handing a pass to a post-process chain leaves the game undestroyable,
+    which is why that route is not bound. The third correction went the other way -- a
+    "borrowed" handle the header says keeps its lender alive really does, and the probe is what
+    established it.
+22. `check` now runs javadoc. A `{@link}` to a method that does not exist survived a session of
+    green checks and surfaced only when the template was next built, because javadoc ran only
+    for the documentation jar.
+
 ## Next work, in dependency order
 
 `docs/backlog.json` is the machine-readable source. What is left:
 
-1. `JAVA-EXT-008` — the engine layer, 824 routes still unbound. It is the largest remaining
-   opportunity and the easiest to spend badly: a coherent Java type per family, and the parts
-   that cannot be honestly qualified in a HEADLESS renderer left unbound and said so. The probe
-   at `tools/native-abi/probes/engine_layer_families.c` is how to choose the next one.
+1. `JAVA-EXT-008` — the engine layer, 79 routes still unbound and every one with a reason.
+   Three groups, and none of them is a matter of writing more Java. Twenty-five are the compute
+   family and thirteen are automatic exposure: both refuse at construction on a renderer with no
+   compute and no luminance readback, so there is no object to configure or observe
+   (`JAVA-EXT-009`, `JAVA-EXT-011`). About a dozen lend a handle whose lifetime the declaration
+   does not state (`JAVA-EXT-010`). The rest are named individually in `docs/backlog.json`: three
+   bake routes whose callback this renderer never enters, nine texture getters that mint a fresh
+   handle per call, two scene callbacks, two no-op initialisers, and the one route that would
+   make a game undestroyable.
+
 2. `JAVA-EXT-007` — blocked with evidence. 23 of 26 skinned-model routes plan; the three that do
    not include `set_clip`, whose descriptor is a pointer graph, and no route takes a clip handle
    instead. Twenty-three plannable routes that do not add up to a usable feature is not a slice

@@ -2,7 +2,7 @@
 
 **Status:** the complete XNA 4.0 runtime superset is structurally at zero diagnostics
 
-**Updated:** 2026-08-30
+**Updated:** 2026-08-31
 
 **Profiles:** the seven-assembly XNA 4.0 Windows runtime subset gate, and the ten-assembly full
 runtime superset that adds GamerServices, Net and Avatar
@@ -42,13 +42,13 @@ or put non-XNA API inside `Microsoft.Xna.Framework.*`.
 | Allowlist entries | 0 | 0 |
 | CNA C ABI | 0.7.0 | 0.21.0 |
 | Canonical C API functions | not measured | 4,054 |
-| Bound native routes | 723 | 1,621 |
+| Bound native routes | 723 | 2,410 |
 | Unexplained native routes | 3,328 | 0 |
 | Bound routes no JNI entry point reaches | 1 | 0 |
 | Bound routes no Java call site reaches | not measurable | 0 |
 | Deferred input routes | 132 | 0 |
 | CNA extension packages | 0 | 9 |
-| Tests | 156 | 275 |
+| Tests | 156 | 455 |
 
 ## Milestones reached this session
 
@@ -141,26 +141,53 @@ explicitly reviewed full signature, never a suppression:
 - A generic struct's copy constructor takes its own parameterization, the only form Java can write
   without a raw type.
 
+## What the engine layer cost, and what it did not
+
+The layer is 857 routes and the wrong way to spend them is mechanically. Every family here was
+chosen by measuring what this runtime can actually do before any Java was written -- fourteen C
+probes under `tools/native-abi/probes/`, each with its measured output recorded beside it -- and
+several of those measurements ended in *not binding* something. That is the point of taking them.
+
+The generator did most of the work and refused the rest. It grew five shapes this way: fixed
+arrays inside a structure, version stamping for every element of an array of versioned structures,
+a declared version prefix for a structure that grew a pointer field, a refusal for a null struct
+carrier, and an optional structure whose absence must reach CNA as a null pointer rather than an
+all-zero value. Each came with tool tests, and each left the refusals intact -- 70 tool tests
+became 125.
+
+Three findings went upstream, each reproduced in pure C first, and one correction came back the
+other way: a "borrowed" handle whose header says it keeps its lender alive really does, and the
+probe is what established that rather than the reading that led to it.
+
 ## Native boundary
 
 ```text
 HEADER_ABI=0.21.0
 CANONICAL_FUNCTIONS=4054
-BOUND_FUNCTIONS=1621
+BOUND_FUNCTIONS=2410
 MANIFEST_SIGNATURE_CHECK=PASS
 MANIFEST_JNI_BINDING_CHECK=PASS
 JNI_HEADER_DERIVED_SLOT_CHECK=PASS
 LAYOUT_SIGNATURE_PROBE=PASS
 LIBRARY_ABI=0.21.0
-LIBRARY_SYMBOL_CHECK=PASS (1621/1621)
+LIBRARY_SYMBOL_CHECK=PASS (2410/2410)
 ABI_POLICY_CHECK=PASS
-NATIVE_TOOL_TESTS=70 passed, 0 failed
+NATIVE_TOOL_TESTS=125 passed, 0 failed
+ENGINE_LAYER_BOUND=778 of 857
+EFFECTS_BOUND=212 of 290
 ```
 
 Every slot is declared `CNA_JNI_ROUTE(symbol)`, so a signature that moves upstream stops the
 adapter compiling instead of crashing at runtime. `tools/native-abi/generate_jni.py` derives the
 mechanical half of the boundary from the headers and refuses a shape it does not understand rather
 than guessing; `generateJniCheck` fails the build when the committed output goes stale.
+
+Two routes are hand-written rather than generated, and both for the same reason: they take a C
+function pointer, which is a shape the generator has no way to derive and must not guess one for.
+They are the transparent draw list's `submit` and `draw_sorted`, and the trampoline between them
+takes no global references -- the callbacks only run inside one call, so they are passed in for
+its duration and the context is an index into them. The whole suite runs clean under
+`-Xcheck:jni`.
 
 ## Coverage
 
@@ -186,9 +213,15 @@ replaces is closed: the deferred Model routes, the Content Pipeline decision, bo
 questions, and 206 of the 272 `.cnb` routes. What is left is smaller and each piece is recorded
 with its own evidence -- the `.cnj` builder, the model's morph targets, a skinned-model slice
 blocked on a marshalling shape the generator refuses rather than guesses at, and an
-out-of-memory-only leak in generated multi-array routes. CNA's engine layer is still the bulk of
-what is classified as an extension candidate; it belongs under
-`org.openeggbert.cna.extensions.*`, never inside the strict packages.
+out-of-memory-only leak in generated multi-array routes.
+
+CNA's engine layer is no longer the bulk of what is unbound: 778 of its 857 routes are projected
+under `org.openeggbert.cna.extensions.graphics`, never inside the strict packages, and each of the
+remaining 79 has a written reason rather than a plan. Thirty-eight of them are two families this
+renderer refuses at construction -- compute and automatic exposure -- and about a dozen more lend
+a handle whose lifetime the declaration does not state. Those are measurements, recorded in
+`JAVA-EXT-009`, `JAVA-EXT-010` and `JAVA-EXT-011` with the probes that took them, not work waiting
+to be typed.
 
 The `.cnb` work is worth naming separately, because it changed what this projection is for. Eight
 asset families read and write, five of them crossing to the XNA type a game uses, and `CnbImport`

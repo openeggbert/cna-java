@@ -605,6 +605,21 @@
         "AreaLightTests.theTableHandsOutTheTextureItsShaderSamples"
       ],
       "note": "The same shape as cna_effect_get_shadow_map_ext, which is bound only far enough to answer EffectLighting.hasShadowMap: a boolean a caller can honestly have, with the handle given straight back. Where a game needs the object rather than the fact, the retained Java reference is the settled answer -- PbrMaterialExtensions, PbrEffect and Skybox all use it."
+    },
+    {
+      "id": "JAVA-EXT-011",
+      "title": "Project automatic exposure when a renderer that can measure luminance can qualify it",
+      "family": "org.openeggbert.cna.extensions.graphics",
+      "authority": "engine_layer.h",
+      "status": "blocked",
+      "priority": 6,
+      "currentState": "Thirteen routes measured and unbound: cna_auto_exposure_ext_create and the twelve that configure, drive and read it. Asked with a real graphics device by tools/native-abi/probes/engine_layer_families.c, cna_auto_exposure_ext_create answers NOT_SUPPORTED, so no object exists to set a key value on, to update, or to read an exposure back from.",
+      "expectedState": "One coherent family: a measured average luminance, a key value that turns it into an exposure, adaptation speeds that make the change gradual, and a clamp so a dark room does not become a bright one. All of it becomes reachable at once on a renderer that can read a frame's luminance back.",
+      "blocker": "HARDWARE_PENDING, not upstream. Automatic exposure measures the frame it is given, which needs a readback the HEADLESS renderer refuses -- the same wall the light-probe baker meets. Twelve of the thirteen routes cannot be reached, and the thirteenth only answers that the family is unavailable.",
+      "tests": [
+        "tools/native-abi/probes/engine_layer_families.c"
+      ],
+      "note": "Not the GPU timer's treatment, for the same reason as JAVA-EXT-009: that family constructs and reports itself unsupported, so its refusal is observable; this one refuses at construction and leaves nothing to observe. cna_auto_exposure_ext_apply_to is additionally refused by the generator -- it takes a non-const CNA_RenderPipelineSettingsEXT the declaration does not mark as an output -- which would need a declaration in routes.json even once the renderer could run it."
     }
   ]
 }
