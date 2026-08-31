@@ -997,6 +997,16 @@
     CNA_JNI_ROUTE(cna_lens_flare_pass_set_dispersal) lens_flare_pass_set_dispersal;
     CNA_JNI_ROUTE(cna_lens_flare_pass_set_intensity) lens_flare_pass_set_intensity;
     CNA_JNI_ROUTE(cna_lens_flare_pass_set_threshold) lens_flare_pass_set_threshold;
+    CNA_JNI_ROUTE(cna_light_probe_baker_create) light_probe_baker_create;
+    CNA_JNI_ROUTE(cna_light_probe_baker_create_with_face_size) light_probe_baker_create_with_face_size;
+    CNA_JNI_ROUTE(cna_light_probe_baker_destroy) light_probe_baker_destroy;
+    CNA_JNI_ROUTE(cna_light_probe_baker_face_count) light_probe_baker_face_count;
+    CNA_JNI_ROUTE(cna_light_probe_baker_face_view) light_probe_baker_face_view;
+    CNA_JNI_ROUTE(cna_light_probe_baker_get_face_size) light_probe_baker_get_face_size;
+    CNA_JNI_ROUTE(cna_light_probe_baker_get_far_plane) light_probe_baker_get_far_plane;
+    CNA_JNI_ROUTE(cna_light_probe_baker_get_near_plane) light_probe_baker_get_near_plane;
+    CNA_JNI_ROUTE(cna_light_probe_baker_is_supported) light_probe_baker_is_supported;
+    CNA_JNI_ROUTE(cna_light_probe_baker_set_planes) light_probe_baker_set_planes;
     CNA_JNI_ROUTE(cna_light_probe_ext_copy_coefficients) light_probe_ext_copy_coefficients;
     CNA_JNI_ROUTE(cna_light_probe_ext_copy_evaluation_glsl) light_probe_ext_copy_evaluation_glsl;
     CNA_JNI_ROUTE(cna_light_probe_ext_copy_from) light_probe_ext_copy_from;

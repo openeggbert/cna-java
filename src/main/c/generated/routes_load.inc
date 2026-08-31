@@ -997,6 +997,16 @@
     LOAD(lens_flare_pass_set_dispersal, "cna_lens_flare_pass_set_dispersal");
     LOAD(lens_flare_pass_set_intensity, "cna_lens_flare_pass_set_intensity");
     LOAD(lens_flare_pass_set_threshold, "cna_lens_flare_pass_set_threshold");
+    LOAD(light_probe_baker_create, "cna_light_probe_baker_create");
+    LOAD(light_probe_baker_create_with_face_size, "cna_light_probe_baker_create_with_face_size");
+    LOAD(light_probe_baker_destroy, "cna_light_probe_baker_destroy");
+    LOAD(light_probe_baker_face_count, "cna_light_probe_baker_face_count");
+    LOAD(light_probe_baker_face_view, "cna_light_probe_baker_face_view");
+    LOAD(light_probe_baker_get_face_size, "cna_light_probe_baker_get_face_size");
+    LOAD(light_probe_baker_get_far_plane, "cna_light_probe_baker_get_far_plane");
+    LOAD(light_probe_baker_get_near_plane, "cna_light_probe_baker_get_near_plane");
+    LOAD(light_probe_baker_is_supported, "cna_light_probe_baker_is_supported");
+    LOAD(light_probe_baker_set_planes, "cna_light_probe_baker_set_planes");
     LOAD(light_probe_ext_copy_coefficients, "cna_light_probe_ext_copy_coefficients");
     LOAD(light_probe_ext_copy_evaluation_glsl, "cna_light_probe_ext_copy_evaluation_glsl");
     LOAD(light_probe_ext_copy_from, "cna_light_probe_ext_copy_from");

@@ -4084,6 +4084,83 @@ public final class NativeEngineLayerRoutes {
     public static native int lensFlarePassSetThreshold(long pass, float value);
 
     /**
+     * cna_light_probe_baker_create (engine_layer.h).
+     */
+    public static native int lightProbeBakerCreate(long graphicsDevice, long[] outBaker);
+
+    /**
+     * cna_light_probe_baker_create_with_face_size (engine_layer.h).
+     */
+    public static native int lightProbeBakerCreateWithFaceSize(long graphicsDevice, int faceSize, long[] outBaker);
+
+    /**
+     * cna_light_probe_baker_destroy (engine_layer.h).
+     */
+    public static native int lightProbeBakerDestroy(long baker);
+
+    /**
+     * cna_light_probe_baker_face_count (engine_layer.h).
+     */
+    public static native int lightProbeBakerFaceCount(int[] outFaceCount);
+
+    /**
+     * cna_light_probe_baker_face_view (engine_layer.h).
+     *
+     * <p>positionFloating carries CNA_Vector3 in this order:
+     * <ol start="0">
+     *   <li>{@code x} (float)</li>
+     *   <li>{@code y} (float)</li>
+     *   <li>{@code z} (float)</li>
+     * </ol>
+     *
+     * <p>outViewFloating carries CNA_Matrix in this order:
+     * <ol start="0">
+     *   <li>{@code m11} (float)</li>
+     *   <li>{@code m12} (float)</li>
+     *   <li>{@code m13} (float)</li>
+     *   <li>{@code m14} (float)</li>
+     *   <li>{@code m21} (float)</li>
+     *   <li>{@code m22} (float)</li>
+     *   <li>{@code m23} (float)</li>
+     *   <li>{@code m24} (float)</li>
+     *   <li>{@code m31} (float)</li>
+     *   <li>{@code m32} (float)</li>
+     *   <li>{@code m33} (float)</li>
+     *   <li>{@code m34} (float)</li>
+     *   <li>{@code m41} (float)</li>
+     *   <li>{@code m42} (float)</li>
+     *   <li>{@code m43} (float)</li>
+     *   <li>{@code m44} (float)</li>
+     * </ol>
+     */
+    public static native int lightProbeBakerFaceView(long baker, int face, float[] positionFloating, float[] outViewFloating);
+
+    /**
+     * cna_light_probe_baker_get_face_size (engine_layer.h).
+     */
+    public static native int lightProbeBakerGetFaceSize(long baker, int[] outFaceSize);
+
+    /**
+     * cna_light_probe_baker_get_far_plane (engine_layer.h).
+     */
+    public static native int lightProbeBakerGetFarPlane(long baker, float[] outFar);
+
+    /**
+     * cna_light_probe_baker_get_near_plane (engine_layer.h).
+     */
+    public static native int lightProbeBakerGetNearPlane(long baker, float[] outNear);
+
+    /**
+     * cna_light_probe_baker_is_supported (engine_layer.h).
+     */
+    public static native int lightProbeBakerIsSupported(long baker, boolean[] outSupported);
+
+    /**
+     * cna_light_probe_baker_set_planes (engine_layer.h).
+     */
+    public static native int lightProbeBakerSetPlanes(long baker, float nearPlane, float farPlane);
+
+    /**
      * cna_light_probe_ext_copy_coefficients (engine_layer.h).
      */
     public static native int lightProbeExtCopyCoefficients(long probe, float[] destinationFloating, long[] outCount);

@@ -179,3 +179,44 @@ says its ordering guard is for a future CNA rather than claiming a test can make
 
 `destroy` twice answers `INVALID_HANDLE` rather than succeeding quietly, which is the behaviour the
 Java `close()` is built to be idempotent over.
+
+## light_probe_bake.c
+
+Can this renderer bake a light probe, and what happens to the scene callback when it cannot?
+
+The header says the baker measures its own capability at construction -- it captures one probe and
+sees whether the readback worked -- and that the headless renderer is exactly the case that binds
+an offscreen target happily and then refuses to read it. Both halves of that needed measuring
+before any Java was written, because the second decides whether a JNI trampoline for the bake
+routes could ever be entered here.
+
+Runs inside a game, because the baker needs a device. Its output on ABI 0.21.0, HEADLESS:
+
+```text
+is supported            0  0
+defaults                face 32, count 6, planes 0.0500..500.0000
+set planes reversed     1
+set planes negative     1
+planes after refusals   0.5000..200.0000
+face view 0             0  m11=0.000 m31=1.000 m41=-3.000
+face view 6             1
+bake probe              3  faces drawn 0  probe invalid
+bake null callback      1
+bake light              3  faces drawn 0
+bake visibility         3  faces drawn 0
+face size zero          1
+```
+
+The answer that shaped the projection is the fourth line from the bottom: **all three bake routes
+refuse with `INVALID_STATE` and draw zero faces.** The callback is never entered on this renderer,
+so a JNI trampoline for it would be code no test here could execute. `LightProbeBaker` therefore
+projects the other ten routes and says why the three are missing, rather than shipping a
+trampoline nobody can exercise -- while `cna_transparent_draw_list_draw_sorted`, whose callback
+*does* run here, gets one.
+
+The rest is what the Java tests now assert. `set_planes` refuses a reversed and a negative pair
+with `INVALID_ARGUMENT` and **leaves the previously accepted pair intact** -- a setter that wrote
+the near plane before checking would have left `0.5000..200.0000` crossed. The six face views are
+six different matrices, the seventh face is refused, and a face size of zero is refused. A null
+callback answers `INVALID_ARGUMENT` rather than `INVALID_STATE`, so CNA checks its arguments before
+it checks whether it can capture at all.

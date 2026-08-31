@@ -6235,6 +6235,46 @@
         "symbol": "cna_volumetric_fog_pass_set_range"
       },
       {
+        "java": "lightProbeBakerCreate",
+        "symbol": "cna_light_probe_baker_create"
+      },
+      {
+        "java": "lightProbeBakerCreateWithFaceSize",
+        "symbol": "cna_light_probe_baker_create_with_face_size"
+      },
+      {
+        "java": "lightProbeBakerDestroy",
+        "symbol": "cna_light_probe_baker_destroy"
+      },
+      {
+        "java": "lightProbeBakerFaceCount",
+        "symbol": "cna_light_probe_baker_face_count"
+      },
+      {
+        "java": "lightProbeBakerFaceView",
+        "symbol": "cna_light_probe_baker_face_view"
+      },
+      {
+        "java": "lightProbeBakerGetFaceSize",
+        "symbol": "cna_light_probe_baker_get_face_size"
+      },
+      {
+        "java": "lightProbeBakerGetFarPlane",
+        "symbol": "cna_light_probe_baker_get_far_plane"
+      },
+      {
+        "java": "lightProbeBakerGetNearPlane",
+        "symbol": "cna_light_probe_baker_get_near_plane"
+      },
+      {
+        "java": "lightProbeBakerIsSupported",
+        "symbol": "cna_light_probe_baker_is_supported"
+      },
+      {
+        "java": "lightProbeBakerSetPlanes",
+        "symbol": "cna_light_probe_baker_set_planes"
+      },
+      {
         "java": "transparentDrawListCameraPositionOf",
         "symbol": "cna_transparent_draw_list_camera_position_of"
       },

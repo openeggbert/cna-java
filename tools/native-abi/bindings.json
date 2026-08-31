@@ -14750,6 +14750,108 @@
       ]
     },
     {
+      "name": "cna_light_probe_baker_create",
+      "header": "engine_layer.h",
+      "ownership": "borrows the graphics device, which outlives the baker; returns an owned baker handle",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_Handle",
+        "CNA_LightProbeBakerHandle*"
+      ]
+    },
+    {
+      "name": "cna_light_probe_baker_create_with_face_size",
+      "header": "engine_layer.h",
+      "ownership": "borrows the graphics device; returns an owned baker handle",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_Handle",
+        "int32_t",
+        "CNA_LightProbeBakerHandle*"
+      ]
+    },
+    {
+      "name": "cna_light_probe_baker_destroy",
+      "header": "engine_layer.h",
+      "ownership": "consumes the baker handle",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_LightProbeBakerHandle"
+      ]
+    },
+    {
+      "name": "cna_light_probe_baker_face_count",
+      "header": "engine_layer.h",
+      "ownership": "owns nothing; a constant",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "int32_t*"
+      ]
+    },
+    {
+      "name": "cna_light_probe_baker_face_view",
+      "header": "engine_layer.h",
+      "ownership": "borrows the baker; copies a matrix out",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_LightProbeBakerHandle",
+        "int32_t",
+        "const CNA_Vector3*",
+        "CNA_Matrix*"
+      ]
+    },
+    {
+      "name": "cna_light_probe_baker_get_face_size",
+      "header": "engine_layer.h",
+      "ownership": "borrows the baker; owns nothing",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_LightProbeBakerHandle",
+        "int32_t*"
+      ]
+    },
+    {
+      "name": "cna_light_probe_baker_get_far_plane",
+      "header": "engine_layer.h",
+      "ownership": "borrows the baker; owns nothing",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_LightProbeBakerHandle",
+        "float*"
+      ]
+    },
+    {
+      "name": "cna_light_probe_baker_get_near_plane",
+      "header": "engine_layer.h",
+      "ownership": "borrows the baker; owns nothing",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_LightProbeBakerHandle",
+        "float*"
+      ]
+    },
+    {
+      "name": "cna_light_probe_baker_is_supported",
+      "header": "engine_layer.h",
+      "ownership": "borrows the baker; owns nothing",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_LightProbeBakerHandle",
+        "CNA_Bool*"
+      ]
+    },
+    {
+      "name": "cna_light_probe_baker_set_planes",
+      "header": "engine_layer.h",
+      "ownership": "borrows the baker; owns nothing",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_LightProbeBakerHandle",
+        "float",
+        "float"
+      ]
+    },
+    {
       "name": "cna_light_probe_ext_copy_coefficients",
       "header": "engine_layer.h",
       "ownership": "borrows the probe; fills the caller's coefficient buffer",

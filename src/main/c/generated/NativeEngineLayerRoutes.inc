@@ -9353,6 +9353,182 @@ Java_org_openeggbert_cna_internal_generated_NativeEngineLayerRoutes_lensFlarePas
 }
 
 JNIEXPORT jint JNICALL
+Java_org_openeggbert_cna_internal_generated_NativeEngineLayerRoutes_lightProbeBakerCreate(
+    JNIEnv* environment, jclass declaring_class, jlong graphics_device, jlongArray out_baker)
+{
+    (void)environment;
+    (void)declaring_class;
+    CNA_LightProbeBakerHandle out_baker_value = 0;
+    CNA_Result call_result = cna.light_probe_baker_create((CNA_Handle)graphics_device, &out_baker_value);
+    if (call_result == CNA_RESULT_SUCCESS || call_result == CNA_RESULT_BUFFER_TOO_SMALL) {
+        jlong out_baker_element = (jlong)out_baker_value;
+        (*environment)->SetLongArrayRegion(
+            environment, out_baker, 0, 1, &out_baker_element);
+    }
+    return (jint)call_result;
+}
+
+JNIEXPORT jint JNICALL
+Java_org_openeggbert_cna_internal_generated_NativeEngineLayerRoutes_lightProbeBakerCreateWithFaceSize(
+    JNIEnv* environment, jclass declaring_class, jlong graphics_device, jint face_size, jlongArray out_baker)
+{
+    (void)environment;
+    (void)declaring_class;
+    CNA_LightProbeBakerHandle out_baker_value = 0;
+    CNA_Result call_result = cna.light_probe_baker_create_with_face_size((CNA_Handle)graphics_device, (int32_t)face_size, &out_baker_value);
+    if (call_result == CNA_RESULT_SUCCESS || call_result == CNA_RESULT_BUFFER_TOO_SMALL) {
+        jlong out_baker_element = (jlong)out_baker_value;
+        (*environment)->SetLongArrayRegion(
+            environment, out_baker, 0, 1, &out_baker_element);
+    }
+    return (jint)call_result;
+}
+
+JNIEXPORT jint JNICALL
+Java_org_openeggbert_cna_internal_generated_NativeEngineLayerRoutes_lightProbeBakerDestroy(
+    JNIEnv* environment, jclass declaring_class, jlong baker)
+{
+    (void)environment;
+    (void)declaring_class;
+    CNA_Result call_result = cna.light_probe_baker_destroy((CNA_LightProbeBakerHandle)baker);
+    return (jint)call_result;
+}
+
+JNIEXPORT jint JNICALL
+Java_org_openeggbert_cna_internal_generated_NativeEngineLayerRoutes_lightProbeBakerFaceCount(
+    JNIEnv* environment, jclass declaring_class, jintArray out_face_count)
+{
+    (void)environment;
+    (void)declaring_class;
+    int32_t out_face_count_value = 0;
+    CNA_Result call_result = cna.light_probe_baker_face_count(&out_face_count_value);
+    if (call_result == CNA_RESULT_SUCCESS || call_result == CNA_RESULT_BUFFER_TOO_SMALL) {
+        jint out_face_count_element = (jint)out_face_count_value;
+        (*environment)->SetIntArrayRegion(
+            environment, out_face_count, 0, 1, &out_face_count_element);
+    }
+    return (jint)call_result;
+}
+
+JNIEXPORT jint JNICALL
+Java_org_openeggbert_cna_internal_generated_NativeEngineLayerRoutes_lightProbeBakerFaceView(
+    JNIEnv* environment, jclass declaring_class, jlong baker, jint face, jfloatArray positionFloating, jfloatArray out_viewFloating)
+{
+    (void)environment;
+    (void)declaring_class;
+    CNA_Vector3 position_value;
+    memset(&position_value, 0, sizeof position_value);
+    {
+        jfloat positionFloating_values[3];
+        (*environment)->GetFloatArrayRegion(environment, positionFloating, 0, 3, positionFloating_values);
+        position_value.x = (float)positionFloating_values[0];
+        position_value.y = (float)positionFloating_values[1];
+        position_value.z = (float)positionFloating_values[2];
+    }
+    CNA_Matrix out_view_value;
+    memset(&out_view_value, 0, sizeof out_view_value);
+    CNA_Result call_result = cna.light_probe_baker_face_view((CNA_LightProbeBakerHandle)baker, (int32_t)face, &position_value, &out_view_value);
+    if (call_result == CNA_RESULT_SUCCESS || call_result == CNA_RESULT_BUFFER_TOO_SMALL) {
+        jfloat out_viewFloating_values[] = {
+            (jfloat)out_view_value.m11,
+            (jfloat)out_view_value.m12,
+            (jfloat)out_view_value.m13,
+            (jfloat)out_view_value.m14,
+            (jfloat)out_view_value.m21,
+            (jfloat)out_view_value.m22,
+            (jfloat)out_view_value.m23,
+            (jfloat)out_view_value.m24,
+            (jfloat)out_view_value.m31,
+            (jfloat)out_view_value.m32,
+            (jfloat)out_view_value.m33,
+            (jfloat)out_view_value.m34,
+            (jfloat)out_view_value.m41,
+            (jfloat)out_view_value.m42,
+            (jfloat)out_view_value.m43,
+            (jfloat)out_view_value.m44
+        };
+        (*environment)->SetFloatArrayRegion(environment, out_viewFloating, 0,
+            (jsize)(sizeof out_viewFloating_values / sizeof out_viewFloating_values[0]),
+            out_viewFloating_values);
+    }
+    return (jint)call_result;
+}
+
+JNIEXPORT jint JNICALL
+Java_org_openeggbert_cna_internal_generated_NativeEngineLayerRoutes_lightProbeBakerGetFaceSize(
+    JNIEnv* environment, jclass declaring_class, jlong baker, jintArray out_face_size)
+{
+    (void)environment;
+    (void)declaring_class;
+    int32_t out_face_size_value = 0;
+    CNA_Result call_result = cna.light_probe_baker_get_face_size((CNA_LightProbeBakerHandle)baker, &out_face_size_value);
+    if (call_result == CNA_RESULT_SUCCESS || call_result == CNA_RESULT_BUFFER_TOO_SMALL) {
+        jint out_face_size_element = (jint)out_face_size_value;
+        (*environment)->SetIntArrayRegion(
+            environment, out_face_size, 0, 1, &out_face_size_element);
+    }
+    return (jint)call_result;
+}
+
+JNIEXPORT jint JNICALL
+Java_org_openeggbert_cna_internal_generated_NativeEngineLayerRoutes_lightProbeBakerGetFarPlane(
+    JNIEnv* environment, jclass declaring_class, jlong baker, jfloatArray out_far)
+{
+    (void)environment;
+    (void)declaring_class;
+    float out_far_value = 0;
+    CNA_Result call_result = cna.light_probe_baker_get_far_plane((CNA_LightProbeBakerHandle)baker, &out_far_value);
+    if (call_result == CNA_RESULT_SUCCESS || call_result == CNA_RESULT_BUFFER_TOO_SMALL) {
+        jfloat out_far_element = (jfloat)out_far_value;
+        (*environment)->SetFloatArrayRegion(
+            environment, out_far, 0, 1, &out_far_element);
+    }
+    return (jint)call_result;
+}
+
+JNIEXPORT jint JNICALL
+Java_org_openeggbert_cna_internal_generated_NativeEngineLayerRoutes_lightProbeBakerGetNearPlane(
+    JNIEnv* environment, jclass declaring_class, jlong baker, jfloatArray out_near)
+{
+    (void)environment;
+    (void)declaring_class;
+    float out_near_value = 0;
+    CNA_Result call_result = cna.light_probe_baker_get_near_plane((CNA_LightProbeBakerHandle)baker, &out_near_value);
+    if (call_result == CNA_RESULT_SUCCESS || call_result == CNA_RESULT_BUFFER_TOO_SMALL) {
+        jfloat out_near_element = (jfloat)out_near_value;
+        (*environment)->SetFloatArrayRegion(
+            environment, out_near, 0, 1, &out_near_element);
+    }
+    return (jint)call_result;
+}
+
+JNIEXPORT jint JNICALL
+Java_org_openeggbert_cna_internal_generated_NativeEngineLayerRoutes_lightProbeBakerIsSupported(
+    JNIEnv* environment, jclass declaring_class, jlong baker, jbooleanArray out_supported)
+{
+    (void)environment;
+    (void)declaring_class;
+    CNA_Bool out_supported_value = 0;
+    CNA_Result call_result = cna.light_probe_baker_is_supported((CNA_LightProbeBakerHandle)baker, &out_supported_value);
+    if (call_result == CNA_RESULT_SUCCESS || call_result == CNA_RESULT_BUFFER_TOO_SMALL) {
+        jboolean out_supported_element = (jboolean)out_supported_value;
+        (*environment)->SetBooleanArrayRegion(
+            environment, out_supported, 0, 1, &out_supported_element);
+    }
+    return (jint)call_result;
+}
+
+JNIEXPORT jint JNICALL
+Java_org_openeggbert_cna_internal_generated_NativeEngineLayerRoutes_lightProbeBakerSetPlanes(
+    JNIEnv* environment, jclass declaring_class, jlong baker, jfloat near_plane, jfloat far_plane)
+{
+    (void)environment;
+    (void)declaring_class;
+    CNA_Result call_result = cna.light_probe_baker_set_planes((CNA_LightProbeBakerHandle)baker, (float)near_plane, (float)far_plane);
+    return (jint)call_result;
+}
+
+JNIEXPORT jint JNICALL
 Java_org_openeggbert_cna_internal_generated_NativeEngineLayerRoutes_lightProbeExtCopyCoefficients(
     JNIEnv* environment, jclass declaring_class, jlong probe, jfloatArray destinationFloating, jlongArray out_count)
 {
