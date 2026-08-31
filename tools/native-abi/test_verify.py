@@ -501,6 +501,15 @@ def test_generator(live: dict) -> None:
             check(True, f"an unresolvable array extent {bad} is refused")
     check(generator_tool.array_extent("probe.field", "CNA_SHADOW_CASCADE_MAX_EXT", live) == 4,
           "a resolvable one is resolved")
+    # CNA writes some of its own counts with the standard fixed-width constant macros. That form
+    # means exactly its argument, so unwrapping it is reading the header rather than evaluating
+    # an expression -- and it is the difference between the glTF material bridge being reachable
+    # and being refused for a spelling.
+    check(generator_tool.array_extent("probe.field", "CNA_PBR_TEXTURE_SLOT_COUNT", live) == 7,
+          "an INT32_C-wrapped extent is read as the integer it is")
+    check(len(generator_tool.group_leaves(
+              generator_tool.flatten_struct("CNA_GltfMaterialTexturesEXT", live))["integral"]) == 7,
+          "and the structure that uses it carries its seven slots into Java")
 
     # The generator refuses a shape it cannot prove rather than guessing at it.
     try:

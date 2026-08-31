@@ -4791,6 +4791,22 @@
         "symbol": "cna_fxaa_pass_set_edge_threshold"
       },
       {
+        "java": "gltfMaterialBridgeBuildExtensions",
+        "symbol": "cna_gltf_material_bridge_build_extensions"
+      },
+      {
+        "java": "gltfMaterialBridgeBuildMaterial",
+        "symbol": "cna_gltf_material_bridge_build_material"
+      },
+      {
+        "java": "gltfMaterialExtensionSourceExtInit",
+        "symbol": "cna_gltf_material_extension_source_ext_init"
+      },
+      {
+        "java": "gltfMaterialSourceExtInit",
+        "symbol": "cna_gltf_material_source_ext_init"
+      },
+      {
         "java": "gpuCullableInstanceInit",
         "symbol": "cna_gpu_cullable_instance_init"
       },

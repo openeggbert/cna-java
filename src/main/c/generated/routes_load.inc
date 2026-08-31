@@ -771,6 +771,10 @@
     LOAD(gamer_set_display_name, "cna_gamer_set_display_name");
     LOAD(gamer_set_tag, "cna_gamer_set_tag");
     LOAD(gamer_unsubscribe_ext, "cna_gamer_unsubscribe_ext");
+    LOAD(gltf_material_bridge_build_extensions, "cna_gltf_material_bridge_build_extensions");
+    LOAD(gltf_material_bridge_build_material, "cna_gltf_material_bridge_build_material");
+    LOAD(gltf_material_extension_source_ext_init, "cna_gltf_material_extension_source_ext_init");
+    LOAD(gltf_material_source_ext_init, "cna_gltf_material_source_ext_init");
     LOAD(gpu_cullable_instance_init, "cna_gpu_cullable_instance_init");
     LOAD(gpu_instance_culler_copy_instance_lookup_glsl, "cna_gpu_instance_culler_copy_instance_lookup_glsl");
     LOAD(gpu_instance_culler_copy_unsupported_reason, "cna_gpu_instance_culler_copy_unsupported_reason");

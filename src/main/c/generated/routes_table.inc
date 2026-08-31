@@ -771,6 +771,10 @@
     CNA_JNI_ROUTE(cna_gamer_set_display_name) gamer_set_display_name;
     CNA_JNI_ROUTE(cna_gamer_set_tag) gamer_set_tag;
     CNA_JNI_ROUTE(cna_gamer_unsubscribe_ext) gamer_unsubscribe_ext;
+    CNA_JNI_ROUTE(cna_gltf_material_bridge_build_extensions) gltf_material_bridge_build_extensions;
+    CNA_JNI_ROUTE(cna_gltf_material_bridge_build_material) gltf_material_bridge_build_material;
+    CNA_JNI_ROUTE(cna_gltf_material_extension_source_ext_init) gltf_material_extension_source_ext_init;
+    CNA_JNI_ROUTE(cna_gltf_material_source_ext_init) gltf_material_source_ext_init;
     CNA_JNI_ROUTE(cna_gpu_cullable_instance_init) gpu_cullable_instance_init;
     CNA_JNI_ROUTE(cna_gpu_instance_culler_copy_instance_lookup_glsl) gpu_instance_culler_copy_instance_lookup_glsl;
     CNA_JNI_ROUTE(cna_gpu_instance_culler_copy_unsupported_reason) gpu_instance_culler_copy_unsupported_reason;

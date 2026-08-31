@@ -838,6 +838,32 @@ X
         }
     }
 
+    /**
+     * Records the textures a whole-value write put into the slots.
+     *
+     * <p>Used by {@link GltfMaterialExtensionSource#buildInto}, which fills every slot in one
+     * native call rather than nine. The retained references have to follow, or the getters would
+     * answer with what the material held before -- which is the one way this object's shadow and
+     * CNA's value can disagree.
+     *
+     * @param textures the nine textures, in CNA's own slot order
+     */
+    void rememberSlots(Texture2D[] textures) {
+        String[] names = {"clearcoat_texture", "clearcoat_roughness_texture",
+            "clearcoat_normal_texture", "sheen_color_texture", "sheen_roughness_texture",
+            "transmission_texture", "thickness_texture", "iridescence_texture",
+            "iridescence_thickness_texture"};
+        synchronized (slots) {
+            for (int slot = 0; slot < names.length; slot++) {
+                if (textures[slot] == null) {
+                    slots.remove(names[slot]);
+                } else {
+                    slots.put(names[slot], textures[slot]);
+                }
+            }
+        }
+    }
+
     /** The native handle, for the effect that shades through a material. */
     long handle() {
         return open();

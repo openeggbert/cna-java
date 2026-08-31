@@ -124,6 +124,13 @@ def array_extent(where: str, extent: str, live: dict) -> int:
         if constant is None:
             raise Unsupported(f"{where}: array extent {extent} is not a CNA constant")
         value = str(constant["value"]).strip()
+        # CNA writes some of these with the standard fixed-width constant macros --
+        # INT32_C(7) rather than 7 -- which mean exactly their argument and nothing else.
+        # Unwrapping that one form is reading the header, not evaluating an expression;
+        # anything else is still refused below.
+        wrapped = re.fullmatch(r"U?INT(?:8|16|32|64)_C\(\s*(\d+)\s*\)", value)
+        if wrapped is not None:
+            value = wrapped.group(1)
         if not value.isdigit():
             raise Unsupported(f"{where}: array extent {extent} is {value!r}, not a plain integer")
         count = int(value)

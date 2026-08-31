@@ -11192,6 +11192,46 @@
       "parameters": []
     },
     {
+      "name": "cna_gltf_material_bridge_build_extensions",
+      "header": "engine_layer.h",
+      "ownership": "borrows the destination extensions handle, which the caller keeps owning; the textures named in the source are borrowed",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "const CNA_GltfMaterialExtensionSourceEXT*",
+        "const CNA_GltfMaterialExtensionTexturesEXT*",
+        "CNA_PbrMaterialExtensionsHandle"
+      ]
+    },
+    {
+      "name": "cna_gltf_material_bridge_build_material",
+      "header": "engine_layer.h",
+      "ownership": "owns nothing; the textures named in the source are borrowed and recorded in the built material, and the loader keeps owning them",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "const CNA_GltfMaterialSourceEXT*",
+        "const CNA_GltfMaterialTexturesEXT*",
+        "CNA_PbrMaterialEXT*"
+      ]
+    },
+    {
+      "name": "cna_gltf_material_extension_source_ext_init",
+      "header": "engine_layer.h",
+      "ownership": "owns nothing; fills a caller-owned structure",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_GltfMaterialExtensionSourceEXT*"
+      ]
+    },
+    {
+      "name": "cna_gltf_material_source_ext_init",
+      "header": "engine_layer.h",
+      "ownership": "owns nothing; fills a caller-owned structure",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_GltfMaterialSourceEXT*"
+      ]
+    },
+    {
       "name": "cna_gpu_cullable_instance_init",
       "header": "engine_layer.h",
       "ownership": "no handle; fills the caller's instance value",
