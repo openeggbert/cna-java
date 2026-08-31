@@ -13,6 +13,607 @@ public final class NativeEngineLayerRoutes {
     }
 
     /**
+     * cna_clustered_light_assignment_adopt (engine_layer.h).
+     */
+    public static native int clusteredLightAssignmentAdopt(long assignment, int lightCount, int[] offsets, int[] indices);
+
+    /**
+     * cna_clustered_light_assignment_assign (engine_layer.h).
+     *
+     * <p>viewFloating carries CNA_Matrix in this order:
+     * <ol start="0">
+     *   <li>{@code m11} (float)</li>
+     *   <li>{@code m12} (float)</li>
+     *   <li>{@code m13} (float)</li>
+     *   <li>{@code m14} (float)</li>
+     *   <li>{@code m21} (float)</li>
+     *   <li>{@code m22} (float)</li>
+     *   <li>{@code m23} (float)</li>
+     *   <li>{@code m24} (float)</li>
+     *   <li>{@code m31} (float)</li>
+     *   <li>{@code m32} (float)</li>
+     *   <li>{@code m33} (float)</li>
+     *   <li>{@code m34} (float)</li>
+     *   <li>{@code m41} (float)</li>
+     *   <li>{@code m42} (float)</li>
+     *   <li>{@code m43} (float)</li>
+     *   <li>{@code m44} (float)</li>
+     * </ol>
+     */
+    public static native int clusteredLightAssignmentAssign(long assignment, long grid, float[] viewFloating, float[] boundsFloating);
+
+    /**
+     * cna_clustered_light_assignment_clear (engine_layer.h).
+     */
+    public static native int clusteredLightAssignmentClear(long assignment);
+
+    /**
+     * cna_clustered_light_assignment_copy_indices (engine_layer.h).
+     */
+    public static native int clusteredLightAssignmentCopyIndices(long assignment, int[] destination, long[] outCount);
+
+    /**
+     * cna_clustered_light_assignment_copy_lights_in_cluster (engine_layer.h).
+     */
+    public static native int clusteredLightAssignmentCopyLightsInCluster(long assignment, int clusterIndex, int[] destination, long[] outCount);
+
+    /**
+     * cna_clustered_light_assignment_copy_offsets (engine_layer.h).
+     */
+    public static native int clusteredLightAssignmentCopyOffsets(long assignment, int[] destination, long[] outCount);
+
+    /**
+     * cna_clustered_light_assignment_create (engine_layer.h).
+     */
+    public static native int clusteredLightAssignmentCreate(long game, long[] outAssignment);
+
+    /**
+     * cna_clustered_light_assignment_destroy (engine_layer.h).
+     */
+    public static native int clusteredLightAssignmentDestroy(long assignment);
+
+    /**
+     * cna_clustered_light_assignment_get_cluster_count (engine_layer.h).
+     */
+    public static native int clusteredLightAssignmentGetClusterCount(long assignment, int[] outCount);
+
+    /**
+     * cna_clustered_light_assignment_get_light_count (engine_layer.h).
+     */
+    public static native int clusteredLightAssignmentGetLightCount(long assignment, int[] outCount);
+
+    /**
+     * cna_clustered_light_assignment_get_max_lights_per_cluster (engine_layer.h).
+     */
+    public static native int clusteredLightAssignmentGetMaxLightsPerCluster(long assignment, int[] outCount);
+
+    /**
+     * cna_clustered_light_assignment_get_total_reference_count (engine_layer.h).
+     */
+    public static native int clusteredLightAssignmentGetTotalReferenceCount(long assignment, int[] outCount);
+
+    /**
+     * cna_clustered_light_buffer_bind (engine_layer.h).
+     */
+    public static native int clusteredLightBufferBind(long buffer, long effect, int firstUnit);
+
+    /**
+     * cna_clustered_light_buffer_copy_light_lookup_glsl (engine_layer.h).
+     */
+    public static native int clusteredLightBufferCopyLightLookupGlsl(byte[] destination, long[] outBytes);
+
+    /**
+     * cna_clustered_light_buffer_create (engine_layer.h).
+     */
+    public static native int clusteredLightBufferCreate(long graphicsDevice, long[] outBuffer);
+
+    /**
+     * cna_clustered_light_buffer_destroy (engine_layer.h).
+     */
+    public static native int clusteredLightBufferDestroy(long buffer);
+
+    /**
+     * cna_clustered_light_buffer_get_cluster_count (engine_layer.h).
+     */
+    public static native int clusteredLightBufferGetClusterCount(long buffer, int[] outCount);
+
+    /**
+     * cna_clustered_light_buffer_get_light_count (engine_layer.h).
+     */
+    public static native int clusteredLightBufferGetLightCount(long buffer, int[] outCount);
+
+    /**
+     * cna_clustered_light_buffer_get_reference_count (engine_layer.h).
+     */
+    public static native int clusteredLightBufferGetReferenceCount(long buffer, int[] outCount);
+
+    /**
+     * cna_clustered_light_buffer_is_uploaded (engine_layer.h).
+     */
+    public static native int clusteredLightBufferIsUploaded(long buffer, boolean[] outUploaded);
+
+    /**
+     * cna_clustered_light_buffer_upload (engine_layer.h).
+     */
+    public static native int clusteredLightBufferUpload(long buffer, long lights, long grid, long assignment);
+
+    /**
+     * cna_clustered_light_compute_assign (engine_layer.h).
+     *
+     * <p>viewFloating carries CNA_Matrix in this order:
+     * <ol start="0">
+     *   <li>{@code m11} (float)</li>
+     *   <li>{@code m12} (float)</li>
+     *   <li>{@code m13} (float)</li>
+     *   <li>{@code m14} (float)</li>
+     *   <li>{@code m21} (float)</li>
+     *   <li>{@code m22} (float)</li>
+     *   <li>{@code m23} (float)</li>
+     *   <li>{@code m24} (float)</li>
+     *   <li>{@code m31} (float)</li>
+     *   <li>{@code m32} (float)</li>
+     *   <li>{@code m33} (float)</li>
+     *   <li>{@code m34} (float)</li>
+     *   <li>{@code m41} (float)</li>
+     *   <li>{@code m42} (float)</li>
+     *   <li>{@code m43} (float)</li>
+     *   <li>{@code m44} (float)</li>
+     * </ol>
+     */
+    public static native int clusteredLightComputeAssign(long compute, long grid, float[] viewFloating, float[] boundsFloating, long outAssignment);
+
+    /**
+     * cna_clustered_light_compute_copy_unsupported_reason (engine_layer.h).
+     */
+    public static native int clusteredLightComputeCopyUnsupportedReason(long compute, byte[] destination, long[] outBytes);
+
+    /**
+     * cna_clustered_light_compute_create (engine_layer.h).
+     */
+    public static native int clusteredLightComputeCreate(long graphicsDevice, int stride, long[] outCompute);
+
+    /**
+     * cna_clustered_light_compute_destroy (engine_layer.h).
+     */
+    public static native int clusteredLightComputeDestroy(long compute);
+
+    /**
+     * cna_clustered_light_compute_get_stride (engine_layer.h).
+     */
+    public static native int clusteredLightComputeGetStride(long compute, int[] outStride);
+
+    /**
+     * cna_clustered_light_compute_has_overflowed (engine_layer.h).
+     */
+    public static native int clusteredLightComputeHasOverflowed(long compute, boolean[] outOverflowed);
+
+    /**
+     * cna_clustered_light_compute_is_supported (engine_layer.h).
+     */
+    public static native int clusteredLightComputeIsSupported(long compute, boolean[] outSupported);
+
+    /**
+     * cna_clustered_light_compute_used_compute (engine_layer.h).
+     */
+    public static native int clusteredLightComputeUsedCompute(long compute, boolean[] outUsed);
+
+    /**
+     * cna_clustered_light_ext_init (engine_layer.h).
+     *
+     * <p>outLightBytes carries CNA_ClusteredLightEXT in this order:
+     * <ol start="0">
+     *   <li>{@code reserved[0]} (uint8_t)</li>
+     *   <li>{@code reserved[1]} (uint8_t)</li>
+     *   <li>{@code reserved[2]} (uint8_t)</li>
+     * </ol>
+     *
+     * <p>outLightIntegral carries CNA_ClusteredLightEXT in this order:
+     * <ol start="0">
+     *   <li>{@code type} (CNA_ClusteredLightType)</li>
+     *   <li>{@code casts_shadows} (CNA_Bool)</li>
+     * </ol>
+     *
+     * <p>outLightFloating carries CNA_ClusteredLightEXT in this order:
+     * <ol start="0">
+     *   <li>{@code position.x} (float)</li>
+     *   <li>{@code position.y} (float)</li>
+     *   <li>{@code position.z} (float)</li>
+     *   <li>{@code direction.x} (float)</li>
+     *   <li>{@code direction.y} (float)</li>
+     *   <li>{@code direction.z} (float)</li>
+     *   <li>{@code color.x} (float)</li>
+     *   <li>{@code color.y} (float)</li>
+     *   <li>{@code color.z} (float)</li>
+     *   <li>{@code intensity} (float)</li>
+     *   <li>{@code range} (float)</li>
+     *   <li>{@code inner_angle} (float)</li>
+     *   <li>{@code outer_angle} (float)</li>
+     * </ol>
+     */
+    public static native int clusteredLightExtInit(byte[] outLightBytes, long[] outLightIntegral, float[] outLightFloating);
+
+    /**
+     * cna_clustered_light_grid_cluster_bounds (engine_layer.h).
+     *
+     * <p>outBoundsFloating carries CNA_BoundingBox in this order:
+     * <ol start="0">
+     *   <li>{@code min.x} (float)</li>
+     *   <li>{@code min.y} (float)</li>
+     *   <li>{@code min.z} (float)</li>
+     *   <li>{@code max.x} (float)</li>
+     *   <li>{@code max.y} (float)</li>
+     *   <li>{@code max.z} (float)</li>
+     * </ol>
+     */
+    public static native int clusteredLightGridClusterBounds(long grid, int x, int y, int slice, float[] outBoundsFloating);
+
+    /**
+     * cna_clustered_light_grid_cluster_index (engine_layer.h).
+     */
+    public static native int clusteredLightGridClusterIndex(long grid, int x, int y, int slice, int[] outIndex);
+
+    /**
+     * cna_clustered_light_grid_create (engine_layer.h).
+     */
+    public static native int clusteredLightGridCreate(long game, int tilesX, int tilesY, int sliceCount, long[] outGrid);
+
+    /**
+     * cna_clustered_light_grid_destroy (engine_layer.h).
+     */
+    public static native int clusteredLightGridDestroy(long grid);
+
+    /**
+     * cna_clustered_light_grid_get_cluster_count (engine_layer.h).
+     */
+    public static native int clusteredLightGridGetClusterCount(long grid, int[] outCount);
+
+    /**
+     * cna_clustered_light_grid_get_far_plane (engine_layer.h).
+     */
+    public static native int clusteredLightGridGetFarPlane(long grid, float[] outFar);
+
+    /**
+     * cna_clustered_light_grid_get_inverse_projection (engine_layer.h).
+     *
+     * <p>outMatrixFloating carries CNA_Matrix in this order:
+     * <ol start="0">
+     *   <li>{@code m11} (float)</li>
+     *   <li>{@code m12} (float)</li>
+     *   <li>{@code m13} (float)</li>
+     *   <li>{@code m14} (float)</li>
+     *   <li>{@code m21} (float)</li>
+     *   <li>{@code m22} (float)</li>
+     *   <li>{@code m23} (float)</li>
+     *   <li>{@code m24} (float)</li>
+     *   <li>{@code m31} (float)</li>
+     *   <li>{@code m32} (float)</li>
+     *   <li>{@code m33} (float)</li>
+     *   <li>{@code m34} (float)</li>
+     *   <li>{@code m41} (float)</li>
+     *   <li>{@code m42} (float)</li>
+     *   <li>{@code m43} (float)</li>
+     *   <li>{@code m44} (float)</li>
+     * </ol>
+     */
+    public static native int clusteredLightGridGetInverseProjection(long grid, float[] outMatrixFloating);
+
+    /**
+     * cna_clustered_light_grid_get_near_plane (engine_layer.h).
+     */
+    public static native int clusteredLightGridGetNearPlane(long grid, float[] outNear);
+
+    /**
+     * cna_clustered_light_grid_get_slice_count (engine_layer.h).
+     */
+    public static native int clusteredLightGridGetSliceCount(long grid, int[] outSlices);
+
+    /**
+     * cna_clustered_light_grid_get_tiles_x (engine_layer.h).
+     */
+    public static native int clusteredLightGridGetTilesX(long grid, int[] outTiles);
+
+    /**
+     * cna_clustered_light_grid_get_tiles_y (engine_layer.h).
+     */
+    public static native int clusteredLightGridGetTilesY(long grid, int[] outTiles);
+
+    /**
+     * cna_clustered_light_grid_has_projection (engine_layer.h).
+     */
+    public static native int clusteredLightGridHasProjection(long grid, boolean[] outHas);
+
+    /**
+     * cna_clustered_light_grid_set_projection (engine_layer.h).
+     *
+     * <p>projectionFloating carries CNA_Matrix in this order:
+     * <ol start="0">
+     *   <li>{@code m11} (float)</li>
+     *   <li>{@code m12} (float)</li>
+     *   <li>{@code m13} (float)</li>
+     *   <li>{@code m14} (float)</li>
+     *   <li>{@code m21} (float)</li>
+     *   <li>{@code m22} (float)</li>
+     *   <li>{@code m23} (float)</li>
+     *   <li>{@code m24} (float)</li>
+     *   <li>{@code m31} (float)</li>
+     *   <li>{@code m32} (float)</li>
+     *   <li>{@code m33} (float)</li>
+     *   <li>{@code m34} (float)</li>
+     *   <li>{@code m41} (float)</li>
+     *   <li>{@code m42} (float)</li>
+     *   <li>{@code m43} (float)</li>
+     *   <li>{@code m44} (float)</li>
+     * </ol>
+     */
+    public static native int clusteredLightGridSetProjection(long grid, float[] projectionFloating, float nearPlane, float farPlane);
+
+    /**
+     * cna_clustered_light_grid_slice_distance (engine_layer.h).
+     */
+    public static native int clusteredLightGridSliceDistance(long grid, int slice, float[] outDistance);
+
+    /**
+     * cna_clustered_light_grid_slice_for_view_distance (engine_layer.h).
+     */
+    public static native int clusteredLightGridSliceForViewDistance(long grid, float viewDistance, int[] outSlice);
+
+    /**
+     * cna_clustered_light_set_add (engine_layer.h).
+     *
+     * <p>lightBytes carries CNA_ClusteredLightEXT in this order:
+     * <ol start="0">
+     *   <li>{@code reserved[0]} (uint8_t)</li>
+     *   <li>{@code reserved[1]} (uint8_t)</li>
+     *   <li>{@code reserved[2]} (uint8_t)</li>
+     * </ol>
+     *
+     * <p>lightIntegral carries CNA_ClusteredLightEXT in this order:
+     * <ol start="0">
+     *   <li>{@code type} (CNA_ClusteredLightType)</li>
+     *   <li>{@code casts_shadows} (CNA_Bool)</li>
+     * </ol>
+     *
+     * <p>lightFloating carries CNA_ClusteredLightEXT in this order:
+     * <ol start="0">
+     *   <li>{@code position.x} (float)</li>
+     *   <li>{@code position.y} (float)</li>
+     *   <li>{@code position.z} (float)</li>
+     *   <li>{@code direction.x} (float)</li>
+     *   <li>{@code direction.y} (float)</li>
+     *   <li>{@code direction.z} (float)</li>
+     *   <li>{@code color.x} (float)</li>
+     *   <li>{@code color.y} (float)</li>
+     *   <li>{@code color.z} (float)</li>
+     *   <li>{@code intensity} (float)</li>
+     *   <li>{@code range} (float)</li>
+     *   <li>{@code inner_angle} (float)</li>
+     *   <li>{@code outer_angle} (float)</li>
+     * </ol>
+     */
+    public static native int clusteredLightSetAdd(long set, byte[] lightBytes, long[] lightIntegral, float[] lightFloating, int[] outIndex);
+
+    /**
+     * cna_clustered_light_set_add_point (engine_layer.h).
+     *
+     * <p>lightBytes carries CNA_PointLightEXT in this order:
+     * <ol start="0">
+     *   <li>{@code reserved[0]} (uint8_t)</li>
+     *   <li>{@code reserved[1]} (uint8_t)</li>
+     *   <li>{@code reserved[2]} (uint8_t)</li>
+     * </ol>
+     *
+     * <p>lightIntegral carries CNA_PointLightEXT in this order:
+     * <ol start="0">
+     *   <li>{@code casts_shadows} (CNA_Bool)</li>
+     * </ol>
+     *
+     * <p>lightFloating carries CNA_PointLightEXT in this order:
+     * <ol start="0">
+     *   <li>{@code position.x} (float)</li>
+     *   <li>{@code position.y} (float)</li>
+     *   <li>{@code position.z} (float)</li>
+     *   <li>{@code color.x} (float)</li>
+     *   <li>{@code color.y} (float)</li>
+     *   <li>{@code color.z} (float)</li>
+     *   <li>{@code intensity} (float)</li>
+     *   <li>{@code range} (float)</li>
+     * </ol>
+     */
+    public static native int clusteredLightSetAddPoint(long set, byte[] lightBytes, long[] lightIntegral, float[] lightFloating, int[] outIndex);
+
+    /**
+     * cna_clustered_light_set_add_spot (engine_layer.h).
+     *
+     * <p>lightBytes carries CNA_SpotLightEXT in this order:
+     * <ol start="0">
+     *   <li>{@code reserved[0]} (uint8_t)</li>
+     *   <li>{@code reserved[1]} (uint8_t)</li>
+     *   <li>{@code reserved[2]} (uint8_t)</li>
+     * </ol>
+     *
+     * <p>lightIntegral carries CNA_SpotLightEXT in this order:
+     * <ol start="0">
+     *   <li>{@code casts_shadows} (CNA_Bool)</li>
+     * </ol>
+     *
+     * <p>lightFloating carries CNA_SpotLightEXT in this order:
+     * <ol start="0">
+     *   <li>{@code position.x} (float)</li>
+     *   <li>{@code position.y} (float)</li>
+     *   <li>{@code position.z} (float)</li>
+     *   <li>{@code direction.x} (float)</li>
+     *   <li>{@code direction.y} (float)</li>
+     *   <li>{@code direction.z} (float)</li>
+     *   <li>{@code color.x} (float)</li>
+     *   <li>{@code color.y} (float)</li>
+     *   <li>{@code color.z} (float)</li>
+     *   <li>{@code intensity} (float)</li>
+     *   <li>{@code range} (float)</li>
+     *   <li>{@code inner_angle} (float)</li>
+     *   <li>{@code outer_angle} (float)</li>
+     * </ol>
+     */
+    public static native int clusteredLightSetAddSpot(long set, byte[] lightBytes, long[] lightIntegral, float[] lightFloating, int[] outIndex);
+
+    /**
+     * cna_clustered_light_set_clear (engine_layer.h).
+     */
+    public static native int clusteredLightSetClear(long set);
+
+    /**
+     * cna_clustered_light_set_copy_bounds (engine_layer.h).
+     */
+    public static native int clusteredLightSetCopyBounds(long set, float[] destinationFloating, long[] outCount);
+
+    /**
+     * cna_clustered_light_set_copy_lights (engine_layer.h).
+     */
+    public static native int clusteredLightSetCopyLights(long set, byte[] destinationBytes, long[] destinationIntegral, float[] destinationFloating, long[] outCount);
+
+    /**
+     * cna_clustered_light_set_create (engine_layer.h).
+     */
+    public static native int clusteredLightSetCreate(long game, long[] outSet);
+
+    /**
+     * cna_clustered_light_set_destroy (engine_layer.h).
+     */
+    public static native int clusteredLightSetDestroy(long set);
+
+    /**
+     * cna_clustered_light_set_get_at (engine_layer.h).
+     *
+     * <p>outLightBytes carries CNA_ClusteredLightEXT in this order:
+     * <ol start="0">
+     *   <li>{@code reserved[0]} (uint8_t)</li>
+     *   <li>{@code reserved[1]} (uint8_t)</li>
+     *   <li>{@code reserved[2]} (uint8_t)</li>
+     * </ol>
+     *
+     * <p>outLightIntegral carries CNA_ClusteredLightEXT in this order:
+     * <ol start="0">
+     *   <li>{@code type} (CNA_ClusteredLightType)</li>
+     *   <li>{@code casts_shadows} (CNA_Bool)</li>
+     * </ol>
+     *
+     * <p>outLightFloating carries CNA_ClusteredLightEXT in this order:
+     * <ol start="0">
+     *   <li>{@code position.x} (float)</li>
+     *   <li>{@code position.y} (float)</li>
+     *   <li>{@code position.z} (float)</li>
+     *   <li>{@code direction.x} (float)</li>
+     *   <li>{@code direction.y} (float)</li>
+     *   <li>{@code direction.z} (float)</li>
+     *   <li>{@code color.x} (float)</li>
+     *   <li>{@code color.y} (float)</li>
+     *   <li>{@code color.z} (float)</li>
+     *   <li>{@code intensity} (float)</li>
+     *   <li>{@code range} (float)</li>
+     *   <li>{@code inner_angle} (float)</li>
+     *   <li>{@code outer_angle} (float)</li>
+     * </ol>
+     */
+    public static native int clusteredLightSetGetAt(long set, int index, byte[] outLightBytes, long[] outLightIntegral, float[] outLightFloating);
+
+    /**
+     * cna_clustered_light_set_get_bounds_at (engine_layer.h).
+     *
+     * <p>outBoundsFloating carries CNA_BoundingSphere in this order:
+     * <ol start="0">
+     *   <li>{@code center.x} (float)</li>
+     *   <li>{@code center.y} (float)</li>
+     *   <li>{@code center.z} (float)</li>
+     *   <li>{@code radius} (float)</li>
+     * </ol>
+     */
+    public static native int clusteredLightSetGetBoundsAt(long set, int index, float[] outBoundsFloating);
+
+    /**
+     * cna_clustered_light_set_get_count (engine_layer.h).
+     */
+    public static native int clusteredLightSetGetCount(long set, int[] outCount);
+
+    /**
+     * cna_clustered_light_set_is_empty (engine_layer.h).
+     */
+    public static native int clusteredLightSetIsEmpty(long set, boolean[] outEmpty);
+
+    /**
+     * cna_clustered_light_set_is_usable (engine_layer.h).
+     *
+     * <p>lightBytes carries CNA_ClusteredLightEXT in this order:
+     * <ol start="0">
+     *   <li>{@code reserved[0]} (uint8_t)</li>
+     *   <li>{@code reserved[1]} (uint8_t)</li>
+     *   <li>{@code reserved[2]} (uint8_t)</li>
+     * </ol>
+     *
+     * <p>lightIntegral carries CNA_ClusteredLightEXT in this order:
+     * <ol start="0">
+     *   <li>{@code type} (CNA_ClusteredLightType)</li>
+     *   <li>{@code casts_shadows} (CNA_Bool)</li>
+     * </ol>
+     *
+     * <p>lightFloating carries CNA_ClusteredLightEXT in this order:
+     * <ol start="0">
+     *   <li>{@code position.x} (float)</li>
+     *   <li>{@code position.y} (float)</li>
+     *   <li>{@code position.z} (float)</li>
+     *   <li>{@code direction.x} (float)</li>
+     *   <li>{@code direction.y} (float)</li>
+     *   <li>{@code direction.z} (float)</li>
+     *   <li>{@code color.x} (float)</li>
+     *   <li>{@code color.y} (float)</li>
+     *   <li>{@code color.z} (float)</li>
+     *   <li>{@code intensity} (float)</li>
+     *   <li>{@code range} (float)</li>
+     *   <li>{@code inner_angle} (float)</li>
+     *   <li>{@code outer_angle} (float)</li>
+     * </ol>
+     */
+    public static native int clusteredLightSetIsUsable(byte[] lightBytes, long[] lightIntegral, float[] lightFloating, boolean[] outUsable);
+
+    /**
+     * cna_clustered_light_set_remove_at (engine_layer.h).
+     */
+    public static native int clusteredLightSetRemoveAt(long set, int index);
+
+    /**
+     * cna_clustered_light_set_replace_at (engine_layer.h).
+     *
+     * <p>lightBytes carries CNA_ClusteredLightEXT in this order:
+     * <ol start="0">
+     *   <li>{@code reserved[0]} (uint8_t)</li>
+     *   <li>{@code reserved[1]} (uint8_t)</li>
+     *   <li>{@code reserved[2]} (uint8_t)</li>
+     * </ol>
+     *
+     * <p>lightIntegral carries CNA_ClusteredLightEXT in this order:
+     * <ol start="0">
+     *   <li>{@code type} (CNA_ClusteredLightType)</li>
+     *   <li>{@code casts_shadows} (CNA_Bool)</li>
+     * </ol>
+     *
+     * <p>lightFloating carries CNA_ClusteredLightEXT in this order:
+     * <ol start="0">
+     *   <li>{@code position.x} (float)</li>
+     *   <li>{@code position.y} (float)</li>
+     *   <li>{@code position.z} (float)</li>
+     *   <li>{@code direction.x} (float)</li>
+     *   <li>{@code direction.y} (float)</li>
+     *   <li>{@code direction.z} (float)</li>
+     *   <li>{@code color.x} (float)</li>
+     *   <li>{@code color.y} (float)</li>
+     *   <li>{@code color.z} (float)</li>
+     *   <li>{@code intensity} (float)</li>
+     *   <li>{@code range} (float)</li>
+     *   <li>{@code inner_angle} (float)</li>
+     *   <li>{@code outer_angle} (float)</li>
+     * </ol>
+     */
+    public static native int clusteredLightSetReplaceAt(long set, int index, byte[] lightBytes, long[] lightIntegral, float[] lightFloating);
+
+    /**
      * cna_debug_draw_add_bounding_sphere (engine_layer.h).
      *
      * <p>sphereFloating carries CNA_BoundingSphere in this order:

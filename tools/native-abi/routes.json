@@ -3388,6 +3388,246 @@
     ],
     "NativeEngineLayerRoutes": [
       {
+        "java": "clusteredLightAssignmentAdopt",
+        "symbol": "cna_clustered_light_assignment_adopt"
+      },
+      {
+        "java": "clusteredLightAssignmentAssign",
+        "symbol": "cna_clustered_light_assignment_assign"
+      },
+      {
+        "java": "clusteredLightAssignmentClear",
+        "symbol": "cna_clustered_light_assignment_clear"
+      },
+      {
+        "java": "clusteredLightAssignmentCopyIndices",
+        "symbol": "cna_clustered_light_assignment_copy_indices"
+      },
+      {
+        "java": "clusteredLightAssignmentCopyLightsInCluster",
+        "symbol": "cna_clustered_light_assignment_copy_lights_in_cluster"
+      },
+      {
+        "java": "clusteredLightAssignmentCopyOffsets",
+        "symbol": "cna_clustered_light_assignment_copy_offsets"
+      },
+      {
+        "java": "clusteredLightAssignmentCreate",
+        "symbol": "cna_clustered_light_assignment_create"
+      },
+      {
+        "java": "clusteredLightAssignmentDestroy",
+        "symbol": "cna_clustered_light_assignment_destroy"
+      },
+      {
+        "java": "clusteredLightAssignmentGetClusterCount",
+        "symbol": "cna_clustered_light_assignment_get_cluster_count"
+      },
+      {
+        "java": "clusteredLightAssignmentGetLightCount",
+        "symbol": "cna_clustered_light_assignment_get_light_count"
+      },
+      {
+        "java": "clusteredLightAssignmentGetMaxLightsPerCluster",
+        "symbol": "cna_clustered_light_assignment_get_max_lights_per_cluster"
+      },
+      {
+        "java": "clusteredLightAssignmentGetTotalReferenceCount",
+        "symbol": "cna_clustered_light_assignment_get_total_reference_count"
+      },
+      {
+        "java": "clusteredLightBufferBind",
+        "symbol": "cna_clustered_light_buffer_bind"
+      },
+      {
+        "java": "clusteredLightBufferCopyLightLookupGlsl",
+        "symbol": "cna_clustered_light_buffer_copy_light_lookup_glsl"
+      },
+      {
+        "java": "clusteredLightBufferCreate",
+        "symbol": "cna_clustered_light_buffer_create"
+      },
+      {
+        "java": "clusteredLightBufferDestroy",
+        "symbol": "cna_clustered_light_buffer_destroy"
+      },
+      {
+        "java": "clusteredLightBufferGetClusterCount",
+        "symbol": "cna_clustered_light_buffer_get_cluster_count"
+      },
+      {
+        "java": "clusteredLightBufferGetLightCount",
+        "symbol": "cna_clustered_light_buffer_get_light_count"
+      },
+      {
+        "java": "clusteredLightBufferGetReferenceCount",
+        "symbol": "cna_clustered_light_buffer_get_reference_count"
+      },
+      {
+        "java": "clusteredLightBufferIsUploaded",
+        "symbol": "cna_clustered_light_buffer_is_uploaded"
+      },
+      {
+        "java": "clusteredLightBufferUpload",
+        "symbol": "cna_clustered_light_buffer_upload"
+      },
+      {
+        "java": "clusteredLightComputeAssign",
+        "symbol": "cna_clustered_light_compute_assign"
+      },
+      {
+        "java": "clusteredLightComputeCopyUnsupportedReason",
+        "symbol": "cna_clustered_light_compute_copy_unsupported_reason"
+      },
+      {
+        "java": "clusteredLightComputeCreate",
+        "symbol": "cna_clustered_light_compute_create"
+      },
+      {
+        "java": "clusteredLightComputeDestroy",
+        "symbol": "cna_clustered_light_compute_destroy"
+      },
+      {
+        "java": "clusteredLightComputeGetStride",
+        "symbol": "cna_clustered_light_compute_get_stride"
+      },
+      {
+        "java": "clusteredLightComputeHasOverflowed",
+        "symbol": "cna_clustered_light_compute_has_overflowed"
+      },
+      {
+        "java": "clusteredLightComputeIsSupported",
+        "symbol": "cna_clustered_light_compute_is_supported"
+      },
+      {
+        "java": "clusteredLightComputeUsedCompute",
+        "symbol": "cna_clustered_light_compute_used_compute"
+      },
+      {
+        "java": "clusteredLightExtInit",
+        "symbol": "cna_clustered_light_ext_init"
+      },
+      {
+        "java": "clusteredLightGridClusterBounds",
+        "symbol": "cna_clustered_light_grid_cluster_bounds"
+      },
+      {
+        "java": "clusteredLightGridClusterIndex",
+        "symbol": "cna_clustered_light_grid_cluster_index"
+      },
+      {
+        "java": "clusteredLightGridCreate",
+        "symbol": "cna_clustered_light_grid_create"
+      },
+      {
+        "java": "clusteredLightGridDestroy",
+        "symbol": "cna_clustered_light_grid_destroy"
+      },
+      {
+        "java": "clusteredLightGridGetClusterCount",
+        "symbol": "cna_clustered_light_grid_get_cluster_count"
+      },
+      {
+        "java": "clusteredLightGridGetFarPlane",
+        "symbol": "cna_clustered_light_grid_get_far_plane"
+      },
+      {
+        "java": "clusteredLightGridGetInverseProjection",
+        "symbol": "cna_clustered_light_grid_get_inverse_projection"
+      },
+      {
+        "java": "clusteredLightGridGetNearPlane",
+        "symbol": "cna_clustered_light_grid_get_near_plane"
+      },
+      {
+        "java": "clusteredLightGridGetSliceCount",
+        "symbol": "cna_clustered_light_grid_get_slice_count"
+      },
+      {
+        "java": "clusteredLightGridGetTilesX",
+        "symbol": "cna_clustered_light_grid_get_tiles_x"
+      },
+      {
+        "java": "clusteredLightGridGetTilesY",
+        "symbol": "cna_clustered_light_grid_get_tiles_y"
+      },
+      {
+        "java": "clusteredLightGridHasProjection",
+        "symbol": "cna_clustered_light_grid_has_projection"
+      },
+      {
+        "java": "clusteredLightGridSetProjection",
+        "symbol": "cna_clustered_light_grid_set_projection"
+      },
+      {
+        "java": "clusteredLightGridSliceDistance",
+        "symbol": "cna_clustered_light_grid_slice_distance"
+      },
+      {
+        "java": "clusteredLightGridSliceForViewDistance",
+        "symbol": "cna_clustered_light_grid_slice_for_view_distance"
+      },
+      {
+        "java": "clusteredLightSetAdd",
+        "symbol": "cna_clustered_light_set_add"
+      },
+      {
+        "java": "clusteredLightSetAddPoint",
+        "symbol": "cna_clustered_light_set_add_point"
+      },
+      {
+        "java": "clusteredLightSetAddSpot",
+        "symbol": "cna_clustered_light_set_add_spot"
+      },
+      {
+        "java": "clusteredLightSetClear",
+        "symbol": "cna_clustered_light_set_clear"
+      },
+      {
+        "java": "clusteredLightSetCopyBounds",
+        "symbol": "cna_clustered_light_set_copy_bounds"
+      },
+      {
+        "java": "clusteredLightSetCopyLights",
+        "symbol": "cna_clustered_light_set_copy_lights"
+      },
+      {
+        "java": "clusteredLightSetCreate",
+        "symbol": "cna_clustered_light_set_create"
+      },
+      {
+        "java": "clusteredLightSetDestroy",
+        "symbol": "cna_clustered_light_set_destroy"
+      },
+      {
+        "java": "clusteredLightSetGetAt",
+        "symbol": "cna_clustered_light_set_get_at"
+      },
+      {
+        "java": "clusteredLightSetGetBoundsAt",
+        "symbol": "cna_clustered_light_set_get_bounds_at"
+      },
+      {
+        "java": "clusteredLightSetGetCount",
+        "symbol": "cna_clustered_light_set_get_count"
+      },
+      {
+        "java": "clusteredLightSetIsEmpty",
+        "symbol": "cna_clustered_light_set_is_empty"
+      },
+      {
+        "java": "clusteredLightSetIsUsable",
+        "symbol": "cna_clustered_light_set_is_usable"
+      },
+      {
+        "java": "clusteredLightSetRemoveAt",
+        "symbol": "cna_clustered_light_set_remove_at"
+      },
+      {
+        "java": "clusteredLightSetReplaceAt",
+        "symbol": "cna_clustered_light_set_replace_at"
+      },
+      {
         "java": "debugDrawAddBoundingSphere",
         "symbol": "cna_debug_draw_add_bounding_sphere"
       },

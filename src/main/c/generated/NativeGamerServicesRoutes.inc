@@ -842,6 +842,9 @@ Java_org_openeggbert_cna_internal_generated_NativeGamerServicesRoutes_avatarRend
     (void)environment;
     (void)declaring_class;
     jsize bones_count = (*environment)->GetArrayLength(environment, bonesFloating) / 16;
+    if ((*environment)->GetArrayLength(environment, bonesFloating) != bones_count * 16) {
+        return (jint)CNA_RESULT_INVALID_ARGUMENT;
+    }
     CNA_Matrix* bones_values = (CNA_Matrix*)calloc(
         (size_t)bones_count + 1U, sizeof(*bones_values));
     if (bones_values == NULL) {

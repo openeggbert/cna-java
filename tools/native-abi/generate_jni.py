@@ -595,6 +595,20 @@ def render_c(class_name: str, entries: list[dict]) -> str:
                 body.append(f"    jsize {name}_count = (*environment)->GetArrayLength("
                             f"environment, {name}{primary[0].capitalize()}) / "
                             f"{len(step[primary[0]])};")
+                # One struct is split across up to four parallel Java arrays, and the element
+                # count comes from only one of them. A caller whose other arrays are shorter
+                # would have every element past their end read out of bounds in C -- a heap
+                # overread inside the marshalling loop, not a Java exception. So every carrier
+                # is required to hold exactly the same number of elements, and a mismatch is
+                # refused before anything is allocated.
+                conditions = " ||\n        ".join(
+                    f"(*environment)->GetArrayLength(environment, "
+                    f"{name}{group.capitalize()}) != {name}_count * {len(step[group])}"
+                    for group, _, _ in groups)
+                body.append(f"    if ({conditions}) {{")
+                body.extend(unwind_lines(unwind, "    "))
+                body.append("        return (jint)CNA_RESULT_INVALID_ARGUMENT;")
+                body.append("    }")
                 body.append(f"    {step['ctype']}* {name}_values = ({step['ctype']}*)calloc(")
                 body.append(f"        (size_t){name}_count + 1U, sizeof(*{name}_values));")
                 body.append(f"    if ({name}_values == NULL) {{")

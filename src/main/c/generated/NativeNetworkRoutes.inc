@@ -1463,6 +1463,10 @@ Java_org_openeggbert_cna_internal_generated_NativeNetworkRoutes_networkSessionPr
     (void)environment;
     (void)declaring_class;
     jsize destination_count = (*environment)->GetArrayLength(environment, destinationBytes) / 3;
+    if ((*environment)->GetArrayLength(environment, destinationBytes) != destination_count * 3 ||
+        (*environment)->GetArrayLength(environment, destinationIntegral) != destination_count * 2) {
+        return (jint)CNA_RESULT_INVALID_ARGUMENT;
+    }
     CNA_OptionalInt32* destination_values = (CNA_OptionalInt32*)calloc(
         (size_t)destination_count + 1U, sizeof(*destination_values));
     if (destination_values == NULL) {

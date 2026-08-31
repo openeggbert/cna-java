@@ -293,6 +293,9 @@ Java_org_openeggbert_cna_internal_generated_NativeModelExtensionRoutes_modelCopy
     (void)environment;
     (void)declaring_class;
     jsize destination_count = (*environment)->GetArrayLength(environment, destinationFloating) / 16;
+    if ((*environment)->GetArrayLength(environment, destinationFloating) != destination_count * 16) {
+        return (jint)CNA_RESULT_INVALID_ARGUMENT;
+    }
     CNA_Matrix* destination_values = (CNA_Matrix*)calloc(
         (size_t)destination_count + 1U, sizeof(*destination_values));
     if (destination_values == NULL) {
@@ -375,6 +378,9 @@ Java_org_openeggbert_cna_internal_generated_NativeModelExtensionRoutes_modelCopy
     (void)environment;
     (void)declaring_class;
     jsize destination_count = (*environment)->GetArrayLength(environment, destinationFloating) / 16;
+    if ((*environment)->GetArrayLength(environment, destinationFloating) != destination_count * 16) {
+        return (jint)CNA_RESULT_INVALID_ARGUMENT;
+    }
     CNA_Matrix* destination_values = (CNA_Matrix*)calloc(
         (size_t)destination_count + 1U, sizeof(*destination_values));
     if (destination_values == NULL) {
@@ -1488,6 +1494,9 @@ Java_org_openeggbert_cna_internal_generated_NativeModelExtensionRoutes_modelSetB
     (void)environment;
     (void)declaring_class;
     jsize source_count = (*environment)->GetArrayLength(environment, sourceFloating) / 16;
+    if ((*environment)->GetArrayLength(environment, sourceFloating) != source_count * 16) {
+        return (jint)CNA_RESULT_INVALID_ARGUMENT;
+    }
     CNA_Matrix* source_values = (CNA_Matrix*)calloc(
         (size_t)source_count + 1U, sizeof(*source_values));
     if (source_values == NULL) {

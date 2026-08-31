@@ -1172,6 +1172,9 @@ Java_org_openeggbert_cna_internal_generated_NativeInputExtensionRoutes_joystickS
     (void)environment;
     (void)declaring_class;
     jsize destination_count = (*environment)->GetArrayLength(environment, destinationIntegral) / 2;
+    if ((*environment)->GetArrayLength(environment, destinationIntegral) != destination_count * 2) {
+        return (jint)CNA_RESULT_INVALID_ARGUMENT;
+    }
     CNA_Point* destination_values = (CNA_Point*)calloc(
         (size_t)destination_count + 1U, sizeof(*destination_values));
     if (destination_values == NULL) {

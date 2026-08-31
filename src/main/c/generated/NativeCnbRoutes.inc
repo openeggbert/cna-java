@@ -3102,6 +3102,10 @@ Java_org_openeggbert_cna_internal_generated_NativeCnbRoutes_cnbModelCopyAnimatio
     (void)environment;
     (void)declaring_class;
     jsize destination_count = (*environment)->GetArrayLength(environment, destinationFloating) / 10;
+    if ((*environment)->GetArrayLength(environment, destinationFloating) != destination_count * 10 ||
+        (*environment)->GetArrayLength(environment, destinationDoubles) != destination_count * 1) {
+        return (jint)CNA_RESULT_INVALID_ARGUMENT;
+    }
     CNA_KeyframeEXT* destination_values = (CNA_KeyframeEXT*)calloc(
         (size_t)destination_count + 1U, sizeof(*destination_values));
     if (destination_values == NULL) {

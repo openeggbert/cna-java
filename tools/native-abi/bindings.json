@@ -1802,6 +1802,646 @@
       ]
     },
     {
+      "name": "cna_clustered_light_assignment_adopt",
+      "header": "engine_layer.h",
+      "ownership": "borrows the assignment and the caller's arrays; copies them",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_ClusteredLightAssignmentHandle",
+        "int32_t",
+        "const int32_t*",
+        "uint64_t",
+        "const int32_t*",
+        "uint64_t"
+      ]
+    },
+    {
+      "name": "cna_clustered_light_assignment_assign",
+      "header": "engine_layer.h",
+      "ownership": "borrows the assignment, the grid and the caller's bounds; the grid is not retained",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_ClusteredLightAssignmentHandle",
+        "CNA_ClusteredLightGridHandle",
+        "const CNA_Matrix*",
+        "const CNA_BoundingSphere*",
+        "uint64_t"
+      ]
+    },
+    {
+      "name": "cna_clustered_light_assignment_clear",
+      "header": "engine_layer.h",
+      "ownership": "borrows the assignment",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_ClusteredLightAssignmentHandle"
+      ]
+    },
+    {
+      "name": "cna_clustered_light_assignment_copy_indices",
+      "header": "engine_layer.h",
+      "ownership": "borrows the assignment; fills the caller's index buffer",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_ClusteredLightAssignmentHandle",
+        "int32_t*",
+        "uint64_t",
+        "uint64_t*"
+      ]
+    },
+    {
+      "name": "cna_clustered_light_assignment_copy_lights_in_cluster",
+      "header": "engine_layer.h",
+      "ownership": "borrows the assignment; fills the caller's index buffer",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_ClusteredLightAssignmentHandle",
+        "int32_t",
+        "int32_t*",
+        "uint64_t",
+        "uint64_t*"
+      ]
+    },
+    {
+      "name": "cna_clustered_light_assignment_copy_offsets",
+      "header": "engine_layer.h",
+      "ownership": "borrows the assignment; fills the caller's offset buffer",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_ClusteredLightAssignmentHandle",
+        "int32_t*",
+        "uint64_t",
+        "uint64_t*"
+      ]
+    },
+    {
+      "name": "cna_clustered_light_assignment_create",
+      "header": "engine_layer.h",
+      "ownership": "borrows the graphics device (the header calls it a game; JAVA-UPSTREAM-005); returns an owned assignment handle",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_Handle",
+        "CNA_ClusteredLightAssignmentHandle*"
+      ]
+    },
+    {
+      "name": "cna_clustered_light_assignment_destroy",
+      "header": "engine_layer.h",
+      "ownership": "releases the owned assignment handle",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_ClusteredLightAssignmentHandle"
+      ]
+    },
+    {
+      "name": "cna_clustered_light_assignment_get_cluster_count",
+      "header": "engine_layer.h",
+      "ownership": "borrows the assignment",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_ClusteredLightAssignmentHandle",
+        "int32_t*"
+      ]
+    },
+    {
+      "name": "cna_clustered_light_assignment_get_light_count",
+      "header": "engine_layer.h",
+      "ownership": "borrows the assignment",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_ClusteredLightAssignmentHandle",
+        "int32_t*"
+      ]
+    },
+    {
+      "name": "cna_clustered_light_assignment_get_max_lights_per_cluster",
+      "header": "engine_layer.h",
+      "ownership": "borrows the assignment",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_ClusteredLightAssignmentHandle",
+        "int32_t*"
+      ]
+    },
+    {
+      "name": "cna_clustered_light_assignment_get_total_reference_count",
+      "header": "engine_layer.h",
+      "ownership": "borrows the assignment",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_ClusteredLightAssignmentHandle",
+        "int32_t*"
+      ]
+    },
+    {
+      "name": "cna_clustered_light_buffer_bind",
+      "header": "engine_layer.h",
+      "ownership": "borrows the buffer and the caller's effect for the duration of the call",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_ClusteredLightBufferHandle",
+        "CNA_EffectHandle",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "cna_clustered_light_buffer_copy_light_lookup_glsl",
+      "header": "engine_layer.h",
+      "ownership": "no handle; fills the caller's byte buffer",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "char*",
+        "uint64_t",
+        "uint64_t*"
+      ]
+    },
+    {
+      "name": "cna_clustered_light_buffer_create",
+      "header": "engine_layer.h",
+      "ownership": "borrows the graphics device; returns an owned buffer handle",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_Handle",
+        "CNA_ClusteredLightBufferHandle*"
+      ]
+    },
+    {
+      "name": "cna_clustered_light_buffer_destroy",
+      "header": "engine_layer.h",
+      "ownership": "releases the owned buffer handle",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_ClusteredLightBufferHandle"
+      ]
+    },
+    {
+      "name": "cna_clustered_light_buffer_get_cluster_count",
+      "header": "engine_layer.h",
+      "ownership": "borrows the buffer",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_ClusteredLightBufferHandle",
+        "int32_t*"
+      ]
+    },
+    {
+      "name": "cna_clustered_light_buffer_get_light_count",
+      "header": "engine_layer.h",
+      "ownership": "borrows the buffer",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_ClusteredLightBufferHandle",
+        "int32_t*"
+      ]
+    },
+    {
+      "name": "cna_clustered_light_buffer_get_reference_count",
+      "header": "engine_layer.h",
+      "ownership": "borrows the buffer",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_ClusteredLightBufferHandle",
+        "int32_t*"
+      ]
+    },
+    {
+      "name": "cna_clustered_light_buffer_is_uploaded",
+      "header": "engine_layer.h",
+      "ownership": "borrows the buffer",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_ClusteredLightBufferHandle",
+        "CNA_Bool*"
+      ]
+    },
+    {
+      "name": "cna_clustered_light_buffer_upload",
+      "header": "engine_layer.h",
+      "ownership": "borrows the buffer, the set, the grid and the assignment; copies what it needs and retains none of them",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_ClusteredLightBufferHandle",
+        "CNA_ClusteredLightSetHandle",
+        "CNA_ClusteredLightGridHandle",
+        "CNA_ClusteredLightAssignmentHandle"
+      ]
+    },
+    {
+      "name": "cna_clustered_light_compute_assign",
+      "header": "engine_layer.h",
+      "ownership": "borrows the program, the grid, the caller's bounds and the assignment it fills; retains none of them",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_ClusteredLightComputeHandle",
+        "CNA_ClusteredLightGridHandle",
+        "const CNA_Matrix*",
+        "const CNA_BoundingSphere*",
+        "uint64_t",
+        "CNA_ClusteredLightAssignmentHandle"
+      ]
+    },
+    {
+      "name": "cna_clustered_light_compute_copy_unsupported_reason",
+      "header": "engine_layer.h",
+      "ownership": "borrows the program; fills the caller's byte buffer",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_ClusteredLightComputeHandle",
+        "char*",
+        "uint64_t",
+        "uint64_t*"
+      ]
+    },
+    {
+      "name": "cna_clustered_light_compute_create",
+      "header": "engine_layer.h",
+      "ownership": "borrows the graphics device; returns an owned compute handle",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_Handle",
+        "int32_t",
+        "CNA_ClusteredLightComputeHandle*"
+      ]
+    },
+    {
+      "name": "cna_clustered_light_compute_destroy",
+      "header": "engine_layer.h",
+      "ownership": "releases the owned compute handle",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_ClusteredLightComputeHandle"
+      ]
+    },
+    {
+      "name": "cna_clustered_light_compute_get_stride",
+      "header": "engine_layer.h",
+      "ownership": "borrows the program",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_ClusteredLightComputeHandle",
+        "int32_t*"
+      ]
+    },
+    {
+      "name": "cna_clustered_light_compute_has_overflowed",
+      "header": "engine_layer.h",
+      "ownership": "borrows the program",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_ClusteredLightComputeHandle",
+        "CNA_Bool*"
+      ]
+    },
+    {
+      "name": "cna_clustered_light_compute_is_supported",
+      "header": "engine_layer.h",
+      "ownership": "borrows the program",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_ClusteredLightComputeHandle",
+        "CNA_Bool*"
+      ]
+    },
+    {
+      "name": "cna_clustered_light_compute_used_compute",
+      "header": "engine_layer.h",
+      "ownership": "borrows the program",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_ClusteredLightComputeHandle",
+        "CNA_Bool*"
+      ]
+    },
+    {
+      "name": "cna_clustered_light_ext_init",
+      "header": "engine_layer.h",
+      "ownership": "no handle; fills the caller's light value",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_ClusteredLightEXT*"
+      ]
+    },
+    {
+      "name": "cna_clustered_light_grid_cluster_bounds",
+      "header": "engine_layer.h",
+      "ownership": "borrows the grid; fills the caller's box",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_ClusteredLightGridHandle",
+        "int32_t",
+        "int32_t",
+        "int32_t",
+        "CNA_BoundingBox*"
+      ]
+    },
+    {
+      "name": "cna_clustered_light_grid_cluster_index",
+      "header": "engine_layer.h",
+      "ownership": "borrows the grid",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_ClusteredLightGridHandle",
+        "int32_t",
+        "int32_t",
+        "int32_t",
+        "int32_t*"
+      ]
+    },
+    {
+      "name": "cna_clustered_light_grid_create",
+      "header": "engine_layer.h",
+      "ownership": "borrows the graphics device (the header calls it a game; JAVA-UPSTREAM-005); returns an owned grid handle",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_Handle",
+        "int32_t",
+        "int32_t",
+        "int32_t",
+        "CNA_ClusteredLightGridHandle*"
+      ]
+    },
+    {
+      "name": "cna_clustered_light_grid_destroy",
+      "header": "engine_layer.h",
+      "ownership": "releases the owned grid handle",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_ClusteredLightGridHandle"
+      ]
+    },
+    {
+      "name": "cna_clustered_light_grid_get_cluster_count",
+      "header": "engine_layer.h",
+      "ownership": "borrows the grid",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_ClusteredLightGridHandle",
+        "int32_t*"
+      ]
+    },
+    {
+      "name": "cna_clustered_light_grid_get_far_plane",
+      "header": "engine_layer.h",
+      "ownership": "borrows the grid",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_ClusteredLightGridHandle",
+        "float*"
+      ]
+    },
+    {
+      "name": "cna_clustered_light_grid_get_inverse_projection",
+      "header": "engine_layer.h",
+      "ownership": "borrows the grid; fills the caller's matrix",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_ClusteredLightGridHandle",
+        "CNA_Matrix*"
+      ]
+    },
+    {
+      "name": "cna_clustered_light_grid_get_near_plane",
+      "header": "engine_layer.h",
+      "ownership": "borrows the grid",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_ClusteredLightGridHandle",
+        "float*"
+      ]
+    },
+    {
+      "name": "cna_clustered_light_grid_get_slice_count",
+      "header": "engine_layer.h",
+      "ownership": "borrows the grid",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_ClusteredLightGridHandle",
+        "int32_t*"
+      ]
+    },
+    {
+      "name": "cna_clustered_light_grid_get_tiles_x",
+      "header": "engine_layer.h",
+      "ownership": "borrows the grid",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_ClusteredLightGridHandle",
+        "int32_t*"
+      ]
+    },
+    {
+      "name": "cna_clustered_light_grid_get_tiles_y",
+      "header": "engine_layer.h",
+      "ownership": "borrows the grid",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_ClusteredLightGridHandle",
+        "int32_t*"
+      ]
+    },
+    {
+      "name": "cna_clustered_light_grid_has_projection",
+      "header": "engine_layer.h",
+      "ownership": "borrows the grid",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_ClusteredLightGridHandle",
+        "CNA_Bool*"
+      ]
+    },
+    {
+      "name": "cna_clustered_light_grid_set_projection",
+      "header": "engine_layer.h",
+      "ownership": "borrows the grid and the caller's matrix; copies it",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_ClusteredLightGridHandle",
+        "const CNA_Matrix*",
+        "float",
+        "float"
+      ]
+    },
+    {
+      "name": "cna_clustered_light_grid_slice_distance",
+      "header": "engine_layer.h",
+      "ownership": "borrows the grid",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_ClusteredLightGridHandle",
+        "int32_t",
+        "float*"
+      ]
+    },
+    {
+      "name": "cna_clustered_light_grid_slice_for_view_distance",
+      "header": "engine_layer.h",
+      "ownership": "borrows the grid",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_ClusteredLightGridHandle",
+        "float",
+        "int32_t*"
+      ]
+    },
+    {
+      "name": "cna_clustered_light_set_add",
+      "header": "engine_layer.h",
+      "ownership": "borrows the set and the caller's light; copies it into the set",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_ClusteredLightSetHandle",
+        "const CNA_ClusteredLightEXT*",
+        "int32_t*"
+      ]
+    },
+    {
+      "name": "cna_clustered_light_set_add_point",
+      "header": "engine_layer.h",
+      "ownership": "borrows the set and the caller's light; copies it into the set",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_ClusteredLightSetHandle",
+        "const CNA_PointLightEXT*",
+        "int32_t*"
+      ]
+    },
+    {
+      "name": "cna_clustered_light_set_add_spot",
+      "header": "engine_layer.h",
+      "ownership": "borrows the set and the caller's light; copies it into the set",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_ClusteredLightSetHandle",
+        "const CNA_SpotLightEXT*",
+        "int32_t*"
+      ]
+    },
+    {
+      "name": "cna_clustered_light_set_clear",
+      "header": "engine_layer.h",
+      "ownership": "borrows the set",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_ClusteredLightSetHandle"
+      ]
+    },
+    {
+      "name": "cna_clustered_light_set_copy_bounds",
+      "header": "engine_layer.h",
+      "ownership": "borrows the set; fills the caller's sphere buffer",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_ClusteredLightSetHandle",
+        "CNA_BoundingSphere*",
+        "uint64_t",
+        "uint64_t*"
+      ]
+    },
+    {
+      "name": "cna_clustered_light_set_copy_lights",
+      "header": "engine_layer.h",
+      "ownership": "borrows the set; fills the caller's light buffer",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_ClusteredLightSetHandle",
+        "CNA_ClusteredLightEXT*",
+        "uint64_t",
+        "uint64_t*"
+      ]
+    },
+    {
+      "name": "cna_clustered_light_set_create",
+      "header": "engine_layer.h",
+      "ownership": "borrows the graphics device (the header calls it a game; JAVA-UPSTREAM-005); returns an owned light-set handle",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_Handle",
+        "CNA_ClusteredLightSetHandle*"
+      ]
+    },
+    {
+      "name": "cna_clustered_light_set_destroy",
+      "header": "engine_layer.h",
+      "ownership": "releases the owned light-set handle",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_ClusteredLightSetHandle"
+      ]
+    },
+    {
+      "name": "cna_clustered_light_set_get_at",
+      "header": "engine_layer.h",
+      "ownership": "borrows the set; fills the caller's light value",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_ClusteredLightSetHandle",
+        "int32_t",
+        "CNA_ClusteredLightEXT*"
+      ]
+    },
+    {
+      "name": "cna_clustered_light_set_get_bounds_at",
+      "header": "engine_layer.h",
+      "ownership": "borrows the set; fills the caller's sphere",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_ClusteredLightSetHandle",
+        "int32_t",
+        "CNA_BoundingSphere*"
+      ]
+    },
+    {
+      "name": "cna_clustered_light_set_get_count",
+      "header": "engine_layer.h",
+      "ownership": "borrows the set",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_ClusteredLightSetHandle",
+        "int32_t*"
+      ]
+    },
+    {
+      "name": "cna_clustered_light_set_is_empty",
+      "header": "engine_layer.h",
+      "ownership": "borrows the set",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_ClusteredLightSetHandle",
+        "CNA_Bool*"
+      ]
+    },
+    {
+      "name": "cna_clustered_light_set_is_usable",
+      "header": "engine_layer.h",
+      "ownership": "no handle; reads the caller's light value",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "const CNA_ClusteredLightEXT*",
+        "CNA_Bool*"
+      ]
+    },
+    {
+      "name": "cna_clustered_light_set_remove_at",
+      "header": "engine_layer.h",
+      "ownership": "borrows the set",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_ClusteredLightSetHandle",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "cna_clustered_light_set_replace_at",
+      "header": "engine_layer.h",
+      "ownership": "borrows the set and the caller's light; copies it into the set",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_ClusteredLightSetHandle",
+        "int32_t",
+        "const CNA_ClusteredLightEXT*"
+      ]
+    },
+    {
       "name": "cna_cnb_asset_type_id_from_name",
       "header": "cnb.h",
       "ownership": "no handle; caller integer output",

@@ -355,6 +355,24 @@ def test_generator(live: dict) -> None:
     check(emitted.index("SetLongArrayRegion") < emitted.rindex("free(destination_values);"),
           "the copy back happens before the C buffer is freed")
 
+    # One struct is split across up to four parallel Java arrays, and only one of them supplies
+    # the element count. A caller whose other arrays are shorter would have every element past
+    # their end read out of bounds in C -- a heap overread inside the marshalling loop, not a
+    # Java exception -- so a mismatch has to be refused before anything is allocated.
+    lights = plan("cna_clustered_light_set_copy_lights")
+    check(struct_step(lights)["shape"] == "struct_array",
+          "a light set's copy-out is an array of structs")
+    emitted = generator_tool.render_c("Probe", [lights])
+    check("destination_count * 2" in emitted and "destination_count * 13" in emitted,
+          "every parallel carrier's length is checked against the element count")
+    check("return (jint)CNA_RESULT_INVALID_ARGUMENT;" in emitted,
+          "a mismatched carrier is refused rather than read past its end")
+    guard = emitted.index("CNA_RESULT_INVALID_ARGUMENT")
+    check(guard < emitted.index("calloc("),
+          "the refusal happens before anything is allocated")
+    check(guard < emitted.index("GetByteArrayRegion"),
+          "and before any carrier is read")
+
     # An input struct must not be written back over the caller's data.
     haptic = plan("cna_haptic_device_get_is_effect_supported")
     effect = next(step for step in haptic["steps"] if step["shape"] == "struct")
