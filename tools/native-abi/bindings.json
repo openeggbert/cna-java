@@ -2382,6 +2382,29 @@
       ]
     },
     {
+      "name": "cna_avatar_renderer_draw_real_ext",
+      "header": "gamer_services.h",
+      "ownership": "borrows renderer and the clip name for the call",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_AvatarRendererHandle",
+        "CNA_StringView",
+        "int64_t",
+        "CNA_Bool"
+      ]
+    },
+    {
+      "name": "cna_avatar_renderer_enable_real_rendering_ext",
+      "header": "gamer_services.h",
+      "ownership": "borrows renderer, device and model for the call",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_AvatarRendererHandle",
+        "CNA_Handle",
+        "CNA_Handle"
+      ]
+    },
+    {
       "name": "cna_avatar_renderer_get_bind_pose_at",
       "header": "gamer_services.h",
       "ownership": "borrows its inputs; caller output",
@@ -24442,6 +24465,251 @@
       "parameters": [
         "CNA_EffectHandle",
         "int32_t"
+      ]
+    },
+    {
+      "name": "cna_skinned_model_ext_add_part",
+      "header": "models.h",
+      "ownership": "borrows model and the name for the call; the model retains the buffers, the part and the texture",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_SkinnedModelEXTHandle",
+        "CNA_StringView",
+        "CNA_VertexBufferHandle",
+        "CNA_IndexBufferHandle",
+        "CNA_ModelMeshPartHandle",
+        "CNA_Handle"
+      ]
+    },
+    {
+      "name": "cna_skinned_model_ext_attach_parts",
+      "header": "models.h",
+      "ownership": "borrows model; moves the other model parts into it and leaves it empty",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_SkinnedModelEXTHandle",
+        "CNA_SkinnedModelEXTHandle"
+      ]
+    },
+    {
+      "name": "cna_skinned_model_ext_compute_bone_transforms",
+      "header": "models.h",
+      "ownership": "borrows model and the name; copies into the caller buffer",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_SkinnedModelEXTHandle",
+        "CNA_StringView",
+        "double",
+        "CNA_Bool",
+        "CNA_Matrix*",
+        "uint64_t",
+        "uint64_t*"
+      ]
+    },
+    {
+      "name": "cna_skinned_model_ext_copy_bind_pose_local",
+      "header": "models.h",
+      "ownership": "borrows model; copies into the caller buffer",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_SkinnedModelEXTHandle",
+        "CNA_Matrix*",
+        "uint64_t",
+        "uint64_t*"
+      ]
+    },
+    {
+      "name": "cna_skinned_model_ext_copy_clip_name_at",
+      "header": "models.h",
+      "ownership": "borrows model; copies into the caller buffer",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_SkinnedModelEXTHandle",
+        "uint64_t",
+        "char*",
+        "uint64_t",
+        "uint64_t*"
+      ]
+    },
+    {
+      "name": "cna_skinned_model_ext_copy_clip_track",
+      "header": "models.h",
+      "ownership": "borrows model and the name; copies into the caller buffer",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_SkinnedModelEXTHandle",
+        "CNA_StringView",
+        "uint64_t",
+        "int32_t*",
+        "CNA_KeyframeEXT*",
+        "uint64_t",
+        "uint64_t*"
+      ]
+    },
+    {
+      "name": "cna_skinned_model_ext_copy_inverse_bind_pose_global",
+      "header": "models.h",
+      "ownership": "borrows model; copies into the caller buffer",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_SkinnedModelEXTHandle",
+        "CNA_Matrix*",
+        "uint64_t",
+        "uint64_t*"
+      ]
+    },
+    {
+      "name": "cna_skinned_model_ext_copy_parent_bone_indices",
+      "header": "models.h",
+      "ownership": "borrows model; copies into the caller buffer",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_SkinnedModelEXTHandle",
+        "int32_t*",
+        "uint64_t",
+        "uint64_t*"
+      ]
+    },
+    {
+      "name": "cna_skinned_model_ext_copy_part_name_at",
+      "header": "models.h",
+      "ownership": "borrows model; copies into the caller buffer",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_SkinnedModelEXTHandle",
+        "uint64_t",
+        "char*",
+        "uint64_t",
+        "uint64_t*"
+      ]
+    },
+    {
+      "name": "cna_skinned_model_ext_create_default",
+      "header": "models.h",
+      "ownership": "no handle; returns an owned skinned-model handle",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_SkinnedModelEXTHandle*"
+      ]
+    },
+    {
+      "name": "cna_skinned_model_ext_destroy",
+      "header": "models.h",
+      "ownership": "destroys an owned skinned-model handle",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_SkinnedModelEXTHandle"
+      ]
+    },
+    {
+      "name": "cna_skinned_model_ext_get_bone_count",
+      "header": "models.h",
+      "ownership": "borrows model; returns a value",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_SkinnedModelEXTHandle",
+        "uint64_t*"
+      ]
+    },
+    {
+      "name": "cna_skinned_model_ext_get_clip_count",
+      "header": "models.h",
+      "ownership": "borrows model; returns a value",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_SkinnedModelEXTHandle",
+        "uint64_t*"
+      ]
+    },
+    {
+      "name": "cna_skinned_model_ext_get_clip_info",
+      "header": "models.h",
+      "ownership": "borrows model and the name; returns three values",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_SkinnedModelEXTHandle",
+        "CNA_StringView",
+        "CNA_Bool*",
+        "double*",
+        "uint64_t*"
+      ]
+    },
+    {
+      "name": "cna_skinned_model_ext_get_clip_name_byte_count_at",
+      "header": "models.h",
+      "ownership": "borrows model; returns a value",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_SkinnedModelEXTHandle",
+        "uint64_t",
+        "uint64_t*"
+      ]
+    },
+    {
+      "name": "cna_skinned_model_ext_get_owned_resource_counts",
+      "header": "models.h",
+      "ownership": "borrows model; returns four values",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_SkinnedModelEXTHandle",
+        "uint64_t*",
+        "uint64_t*",
+        "uint64_t*",
+        "uint64_t*"
+      ]
+    },
+    {
+      "name": "cna_skinned_model_ext_get_part_at",
+      "header": "models.h",
+      "ownership": "borrows model; lends an owned part alias and a retained texture handle",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_SkinnedModelEXTHandle",
+        "uint64_t",
+        "CNA_ModelMeshPartHandle*",
+        "CNA_Bool*",
+        "CNA_Handle*"
+      ]
+    },
+    {
+      "name": "cna_skinned_model_ext_get_part_count",
+      "header": "models.h",
+      "ownership": "borrows model; returns a value",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_SkinnedModelEXTHandle",
+        "uint64_t*"
+      ]
+    },
+    {
+      "name": "cna_skinned_model_ext_get_part_name_byte_count_at",
+      "header": "models.h",
+      "ownership": "borrows model; returns a value",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_SkinnedModelEXTHandle",
+        "uint64_t",
+        "uint64_t*"
+      ]
+    },
+    {
+      "name": "cna_skinned_model_ext_remove_clip",
+      "header": "models.h",
+      "ownership": "borrows model and the name for the call",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_SkinnedModelEXTHandle",
+        "CNA_StringView"
+      ]
+    },
+    {
+      "name": "cna_skinned_model_ext_remove_part",
+      "header": "models.h",
+      "ownership": "borrows model and the name for the call; releases what the part retained",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_SkinnedModelEXTHandle",
+        "CNA_StringView"
       ]
     },
     {

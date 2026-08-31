@@ -338,6 +338,16 @@ public final class NativeGamerServicesRoutes {
     public static native int avatarRendererDrawBones(long renderer, float[] bonesFloating, long[] expressionIntegral);
 
     /**
+     * cna_avatar_renderer_draw_real_ext (gamer_services.h).
+     */
+    public static native int avatarRendererDrawRealExt(long renderer, byte[] animationClipName, long positionTicks, boolean loop);
+
+    /**
+     * cna_avatar_renderer_enable_real_rendering_ext (gamer_services.h).
+     */
+    public static native int avatarRendererEnableRealRenderingExt(long renderer, long device, long model);
+
+    /**
      * cna_avatar_renderer_get_bind_pose_at (gamer_services.h).
      *
      * <p>outTransformFloating carries CNA_Matrix in this order:

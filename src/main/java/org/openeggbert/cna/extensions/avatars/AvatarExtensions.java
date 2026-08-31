@@ -18,12 +18,11 @@ import java.util.Objects;
  * one itself, which raises three questions XNA never had to answer: what does it look like, what
  * is it doing, and where does the content come from. This is where those live.
  *
- * <p><strong>Drawing a real skinned model is not here yet.</strong> CNA can switch a renderer
- * from its placeholder to a real model and draw a named clip, but the model it wants is a
- * {@code CNA_SkinnedModelEXT}, which this projection does not have a Java type for. Those two
- * routes stay unbound rather than being exposed as a raw handle: an API whose parameter is a
- * native pointer is not one a game can safely use, and half of a two-step contract is worse than
- * none. JAVA-EXT-007 is the slice that finishes it.
+ * <p><strong>Drawing a real skinned model is here now.</strong> CNA switches a renderer from its
+ * placeholder to a model the game supplies -- there is no avatar asset service outside the Xbox
+ * runtime, so the model is the game's -- and draws a named clip at a position. It waited on a
+ * Java type for {@code CNA_SkinnedModelEXT} rather than on anything upstream, and
+ * {@link org.openeggbert.cna.extensions.content.CnaSkinnedModel} is it.
  */
 public final class AvatarExtensions {
 
@@ -111,5 +110,54 @@ public final class AvatarExtensions {
                         .avatarBodyTypeGetContentNameSizeExt(bodyType.ordinal(), out),
                 (buffer, out) -> NativeGamerServicesRoutes
                         .avatarBodyTypeCopyContentNameExt(bodyType.ordinal(), buffer, out));
+    }
+
+    /**
+     * Switches a renderer from CNA's placeholder to a real skinned model.
+     *
+     * <p>XNA's {@code AvatarRenderer} draws the Xbox runtime's own avatar and there is no such
+     * service here, so the model is the game's own. The renderer keeps drawing it until it is
+     * disposed.
+     *
+     * @param renderer the renderer to switch
+     * @param graphicsDevice the device to draw on
+     * @param model the skinned model to draw
+     */
+    public static void EnableRealRendering(AvatarRenderer renderer,
+            Microsoft.Xna.Framework.Graphics.GraphicsDevice graphicsDevice,
+            org.openeggbert.cna.extensions.content.CnaSkinnedModel model) {
+        NativeGamerServices.requireAvailable("AvatarExtensions.EnableRealRendering");
+        Objects.requireNonNull(renderer, "renderer");
+        Objects.requireNonNull(graphicsDevice, "graphicsDevice");
+        Objects.requireNonNull(model, "model");
+        NativeGamerServices.check("AvatarExtensions.EnableRealRendering",
+                NativeGamerServicesRoutes.avatarRendererEnableRealRenderingExt(
+                        FacadeFactory.avatarRendererHandle(renderer),
+                        org.openeggbert.cna.internal.NativeBindings
+                                .nativeGraphicsDeviceValue(graphicsDevice),
+                        model.handle()));
+    }
+
+    /**
+     * Draws the real skinned model at a point in a named clip.
+     *
+     * @param renderer the renderer to draw with
+     * @param animationClipName the clip to draw
+     * @param position where in the clip to draw
+     * @param loop whether to wrap around at the end of the clip
+     * @throws IllegalStateException when the renderer is disposed or has no real model, which
+     *         CNA reports rather than drawing the placeholder instead
+     */
+    public static void DrawReal(AvatarRenderer renderer, String animationClipName,
+            java.time.Duration position, boolean loop) {
+        NativeGamerServices.requireAvailable("AvatarExtensions.DrawReal");
+        Objects.requireNonNull(renderer, "renderer");
+        Objects.requireNonNull(animationClipName, "animationClipName");
+        Objects.requireNonNull(position, "position");
+        NativeGamerServices.check("AvatarExtensions.DrawReal",
+                NativeGamerServicesRoutes.avatarRendererDrawRealExt(
+                        FacadeFactory.avatarRendererHandle(renderer),
+                        NativeGamerServices.utf8(animationClipName),
+                        position.toNanos() / 100L, loop));
     }
 }

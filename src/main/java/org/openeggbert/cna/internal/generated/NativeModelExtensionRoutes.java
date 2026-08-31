@@ -542,6 +542,111 @@ public final class NativeModelExtensionRoutes {
     public static native int modelSetMaterialVariantExt(long model, int value);
 
     /**
+     * cna_skinned_model_ext_add_part (models.h).
+     */
+    public static native int skinnedModelAddPart(long model, byte[] name, long vertexBuffer, long indexBuffer, long part, long texture);
+
+    /**
+     * cna_skinned_model_ext_attach_parts (models.h).
+     */
+    public static native int skinnedModelAttachParts(long model, long other);
+
+    /**
+     * cna_skinned_model_ext_compute_bone_transforms (models.h).
+     */
+    public static native int skinnedModelComputeBoneTransforms(long model, byte[] clipName, double positionSeconds, boolean loop, float[] destinationFloating, long[] outBoneCount);
+
+    /**
+     * cna_skinned_model_ext_copy_bind_pose_local (models.h).
+     */
+    public static native int skinnedModelCopyBindPoseLocal(long model, float[] destinationFloating, long[] outCount);
+
+    /**
+     * cna_skinned_model_ext_copy_clip_name_at (models.h).
+     */
+    public static native int skinnedModelCopyClipNameAt(long model, long clipIndex, byte[] destination, long[] outByteCount);
+
+    /**
+     * cna_skinned_model_ext_copy_clip_track (models.h).
+     */
+    public static native int skinnedModelCopyClipTrack(long model, byte[] name, long trackIndex, int[] outBoneIndex, float[] destinationFloating, double[] destinationDoubles, long[] outKeyframeCount);
+
+    /**
+     * cna_skinned_model_ext_copy_inverse_bind_pose_global (models.h).
+     */
+    public static native int skinnedModelCopyInverseBindPoseGlobal(long model, float[] destinationFloating, long[] outCount);
+
+    /**
+     * cna_skinned_model_ext_copy_parent_bone_indices (models.h).
+     */
+    public static native int skinnedModelCopyParentBoneIndices(long model, int[] destination, long[] outCount);
+
+    /**
+     * cna_skinned_model_ext_copy_part_name_at (models.h).
+     */
+    public static native int skinnedModelCopyPartNameAt(long model, long partIndex, byte[] destination, long[] outByteCount);
+
+    /**
+     * cna_skinned_model_ext_create_default (models.h).
+     */
+    public static native int skinnedModelCreateDefault(long[] outModel);
+
+    /**
+     * cna_skinned_model_ext_destroy (models.h).
+     */
+    public static native int skinnedModelDestroy(long model);
+
+    /**
+     * cna_skinned_model_ext_get_bone_count (models.h).
+     */
+    public static native int skinnedModelGetBoneCount(long model, long[] outBoneCount);
+
+    /**
+     * cna_skinned_model_ext_get_clip_count (models.h).
+     */
+    public static native int skinnedModelGetClipCount(long model, long[] outClipCount);
+
+    /**
+     * cna_skinned_model_ext_get_clip_info (models.h).
+     */
+    public static native int skinnedModelGetClipInfo(long model, byte[] name, boolean[] outFound, double[] outDurationSeconds, long[] outTrackCount);
+
+    /**
+     * cna_skinned_model_ext_get_clip_name_byte_count_at (models.h).
+     */
+    public static native int skinnedModelGetClipNameByteCountAt(long model, long clipIndex, long[] outByteCount);
+
+    /**
+     * cna_skinned_model_ext_get_owned_resource_counts (models.h).
+     */
+    public static native int skinnedModelGetOwnedResourceCounts(long model, long[] outVertexBuffers, long[] outIndexBuffers, long[] outParts, long[] outTextures);
+
+    /**
+     * cna_skinned_model_ext_get_part_at (models.h).
+     */
+    public static native int skinnedModelGetPartAt(long model, long partIndex, long[] outPart, boolean[] outHasTexture, long[] outTexture);
+
+    /**
+     * cna_skinned_model_ext_get_part_count (models.h).
+     */
+    public static native int skinnedModelGetPartCount(long model, long[] outPartCount);
+
+    /**
+     * cna_skinned_model_ext_get_part_name_byte_count_at (models.h).
+     */
+    public static native int skinnedModelGetPartNameByteCountAt(long model, long partIndex, long[] outByteCount);
+
+    /**
+     * cna_skinned_model_ext_remove_clip (models.h).
+     */
+    public static native int skinnedModelRemoveClip(long model, byte[] name);
+
+    /**
+     * cna_skinned_model_ext_remove_part (models.h).
+     */
+    public static native int skinnedModelRemovePart(long model, byte[] name);
+
+    /**
      * cna_skinning_data_copy_bind_pose (models.h).
      */
     public static native int skinningDataCopyBindPose(long data, float[] destinationFloating, long[] outCount);

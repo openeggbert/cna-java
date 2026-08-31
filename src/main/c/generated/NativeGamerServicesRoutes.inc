@@ -919,6 +919,33 @@ Java_org_openeggbert_cna_internal_generated_NativeGamerServicesRoutes_avatarRend
 }
 
 JNIEXPORT jint JNICALL
+Java_org_openeggbert_cna_internal_generated_NativeGamerServicesRoutes_avatarRendererDrawRealExt(
+    JNIEnv* environment, jclass declaring_class, jlong renderer, jbyteArray animation_clip_name, jlong position_ticks, jboolean loop)
+{
+    (void)environment;
+    (void)declaring_class;
+    jsize animation_clip_name_size = (*environment)->GetArrayLength(environment, animation_clip_name);
+    jbyte* animation_clip_name_bytes = (*environment)->GetByteArrayElements(environment, animation_clip_name, NULL);
+    if (animation_clip_name_bytes == NULL) {
+        return (jint)CNA_RESULT_OUT_OF_MEMORY;
+    }
+    CNA_StringView animation_clip_name_view = {(const char*)animation_clip_name_bytes, (uint64_t)animation_clip_name_size};
+    CNA_Result call_result = cna.avatar_renderer_draw_real_ext((CNA_AvatarRendererHandle)renderer, animation_clip_name_view, (int64_t)position_ticks, (CNA_Bool)loop);
+    (*environment)->ReleaseByteArrayElements(environment, animation_clip_name, animation_clip_name_bytes, JNI_ABORT);
+    return (jint)call_result;
+}
+
+JNIEXPORT jint JNICALL
+Java_org_openeggbert_cna_internal_generated_NativeGamerServicesRoutes_avatarRendererEnableRealRenderingExt(
+    JNIEnv* environment, jclass declaring_class, jlong renderer, jlong device, jlong model)
+{
+    (void)environment;
+    (void)declaring_class;
+    CNA_Result call_result = cna.avatar_renderer_enable_real_rendering_ext((CNA_AvatarRendererHandle)renderer, (CNA_Handle)device, (CNA_Handle)model);
+    return (jint)call_result;
+}
+
+JNIEXPORT jint JNICALL
 Java_org_openeggbert_cna_internal_generated_NativeGamerServicesRoutes_avatarRendererGetBindPoseAt(
     JNIEnv* environment, jclass declaring_class, jlong renderer, jint index, jfloatArray out_transformFloating)
 {

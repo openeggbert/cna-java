@@ -694,22 +694,7 @@
     {
       "match": {
         "symbols": [
-          "cna_avatar_renderer_draw_real_ext",
-          "cna_avatar_renderer_enable_real_rendering_ext"
-        ]
-      },
-      "classification": "CNA_EXTENSION_CANDIDATE",
-      "purposeReason": "Switches an avatar renderer from CNA's placeholder to a real skinned model and draws a named clip on it. XNA's AvatarRenderer draws the Xbox runtime's own avatar and exposes none of this.",
-      "bindingStatus": "ACTIONABLE_LOCAL",
-      "bindingReason": "Both take a CNA_SkinnedModelEXT handle and this projection has no Java type for one yet. Exposing them over a raw handle is not an option -- an API whose parameter is a native pointer is not one a game can safely use, and half of a two-step contract is worse than none. The skinned-model facade is what finishes it, and it is local work.",
-      "task": "JAVA-EXT-007"
-    },
-    {
-      "match": {
-        "symbols": [
-          "cna_avatar_expression_init",
-          "cna_avatar_renderer_draw_real_ext",
-          "cna_avatar_renderer_enable_real_rendering_ext"
+          "cna_avatar_expression_init"
         ]
       },
       "classification": "CNA_EXTENSION_CANDIDATE",
@@ -938,14 +923,26 @@
     },
     {
       "match": {
+        "symbols": [
+          "cna_skinned_model_ext_create",
+          "cna_skinned_model_ext_create_move",
+          "cna_skinned_model_ext_move_assign"
+        ]
+      },
+      "classification": "CNA_EXTENSION_CANDIDATE",
+      "purposeReason": "A skinned model built in one call from a whole descriptor, and the two C++ move operations over one.",
+      "bindingStatus": "DELIBERATE_NON_BINDING",
+      "bindingReason": "CnaSkinnedModel builds the same state through create_default plus setSkeleton and setClip, which is the only form that can also be changed afterwards -- a game adding a part at load time needs that, and a descriptor constructor beside it would be a second spelling of one model. The two move operations are C++ construction idioms: they leave the source valid and empty, which Java has no vocabulary for and which attachPartsFrom already expresses for the one case that is about parts rather than about C++.",
+      "evidence": "CnaSkinnedModelTests builds a two-bone model with a clip and two parts through the setters and reads every one of them back, and attachPartsFrom is asserted to leave the source empty."
+    },
+    {
+      "match": {
         "prefix": "cna_skinned_model_"
       },
       "classification": "CNA_EXTENSION_CANDIDATE",
       "purposeReason": "SkinnedModel is a CNA model extension; XNA 4.0 ships skinning only as a sample-level content processor. Not bound for the reason JAVA-EXT-007 records and this session rechecked against the live headers: the family is entered through cna_skinning_data_create, which takes a CNA_SkinningDataDescriptor -- a pointer graph the generator refuses rather than guesses at -- and no route takes a clip handle, so there is no other door in. cna_animation_player_create takes the SkinningData handle that door would produce.",
-      "bindingStatus": "ACTIONABLE_LOCAL",
-      "bindingReason": "Nothing outside this repository blocks SkinnedModelEXT. The descriptor graph that was recorded as the family's only door and no way through it is marshalled by hand now -- CnaSkinningData and CnaAnimationPlayer are built on exactly that, and cna_skinned_model_ext_set_skeleton and _set_clip are bound with it -- so what is left is a Java facade over the container: its parts, its textures and its buffers. JAVA-EXT-007 is the task, and it is local work rather than an upstream boundary.",
-      "evidence": "CnaSkinningDataTests builds a two-bone skeleton and two clips through the same descriptor, reads every matrix and keyframe back, and poses the three palettes; four planted defects in the marshaller are caught.",
-      "task": "JAVA-EXT-007"
+      "bindingStatus": "DELIBERATE_NON_BINDING",
+      "bindingReason": "Nothing is left unbound here; this catch-all exists so a new skinned-model declaration is classified rather than unexplained."
     },
     {
       "match": {

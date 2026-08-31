@@ -177,6 +177,14 @@
         "symbol": "cna_avatar_renderer_draw_bones"
       },
       {
+        "java": "avatarRendererDrawRealExt",
+        "symbol": "cna_avatar_renderer_draw_real_ext"
+      },
+      {
+        "java": "avatarRendererEnableRealRenderingExt",
+        "symbol": "cna_avatar_renderer_enable_real_rendering_ext"
+      },
+      {
         "java": "avatarRendererGetBindPoseAt",
         "symbol": "cna_avatar_renderer_get_bind_pose_at"
       },
@@ -2818,6 +2826,90 @@
       {
         "java": "modelSetMaterialVariantExt",
         "symbol": "cna_model_set_material_variant_ext"
+      },
+      {
+        "java": "skinnedModelAddPart",
+        "symbol": "cna_skinned_model_ext_add_part"
+      },
+      {
+        "java": "skinnedModelAttachParts",
+        "symbol": "cna_skinned_model_ext_attach_parts"
+      },
+      {
+        "java": "skinnedModelComputeBoneTransforms",
+        "symbol": "cna_skinned_model_ext_compute_bone_transforms"
+      },
+      {
+        "java": "skinnedModelCopyBindPoseLocal",
+        "symbol": "cna_skinned_model_ext_copy_bind_pose_local"
+      },
+      {
+        "java": "skinnedModelCopyClipNameAt",
+        "symbol": "cna_skinned_model_ext_copy_clip_name_at"
+      },
+      {
+        "java": "skinnedModelCopyClipTrack",
+        "symbol": "cna_skinned_model_ext_copy_clip_track"
+      },
+      {
+        "java": "skinnedModelCopyInverseBindPoseGlobal",
+        "symbol": "cna_skinned_model_ext_copy_inverse_bind_pose_global"
+      },
+      {
+        "java": "skinnedModelCopyParentBoneIndices",
+        "symbol": "cna_skinned_model_ext_copy_parent_bone_indices"
+      },
+      {
+        "java": "skinnedModelCopyPartNameAt",
+        "symbol": "cna_skinned_model_ext_copy_part_name_at"
+      },
+      {
+        "java": "skinnedModelCreateDefault",
+        "symbol": "cna_skinned_model_ext_create_default"
+      },
+      {
+        "java": "skinnedModelDestroy",
+        "symbol": "cna_skinned_model_ext_destroy"
+      },
+      {
+        "java": "skinnedModelGetBoneCount",
+        "symbol": "cna_skinned_model_ext_get_bone_count"
+      },
+      {
+        "java": "skinnedModelGetClipCount",
+        "symbol": "cna_skinned_model_ext_get_clip_count"
+      },
+      {
+        "java": "skinnedModelGetClipInfo",
+        "symbol": "cna_skinned_model_ext_get_clip_info"
+      },
+      {
+        "java": "skinnedModelGetClipNameByteCountAt",
+        "symbol": "cna_skinned_model_ext_get_clip_name_byte_count_at"
+      },
+      {
+        "java": "skinnedModelGetOwnedResourceCounts",
+        "symbol": "cna_skinned_model_ext_get_owned_resource_counts"
+      },
+      {
+        "java": "skinnedModelGetPartAt",
+        "symbol": "cna_skinned_model_ext_get_part_at"
+      },
+      {
+        "java": "skinnedModelGetPartCount",
+        "symbol": "cna_skinned_model_ext_get_part_count"
+      },
+      {
+        "java": "skinnedModelGetPartNameByteCountAt",
+        "symbol": "cna_skinned_model_ext_get_part_name_byte_count_at"
+      },
+      {
+        "java": "skinnedModelRemoveClip",
+        "symbol": "cna_skinned_model_ext_remove_clip"
+      },
+      {
+        "java": "skinnedModelRemovePart",
+        "symbol": "cna_skinned_model_ext_remove_part"
       },
       {
         "java": "skinningDataCopyBindPose",
