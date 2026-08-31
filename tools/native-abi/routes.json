@@ -3400,6 +3400,10 @@
         "symbol": "cna_debug_draw_add_cross"
       },
       {
+        "java": "debugDrawAddDirectionalLightGizmo",
+        "symbol": "cna_debug_draw_add_directional_light_gizmo"
+      },
+      {
         "java": "debugDrawAddFrustum",
         "symbol": "cna_debug_draw_add_frustum"
       },
@@ -3408,8 +3412,16 @@
         "symbol": "cna_debug_draw_add_line"
       },
       {
+        "java": "debugDrawAddPointLightGizmo",
+        "symbol": "cna_debug_draw_add_point_light_gizmo"
+      },
+      {
         "java": "debugDrawAddSphere",
         "symbol": "cna_debug_draw_add_sphere"
+      },
+      {
+        "java": "debugDrawAddSpotLightGizmo",
+        "symbol": "cna_debug_draw_add_spot_light_gizmo"
       },
       {
         "java": "debugDrawBegin",
@@ -3446,6 +3458,10 @@
       {
         "java": "debugDrawSetDepthTested",
         "symbol": "cna_debug_draw_set_depth_tested"
+      },
+      {
+        "java": "directionalLightExtInit",
+        "symbol": "cna_directional_light_ext_init"
       },
       {
         "java": "engineLayerGetVersion",
@@ -3660,6 +3676,10 @@
         "symbol": "cna_lod_group_ext_set_selection_mode"
       },
       {
+        "java": "pointLightExtInit",
+        "symbol": "cna_point_light_ext_init"
+      },
+      {
         "java": "renderPipelineSettingsExtApplyFromString",
         "symbol": "cna_render_pipeline_settings_ext_apply_from_string",
         "inOut": [
@@ -3683,6 +3703,10 @@
         "inOut": [
           "settings"
         ]
+      },
+      {
+        "java": "spotLightExtInit",
+        "symbol": "cna_spot_light_ext_init"
       }
     ]
   }

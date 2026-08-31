@@ -357,9 +357,12 @@
     CNA_JNI_ROUTE(cna_debug_draw_add_bounding_sphere) debug_draw_add_bounding_sphere;
     CNA_JNI_ROUTE(cna_debug_draw_add_box) debug_draw_add_box;
     CNA_JNI_ROUTE(cna_debug_draw_add_cross) debug_draw_add_cross;
+    CNA_JNI_ROUTE(cna_debug_draw_add_directional_light_gizmo) debug_draw_add_directional_light_gizmo;
     CNA_JNI_ROUTE(cna_debug_draw_add_frustum) debug_draw_add_frustum;
     CNA_JNI_ROUTE(cna_debug_draw_add_line) debug_draw_add_line;
+    CNA_JNI_ROUTE(cna_debug_draw_add_point_light_gizmo) debug_draw_add_point_light_gizmo;
     CNA_JNI_ROUTE(cna_debug_draw_add_sphere) debug_draw_add_sphere;
+    CNA_JNI_ROUTE(cna_debug_draw_add_spot_light_gizmo) debug_draw_add_spot_light_gizmo;
     CNA_JNI_ROUTE(cna_debug_draw_begin) debug_draw_begin;
     CNA_JNI_ROUTE(cna_debug_draw_clear) debug_draw_clear;
     CNA_JNI_ROUTE(cna_debug_draw_copy_vertices) debug_draw_copy_vertices;
@@ -377,6 +380,7 @@
     CNA_JNI_ROUTE(cna_desktop_os_get_current) desktop_os_get_current;
     CNA_JNI_ROUTE(cna_devices_clipboard_set_text_ext) devices_clipboard_set_text_ext;
     CNA_JNI_ROUTE(cna_devices_ext_is_available) devices_ext_is_available;
+    CNA_JNI_ROUTE(cna_directional_light_ext_init) directional_light_ext_init;
     CNA_JNI_ROUTE(cna_display_info_get_content_scale_ext) display_info_get_content_scale_ext;
     CNA_JNI_ROUTE(cna_display_info_get_safe_area_ext) display_info_get_safe_area_ext;
     CNA_JNI_ROUTE(cna_effect_copy_type_name) effect_copy_type_name;
@@ -831,6 +835,7 @@
     CNA_JNI_ROUTE(cna_platform_get_current_name_size_ext) platform_get_current_name_size_ext;
     CNA_JNI_ROUTE(cna_platform_get_is_apple_ext) platform_get_is_apple_ext;
     CNA_JNI_ROUTE(cna_platform_get_is_mobile_ext) platform_get_is_mobile_ext;
+    CNA_JNI_ROUTE(cna_point_light_ext_init) point_light_ext_init;
     CNA_JNI_ROUTE(cna_power_get_battery_percent_ext) power_get_battery_percent_ext;
     CNA_JNI_ROUTE(cna_power_get_seconds_remaining_ext) power_get_seconds_remaining_ext;
     CNA_JNI_ROUTE(cna_power_get_state_ext) power_get_state_ext;
@@ -885,6 +890,7 @@
     CNA_JNI_ROUTE(cna_signed_in_gamer_is_headset) signed_in_gamer_is_headset;
     CNA_JNI_ROUTE(cna_signed_in_gamer_set_party_size) signed_in_gamer_set_party_size;
     CNA_JNI_ROUTE(cna_signed_in_gamer_set_presence) signed_in_gamer_set_presence;
+    CNA_JNI_ROUTE(cna_spot_light_ext_init) spot_light_ext_init;
     CNA_JNI_ROUTE(cna_system_info_get_logical_cpu_core_count_ext) system_info_get_logical_cpu_core_count_ext;
     CNA_JNI_ROUTE(cna_system_info_get_system_ram_megabytes_ext) system_info_get_system_ram_megabytes_ext;
     CNA_JNI_ROUTE(cna_text_input_is_active_ext) text_input_is_active_ext;

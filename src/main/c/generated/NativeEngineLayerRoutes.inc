@@ -98,6 +98,62 @@ Java_org_openeggbert_cna_internal_generated_NativeEngineLayerRoutes_debugDrawAdd
 }
 
 JNIEXPORT jint JNICALL
+Java_org_openeggbert_cna_internal_generated_NativeEngineLayerRoutes_debugDrawAddDirectionalLightGizmo(
+    JNIEnv* environment, jclass declaring_class, jlong debug, jbyteArray lightBytes, jlongArray lightIntegral, jfloatArray lightFloating, jfloatArray atFloating, jfloat length, jlongArray colourIntegral)
+{
+    (void)environment;
+    (void)declaring_class;
+    CNA_DirectionalLightEXT light_value;
+    memset(&light_value, 0, sizeof light_value);
+    light_value.struct_size = (uint32_t)(sizeof light_value);
+    light_value.struct_version = UINT32_C(1);
+    {
+        jbyte lightBytes_values[3];
+        (*environment)->GetByteArrayRegion(environment, lightBytes, 0, 3, lightBytes_values);
+        light_value.reserved[0] = (uint8_t)lightBytes_values[0];
+        light_value.reserved[1] = (uint8_t)lightBytes_values[1];
+        light_value.reserved[2] = (uint8_t)lightBytes_values[2];
+    }
+    {
+        jlong lightIntegral_values[1];
+        (*environment)->GetLongArrayRegion(environment, lightIntegral, 0, 1, lightIntegral_values);
+        light_value.casts_shadows = (CNA_Bool)lightIntegral_values[0];
+    }
+    {
+        jfloat lightFloating_values[7];
+        (*environment)->GetFloatArrayRegion(environment, lightFloating, 0, 7, lightFloating_values);
+        light_value.direction.x = (float)lightFloating_values[0];
+        light_value.direction.y = (float)lightFloating_values[1];
+        light_value.direction.z = (float)lightFloating_values[2];
+        light_value.color.x = (float)lightFloating_values[3];
+        light_value.color.y = (float)lightFloating_values[4];
+        light_value.color.z = (float)lightFloating_values[5];
+        light_value.intensity = (float)lightFloating_values[6];
+    }
+    CNA_Vector3 at_value;
+    memset(&at_value, 0, sizeof at_value);
+    {
+        jfloat atFloating_values[3];
+        (*environment)->GetFloatArrayRegion(environment, atFloating, 0, 3, atFloating_values);
+        at_value.x = (float)atFloating_values[0];
+        at_value.y = (float)atFloating_values[1];
+        at_value.z = (float)atFloating_values[2];
+    }
+    CNA_Color colour_value;
+    memset(&colour_value, 0, sizeof colour_value);
+    {
+        jlong colourIntegral_values[4];
+        (*environment)->GetLongArrayRegion(environment, colourIntegral, 0, 4, colourIntegral_values);
+        colour_value.r = (uint8_t)colourIntegral_values[0];
+        colour_value.g = (uint8_t)colourIntegral_values[1];
+        colour_value.b = (uint8_t)colourIntegral_values[2];
+        colour_value.a = (uint8_t)colourIntegral_values[3];
+    }
+    CNA_Result call_result = cna.debug_draw_add_directional_light_gizmo((CNA_DebugDrawHandle)debug, &light_value, &at_value, (float)length, colour_value);
+    return (jint)call_result;
+}
+
+JNIEXPORT jint JNICALL
 Java_org_openeggbert_cna_internal_generated_NativeEngineLayerRoutes_debugDrawAddFrustum(
     JNIEnv* environment, jclass declaring_class, jlong debug, jfloatArray frustumFloating, jlongArray colourIntegral)
 {
@@ -178,6 +234,54 @@ Java_org_openeggbert_cna_internal_generated_NativeEngineLayerRoutes_debugDrawAdd
 }
 
 JNIEXPORT jint JNICALL
+Java_org_openeggbert_cna_internal_generated_NativeEngineLayerRoutes_debugDrawAddPointLightGizmo(
+    JNIEnv* environment, jclass declaring_class, jlong debug, jbyteArray lightBytes, jlongArray lightIntegral, jfloatArray lightFloating, jlongArray colourIntegral)
+{
+    (void)environment;
+    (void)declaring_class;
+    CNA_PointLightEXT light_value;
+    memset(&light_value, 0, sizeof light_value);
+    light_value.struct_size = (uint32_t)(sizeof light_value);
+    light_value.struct_version = UINT32_C(1);
+    {
+        jbyte lightBytes_values[3];
+        (*environment)->GetByteArrayRegion(environment, lightBytes, 0, 3, lightBytes_values);
+        light_value.reserved[0] = (uint8_t)lightBytes_values[0];
+        light_value.reserved[1] = (uint8_t)lightBytes_values[1];
+        light_value.reserved[2] = (uint8_t)lightBytes_values[2];
+    }
+    {
+        jlong lightIntegral_values[1];
+        (*environment)->GetLongArrayRegion(environment, lightIntegral, 0, 1, lightIntegral_values);
+        light_value.casts_shadows = (CNA_Bool)lightIntegral_values[0];
+    }
+    {
+        jfloat lightFloating_values[8];
+        (*environment)->GetFloatArrayRegion(environment, lightFloating, 0, 8, lightFloating_values);
+        light_value.position.x = (float)lightFloating_values[0];
+        light_value.position.y = (float)lightFloating_values[1];
+        light_value.position.z = (float)lightFloating_values[2];
+        light_value.color.x = (float)lightFloating_values[3];
+        light_value.color.y = (float)lightFloating_values[4];
+        light_value.color.z = (float)lightFloating_values[5];
+        light_value.intensity = (float)lightFloating_values[6];
+        light_value.range = (float)lightFloating_values[7];
+    }
+    CNA_Color colour_value;
+    memset(&colour_value, 0, sizeof colour_value);
+    {
+        jlong colourIntegral_values[4];
+        (*environment)->GetLongArrayRegion(environment, colourIntegral, 0, 4, colourIntegral_values);
+        colour_value.r = (uint8_t)colourIntegral_values[0];
+        colour_value.g = (uint8_t)colourIntegral_values[1];
+        colour_value.b = (uint8_t)colourIntegral_values[2];
+        colour_value.a = (uint8_t)colourIntegral_values[3];
+    }
+    CNA_Result call_result = cna.debug_draw_add_point_light_gizmo((CNA_DebugDrawHandle)debug, &light_value, colour_value);
+    return (jint)call_result;
+}
+
+JNIEXPORT jint JNICALL
 Java_org_openeggbert_cna_internal_generated_NativeEngineLayerRoutes_debugDrawAddSphere(
     JNIEnv* environment, jclass declaring_class, jlong debug, jfloatArray centreFloating, jfloat radius, jlongArray colourIntegral, jint segments)
 {
@@ -203,6 +307,59 @@ Java_org_openeggbert_cna_internal_generated_NativeEngineLayerRoutes_debugDrawAdd
         colour_value.a = (uint8_t)colourIntegral_values[3];
     }
     CNA_Result call_result = cna.debug_draw_add_sphere((CNA_DebugDrawHandle)debug, &centre_value, (float)radius, colour_value, (int32_t)segments);
+    return (jint)call_result;
+}
+
+JNIEXPORT jint JNICALL
+Java_org_openeggbert_cna_internal_generated_NativeEngineLayerRoutes_debugDrawAddSpotLightGizmo(
+    JNIEnv* environment, jclass declaring_class, jlong debug, jbyteArray lightBytes, jlongArray lightIntegral, jfloatArray lightFloating, jlongArray colourIntegral, jint segments)
+{
+    (void)environment;
+    (void)declaring_class;
+    CNA_SpotLightEXT light_value;
+    memset(&light_value, 0, sizeof light_value);
+    light_value.struct_size = (uint32_t)(sizeof light_value);
+    light_value.struct_version = UINT32_C(1);
+    {
+        jbyte lightBytes_values[3];
+        (*environment)->GetByteArrayRegion(environment, lightBytes, 0, 3, lightBytes_values);
+        light_value.reserved[0] = (uint8_t)lightBytes_values[0];
+        light_value.reserved[1] = (uint8_t)lightBytes_values[1];
+        light_value.reserved[2] = (uint8_t)lightBytes_values[2];
+    }
+    {
+        jlong lightIntegral_values[1];
+        (*environment)->GetLongArrayRegion(environment, lightIntegral, 0, 1, lightIntegral_values);
+        light_value.casts_shadows = (CNA_Bool)lightIntegral_values[0];
+    }
+    {
+        jfloat lightFloating_values[13];
+        (*environment)->GetFloatArrayRegion(environment, lightFloating, 0, 13, lightFloating_values);
+        light_value.position.x = (float)lightFloating_values[0];
+        light_value.position.y = (float)lightFloating_values[1];
+        light_value.position.z = (float)lightFloating_values[2];
+        light_value.direction.x = (float)lightFloating_values[3];
+        light_value.direction.y = (float)lightFloating_values[4];
+        light_value.direction.z = (float)lightFloating_values[5];
+        light_value.color.x = (float)lightFloating_values[6];
+        light_value.color.y = (float)lightFloating_values[7];
+        light_value.color.z = (float)lightFloating_values[8];
+        light_value.intensity = (float)lightFloating_values[9];
+        light_value.range = (float)lightFloating_values[10];
+        light_value.inner_angle = (float)lightFloating_values[11];
+        light_value.outer_angle = (float)lightFloating_values[12];
+    }
+    CNA_Color colour_value;
+    memset(&colour_value, 0, sizeof colour_value);
+    {
+        jlong colourIntegral_values[4];
+        (*environment)->GetLongArrayRegion(environment, colourIntegral, 0, 4, colourIntegral_values);
+        colour_value.r = (uint8_t)colourIntegral_values[0];
+        colour_value.g = (uint8_t)colourIntegral_values[1];
+        colour_value.b = (uint8_t)colourIntegral_values[2];
+        colour_value.a = (uint8_t)colourIntegral_values[3];
+    }
+    CNA_Result call_result = cna.debug_draw_add_spot_light_gizmo((CNA_DebugDrawHandle)debug, &light_value, colour_value, (int32_t)segments);
     return (jint)call_result;
 }
 
@@ -434,6 +591,48 @@ Java_org_openeggbert_cna_internal_generated_NativeEngineLayerRoutes_debugDrawSet
     (void)environment;
     (void)declaring_class;
     CNA_Result call_result = cna.debug_draw_set_depth_tested((CNA_DebugDrawHandle)debug, (CNA_Bool)depth_tested);
+    return (jint)call_result;
+}
+
+JNIEXPORT jint JNICALL
+Java_org_openeggbert_cna_internal_generated_NativeEngineLayerRoutes_directionalLightExtInit(
+    JNIEnv* environment, jclass declaring_class, jbyteArray out_lightBytes, jlongArray out_lightIntegral, jfloatArray out_lightFloating)
+{
+    (void)environment;
+    (void)declaring_class;
+    CNA_DirectionalLightEXT out_light_value;
+    memset(&out_light_value, 0, sizeof out_light_value);
+    out_light_value.struct_size = (uint32_t)(sizeof out_light_value);
+    out_light_value.struct_version = UINT32_C(1);
+    CNA_Result call_result = cna.directional_light_ext_init(&out_light_value);
+    if (call_result == CNA_RESULT_SUCCESS || call_result == CNA_RESULT_BUFFER_TOO_SMALL) {
+        jbyte out_lightBytes_values[] = {
+            (jbyte)out_light_value.reserved[0],
+            (jbyte)out_light_value.reserved[1],
+            (jbyte)out_light_value.reserved[2]
+        };
+        (*environment)->SetByteArrayRegion(environment, out_lightBytes, 0,
+            (jsize)(sizeof out_lightBytes_values / sizeof out_lightBytes_values[0]),
+            out_lightBytes_values);
+        jlong out_lightIntegral_values[] = {
+            (jlong)out_light_value.casts_shadows
+        };
+        (*environment)->SetLongArrayRegion(environment, out_lightIntegral, 0,
+            (jsize)(sizeof out_lightIntegral_values / sizeof out_lightIntegral_values[0]),
+            out_lightIntegral_values);
+        jfloat out_lightFloating_values[] = {
+            (jfloat)out_light_value.direction.x,
+            (jfloat)out_light_value.direction.y,
+            (jfloat)out_light_value.direction.z,
+            (jfloat)out_light_value.color.x,
+            (jfloat)out_light_value.color.y,
+            (jfloat)out_light_value.color.z,
+            (jfloat)out_light_value.intensity
+        };
+        (*environment)->SetFloatArrayRegion(environment, out_lightFloating, 0,
+            (jsize)(sizeof out_lightFloating_values / sizeof out_lightFloating_values[0]),
+            out_lightFloating_values);
+    }
     return (jint)call_result;
 }
 
@@ -1728,6 +1927,49 @@ Java_org_openeggbert_cna_internal_generated_NativeEngineLayerRoutes_lodGroupExtS
 }
 
 JNIEXPORT jint JNICALL
+Java_org_openeggbert_cna_internal_generated_NativeEngineLayerRoutes_pointLightExtInit(
+    JNIEnv* environment, jclass declaring_class, jbyteArray out_lightBytes, jlongArray out_lightIntegral, jfloatArray out_lightFloating)
+{
+    (void)environment;
+    (void)declaring_class;
+    CNA_PointLightEXT out_light_value;
+    memset(&out_light_value, 0, sizeof out_light_value);
+    out_light_value.struct_size = (uint32_t)(sizeof out_light_value);
+    out_light_value.struct_version = UINT32_C(1);
+    CNA_Result call_result = cna.point_light_ext_init(&out_light_value);
+    if (call_result == CNA_RESULT_SUCCESS || call_result == CNA_RESULT_BUFFER_TOO_SMALL) {
+        jbyte out_lightBytes_values[] = {
+            (jbyte)out_light_value.reserved[0],
+            (jbyte)out_light_value.reserved[1],
+            (jbyte)out_light_value.reserved[2]
+        };
+        (*environment)->SetByteArrayRegion(environment, out_lightBytes, 0,
+            (jsize)(sizeof out_lightBytes_values / sizeof out_lightBytes_values[0]),
+            out_lightBytes_values);
+        jlong out_lightIntegral_values[] = {
+            (jlong)out_light_value.casts_shadows
+        };
+        (*environment)->SetLongArrayRegion(environment, out_lightIntegral, 0,
+            (jsize)(sizeof out_lightIntegral_values / sizeof out_lightIntegral_values[0]),
+            out_lightIntegral_values);
+        jfloat out_lightFloating_values[] = {
+            (jfloat)out_light_value.position.x,
+            (jfloat)out_light_value.position.y,
+            (jfloat)out_light_value.position.z,
+            (jfloat)out_light_value.color.x,
+            (jfloat)out_light_value.color.y,
+            (jfloat)out_light_value.color.z,
+            (jfloat)out_light_value.intensity,
+            (jfloat)out_light_value.range
+        };
+        (*environment)->SetFloatArrayRegion(environment, out_lightFloating, 0,
+            (jsize)(sizeof out_lightFloating_values / sizeof out_lightFloating_values[0]),
+            out_lightFloating_values);
+    }
+    return (jint)call_result;
+}
+
+JNIEXPORT jint JNICALL
 Java_org_openeggbert_cna_internal_generated_NativeEngineLayerRoutes_renderPipelineSettingsExtApplyFromString(
     JNIEnv* environment, jclass declaring_class, jbyteArray settingsBytes, jlongArray settingsIntegral, jfloatArray settingsFloating, jbyteArray text, jintArray out_applied)
 {
@@ -2251,6 +2493,54 @@ Java_org_openeggbert_cna_internal_generated_NativeEngineLayerRoutes_renderPipeli
         (*environment)->SetFloatArrayRegion(environment, settingsFloating, 0,
             (jsize)(sizeof settingsFloating_values / sizeof settingsFloating_values[0]),
             settingsFloating_values);
+    }
+    return (jint)call_result;
+}
+
+JNIEXPORT jint JNICALL
+Java_org_openeggbert_cna_internal_generated_NativeEngineLayerRoutes_spotLightExtInit(
+    JNIEnv* environment, jclass declaring_class, jbyteArray out_lightBytes, jlongArray out_lightIntegral, jfloatArray out_lightFloating)
+{
+    (void)environment;
+    (void)declaring_class;
+    CNA_SpotLightEXT out_light_value;
+    memset(&out_light_value, 0, sizeof out_light_value);
+    out_light_value.struct_size = (uint32_t)(sizeof out_light_value);
+    out_light_value.struct_version = UINT32_C(1);
+    CNA_Result call_result = cna.spot_light_ext_init(&out_light_value);
+    if (call_result == CNA_RESULT_SUCCESS || call_result == CNA_RESULT_BUFFER_TOO_SMALL) {
+        jbyte out_lightBytes_values[] = {
+            (jbyte)out_light_value.reserved[0],
+            (jbyte)out_light_value.reserved[1],
+            (jbyte)out_light_value.reserved[2]
+        };
+        (*environment)->SetByteArrayRegion(environment, out_lightBytes, 0,
+            (jsize)(sizeof out_lightBytes_values / sizeof out_lightBytes_values[0]),
+            out_lightBytes_values);
+        jlong out_lightIntegral_values[] = {
+            (jlong)out_light_value.casts_shadows
+        };
+        (*environment)->SetLongArrayRegion(environment, out_lightIntegral, 0,
+            (jsize)(sizeof out_lightIntegral_values / sizeof out_lightIntegral_values[0]),
+            out_lightIntegral_values);
+        jfloat out_lightFloating_values[] = {
+            (jfloat)out_light_value.position.x,
+            (jfloat)out_light_value.position.y,
+            (jfloat)out_light_value.position.z,
+            (jfloat)out_light_value.direction.x,
+            (jfloat)out_light_value.direction.y,
+            (jfloat)out_light_value.direction.z,
+            (jfloat)out_light_value.color.x,
+            (jfloat)out_light_value.color.y,
+            (jfloat)out_light_value.color.z,
+            (jfloat)out_light_value.intensity,
+            (jfloat)out_light_value.range,
+            (jfloat)out_light_value.inner_angle,
+            (jfloat)out_light_value.outer_angle
+        };
+        (*environment)->SetFloatArrayRegion(environment, out_lightFloating, 0,
+            (jsize)(sizeof out_lightFloating_values / sizeof out_lightFloating_values[0]),
+            out_lightFloating_values);
     }
     return (jint)call_result;
 }

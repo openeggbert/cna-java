@@ -53,6 +53,41 @@ public final class NativeEngineLayerRoutes {
     public static native int debugDrawAddCross(long debug, float[] positionFloating, float size, long[] colourIntegral);
 
     /**
+     * cna_debug_draw_add_directional_light_gizmo (engine_layer.h).
+     *
+     * <p>lightBytes carries CNA_DirectionalLightEXT in this order:
+     * <ol start="0">
+     *   <li>{@code reserved[0]} (uint8_t)</li>
+     *   <li>{@code reserved[1]} (uint8_t)</li>
+     *   <li>{@code reserved[2]} (uint8_t)</li>
+     * </ol>
+     *
+     * <p>lightIntegral carries CNA_DirectionalLightEXT in this order:
+     * <ol start="0">
+     *   <li>{@code casts_shadows} (CNA_Bool)</li>
+     * </ol>
+     *
+     * <p>lightFloating carries CNA_DirectionalLightEXT in this order:
+     * <ol start="0">
+     *   <li>{@code direction.x} (float)</li>
+     *   <li>{@code direction.y} (float)</li>
+     *   <li>{@code direction.z} (float)</li>
+     *   <li>{@code color.x} (float)</li>
+     *   <li>{@code color.y} (float)</li>
+     *   <li>{@code color.z} (float)</li>
+     *   <li>{@code intensity} (float)</li>
+     * </ol>
+     *
+     * <p>atFloating carries CNA_Vector3 in this order:
+     * <ol start="0">
+     *   <li>{@code x} (float)</li>
+     *   <li>{@code y} (float)</li>
+     *   <li>{@code z} (float)</li>
+     * </ol>
+     */
+    public static native int debugDrawAddDirectionalLightGizmo(long debug, byte[] lightBytes, long[] lightIntegral, float[] lightFloating, float[] atFloating, float length, long[] colourIntegral);
+
+    /**
      * cna_debug_draw_add_frustum (engine_layer.h).
      */
     public static native int debugDrawAddFrustum(long debug, float[] frustumFloating, long[] colourIntegral);
@@ -77,6 +112,35 @@ public final class NativeEngineLayerRoutes {
     public static native int debugDrawAddLine(long debug, float[] fromFloating, float[] toFloating, long[] colourIntegral);
 
     /**
+     * cna_debug_draw_add_point_light_gizmo (engine_layer.h).
+     *
+     * <p>lightBytes carries CNA_PointLightEXT in this order:
+     * <ol start="0">
+     *   <li>{@code reserved[0]} (uint8_t)</li>
+     *   <li>{@code reserved[1]} (uint8_t)</li>
+     *   <li>{@code reserved[2]} (uint8_t)</li>
+     * </ol>
+     *
+     * <p>lightIntegral carries CNA_PointLightEXT in this order:
+     * <ol start="0">
+     *   <li>{@code casts_shadows} (CNA_Bool)</li>
+     * </ol>
+     *
+     * <p>lightFloating carries CNA_PointLightEXT in this order:
+     * <ol start="0">
+     *   <li>{@code position.x} (float)</li>
+     *   <li>{@code position.y} (float)</li>
+     *   <li>{@code position.z} (float)</li>
+     *   <li>{@code color.x} (float)</li>
+     *   <li>{@code color.y} (float)</li>
+     *   <li>{@code color.z} (float)</li>
+     *   <li>{@code intensity} (float)</li>
+     *   <li>{@code range} (float)</li>
+     * </ol>
+     */
+    public static native int debugDrawAddPointLightGizmo(long debug, byte[] lightBytes, long[] lightIntegral, float[] lightFloating, long[] colourIntegral);
+
+    /**
      * cna_debug_draw_add_sphere (engine_layer.h).
      *
      * <p>centreFloating carries CNA_Vector3 in this order:
@@ -87,6 +151,40 @@ public final class NativeEngineLayerRoutes {
      * </ol>
      */
     public static native int debugDrawAddSphere(long debug, float[] centreFloating, float radius, long[] colourIntegral, int segments);
+
+    /**
+     * cna_debug_draw_add_spot_light_gizmo (engine_layer.h).
+     *
+     * <p>lightBytes carries CNA_SpotLightEXT in this order:
+     * <ol start="0">
+     *   <li>{@code reserved[0]} (uint8_t)</li>
+     *   <li>{@code reserved[1]} (uint8_t)</li>
+     *   <li>{@code reserved[2]} (uint8_t)</li>
+     * </ol>
+     *
+     * <p>lightIntegral carries CNA_SpotLightEXT in this order:
+     * <ol start="0">
+     *   <li>{@code casts_shadows} (CNA_Bool)</li>
+     * </ol>
+     *
+     * <p>lightFloating carries CNA_SpotLightEXT in this order:
+     * <ol start="0">
+     *   <li>{@code position.x} (float)</li>
+     *   <li>{@code position.y} (float)</li>
+     *   <li>{@code position.z} (float)</li>
+     *   <li>{@code direction.x} (float)</li>
+     *   <li>{@code direction.y} (float)</li>
+     *   <li>{@code direction.z} (float)</li>
+     *   <li>{@code color.x} (float)</li>
+     *   <li>{@code color.y} (float)</li>
+     *   <li>{@code color.z} (float)</li>
+     *   <li>{@code intensity} (float)</li>
+     *   <li>{@code range} (float)</li>
+     *   <li>{@code inner_angle} (float)</li>
+     *   <li>{@code outer_angle} (float)</li>
+     * </ol>
+     */
+    public static native int debugDrawAddSpotLightGizmo(long debug, byte[] lightBytes, long[] lightIntegral, float[] lightFloating, long[] colourIntegral, int segments);
 
     /**
      * cna_debug_draw_begin (engine_layer.h).
@@ -172,6 +270,34 @@ public final class NativeEngineLayerRoutes {
      * cna_debug_draw_set_depth_tested (engine_layer.h).
      */
     public static native int debugDrawSetDepthTested(long debug, boolean depthTested);
+
+    /**
+     * cna_directional_light_ext_init (engine_layer.h).
+     *
+     * <p>outLightBytes carries CNA_DirectionalLightEXT in this order:
+     * <ol start="0">
+     *   <li>{@code reserved[0]} (uint8_t)</li>
+     *   <li>{@code reserved[1]} (uint8_t)</li>
+     *   <li>{@code reserved[2]} (uint8_t)</li>
+     * </ol>
+     *
+     * <p>outLightIntegral carries CNA_DirectionalLightEXT in this order:
+     * <ol start="0">
+     *   <li>{@code casts_shadows} (CNA_Bool)</li>
+     * </ol>
+     *
+     * <p>outLightFloating carries CNA_DirectionalLightEXT in this order:
+     * <ol start="0">
+     *   <li>{@code direction.x} (float)</li>
+     *   <li>{@code direction.y} (float)</li>
+     *   <li>{@code direction.z} (float)</li>
+     *   <li>{@code color.x} (float)</li>
+     *   <li>{@code color.y} (float)</li>
+     *   <li>{@code color.z} (float)</li>
+     *   <li>{@code intensity} (float)</li>
+     * </ol>
+     */
+    public static native int directionalLightExtInit(byte[] outLightBytes, long[] outLightIntegral, float[] outLightFloating);
 
     /**
      * cna_engine_layer_get_version (engine_layer.h).
@@ -537,6 +663,35 @@ public final class NativeEngineLayerRoutes {
     public static native int lodGroupExtSetSelectionMode(long group, int mode);
 
     /**
+     * cna_point_light_ext_init (engine_layer.h).
+     *
+     * <p>outLightBytes carries CNA_PointLightEXT in this order:
+     * <ol start="0">
+     *   <li>{@code reserved[0]} (uint8_t)</li>
+     *   <li>{@code reserved[1]} (uint8_t)</li>
+     *   <li>{@code reserved[2]} (uint8_t)</li>
+     * </ol>
+     *
+     * <p>outLightIntegral carries CNA_PointLightEXT in this order:
+     * <ol start="0">
+     *   <li>{@code casts_shadows} (CNA_Bool)</li>
+     * </ol>
+     *
+     * <p>outLightFloating carries CNA_PointLightEXT in this order:
+     * <ol start="0">
+     *   <li>{@code position.x} (float)</li>
+     *   <li>{@code position.y} (float)</li>
+     *   <li>{@code position.z} (float)</li>
+     *   <li>{@code color.x} (float)</li>
+     *   <li>{@code color.y} (float)</li>
+     *   <li>{@code color.z} (float)</li>
+     *   <li>{@code intensity} (float)</li>
+     *   <li>{@code range} (float)</li>
+     * </ol>
+     */
+    public static native int pointLightExtInit(byte[] outLightBytes, long[] outLightIntegral, float[] outLightFloating);
+
+    /**
      * cna_render_pipeline_settings_ext_apply_from_string (engine_layer.h).
      *
      * <p>settingsBytes carries CNA_RenderPipelineSettingsEXT in this order:
@@ -807,4 +962,38 @@ public final class NativeEngineLayerRoutes {
      * </ol>
      */
     public static native int renderPipelineSettingsExtNormalize(byte[] settingsBytes, long[] settingsIntegral, float[] settingsFloating);
+
+    /**
+     * cna_spot_light_ext_init (engine_layer.h).
+     *
+     * <p>outLightBytes carries CNA_SpotLightEXT in this order:
+     * <ol start="0">
+     *   <li>{@code reserved[0]} (uint8_t)</li>
+     *   <li>{@code reserved[1]} (uint8_t)</li>
+     *   <li>{@code reserved[2]} (uint8_t)</li>
+     * </ol>
+     *
+     * <p>outLightIntegral carries CNA_SpotLightEXT in this order:
+     * <ol start="0">
+     *   <li>{@code casts_shadows} (CNA_Bool)</li>
+     * </ol>
+     *
+     * <p>outLightFloating carries CNA_SpotLightEXT in this order:
+     * <ol start="0">
+     *   <li>{@code position.x} (float)</li>
+     *   <li>{@code position.y} (float)</li>
+     *   <li>{@code position.z} (float)</li>
+     *   <li>{@code direction.x} (float)</li>
+     *   <li>{@code direction.y} (float)</li>
+     *   <li>{@code direction.z} (float)</li>
+     *   <li>{@code color.x} (float)</li>
+     *   <li>{@code color.y} (float)</li>
+     *   <li>{@code color.z} (float)</li>
+     *   <li>{@code intensity} (float)</li>
+     *   <li>{@code range} (float)</li>
+     *   <li>{@code inner_angle} (float)</li>
+     *   <li>{@code outer_angle} (float)</li>
+     * </ol>
+     */
+    public static native int spotLightExtInit(byte[] outLightBytes, long[] outLightIntegral, float[] outLightFloating);
 }

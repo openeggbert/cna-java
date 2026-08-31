@@ -357,9 +357,12 @@
     LOAD(debug_draw_add_bounding_sphere, "cna_debug_draw_add_bounding_sphere");
     LOAD(debug_draw_add_box, "cna_debug_draw_add_box");
     LOAD(debug_draw_add_cross, "cna_debug_draw_add_cross");
+    LOAD(debug_draw_add_directional_light_gizmo, "cna_debug_draw_add_directional_light_gizmo");
     LOAD(debug_draw_add_frustum, "cna_debug_draw_add_frustum");
     LOAD(debug_draw_add_line, "cna_debug_draw_add_line");
+    LOAD(debug_draw_add_point_light_gizmo, "cna_debug_draw_add_point_light_gizmo");
     LOAD(debug_draw_add_sphere, "cna_debug_draw_add_sphere");
+    LOAD(debug_draw_add_spot_light_gizmo, "cna_debug_draw_add_spot_light_gizmo");
     LOAD(debug_draw_begin, "cna_debug_draw_begin");
     LOAD(debug_draw_clear, "cna_debug_draw_clear");
     LOAD(debug_draw_copy_vertices, "cna_debug_draw_copy_vertices");
@@ -377,6 +380,7 @@
     LOAD(desktop_os_get_current, "cna_desktop_os_get_current");
     LOAD(devices_clipboard_set_text_ext, "cna_devices_clipboard_set_text_ext");
     LOAD(devices_ext_is_available, "cna_devices_ext_is_available");
+    LOAD(directional_light_ext_init, "cna_directional_light_ext_init");
     LOAD(display_info_get_content_scale_ext, "cna_display_info_get_content_scale_ext");
     LOAD(display_info_get_safe_area_ext, "cna_display_info_get_safe_area_ext");
     LOAD(effect_copy_type_name, "cna_effect_copy_type_name");
@@ -831,6 +835,7 @@
     LOAD(platform_get_current_name_size_ext, "cna_platform_get_current_name_size_ext");
     LOAD(platform_get_is_apple_ext, "cna_platform_get_is_apple_ext");
     LOAD(platform_get_is_mobile_ext, "cna_platform_get_is_mobile_ext");
+    LOAD(point_light_ext_init, "cna_point_light_ext_init");
     LOAD(power_get_battery_percent_ext, "cna_power_get_battery_percent_ext");
     LOAD(power_get_seconds_remaining_ext, "cna_power_get_seconds_remaining_ext");
     LOAD(power_get_state_ext, "cna_power_get_state_ext");
@@ -885,6 +890,7 @@
     LOAD(signed_in_gamer_is_headset, "cna_signed_in_gamer_is_headset");
     LOAD(signed_in_gamer_set_party_size, "cna_signed_in_gamer_set_party_size");
     LOAD(signed_in_gamer_set_presence, "cna_signed_in_gamer_set_presence");
+    LOAD(spot_light_ext_init, "cna_spot_light_ext_init");
     LOAD(system_info_get_logical_cpu_core_count_ext, "cna_system_info_get_logical_cpu_core_count_ext");
     LOAD(system_info_get_system_ram_megabytes_ext, "cna_system_info_get_system_ram_megabytes_ext");
     LOAD(text_input_is_active_ext, "cna_text_input_is_active_ext");

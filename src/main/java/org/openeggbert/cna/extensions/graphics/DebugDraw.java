@@ -160,6 +160,51 @@ public final class DebugDraw implements AutoCloseable {
     }
 
     /**
+     * Queues an arrow through a point, showing where a directional light comes from.
+     *
+     * <p>A directional light has no position, so the caller says where to draw it.
+     *
+     * @param light the light to draw
+     * @param at where to draw the arrow
+     * @param length how long to draw it
+     * @param color the colour to draw it in
+     */
+    public void addDirectionalLightGizmo(DirectionalLight light, Vector3 at, float length,
+            Color color) {
+        Objects.requireNonNull(light, "light");
+        GraphicsExtension.check("DebugDraw.addDirectionalLightGizmo", NativeEngineLayerRoutes
+                .debugDrawAddDirectionalLightGizmo(open(), new byte[3], light.integral(),
+                        light.floating(), floats(at, "at"), length, channels(color)));
+    }
+
+    /**
+     * Queues a sphere at a point light's range, showing how far it reaches.
+     *
+     * @param light the light to draw
+     * @param color the colour to draw it in
+     */
+    public void addPointLightGizmo(PointLight light, Color color) {
+        Objects.requireNonNull(light, "light");
+        GraphicsExtension.check("DebugDraw.addPointLightGizmo", NativeEngineLayerRoutes
+                .debugDrawAddPointLightGizmo(open(), new byte[3], light.integral(),
+                        light.floating(), channels(color)));
+    }
+
+    /**
+     * Queues a cone showing where a spot light points and how wide it opens.
+     *
+     * @param light the light to draw
+     * @param color the colour to draw it in
+     * @param segments how many segments the cone is drawn with; clamped like a sphere's
+     */
+    public void addSpotLightGizmo(SpotLight light, Color color, int segments) {
+        Objects.requireNonNull(light, "light");
+        GraphicsExtension.check("DebugDraw.addSpotLightGizmo", NativeEngineLayerRoutes
+                .debugDrawAddSpotLightGizmo(open(), new byte[3], light.integral(),
+                        light.floating(), channels(color), segments));
+    }
+
+    /**
      * Queues three axis-aligned segments crossing at a point.
      *
      * @param position where the cross sits
