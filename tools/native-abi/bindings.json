@@ -4933,6 +4933,168 @@
       ]
     },
     {
+      "name": "cna_debug_draw_add_bounding_sphere",
+      "header": "engine_layer.h",
+      "ownership": "borrows the renderer; reads the caller's structure",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_DebugDrawHandle",
+        "const CNA_BoundingSphere*",
+        "CNA_Color",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "cna_debug_draw_add_box",
+      "header": "engine_layer.h",
+      "ownership": "borrows the renderer; reads the caller's structure",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_DebugDrawHandle",
+        "const CNA_BoundingBox*",
+        "CNA_Color"
+      ]
+    },
+    {
+      "name": "cna_debug_draw_add_cross",
+      "header": "engine_layer.h",
+      "ownership": "borrows the renderer; reads the caller's values",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_DebugDrawHandle",
+        "const CNA_Vector3*",
+        "float",
+        "CNA_Color"
+      ]
+    },
+    {
+      "name": "cna_debug_draw_add_frustum",
+      "header": "engine_layer.h",
+      "ownership": "borrows the renderer; reads the caller's structure by value",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_DebugDrawHandle",
+        "CNA_BoundingFrustum",
+        "CNA_Color"
+      ]
+    },
+    {
+      "name": "cna_debug_draw_add_line",
+      "header": "engine_layer.h",
+      "ownership": "borrows the renderer; reads the caller's values",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_DebugDrawHandle",
+        "const CNA_Vector3*",
+        "const CNA_Vector3*",
+        "CNA_Color"
+      ]
+    },
+    {
+      "name": "cna_debug_draw_add_sphere",
+      "header": "engine_layer.h",
+      "ownership": "borrows the renderer; reads the caller's values",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_DebugDrawHandle",
+        "const CNA_Vector3*",
+        "float",
+        "CNA_Color",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "cna_debug_draw_begin",
+      "header": "engine_layer.h",
+      "ownership": "borrows the renderer; reads the caller's matrices",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_DebugDrawHandle",
+        "const CNA_Matrix*",
+        "const CNA_Matrix*"
+      ]
+    },
+    {
+      "name": "cna_debug_draw_clear",
+      "header": "engine_layer.h",
+      "ownership": "borrows the renderer",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_DebugDrawHandle"
+      ]
+    },
+    {
+      "name": "cna_debug_draw_copy_vertices",
+      "header": "engine_layer.h",
+      "ownership": "borrows the renderer; caller buffer",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_DebugDrawHandle",
+        "CNA_Bool",
+        "CNA_VertexPositionColor*",
+        "uint64_t",
+        "uint64_t*"
+      ]
+    },
+    {
+      "name": "cna_debug_draw_create",
+      "header": "engine_layer.h",
+      "ownership": "borrows the graphics device; returns an owned debug-renderer handle",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_Handle",
+        "CNA_DebugDrawHandle*"
+      ]
+    },
+    {
+      "name": "cna_debug_draw_destroy",
+      "header": "engine_layer.h",
+      "ownership": "releases the owned debug-renderer handle",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_DebugDrawHandle"
+      ]
+    },
+    {
+      "name": "cna_debug_draw_end",
+      "header": "engine_layer.h",
+      "ownership": "borrows the renderer",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_DebugDrawHandle"
+      ]
+    },
+    {
+      "name": "cna_debug_draw_get_line_count",
+      "header": "engine_layer.h",
+      "ownership": "borrows the renderer; caller integer output",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_DebugDrawHandle",
+        "int32_t*"
+      ]
+    },
+    {
+      "name": "cna_debug_draw_is_depth_tested",
+      "header": "engine_layer.h",
+      "ownership": "borrows the renderer; caller boolean output",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_DebugDrawHandle",
+        "CNA_Bool*"
+      ]
+    },
+    {
+      "name": "cna_debug_draw_set_depth_tested",
+      "header": "engine_layer.h",
+      "ownership": "borrows the renderer; value parameter",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_DebugDrawHandle",
+        "CNA_Bool"
+      ]
+    },
+    {
       "name": "cna_depth_effect_create",
       "header": "graphics_ext.h",
       "ownership": "borrows its inputs; returns an owned handle",

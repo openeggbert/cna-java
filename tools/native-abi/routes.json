@@ -3388,6 +3388,66 @@
     ],
     "NativeEngineLayerRoutes": [
       {
+        "java": "debugDrawAddBoundingSphere",
+        "symbol": "cna_debug_draw_add_bounding_sphere"
+      },
+      {
+        "java": "debugDrawAddBox",
+        "symbol": "cna_debug_draw_add_box"
+      },
+      {
+        "java": "debugDrawAddCross",
+        "symbol": "cna_debug_draw_add_cross"
+      },
+      {
+        "java": "debugDrawAddFrustum",
+        "symbol": "cna_debug_draw_add_frustum"
+      },
+      {
+        "java": "debugDrawAddLine",
+        "symbol": "cna_debug_draw_add_line"
+      },
+      {
+        "java": "debugDrawAddSphere",
+        "symbol": "cna_debug_draw_add_sphere"
+      },
+      {
+        "java": "debugDrawBegin",
+        "symbol": "cna_debug_draw_begin"
+      },
+      {
+        "java": "debugDrawClear",
+        "symbol": "cna_debug_draw_clear"
+      },
+      {
+        "java": "debugDrawCopyVertices",
+        "symbol": "cna_debug_draw_copy_vertices"
+      },
+      {
+        "java": "debugDrawCreate",
+        "symbol": "cna_debug_draw_create"
+      },
+      {
+        "java": "debugDrawDestroy",
+        "symbol": "cna_debug_draw_destroy"
+      },
+      {
+        "java": "debugDrawEnd",
+        "symbol": "cna_debug_draw_end"
+      },
+      {
+        "java": "debugDrawGetLineCount",
+        "symbol": "cna_debug_draw_get_line_count"
+      },
+      {
+        "java": "debugDrawIsDepthTested",
+        "symbol": "cna_debug_draw_is_depth_tested"
+      },
+      {
+        "java": "debugDrawSetDepthTested",
+        "symbol": "cna_debug_draw_set_depth_tested"
+      },
+      {
         "java": "engineLayerGetVersion",
         "symbol": "cna_engine_layer_get_version"
       },
