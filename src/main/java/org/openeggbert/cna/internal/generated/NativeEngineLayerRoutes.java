@@ -1189,6 +1189,11 @@ public final class NativeEngineLayerRoutes {
     public static native int debugDrawAddPointLightGizmo(long debug, byte[] lightBytes, long[] lightIntegral, float[] lightFloating, long[] colourIntegral);
 
     /**
+     * cna_debug_draw_add_probe_volume_gizmo (engine_layer.h).
+     */
+    public static native int debugDrawAddProbeVolumeGizmo(long debug, long volume, long[] colourIntegral, float crossSize);
+
+    /**
      * cna_debug_draw_add_sphere (engine_layer.h).
      *
      * <p>centreFloating carries CNA_Vector3 in this order:
@@ -1644,6 +1649,289 @@ public final class NativeEngineLayerRoutes {
      * cna_instanced_renderer_ext_set_tints_enabled (engine_layer.h).
      */
     public static native int instancedRendererExtSetTintsEnabled(long renderer, boolean enabled);
+
+    /**
+     * cna_light_probe_ext_copy_coefficients (engine_layer.h).
+     */
+    public static native int lightProbeExtCopyCoefficients(long probe, float[] destinationFloating, long[] outCount);
+
+    /**
+     * cna_light_probe_ext_copy_evaluation_glsl (engine_layer.h).
+     */
+    public static native int lightProbeExtCopyEvaluationGlsl(byte[] destination, long[] outBytes);
+
+    /**
+     * cna_light_probe_ext_copy_from (engine_layer.h).
+     */
+    public static native int lightProbeExtCopyFrom(long destination, long source);
+
+    /**
+     * cna_light_probe_ext_create (engine_layer.h).
+     */
+    public static native int lightProbeExtCreate(long[] outProbe);
+
+    /**
+     * cna_light_probe_ext_create_at (engine_layer.h).
+     *
+     * <p>positionFloating carries CNA_Vector3 in this order:
+     * <ol start="0">
+     *   <li>{@code x} (float)</li>
+     *   <li>{@code y} (float)</li>
+     *   <li>{@code z} (float)</li>
+     * </ol>
+     */
+    public static native int lightProbeExtCreateAt(float[] positionFloating, long[] outProbe);
+
+    /**
+     * cna_light_probe_ext_destroy (engine_layer.h).
+     */
+    public static native int lightProbeExtDestroy(long probe);
+
+    /**
+     * cna_light_probe_ext_equals (engine_layer.h).
+     */
+    public static native int lightProbeExtEquals(long first, long second, boolean[] outEqual);
+
+    /**
+     * cna_light_probe_ext_get_coefficient (engine_layer.h).
+     *
+     * <p>outValueFloating carries CNA_Vector3 in this order:
+     * <ol start="0">
+     *   <li>{@code x} (float)</li>
+     *   <li>{@code y} (float)</li>
+     *   <li>{@code z} (float)</li>
+     * </ol>
+     */
+    public static native int lightProbeExtGetCoefficient(long probe, int index, float[] outValueFloating);
+
+    /**
+     * cna_light_probe_ext_get_position (engine_layer.h).
+     *
+     * <p>outPositionFloating carries CNA_Vector3 in this order:
+     * <ol start="0">
+     *   <li>{@code x} (float)</li>
+     *   <li>{@code y} (float)</li>
+     *   <li>{@code z} (float)</li>
+     * </ol>
+     */
+    public static native int lightProbeExtGetPosition(long probe, float[] outPositionFloating);
+
+    /**
+     * cna_light_probe_ext_get_visibility_mean (engine_layer.h).
+     */
+    public static native int lightProbeExtGetVisibilityMean(long probe, int direction, float[] outValue);
+
+    /**
+     * cna_light_probe_ext_get_visibility_mean_squared (engine_layer.h).
+     */
+    public static native int lightProbeExtGetVisibilityMeanSquared(long probe, int direction, float[] outValue);
+
+    /**
+     * cna_light_probe_ext_has_visibility (engine_layer.h).
+     */
+    public static native int lightProbeExtHasVisibility(long probe, boolean[] outHas);
+
+    /**
+     * cna_light_probe_ext_irradiance (engine_layer.h).
+     *
+     * <p>normalFloating carries CNA_Vector3 in this order:
+     * <ol start="0">
+     *   <li>{@code x} (float)</li>
+     *   <li>{@code y} (float)</li>
+     *   <li>{@code z} (float)</li>
+     * </ol>
+     *
+     * <p>outIrradianceFloating carries CNA_Vector3 in this order:
+     * <ol start="0">
+     *   <li>{@code x} (float)</li>
+     *   <li>{@code y} (float)</li>
+     *   <li>{@code z} (float)</li>
+     * </ol>
+     */
+    public static native int lightProbeExtIrradiance(long probe, float[] normalFloating, float[] outIrradianceFloating);
+
+    /**
+     * cna_light_probe_ext_is_zero (engine_layer.h).
+     */
+    public static native int lightProbeExtIsZero(long probe, boolean[] outZero);
+
+    /**
+     * cna_light_probe_ext_scale (engine_layer.h).
+     */
+    public static native int lightProbeExtScale(long probe, float factor);
+
+    /**
+     * cna_light_probe_ext_set_coefficient (engine_layer.h).
+     *
+     * <p>valueFloating carries CNA_Vector3 in this order:
+     * <ol start="0">
+     *   <li>{@code x} (float)</li>
+     *   <li>{@code y} (float)</li>
+     *   <li>{@code z} (float)</li>
+     * </ol>
+     */
+    public static native int lightProbeExtSetCoefficient(long probe, int index, float[] valueFloating);
+
+    /**
+     * cna_light_probe_ext_set_position (engine_layer.h).
+     *
+     * <p>positionFloating carries CNA_Vector3 in this order:
+     * <ol start="0">
+     *   <li>{@code x} (float)</li>
+     *   <li>{@code y} (float)</li>
+     *   <li>{@code z} (float)</li>
+     * </ol>
+     */
+    public static native int lightProbeExtSetPosition(long probe, float[] positionFloating);
+
+    /**
+     * cna_light_probe_ext_set_visibility (engine_layer.h).
+     */
+    public static native int lightProbeExtSetVisibility(long probe, int direction, float meanDistance, float meanSquaredDistance);
+
+    /**
+     * cna_light_probe_ext_visibility_weight (engine_layer.h).
+     *
+     * <p>directionFloating carries CNA_Vector3 in this order:
+     * <ol start="0">
+     *   <li>{@code x} (float)</li>
+     *   <li>{@code y} (float)</li>
+     *   <li>{@code z} (float)</li>
+     * </ol>
+     */
+    public static native int lightProbeExtVisibilityWeight(long probe, float[] directionFloating, float distance, float[] outWeight);
+
+    /**
+     * cna_light_probe_volume_ext_contains (engine_layer.h).
+     *
+     * <p>positionFloating carries CNA_Vector3 in this order:
+     * <ol start="0">
+     *   <li>{@code x} (float)</li>
+     *   <li>{@code y} (float)</li>
+     *   <li>{@code z} (float)</li>
+     * </ol>
+     */
+    public static native int lightProbeVolumeExtContains(long volume, float[] positionFloating, boolean[] outContains);
+
+    /**
+     * cna_light_probe_volume_ext_create (engine_layer.h).
+     *
+     * <p>boundsFloating carries CNA_BoundingBox in this order:
+     * <ol start="0">
+     *   <li>{@code min.x} (float)</li>
+     *   <li>{@code min.y} (float)</li>
+     *   <li>{@code min.z} (float)</li>
+     *   <li>{@code max.x} (float)</li>
+     *   <li>{@code max.y} (float)</li>
+     *   <li>{@code max.z} (float)</li>
+     * </ol>
+     */
+    public static native int lightProbeVolumeExtCreate(float[] boundsFloating, int countX, int countY, int countZ, long[] outVolume);
+
+    /**
+     * cna_light_probe_volume_ext_destroy (engine_layer.h).
+     */
+    public static native int lightProbeVolumeExtDestroy(long volume);
+
+    /**
+     * cna_light_probe_volume_ext_get_bounds (engine_layer.h).
+     *
+     * <p>outBoundsFloating carries CNA_BoundingBox in this order:
+     * <ol start="0">
+     *   <li>{@code min.x} (float)</li>
+     *   <li>{@code min.y} (float)</li>
+     *   <li>{@code min.z} (float)</li>
+     *   <li>{@code max.x} (float)</li>
+     *   <li>{@code max.y} (float)</li>
+     *   <li>{@code max.z} (float)</li>
+     * </ol>
+     */
+    public static native int lightProbeVolumeExtGetBounds(long volume, float[] outBoundsFloating);
+
+    /**
+     * cna_light_probe_volume_ext_get_count_x (engine_layer.h).
+     */
+    public static native int lightProbeVolumeExtGetCountX(long volume, int[] outCount);
+
+    /**
+     * cna_light_probe_volume_ext_get_count_y (engine_layer.h).
+     */
+    public static native int lightProbeVolumeExtGetCountY(long volume, int[] outCount);
+
+    /**
+     * cna_light_probe_volume_ext_get_count_z (engine_layer.h).
+     */
+    public static native int lightProbeVolumeExtGetCountZ(long volume, int[] outCount);
+
+    /**
+     * cna_light_probe_volume_ext_get_probe (engine_layer.h).
+     */
+    public static native int lightProbeVolumeExtGetProbe(long volume, int x, int y, int z, long outProbe);
+
+    /**
+     * cna_light_probe_volume_ext_get_probe_count (engine_layer.h).
+     */
+    public static native int lightProbeVolumeExtGetProbeCount(long volume, int[] outCount);
+
+    /**
+     * cna_light_probe_volume_ext_get_probe_position (engine_layer.h).
+     *
+     * <p>outPositionFloating carries CNA_Vector3 in this order:
+     * <ol start="0">
+     *   <li>{@code x} (float)</li>
+     *   <li>{@code y} (float)</li>
+     *   <li>{@code z} (float)</li>
+     * </ol>
+     */
+    public static native int lightProbeVolumeExtGetProbePosition(long volume, int x, int y, int z, float[] outPositionFloating);
+
+    /**
+     * cna_light_probe_volume_ext_irradiance (engine_layer.h).
+     *
+     * <p>positionFloating carries CNA_Vector3 in this order:
+     * <ol start="0">
+     *   <li>{@code x} (float)</li>
+     *   <li>{@code y} (float)</li>
+     *   <li>{@code z} (float)</li>
+     * </ol>
+     *
+     * <p>normalFloating carries CNA_Vector3 in this order:
+     * <ol start="0">
+     *   <li>{@code x} (float)</li>
+     *   <li>{@code y} (float)</li>
+     *   <li>{@code z} (float)</li>
+     * </ol>
+     *
+     * <p>outIrradianceFloating carries CNA_Vector3 in this order:
+     * <ol start="0">
+     *   <li>{@code x} (float)</li>
+     *   <li>{@code y} (float)</li>
+     *   <li>{@code z} (float)</li>
+     * </ol>
+     */
+    public static native int lightProbeVolumeExtIrradiance(long volume, float[] positionFloating, float[] normalFloating, float[] outIrradianceFloating);
+
+    /**
+     * cna_light_probe_volume_ext_is_zero (engine_layer.h).
+     */
+    public static native int lightProbeVolumeExtIsZero(long volume, boolean[] outZero);
+
+    /**
+     * cna_light_probe_volume_ext_sample_probe (engine_layer.h).
+     *
+     * <p>positionFloating carries CNA_Vector3 in this order:
+     * <ol start="0">
+     *   <li>{@code x} (float)</li>
+     *   <li>{@code y} (float)</li>
+     *   <li>{@code z} (float)</li>
+     * </ol>
+     */
+    public static native int lightProbeVolumeExtSampleProbe(long volume, float[] positionFloating, long outProbe);
+
+    /**
+     * cna_light_probe_volume_ext_set_probe (engine_layer.h).
+     */
+    public static native int lightProbeVolumeExtSetProbe(long volume, int x, int y, int z, long probe);
 
     /**
      * cna_lod_group_ext_add_level (engine_layer.h).

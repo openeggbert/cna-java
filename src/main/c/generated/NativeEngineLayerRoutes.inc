@@ -2767,6 +2767,26 @@ Java_org_openeggbert_cna_internal_generated_NativeEngineLayerRoutes_debugDrawAdd
 }
 
 JNIEXPORT jint JNICALL
+Java_org_openeggbert_cna_internal_generated_NativeEngineLayerRoutes_debugDrawAddProbeVolumeGizmo(
+    JNIEnv* environment, jclass declaring_class, jlong debug, jlong volume, jlongArray colourIntegral, jfloat cross_size)
+{
+    (void)environment;
+    (void)declaring_class;
+    CNA_Color colour_value;
+    memset(&colour_value, 0, sizeof colour_value);
+    {
+        jlong colourIntegral_values[4];
+        (*environment)->GetLongArrayRegion(environment, colourIntegral, 0, 4, colourIntegral_values);
+        colour_value.r = (uint8_t)colourIntegral_values[0];
+        colour_value.g = (uint8_t)colourIntegral_values[1];
+        colour_value.b = (uint8_t)colourIntegral_values[2];
+        colour_value.a = (uint8_t)colourIntegral_values[3];
+    }
+    CNA_Result call_result = cna.debug_draw_add_probe_volume_gizmo((CNA_DebugDrawHandle)debug, (CNA_LightProbeVolumeHandle)volume, colour_value, (float)cross_size);
+    return (jint)call_result;
+}
+
+JNIEXPORT jint JNICALL
 Java_org_openeggbert_cna_internal_generated_NativeEngineLayerRoutes_debugDrawAddSphere(
     JNIEnv* environment, jclass declaring_class, jlong debug, jfloatArray centreFloating, jfloat radius, jlongArray colourIntegral, jint segments)
 {
@@ -4211,6 +4231,655 @@ Java_org_openeggbert_cna_internal_generated_NativeEngineLayerRoutes_instancedRen
     (void)environment;
     (void)declaring_class;
     CNA_Result call_result = cna.instanced_renderer_ext_set_tints_enabled((CNA_InstancedRendererEXTHandle)renderer, (CNA_Bool)enabled);
+    return (jint)call_result;
+}
+
+JNIEXPORT jint JNICALL
+Java_org_openeggbert_cna_internal_generated_NativeEngineLayerRoutes_lightProbeExtCopyCoefficients(
+    JNIEnv* environment, jclass declaring_class, jlong probe, jfloatArray destinationFloating, jlongArray out_count)
+{
+    (void)environment;
+    (void)declaring_class;
+    jsize destination_count = (*environment)->GetArrayLength(environment, destinationFloating) / 3;
+    if ((*environment)->GetArrayLength(environment, destinationFloating) != destination_count * 3) {
+        return (jint)CNA_RESULT_INVALID_ARGUMENT;
+    }
+    CNA_Vector3* destination_values = (CNA_Vector3*)calloc(
+        (size_t)destination_count + 1U, sizeof(*destination_values));
+    if (destination_values == NULL) {
+        return (jint)CNA_RESULT_OUT_OF_MEMORY;
+    }
+    {
+        jsize destinationFloating_length = (*environment)->GetArrayLength(environment, destinationFloating);
+        jfloat* destinationFloating_values = (jfloat*)malloc(
+            ((size_t)destinationFloating_length + 1U) * sizeof(*destinationFloating_values));
+        if (destinationFloating_values == NULL) {
+            free(destination_values);
+            return (jint)CNA_RESULT_OUT_OF_MEMORY;
+        }
+        (*environment)->GetFloatArrayRegion(environment, destinationFloating, 0, destinationFloating_length, destinationFloating_values);
+        for (jsize element = 0; element < destination_count; ++element) {
+            destination_values[element].x = (float)destinationFloating_values[element * 3 + 0];
+            destination_values[element].y = (float)destinationFloating_values[element * 3 + 1];
+            destination_values[element].z = (float)destinationFloating_values[element * 3 + 2];
+        }
+        free(destinationFloating_values);
+    }
+    uint64_t out_count_value = 0;
+    CNA_Result call_result = cna.light_probe_ext_copy_coefficients((CNA_LightProbeHandle)probe, destination_values, (uint64_t)destination_count, &out_count_value);
+    if (call_result == CNA_RESULT_SUCCESS) {
+        {
+            jfloat* destinationFloating_out = (jfloat*)malloc(
+                ((size_t)destination_count * 3 + 1U) * sizeof(*destinationFloating_out));
+            if (destinationFloating_out != NULL) {
+                for (jsize element = 0; element < destination_count; ++element) {
+                    destinationFloating_out[element * 3 + 0] = (jfloat)destination_values[element].x;
+                    destinationFloating_out[element * 3 + 1] = (jfloat)destination_values[element].y;
+                    destinationFloating_out[element * 3 + 2] = (jfloat)destination_values[element].z;
+                }
+                (*environment)->SetFloatArrayRegion(
+                    environment, destinationFloating, 0,
+                    (jsize)(destination_count * 3), destinationFloating_out);
+                free(destinationFloating_out);
+            }
+        }
+    }
+    free(destination_values);
+    if (call_result == CNA_RESULT_SUCCESS || call_result == CNA_RESULT_BUFFER_TOO_SMALL) {
+        jlong out_count_element = (jlong)out_count_value;
+        (*environment)->SetLongArrayRegion(
+            environment, out_count, 0, 1, &out_count_element);
+    }
+    return (jint)call_result;
+}
+
+JNIEXPORT jint JNICALL
+Java_org_openeggbert_cna_internal_generated_NativeEngineLayerRoutes_lightProbeExtCopyEvaluationGlsl(
+    JNIEnv* environment, jclass declaring_class, jbyteArray destination, jlongArray out_bytes)
+{
+    (void)environment;
+    (void)declaring_class;
+    jsize destination_size = (*environment)->GetArrayLength(environment, destination);
+    jbyte* destination_bytes = (*environment)->GetByteArrayElements(environment, destination, NULL);
+    if (destination_bytes == NULL) {
+        return (jint)CNA_RESULT_OUT_OF_MEMORY;
+    }
+    uint64_t destination_written = 0;
+    CNA_Result call_result = cna.light_probe_ext_copy_evaluation_glsl((char*)destination_bytes, (uint64_t)destination_size, &destination_written);
+    (*environment)->ReleaseByteArrayElements(environment, destination, destination_bytes, 0);
+    if (call_result == CNA_RESULT_SUCCESS || call_result == CNA_RESULT_BUFFER_TOO_SMALL) {
+        jlong destination_element = (jlong)destination_written;
+        (*environment)->SetLongArrayRegion(
+            environment, out_bytes, 0, 1, &destination_element);
+    }
+    return (jint)call_result;
+}
+
+JNIEXPORT jint JNICALL
+Java_org_openeggbert_cna_internal_generated_NativeEngineLayerRoutes_lightProbeExtCopyFrom(
+    JNIEnv* environment, jclass declaring_class, jlong destination, jlong source)
+{
+    (void)environment;
+    (void)declaring_class;
+    CNA_Result call_result = cna.light_probe_ext_copy_from((CNA_LightProbeHandle)destination, (CNA_LightProbeHandle)source);
+    return (jint)call_result;
+}
+
+JNIEXPORT jint JNICALL
+Java_org_openeggbert_cna_internal_generated_NativeEngineLayerRoutes_lightProbeExtCreate(
+    JNIEnv* environment, jclass declaring_class, jlongArray out_probe)
+{
+    (void)environment;
+    (void)declaring_class;
+    CNA_LightProbeHandle out_probe_value = 0;
+    CNA_Result call_result = cna.light_probe_ext_create(&out_probe_value);
+    if (call_result == CNA_RESULT_SUCCESS || call_result == CNA_RESULT_BUFFER_TOO_SMALL) {
+        jlong out_probe_element = (jlong)out_probe_value;
+        (*environment)->SetLongArrayRegion(
+            environment, out_probe, 0, 1, &out_probe_element);
+    }
+    return (jint)call_result;
+}
+
+JNIEXPORT jint JNICALL
+Java_org_openeggbert_cna_internal_generated_NativeEngineLayerRoutes_lightProbeExtCreateAt(
+    JNIEnv* environment, jclass declaring_class, jfloatArray positionFloating, jlongArray out_probe)
+{
+    (void)environment;
+    (void)declaring_class;
+    CNA_Vector3 position_value;
+    memset(&position_value, 0, sizeof position_value);
+    {
+        jfloat positionFloating_values[3];
+        (*environment)->GetFloatArrayRegion(environment, positionFloating, 0, 3, positionFloating_values);
+        position_value.x = (float)positionFloating_values[0];
+        position_value.y = (float)positionFloating_values[1];
+        position_value.z = (float)positionFloating_values[2];
+    }
+    CNA_LightProbeHandle out_probe_value = 0;
+    CNA_Result call_result = cna.light_probe_ext_create_at(&position_value, &out_probe_value);
+    if (call_result == CNA_RESULT_SUCCESS || call_result == CNA_RESULT_BUFFER_TOO_SMALL) {
+        jlong out_probe_element = (jlong)out_probe_value;
+        (*environment)->SetLongArrayRegion(
+            environment, out_probe, 0, 1, &out_probe_element);
+    }
+    return (jint)call_result;
+}
+
+JNIEXPORT jint JNICALL
+Java_org_openeggbert_cna_internal_generated_NativeEngineLayerRoutes_lightProbeExtDestroy(
+    JNIEnv* environment, jclass declaring_class, jlong probe)
+{
+    (void)environment;
+    (void)declaring_class;
+    CNA_Result call_result = cna.light_probe_ext_destroy((CNA_LightProbeHandle)probe);
+    return (jint)call_result;
+}
+
+JNIEXPORT jint JNICALL
+Java_org_openeggbert_cna_internal_generated_NativeEngineLayerRoutes_lightProbeExtEquals(
+    JNIEnv* environment, jclass declaring_class, jlong first, jlong second, jbooleanArray out_equal)
+{
+    (void)environment;
+    (void)declaring_class;
+    CNA_Bool out_equal_value = 0;
+    CNA_Result call_result = cna.light_probe_ext_equals((CNA_LightProbeHandle)first, (CNA_LightProbeHandle)second, &out_equal_value);
+    if (call_result == CNA_RESULT_SUCCESS || call_result == CNA_RESULT_BUFFER_TOO_SMALL) {
+        jboolean out_equal_element = (jboolean)out_equal_value;
+        (*environment)->SetBooleanArrayRegion(
+            environment, out_equal, 0, 1, &out_equal_element);
+    }
+    return (jint)call_result;
+}
+
+JNIEXPORT jint JNICALL
+Java_org_openeggbert_cna_internal_generated_NativeEngineLayerRoutes_lightProbeExtGetCoefficient(
+    JNIEnv* environment, jclass declaring_class, jlong probe, jint index, jfloatArray out_valueFloating)
+{
+    (void)environment;
+    (void)declaring_class;
+    CNA_Vector3 out_value_value;
+    memset(&out_value_value, 0, sizeof out_value_value);
+    CNA_Result call_result = cna.light_probe_ext_get_coefficient((CNA_LightProbeHandle)probe, (int32_t)index, &out_value_value);
+    if (call_result == CNA_RESULT_SUCCESS || call_result == CNA_RESULT_BUFFER_TOO_SMALL) {
+        jfloat out_valueFloating_values[] = {
+            (jfloat)out_value_value.x,
+            (jfloat)out_value_value.y,
+            (jfloat)out_value_value.z
+        };
+        (*environment)->SetFloatArrayRegion(environment, out_valueFloating, 0,
+            (jsize)(sizeof out_valueFloating_values / sizeof out_valueFloating_values[0]),
+            out_valueFloating_values);
+    }
+    return (jint)call_result;
+}
+
+JNIEXPORT jint JNICALL
+Java_org_openeggbert_cna_internal_generated_NativeEngineLayerRoutes_lightProbeExtGetPosition(
+    JNIEnv* environment, jclass declaring_class, jlong probe, jfloatArray out_positionFloating)
+{
+    (void)environment;
+    (void)declaring_class;
+    CNA_Vector3 out_position_value;
+    memset(&out_position_value, 0, sizeof out_position_value);
+    CNA_Result call_result = cna.light_probe_ext_get_position((CNA_LightProbeHandle)probe, &out_position_value);
+    if (call_result == CNA_RESULT_SUCCESS || call_result == CNA_RESULT_BUFFER_TOO_SMALL) {
+        jfloat out_positionFloating_values[] = {
+            (jfloat)out_position_value.x,
+            (jfloat)out_position_value.y,
+            (jfloat)out_position_value.z
+        };
+        (*environment)->SetFloatArrayRegion(environment, out_positionFloating, 0,
+            (jsize)(sizeof out_positionFloating_values / sizeof out_positionFloating_values[0]),
+            out_positionFloating_values);
+    }
+    return (jint)call_result;
+}
+
+JNIEXPORT jint JNICALL
+Java_org_openeggbert_cna_internal_generated_NativeEngineLayerRoutes_lightProbeExtGetVisibilityMean(
+    JNIEnv* environment, jclass declaring_class, jlong probe, jint direction, jfloatArray out_value)
+{
+    (void)environment;
+    (void)declaring_class;
+    float out_value_value = 0;
+    CNA_Result call_result = cna.light_probe_ext_get_visibility_mean((CNA_LightProbeHandle)probe, (int32_t)direction, &out_value_value);
+    if (call_result == CNA_RESULT_SUCCESS || call_result == CNA_RESULT_BUFFER_TOO_SMALL) {
+        jfloat out_value_element = (jfloat)out_value_value;
+        (*environment)->SetFloatArrayRegion(
+            environment, out_value, 0, 1, &out_value_element);
+    }
+    return (jint)call_result;
+}
+
+JNIEXPORT jint JNICALL
+Java_org_openeggbert_cna_internal_generated_NativeEngineLayerRoutes_lightProbeExtGetVisibilityMeanSquared(
+    JNIEnv* environment, jclass declaring_class, jlong probe, jint direction, jfloatArray out_value)
+{
+    (void)environment;
+    (void)declaring_class;
+    float out_value_value = 0;
+    CNA_Result call_result = cna.light_probe_ext_get_visibility_mean_squared((CNA_LightProbeHandle)probe, (int32_t)direction, &out_value_value);
+    if (call_result == CNA_RESULT_SUCCESS || call_result == CNA_RESULT_BUFFER_TOO_SMALL) {
+        jfloat out_value_element = (jfloat)out_value_value;
+        (*environment)->SetFloatArrayRegion(
+            environment, out_value, 0, 1, &out_value_element);
+    }
+    return (jint)call_result;
+}
+
+JNIEXPORT jint JNICALL
+Java_org_openeggbert_cna_internal_generated_NativeEngineLayerRoutes_lightProbeExtHasVisibility(
+    JNIEnv* environment, jclass declaring_class, jlong probe, jbooleanArray out_has)
+{
+    (void)environment;
+    (void)declaring_class;
+    CNA_Bool out_has_value = 0;
+    CNA_Result call_result = cna.light_probe_ext_has_visibility((CNA_LightProbeHandle)probe, &out_has_value);
+    if (call_result == CNA_RESULT_SUCCESS || call_result == CNA_RESULT_BUFFER_TOO_SMALL) {
+        jboolean out_has_element = (jboolean)out_has_value;
+        (*environment)->SetBooleanArrayRegion(
+            environment, out_has, 0, 1, &out_has_element);
+    }
+    return (jint)call_result;
+}
+
+JNIEXPORT jint JNICALL
+Java_org_openeggbert_cna_internal_generated_NativeEngineLayerRoutes_lightProbeExtIrradiance(
+    JNIEnv* environment, jclass declaring_class, jlong probe, jfloatArray normalFloating, jfloatArray out_irradianceFloating)
+{
+    (void)environment;
+    (void)declaring_class;
+    CNA_Vector3 normal_value;
+    memset(&normal_value, 0, sizeof normal_value);
+    {
+        jfloat normalFloating_values[3];
+        (*environment)->GetFloatArrayRegion(environment, normalFloating, 0, 3, normalFloating_values);
+        normal_value.x = (float)normalFloating_values[0];
+        normal_value.y = (float)normalFloating_values[1];
+        normal_value.z = (float)normalFloating_values[2];
+    }
+    CNA_Vector3 out_irradiance_value;
+    memset(&out_irradiance_value, 0, sizeof out_irradiance_value);
+    CNA_Result call_result = cna.light_probe_ext_irradiance((CNA_LightProbeHandle)probe, &normal_value, &out_irradiance_value);
+    if (call_result == CNA_RESULT_SUCCESS || call_result == CNA_RESULT_BUFFER_TOO_SMALL) {
+        jfloat out_irradianceFloating_values[] = {
+            (jfloat)out_irradiance_value.x,
+            (jfloat)out_irradiance_value.y,
+            (jfloat)out_irradiance_value.z
+        };
+        (*environment)->SetFloatArrayRegion(environment, out_irradianceFloating, 0,
+            (jsize)(sizeof out_irradianceFloating_values / sizeof out_irradianceFloating_values[0]),
+            out_irradianceFloating_values);
+    }
+    return (jint)call_result;
+}
+
+JNIEXPORT jint JNICALL
+Java_org_openeggbert_cna_internal_generated_NativeEngineLayerRoutes_lightProbeExtIsZero(
+    JNIEnv* environment, jclass declaring_class, jlong probe, jbooleanArray out_zero)
+{
+    (void)environment;
+    (void)declaring_class;
+    CNA_Bool out_zero_value = 0;
+    CNA_Result call_result = cna.light_probe_ext_is_zero((CNA_LightProbeHandle)probe, &out_zero_value);
+    if (call_result == CNA_RESULT_SUCCESS || call_result == CNA_RESULT_BUFFER_TOO_SMALL) {
+        jboolean out_zero_element = (jboolean)out_zero_value;
+        (*environment)->SetBooleanArrayRegion(
+            environment, out_zero, 0, 1, &out_zero_element);
+    }
+    return (jint)call_result;
+}
+
+JNIEXPORT jint JNICALL
+Java_org_openeggbert_cna_internal_generated_NativeEngineLayerRoutes_lightProbeExtScale(
+    JNIEnv* environment, jclass declaring_class, jlong probe, jfloat factor)
+{
+    (void)environment;
+    (void)declaring_class;
+    CNA_Result call_result = cna.light_probe_ext_scale((CNA_LightProbeHandle)probe, (float)factor);
+    return (jint)call_result;
+}
+
+JNIEXPORT jint JNICALL
+Java_org_openeggbert_cna_internal_generated_NativeEngineLayerRoutes_lightProbeExtSetCoefficient(
+    JNIEnv* environment, jclass declaring_class, jlong probe, jint index, jfloatArray valueFloating)
+{
+    (void)environment;
+    (void)declaring_class;
+    CNA_Vector3 value_value;
+    memset(&value_value, 0, sizeof value_value);
+    {
+        jfloat valueFloating_values[3];
+        (*environment)->GetFloatArrayRegion(environment, valueFloating, 0, 3, valueFloating_values);
+        value_value.x = (float)valueFloating_values[0];
+        value_value.y = (float)valueFloating_values[1];
+        value_value.z = (float)valueFloating_values[2];
+    }
+    CNA_Result call_result = cna.light_probe_ext_set_coefficient((CNA_LightProbeHandle)probe, (int32_t)index, &value_value);
+    return (jint)call_result;
+}
+
+JNIEXPORT jint JNICALL
+Java_org_openeggbert_cna_internal_generated_NativeEngineLayerRoutes_lightProbeExtSetPosition(
+    JNIEnv* environment, jclass declaring_class, jlong probe, jfloatArray positionFloating)
+{
+    (void)environment;
+    (void)declaring_class;
+    CNA_Vector3 position_value;
+    memset(&position_value, 0, sizeof position_value);
+    {
+        jfloat positionFloating_values[3];
+        (*environment)->GetFloatArrayRegion(environment, positionFloating, 0, 3, positionFloating_values);
+        position_value.x = (float)positionFloating_values[0];
+        position_value.y = (float)positionFloating_values[1];
+        position_value.z = (float)positionFloating_values[2];
+    }
+    CNA_Result call_result = cna.light_probe_ext_set_position((CNA_LightProbeHandle)probe, &position_value);
+    return (jint)call_result;
+}
+
+JNIEXPORT jint JNICALL
+Java_org_openeggbert_cna_internal_generated_NativeEngineLayerRoutes_lightProbeExtSetVisibility(
+    JNIEnv* environment, jclass declaring_class, jlong probe, jint direction, jfloat mean_distance, jfloat mean_squared_distance)
+{
+    (void)environment;
+    (void)declaring_class;
+    CNA_Result call_result = cna.light_probe_ext_set_visibility((CNA_LightProbeHandle)probe, (int32_t)direction, (float)mean_distance, (float)mean_squared_distance);
+    return (jint)call_result;
+}
+
+JNIEXPORT jint JNICALL
+Java_org_openeggbert_cna_internal_generated_NativeEngineLayerRoutes_lightProbeExtVisibilityWeight(
+    JNIEnv* environment, jclass declaring_class, jlong probe, jfloatArray directionFloating, jfloat distance, jfloatArray out_weight)
+{
+    (void)environment;
+    (void)declaring_class;
+    CNA_Vector3 direction_value;
+    memset(&direction_value, 0, sizeof direction_value);
+    {
+        jfloat directionFloating_values[3];
+        (*environment)->GetFloatArrayRegion(environment, directionFloating, 0, 3, directionFloating_values);
+        direction_value.x = (float)directionFloating_values[0];
+        direction_value.y = (float)directionFloating_values[1];
+        direction_value.z = (float)directionFloating_values[2];
+    }
+    float out_weight_value = 0;
+    CNA_Result call_result = cna.light_probe_ext_visibility_weight((CNA_LightProbeHandle)probe, &direction_value, (float)distance, &out_weight_value);
+    if (call_result == CNA_RESULT_SUCCESS || call_result == CNA_RESULT_BUFFER_TOO_SMALL) {
+        jfloat out_weight_element = (jfloat)out_weight_value;
+        (*environment)->SetFloatArrayRegion(
+            environment, out_weight, 0, 1, &out_weight_element);
+    }
+    return (jint)call_result;
+}
+
+JNIEXPORT jint JNICALL
+Java_org_openeggbert_cna_internal_generated_NativeEngineLayerRoutes_lightProbeVolumeExtContains(
+    JNIEnv* environment, jclass declaring_class, jlong volume, jfloatArray positionFloating, jbooleanArray out_contains)
+{
+    (void)environment;
+    (void)declaring_class;
+    CNA_Vector3 position_value;
+    memset(&position_value, 0, sizeof position_value);
+    {
+        jfloat positionFloating_values[3];
+        (*environment)->GetFloatArrayRegion(environment, positionFloating, 0, 3, positionFloating_values);
+        position_value.x = (float)positionFloating_values[0];
+        position_value.y = (float)positionFloating_values[1];
+        position_value.z = (float)positionFloating_values[2];
+    }
+    CNA_Bool out_contains_value = 0;
+    CNA_Result call_result = cna.light_probe_volume_ext_contains((CNA_LightProbeVolumeHandle)volume, &position_value, &out_contains_value);
+    if (call_result == CNA_RESULT_SUCCESS || call_result == CNA_RESULT_BUFFER_TOO_SMALL) {
+        jboolean out_contains_element = (jboolean)out_contains_value;
+        (*environment)->SetBooleanArrayRegion(
+            environment, out_contains, 0, 1, &out_contains_element);
+    }
+    return (jint)call_result;
+}
+
+JNIEXPORT jint JNICALL
+Java_org_openeggbert_cna_internal_generated_NativeEngineLayerRoutes_lightProbeVolumeExtCreate(
+    JNIEnv* environment, jclass declaring_class, jfloatArray boundsFloating, jint count_x, jint count_y, jint count_z, jlongArray out_volume)
+{
+    (void)environment;
+    (void)declaring_class;
+    CNA_BoundingBox bounds_value;
+    memset(&bounds_value, 0, sizeof bounds_value);
+    {
+        jfloat boundsFloating_values[6];
+        (*environment)->GetFloatArrayRegion(environment, boundsFloating, 0, 6, boundsFloating_values);
+        bounds_value.min.x = (float)boundsFloating_values[0];
+        bounds_value.min.y = (float)boundsFloating_values[1];
+        bounds_value.min.z = (float)boundsFloating_values[2];
+        bounds_value.max.x = (float)boundsFloating_values[3];
+        bounds_value.max.y = (float)boundsFloating_values[4];
+        bounds_value.max.z = (float)boundsFloating_values[5];
+    }
+    CNA_LightProbeVolumeHandle out_volume_value = 0;
+    CNA_Result call_result = cna.light_probe_volume_ext_create(&bounds_value, (int32_t)count_x, (int32_t)count_y, (int32_t)count_z, &out_volume_value);
+    if (call_result == CNA_RESULT_SUCCESS || call_result == CNA_RESULT_BUFFER_TOO_SMALL) {
+        jlong out_volume_element = (jlong)out_volume_value;
+        (*environment)->SetLongArrayRegion(
+            environment, out_volume, 0, 1, &out_volume_element);
+    }
+    return (jint)call_result;
+}
+
+JNIEXPORT jint JNICALL
+Java_org_openeggbert_cna_internal_generated_NativeEngineLayerRoutes_lightProbeVolumeExtDestroy(
+    JNIEnv* environment, jclass declaring_class, jlong volume)
+{
+    (void)environment;
+    (void)declaring_class;
+    CNA_Result call_result = cna.light_probe_volume_ext_destroy((CNA_LightProbeVolumeHandle)volume);
+    return (jint)call_result;
+}
+
+JNIEXPORT jint JNICALL
+Java_org_openeggbert_cna_internal_generated_NativeEngineLayerRoutes_lightProbeVolumeExtGetBounds(
+    JNIEnv* environment, jclass declaring_class, jlong volume, jfloatArray out_boundsFloating)
+{
+    (void)environment;
+    (void)declaring_class;
+    CNA_BoundingBox out_bounds_value;
+    memset(&out_bounds_value, 0, sizeof out_bounds_value);
+    CNA_Result call_result = cna.light_probe_volume_ext_get_bounds((CNA_LightProbeVolumeHandle)volume, &out_bounds_value);
+    if (call_result == CNA_RESULT_SUCCESS || call_result == CNA_RESULT_BUFFER_TOO_SMALL) {
+        jfloat out_boundsFloating_values[] = {
+            (jfloat)out_bounds_value.min.x,
+            (jfloat)out_bounds_value.min.y,
+            (jfloat)out_bounds_value.min.z,
+            (jfloat)out_bounds_value.max.x,
+            (jfloat)out_bounds_value.max.y,
+            (jfloat)out_bounds_value.max.z
+        };
+        (*environment)->SetFloatArrayRegion(environment, out_boundsFloating, 0,
+            (jsize)(sizeof out_boundsFloating_values / sizeof out_boundsFloating_values[0]),
+            out_boundsFloating_values);
+    }
+    return (jint)call_result;
+}
+
+JNIEXPORT jint JNICALL
+Java_org_openeggbert_cna_internal_generated_NativeEngineLayerRoutes_lightProbeVolumeExtGetCountX(
+    JNIEnv* environment, jclass declaring_class, jlong volume, jintArray out_count)
+{
+    (void)environment;
+    (void)declaring_class;
+    int32_t out_count_value = 0;
+    CNA_Result call_result = cna.light_probe_volume_ext_get_count_x((CNA_LightProbeVolumeHandle)volume, &out_count_value);
+    if (call_result == CNA_RESULT_SUCCESS || call_result == CNA_RESULT_BUFFER_TOO_SMALL) {
+        jint out_count_element = (jint)out_count_value;
+        (*environment)->SetIntArrayRegion(
+            environment, out_count, 0, 1, &out_count_element);
+    }
+    return (jint)call_result;
+}
+
+JNIEXPORT jint JNICALL
+Java_org_openeggbert_cna_internal_generated_NativeEngineLayerRoutes_lightProbeVolumeExtGetCountY(
+    JNIEnv* environment, jclass declaring_class, jlong volume, jintArray out_count)
+{
+    (void)environment;
+    (void)declaring_class;
+    int32_t out_count_value = 0;
+    CNA_Result call_result = cna.light_probe_volume_ext_get_count_y((CNA_LightProbeVolumeHandle)volume, &out_count_value);
+    if (call_result == CNA_RESULT_SUCCESS || call_result == CNA_RESULT_BUFFER_TOO_SMALL) {
+        jint out_count_element = (jint)out_count_value;
+        (*environment)->SetIntArrayRegion(
+            environment, out_count, 0, 1, &out_count_element);
+    }
+    return (jint)call_result;
+}
+
+JNIEXPORT jint JNICALL
+Java_org_openeggbert_cna_internal_generated_NativeEngineLayerRoutes_lightProbeVolumeExtGetCountZ(
+    JNIEnv* environment, jclass declaring_class, jlong volume, jintArray out_count)
+{
+    (void)environment;
+    (void)declaring_class;
+    int32_t out_count_value = 0;
+    CNA_Result call_result = cna.light_probe_volume_ext_get_count_z((CNA_LightProbeVolumeHandle)volume, &out_count_value);
+    if (call_result == CNA_RESULT_SUCCESS || call_result == CNA_RESULT_BUFFER_TOO_SMALL) {
+        jint out_count_element = (jint)out_count_value;
+        (*environment)->SetIntArrayRegion(
+            environment, out_count, 0, 1, &out_count_element);
+    }
+    return (jint)call_result;
+}
+
+JNIEXPORT jint JNICALL
+Java_org_openeggbert_cna_internal_generated_NativeEngineLayerRoutes_lightProbeVolumeExtGetProbe(
+    JNIEnv* environment, jclass declaring_class, jlong volume, jint x, jint y, jint z, jlong out_probe)
+{
+    (void)environment;
+    (void)declaring_class;
+    CNA_Result call_result = cna.light_probe_volume_ext_get_probe((CNA_LightProbeVolumeHandle)volume, (int32_t)x, (int32_t)y, (int32_t)z, (CNA_LightProbeHandle)out_probe);
+    return (jint)call_result;
+}
+
+JNIEXPORT jint JNICALL
+Java_org_openeggbert_cna_internal_generated_NativeEngineLayerRoutes_lightProbeVolumeExtGetProbeCount(
+    JNIEnv* environment, jclass declaring_class, jlong volume, jintArray out_count)
+{
+    (void)environment;
+    (void)declaring_class;
+    int32_t out_count_value = 0;
+    CNA_Result call_result = cna.light_probe_volume_ext_get_probe_count((CNA_LightProbeVolumeHandle)volume, &out_count_value);
+    if (call_result == CNA_RESULT_SUCCESS || call_result == CNA_RESULT_BUFFER_TOO_SMALL) {
+        jint out_count_element = (jint)out_count_value;
+        (*environment)->SetIntArrayRegion(
+            environment, out_count, 0, 1, &out_count_element);
+    }
+    return (jint)call_result;
+}
+
+JNIEXPORT jint JNICALL
+Java_org_openeggbert_cna_internal_generated_NativeEngineLayerRoutes_lightProbeVolumeExtGetProbePosition(
+    JNIEnv* environment, jclass declaring_class, jlong volume, jint x, jint y, jint z, jfloatArray out_positionFloating)
+{
+    (void)environment;
+    (void)declaring_class;
+    CNA_Vector3 out_position_value;
+    memset(&out_position_value, 0, sizeof out_position_value);
+    CNA_Result call_result = cna.light_probe_volume_ext_get_probe_position((CNA_LightProbeVolumeHandle)volume, (int32_t)x, (int32_t)y, (int32_t)z, &out_position_value);
+    if (call_result == CNA_RESULT_SUCCESS || call_result == CNA_RESULT_BUFFER_TOO_SMALL) {
+        jfloat out_positionFloating_values[] = {
+            (jfloat)out_position_value.x,
+            (jfloat)out_position_value.y,
+            (jfloat)out_position_value.z
+        };
+        (*environment)->SetFloatArrayRegion(environment, out_positionFloating, 0,
+            (jsize)(sizeof out_positionFloating_values / sizeof out_positionFloating_values[0]),
+            out_positionFloating_values);
+    }
+    return (jint)call_result;
+}
+
+JNIEXPORT jint JNICALL
+Java_org_openeggbert_cna_internal_generated_NativeEngineLayerRoutes_lightProbeVolumeExtIrradiance(
+    JNIEnv* environment, jclass declaring_class, jlong volume, jfloatArray positionFloating, jfloatArray normalFloating, jfloatArray out_irradianceFloating)
+{
+    (void)environment;
+    (void)declaring_class;
+    CNA_Vector3 position_value;
+    memset(&position_value, 0, sizeof position_value);
+    {
+        jfloat positionFloating_values[3];
+        (*environment)->GetFloatArrayRegion(environment, positionFloating, 0, 3, positionFloating_values);
+        position_value.x = (float)positionFloating_values[0];
+        position_value.y = (float)positionFloating_values[1];
+        position_value.z = (float)positionFloating_values[2];
+    }
+    CNA_Vector3 normal_value;
+    memset(&normal_value, 0, sizeof normal_value);
+    {
+        jfloat normalFloating_values[3];
+        (*environment)->GetFloatArrayRegion(environment, normalFloating, 0, 3, normalFloating_values);
+        normal_value.x = (float)normalFloating_values[0];
+        normal_value.y = (float)normalFloating_values[1];
+        normal_value.z = (float)normalFloating_values[2];
+    }
+    CNA_Vector3 out_irradiance_value;
+    memset(&out_irradiance_value, 0, sizeof out_irradiance_value);
+    CNA_Result call_result = cna.light_probe_volume_ext_irradiance((CNA_LightProbeVolumeHandle)volume, &position_value, &normal_value, &out_irradiance_value);
+    if (call_result == CNA_RESULT_SUCCESS || call_result == CNA_RESULT_BUFFER_TOO_SMALL) {
+        jfloat out_irradianceFloating_values[] = {
+            (jfloat)out_irradiance_value.x,
+            (jfloat)out_irradiance_value.y,
+            (jfloat)out_irradiance_value.z
+        };
+        (*environment)->SetFloatArrayRegion(environment, out_irradianceFloating, 0,
+            (jsize)(sizeof out_irradianceFloating_values / sizeof out_irradianceFloating_values[0]),
+            out_irradianceFloating_values);
+    }
+    return (jint)call_result;
+}
+
+JNIEXPORT jint JNICALL
+Java_org_openeggbert_cna_internal_generated_NativeEngineLayerRoutes_lightProbeVolumeExtIsZero(
+    JNIEnv* environment, jclass declaring_class, jlong volume, jbooleanArray out_zero)
+{
+    (void)environment;
+    (void)declaring_class;
+    CNA_Bool out_zero_value = 0;
+    CNA_Result call_result = cna.light_probe_volume_ext_is_zero((CNA_LightProbeVolumeHandle)volume, &out_zero_value);
+    if (call_result == CNA_RESULT_SUCCESS || call_result == CNA_RESULT_BUFFER_TOO_SMALL) {
+        jboolean out_zero_element = (jboolean)out_zero_value;
+        (*environment)->SetBooleanArrayRegion(
+            environment, out_zero, 0, 1, &out_zero_element);
+    }
+    return (jint)call_result;
+}
+
+JNIEXPORT jint JNICALL
+Java_org_openeggbert_cna_internal_generated_NativeEngineLayerRoutes_lightProbeVolumeExtSampleProbe(
+    JNIEnv* environment, jclass declaring_class, jlong volume, jfloatArray positionFloating, jlong out_probe)
+{
+    (void)environment;
+    (void)declaring_class;
+    CNA_Vector3 position_value;
+    memset(&position_value, 0, sizeof position_value);
+    {
+        jfloat positionFloating_values[3];
+        (*environment)->GetFloatArrayRegion(environment, positionFloating, 0, 3, positionFloating_values);
+        position_value.x = (float)positionFloating_values[0];
+        position_value.y = (float)positionFloating_values[1];
+        position_value.z = (float)positionFloating_values[2];
+    }
+    CNA_Result call_result = cna.light_probe_volume_ext_sample_probe((CNA_LightProbeVolumeHandle)volume, &position_value, (CNA_LightProbeHandle)out_probe);
+    return (jint)call_result;
+}
+
+JNIEXPORT jint JNICALL
+Java_org_openeggbert_cna_internal_generated_NativeEngineLayerRoutes_lightProbeVolumeExtSetProbe(
+    JNIEnv* environment, jclass declaring_class, jlong volume, jint x, jint y, jint z, jlong probe)
+{
+    (void)environment;
+    (void)declaring_class;
+    CNA_Result call_result = cna.light_probe_volume_ext_set_probe((CNA_LightProbeVolumeHandle)volume, (int32_t)x, (int32_t)y, (int32_t)z, (CNA_LightProbeHandle)probe);
     return (jint)call_result;
 }
 

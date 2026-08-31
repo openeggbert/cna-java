@@ -229,6 +229,23 @@ public final class DebugDraw implements AutoCloseable {
     }
 
     /**
+     * Queues a cross at every probe in a light-probe volume, and the volume's own box.
+     *
+     * <p>Where the probes actually are, which is the thing a game gets wrong when its ambient
+     * light is subtly in the wrong place.
+     *
+     * @param volume the volume to outline
+     * @param color the colour to draw it in
+     * @param crossSize how far each probe's cross extends
+     */
+    public void addProbeVolumeGizmo(LightProbeVolume volume, Color color, float crossSize) {
+        Objects.requireNonNull(volume, "volume");
+        GraphicsExtension.check("DebugDraw.addProbeVolumeGizmo", NativeEngineLayerRoutes
+                .debugDrawAddProbeVolumeGizmo(open(), volume.handle(), channels(color),
+                        crossSize));
+    }
+
+    /**
      * Queues each of a cascaded shadow map's cascades as its frustum.
      *
      * <p>The other half of {@link CascadedShadowMap#setDebugTintEnabled}: the tint says which

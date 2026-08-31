@@ -6082,6 +6082,18 @@
       ]
     },
     {
+      "name": "cna_debug_draw_add_probe_volume_gizmo",
+      "header": "engine_layer.h",
+      "ownership": "borrows the renderer and the volume; copies the geometry into the renderer's queue",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_DebugDrawHandle",
+        "CNA_LightProbeVolumeHandle",
+        "CNA_Color",
+        "float"
+      ]
+    },
+    {
       "name": "cna_debug_draw_add_sphere",
       "header": "engine_layer.h",
       "ownership": "borrows the renderer; reads the caller's values",
@@ -12028,6 +12040,362 @@
         "CNA_GamerHandle",
         "int32_t",
         "CNA_LeaderboardReaderHandle*"
+      ]
+    },
+    {
+      "name": "cna_light_probe_ext_copy_coefficients",
+      "header": "engine_layer.h",
+      "ownership": "borrows the probe; fills the caller's coefficient buffer",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_LightProbeHandle",
+        "CNA_Vector3*",
+        "uint64_t",
+        "uint64_t*"
+      ]
+    },
+    {
+      "name": "cna_light_probe_ext_copy_evaluation_glsl",
+      "header": "engine_layer.h",
+      "ownership": "no handle; fills the caller's byte buffer",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "char*",
+        "uint64_t",
+        "uint64_t*"
+      ]
+    },
+    {
+      "name": "cna_light_probe_ext_copy_from",
+      "header": "engine_layer.h",
+      "ownership": "borrows both probes; copies the source's value into the destination",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_LightProbeHandle",
+        "CNA_LightProbeHandle"
+      ]
+    },
+    {
+      "name": "cna_light_probe_ext_create",
+      "header": "engine_layer.h",
+      "ownership": "no handle; returns an owned light-probe handle",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_LightProbeHandle*"
+      ]
+    },
+    {
+      "name": "cna_light_probe_ext_create_at",
+      "header": "engine_layer.h",
+      "ownership": "no handle; returns an owned light-probe handle",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "const CNA_Vector3*",
+        "CNA_LightProbeHandle*"
+      ]
+    },
+    {
+      "name": "cna_light_probe_ext_destroy",
+      "header": "engine_layer.h",
+      "ownership": "releases the owned light-probe handle",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_LightProbeHandle"
+      ]
+    },
+    {
+      "name": "cna_light_probe_ext_equals",
+      "header": "engine_layer.h",
+      "ownership": "borrows both probes",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_LightProbeHandle",
+        "CNA_LightProbeHandle",
+        "CNA_Bool*"
+      ]
+    },
+    {
+      "name": "cna_light_probe_ext_get_coefficient",
+      "header": "engine_layer.h",
+      "ownership": "borrows the probe",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_LightProbeHandle",
+        "int32_t",
+        "CNA_Vector3*"
+      ]
+    },
+    {
+      "name": "cna_light_probe_ext_get_position",
+      "header": "engine_layer.h",
+      "ownership": "borrows the probe",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_LightProbeHandle",
+        "CNA_Vector3*"
+      ]
+    },
+    {
+      "name": "cna_light_probe_ext_get_visibility_mean",
+      "header": "engine_layer.h",
+      "ownership": "borrows the probe",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_LightProbeHandle",
+        "int32_t",
+        "float*"
+      ]
+    },
+    {
+      "name": "cna_light_probe_ext_get_visibility_mean_squared",
+      "header": "engine_layer.h",
+      "ownership": "borrows the probe",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_LightProbeHandle",
+        "int32_t",
+        "float*"
+      ]
+    },
+    {
+      "name": "cna_light_probe_ext_has_visibility",
+      "header": "engine_layer.h",
+      "ownership": "borrows the probe",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_LightProbeHandle",
+        "CNA_Bool*"
+      ]
+    },
+    {
+      "name": "cna_light_probe_ext_irradiance",
+      "header": "engine_layer.h",
+      "ownership": "borrows the probe",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_LightProbeHandle",
+        "const CNA_Vector3*",
+        "CNA_Vector3*"
+      ]
+    },
+    {
+      "name": "cna_light_probe_ext_is_zero",
+      "header": "engine_layer.h",
+      "ownership": "borrows the probe",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_LightProbeHandle",
+        "CNA_Bool*"
+      ]
+    },
+    {
+      "name": "cna_light_probe_ext_scale",
+      "header": "engine_layer.h",
+      "ownership": "borrows the probe",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_LightProbeHandle",
+        "float"
+      ]
+    },
+    {
+      "name": "cna_light_probe_ext_set_coefficient",
+      "header": "engine_layer.h",
+      "ownership": "borrows the probe",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_LightProbeHandle",
+        "int32_t",
+        "const CNA_Vector3*"
+      ]
+    },
+    {
+      "name": "cna_light_probe_ext_set_position",
+      "header": "engine_layer.h",
+      "ownership": "borrows the probe",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_LightProbeHandle",
+        "const CNA_Vector3*"
+      ]
+    },
+    {
+      "name": "cna_light_probe_ext_set_visibility",
+      "header": "engine_layer.h",
+      "ownership": "borrows the probe",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_LightProbeHandle",
+        "int32_t",
+        "float",
+        "float"
+      ]
+    },
+    {
+      "name": "cna_light_probe_ext_visibility_weight",
+      "header": "engine_layer.h",
+      "ownership": "borrows the probe",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_LightProbeHandle",
+        "const CNA_Vector3*",
+        "float",
+        "float*"
+      ]
+    },
+    {
+      "name": "cna_light_probe_volume_ext_contains",
+      "header": "engine_layer.h",
+      "ownership": "borrows the volume",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_LightProbeVolumeHandle",
+        "const CNA_Vector3*",
+        "CNA_Bool*"
+      ]
+    },
+    {
+      "name": "cna_light_probe_volume_ext_create",
+      "header": "engine_layer.h",
+      "ownership": "no handle; returns an owned probe-volume handle",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "const CNA_BoundingBox*",
+        "int32_t",
+        "int32_t",
+        "int32_t",
+        "CNA_LightProbeVolumeHandle*"
+      ]
+    },
+    {
+      "name": "cna_light_probe_volume_ext_destroy",
+      "header": "engine_layer.h",
+      "ownership": "releases the owned probe-volume handle and the probes it stores by value",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_LightProbeVolumeHandle"
+      ]
+    },
+    {
+      "name": "cna_light_probe_volume_ext_get_bounds",
+      "header": "engine_layer.h",
+      "ownership": "borrows the volume",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_LightProbeVolumeHandle",
+        "CNA_BoundingBox*"
+      ]
+    },
+    {
+      "name": "cna_light_probe_volume_ext_get_count_x",
+      "header": "engine_layer.h",
+      "ownership": "borrows the volume",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_LightProbeVolumeHandle",
+        "int32_t*"
+      ]
+    },
+    {
+      "name": "cna_light_probe_volume_ext_get_count_y",
+      "header": "engine_layer.h",
+      "ownership": "borrows the volume",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_LightProbeVolumeHandle",
+        "int32_t*"
+      ]
+    },
+    {
+      "name": "cna_light_probe_volume_ext_get_count_z",
+      "header": "engine_layer.h",
+      "ownership": "borrows the volume",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_LightProbeVolumeHandle",
+        "int32_t*"
+      ]
+    },
+    {
+      "name": "cna_light_probe_volume_ext_get_probe",
+      "header": "engine_layer.h",
+      "ownership": "borrows the volume and the caller's probe; copies a probe's value into it",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_LightProbeVolumeHandle",
+        "int32_t",
+        "int32_t",
+        "int32_t",
+        "CNA_LightProbeHandle"
+      ]
+    },
+    {
+      "name": "cna_light_probe_volume_ext_get_probe_count",
+      "header": "engine_layer.h",
+      "ownership": "borrows the volume",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_LightProbeVolumeHandle",
+        "int32_t*"
+      ]
+    },
+    {
+      "name": "cna_light_probe_volume_ext_get_probe_position",
+      "header": "engine_layer.h",
+      "ownership": "borrows the volume",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_LightProbeVolumeHandle",
+        "int32_t",
+        "int32_t",
+        "int32_t",
+        "CNA_Vector3*"
+      ]
+    },
+    {
+      "name": "cna_light_probe_volume_ext_irradiance",
+      "header": "engine_layer.h",
+      "ownership": "borrows the volume",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_LightProbeVolumeHandle",
+        "const CNA_Vector3*",
+        "const CNA_Vector3*",
+        "CNA_Vector3*"
+      ]
+    },
+    {
+      "name": "cna_light_probe_volume_ext_is_zero",
+      "header": "engine_layer.h",
+      "ownership": "borrows the volume",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_LightProbeVolumeHandle",
+        "CNA_Bool*"
+      ]
+    },
+    {
+      "name": "cna_light_probe_volume_ext_sample_probe",
+      "header": "engine_layer.h",
+      "ownership": "borrows the volume and the caller's probe; copies a probe's value into it",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_LightProbeVolumeHandle",
+        "const CNA_Vector3*",
+        "CNA_LightProbeHandle"
+      ]
+    },
+    {
+      "name": "cna_light_probe_volume_ext_set_probe",
+      "header": "engine_layer.h",
+      "ownership": "borrows the volume and the caller's probe; copies its value into the grid",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_LightProbeVolumeHandle",
+        "int32_t",
+        "int32_t",
+        "int32_t",
+        "CNA_LightProbeHandle"
       ]
     },
     {

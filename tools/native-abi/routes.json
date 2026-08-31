@@ -3830,6 +3830,10 @@
         "symbol": "cna_debug_draw_add_point_light_gizmo"
       },
       {
+        "java": "debugDrawAddProbeVolumeGizmo",
+        "symbol": "cna_debug_draw_add_probe_volume_gizmo"
+      },
+      {
         "java": "debugDrawAddSphere",
         "symbol": "cna_debug_draw_add_sphere"
       },
@@ -4036,6 +4040,138 @@
       {
         "java": "instancedRendererExtSetTintsEnabled",
         "symbol": "cna_instanced_renderer_ext_set_tints_enabled"
+      },
+      {
+        "java": "lightProbeExtCopyCoefficients",
+        "symbol": "cna_light_probe_ext_copy_coefficients"
+      },
+      {
+        "java": "lightProbeExtCopyEvaluationGlsl",
+        "symbol": "cna_light_probe_ext_copy_evaluation_glsl"
+      },
+      {
+        "java": "lightProbeExtCopyFrom",
+        "symbol": "cna_light_probe_ext_copy_from"
+      },
+      {
+        "java": "lightProbeExtCreate",
+        "symbol": "cna_light_probe_ext_create"
+      },
+      {
+        "java": "lightProbeExtCreateAt",
+        "symbol": "cna_light_probe_ext_create_at"
+      },
+      {
+        "java": "lightProbeExtDestroy",
+        "symbol": "cna_light_probe_ext_destroy"
+      },
+      {
+        "java": "lightProbeExtEquals",
+        "symbol": "cna_light_probe_ext_equals"
+      },
+      {
+        "java": "lightProbeExtGetCoefficient",
+        "symbol": "cna_light_probe_ext_get_coefficient"
+      },
+      {
+        "java": "lightProbeExtGetPosition",
+        "symbol": "cna_light_probe_ext_get_position"
+      },
+      {
+        "java": "lightProbeExtGetVisibilityMean",
+        "symbol": "cna_light_probe_ext_get_visibility_mean"
+      },
+      {
+        "java": "lightProbeExtGetVisibilityMeanSquared",
+        "symbol": "cna_light_probe_ext_get_visibility_mean_squared"
+      },
+      {
+        "java": "lightProbeExtHasVisibility",
+        "symbol": "cna_light_probe_ext_has_visibility"
+      },
+      {
+        "java": "lightProbeExtIrradiance",
+        "symbol": "cna_light_probe_ext_irradiance"
+      },
+      {
+        "java": "lightProbeExtIsZero",
+        "symbol": "cna_light_probe_ext_is_zero"
+      },
+      {
+        "java": "lightProbeExtScale",
+        "symbol": "cna_light_probe_ext_scale"
+      },
+      {
+        "java": "lightProbeExtSetCoefficient",
+        "symbol": "cna_light_probe_ext_set_coefficient"
+      },
+      {
+        "java": "lightProbeExtSetPosition",
+        "symbol": "cna_light_probe_ext_set_position"
+      },
+      {
+        "java": "lightProbeExtSetVisibility",
+        "symbol": "cna_light_probe_ext_set_visibility"
+      },
+      {
+        "java": "lightProbeExtVisibilityWeight",
+        "symbol": "cna_light_probe_ext_visibility_weight"
+      },
+      {
+        "java": "lightProbeVolumeExtContains",
+        "symbol": "cna_light_probe_volume_ext_contains"
+      },
+      {
+        "java": "lightProbeVolumeExtCreate",
+        "symbol": "cna_light_probe_volume_ext_create"
+      },
+      {
+        "java": "lightProbeVolumeExtDestroy",
+        "symbol": "cna_light_probe_volume_ext_destroy"
+      },
+      {
+        "java": "lightProbeVolumeExtGetBounds",
+        "symbol": "cna_light_probe_volume_ext_get_bounds"
+      },
+      {
+        "java": "lightProbeVolumeExtGetCountX",
+        "symbol": "cna_light_probe_volume_ext_get_count_x"
+      },
+      {
+        "java": "lightProbeVolumeExtGetCountY",
+        "symbol": "cna_light_probe_volume_ext_get_count_y"
+      },
+      {
+        "java": "lightProbeVolumeExtGetCountZ",
+        "symbol": "cna_light_probe_volume_ext_get_count_z"
+      },
+      {
+        "java": "lightProbeVolumeExtGetProbe",
+        "symbol": "cna_light_probe_volume_ext_get_probe"
+      },
+      {
+        "java": "lightProbeVolumeExtGetProbeCount",
+        "symbol": "cna_light_probe_volume_ext_get_probe_count"
+      },
+      {
+        "java": "lightProbeVolumeExtGetProbePosition",
+        "symbol": "cna_light_probe_volume_ext_get_probe_position"
+      },
+      {
+        "java": "lightProbeVolumeExtIrradiance",
+        "symbol": "cna_light_probe_volume_ext_irradiance"
+      },
+      {
+        "java": "lightProbeVolumeExtIsZero",
+        "symbol": "cna_light_probe_volume_ext_is_zero"
+      },
+      {
+        "java": "lightProbeVolumeExtSampleProbe",
+        "symbol": "cna_light_probe_volume_ext_sample_probe"
+      },
+      {
+        "java": "lightProbeVolumeExtSetProbe",
+        "symbol": "cna_light_probe_volume_ext_set_probe"
       },
       {
         "java": "lodGroupExtAddLevel",
