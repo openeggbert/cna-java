@@ -3436,6 +3436,54 @@
         "symbol": "cna_aerial_perspective_pass_transmittance"
       },
       {
+        "java": "atmosphericSkyCopyModelGlsl",
+        "symbol": "cna_atmospheric_sky_copy_model_glsl"
+      },
+      {
+        "java": "atmosphericSkyCreate",
+        "symbol": "cna_atmospheric_sky_create"
+      },
+      {
+        "java": "atmosphericSkyDestroy",
+        "symbol": "cna_atmospheric_sky_destroy"
+      },
+      {
+        "java": "atmosphericSkyDraw",
+        "symbol": "cna_atmospheric_sky_draw"
+      },
+      {
+        "java": "atmosphericSkyGetIntensity",
+        "symbol": "cna_atmospheric_sky_get_intensity"
+      },
+      {
+        "java": "atmosphericSkyGetSunDirection",
+        "symbol": "cna_atmospheric_sky_get_sun_direction"
+      },
+      {
+        "java": "atmosphericSkyGetTurbidity",
+        "symbol": "cna_atmospheric_sky_get_turbidity"
+      },
+      {
+        "java": "atmosphericSkyIsSupported",
+        "symbol": "cna_atmospheric_sky_is_supported"
+      },
+      {
+        "java": "atmosphericSkyRadiance",
+        "symbol": "cna_atmospheric_sky_radiance"
+      },
+      {
+        "java": "atmosphericSkySetIntensity",
+        "symbol": "cna_atmospheric_sky_set_intensity"
+      },
+      {
+        "java": "atmosphericSkySetSunDirection",
+        "symbol": "cna_atmospheric_sky_set_sun_direction"
+      },
+      {
+        "java": "atmosphericSkySetTurbidity",
+        "symbol": "cna_atmospheric_sky_set_turbidity"
+      },
+      {
         "java": "blitPassCreate",
         "symbol": "cna_blit_pass_create"
       },
@@ -4096,6 +4144,106 @@
       {
         "java": "decalPassSetTint",
         "symbol": "cna_decal_pass_set_tint"
+      },
+      {
+        "java": "depthNormalPrepassBegin",
+        "symbol": "cna_depth_normal_prepass_begin"
+      },
+      {
+        "java": "depthNormalPrepassCopyDepthDecodeGlsl",
+        "symbol": "cna_depth_normal_prepass_copy_depth_decode_glsl"
+      },
+      {
+        "java": "depthNormalPrepassCopyVelocityDecodeGlsl",
+        "symbol": "cna_depth_normal_prepass_copy_velocity_decode_glsl"
+      },
+      {
+        "java": "depthNormalPrepassCreate",
+        "symbol": "cna_depth_normal_prepass_create"
+      },
+      {
+        "java": "depthNormalPrepassDecodeVelocityExt",
+        "symbol": "cna_depth_normal_prepass_decode_velocity_ext"
+      },
+      {
+        "java": "depthNormalPrepassDestroy",
+        "symbol": "cna_depth_normal_prepass_destroy"
+      },
+      {
+        "java": "depthNormalPrepassEnd",
+        "symbol": "cna_depth_normal_prepass_end"
+      },
+      {
+        "java": "depthNormalPrepassGetDepthTexture",
+        "symbol": "cna_depth_normal_prepass_get_depth_texture"
+      },
+      {
+        "java": "depthNormalPrepassGetNormalTexture",
+        "symbol": "cna_depth_normal_prepass_get_normal_texture"
+      },
+      {
+        "java": "depthNormalPrepassGetPassCount",
+        "symbol": "cna_depth_normal_prepass_get_pass_count"
+      },
+      {
+        "java": "depthNormalPrepassGetRoughness",
+        "symbol": "cna_depth_normal_prepass_get_roughness"
+      },
+      {
+        "java": "depthNormalPrepassGetVelocityTextureExt",
+        "symbol": "cna_depth_normal_prepass_get_velocity_texture_ext"
+      },
+      {
+        "java": "depthNormalPrepassHasVelocityExt",
+        "symbol": "cna_depth_normal_prepass_has_velocity_ext"
+      },
+      {
+        "java": "depthNormalPrepassIsDepthPacked",
+        "symbol": "cna_depth_normal_prepass_is_depth_packed"
+      },
+      {
+        "java": "depthNormalPrepassIsSupported",
+        "symbol": "cna_depth_normal_prepass_is_supported"
+      },
+      {
+        "java": "depthNormalPrepassIsUsingMultipleRenderTargets",
+        "symbol": "cna_depth_normal_prepass_is_using_multiple_render_targets"
+      },
+      {
+        "java": "depthNormalPrepassIsVelocityEnabledExt",
+        "symbol": "cna_depth_normal_prepass_is_velocity_enabled_ext"
+      },
+      {
+        "java": "depthNormalPrepassPackDepth",
+        "symbol": "cna_depth_normal_prepass_pack_depth"
+      },
+      {
+        "java": "depthNormalPrepassResize",
+        "symbol": "cna_depth_normal_prepass_resize"
+      },
+      {
+        "java": "depthNormalPrepassSetPreviousCameraExt",
+        "symbol": "cna_depth_normal_prepass_set_previous_camera_ext"
+      },
+      {
+        "java": "depthNormalPrepassSetPreviousWorldExt",
+        "symbol": "cna_depth_normal_prepass_set_previous_world_ext"
+      },
+      {
+        "java": "depthNormalPrepassSetRoughness",
+        "symbol": "cna_depth_normal_prepass_set_roughness"
+      },
+      {
+        "java": "depthNormalPrepassSetVelocityEnabledExt",
+        "symbol": "cna_depth_normal_prepass_set_velocity_enabled_ext"
+      },
+      {
+        "java": "depthNormalPrepassUnpackDepth",
+        "symbol": "cna_depth_normal_prepass_unpack_depth"
+      },
+      {
+        "java": "depthNormalPrepassUsesPackedDepthExt",
+        "symbol": "cna_depth_normal_prepass_uses_packed_depth_ext"
       },
       {
         "java": "depthOfFieldPassCircleOfConfusionMillimetres",

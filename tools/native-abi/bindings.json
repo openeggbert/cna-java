@@ -991,6 +991,131 @@
       ]
     },
     {
+      "name": "cna_atmospheric_sky_copy_model_glsl",
+      "header": "engine_layer.h",
+      "ownership": "no handle; a pure function of its arguments",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "char*",
+        "uint64_t",
+        "uint64_t*"
+      ]
+    },
+    {
+      "name": "cna_atmospheric_sky_create",
+      "header": "engine_layer.h",
+      "ownership": "borrows the graphics device; returns an owned sky handle",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_Handle",
+        "CNA_AtmosphericSkyHandle*"
+      ]
+    },
+    {
+      "name": "cna_atmospheric_sky_destroy",
+      "header": "engine_layer.h",
+      "ownership": "releases the owned sky handle",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_AtmosphericSkyHandle"
+      ]
+    },
+    {
+      "name": "cna_atmospheric_sky_draw",
+      "header": "engine_layer.h",
+      "ownership": "borrows the sky",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_AtmosphericSkyHandle",
+        "const CNA_Matrix*",
+        "const CNA_Matrix*",
+        "int32_t",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "cna_atmospheric_sky_get_intensity",
+      "header": "engine_layer.h",
+      "ownership": "borrows the sky",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_AtmosphericSkyHandle",
+        "float*"
+      ]
+    },
+    {
+      "name": "cna_atmospheric_sky_get_sun_direction",
+      "header": "engine_layer.h",
+      "ownership": "borrows the sky",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_AtmosphericSkyHandle",
+        "CNA_Vector3*"
+      ]
+    },
+    {
+      "name": "cna_atmospheric_sky_get_turbidity",
+      "header": "engine_layer.h",
+      "ownership": "borrows the sky",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_AtmosphericSkyHandle",
+        "float*"
+      ]
+    },
+    {
+      "name": "cna_atmospheric_sky_is_supported",
+      "header": "engine_layer.h",
+      "ownership": "borrows the sky",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_AtmosphericSkyHandle",
+        "CNA_Bool*"
+      ]
+    },
+    {
+      "name": "cna_atmospheric_sky_radiance",
+      "header": "engine_layer.h",
+      "ownership": "no handle; a pure function of its arguments",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "const CNA_Vector3*",
+        "const CNA_Vector3*",
+        "float",
+        "CNA_Vector3*"
+      ]
+    },
+    {
+      "name": "cna_atmospheric_sky_set_intensity",
+      "header": "engine_layer.h",
+      "ownership": "borrows the sky",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_AtmosphericSkyHandle",
+        "float"
+      ]
+    },
+    {
+      "name": "cna_atmospheric_sky_set_sun_direction",
+      "header": "engine_layer.h",
+      "ownership": "borrows the sky",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_AtmosphericSkyHandle",
+        "const CNA_Vector3*"
+      ]
+    },
+    {
+      "name": "cna_atmospheric_sky_set_turbidity",
+      "header": "engine_layer.h",
+      "ownership": "borrows the sky",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_AtmosphericSkyHandle",
+        "float"
+      ]
+    },
+    {
       "name": "cna_audio_category_copy_name",
       "header": "xact.h",
       "ownership": "borrows category; caller UTF-8 buffer",
@@ -6824,6 +6949,273 @@
       "parameters": [
         "CNA_EffectHandle",
         "CNA_DepthEffectMode"
+      ]
+    },
+    {
+      "name": "cna_depth_normal_prepass_begin",
+      "header": "engine_layer.h",
+      "ownership": "borrows the prepass",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_DepthNormalPrepassHandle",
+        "int32_t",
+        "const CNA_Matrix*",
+        "const CNA_Matrix*",
+        "float",
+        "float"
+      ]
+    },
+    {
+      "name": "cna_depth_normal_prepass_copy_depth_decode_glsl",
+      "header": "engine_layer.h",
+      "ownership": "no handle; fills the caller's byte buffer",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_Bool",
+        "char*",
+        "uint64_t",
+        "uint64_t*"
+      ]
+    },
+    {
+      "name": "cna_depth_normal_prepass_copy_velocity_decode_glsl",
+      "header": "engine_layer.h",
+      "ownership": "no handle; fills the caller's byte buffer",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "char*",
+        "uint64_t",
+        "uint64_t*"
+      ]
+    },
+    {
+      "name": "cna_depth_normal_prepass_create",
+      "header": "engine_layer.h",
+      "ownership": "borrows the graphics device; returns an owned prepass handle",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_Handle",
+        "int32_t",
+        "int32_t",
+        "CNA_DepthEncoding",
+        "CNA_DepthNormalPrepassHandle*"
+      ]
+    },
+    {
+      "name": "cna_depth_normal_prepass_decode_velocity_ext",
+      "header": "engine_layer.h",
+      "ownership": "no handle; a pure function of its arguments",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_Color",
+        "CNA_Vector2*"
+      ]
+    },
+    {
+      "name": "cna_depth_normal_prepass_destroy",
+      "header": "engine_layer.h",
+      "ownership": "releases the owned prepass handle and its targets; refused while a texture borrow is outstanding",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_DepthNormalPrepassHandle"
+      ]
+    },
+    {
+      "name": "cna_depth_normal_prepass_end",
+      "header": "engine_layer.h",
+      "ownership": "borrows the prepass",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_DepthNormalPrepassHandle"
+      ]
+    },
+    {
+      "name": "cna_depth_normal_prepass_get_depth_texture",
+      "header": "engine_layer.h",
+      "ownership": "borrows the prepass; returns a counted borrow of one of its targets that the caller releases with cna_render_target_destroy",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_DepthNormalPrepassHandle",
+        "CNA_Handle*"
+      ]
+    },
+    {
+      "name": "cna_depth_normal_prepass_get_normal_texture",
+      "header": "engine_layer.h",
+      "ownership": "borrows the prepass; returns a counted borrow of one of its targets that the caller releases with cna_render_target_destroy",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_DepthNormalPrepassHandle",
+        "CNA_Handle*"
+      ]
+    },
+    {
+      "name": "cna_depth_normal_prepass_get_pass_count",
+      "header": "engine_layer.h",
+      "ownership": "borrows the prepass",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_DepthNormalPrepassHandle",
+        "int32_t*"
+      ]
+    },
+    {
+      "name": "cna_depth_normal_prepass_get_roughness",
+      "header": "engine_layer.h",
+      "ownership": "borrows the prepass",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_DepthNormalPrepassHandle",
+        "float*"
+      ]
+    },
+    {
+      "name": "cna_depth_normal_prepass_get_velocity_texture_ext",
+      "header": "engine_layer.h",
+      "ownership": "borrows the prepass; returns a counted borrow of one of its targets that the caller releases with cna_render_target_destroy",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_DepthNormalPrepassHandle",
+        "CNA_Handle*"
+      ]
+    },
+    {
+      "name": "cna_depth_normal_prepass_has_velocity_ext",
+      "header": "engine_layer.h",
+      "ownership": "no handle; a pure function of its arguments",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_Color",
+        "CNA_Bool*"
+      ]
+    },
+    {
+      "name": "cna_depth_normal_prepass_is_depth_packed",
+      "header": "engine_layer.h",
+      "ownership": "borrows the prepass",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_DepthNormalPrepassHandle",
+        "CNA_Bool*"
+      ]
+    },
+    {
+      "name": "cna_depth_normal_prepass_is_supported",
+      "header": "engine_layer.h",
+      "ownership": "borrows the prepass and the graphics device",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_DepthNormalPrepassHandle",
+        "CNA_Handle",
+        "CNA_Bool*"
+      ]
+    },
+    {
+      "name": "cna_depth_normal_prepass_is_using_multiple_render_targets",
+      "header": "engine_layer.h",
+      "ownership": "borrows the prepass",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_DepthNormalPrepassHandle",
+        "CNA_Bool*"
+      ]
+    },
+    {
+      "name": "cna_depth_normal_prepass_is_velocity_enabled_ext",
+      "header": "engine_layer.h",
+      "ownership": "borrows the prepass",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_DepthNormalPrepassHandle",
+        "CNA_Bool*"
+      ]
+    },
+    {
+      "name": "cna_depth_normal_prepass_pack_depth",
+      "header": "engine_layer.h",
+      "ownership": "no handle; a pure function of its arguments",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "float",
+        "float*",
+        "float*",
+        "float*",
+        "float*"
+      ]
+    },
+    {
+      "name": "cna_depth_normal_prepass_resize",
+      "header": "engine_layer.h",
+      "ownership": "borrows the prepass",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_DepthNormalPrepassHandle",
+        "int32_t",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "cna_depth_normal_prepass_set_previous_camera_ext",
+      "header": "engine_layer.h",
+      "ownership": "borrows the prepass",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_DepthNormalPrepassHandle",
+        "const CNA_Matrix*",
+        "const CNA_Matrix*"
+      ]
+    },
+    {
+      "name": "cna_depth_normal_prepass_set_previous_world_ext",
+      "header": "engine_layer.h",
+      "ownership": "borrows the prepass",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_DepthNormalPrepassHandle",
+        "const CNA_Matrix*"
+      ]
+    },
+    {
+      "name": "cna_depth_normal_prepass_set_roughness",
+      "header": "engine_layer.h",
+      "ownership": "borrows the prepass",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_DepthNormalPrepassHandle",
+        "float"
+      ]
+    },
+    {
+      "name": "cna_depth_normal_prepass_set_velocity_enabled_ext",
+      "header": "engine_layer.h",
+      "ownership": "borrows the prepass",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_DepthNormalPrepassHandle",
+        "CNA_Bool"
+      ]
+    },
+    {
+      "name": "cna_depth_normal_prepass_unpack_depth",
+      "header": "engine_layer.h",
+      "ownership": "no handle; a pure function of its arguments",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "float",
+        "float",
+        "float",
+        "float",
+        "float*"
+      ]
+    },
+    {
+      "name": "cna_depth_normal_prepass_uses_packed_depth_ext",
+      "header": "engine_layer.h",
+      "ownership": "borrows the graphics device",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_Handle",
+        "CNA_Bool*"
       ]
     },
     {

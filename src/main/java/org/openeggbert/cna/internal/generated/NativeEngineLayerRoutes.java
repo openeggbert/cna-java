@@ -101,6 +101,141 @@ public final class NativeEngineLayerRoutes {
     public static native int aerialPerspectivePassTransmittance(float turbidity, float airMass, float[] outTransmittanceFloating);
 
     /**
+     * cna_atmospheric_sky_copy_model_glsl (engine_layer.h).
+     */
+    public static native int atmosphericSkyCopyModelGlsl(byte[] destination, long[] outBytes);
+
+    /**
+     * cna_atmospheric_sky_create (engine_layer.h).
+     */
+    public static native int atmosphericSkyCreate(long graphicsDevice, long[] outSky);
+
+    /**
+     * cna_atmospheric_sky_destroy (engine_layer.h).
+     */
+    public static native int atmosphericSkyDestroy(long sky);
+
+    /**
+     * cna_atmospheric_sky_draw (engine_layer.h).
+     *
+     * <p>viewFloating carries CNA_Matrix in this order:
+     * <ol start="0">
+     *   <li>{@code m11} (float)</li>
+     *   <li>{@code m12} (float)</li>
+     *   <li>{@code m13} (float)</li>
+     *   <li>{@code m14} (float)</li>
+     *   <li>{@code m21} (float)</li>
+     *   <li>{@code m22} (float)</li>
+     *   <li>{@code m23} (float)</li>
+     *   <li>{@code m24} (float)</li>
+     *   <li>{@code m31} (float)</li>
+     *   <li>{@code m32} (float)</li>
+     *   <li>{@code m33} (float)</li>
+     *   <li>{@code m34} (float)</li>
+     *   <li>{@code m41} (float)</li>
+     *   <li>{@code m42} (float)</li>
+     *   <li>{@code m43} (float)</li>
+     *   <li>{@code m44} (float)</li>
+     * </ol>
+     *
+     * <p>projectionFloating carries CNA_Matrix in this order:
+     * <ol start="0">
+     *   <li>{@code m11} (float)</li>
+     *   <li>{@code m12} (float)</li>
+     *   <li>{@code m13} (float)</li>
+     *   <li>{@code m14} (float)</li>
+     *   <li>{@code m21} (float)</li>
+     *   <li>{@code m22} (float)</li>
+     *   <li>{@code m23} (float)</li>
+     *   <li>{@code m24} (float)</li>
+     *   <li>{@code m31} (float)</li>
+     *   <li>{@code m32} (float)</li>
+     *   <li>{@code m33} (float)</li>
+     *   <li>{@code m34} (float)</li>
+     *   <li>{@code m41} (float)</li>
+     *   <li>{@code m42} (float)</li>
+     *   <li>{@code m43} (float)</li>
+     *   <li>{@code m44} (float)</li>
+     * </ol>
+     */
+    public static native int atmosphericSkyDraw(long sky, float[] viewFloating, float[] projectionFloating, int width, int height);
+
+    /**
+     * cna_atmospheric_sky_get_intensity (engine_layer.h).
+     */
+    public static native int atmosphericSkyGetIntensity(long sky, float[] outIntensity);
+
+    /**
+     * cna_atmospheric_sky_get_sun_direction (engine_layer.h).
+     *
+     * <p>outDirectionFloating carries CNA_Vector3 in this order:
+     * <ol start="0">
+     *   <li>{@code x} (float)</li>
+     *   <li>{@code y} (float)</li>
+     *   <li>{@code z} (float)</li>
+     * </ol>
+     */
+    public static native int atmosphericSkyGetSunDirection(long sky, float[] outDirectionFloating);
+
+    /**
+     * cna_atmospheric_sky_get_turbidity (engine_layer.h).
+     */
+    public static native int atmosphericSkyGetTurbidity(long sky, float[] outTurbidity);
+
+    /**
+     * cna_atmospheric_sky_is_supported (engine_layer.h).
+     */
+    public static native int atmosphericSkyIsSupported(long sky, boolean[] outSupported);
+
+    /**
+     * cna_atmospheric_sky_radiance (engine_layer.h).
+     *
+     * <p>viewDirectionFloating carries CNA_Vector3 in this order:
+     * <ol start="0">
+     *   <li>{@code x} (float)</li>
+     *   <li>{@code y} (float)</li>
+     *   <li>{@code z} (float)</li>
+     * </ol>
+     *
+     * <p>sunDirectionFloating carries CNA_Vector3 in this order:
+     * <ol start="0">
+     *   <li>{@code x} (float)</li>
+     *   <li>{@code y} (float)</li>
+     *   <li>{@code z} (float)</li>
+     * </ol>
+     *
+     * <p>outRadianceFloating carries CNA_Vector3 in this order:
+     * <ol start="0">
+     *   <li>{@code x} (float)</li>
+     *   <li>{@code y} (float)</li>
+     *   <li>{@code z} (float)</li>
+     * </ol>
+     */
+    public static native int atmosphericSkyRadiance(float[] viewDirectionFloating, float[] sunDirectionFloating, float turbidity, float[] outRadianceFloating);
+
+    /**
+     * cna_atmospheric_sky_set_intensity (engine_layer.h).
+     */
+    public static native int atmosphericSkySetIntensity(long sky, float intensity);
+
+    /**
+     * cna_atmospheric_sky_set_sun_direction (engine_layer.h).
+     *
+     * <p>directionFloating carries CNA_Vector3 in this order:
+     * <ol start="0">
+     *   <li>{@code x} (float)</li>
+     *   <li>{@code y} (float)</li>
+     *   <li>{@code z} (float)</li>
+     * </ol>
+     */
+    public static native int atmosphericSkySetSunDirection(long sky, float[] directionFloating);
+
+    /**
+     * cna_atmospheric_sky_set_turbidity (engine_layer.h).
+     */
+    public static native int atmosphericSkySetTurbidity(long sky, float turbidity);
+
+    /**
      * cna_blit_pass_create (engine_layer.h).
      */
     public static native int blitPassCreate(long graphicsDevice, long[] outPass);
@@ -1721,6 +1856,237 @@ public final class NativeEngineLayerRoutes {
      * </ol>
      */
     public static native int decalPassSetTint(long pass, float[] valueFloating);
+
+    /**
+     * cna_depth_normal_prepass_begin (engine_layer.h).
+     *
+     * <p>viewFloating carries CNA_Matrix in this order:
+     * <ol start="0">
+     *   <li>{@code m11} (float)</li>
+     *   <li>{@code m12} (float)</li>
+     *   <li>{@code m13} (float)</li>
+     *   <li>{@code m14} (float)</li>
+     *   <li>{@code m21} (float)</li>
+     *   <li>{@code m22} (float)</li>
+     *   <li>{@code m23} (float)</li>
+     *   <li>{@code m24} (float)</li>
+     *   <li>{@code m31} (float)</li>
+     *   <li>{@code m32} (float)</li>
+     *   <li>{@code m33} (float)</li>
+     *   <li>{@code m34} (float)</li>
+     *   <li>{@code m41} (float)</li>
+     *   <li>{@code m42} (float)</li>
+     *   <li>{@code m43} (float)</li>
+     *   <li>{@code m44} (float)</li>
+     * </ol>
+     *
+     * <p>projectionFloating carries CNA_Matrix in this order:
+     * <ol start="0">
+     *   <li>{@code m11} (float)</li>
+     *   <li>{@code m12} (float)</li>
+     *   <li>{@code m13} (float)</li>
+     *   <li>{@code m14} (float)</li>
+     *   <li>{@code m21} (float)</li>
+     *   <li>{@code m22} (float)</li>
+     *   <li>{@code m23} (float)</li>
+     *   <li>{@code m24} (float)</li>
+     *   <li>{@code m31} (float)</li>
+     *   <li>{@code m32} (float)</li>
+     *   <li>{@code m33} (float)</li>
+     *   <li>{@code m34} (float)</li>
+     *   <li>{@code m41} (float)</li>
+     *   <li>{@code m42} (float)</li>
+     *   <li>{@code m43} (float)</li>
+     *   <li>{@code m44} (float)</li>
+     * </ol>
+     */
+    public static native int depthNormalPrepassBegin(long prepass, int passIndex, float[] viewFloating, float[] projectionFloating, float nearPlane, float farPlane);
+
+    /**
+     * cna_depth_normal_prepass_copy_depth_decode_glsl (engine_layer.h).
+     */
+    public static native int depthNormalPrepassCopyDepthDecodeGlsl(boolean packed, byte[] destination, long[] outBytes);
+
+    /**
+     * cna_depth_normal_prepass_copy_velocity_decode_glsl (engine_layer.h).
+     */
+    public static native int depthNormalPrepassCopyVelocityDecodeGlsl(byte[] destination, long[] outBytes);
+
+    /**
+     * cna_depth_normal_prepass_create (engine_layer.h).
+     */
+    public static native int depthNormalPrepassCreate(long graphicsDevice, int width, int height, int encoding, long[] outPrepass);
+
+    /**
+     * cna_depth_normal_prepass_decode_velocity_ext (engine_layer.h).
+     *
+     * <p>outVelocityFloating carries CNA_Vector2 in this order:
+     * <ol start="0">
+     *   <li>{@code x} (float)</li>
+     *   <li>{@code y} (float)</li>
+     * </ol>
+     */
+    public static native int depthNormalPrepassDecodeVelocityExt(long[] texelIntegral, float[] outVelocityFloating);
+
+    /**
+     * cna_depth_normal_prepass_destroy (engine_layer.h).
+     */
+    public static native int depthNormalPrepassDestroy(long prepass);
+
+    /**
+     * cna_depth_normal_prepass_end (engine_layer.h).
+     */
+    public static native int depthNormalPrepassEnd(long prepass);
+
+    /**
+     * cna_depth_normal_prepass_get_depth_texture (engine_layer.h).
+     */
+    public static native int depthNormalPrepassGetDepthTexture(long prepass, long[] outTexture);
+
+    /**
+     * cna_depth_normal_prepass_get_normal_texture (engine_layer.h).
+     */
+    public static native int depthNormalPrepassGetNormalTexture(long prepass, long[] outTexture);
+
+    /**
+     * cna_depth_normal_prepass_get_pass_count (engine_layer.h).
+     */
+    public static native int depthNormalPrepassGetPassCount(long prepass, int[] outCount);
+
+    /**
+     * cna_depth_normal_prepass_get_roughness (engine_layer.h).
+     */
+    public static native int depthNormalPrepassGetRoughness(long prepass, float[] outRoughness);
+
+    /**
+     * cna_depth_normal_prepass_get_velocity_texture_ext (engine_layer.h).
+     */
+    public static native int depthNormalPrepassGetVelocityTextureExt(long prepass, long[] outTexture);
+
+    /**
+     * cna_depth_normal_prepass_has_velocity_ext (engine_layer.h).
+     */
+    public static native int depthNormalPrepassHasVelocityExt(long[] texelIntegral, boolean[] outHas);
+
+    /**
+     * cna_depth_normal_prepass_is_depth_packed (engine_layer.h).
+     */
+    public static native int depthNormalPrepassIsDepthPacked(long prepass, boolean[] outPacked);
+
+    /**
+     * cna_depth_normal_prepass_is_supported (engine_layer.h).
+     */
+    public static native int depthNormalPrepassIsSupported(long prepass, long graphicsDevice, boolean[] outSupported);
+
+    /**
+     * cna_depth_normal_prepass_is_using_multiple_render_targets (engine_layer.h).
+     */
+    public static native int depthNormalPrepassIsUsingMultipleRenderTargets(long prepass, boolean[] outUsing);
+
+    /**
+     * cna_depth_normal_prepass_is_velocity_enabled_ext (engine_layer.h).
+     */
+    public static native int depthNormalPrepassIsVelocityEnabledExt(long prepass, boolean[] outEnabled);
+
+    /**
+     * cna_depth_normal_prepass_pack_depth (engine_layer.h).
+     */
+    public static native int depthNormalPrepassPackDepth(float value, float[] outR, float[] outG, float[] outB, float[] outA);
+
+    /**
+     * cna_depth_normal_prepass_resize (engine_layer.h).
+     */
+    public static native int depthNormalPrepassResize(long prepass, int width, int height);
+
+    /**
+     * cna_depth_normal_prepass_set_previous_camera_ext (engine_layer.h).
+     *
+     * <p>previousViewFloating carries CNA_Matrix in this order:
+     * <ol start="0">
+     *   <li>{@code m11} (float)</li>
+     *   <li>{@code m12} (float)</li>
+     *   <li>{@code m13} (float)</li>
+     *   <li>{@code m14} (float)</li>
+     *   <li>{@code m21} (float)</li>
+     *   <li>{@code m22} (float)</li>
+     *   <li>{@code m23} (float)</li>
+     *   <li>{@code m24} (float)</li>
+     *   <li>{@code m31} (float)</li>
+     *   <li>{@code m32} (float)</li>
+     *   <li>{@code m33} (float)</li>
+     *   <li>{@code m34} (float)</li>
+     *   <li>{@code m41} (float)</li>
+     *   <li>{@code m42} (float)</li>
+     *   <li>{@code m43} (float)</li>
+     *   <li>{@code m44} (float)</li>
+     * </ol>
+     *
+     * <p>previousProjectionFloating carries CNA_Matrix in this order:
+     * <ol start="0">
+     *   <li>{@code m11} (float)</li>
+     *   <li>{@code m12} (float)</li>
+     *   <li>{@code m13} (float)</li>
+     *   <li>{@code m14} (float)</li>
+     *   <li>{@code m21} (float)</li>
+     *   <li>{@code m22} (float)</li>
+     *   <li>{@code m23} (float)</li>
+     *   <li>{@code m24} (float)</li>
+     *   <li>{@code m31} (float)</li>
+     *   <li>{@code m32} (float)</li>
+     *   <li>{@code m33} (float)</li>
+     *   <li>{@code m34} (float)</li>
+     *   <li>{@code m41} (float)</li>
+     *   <li>{@code m42} (float)</li>
+     *   <li>{@code m43} (float)</li>
+     *   <li>{@code m44} (float)</li>
+     * </ol>
+     */
+    public static native int depthNormalPrepassSetPreviousCameraExt(long prepass, float[] previousViewFloating, float[] previousProjectionFloating);
+
+    /**
+     * cna_depth_normal_prepass_set_previous_world_ext (engine_layer.h).
+     *
+     * <p>previousWorldFloating carries CNA_Matrix in this order:
+     * <ol start="0">
+     *   <li>{@code m11} (float)</li>
+     *   <li>{@code m12} (float)</li>
+     *   <li>{@code m13} (float)</li>
+     *   <li>{@code m14} (float)</li>
+     *   <li>{@code m21} (float)</li>
+     *   <li>{@code m22} (float)</li>
+     *   <li>{@code m23} (float)</li>
+     *   <li>{@code m24} (float)</li>
+     *   <li>{@code m31} (float)</li>
+     *   <li>{@code m32} (float)</li>
+     *   <li>{@code m33} (float)</li>
+     *   <li>{@code m34} (float)</li>
+     *   <li>{@code m41} (float)</li>
+     *   <li>{@code m42} (float)</li>
+     *   <li>{@code m43} (float)</li>
+     *   <li>{@code m44} (float)</li>
+     * </ol>
+     */
+    public static native int depthNormalPrepassSetPreviousWorldExt(long prepass, float[] previousWorldFloating);
+
+    /**
+     * cna_depth_normal_prepass_set_roughness (engine_layer.h).
+     */
+    public static native int depthNormalPrepassSetRoughness(long prepass, float roughness);
+
+    /**
+     * cna_depth_normal_prepass_set_velocity_enabled_ext (engine_layer.h).
+     */
+    public static native int depthNormalPrepassSetVelocityEnabledExt(long prepass, boolean enabled);
+
+    /**
+     * cna_depth_normal_prepass_unpack_depth (engine_layer.h).
+     */
+    public static native int depthNormalPrepassUnpackDepth(float r, float g, float b, float a, float[] outValue);
+
+    /**
+     * cna_depth_normal_prepass_uses_packed_depth_ext (engine_layer.h).
+     */
+    public static native int depthNormalPrepassUsesPackedDepthExt(long graphicsDevice, boolean[] outPacked);
 
     /**
      * cna_depth_of_field_pass_circle_of_confusion_millimetres (engine_layer.h).
