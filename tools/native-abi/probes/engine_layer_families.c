@@ -179,10 +179,52 @@ static void device_families(const CNA_Handle device)
                   cna_cascaded_shadow_map_destroy(map));
     }
     {
+        /* Created, updated and asked to open one face. CNA's own log says face passes "still
+           open and close" on a renderer that cannot cast, so whether that holds is a fact
+           rather than a guess -- and it does not: JAVA-UPSTREAM-007. */
         CNA_CubeShadowMapHandle map = 0;
-        LIFECYCLE("cube_shadow_map",
-                  cna_cube_shadow_map_create(device, CNA_SHADOW_QUALITY_LOW, &map), map,
-                  cna_cube_shadow_map_destroy(map));
+        const CNA_Result created =
+            cna_cube_shadow_map_create(device, CNA_SHADOW_QUALITY_LOW, &map);
+        if (created != CNA_RESULT_SUCCESS) {
+            printf("  %-42s %-17s (%d)\n", "cube_shadow_map", name_of(created), (int)created);
+        } else {
+            CNA_Bool castable = CNA_FALSE;
+            TRY("cube_shadow_map_is_supported",
+                cna_cube_shadow_map_is_supported(map, &castable));
+            printf("  %-42s %s\n", "cube_shadow_map supported?", castable ? "yes" : "no");
+            CNA_PointLightEXT light;
+            memset(&light, 0, sizeof light);
+            light.struct_size = (uint32_t)(sizeof light);
+            light.struct_version = 1U;
+            if (cna_point_light_ext_init(&light) == CNA_RESULT_SUCCESS) {
+                light.range = 20.0F;
+                TRY("cube_shadow_map_update", cna_cube_shadow_map_update(map, &light));
+                TRY("cube_shadow_map_begin(face 0)", cna_cube_shadow_map_begin(map, 0));
+                TRY("cube_shadow_map_end", cna_cube_shadow_map_end(map));
+            }
+            TRY("cube_shadow_map_destroy", cna_cube_shadow_map_destroy(map));
+        }
+    }
+    {
+        /* The same question for the 2D map, because the two answers differ and the difference
+           is the whole finding. */
+        CNA_ShadowMapHandle map = 0;
+        const CNA_Result created = cna_shadow_map_create(device, CNA_SHADOW_QUALITY_LOW, &map);
+        if (created == CNA_RESULT_SUCCESS) {
+            CNA_DirectionalLightEXT light;
+            memset(&light, 0, sizeof light);
+            light.struct_size = (uint32_t)(sizeof light);
+            light.struct_version = 1U;
+            CNA_BoundingBox scene;
+            memset(&scene, 0, sizeof scene);
+            scene.min.x = -5.0F; scene.min.y = -5.0F; scene.min.z = -5.0F;
+            scene.max.x =  5.0F; scene.max.y =  5.0F; scene.max.z =  5.0F;
+            if (cna_directional_light_ext_init(&light) == CNA_RESULT_SUCCESS) {
+                TRY("shadow_map_begin", cna_shadow_map_begin(map, &light, &scene));
+                TRY("shadow_map_end", cna_shadow_map_end(map));
+            }
+            TRY("shadow_map_destroy", cna_shadow_map_destroy(map));
+        }
     }
     {
         CNA_SpotShadowMapHandle map = 0;

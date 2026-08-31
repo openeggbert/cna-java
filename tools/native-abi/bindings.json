@@ -5362,6 +5362,166 @@
       ]
     },
     {
+      "name": "cna_cube_shadow_map_begin",
+      "header": "engine_layer.h",
+      "ownership": "borrows the cube shadow map and the caller's light; copies what it needs",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_CubeShadowMapHandle",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "cna_cube_shadow_map_compute_face_projection",
+      "header": "engine_layer.h",
+      "ownership": "no handle; a pure function of its arguments",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "float",
+        "CNA_Matrix*"
+      ]
+    },
+    {
+      "name": "cna_cube_shadow_map_compute_face_view",
+      "header": "engine_layer.h",
+      "ownership": "no handle; a pure function of its arguments",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_CubeMapFace",
+        "const CNA_Vector3*",
+        "CNA_Matrix*"
+      ]
+    },
+    {
+      "name": "cna_cube_shadow_map_create",
+      "header": "engine_layer.h",
+      "ownership": "borrows the graphics device; returns an owned cube shadow map handle",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_Handle",
+        "CNA_ShadowQuality",
+        "CNA_CubeShadowMapHandle*"
+      ]
+    },
+    {
+      "name": "cna_cube_shadow_map_destroy",
+      "header": "engine_layer.h",
+      "ownership": "releases the owned cube shadow map handle and the target it owns; refused while a texture borrow is outstanding",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_CubeShadowMapHandle"
+      ]
+    },
+    {
+      "name": "cna_cube_shadow_map_end",
+      "header": "engine_layer.h",
+      "ownership": "borrows the cube shadow map",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_CubeShadowMapHandle"
+      ]
+    },
+    {
+      "name": "cna_cube_shadow_map_get_depth_bias",
+      "header": "engine_layer.h",
+      "ownership": "borrows the cube shadow map",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_CubeShadowMapHandle",
+        "float*"
+      ]
+    },
+    {
+      "name": "cna_cube_shadow_map_get_light_position",
+      "header": "engine_layer.h",
+      "ownership": "borrows the cube shadow map",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_CubeShadowMapHandle",
+        "CNA_Vector3*"
+      ]
+    },
+    {
+      "name": "cna_cube_shadow_map_get_light_range",
+      "header": "engine_layer.h",
+      "ownership": "borrows the cube shadow map",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_CubeShadowMapHandle",
+        "float*"
+      ]
+    },
+    {
+      "name": "cna_cube_shadow_map_get_quality",
+      "header": "engine_layer.h",
+      "ownership": "borrows the cube shadow map",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_CubeShadowMapHandle",
+        "CNA_ShadowQuality*"
+      ]
+    },
+    {
+      "name": "cna_cube_shadow_map_get_shadow_texture",
+      "header": "engine_layer.h",
+      "ownership": "borrows the cube shadow map; returns a counted borrow of its target that the caller releases with cna_render_target_destroy or cna_texturecube_destroy",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_CubeShadowMapHandle",
+        "CNA_Handle*"
+      ]
+    },
+    {
+      "name": "cna_cube_shadow_map_get_size",
+      "header": "engine_layer.h",
+      "ownership": "borrows the cube shadow map",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_CubeShadowMapHandle",
+        "int32_t*"
+      ]
+    },
+    {
+      "name": "cna_cube_shadow_map_is_supported",
+      "header": "engine_layer.h",
+      "ownership": "borrows the cube shadow map",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_CubeShadowMapHandle",
+        "CNA_Bool*"
+      ]
+    },
+    {
+      "name": "cna_cube_shadow_map_set_depth_bias",
+      "header": "engine_layer.h",
+      "ownership": "borrows the cube shadow map",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_CubeShadowMapHandle",
+        "float"
+      ]
+    },
+    {
+      "name": "cna_cube_shadow_map_size_for_quality",
+      "header": "engine_layer.h",
+      "ownership": "no handle; a pure function of its arguments",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_ShadowQuality",
+        "int32_t*"
+      ]
+    },
+    {
+      "name": "cna_cube_shadow_map_update",
+      "header": "engine_layer.h",
+      "ownership": "borrows the cube shadow map and the caller's light; copies what it needs",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_CubeShadowMapHandle",
+        "const CNA_PointLightEXT*"
+      ]
+    },
+    {
       "name": "cna_cue_apply_3d",
       "header": "xact.h",
       "ownership": "borrows cue and copies listener/emitter",
@@ -15597,6 +15757,189 @@
       ]
     },
     {
+      "name": "cna_shadow_map_apply_caster",
+      "header": "engine_layer.h",
+      "ownership": "borrows the directional shadow map",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_ShadowMapHandle"
+      ]
+    },
+    {
+      "name": "cna_shadow_map_apply_skinned_caster",
+      "header": "engine_layer.h",
+      "ownership": "borrows the directional shadow map and the caller's bone palette",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_ShadowMapHandle",
+        "const CNA_Matrix*",
+        "uint64_t",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "cna_shadow_map_begin",
+      "header": "engine_layer.h",
+      "ownership": "borrows the directional shadow map and the caller's light; copies what it needs",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_ShadowMapHandle",
+        "const CNA_DirectionalLightEXT*",
+        "const CNA_BoundingBox*"
+      ]
+    },
+    {
+      "name": "cna_shadow_map_compute_light_projection",
+      "header": "engine_layer.h",
+      "ownership": "no handle; a pure function of its arguments",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "const CNA_Matrix*",
+        "const CNA_BoundingBox*",
+        "CNA_Matrix*"
+      ]
+    },
+    {
+      "name": "cna_shadow_map_compute_light_view",
+      "header": "engine_layer.h",
+      "ownership": "no handle; a pure function of its arguments",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "const CNA_DirectionalLightEXT*",
+        "const CNA_BoundingBox*",
+        "CNA_Matrix*"
+      ]
+    },
+    {
+      "name": "cna_shadow_map_create",
+      "header": "engine_layer.h",
+      "ownership": "borrows the graphics device; returns an owned directional shadow map handle",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_Handle",
+        "CNA_ShadowQuality",
+        "CNA_ShadowMapHandle*"
+      ]
+    },
+    {
+      "name": "cna_shadow_map_destroy",
+      "header": "engine_layer.h",
+      "ownership": "releases the owned directional shadow map handle and the target it owns; refused while a texture borrow is outstanding",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_ShadowMapHandle"
+      ]
+    },
+    {
+      "name": "cna_shadow_map_end",
+      "header": "engine_layer.h",
+      "ownership": "borrows the directional shadow map",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_ShadowMapHandle"
+      ]
+    },
+    {
+      "name": "cna_shadow_map_filter_radius_for_quality",
+      "header": "engine_layer.h",
+      "ownership": "no handle; a pure function of its arguments",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_ShadowQuality",
+        "int32_t*"
+      ]
+    },
+    {
+      "name": "cna_shadow_map_get_depth_bias",
+      "header": "engine_layer.h",
+      "ownership": "borrows the directional shadow map",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_ShadowMapHandle",
+        "float*"
+      ]
+    },
+    {
+      "name": "cna_shadow_map_get_filter_radius",
+      "header": "engine_layer.h",
+      "ownership": "borrows the directional shadow map",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_ShadowMapHandle",
+        "int32_t*"
+      ]
+    },
+    {
+      "name": "cna_shadow_map_get_light_view_projection",
+      "header": "engine_layer.h",
+      "ownership": "borrows the directional shadow map",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_ShadowMapHandle",
+        "CNA_Matrix*"
+      ]
+    },
+    {
+      "name": "cna_shadow_map_get_quality",
+      "header": "engine_layer.h",
+      "ownership": "borrows the directional shadow map",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_ShadowMapHandle",
+        "CNA_ShadowQuality*"
+      ]
+    },
+    {
+      "name": "cna_shadow_map_get_shadow_texture",
+      "header": "engine_layer.h",
+      "ownership": "borrows the directional shadow map; returns a counted borrow of its target that the caller releases with cna_render_target_destroy or cna_texturecube_destroy",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_ShadowMapHandle",
+        "CNA_Handle*"
+      ]
+    },
+    {
+      "name": "cna_shadow_map_get_size",
+      "header": "engine_layer.h",
+      "ownership": "borrows the directional shadow map",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_ShadowMapHandle",
+        "int32_t*"
+      ]
+    },
+    {
+      "name": "cna_shadow_map_is_supported",
+      "header": "engine_layer.h",
+      "ownership": "borrows the directional shadow map",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_ShadowMapHandle",
+        "CNA_Bool*"
+      ]
+    },
+    {
+      "name": "cna_shadow_map_set_depth_bias",
+      "header": "engine_layer.h",
+      "ownership": "borrows the directional shadow map",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_ShadowMapHandle",
+        "float"
+      ]
+    },
+    {
+      "name": "cna_shadow_map_size_for_quality",
+      "header": "engine_layer.h",
+      "ownership": "no handle; a pure function of its arguments",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_ShadowQuality",
+        "int32_t*"
+      ]
+    },
+    {
       "name": "cna_signed_in_gamer_award_achievement",
       "header": "gamer_services.h",
       "ownership": "borrows its inputs",
@@ -16551,6 +16894,155 @@
       "returnType": "CNA_Result",
       "parameters": [
         "CNA_SpotLightEXT*"
+      ]
+    },
+    {
+      "name": "cna_spot_shadow_map_begin",
+      "header": "engine_layer.h",
+      "ownership": "borrows the spot shadow map and the caller's light; copies what it needs",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_SpotShadowMapHandle",
+        "const CNA_SpotLightEXT*"
+      ]
+    },
+    {
+      "name": "cna_spot_shadow_map_compute_light_projection",
+      "header": "engine_layer.h",
+      "ownership": "no handle; a pure function of its arguments",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "const CNA_SpotLightEXT*",
+        "CNA_Matrix*"
+      ]
+    },
+    {
+      "name": "cna_spot_shadow_map_compute_light_view",
+      "header": "engine_layer.h",
+      "ownership": "no handle; a pure function of its arguments",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "const CNA_SpotLightEXT*",
+        "CNA_Matrix*"
+      ]
+    },
+    {
+      "name": "cna_spot_shadow_map_create",
+      "header": "engine_layer.h",
+      "ownership": "borrows the graphics device; returns an owned spot shadow map handle",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_Handle",
+        "CNA_ShadowQuality",
+        "CNA_SpotShadowMapHandle*"
+      ]
+    },
+    {
+      "name": "cna_spot_shadow_map_destroy",
+      "header": "engine_layer.h",
+      "ownership": "releases the owned spot shadow map handle and the target it owns; refused while a texture borrow is outstanding",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_SpotShadowMapHandle"
+      ]
+    },
+    {
+      "name": "cna_spot_shadow_map_end",
+      "header": "engine_layer.h",
+      "ownership": "borrows the spot shadow map",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_SpotShadowMapHandle"
+      ]
+    },
+    {
+      "name": "cna_spot_shadow_map_get_depth_bias",
+      "header": "engine_layer.h",
+      "ownership": "borrows the spot shadow map",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_SpotShadowMapHandle",
+        "float*"
+      ]
+    },
+    {
+      "name": "cna_spot_shadow_map_get_light_position",
+      "header": "engine_layer.h",
+      "ownership": "borrows the spot shadow map",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_SpotShadowMapHandle",
+        "CNA_Vector3*"
+      ]
+    },
+    {
+      "name": "cna_spot_shadow_map_get_light_range",
+      "header": "engine_layer.h",
+      "ownership": "borrows the spot shadow map",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_SpotShadowMapHandle",
+        "float*"
+      ]
+    },
+    {
+      "name": "cna_spot_shadow_map_get_light_view_projection",
+      "header": "engine_layer.h",
+      "ownership": "borrows the spot shadow map",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_SpotShadowMapHandle",
+        "CNA_Matrix*"
+      ]
+    },
+    {
+      "name": "cna_spot_shadow_map_get_quality",
+      "header": "engine_layer.h",
+      "ownership": "borrows the spot shadow map",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_SpotShadowMapHandle",
+        "CNA_ShadowQuality*"
+      ]
+    },
+    {
+      "name": "cna_spot_shadow_map_get_shadow_texture",
+      "header": "engine_layer.h",
+      "ownership": "borrows the spot shadow map; returns a counted borrow of its target that the caller releases with cna_render_target_destroy or cna_texturecube_destroy",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_SpotShadowMapHandle",
+        "CNA_Handle*"
+      ]
+    },
+    {
+      "name": "cna_spot_shadow_map_get_size",
+      "header": "engine_layer.h",
+      "ownership": "borrows the spot shadow map",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_SpotShadowMapHandle",
+        "int32_t*"
+      ]
+    },
+    {
+      "name": "cna_spot_shadow_map_is_supported",
+      "header": "engine_layer.h",
+      "ownership": "borrows the spot shadow map",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_SpotShadowMapHandle",
+        "CNA_Bool*"
+      ]
+    },
+    {
+      "name": "cna_spot_shadow_map_set_depth_bias",
+      "header": "engine_layer.h",
+      "ownership": "borrows the spot shadow map",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_SpotShadowMapHandle",
+        "float"
       ]
     },
     {

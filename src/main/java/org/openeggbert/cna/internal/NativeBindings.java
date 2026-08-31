@@ -872,6 +872,66 @@ public final class NativeBindings {
         }
     }
 
+    /**
+     * Adopts a borrow of an engine-layer render target as an owning Java facade.
+     *
+     * <p>CNA's engine layer lends a shadow map's texture as a <em>counted</em> borrow: the map
+     * refuses to be destroyed while one is outstanding, and the borrow is given back with
+     * {@code cna_render_target_destroy}, which does not dispose the map's own target. So the
+     * Java facade owns the borrow rather than the texture -- disposing it hands the borrow back
+     * and leaves the map intact, which is exactly what {@code Texture2D.Dispose()} should mean
+     * here.
+     *
+     * @param graphicsDevice the device the target belongs to
+     * @param nativeTexture the borrowed handle the engine layer just returned
+     * @return the facade, which the caller disposes
+     */
+    public static Texture2D createBorrowedRenderTarget(
+            GraphicsDevice graphicsDevice, long nativeTexture) {
+        Objects.requireNonNull(graphicsDevice, "graphicsDevice");
+        if (nativeTexture == 0L) {
+            throw new IllegalArgumentException("nativeTexture");
+        }
+        Texture2D texture = FacadeFactory.createUninitializedTexture2D(graphicsDevice);
+        registerResource(deviceGame(graphicsDevice), texture, nativeTexture,
+                NativeBindings::destroyRenderTarget);
+        try {
+            FacadeFactory.initializeTexture2D(texture, textureInfoOrClose(texture));
+            return texture;
+        } catch (RuntimeException failure) {
+            closeAfterFailedFacade(texture, failure);
+            throw failure;
+        }
+    }
+
+    /**
+     * Adopts a borrow of an engine-layer cube texture as an owning Java facade.
+     *
+     * <p>The cube form of {@link #createBorrowedRenderTarget}: the borrow is given back with
+     * {@code cna_texturecube_destroy}, which does not dispose the map's own cube.
+     *
+     * @param graphicsDevice the device the cube belongs to
+     * @param nativeTexture the borrowed handle the engine layer just returned
+     * @return the facade, which the caller disposes
+     */
+    public static TextureCube createBorrowedTextureCube(
+            GraphicsDevice graphicsDevice, long nativeTexture) {
+        Objects.requireNonNull(graphicsDevice, "graphicsDevice");
+        if (nativeTexture == 0L) {
+            throw new IllegalArgumentException("nativeTexture");
+        }
+        TextureCube texture = FacadeFactory.createUninitializedTextureCube(graphicsDevice);
+        registerResource(deviceGame(graphicsDevice), texture, nativeTexture,
+                NativeBindings::destroyTextureCube);
+        try {
+            FacadeFactory.initializeTextureCube(texture, textureCubeInfoOrClose(texture));
+            return texture;
+        } catch (RuntimeException failure) {
+            closeAfterFailedFacade(texture, failure);
+            throw failure;
+        }
+    }
+
     public static void registerWindowHandle(WindowHandle window, long value) {
         if (value != 0L) {
             synchronized (GAMES) {

@@ -1558,6 +1558,313 @@ Java_org_openeggbert_cna_internal_generated_NativeEngineLayerRoutes_clusteredLig
 }
 
 JNIEXPORT jint JNICALL
+Java_org_openeggbert_cna_internal_generated_NativeEngineLayerRoutes_cubeShadowMapBegin(
+    JNIEnv* environment, jclass declaring_class, jlong shadow_map, jint face_index)
+{
+    (void)environment;
+    (void)declaring_class;
+    CNA_Result call_result = cna.cube_shadow_map_begin((CNA_CubeShadowMapHandle)shadow_map, (int32_t)face_index);
+    return (jint)call_result;
+}
+
+JNIEXPORT jint JNICALL
+Java_org_openeggbert_cna_internal_generated_NativeEngineLayerRoutes_cubeShadowMapComputeFaceProjection(
+    JNIEnv* environment, jclass declaring_class, jfloat range, jfloatArray out_matrixFloating)
+{
+    (void)environment;
+    (void)declaring_class;
+    CNA_Matrix out_matrix_value;
+    memset(&out_matrix_value, 0, sizeof out_matrix_value);
+    CNA_Result call_result = cna.cube_shadow_map_compute_face_projection((float)range, &out_matrix_value);
+    if (call_result == CNA_RESULT_SUCCESS || call_result == CNA_RESULT_BUFFER_TOO_SMALL) {
+        jfloat out_matrixFloating_values[] = {
+            (jfloat)out_matrix_value.m11,
+            (jfloat)out_matrix_value.m12,
+            (jfloat)out_matrix_value.m13,
+            (jfloat)out_matrix_value.m14,
+            (jfloat)out_matrix_value.m21,
+            (jfloat)out_matrix_value.m22,
+            (jfloat)out_matrix_value.m23,
+            (jfloat)out_matrix_value.m24,
+            (jfloat)out_matrix_value.m31,
+            (jfloat)out_matrix_value.m32,
+            (jfloat)out_matrix_value.m33,
+            (jfloat)out_matrix_value.m34,
+            (jfloat)out_matrix_value.m41,
+            (jfloat)out_matrix_value.m42,
+            (jfloat)out_matrix_value.m43,
+            (jfloat)out_matrix_value.m44
+        };
+        (*environment)->SetFloatArrayRegion(environment, out_matrixFloating, 0,
+            (jsize)(sizeof out_matrixFloating_values / sizeof out_matrixFloating_values[0]),
+            out_matrixFloating_values);
+    }
+    return (jint)call_result;
+}
+
+JNIEXPORT jint JNICALL
+Java_org_openeggbert_cna_internal_generated_NativeEngineLayerRoutes_cubeShadowMapComputeFaceView(
+    JNIEnv* environment, jclass declaring_class, jint face, jfloatArray positionFloating, jfloatArray out_matrixFloating)
+{
+    (void)environment;
+    (void)declaring_class;
+    CNA_Vector3 position_value;
+    memset(&position_value, 0, sizeof position_value);
+    {
+        jfloat positionFloating_values[3];
+        (*environment)->GetFloatArrayRegion(environment, positionFloating, 0, 3, positionFloating_values);
+        position_value.x = (float)positionFloating_values[0];
+        position_value.y = (float)positionFloating_values[1];
+        position_value.z = (float)positionFloating_values[2];
+    }
+    CNA_Matrix out_matrix_value;
+    memset(&out_matrix_value, 0, sizeof out_matrix_value);
+    CNA_Result call_result = cna.cube_shadow_map_compute_face_view((CNA_CubeMapFace)face, &position_value, &out_matrix_value);
+    if (call_result == CNA_RESULT_SUCCESS || call_result == CNA_RESULT_BUFFER_TOO_SMALL) {
+        jfloat out_matrixFloating_values[] = {
+            (jfloat)out_matrix_value.m11,
+            (jfloat)out_matrix_value.m12,
+            (jfloat)out_matrix_value.m13,
+            (jfloat)out_matrix_value.m14,
+            (jfloat)out_matrix_value.m21,
+            (jfloat)out_matrix_value.m22,
+            (jfloat)out_matrix_value.m23,
+            (jfloat)out_matrix_value.m24,
+            (jfloat)out_matrix_value.m31,
+            (jfloat)out_matrix_value.m32,
+            (jfloat)out_matrix_value.m33,
+            (jfloat)out_matrix_value.m34,
+            (jfloat)out_matrix_value.m41,
+            (jfloat)out_matrix_value.m42,
+            (jfloat)out_matrix_value.m43,
+            (jfloat)out_matrix_value.m44
+        };
+        (*environment)->SetFloatArrayRegion(environment, out_matrixFloating, 0,
+            (jsize)(sizeof out_matrixFloating_values / sizeof out_matrixFloating_values[0]),
+            out_matrixFloating_values);
+    }
+    return (jint)call_result;
+}
+
+JNIEXPORT jint JNICALL
+Java_org_openeggbert_cna_internal_generated_NativeEngineLayerRoutes_cubeShadowMapCreate(
+    JNIEnv* environment, jclass declaring_class, jlong graphics_device, jint quality, jlongArray out_shadow_map)
+{
+    (void)environment;
+    (void)declaring_class;
+    CNA_CubeShadowMapHandle out_shadow_map_value = 0;
+    CNA_Result call_result = cna.cube_shadow_map_create((CNA_Handle)graphics_device, (CNA_ShadowQuality)quality, &out_shadow_map_value);
+    if (call_result == CNA_RESULT_SUCCESS || call_result == CNA_RESULT_BUFFER_TOO_SMALL) {
+        jlong out_shadow_map_element = (jlong)out_shadow_map_value;
+        (*environment)->SetLongArrayRegion(
+            environment, out_shadow_map, 0, 1, &out_shadow_map_element);
+    }
+    return (jint)call_result;
+}
+
+JNIEXPORT jint JNICALL
+Java_org_openeggbert_cna_internal_generated_NativeEngineLayerRoutes_cubeShadowMapDestroy(
+    JNIEnv* environment, jclass declaring_class, jlong shadow_map)
+{
+    (void)environment;
+    (void)declaring_class;
+    CNA_Result call_result = cna.cube_shadow_map_destroy((CNA_CubeShadowMapHandle)shadow_map);
+    return (jint)call_result;
+}
+
+JNIEXPORT jint JNICALL
+Java_org_openeggbert_cna_internal_generated_NativeEngineLayerRoutes_cubeShadowMapEnd(
+    JNIEnv* environment, jclass declaring_class, jlong shadow_map)
+{
+    (void)environment;
+    (void)declaring_class;
+    CNA_Result call_result = cna.cube_shadow_map_end((CNA_CubeShadowMapHandle)shadow_map);
+    return (jint)call_result;
+}
+
+JNIEXPORT jint JNICALL
+Java_org_openeggbert_cna_internal_generated_NativeEngineLayerRoutes_cubeShadowMapGetDepthBias(
+    JNIEnv* environment, jclass declaring_class, jlong shadow_map, jfloatArray out_bias)
+{
+    (void)environment;
+    (void)declaring_class;
+    float out_bias_value = 0;
+    CNA_Result call_result = cna.cube_shadow_map_get_depth_bias((CNA_CubeShadowMapHandle)shadow_map, &out_bias_value);
+    if (call_result == CNA_RESULT_SUCCESS || call_result == CNA_RESULT_BUFFER_TOO_SMALL) {
+        jfloat out_bias_element = (jfloat)out_bias_value;
+        (*environment)->SetFloatArrayRegion(
+            environment, out_bias, 0, 1, &out_bias_element);
+    }
+    return (jint)call_result;
+}
+
+JNIEXPORT jint JNICALL
+Java_org_openeggbert_cna_internal_generated_NativeEngineLayerRoutes_cubeShadowMapGetLightPosition(
+    JNIEnv* environment, jclass declaring_class, jlong shadow_map, jfloatArray out_positionFloating)
+{
+    (void)environment;
+    (void)declaring_class;
+    CNA_Vector3 out_position_value;
+    memset(&out_position_value, 0, sizeof out_position_value);
+    CNA_Result call_result = cna.cube_shadow_map_get_light_position((CNA_CubeShadowMapHandle)shadow_map, &out_position_value);
+    if (call_result == CNA_RESULT_SUCCESS || call_result == CNA_RESULT_BUFFER_TOO_SMALL) {
+        jfloat out_positionFloating_values[] = {
+            (jfloat)out_position_value.x,
+            (jfloat)out_position_value.y,
+            (jfloat)out_position_value.z
+        };
+        (*environment)->SetFloatArrayRegion(environment, out_positionFloating, 0,
+            (jsize)(sizeof out_positionFloating_values / sizeof out_positionFloating_values[0]),
+            out_positionFloating_values);
+    }
+    return (jint)call_result;
+}
+
+JNIEXPORT jint JNICALL
+Java_org_openeggbert_cna_internal_generated_NativeEngineLayerRoutes_cubeShadowMapGetLightRange(
+    JNIEnv* environment, jclass declaring_class, jlong shadow_map, jfloatArray out_range)
+{
+    (void)environment;
+    (void)declaring_class;
+    float out_range_value = 0;
+    CNA_Result call_result = cna.cube_shadow_map_get_light_range((CNA_CubeShadowMapHandle)shadow_map, &out_range_value);
+    if (call_result == CNA_RESULT_SUCCESS || call_result == CNA_RESULT_BUFFER_TOO_SMALL) {
+        jfloat out_range_element = (jfloat)out_range_value;
+        (*environment)->SetFloatArrayRegion(
+            environment, out_range, 0, 1, &out_range_element);
+    }
+    return (jint)call_result;
+}
+
+JNIEXPORT jint JNICALL
+Java_org_openeggbert_cna_internal_generated_NativeEngineLayerRoutes_cubeShadowMapGetQuality(
+    JNIEnv* environment, jclass declaring_class, jlong shadow_map, jintArray out_quality)
+{
+    (void)environment;
+    (void)declaring_class;
+    CNA_ShadowQuality out_quality_value = 0;
+    CNA_Result call_result = cna.cube_shadow_map_get_quality((CNA_CubeShadowMapHandle)shadow_map, &out_quality_value);
+    if (call_result == CNA_RESULT_SUCCESS || call_result == CNA_RESULT_BUFFER_TOO_SMALL) {
+        jint out_quality_element = (jint)out_quality_value;
+        (*environment)->SetIntArrayRegion(
+            environment, out_quality, 0, 1, &out_quality_element);
+    }
+    return (jint)call_result;
+}
+
+JNIEXPORT jint JNICALL
+Java_org_openeggbert_cna_internal_generated_NativeEngineLayerRoutes_cubeShadowMapGetShadowTexture(
+    JNIEnv* environment, jclass declaring_class, jlong shadow_map, jlongArray out_texture)
+{
+    (void)environment;
+    (void)declaring_class;
+    CNA_Handle out_texture_value = 0;
+    CNA_Result call_result = cna.cube_shadow_map_get_shadow_texture((CNA_CubeShadowMapHandle)shadow_map, &out_texture_value);
+    if (call_result == CNA_RESULT_SUCCESS || call_result == CNA_RESULT_BUFFER_TOO_SMALL) {
+        jlong out_texture_element = (jlong)out_texture_value;
+        (*environment)->SetLongArrayRegion(
+            environment, out_texture, 0, 1, &out_texture_element);
+    }
+    return (jint)call_result;
+}
+
+JNIEXPORT jint JNICALL
+Java_org_openeggbert_cna_internal_generated_NativeEngineLayerRoutes_cubeShadowMapGetSize(
+    JNIEnv* environment, jclass declaring_class, jlong shadow_map, jintArray out_size)
+{
+    (void)environment;
+    (void)declaring_class;
+    int32_t out_size_value = 0;
+    CNA_Result call_result = cna.cube_shadow_map_get_size((CNA_CubeShadowMapHandle)shadow_map, &out_size_value);
+    if (call_result == CNA_RESULT_SUCCESS || call_result == CNA_RESULT_BUFFER_TOO_SMALL) {
+        jint out_size_element = (jint)out_size_value;
+        (*environment)->SetIntArrayRegion(
+            environment, out_size, 0, 1, &out_size_element);
+    }
+    return (jint)call_result;
+}
+
+JNIEXPORT jint JNICALL
+Java_org_openeggbert_cna_internal_generated_NativeEngineLayerRoutes_cubeShadowMapIsSupported(
+    JNIEnv* environment, jclass declaring_class, jlong shadow_map, jbooleanArray out_supported)
+{
+    (void)environment;
+    (void)declaring_class;
+    CNA_Bool out_supported_value = 0;
+    CNA_Result call_result = cna.cube_shadow_map_is_supported((CNA_CubeShadowMapHandle)shadow_map, &out_supported_value);
+    if (call_result == CNA_RESULT_SUCCESS || call_result == CNA_RESULT_BUFFER_TOO_SMALL) {
+        jboolean out_supported_element = (jboolean)out_supported_value;
+        (*environment)->SetBooleanArrayRegion(
+            environment, out_supported, 0, 1, &out_supported_element);
+    }
+    return (jint)call_result;
+}
+
+JNIEXPORT jint JNICALL
+Java_org_openeggbert_cna_internal_generated_NativeEngineLayerRoutes_cubeShadowMapSetDepthBias(
+    JNIEnv* environment, jclass declaring_class, jlong shadow_map, jfloat bias)
+{
+    (void)environment;
+    (void)declaring_class;
+    CNA_Result call_result = cna.cube_shadow_map_set_depth_bias((CNA_CubeShadowMapHandle)shadow_map, (float)bias);
+    return (jint)call_result;
+}
+
+JNIEXPORT jint JNICALL
+Java_org_openeggbert_cna_internal_generated_NativeEngineLayerRoutes_cubeShadowMapSizeForQuality(
+    JNIEnv* environment, jclass declaring_class, jint quality, jintArray out_size)
+{
+    (void)environment;
+    (void)declaring_class;
+    int32_t out_size_value = 0;
+    CNA_Result call_result = cna.cube_shadow_map_size_for_quality((CNA_ShadowQuality)quality, &out_size_value);
+    if (call_result == CNA_RESULT_SUCCESS || call_result == CNA_RESULT_BUFFER_TOO_SMALL) {
+        jint out_size_element = (jint)out_size_value;
+        (*environment)->SetIntArrayRegion(
+            environment, out_size, 0, 1, &out_size_element);
+    }
+    return (jint)call_result;
+}
+
+JNIEXPORT jint JNICALL
+Java_org_openeggbert_cna_internal_generated_NativeEngineLayerRoutes_cubeShadowMapUpdate(
+    JNIEnv* environment, jclass declaring_class, jlong shadow_map, jbyteArray lightBytes, jlongArray lightIntegral, jfloatArray lightFloating)
+{
+    (void)environment;
+    (void)declaring_class;
+    CNA_PointLightEXT light_value;
+    memset(&light_value, 0, sizeof light_value);
+    light_value.struct_size = (uint32_t)(sizeof light_value);
+    light_value.struct_version = UINT32_C(1);
+    {
+        jbyte lightBytes_values[3];
+        (*environment)->GetByteArrayRegion(environment, lightBytes, 0, 3, lightBytes_values);
+        light_value.reserved[0] = (uint8_t)lightBytes_values[0];
+        light_value.reserved[1] = (uint8_t)lightBytes_values[1];
+        light_value.reserved[2] = (uint8_t)lightBytes_values[2];
+    }
+    {
+        jlong lightIntegral_values[1];
+        (*environment)->GetLongArrayRegion(environment, lightIntegral, 0, 1, lightIntegral_values);
+        light_value.casts_shadows = (CNA_Bool)lightIntegral_values[0];
+    }
+    {
+        jfloat lightFloating_values[8];
+        (*environment)->GetFloatArrayRegion(environment, lightFloating, 0, 8, lightFloating_values);
+        light_value.position.x = (float)lightFloating_values[0];
+        light_value.position.y = (float)lightFloating_values[1];
+        light_value.position.z = (float)lightFloating_values[2];
+        light_value.color.x = (float)lightFloating_values[3];
+        light_value.color.y = (float)lightFloating_values[4];
+        light_value.color.z = (float)lightFloating_values[5];
+        light_value.intensity = (float)lightFloating_values[6];
+        light_value.range = (float)lightFloating_values[7];
+    }
+    CNA_Result call_result = cna.cube_shadow_map_update((CNA_CubeShadowMapHandle)shadow_map, &light_value);
+    return (jint)call_result;
+}
+
+JNIEXPORT jint JNICALL
 Java_org_openeggbert_cna_internal_generated_NativeEngineLayerRoutes_debugDrawAddBoundingSphere(
     JNIEnv* environment, jclass declaring_class, jlong debug, jfloatArray sphereFloating, jlongArray colourIntegral, jint segments)
 {
@@ -4087,6 +4394,466 @@ Java_org_openeggbert_cna_internal_generated_NativeEngineLayerRoutes_renderPipeli
 }
 
 JNIEXPORT jint JNICALL
+Java_org_openeggbert_cna_internal_generated_NativeEngineLayerRoutes_shadowMapApplyCaster(
+    JNIEnv* environment, jclass declaring_class, jlong shadow_map)
+{
+    (void)environment;
+    (void)declaring_class;
+    CNA_Result call_result = cna.shadow_map_apply_caster((CNA_ShadowMapHandle)shadow_map);
+    return (jint)call_result;
+}
+
+JNIEXPORT jint JNICALL
+Java_org_openeggbert_cna_internal_generated_NativeEngineLayerRoutes_shadowMapApplySkinnedCaster(
+    JNIEnv* environment, jclass declaring_class, jlong shadow_map, jfloatArray bone_transformsFloating, jint weights_per_vertex)
+{
+    (void)environment;
+    (void)declaring_class;
+    jsize bone_transforms_count = (*environment)->GetArrayLength(environment, bone_transformsFloating) / 16;
+    if ((*environment)->GetArrayLength(environment, bone_transformsFloating) != bone_transforms_count * 16) {
+        return (jint)CNA_RESULT_INVALID_ARGUMENT;
+    }
+    CNA_Matrix* bone_transforms_values = (CNA_Matrix*)calloc(
+        (size_t)bone_transforms_count + 1U, sizeof(*bone_transforms_values));
+    if (bone_transforms_values == NULL) {
+        return (jint)CNA_RESULT_OUT_OF_MEMORY;
+    }
+    {
+        jsize bone_transformsFloating_length = (*environment)->GetArrayLength(environment, bone_transformsFloating);
+        jfloat* bone_transformsFloating_values = (jfloat*)malloc(
+            ((size_t)bone_transformsFloating_length + 1U) * sizeof(*bone_transformsFloating_values));
+        if (bone_transformsFloating_values == NULL) {
+            free(bone_transforms_values);
+            return (jint)CNA_RESULT_OUT_OF_MEMORY;
+        }
+        (*environment)->GetFloatArrayRegion(environment, bone_transformsFloating, 0, bone_transformsFloating_length, bone_transformsFloating_values);
+        for (jsize element = 0; element < bone_transforms_count; ++element) {
+            bone_transforms_values[element].m11 = (float)bone_transformsFloating_values[element * 16 + 0];
+            bone_transforms_values[element].m12 = (float)bone_transformsFloating_values[element * 16 + 1];
+            bone_transforms_values[element].m13 = (float)bone_transformsFloating_values[element * 16 + 2];
+            bone_transforms_values[element].m14 = (float)bone_transformsFloating_values[element * 16 + 3];
+            bone_transforms_values[element].m21 = (float)bone_transformsFloating_values[element * 16 + 4];
+            bone_transforms_values[element].m22 = (float)bone_transformsFloating_values[element * 16 + 5];
+            bone_transforms_values[element].m23 = (float)bone_transformsFloating_values[element * 16 + 6];
+            bone_transforms_values[element].m24 = (float)bone_transformsFloating_values[element * 16 + 7];
+            bone_transforms_values[element].m31 = (float)bone_transformsFloating_values[element * 16 + 8];
+            bone_transforms_values[element].m32 = (float)bone_transformsFloating_values[element * 16 + 9];
+            bone_transforms_values[element].m33 = (float)bone_transformsFloating_values[element * 16 + 10];
+            bone_transforms_values[element].m34 = (float)bone_transformsFloating_values[element * 16 + 11];
+            bone_transforms_values[element].m41 = (float)bone_transformsFloating_values[element * 16 + 12];
+            bone_transforms_values[element].m42 = (float)bone_transformsFloating_values[element * 16 + 13];
+            bone_transforms_values[element].m43 = (float)bone_transformsFloating_values[element * 16 + 14];
+            bone_transforms_values[element].m44 = (float)bone_transformsFloating_values[element * 16 + 15];
+        }
+        free(bone_transformsFloating_values);
+    }
+    CNA_Result call_result = cna.shadow_map_apply_skinned_caster((CNA_ShadowMapHandle)shadow_map, bone_transforms_values, (uint64_t)bone_transforms_count, (int32_t)weights_per_vertex);
+    free(bone_transforms_values);
+    return (jint)call_result;
+}
+
+JNIEXPORT jint JNICALL
+Java_org_openeggbert_cna_internal_generated_NativeEngineLayerRoutes_shadowMapBegin(
+    JNIEnv* environment, jclass declaring_class, jlong shadow_map, jbyteArray lightBytes, jlongArray lightIntegral, jfloatArray lightFloating, jfloatArray scene_boundsFloating)
+{
+    (void)environment;
+    (void)declaring_class;
+    CNA_DirectionalLightEXT light_value;
+    memset(&light_value, 0, sizeof light_value);
+    light_value.struct_size = (uint32_t)(sizeof light_value);
+    light_value.struct_version = UINT32_C(1);
+    {
+        jbyte lightBytes_values[3];
+        (*environment)->GetByteArrayRegion(environment, lightBytes, 0, 3, lightBytes_values);
+        light_value.reserved[0] = (uint8_t)lightBytes_values[0];
+        light_value.reserved[1] = (uint8_t)lightBytes_values[1];
+        light_value.reserved[2] = (uint8_t)lightBytes_values[2];
+    }
+    {
+        jlong lightIntegral_values[1];
+        (*environment)->GetLongArrayRegion(environment, lightIntegral, 0, 1, lightIntegral_values);
+        light_value.casts_shadows = (CNA_Bool)lightIntegral_values[0];
+    }
+    {
+        jfloat lightFloating_values[7];
+        (*environment)->GetFloatArrayRegion(environment, lightFloating, 0, 7, lightFloating_values);
+        light_value.direction.x = (float)lightFloating_values[0];
+        light_value.direction.y = (float)lightFloating_values[1];
+        light_value.direction.z = (float)lightFloating_values[2];
+        light_value.color.x = (float)lightFloating_values[3];
+        light_value.color.y = (float)lightFloating_values[4];
+        light_value.color.z = (float)lightFloating_values[5];
+        light_value.intensity = (float)lightFloating_values[6];
+    }
+    CNA_BoundingBox scene_bounds_value;
+    memset(&scene_bounds_value, 0, sizeof scene_bounds_value);
+    {
+        jfloat scene_boundsFloating_values[6];
+        (*environment)->GetFloatArrayRegion(environment, scene_boundsFloating, 0, 6, scene_boundsFloating_values);
+        scene_bounds_value.min.x = (float)scene_boundsFloating_values[0];
+        scene_bounds_value.min.y = (float)scene_boundsFloating_values[1];
+        scene_bounds_value.min.z = (float)scene_boundsFloating_values[2];
+        scene_bounds_value.max.x = (float)scene_boundsFloating_values[3];
+        scene_bounds_value.max.y = (float)scene_boundsFloating_values[4];
+        scene_bounds_value.max.z = (float)scene_boundsFloating_values[5];
+    }
+    CNA_Result call_result = cna.shadow_map_begin((CNA_ShadowMapHandle)shadow_map, &light_value, &scene_bounds_value);
+    return (jint)call_result;
+}
+
+JNIEXPORT jint JNICALL
+Java_org_openeggbert_cna_internal_generated_NativeEngineLayerRoutes_shadowMapComputeLightProjection(
+    JNIEnv* environment, jclass declaring_class, jfloatArray light_viewFloating, jfloatArray scene_boundsFloating, jfloatArray out_matrixFloating)
+{
+    (void)environment;
+    (void)declaring_class;
+    CNA_Matrix light_view_value;
+    memset(&light_view_value, 0, sizeof light_view_value);
+    {
+        jfloat light_viewFloating_values[16];
+        (*environment)->GetFloatArrayRegion(environment, light_viewFloating, 0, 16, light_viewFloating_values);
+        light_view_value.m11 = (float)light_viewFloating_values[0];
+        light_view_value.m12 = (float)light_viewFloating_values[1];
+        light_view_value.m13 = (float)light_viewFloating_values[2];
+        light_view_value.m14 = (float)light_viewFloating_values[3];
+        light_view_value.m21 = (float)light_viewFloating_values[4];
+        light_view_value.m22 = (float)light_viewFloating_values[5];
+        light_view_value.m23 = (float)light_viewFloating_values[6];
+        light_view_value.m24 = (float)light_viewFloating_values[7];
+        light_view_value.m31 = (float)light_viewFloating_values[8];
+        light_view_value.m32 = (float)light_viewFloating_values[9];
+        light_view_value.m33 = (float)light_viewFloating_values[10];
+        light_view_value.m34 = (float)light_viewFloating_values[11];
+        light_view_value.m41 = (float)light_viewFloating_values[12];
+        light_view_value.m42 = (float)light_viewFloating_values[13];
+        light_view_value.m43 = (float)light_viewFloating_values[14];
+        light_view_value.m44 = (float)light_viewFloating_values[15];
+    }
+    CNA_BoundingBox scene_bounds_value;
+    memset(&scene_bounds_value, 0, sizeof scene_bounds_value);
+    {
+        jfloat scene_boundsFloating_values[6];
+        (*environment)->GetFloatArrayRegion(environment, scene_boundsFloating, 0, 6, scene_boundsFloating_values);
+        scene_bounds_value.min.x = (float)scene_boundsFloating_values[0];
+        scene_bounds_value.min.y = (float)scene_boundsFloating_values[1];
+        scene_bounds_value.min.z = (float)scene_boundsFloating_values[2];
+        scene_bounds_value.max.x = (float)scene_boundsFloating_values[3];
+        scene_bounds_value.max.y = (float)scene_boundsFloating_values[4];
+        scene_bounds_value.max.z = (float)scene_boundsFloating_values[5];
+    }
+    CNA_Matrix out_matrix_value;
+    memset(&out_matrix_value, 0, sizeof out_matrix_value);
+    CNA_Result call_result = cna.shadow_map_compute_light_projection(&light_view_value, &scene_bounds_value, &out_matrix_value);
+    if (call_result == CNA_RESULT_SUCCESS || call_result == CNA_RESULT_BUFFER_TOO_SMALL) {
+        jfloat out_matrixFloating_values[] = {
+            (jfloat)out_matrix_value.m11,
+            (jfloat)out_matrix_value.m12,
+            (jfloat)out_matrix_value.m13,
+            (jfloat)out_matrix_value.m14,
+            (jfloat)out_matrix_value.m21,
+            (jfloat)out_matrix_value.m22,
+            (jfloat)out_matrix_value.m23,
+            (jfloat)out_matrix_value.m24,
+            (jfloat)out_matrix_value.m31,
+            (jfloat)out_matrix_value.m32,
+            (jfloat)out_matrix_value.m33,
+            (jfloat)out_matrix_value.m34,
+            (jfloat)out_matrix_value.m41,
+            (jfloat)out_matrix_value.m42,
+            (jfloat)out_matrix_value.m43,
+            (jfloat)out_matrix_value.m44
+        };
+        (*environment)->SetFloatArrayRegion(environment, out_matrixFloating, 0,
+            (jsize)(sizeof out_matrixFloating_values / sizeof out_matrixFloating_values[0]),
+            out_matrixFloating_values);
+    }
+    return (jint)call_result;
+}
+
+JNIEXPORT jint JNICALL
+Java_org_openeggbert_cna_internal_generated_NativeEngineLayerRoutes_shadowMapComputeLightView(
+    JNIEnv* environment, jclass declaring_class, jbyteArray lightBytes, jlongArray lightIntegral, jfloatArray lightFloating, jfloatArray scene_boundsFloating, jfloatArray out_matrixFloating)
+{
+    (void)environment;
+    (void)declaring_class;
+    CNA_DirectionalLightEXT light_value;
+    memset(&light_value, 0, sizeof light_value);
+    light_value.struct_size = (uint32_t)(sizeof light_value);
+    light_value.struct_version = UINT32_C(1);
+    {
+        jbyte lightBytes_values[3];
+        (*environment)->GetByteArrayRegion(environment, lightBytes, 0, 3, lightBytes_values);
+        light_value.reserved[0] = (uint8_t)lightBytes_values[0];
+        light_value.reserved[1] = (uint8_t)lightBytes_values[1];
+        light_value.reserved[2] = (uint8_t)lightBytes_values[2];
+    }
+    {
+        jlong lightIntegral_values[1];
+        (*environment)->GetLongArrayRegion(environment, lightIntegral, 0, 1, lightIntegral_values);
+        light_value.casts_shadows = (CNA_Bool)lightIntegral_values[0];
+    }
+    {
+        jfloat lightFloating_values[7];
+        (*environment)->GetFloatArrayRegion(environment, lightFloating, 0, 7, lightFloating_values);
+        light_value.direction.x = (float)lightFloating_values[0];
+        light_value.direction.y = (float)lightFloating_values[1];
+        light_value.direction.z = (float)lightFloating_values[2];
+        light_value.color.x = (float)lightFloating_values[3];
+        light_value.color.y = (float)lightFloating_values[4];
+        light_value.color.z = (float)lightFloating_values[5];
+        light_value.intensity = (float)lightFloating_values[6];
+    }
+    CNA_BoundingBox scene_bounds_value;
+    memset(&scene_bounds_value, 0, sizeof scene_bounds_value);
+    {
+        jfloat scene_boundsFloating_values[6];
+        (*environment)->GetFloatArrayRegion(environment, scene_boundsFloating, 0, 6, scene_boundsFloating_values);
+        scene_bounds_value.min.x = (float)scene_boundsFloating_values[0];
+        scene_bounds_value.min.y = (float)scene_boundsFloating_values[1];
+        scene_bounds_value.min.z = (float)scene_boundsFloating_values[2];
+        scene_bounds_value.max.x = (float)scene_boundsFloating_values[3];
+        scene_bounds_value.max.y = (float)scene_boundsFloating_values[4];
+        scene_bounds_value.max.z = (float)scene_boundsFloating_values[5];
+    }
+    CNA_Matrix out_matrix_value;
+    memset(&out_matrix_value, 0, sizeof out_matrix_value);
+    CNA_Result call_result = cna.shadow_map_compute_light_view(&light_value, &scene_bounds_value, &out_matrix_value);
+    if (call_result == CNA_RESULT_SUCCESS || call_result == CNA_RESULT_BUFFER_TOO_SMALL) {
+        jfloat out_matrixFloating_values[] = {
+            (jfloat)out_matrix_value.m11,
+            (jfloat)out_matrix_value.m12,
+            (jfloat)out_matrix_value.m13,
+            (jfloat)out_matrix_value.m14,
+            (jfloat)out_matrix_value.m21,
+            (jfloat)out_matrix_value.m22,
+            (jfloat)out_matrix_value.m23,
+            (jfloat)out_matrix_value.m24,
+            (jfloat)out_matrix_value.m31,
+            (jfloat)out_matrix_value.m32,
+            (jfloat)out_matrix_value.m33,
+            (jfloat)out_matrix_value.m34,
+            (jfloat)out_matrix_value.m41,
+            (jfloat)out_matrix_value.m42,
+            (jfloat)out_matrix_value.m43,
+            (jfloat)out_matrix_value.m44
+        };
+        (*environment)->SetFloatArrayRegion(environment, out_matrixFloating, 0,
+            (jsize)(sizeof out_matrixFloating_values / sizeof out_matrixFloating_values[0]),
+            out_matrixFloating_values);
+    }
+    return (jint)call_result;
+}
+
+JNIEXPORT jint JNICALL
+Java_org_openeggbert_cna_internal_generated_NativeEngineLayerRoutes_shadowMapCreate(
+    JNIEnv* environment, jclass declaring_class, jlong graphics_device, jint quality, jlongArray out_shadow_map)
+{
+    (void)environment;
+    (void)declaring_class;
+    CNA_ShadowMapHandle out_shadow_map_value = 0;
+    CNA_Result call_result = cna.shadow_map_create((CNA_Handle)graphics_device, (CNA_ShadowQuality)quality, &out_shadow_map_value);
+    if (call_result == CNA_RESULT_SUCCESS || call_result == CNA_RESULT_BUFFER_TOO_SMALL) {
+        jlong out_shadow_map_element = (jlong)out_shadow_map_value;
+        (*environment)->SetLongArrayRegion(
+            environment, out_shadow_map, 0, 1, &out_shadow_map_element);
+    }
+    return (jint)call_result;
+}
+
+JNIEXPORT jint JNICALL
+Java_org_openeggbert_cna_internal_generated_NativeEngineLayerRoutes_shadowMapDestroy(
+    JNIEnv* environment, jclass declaring_class, jlong shadow_map)
+{
+    (void)environment;
+    (void)declaring_class;
+    CNA_Result call_result = cna.shadow_map_destroy((CNA_ShadowMapHandle)shadow_map);
+    return (jint)call_result;
+}
+
+JNIEXPORT jint JNICALL
+Java_org_openeggbert_cna_internal_generated_NativeEngineLayerRoutes_shadowMapEnd(
+    JNIEnv* environment, jclass declaring_class, jlong shadow_map)
+{
+    (void)environment;
+    (void)declaring_class;
+    CNA_Result call_result = cna.shadow_map_end((CNA_ShadowMapHandle)shadow_map);
+    return (jint)call_result;
+}
+
+JNIEXPORT jint JNICALL
+Java_org_openeggbert_cna_internal_generated_NativeEngineLayerRoutes_shadowMapFilterRadiusForQuality(
+    JNIEnv* environment, jclass declaring_class, jint quality, jintArray out_radius)
+{
+    (void)environment;
+    (void)declaring_class;
+    int32_t out_radius_value = 0;
+    CNA_Result call_result = cna.shadow_map_filter_radius_for_quality((CNA_ShadowQuality)quality, &out_radius_value);
+    if (call_result == CNA_RESULT_SUCCESS || call_result == CNA_RESULT_BUFFER_TOO_SMALL) {
+        jint out_radius_element = (jint)out_radius_value;
+        (*environment)->SetIntArrayRegion(
+            environment, out_radius, 0, 1, &out_radius_element);
+    }
+    return (jint)call_result;
+}
+
+JNIEXPORT jint JNICALL
+Java_org_openeggbert_cna_internal_generated_NativeEngineLayerRoutes_shadowMapGetDepthBias(
+    JNIEnv* environment, jclass declaring_class, jlong shadow_map, jfloatArray out_bias)
+{
+    (void)environment;
+    (void)declaring_class;
+    float out_bias_value = 0;
+    CNA_Result call_result = cna.shadow_map_get_depth_bias((CNA_ShadowMapHandle)shadow_map, &out_bias_value);
+    if (call_result == CNA_RESULT_SUCCESS || call_result == CNA_RESULT_BUFFER_TOO_SMALL) {
+        jfloat out_bias_element = (jfloat)out_bias_value;
+        (*environment)->SetFloatArrayRegion(
+            environment, out_bias, 0, 1, &out_bias_element);
+    }
+    return (jint)call_result;
+}
+
+JNIEXPORT jint JNICALL
+Java_org_openeggbert_cna_internal_generated_NativeEngineLayerRoutes_shadowMapGetFilterRadius(
+    JNIEnv* environment, jclass declaring_class, jlong shadow_map, jintArray out_radius)
+{
+    (void)environment;
+    (void)declaring_class;
+    int32_t out_radius_value = 0;
+    CNA_Result call_result = cna.shadow_map_get_filter_radius((CNA_ShadowMapHandle)shadow_map, &out_radius_value);
+    if (call_result == CNA_RESULT_SUCCESS || call_result == CNA_RESULT_BUFFER_TOO_SMALL) {
+        jint out_radius_element = (jint)out_radius_value;
+        (*environment)->SetIntArrayRegion(
+            environment, out_radius, 0, 1, &out_radius_element);
+    }
+    return (jint)call_result;
+}
+
+JNIEXPORT jint JNICALL
+Java_org_openeggbert_cna_internal_generated_NativeEngineLayerRoutes_shadowMapGetLightViewProjection(
+    JNIEnv* environment, jclass declaring_class, jlong shadow_map, jfloatArray out_matrixFloating)
+{
+    (void)environment;
+    (void)declaring_class;
+    CNA_Matrix out_matrix_value;
+    memset(&out_matrix_value, 0, sizeof out_matrix_value);
+    CNA_Result call_result = cna.shadow_map_get_light_view_projection((CNA_ShadowMapHandle)shadow_map, &out_matrix_value);
+    if (call_result == CNA_RESULT_SUCCESS || call_result == CNA_RESULT_BUFFER_TOO_SMALL) {
+        jfloat out_matrixFloating_values[] = {
+            (jfloat)out_matrix_value.m11,
+            (jfloat)out_matrix_value.m12,
+            (jfloat)out_matrix_value.m13,
+            (jfloat)out_matrix_value.m14,
+            (jfloat)out_matrix_value.m21,
+            (jfloat)out_matrix_value.m22,
+            (jfloat)out_matrix_value.m23,
+            (jfloat)out_matrix_value.m24,
+            (jfloat)out_matrix_value.m31,
+            (jfloat)out_matrix_value.m32,
+            (jfloat)out_matrix_value.m33,
+            (jfloat)out_matrix_value.m34,
+            (jfloat)out_matrix_value.m41,
+            (jfloat)out_matrix_value.m42,
+            (jfloat)out_matrix_value.m43,
+            (jfloat)out_matrix_value.m44
+        };
+        (*environment)->SetFloatArrayRegion(environment, out_matrixFloating, 0,
+            (jsize)(sizeof out_matrixFloating_values / sizeof out_matrixFloating_values[0]),
+            out_matrixFloating_values);
+    }
+    return (jint)call_result;
+}
+
+JNIEXPORT jint JNICALL
+Java_org_openeggbert_cna_internal_generated_NativeEngineLayerRoutes_shadowMapGetQuality(
+    JNIEnv* environment, jclass declaring_class, jlong shadow_map, jintArray out_quality)
+{
+    (void)environment;
+    (void)declaring_class;
+    CNA_ShadowQuality out_quality_value = 0;
+    CNA_Result call_result = cna.shadow_map_get_quality((CNA_ShadowMapHandle)shadow_map, &out_quality_value);
+    if (call_result == CNA_RESULT_SUCCESS || call_result == CNA_RESULT_BUFFER_TOO_SMALL) {
+        jint out_quality_element = (jint)out_quality_value;
+        (*environment)->SetIntArrayRegion(
+            environment, out_quality, 0, 1, &out_quality_element);
+    }
+    return (jint)call_result;
+}
+
+JNIEXPORT jint JNICALL
+Java_org_openeggbert_cna_internal_generated_NativeEngineLayerRoutes_shadowMapGetShadowTexture(
+    JNIEnv* environment, jclass declaring_class, jlong shadow_map, jlongArray out_texture)
+{
+    (void)environment;
+    (void)declaring_class;
+    CNA_Handle out_texture_value = 0;
+    CNA_Result call_result = cna.shadow_map_get_shadow_texture((CNA_ShadowMapHandle)shadow_map, &out_texture_value);
+    if (call_result == CNA_RESULT_SUCCESS || call_result == CNA_RESULT_BUFFER_TOO_SMALL) {
+        jlong out_texture_element = (jlong)out_texture_value;
+        (*environment)->SetLongArrayRegion(
+            environment, out_texture, 0, 1, &out_texture_element);
+    }
+    return (jint)call_result;
+}
+
+JNIEXPORT jint JNICALL
+Java_org_openeggbert_cna_internal_generated_NativeEngineLayerRoutes_shadowMapGetSize(
+    JNIEnv* environment, jclass declaring_class, jlong shadow_map, jintArray out_size)
+{
+    (void)environment;
+    (void)declaring_class;
+    int32_t out_size_value = 0;
+    CNA_Result call_result = cna.shadow_map_get_size((CNA_ShadowMapHandle)shadow_map, &out_size_value);
+    if (call_result == CNA_RESULT_SUCCESS || call_result == CNA_RESULT_BUFFER_TOO_SMALL) {
+        jint out_size_element = (jint)out_size_value;
+        (*environment)->SetIntArrayRegion(
+            environment, out_size, 0, 1, &out_size_element);
+    }
+    return (jint)call_result;
+}
+
+JNIEXPORT jint JNICALL
+Java_org_openeggbert_cna_internal_generated_NativeEngineLayerRoutes_shadowMapIsSupported(
+    JNIEnv* environment, jclass declaring_class, jlong shadow_map, jbooleanArray out_supported)
+{
+    (void)environment;
+    (void)declaring_class;
+    CNA_Bool out_supported_value = 0;
+    CNA_Result call_result = cna.shadow_map_is_supported((CNA_ShadowMapHandle)shadow_map, &out_supported_value);
+    if (call_result == CNA_RESULT_SUCCESS || call_result == CNA_RESULT_BUFFER_TOO_SMALL) {
+        jboolean out_supported_element = (jboolean)out_supported_value;
+        (*environment)->SetBooleanArrayRegion(
+            environment, out_supported, 0, 1, &out_supported_element);
+    }
+    return (jint)call_result;
+}
+
+JNIEXPORT jint JNICALL
+Java_org_openeggbert_cna_internal_generated_NativeEngineLayerRoutes_shadowMapSetDepthBias(
+    JNIEnv* environment, jclass declaring_class, jlong shadow_map, jfloat bias)
+{
+    (void)environment;
+    (void)declaring_class;
+    CNA_Result call_result = cna.shadow_map_set_depth_bias((CNA_ShadowMapHandle)shadow_map, (float)bias);
+    return (jint)call_result;
+}
+
+JNIEXPORT jint JNICALL
+Java_org_openeggbert_cna_internal_generated_NativeEngineLayerRoutes_shadowMapSizeForQuality(
+    JNIEnv* environment, jclass declaring_class, jint quality, jintArray out_size)
+{
+    (void)environment;
+    (void)declaring_class;
+    int32_t out_size_value = 0;
+    CNA_Result call_result = cna.shadow_map_size_for_quality((CNA_ShadowQuality)quality, &out_size_value);
+    if (call_result == CNA_RESULT_SUCCESS || call_result == CNA_RESULT_BUFFER_TOO_SMALL) {
+        jint out_size_element = (jint)out_size_value;
+        (*environment)->SetIntArrayRegion(
+            environment, out_size, 0, 1, &out_size_element);
+    }
+    return (jint)call_result;
+}
+
+JNIEXPORT jint JNICALL
 Java_org_openeggbert_cna_internal_generated_NativeEngineLayerRoutes_spotLightExtInit(
     JNIEnv* environment, jclass declaring_class, jbyteArray out_lightBytes, jlongArray out_lightIntegral, jfloatArray out_lightFloating)
 {
@@ -4131,5 +4898,383 @@ Java_org_openeggbert_cna_internal_generated_NativeEngineLayerRoutes_spotLightExt
             (jsize)(sizeof out_lightFloating_values / sizeof out_lightFloating_values[0]),
             out_lightFloating_values);
     }
+    return (jint)call_result;
+}
+
+JNIEXPORT jint JNICALL
+Java_org_openeggbert_cna_internal_generated_NativeEngineLayerRoutes_spotShadowMapBegin(
+    JNIEnv* environment, jclass declaring_class, jlong shadow_map, jbyteArray lightBytes, jlongArray lightIntegral, jfloatArray lightFloating)
+{
+    (void)environment;
+    (void)declaring_class;
+    CNA_SpotLightEXT light_value;
+    memset(&light_value, 0, sizeof light_value);
+    light_value.struct_size = (uint32_t)(sizeof light_value);
+    light_value.struct_version = UINT32_C(1);
+    {
+        jbyte lightBytes_values[3];
+        (*environment)->GetByteArrayRegion(environment, lightBytes, 0, 3, lightBytes_values);
+        light_value.reserved[0] = (uint8_t)lightBytes_values[0];
+        light_value.reserved[1] = (uint8_t)lightBytes_values[1];
+        light_value.reserved[2] = (uint8_t)lightBytes_values[2];
+    }
+    {
+        jlong lightIntegral_values[1];
+        (*environment)->GetLongArrayRegion(environment, lightIntegral, 0, 1, lightIntegral_values);
+        light_value.casts_shadows = (CNA_Bool)lightIntegral_values[0];
+    }
+    {
+        jfloat lightFloating_values[13];
+        (*environment)->GetFloatArrayRegion(environment, lightFloating, 0, 13, lightFloating_values);
+        light_value.position.x = (float)lightFloating_values[0];
+        light_value.position.y = (float)lightFloating_values[1];
+        light_value.position.z = (float)lightFloating_values[2];
+        light_value.direction.x = (float)lightFloating_values[3];
+        light_value.direction.y = (float)lightFloating_values[4];
+        light_value.direction.z = (float)lightFloating_values[5];
+        light_value.color.x = (float)lightFloating_values[6];
+        light_value.color.y = (float)lightFloating_values[7];
+        light_value.color.z = (float)lightFloating_values[8];
+        light_value.intensity = (float)lightFloating_values[9];
+        light_value.range = (float)lightFloating_values[10];
+        light_value.inner_angle = (float)lightFloating_values[11];
+        light_value.outer_angle = (float)lightFloating_values[12];
+    }
+    CNA_Result call_result = cna.spot_shadow_map_begin((CNA_SpotShadowMapHandle)shadow_map, &light_value);
+    return (jint)call_result;
+}
+
+JNIEXPORT jint JNICALL
+Java_org_openeggbert_cna_internal_generated_NativeEngineLayerRoutes_spotShadowMapComputeLightProjection(
+    JNIEnv* environment, jclass declaring_class, jbyteArray lightBytes, jlongArray lightIntegral, jfloatArray lightFloating, jfloatArray out_matrixFloating)
+{
+    (void)environment;
+    (void)declaring_class;
+    CNA_SpotLightEXT light_value;
+    memset(&light_value, 0, sizeof light_value);
+    light_value.struct_size = (uint32_t)(sizeof light_value);
+    light_value.struct_version = UINT32_C(1);
+    {
+        jbyte lightBytes_values[3];
+        (*environment)->GetByteArrayRegion(environment, lightBytes, 0, 3, lightBytes_values);
+        light_value.reserved[0] = (uint8_t)lightBytes_values[0];
+        light_value.reserved[1] = (uint8_t)lightBytes_values[1];
+        light_value.reserved[2] = (uint8_t)lightBytes_values[2];
+    }
+    {
+        jlong lightIntegral_values[1];
+        (*environment)->GetLongArrayRegion(environment, lightIntegral, 0, 1, lightIntegral_values);
+        light_value.casts_shadows = (CNA_Bool)lightIntegral_values[0];
+    }
+    {
+        jfloat lightFloating_values[13];
+        (*environment)->GetFloatArrayRegion(environment, lightFloating, 0, 13, lightFloating_values);
+        light_value.position.x = (float)lightFloating_values[0];
+        light_value.position.y = (float)lightFloating_values[1];
+        light_value.position.z = (float)lightFloating_values[2];
+        light_value.direction.x = (float)lightFloating_values[3];
+        light_value.direction.y = (float)lightFloating_values[4];
+        light_value.direction.z = (float)lightFloating_values[5];
+        light_value.color.x = (float)lightFloating_values[6];
+        light_value.color.y = (float)lightFloating_values[7];
+        light_value.color.z = (float)lightFloating_values[8];
+        light_value.intensity = (float)lightFloating_values[9];
+        light_value.range = (float)lightFloating_values[10];
+        light_value.inner_angle = (float)lightFloating_values[11];
+        light_value.outer_angle = (float)lightFloating_values[12];
+    }
+    CNA_Matrix out_matrix_value;
+    memset(&out_matrix_value, 0, sizeof out_matrix_value);
+    CNA_Result call_result = cna.spot_shadow_map_compute_light_projection(&light_value, &out_matrix_value);
+    if (call_result == CNA_RESULT_SUCCESS || call_result == CNA_RESULT_BUFFER_TOO_SMALL) {
+        jfloat out_matrixFloating_values[] = {
+            (jfloat)out_matrix_value.m11,
+            (jfloat)out_matrix_value.m12,
+            (jfloat)out_matrix_value.m13,
+            (jfloat)out_matrix_value.m14,
+            (jfloat)out_matrix_value.m21,
+            (jfloat)out_matrix_value.m22,
+            (jfloat)out_matrix_value.m23,
+            (jfloat)out_matrix_value.m24,
+            (jfloat)out_matrix_value.m31,
+            (jfloat)out_matrix_value.m32,
+            (jfloat)out_matrix_value.m33,
+            (jfloat)out_matrix_value.m34,
+            (jfloat)out_matrix_value.m41,
+            (jfloat)out_matrix_value.m42,
+            (jfloat)out_matrix_value.m43,
+            (jfloat)out_matrix_value.m44
+        };
+        (*environment)->SetFloatArrayRegion(environment, out_matrixFloating, 0,
+            (jsize)(sizeof out_matrixFloating_values / sizeof out_matrixFloating_values[0]),
+            out_matrixFloating_values);
+    }
+    return (jint)call_result;
+}
+
+JNIEXPORT jint JNICALL
+Java_org_openeggbert_cna_internal_generated_NativeEngineLayerRoutes_spotShadowMapComputeLightView(
+    JNIEnv* environment, jclass declaring_class, jbyteArray lightBytes, jlongArray lightIntegral, jfloatArray lightFloating, jfloatArray out_matrixFloating)
+{
+    (void)environment;
+    (void)declaring_class;
+    CNA_SpotLightEXT light_value;
+    memset(&light_value, 0, sizeof light_value);
+    light_value.struct_size = (uint32_t)(sizeof light_value);
+    light_value.struct_version = UINT32_C(1);
+    {
+        jbyte lightBytes_values[3];
+        (*environment)->GetByteArrayRegion(environment, lightBytes, 0, 3, lightBytes_values);
+        light_value.reserved[0] = (uint8_t)lightBytes_values[0];
+        light_value.reserved[1] = (uint8_t)lightBytes_values[1];
+        light_value.reserved[2] = (uint8_t)lightBytes_values[2];
+    }
+    {
+        jlong lightIntegral_values[1];
+        (*environment)->GetLongArrayRegion(environment, lightIntegral, 0, 1, lightIntegral_values);
+        light_value.casts_shadows = (CNA_Bool)lightIntegral_values[0];
+    }
+    {
+        jfloat lightFloating_values[13];
+        (*environment)->GetFloatArrayRegion(environment, lightFloating, 0, 13, lightFloating_values);
+        light_value.position.x = (float)lightFloating_values[0];
+        light_value.position.y = (float)lightFloating_values[1];
+        light_value.position.z = (float)lightFloating_values[2];
+        light_value.direction.x = (float)lightFloating_values[3];
+        light_value.direction.y = (float)lightFloating_values[4];
+        light_value.direction.z = (float)lightFloating_values[5];
+        light_value.color.x = (float)lightFloating_values[6];
+        light_value.color.y = (float)lightFloating_values[7];
+        light_value.color.z = (float)lightFloating_values[8];
+        light_value.intensity = (float)lightFloating_values[9];
+        light_value.range = (float)lightFloating_values[10];
+        light_value.inner_angle = (float)lightFloating_values[11];
+        light_value.outer_angle = (float)lightFloating_values[12];
+    }
+    CNA_Matrix out_matrix_value;
+    memset(&out_matrix_value, 0, sizeof out_matrix_value);
+    CNA_Result call_result = cna.spot_shadow_map_compute_light_view(&light_value, &out_matrix_value);
+    if (call_result == CNA_RESULT_SUCCESS || call_result == CNA_RESULT_BUFFER_TOO_SMALL) {
+        jfloat out_matrixFloating_values[] = {
+            (jfloat)out_matrix_value.m11,
+            (jfloat)out_matrix_value.m12,
+            (jfloat)out_matrix_value.m13,
+            (jfloat)out_matrix_value.m14,
+            (jfloat)out_matrix_value.m21,
+            (jfloat)out_matrix_value.m22,
+            (jfloat)out_matrix_value.m23,
+            (jfloat)out_matrix_value.m24,
+            (jfloat)out_matrix_value.m31,
+            (jfloat)out_matrix_value.m32,
+            (jfloat)out_matrix_value.m33,
+            (jfloat)out_matrix_value.m34,
+            (jfloat)out_matrix_value.m41,
+            (jfloat)out_matrix_value.m42,
+            (jfloat)out_matrix_value.m43,
+            (jfloat)out_matrix_value.m44
+        };
+        (*environment)->SetFloatArrayRegion(environment, out_matrixFloating, 0,
+            (jsize)(sizeof out_matrixFloating_values / sizeof out_matrixFloating_values[0]),
+            out_matrixFloating_values);
+    }
+    return (jint)call_result;
+}
+
+JNIEXPORT jint JNICALL
+Java_org_openeggbert_cna_internal_generated_NativeEngineLayerRoutes_spotShadowMapCreate(
+    JNIEnv* environment, jclass declaring_class, jlong graphics_device, jint quality, jlongArray out_shadow_map)
+{
+    (void)environment;
+    (void)declaring_class;
+    CNA_SpotShadowMapHandle out_shadow_map_value = 0;
+    CNA_Result call_result = cna.spot_shadow_map_create((CNA_Handle)graphics_device, (CNA_ShadowQuality)quality, &out_shadow_map_value);
+    if (call_result == CNA_RESULT_SUCCESS || call_result == CNA_RESULT_BUFFER_TOO_SMALL) {
+        jlong out_shadow_map_element = (jlong)out_shadow_map_value;
+        (*environment)->SetLongArrayRegion(
+            environment, out_shadow_map, 0, 1, &out_shadow_map_element);
+    }
+    return (jint)call_result;
+}
+
+JNIEXPORT jint JNICALL
+Java_org_openeggbert_cna_internal_generated_NativeEngineLayerRoutes_spotShadowMapDestroy(
+    JNIEnv* environment, jclass declaring_class, jlong shadow_map)
+{
+    (void)environment;
+    (void)declaring_class;
+    CNA_Result call_result = cna.spot_shadow_map_destroy((CNA_SpotShadowMapHandle)shadow_map);
+    return (jint)call_result;
+}
+
+JNIEXPORT jint JNICALL
+Java_org_openeggbert_cna_internal_generated_NativeEngineLayerRoutes_spotShadowMapEnd(
+    JNIEnv* environment, jclass declaring_class, jlong shadow_map)
+{
+    (void)environment;
+    (void)declaring_class;
+    CNA_Result call_result = cna.spot_shadow_map_end((CNA_SpotShadowMapHandle)shadow_map);
+    return (jint)call_result;
+}
+
+JNIEXPORT jint JNICALL
+Java_org_openeggbert_cna_internal_generated_NativeEngineLayerRoutes_spotShadowMapGetDepthBias(
+    JNIEnv* environment, jclass declaring_class, jlong shadow_map, jfloatArray out_bias)
+{
+    (void)environment;
+    (void)declaring_class;
+    float out_bias_value = 0;
+    CNA_Result call_result = cna.spot_shadow_map_get_depth_bias((CNA_SpotShadowMapHandle)shadow_map, &out_bias_value);
+    if (call_result == CNA_RESULT_SUCCESS || call_result == CNA_RESULT_BUFFER_TOO_SMALL) {
+        jfloat out_bias_element = (jfloat)out_bias_value;
+        (*environment)->SetFloatArrayRegion(
+            environment, out_bias, 0, 1, &out_bias_element);
+    }
+    return (jint)call_result;
+}
+
+JNIEXPORT jint JNICALL
+Java_org_openeggbert_cna_internal_generated_NativeEngineLayerRoutes_spotShadowMapGetLightPosition(
+    JNIEnv* environment, jclass declaring_class, jlong shadow_map, jfloatArray out_positionFloating)
+{
+    (void)environment;
+    (void)declaring_class;
+    CNA_Vector3 out_position_value;
+    memset(&out_position_value, 0, sizeof out_position_value);
+    CNA_Result call_result = cna.spot_shadow_map_get_light_position((CNA_SpotShadowMapHandle)shadow_map, &out_position_value);
+    if (call_result == CNA_RESULT_SUCCESS || call_result == CNA_RESULT_BUFFER_TOO_SMALL) {
+        jfloat out_positionFloating_values[] = {
+            (jfloat)out_position_value.x,
+            (jfloat)out_position_value.y,
+            (jfloat)out_position_value.z
+        };
+        (*environment)->SetFloatArrayRegion(environment, out_positionFloating, 0,
+            (jsize)(sizeof out_positionFloating_values / sizeof out_positionFloating_values[0]),
+            out_positionFloating_values);
+    }
+    return (jint)call_result;
+}
+
+JNIEXPORT jint JNICALL
+Java_org_openeggbert_cna_internal_generated_NativeEngineLayerRoutes_spotShadowMapGetLightRange(
+    JNIEnv* environment, jclass declaring_class, jlong shadow_map, jfloatArray out_range)
+{
+    (void)environment;
+    (void)declaring_class;
+    float out_range_value = 0;
+    CNA_Result call_result = cna.spot_shadow_map_get_light_range((CNA_SpotShadowMapHandle)shadow_map, &out_range_value);
+    if (call_result == CNA_RESULT_SUCCESS || call_result == CNA_RESULT_BUFFER_TOO_SMALL) {
+        jfloat out_range_element = (jfloat)out_range_value;
+        (*environment)->SetFloatArrayRegion(
+            environment, out_range, 0, 1, &out_range_element);
+    }
+    return (jint)call_result;
+}
+
+JNIEXPORT jint JNICALL
+Java_org_openeggbert_cna_internal_generated_NativeEngineLayerRoutes_spotShadowMapGetLightViewProjection(
+    JNIEnv* environment, jclass declaring_class, jlong shadow_map, jfloatArray out_matrixFloating)
+{
+    (void)environment;
+    (void)declaring_class;
+    CNA_Matrix out_matrix_value;
+    memset(&out_matrix_value, 0, sizeof out_matrix_value);
+    CNA_Result call_result = cna.spot_shadow_map_get_light_view_projection((CNA_SpotShadowMapHandle)shadow_map, &out_matrix_value);
+    if (call_result == CNA_RESULT_SUCCESS || call_result == CNA_RESULT_BUFFER_TOO_SMALL) {
+        jfloat out_matrixFloating_values[] = {
+            (jfloat)out_matrix_value.m11,
+            (jfloat)out_matrix_value.m12,
+            (jfloat)out_matrix_value.m13,
+            (jfloat)out_matrix_value.m14,
+            (jfloat)out_matrix_value.m21,
+            (jfloat)out_matrix_value.m22,
+            (jfloat)out_matrix_value.m23,
+            (jfloat)out_matrix_value.m24,
+            (jfloat)out_matrix_value.m31,
+            (jfloat)out_matrix_value.m32,
+            (jfloat)out_matrix_value.m33,
+            (jfloat)out_matrix_value.m34,
+            (jfloat)out_matrix_value.m41,
+            (jfloat)out_matrix_value.m42,
+            (jfloat)out_matrix_value.m43,
+            (jfloat)out_matrix_value.m44
+        };
+        (*environment)->SetFloatArrayRegion(environment, out_matrixFloating, 0,
+            (jsize)(sizeof out_matrixFloating_values / sizeof out_matrixFloating_values[0]),
+            out_matrixFloating_values);
+    }
+    return (jint)call_result;
+}
+
+JNIEXPORT jint JNICALL
+Java_org_openeggbert_cna_internal_generated_NativeEngineLayerRoutes_spotShadowMapGetQuality(
+    JNIEnv* environment, jclass declaring_class, jlong shadow_map, jintArray out_quality)
+{
+    (void)environment;
+    (void)declaring_class;
+    CNA_ShadowQuality out_quality_value = 0;
+    CNA_Result call_result = cna.spot_shadow_map_get_quality((CNA_SpotShadowMapHandle)shadow_map, &out_quality_value);
+    if (call_result == CNA_RESULT_SUCCESS || call_result == CNA_RESULT_BUFFER_TOO_SMALL) {
+        jint out_quality_element = (jint)out_quality_value;
+        (*environment)->SetIntArrayRegion(
+            environment, out_quality, 0, 1, &out_quality_element);
+    }
+    return (jint)call_result;
+}
+
+JNIEXPORT jint JNICALL
+Java_org_openeggbert_cna_internal_generated_NativeEngineLayerRoutes_spotShadowMapGetShadowTexture(
+    JNIEnv* environment, jclass declaring_class, jlong shadow_map, jlongArray out_texture)
+{
+    (void)environment;
+    (void)declaring_class;
+    CNA_Handle out_texture_value = 0;
+    CNA_Result call_result = cna.spot_shadow_map_get_shadow_texture((CNA_SpotShadowMapHandle)shadow_map, &out_texture_value);
+    if (call_result == CNA_RESULT_SUCCESS || call_result == CNA_RESULT_BUFFER_TOO_SMALL) {
+        jlong out_texture_element = (jlong)out_texture_value;
+        (*environment)->SetLongArrayRegion(
+            environment, out_texture, 0, 1, &out_texture_element);
+    }
+    return (jint)call_result;
+}
+
+JNIEXPORT jint JNICALL
+Java_org_openeggbert_cna_internal_generated_NativeEngineLayerRoutes_spotShadowMapGetSize(
+    JNIEnv* environment, jclass declaring_class, jlong shadow_map, jintArray out_size)
+{
+    (void)environment;
+    (void)declaring_class;
+    int32_t out_size_value = 0;
+    CNA_Result call_result = cna.spot_shadow_map_get_size((CNA_SpotShadowMapHandle)shadow_map, &out_size_value);
+    if (call_result == CNA_RESULT_SUCCESS || call_result == CNA_RESULT_BUFFER_TOO_SMALL) {
+        jint out_size_element = (jint)out_size_value;
+        (*environment)->SetIntArrayRegion(
+            environment, out_size, 0, 1, &out_size_element);
+    }
+    return (jint)call_result;
+}
+
+JNIEXPORT jint JNICALL
+Java_org_openeggbert_cna_internal_generated_NativeEngineLayerRoutes_spotShadowMapIsSupported(
+    JNIEnv* environment, jclass declaring_class, jlong shadow_map, jbooleanArray out_supported)
+{
+    (void)environment;
+    (void)declaring_class;
+    CNA_Bool out_supported_value = 0;
+    CNA_Result call_result = cna.spot_shadow_map_is_supported((CNA_SpotShadowMapHandle)shadow_map, &out_supported_value);
+    if (call_result == CNA_RESULT_SUCCESS || call_result == CNA_RESULT_BUFFER_TOO_SMALL) {
+        jboolean out_supported_element = (jboolean)out_supported_value;
+        (*environment)->SetBooleanArrayRegion(
+            environment, out_supported, 0, 1, &out_supported_element);
+    }
+    return (jint)call_result;
+}
+
+JNIEXPORT jint JNICALL
+Java_org_openeggbert_cna_internal_generated_NativeEngineLayerRoutes_spotShadowMapSetDepthBias(
+    JNIEnv* environment, jclass declaring_class, jlong shadow_map, jfloat bias)
+{
+    (void)environment;
+    (void)declaring_class;
+    CNA_Result call_result = cna.spot_shadow_map_set_depth_bias((CNA_SpotShadowMapHandle)shadow_map, (float)bias);
     return (jint)call_result;
 }

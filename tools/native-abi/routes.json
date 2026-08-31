@@ -3628,6 +3628,70 @@
         "symbol": "cna_clustered_light_set_replace_at"
       },
       {
+        "java": "cubeShadowMapBegin",
+        "symbol": "cna_cube_shadow_map_begin"
+      },
+      {
+        "java": "cubeShadowMapComputeFaceProjection",
+        "symbol": "cna_cube_shadow_map_compute_face_projection"
+      },
+      {
+        "java": "cubeShadowMapComputeFaceView",
+        "symbol": "cna_cube_shadow_map_compute_face_view"
+      },
+      {
+        "java": "cubeShadowMapCreate",
+        "symbol": "cna_cube_shadow_map_create"
+      },
+      {
+        "java": "cubeShadowMapDestroy",
+        "symbol": "cna_cube_shadow_map_destroy"
+      },
+      {
+        "java": "cubeShadowMapEnd",
+        "symbol": "cna_cube_shadow_map_end"
+      },
+      {
+        "java": "cubeShadowMapGetDepthBias",
+        "symbol": "cna_cube_shadow_map_get_depth_bias"
+      },
+      {
+        "java": "cubeShadowMapGetLightPosition",
+        "symbol": "cna_cube_shadow_map_get_light_position"
+      },
+      {
+        "java": "cubeShadowMapGetLightRange",
+        "symbol": "cna_cube_shadow_map_get_light_range"
+      },
+      {
+        "java": "cubeShadowMapGetQuality",
+        "symbol": "cna_cube_shadow_map_get_quality"
+      },
+      {
+        "java": "cubeShadowMapGetShadowTexture",
+        "symbol": "cna_cube_shadow_map_get_shadow_texture"
+      },
+      {
+        "java": "cubeShadowMapGetSize",
+        "symbol": "cna_cube_shadow_map_get_size"
+      },
+      {
+        "java": "cubeShadowMapIsSupported",
+        "symbol": "cna_cube_shadow_map_is_supported"
+      },
+      {
+        "java": "cubeShadowMapSetDepthBias",
+        "symbol": "cna_cube_shadow_map_set_depth_bias"
+      },
+      {
+        "java": "cubeShadowMapSizeForQuality",
+        "symbol": "cna_cube_shadow_map_size_for_quality"
+      },
+      {
+        "java": "cubeShadowMapUpdate",
+        "symbol": "cna_cube_shadow_map_update"
+      },
+      {
         "java": "debugDrawAddBoundingSphere",
         "symbol": "cna_debug_draw_add_bounding_sphere"
       },
@@ -3945,8 +4009,140 @@
         ]
       },
       {
+        "java": "shadowMapApplyCaster",
+        "symbol": "cna_shadow_map_apply_caster"
+      },
+      {
+        "java": "shadowMapApplySkinnedCaster",
+        "symbol": "cna_shadow_map_apply_skinned_caster"
+      },
+      {
+        "java": "shadowMapBegin",
+        "symbol": "cna_shadow_map_begin"
+      },
+      {
+        "java": "shadowMapComputeLightProjection",
+        "symbol": "cna_shadow_map_compute_light_projection"
+      },
+      {
+        "java": "shadowMapComputeLightView",
+        "symbol": "cna_shadow_map_compute_light_view"
+      },
+      {
+        "java": "shadowMapCreate",
+        "symbol": "cna_shadow_map_create"
+      },
+      {
+        "java": "shadowMapDestroy",
+        "symbol": "cna_shadow_map_destroy"
+      },
+      {
+        "java": "shadowMapEnd",
+        "symbol": "cna_shadow_map_end"
+      },
+      {
+        "java": "shadowMapFilterRadiusForQuality",
+        "symbol": "cna_shadow_map_filter_radius_for_quality"
+      },
+      {
+        "java": "shadowMapGetDepthBias",
+        "symbol": "cna_shadow_map_get_depth_bias"
+      },
+      {
+        "java": "shadowMapGetFilterRadius",
+        "symbol": "cna_shadow_map_get_filter_radius"
+      },
+      {
+        "java": "shadowMapGetLightViewProjection",
+        "symbol": "cna_shadow_map_get_light_view_projection"
+      },
+      {
+        "java": "shadowMapGetQuality",
+        "symbol": "cna_shadow_map_get_quality"
+      },
+      {
+        "java": "shadowMapGetShadowTexture",
+        "symbol": "cna_shadow_map_get_shadow_texture"
+      },
+      {
+        "java": "shadowMapGetSize",
+        "symbol": "cna_shadow_map_get_size"
+      },
+      {
+        "java": "shadowMapIsSupported",
+        "symbol": "cna_shadow_map_is_supported"
+      },
+      {
+        "java": "shadowMapSetDepthBias",
+        "symbol": "cna_shadow_map_set_depth_bias"
+      },
+      {
+        "java": "shadowMapSizeForQuality",
+        "symbol": "cna_shadow_map_size_for_quality"
+      },
+      {
         "java": "spotLightExtInit",
         "symbol": "cna_spot_light_ext_init"
+      },
+      {
+        "java": "spotShadowMapBegin",
+        "symbol": "cna_spot_shadow_map_begin"
+      },
+      {
+        "java": "spotShadowMapComputeLightProjection",
+        "symbol": "cna_spot_shadow_map_compute_light_projection"
+      },
+      {
+        "java": "spotShadowMapComputeLightView",
+        "symbol": "cna_spot_shadow_map_compute_light_view"
+      },
+      {
+        "java": "spotShadowMapCreate",
+        "symbol": "cna_spot_shadow_map_create"
+      },
+      {
+        "java": "spotShadowMapDestroy",
+        "symbol": "cna_spot_shadow_map_destroy"
+      },
+      {
+        "java": "spotShadowMapEnd",
+        "symbol": "cna_spot_shadow_map_end"
+      },
+      {
+        "java": "spotShadowMapGetDepthBias",
+        "symbol": "cna_spot_shadow_map_get_depth_bias"
+      },
+      {
+        "java": "spotShadowMapGetLightPosition",
+        "symbol": "cna_spot_shadow_map_get_light_position"
+      },
+      {
+        "java": "spotShadowMapGetLightRange",
+        "symbol": "cna_spot_shadow_map_get_light_range"
+      },
+      {
+        "java": "spotShadowMapGetLightViewProjection",
+        "symbol": "cna_spot_shadow_map_get_light_view_projection"
+      },
+      {
+        "java": "spotShadowMapGetQuality",
+        "symbol": "cna_spot_shadow_map_get_quality"
+      },
+      {
+        "java": "spotShadowMapGetShadowTexture",
+        "symbol": "cna_spot_shadow_map_get_shadow_texture"
+      },
+      {
+        "java": "spotShadowMapGetSize",
+        "symbol": "cna_spot_shadow_map_get_size"
+      },
+      {
+        "java": "spotShadowMapIsSupported",
+        "symbol": "cna_spot_shadow_map_is_supported"
+      },
+      {
+        "java": "spotShadowMapSetDepthBias",
+        "symbol": "cna_spot_shadow_map_set_depth_bias"
       }
     ]
   }

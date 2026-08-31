@@ -436,7 +436,7 @@
       "authority": "engine_layer.h",
       "status": "ready",
       "priority": 7,
-      "currentState": "138 of the 857 routes are bound and reached: the layer's revision, the LOD group, the debug renderer's geometry and its three light gizmos, the full render-pipeline settings value, the frustum culler, the instanced renderer, the GPU timer, the three light value types, and the whole of clustered forward lighting -- set, grid, assignment, buffer and the compute path. Each family is chosen by measurement -- tools/native-abi/probes/engine_layer_families.c, which runs two passes and creates a real game to borrow a device from. Qualification: LOD group, frustum culler and lights VERIFIED_PURE, settings pure arithmetic, debug renderer, instanced renderer and clustered lighting VERIFIED_HEADLESS_GAME, GPU timer and the clustered compute path NOT_SUPPORTED_BY_RENDERER with their refusals qualified rather than skipped.",
+      "currentState": "187 of the 857 routes are bound and reached: the layer's revision, the LOD group, the debug renderer's geometry and its three light gizmos, the full render-pipeline settings value, the frustum culler, the instanced renderer, the GPU timer, the three light value types, the whole of clustered forward lighting, and the directional, spot and cube shadow maps. Families are chosen by measurement -- tools/native-abi/probes/engine_layer_families.c, which runs two passes and creates a real game to borrow a device from. Qualification: LOD group, frustum culler, lights and the shadow fitting VERIFIED_PURE; settings pure arithmetic; debug renderer, instanced renderer, clustered lighting and shadow-map state VERIFIED_HEADLESS_GAME; GPU timer, the clustered compute path and shadow casting NOT_SUPPORTED_BY_RENDERER with their refusals qualified rather than skipped.",
       "expectedState": "More families as each earns a consumer and can be qualified. The layer is a modern renderer -- clustered forward lighting, cascaded and contact and cube shadows, SSAO, SSR, tonemapping, auto-exposure, atmospheric sky, decals, particles, debug draw, instancing, light probes -- none of which XNA 4.0 has any counterpart for, so every family is an addition rather than a member being filled in. It is 857 routes and the wrong way to spend them is mechanically: a coherent Java type per family, with the parts that cannot be honestly qualified here left unbound and said so.",
       "blocker": "None, but most families need a real graphics device. The probe found that debug draw and the particle system both refuse an invalid one, so those tests have to run inside a Game, and anything whose result is a rendered image cannot be checked in a HEADLESS renderer at all -- which has to be stated rather than asserted around.",
       "tests": [
@@ -447,9 +447,10 @@
         "InstancedRendererTests",
         "GpuTimerTests",
         "LightTests",
-        "ClusteredLightTests"
+        "ClusteredLightTests",
+        "ShadowTests"
       ],
-      "note": "LodGroup deliberately holds thresholds rather than mesh parts: the Java projection's ModelMeshPart is a managed object with no native handle, so there is nothing to hand CNA and nothing meaningful to receive. selectIndex returns the level and the game draws what it keeps at that index. Three of DebugDraw's six gizmo routes are bound now that the lighting slice exists; the other three take engine-layer handles -- a light-probe volume, a cluster grid and a cascaded shadow map -- for families that do not exist in Java yet, and follow each of those. Nothing in DebugDrawTests claims a line was drawn -- this qualification has a HEADLESS renderer -- only that the queue holds what was put in it, which is the part a game's own logic depends on. FrustumCuller is VERIFIED_PURE: it needs no device, and its evidence is agreement with XNA's own BoundingFrustum across a 125-box grid. Which XNA test matters -- CNA's culler is Contains(box) != Disjoint, the six-plane test, and XNA's Intersects is GJK. They disagree on boxes near a frustum corner, always with the plane test being the one that drops, and the projection measures that divergence rather than hiding it. The first version of the test used a camera at the origin looking down -Z, whose view matrix is the identity -- against which a planted view/projection swap passed. The camera is off-axis now."
+      "note": "LodGroup deliberately holds thresholds rather than mesh parts: the Java projection's ModelMeshPart is a managed object with no native handle, so there is nothing to hand CNA and nothing meaningful to receive. selectIndex returns the level and the game draws what it keeps at that index. Three of DebugDraw's six gizmo routes are bound now that the lighting slice exists; the other three take engine-layer handles -- a light-probe volume, a cluster grid and a cascaded shadow map -- for families that do not exist in Java yet, and follow each of those. Nothing in DebugDrawTests claims a line was drawn -- this qualification has a HEADLESS renderer -- only that the queue holds what was put in it, which is the part a game's own logic depends on. FrustumCuller is VERIFIED_PURE: it needs no device, and its evidence is agreement with XNA's own BoundingFrustum across a 125-box grid. Which XNA test matters -- CNA's culler is Contains(box) != Disjoint, the six-plane test, and XNA's Intersects is GJK. They disagree on boxes near a frustum corner, always with the plane test being the one that drops, and the projection measures that divergence rather than hiding it. The first version of the test used a camera at the origin looking down -Z, whose view matrix is the identity -- against which a planted view/projection swap passed. The camera is off-axis now. The two caster-effect accessors on each shadow map are deliberately unbound: applyCaster is the operation a game needs, and a borrowed engine effect has no Java facade with a coherent lifetime yet."
     },
     {
       "id": "JAVA-EXT-009",
@@ -490,6 +491,21 @@
         "InstancedRendererTests"
       ],
       "note": "CNA-Java works around it soundly rather than by matching on the message: InstancedRenderer.draw asks the renderer its own two questions on the failure path only -- can it instance, is the fallback on -- and raises IllegalStateException when they explain the refusal, keeping CNA's failure and its real result code as the cause. The workaround costs nothing on the success path and stops working correctly the moment CNA fixes the result, at which point it simply becomes redundant rather than wrong. Likely wider than this one route: std::logic_error is thrown in more than one place in the engine layer."
+    },
+    {
+      "id": "JAVA-UPSTREAM-007",
+      "title": "A cube shadow map's face passes do not open on a renderer that cannot cast, though CNA says they do",
+      "family": "engine_layer.h",
+      "authority": "CNA's own startup log against measured behaviour",
+      "status": "blocked",
+      "priority": 9,
+      "currentState": "CNA logs \"CNA::Graphics::CubeShadowMap: point shadows are unavailable on this renderer. Face passes still open and close, and the cube keeps meaning nothing occludes, so the frame renders unshadowed rather than failing.\" On the HEADLESS renderer they do not: cna_cube_shadow_map_begin returns CNA_RESULT_INTERNAL (12) with the diagnostic \"HeadlessRenderer::SetViewport: rectangle (0,0,512x512) exceeds the current target's bounds (800x480)\", and the matching end fails too. cna_shadow_map_begin and _end on the same renderer, at the same quality and therefore the same size, both succeed -- so the difference is binding a cube face rather than a 2D target. Measured in C by tools/native-abi/probes/engine_layer_families.c.",
+      "expectedState": "Either the headless renderer binds a cube face the way it binds a 2D target, or the log stops promising that face passes open. As it stands a game that follows CNA's own advice -- run the shadow pass unconditionally and let it do nothing -- crashes on point shadows and not on directional ones.",
+      "blocker": "Upstream defect in cnanext's headless renderer; CNA-Java cannot fix it.",
+      "tests": [
+        "ShadowTests"
+      ],
+      "note": "CubeShadowMap's documentation states the difference rather than hiding it, and ShadowTests asserts the current refusal when isSupported() is false -- so an upstream fix shows up as a failing test rather than going unnoticed. The result is CNA_RESULT_INTERNAL again, the same missing std::logic_error arm JAVA-UPSTREAM-006 records."
     }
   ]
 }

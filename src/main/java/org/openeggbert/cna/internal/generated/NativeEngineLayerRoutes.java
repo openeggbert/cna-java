@@ -614,6 +614,164 @@ public final class NativeEngineLayerRoutes {
     public static native int clusteredLightSetReplaceAt(long set, int index, byte[] lightBytes, long[] lightIntegral, float[] lightFloating);
 
     /**
+     * cna_cube_shadow_map_begin (engine_layer.h).
+     */
+    public static native int cubeShadowMapBegin(long shadowMap, int faceIndex);
+
+    /**
+     * cna_cube_shadow_map_compute_face_projection (engine_layer.h).
+     *
+     * <p>outMatrixFloating carries CNA_Matrix in this order:
+     * <ol start="0">
+     *   <li>{@code m11} (float)</li>
+     *   <li>{@code m12} (float)</li>
+     *   <li>{@code m13} (float)</li>
+     *   <li>{@code m14} (float)</li>
+     *   <li>{@code m21} (float)</li>
+     *   <li>{@code m22} (float)</li>
+     *   <li>{@code m23} (float)</li>
+     *   <li>{@code m24} (float)</li>
+     *   <li>{@code m31} (float)</li>
+     *   <li>{@code m32} (float)</li>
+     *   <li>{@code m33} (float)</li>
+     *   <li>{@code m34} (float)</li>
+     *   <li>{@code m41} (float)</li>
+     *   <li>{@code m42} (float)</li>
+     *   <li>{@code m43} (float)</li>
+     *   <li>{@code m44} (float)</li>
+     * </ol>
+     */
+    public static native int cubeShadowMapComputeFaceProjection(float range, float[] outMatrixFloating);
+
+    /**
+     * cna_cube_shadow_map_compute_face_view (engine_layer.h).
+     *
+     * <p>positionFloating carries CNA_Vector3 in this order:
+     * <ol start="0">
+     *   <li>{@code x} (float)</li>
+     *   <li>{@code y} (float)</li>
+     *   <li>{@code z} (float)</li>
+     * </ol>
+     *
+     * <p>outMatrixFloating carries CNA_Matrix in this order:
+     * <ol start="0">
+     *   <li>{@code m11} (float)</li>
+     *   <li>{@code m12} (float)</li>
+     *   <li>{@code m13} (float)</li>
+     *   <li>{@code m14} (float)</li>
+     *   <li>{@code m21} (float)</li>
+     *   <li>{@code m22} (float)</li>
+     *   <li>{@code m23} (float)</li>
+     *   <li>{@code m24} (float)</li>
+     *   <li>{@code m31} (float)</li>
+     *   <li>{@code m32} (float)</li>
+     *   <li>{@code m33} (float)</li>
+     *   <li>{@code m34} (float)</li>
+     *   <li>{@code m41} (float)</li>
+     *   <li>{@code m42} (float)</li>
+     *   <li>{@code m43} (float)</li>
+     *   <li>{@code m44} (float)</li>
+     * </ol>
+     */
+    public static native int cubeShadowMapComputeFaceView(int face, float[] positionFloating, float[] outMatrixFloating);
+
+    /**
+     * cna_cube_shadow_map_create (engine_layer.h).
+     */
+    public static native int cubeShadowMapCreate(long graphicsDevice, int quality, long[] outShadowMap);
+
+    /**
+     * cna_cube_shadow_map_destroy (engine_layer.h).
+     */
+    public static native int cubeShadowMapDestroy(long shadowMap);
+
+    /**
+     * cna_cube_shadow_map_end (engine_layer.h).
+     */
+    public static native int cubeShadowMapEnd(long shadowMap);
+
+    /**
+     * cna_cube_shadow_map_get_depth_bias (engine_layer.h).
+     */
+    public static native int cubeShadowMapGetDepthBias(long shadowMap, float[] outBias);
+
+    /**
+     * cna_cube_shadow_map_get_light_position (engine_layer.h).
+     *
+     * <p>outPositionFloating carries CNA_Vector3 in this order:
+     * <ol start="0">
+     *   <li>{@code x} (float)</li>
+     *   <li>{@code y} (float)</li>
+     *   <li>{@code z} (float)</li>
+     * </ol>
+     */
+    public static native int cubeShadowMapGetLightPosition(long shadowMap, float[] outPositionFloating);
+
+    /**
+     * cna_cube_shadow_map_get_light_range (engine_layer.h).
+     */
+    public static native int cubeShadowMapGetLightRange(long shadowMap, float[] outRange);
+
+    /**
+     * cna_cube_shadow_map_get_quality (engine_layer.h).
+     */
+    public static native int cubeShadowMapGetQuality(long shadowMap, int[] outQuality);
+
+    /**
+     * cna_cube_shadow_map_get_shadow_texture (engine_layer.h).
+     */
+    public static native int cubeShadowMapGetShadowTexture(long shadowMap, long[] outTexture);
+
+    /**
+     * cna_cube_shadow_map_get_size (engine_layer.h).
+     */
+    public static native int cubeShadowMapGetSize(long shadowMap, int[] outSize);
+
+    /**
+     * cna_cube_shadow_map_is_supported (engine_layer.h).
+     */
+    public static native int cubeShadowMapIsSupported(long shadowMap, boolean[] outSupported);
+
+    /**
+     * cna_cube_shadow_map_set_depth_bias (engine_layer.h).
+     */
+    public static native int cubeShadowMapSetDepthBias(long shadowMap, float bias);
+
+    /**
+     * cna_cube_shadow_map_size_for_quality (engine_layer.h).
+     */
+    public static native int cubeShadowMapSizeForQuality(int quality, int[] outSize);
+
+    /**
+     * cna_cube_shadow_map_update (engine_layer.h).
+     *
+     * <p>lightBytes carries CNA_PointLightEXT in this order:
+     * <ol start="0">
+     *   <li>{@code reserved[0]} (uint8_t)</li>
+     *   <li>{@code reserved[1]} (uint8_t)</li>
+     *   <li>{@code reserved[2]} (uint8_t)</li>
+     * </ol>
+     *
+     * <p>lightIntegral carries CNA_PointLightEXT in this order:
+     * <ol start="0">
+     *   <li>{@code casts_shadows} (CNA_Bool)</li>
+     * </ol>
+     *
+     * <p>lightFloating carries CNA_PointLightEXT in this order:
+     * <ol start="0">
+     *   <li>{@code position.x} (float)</li>
+     *   <li>{@code position.y} (float)</li>
+     *   <li>{@code position.z} (float)</li>
+     *   <li>{@code color.x} (float)</li>
+     *   <li>{@code color.y} (float)</li>
+     *   <li>{@code color.z} (float)</li>
+     *   <li>{@code intensity} (float)</li>
+     *   <li>{@code range} (float)</li>
+     * </ol>
+     */
+    public static native int cubeShadowMapUpdate(long shadowMap, byte[] lightBytes, long[] lightIntegral, float[] lightFloating);
+
+    /**
      * cna_debug_draw_add_bounding_sphere (engine_layer.h).
      *
      * <p>sphereFloating carries CNA_BoundingSphere in this order:
@@ -1565,6 +1723,252 @@ public final class NativeEngineLayerRoutes {
     public static native int renderPipelineSettingsExtNormalize(byte[] settingsBytes, long[] settingsIntegral, float[] settingsFloating);
 
     /**
+     * cna_shadow_map_apply_caster (engine_layer.h).
+     */
+    public static native int shadowMapApplyCaster(long shadowMap);
+
+    /**
+     * cna_shadow_map_apply_skinned_caster (engine_layer.h).
+     */
+    public static native int shadowMapApplySkinnedCaster(long shadowMap, float[] boneTransformsFloating, int weightsPerVertex);
+
+    /**
+     * cna_shadow_map_begin (engine_layer.h).
+     *
+     * <p>lightBytes carries CNA_DirectionalLightEXT in this order:
+     * <ol start="0">
+     *   <li>{@code reserved[0]} (uint8_t)</li>
+     *   <li>{@code reserved[1]} (uint8_t)</li>
+     *   <li>{@code reserved[2]} (uint8_t)</li>
+     * </ol>
+     *
+     * <p>lightIntegral carries CNA_DirectionalLightEXT in this order:
+     * <ol start="0">
+     *   <li>{@code casts_shadows} (CNA_Bool)</li>
+     * </ol>
+     *
+     * <p>lightFloating carries CNA_DirectionalLightEXT in this order:
+     * <ol start="0">
+     *   <li>{@code direction.x} (float)</li>
+     *   <li>{@code direction.y} (float)</li>
+     *   <li>{@code direction.z} (float)</li>
+     *   <li>{@code color.x} (float)</li>
+     *   <li>{@code color.y} (float)</li>
+     *   <li>{@code color.z} (float)</li>
+     *   <li>{@code intensity} (float)</li>
+     * </ol>
+     *
+     * <p>sceneBoundsFloating carries CNA_BoundingBox in this order:
+     * <ol start="0">
+     *   <li>{@code min.x} (float)</li>
+     *   <li>{@code min.y} (float)</li>
+     *   <li>{@code min.z} (float)</li>
+     *   <li>{@code max.x} (float)</li>
+     *   <li>{@code max.y} (float)</li>
+     *   <li>{@code max.z} (float)</li>
+     * </ol>
+     */
+    public static native int shadowMapBegin(long shadowMap, byte[] lightBytes, long[] lightIntegral, float[] lightFloating, float[] sceneBoundsFloating);
+
+    /**
+     * cna_shadow_map_compute_light_projection (engine_layer.h).
+     *
+     * <p>lightViewFloating carries CNA_Matrix in this order:
+     * <ol start="0">
+     *   <li>{@code m11} (float)</li>
+     *   <li>{@code m12} (float)</li>
+     *   <li>{@code m13} (float)</li>
+     *   <li>{@code m14} (float)</li>
+     *   <li>{@code m21} (float)</li>
+     *   <li>{@code m22} (float)</li>
+     *   <li>{@code m23} (float)</li>
+     *   <li>{@code m24} (float)</li>
+     *   <li>{@code m31} (float)</li>
+     *   <li>{@code m32} (float)</li>
+     *   <li>{@code m33} (float)</li>
+     *   <li>{@code m34} (float)</li>
+     *   <li>{@code m41} (float)</li>
+     *   <li>{@code m42} (float)</li>
+     *   <li>{@code m43} (float)</li>
+     *   <li>{@code m44} (float)</li>
+     * </ol>
+     *
+     * <p>sceneBoundsFloating carries CNA_BoundingBox in this order:
+     * <ol start="0">
+     *   <li>{@code min.x} (float)</li>
+     *   <li>{@code min.y} (float)</li>
+     *   <li>{@code min.z} (float)</li>
+     *   <li>{@code max.x} (float)</li>
+     *   <li>{@code max.y} (float)</li>
+     *   <li>{@code max.z} (float)</li>
+     * </ol>
+     *
+     * <p>outMatrixFloating carries CNA_Matrix in this order:
+     * <ol start="0">
+     *   <li>{@code m11} (float)</li>
+     *   <li>{@code m12} (float)</li>
+     *   <li>{@code m13} (float)</li>
+     *   <li>{@code m14} (float)</li>
+     *   <li>{@code m21} (float)</li>
+     *   <li>{@code m22} (float)</li>
+     *   <li>{@code m23} (float)</li>
+     *   <li>{@code m24} (float)</li>
+     *   <li>{@code m31} (float)</li>
+     *   <li>{@code m32} (float)</li>
+     *   <li>{@code m33} (float)</li>
+     *   <li>{@code m34} (float)</li>
+     *   <li>{@code m41} (float)</li>
+     *   <li>{@code m42} (float)</li>
+     *   <li>{@code m43} (float)</li>
+     *   <li>{@code m44} (float)</li>
+     * </ol>
+     */
+    public static native int shadowMapComputeLightProjection(float[] lightViewFloating, float[] sceneBoundsFloating, float[] outMatrixFloating);
+
+    /**
+     * cna_shadow_map_compute_light_view (engine_layer.h).
+     *
+     * <p>lightBytes carries CNA_DirectionalLightEXT in this order:
+     * <ol start="0">
+     *   <li>{@code reserved[0]} (uint8_t)</li>
+     *   <li>{@code reserved[1]} (uint8_t)</li>
+     *   <li>{@code reserved[2]} (uint8_t)</li>
+     * </ol>
+     *
+     * <p>lightIntegral carries CNA_DirectionalLightEXT in this order:
+     * <ol start="0">
+     *   <li>{@code casts_shadows} (CNA_Bool)</li>
+     * </ol>
+     *
+     * <p>lightFloating carries CNA_DirectionalLightEXT in this order:
+     * <ol start="0">
+     *   <li>{@code direction.x} (float)</li>
+     *   <li>{@code direction.y} (float)</li>
+     *   <li>{@code direction.z} (float)</li>
+     *   <li>{@code color.x} (float)</li>
+     *   <li>{@code color.y} (float)</li>
+     *   <li>{@code color.z} (float)</li>
+     *   <li>{@code intensity} (float)</li>
+     * </ol>
+     *
+     * <p>sceneBoundsFloating carries CNA_BoundingBox in this order:
+     * <ol start="0">
+     *   <li>{@code min.x} (float)</li>
+     *   <li>{@code min.y} (float)</li>
+     *   <li>{@code min.z} (float)</li>
+     *   <li>{@code max.x} (float)</li>
+     *   <li>{@code max.y} (float)</li>
+     *   <li>{@code max.z} (float)</li>
+     * </ol>
+     *
+     * <p>outMatrixFloating carries CNA_Matrix in this order:
+     * <ol start="0">
+     *   <li>{@code m11} (float)</li>
+     *   <li>{@code m12} (float)</li>
+     *   <li>{@code m13} (float)</li>
+     *   <li>{@code m14} (float)</li>
+     *   <li>{@code m21} (float)</li>
+     *   <li>{@code m22} (float)</li>
+     *   <li>{@code m23} (float)</li>
+     *   <li>{@code m24} (float)</li>
+     *   <li>{@code m31} (float)</li>
+     *   <li>{@code m32} (float)</li>
+     *   <li>{@code m33} (float)</li>
+     *   <li>{@code m34} (float)</li>
+     *   <li>{@code m41} (float)</li>
+     *   <li>{@code m42} (float)</li>
+     *   <li>{@code m43} (float)</li>
+     *   <li>{@code m44} (float)</li>
+     * </ol>
+     */
+    public static native int shadowMapComputeLightView(byte[] lightBytes, long[] lightIntegral, float[] lightFloating, float[] sceneBoundsFloating, float[] outMatrixFloating);
+
+    /**
+     * cna_shadow_map_create (engine_layer.h).
+     */
+    public static native int shadowMapCreate(long graphicsDevice, int quality, long[] outShadowMap);
+
+    /**
+     * cna_shadow_map_destroy (engine_layer.h).
+     */
+    public static native int shadowMapDestroy(long shadowMap);
+
+    /**
+     * cna_shadow_map_end (engine_layer.h).
+     */
+    public static native int shadowMapEnd(long shadowMap);
+
+    /**
+     * cna_shadow_map_filter_radius_for_quality (engine_layer.h).
+     */
+    public static native int shadowMapFilterRadiusForQuality(int quality, int[] outRadius);
+
+    /**
+     * cna_shadow_map_get_depth_bias (engine_layer.h).
+     */
+    public static native int shadowMapGetDepthBias(long shadowMap, float[] outBias);
+
+    /**
+     * cna_shadow_map_get_filter_radius (engine_layer.h).
+     */
+    public static native int shadowMapGetFilterRadius(long shadowMap, int[] outRadius);
+
+    /**
+     * cna_shadow_map_get_light_view_projection (engine_layer.h).
+     *
+     * <p>outMatrixFloating carries CNA_Matrix in this order:
+     * <ol start="0">
+     *   <li>{@code m11} (float)</li>
+     *   <li>{@code m12} (float)</li>
+     *   <li>{@code m13} (float)</li>
+     *   <li>{@code m14} (float)</li>
+     *   <li>{@code m21} (float)</li>
+     *   <li>{@code m22} (float)</li>
+     *   <li>{@code m23} (float)</li>
+     *   <li>{@code m24} (float)</li>
+     *   <li>{@code m31} (float)</li>
+     *   <li>{@code m32} (float)</li>
+     *   <li>{@code m33} (float)</li>
+     *   <li>{@code m34} (float)</li>
+     *   <li>{@code m41} (float)</li>
+     *   <li>{@code m42} (float)</li>
+     *   <li>{@code m43} (float)</li>
+     *   <li>{@code m44} (float)</li>
+     * </ol>
+     */
+    public static native int shadowMapGetLightViewProjection(long shadowMap, float[] outMatrixFloating);
+
+    /**
+     * cna_shadow_map_get_quality (engine_layer.h).
+     */
+    public static native int shadowMapGetQuality(long shadowMap, int[] outQuality);
+
+    /**
+     * cna_shadow_map_get_shadow_texture (engine_layer.h).
+     */
+    public static native int shadowMapGetShadowTexture(long shadowMap, long[] outTexture);
+
+    /**
+     * cna_shadow_map_get_size (engine_layer.h).
+     */
+    public static native int shadowMapGetSize(long shadowMap, int[] outSize);
+
+    /**
+     * cna_shadow_map_is_supported (engine_layer.h).
+     */
+    public static native int shadowMapIsSupported(long shadowMap, boolean[] outSupported);
+
+    /**
+     * cna_shadow_map_set_depth_bias (engine_layer.h).
+     */
+    public static native int shadowMapSetDepthBias(long shadowMap, float bias);
+
+    /**
+     * cna_shadow_map_size_for_quality (engine_layer.h).
+     */
+    public static native int shadowMapSizeForQuality(int quality, int[] outSize);
+
+    /**
      * cna_spot_light_ext_init (engine_layer.h).
      *
      * <p>outLightBytes carries CNA_SpotLightEXT in this order:
@@ -1597,4 +2001,233 @@ public final class NativeEngineLayerRoutes {
      * </ol>
      */
     public static native int spotLightExtInit(byte[] outLightBytes, long[] outLightIntegral, float[] outLightFloating);
+
+    /**
+     * cna_spot_shadow_map_begin (engine_layer.h).
+     *
+     * <p>lightBytes carries CNA_SpotLightEXT in this order:
+     * <ol start="0">
+     *   <li>{@code reserved[0]} (uint8_t)</li>
+     *   <li>{@code reserved[1]} (uint8_t)</li>
+     *   <li>{@code reserved[2]} (uint8_t)</li>
+     * </ol>
+     *
+     * <p>lightIntegral carries CNA_SpotLightEXT in this order:
+     * <ol start="0">
+     *   <li>{@code casts_shadows} (CNA_Bool)</li>
+     * </ol>
+     *
+     * <p>lightFloating carries CNA_SpotLightEXT in this order:
+     * <ol start="0">
+     *   <li>{@code position.x} (float)</li>
+     *   <li>{@code position.y} (float)</li>
+     *   <li>{@code position.z} (float)</li>
+     *   <li>{@code direction.x} (float)</li>
+     *   <li>{@code direction.y} (float)</li>
+     *   <li>{@code direction.z} (float)</li>
+     *   <li>{@code color.x} (float)</li>
+     *   <li>{@code color.y} (float)</li>
+     *   <li>{@code color.z} (float)</li>
+     *   <li>{@code intensity} (float)</li>
+     *   <li>{@code range} (float)</li>
+     *   <li>{@code inner_angle} (float)</li>
+     *   <li>{@code outer_angle} (float)</li>
+     * </ol>
+     */
+    public static native int spotShadowMapBegin(long shadowMap, byte[] lightBytes, long[] lightIntegral, float[] lightFloating);
+
+    /**
+     * cna_spot_shadow_map_compute_light_projection (engine_layer.h).
+     *
+     * <p>lightBytes carries CNA_SpotLightEXT in this order:
+     * <ol start="0">
+     *   <li>{@code reserved[0]} (uint8_t)</li>
+     *   <li>{@code reserved[1]} (uint8_t)</li>
+     *   <li>{@code reserved[2]} (uint8_t)</li>
+     * </ol>
+     *
+     * <p>lightIntegral carries CNA_SpotLightEXT in this order:
+     * <ol start="0">
+     *   <li>{@code casts_shadows} (CNA_Bool)</li>
+     * </ol>
+     *
+     * <p>lightFloating carries CNA_SpotLightEXT in this order:
+     * <ol start="0">
+     *   <li>{@code position.x} (float)</li>
+     *   <li>{@code position.y} (float)</li>
+     *   <li>{@code position.z} (float)</li>
+     *   <li>{@code direction.x} (float)</li>
+     *   <li>{@code direction.y} (float)</li>
+     *   <li>{@code direction.z} (float)</li>
+     *   <li>{@code color.x} (float)</li>
+     *   <li>{@code color.y} (float)</li>
+     *   <li>{@code color.z} (float)</li>
+     *   <li>{@code intensity} (float)</li>
+     *   <li>{@code range} (float)</li>
+     *   <li>{@code inner_angle} (float)</li>
+     *   <li>{@code outer_angle} (float)</li>
+     * </ol>
+     *
+     * <p>outMatrixFloating carries CNA_Matrix in this order:
+     * <ol start="0">
+     *   <li>{@code m11} (float)</li>
+     *   <li>{@code m12} (float)</li>
+     *   <li>{@code m13} (float)</li>
+     *   <li>{@code m14} (float)</li>
+     *   <li>{@code m21} (float)</li>
+     *   <li>{@code m22} (float)</li>
+     *   <li>{@code m23} (float)</li>
+     *   <li>{@code m24} (float)</li>
+     *   <li>{@code m31} (float)</li>
+     *   <li>{@code m32} (float)</li>
+     *   <li>{@code m33} (float)</li>
+     *   <li>{@code m34} (float)</li>
+     *   <li>{@code m41} (float)</li>
+     *   <li>{@code m42} (float)</li>
+     *   <li>{@code m43} (float)</li>
+     *   <li>{@code m44} (float)</li>
+     * </ol>
+     */
+    public static native int spotShadowMapComputeLightProjection(byte[] lightBytes, long[] lightIntegral, float[] lightFloating, float[] outMatrixFloating);
+
+    /**
+     * cna_spot_shadow_map_compute_light_view (engine_layer.h).
+     *
+     * <p>lightBytes carries CNA_SpotLightEXT in this order:
+     * <ol start="0">
+     *   <li>{@code reserved[0]} (uint8_t)</li>
+     *   <li>{@code reserved[1]} (uint8_t)</li>
+     *   <li>{@code reserved[2]} (uint8_t)</li>
+     * </ol>
+     *
+     * <p>lightIntegral carries CNA_SpotLightEXT in this order:
+     * <ol start="0">
+     *   <li>{@code casts_shadows} (CNA_Bool)</li>
+     * </ol>
+     *
+     * <p>lightFloating carries CNA_SpotLightEXT in this order:
+     * <ol start="0">
+     *   <li>{@code position.x} (float)</li>
+     *   <li>{@code position.y} (float)</li>
+     *   <li>{@code position.z} (float)</li>
+     *   <li>{@code direction.x} (float)</li>
+     *   <li>{@code direction.y} (float)</li>
+     *   <li>{@code direction.z} (float)</li>
+     *   <li>{@code color.x} (float)</li>
+     *   <li>{@code color.y} (float)</li>
+     *   <li>{@code color.z} (float)</li>
+     *   <li>{@code intensity} (float)</li>
+     *   <li>{@code range} (float)</li>
+     *   <li>{@code inner_angle} (float)</li>
+     *   <li>{@code outer_angle} (float)</li>
+     * </ol>
+     *
+     * <p>outMatrixFloating carries CNA_Matrix in this order:
+     * <ol start="0">
+     *   <li>{@code m11} (float)</li>
+     *   <li>{@code m12} (float)</li>
+     *   <li>{@code m13} (float)</li>
+     *   <li>{@code m14} (float)</li>
+     *   <li>{@code m21} (float)</li>
+     *   <li>{@code m22} (float)</li>
+     *   <li>{@code m23} (float)</li>
+     *   <li>{@code m24} (float)</li>
+     *   <li>{@code m31} (float)</li>
+     *   <li>{@code m32} (float)</li>
+     *   <li>{@code m33} (float)</li>
+     *   <li>{@code m34} (float)</li>
+     *   <li>{@code m41} (float)</li>
+     *   <li>{@code m42} (float)</li>
+     *   <li>{@code m43} (float)</li>
+     *   <li>{@code m44} (float)</li>
+     * </ol>
+     */
+    public static native int spotShadowMapComputeLightView(byte[] lightBytes, long[] lightIntegral, float[] lightFloating, float[] outMatrixFloating);
+
+    /**
+     * cna_spot_shadow_map_create (engine_layer.h).
+     */
+    public static native int spotShadowMapCreate(long graphicsDevice, int quality, long[] outShadowMap);
+
+    /**
+     * cna_spot_shadow_map_destroy (engine_layer.h).
+     */
+    public static native int spotShadowMapDestroy(long shadowMap);
+
+    /**
+     * cna_spot_shadow_map_end (engine_layer.h).
+     */
+    public static native int spotShadowMapEnd(long shadowMap);
+
+    /**
+     * cna_spot_shadow_map_get_depth_bias (engine_layer.h).
+     */
+    public static native int spotShadowMapGetDepthBias(long shadowMap, float[] outBias);
+
+    /**
+     * cna_spot_shadow_map_get_light_position (engine_layer.h).
+     *
+     * <p>outPositionFloating carries CNA_Vector3 in this order:
+     * <ol start="0">
+     *   <li>{@code x} (float)</li>
+     *   <li>{@code y} (float)</li>
+     *   <li>{@code z} (float)</li>
+     * </ol>
+     */
+    public static native int spotShadowMapGetLightPosition(long shadowMap, float[] outPositionFloating);
+
+    /**
+     * cna_spot_shadow_map_get_light_range (engine_layer.h).
+     */
+    public static native int spotShadowMapGetLightRange(long shadowMap, float[] outRange);
+
+    /**
+     * cna_spot_shadow_map_get_light_view_projection (engine_layer.h).
+     *
+     * <p>outMatrixFloating carries CNA_Matrix in this order:
+     * <ol start="0">
+     *   <li>{@code m11} (float)</li>
+     *   <li>{@code m12} (float)</li>
+     *   <li>{@code m13} (float)</li>
+     *   <li>{@code m14} (float)</li>
+     *   <li>{@code m21} (float)</li>
+     *   <li>{@code m22} (float)</li>
+     *   <li>{@code m23} (float)</li>
+     *   <li>{@code m24} (float)</li>
+     *   <li>{@code m31} (float)</li>
+     *   <li>{@code m32} (float)</li>
+     *   <li>{@code m33} (float)</li>
+     *   <li>{@code m34} (float)</li>
+     *   <li>{@code m41} (float)</li>
+     *   <li>{@code m42} (float)</li>
+     *   <li>{@code m43} (float)</li>
+     *   <li>{@code m44} (float)</li>
+     * </ol>
+     */
+    public static native int spotShadowMapGetLightViewProjection(long shadowMap, float[] outMatrixFloating);
+
+    /**
+     * cna_spot_shadow_map_get_quality (engine_layer.h).
+     */
+    public static native int spotShadowMapGetQuality(long shadowMap, int[] outQuality);
+
+    /**
+     * cna_spot_shadow_map_get_shadow_texture (engine_layer.h).
+     */
+    public static native int spotShadowMapGetShadowTexture(long shadowMap, long[] outTexture);
+
+    /**
+     * cna_spot_shadow_map_get_size (engine_layer.h).
+     */
+    public static native int spotShadowMapGetSize(long shadowMap, int[] outSize);
+
+    /**
+     * cna_spot_shadow_map_is_supported (engine_layer.h).
+     */
+    public static native int spotShadowMapIsSupported(long shadowMap, boolean[] outSupported);
+
+    /**
+     * cna_spot_shadow_map_set_depth_bias (engine_layer.h).
+     */
+    public static native int spotShadowMapSetDepthBias(long shadowMap, float bias);
 }
