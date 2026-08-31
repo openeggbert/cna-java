@@ -96,6 +96,18 @@ public final class NativeStorage {
                 nativePathOperation(container, operation, utf8(path)));
     }
 
+    /**
+     * Returns the CNA handle behind a container, for the qualification that asks CNA directly.
+     *
+     * <p>The projection refuses an escaping path before the JNI call, so a test going through
+     * {@code StorageContainer} can never see whether CNA would refuse it too. This is how that
+     * question gets asked; nothing in the product uses it.
+     */
+    public static long containerHandleForQualification(
+            Microsoft.Xna.Framework.Storage.StorageContainer container) {
+        return FacadeFactory.storageContainerHandle(container);
+    }
+
     public static boolean pathQuery(long container, boolean directory, String path) {
         int[] output = new int[1];
         check("cna_storage_container path query",

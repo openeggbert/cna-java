@@ -276,11 +276,14 @@
       "id": "JAVA-UPSTREAM-001",
       "title": "Native StorageContainer path containment",
       "family": "Microsoft.Xna.Framework.Storage",
-      "currentState": "Java enforces XNA's containment before the JNI call; CNA itself accepts parent traversal.",
-      "expectedState": "CNA refuses a path that escapes the container, so the guarantee can be credited to the runtime rather than to the binding.",
+      "currentState": "Fixed upstream and revalidated against the live 0.21.0 library, not against a commit message. Asked directly in C, past the Java guard: cna_storage_container_file_exists refuses '../escaped.sav', 'a/../../escaped.sav' and '/absolute.sav' with CNA_RESULT_INVALID_ARGUMENT, and accepts an ordinary name, so the refusal is containment rather than a route that stopped working.",
+      "expectedState": "The guarantee is the runtime's. Java keeps its own guard as well -- it produces XNA's exception and message deterministically whatever backend is loaded -- but it is no longer the only thing standing there, and a test now asserts CNA's refusal past the guard so that stays true.",
       "blocker": "cnanext storage: cna_storage_container_* accept a path containing parent traversal.",
       "priority": 12,
-      "status": "blocked"
+      "status": "done",
+      "tests": [
+        "StorageNativeIntegrationTests"
+      ]
     },
     {
       "id": "JAVA-EXT-004",
@@ -304,11 +307,14 @@
       "title": "NetworkSession.MaxGamers does not report the maximum the creation asked for",
       "family": "Microsoft.Xna.Framework.Net",
       "authority": "cna_network_session_create(session_type, max_local_gamers, max_gamers, out_session) and cna_network_session_get_max_gamers",
-      "currentState": "A Local session created with max_gamers = 4 reports MaxGamers = 69. The setter does take effect: setting 8 reads back 8.",
-      "expectedState": "MaxGamers reports the maximum the session was created with, as XNA's does.",
+      "currentState": "Fixed upstream and revalidated against the live 0.21.0 library by re-running the exact creation and readback case: a Local session created with max_gamers = 4 now reports MaxGamers = 4, where it once reported 69. The setter still takes effect.",
+      "expectedState": "MaxGamers reports the maximum the session was created with, as XNA's does. The test asserts the creation value now instead of only that the property is stable, which is what keeps it fixed.",
       "blocker": "cnanext net_sessions: the synchronous creation does not carry max_gamers into the session's own maximum. Java asserts the property is stable and that the setter works, and does not invent the creation value.",
       "priority": 11,
-      "status": "blocked"
+      "status": "done",
+      "tests": [
+        "NetworkSessionNativeIntegrationTests"
+      ]
     },
     {
       "id": "JAVA-UPSTREAM-003",

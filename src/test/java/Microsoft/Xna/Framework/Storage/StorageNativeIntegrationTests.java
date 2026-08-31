@@ -120,6 +120,7 @@ final class StorageNativeIntegrationTests {
                         () -> container.CreateDirectory("../escape"));
                 assertThrows(IllegalArgumentException.class,
                         () -> container.CreateDirectory("C:\\escape"));
+                containmentIsTheRuntimesGuaranteeToo(container);
 
                 byte[] payload = "CNA storage".getBytes(StandardCharsets.UTF_8);
                 try (Stream stream = container.CreateFile("save.bin")) {
@@ -360,6 +361,28 @@ final class StorageNativeIntegrationTests {
 
     private static void deleteIfPresent(StorageDevice device, String name) {
         device.DeleteContainer(name);
+    }
+
+    /**
+     * Proves the containment guarantee belongs to CNA, not only to this binding.
+     *
+     * <p>The projection refuses an escaping path before the JNI call, which is why the
+     * assertions above pass whatever the runtime does -- so they cannot tell whether CNA would
+     * have refused it too. That mattered: CNA once accepted parent traversal, which
+     * JAVA-UPSTREAM-001 recorded. This asks the runtime directly, past the Java guard, and
+     * requires the refusal to be its own.
+     */
+    private static void containmentIsTheRuntimesGuaranteeToo(StorageContainer container) {
+        long handle = NativeStorage.containerHandleForQualification(container);
+        for (String escaping : new String[] {
+            "../escaped.sav", "a/../../escaped.sav", "/absolute.sav"}) {
+            assertThrows(RuntimeException.class,
+                    () -> NativeStorage.pathQuery(handle, false, escaping),
+                    "CNA itself must refuse '" + escaping + "'");
+        }
+        // And an ordinary name is still accepted, so the refusal is containment rather than a
+        // route that stopped working.
+        assertFalse(NativeStorage.pathQuery(handle, false, "not-created.sav"));
     }
 
     private static void assertNames(String[] actual, String... expected) {

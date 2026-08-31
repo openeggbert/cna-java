@@ -13,6 +13,7 @@ import Microsoft.Xna.Framework.Content.ContentReader;
 import Microsoft.Xna.Framework.Media.MediaPlayer;
 import Microsoft.Xna.Framework.Media.VisualizationData;
 import Microsoft.Xna.Framework.Media.Video;
+import Microsoft.Xna.Framework.Storage.StorageContainer;
 
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
@@ -39,6 +40,7 @@ public final class FacadeFactory {
     private static final Method EFFECT_ADOPT_EXTENSION = effectAdoptExtensionMethod();
     private static final Method CONTENT_MANAGER_DEVICE = contentManagerDeviceMethod();
     private static final Method TEXTURE_2D_LEVEL_BYTES = texture2DLevelBytesMethod();
+    private static final Method STORAGE_CONTAINER_HANDLE = storageContainerHandleMethod();
 
     private FacadeFactory() {
     }
@@ -318,6 +320,35 @@ public final class FacadeFactory {
             throw new IllegalStateException("Cannot upload the texture level", exception);
         } catch (InvocationTargetException exception) {
             throw facadeFailure("Texture level upload failed", exception);
+        }
+    }
+
+    /**
+     * Returns the CNA handle behind a storage container.
+     *
+     * <p>Reached only from the qualification that asks CNA whether it refuses a path escaping
+     * the container, which the projection's own guard would otherwise hide.
+     */
+    public static long storageContainerHandle(StorageContainer container) {
+        try {
+            return (Long) STORAGE_CONTAINER_HANDLE.invoke(container);
+        } catch (IllegalAccessException exception) {
+            throw new IllegalStateException("Cannot reach the container handle", exception);
+        } catch (InvocationTargetException exception) {
+            throw facadeFailure("Container handle lookup failed", exception);
+        }
+    }
+
+    private static Method storageContainerHandleMethod() {
+        try {
+            Method method = StorageContainer.class.getDeclaredMethod("requireOpen");
+            if (!method.trySetAccessible()) {
+                throw new IllegalStateException(
+                        "The runtime denied access to the container handle");
+            }
+            return method;
+        } catch (NoSuchMethodException exception) {
+            throw new ExceptionInInitializerError(exception);
         }
     }
 

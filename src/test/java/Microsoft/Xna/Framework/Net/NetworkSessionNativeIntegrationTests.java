@@ -75,15 +75,16 @@ final class NetworkSessionNativeIntegrationTests {
                 assertTrue(session.getIsHost());
                 assertFalse(session.getIsDisposed());
 
-                // CNA does not report back the maximum the creation asked for -- a session
-                // created with four reports its own number instead. What the projection can
-                // guarantee is that the property is stable and that the setter takes effect,
-                // which is what a game uses it for.
-                int reported = session.getMaxGamers();
-                assertEquals(reported, session.getMaxGamers());
+                // The maximum a session was created with is the maximum it reports. CNA did
+                // not always: a session created with four once reported 69, which
+                // JAVA-UPSTREAM-002 recorded and which is fixed in ABI 0.21.0. Asserting the
+                // creation value is what keeps it fixed.
+                assertEquals(4, session.getMaxGamers(),
+                        "a session created with four gamers reports four");
                 session.setMaxGamers(8);
                 assertEquals(8, session.getMaxGamers());
-                session.setMaxGamers(reported);
+                session.setMaxGamers(4);
+                assertEquals(4, session.getMaxGamers());
 
                 session.addGameStartedListener((sender, args) -> {
                     assertEquals(session, sender);

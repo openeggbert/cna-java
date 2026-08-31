@@ -103,9 +103,10 @@ unexpected type in the narrower one, so its zero still means what it always mean
   second machine or a live sign-in, and neither took part in this qualification.
 - **`Guide.IsScreenSaverEnabled` does not round-trip on HEADLESS.** CNA accepts the request and
   the platform does not honour it. The projection reports what CNA reports.
-- **`NetworkSession.MaxGamers` does not report the maximum a session was created with.** A
-  session created with four reports 69; the setter does work. `JAVA-UPSTREAM-002` records it,
-  and Java does not invent the creation value.
+- **`NetworkSession.MaxGamers` was wrong and is fixed.** A session created with four once
+  reported 69. Revalidated against the live 0.21.0 library by re-running the exact case: it
+  reports four. The test asserts the creation value now rather than only that the property is
+  stable.
 - **CNA publishes a local signed-in roster** on this runtime rather than an empty one, and
   sorts a `PropertyDictionary` by key. Both are asserted as CNA's own answers.
 - **The headless platform does not report every host fact.** A zero from
