@@ -2130,6 +2130,10 @@
     ],
     "NativeSensorExtensionRoutes": [
       {
+        "java": "accelerometerCopyLastDispatchExceptionMessageForTestsExt",
+        "symbol": "cna_accelerometer_copy_last_dispatch_exception_message_for_tests_ext"
+      },
+      {
         "java": "accelerometerCreate",
         "symbol": "cna_accelerometer_create"
       },
@@ -2138,8 +2142,20 @@
         "symbol": "cna_accelerometer_destroy"
       },
       {
+        "java": "accelerometerDispatchToInstancesForTestsExt",
+        "symbol": "cna_accelerometer_dispatch_to_instances_for_tests_ext"
+      },
+      {
+        "java": "accelerometerDispose",
+        "symbol": "cna_accelerometer_dispose"
+      },
+      {
         "java": "accelerometerGetCurrentValue",
         "symbol": "cna_accelerometer_get_current_value"
+      },
+      {
+        "java": "accelerometerGetDispatchExceptionCountForTestsExt",
+        "symbol": "cna_accelerometer_get_dispatch_exception_count_for_tests_ext"
       },
       {
         "java": "accelerometerGetIsDataValid",
@@ -2150,12 +2166,44 @@
         "symbol": "cna_accelerometer_get_is_supported"
       },
       {
+        "java": "accelerometerGetLastDispatchExceptionMessageSizeForTestsExt",
+        "symbol": "cna_accelerometer_get_last_dispatch_exception_message_size_for_tests_ext"
+      },
+      {
         "java": "accelerometerGetState",
         "symbol": "cna_accelerometer_get_state"
       },
       {
+        "java": "accelerometerGetSubsystemHeldForTestsExt",
+        "symbol": "cna_accelerometer_get_subsystem_held_for_tests_ext"
+      },
+      {
         "java": "accelerometerGetTimeBetweenUpdatesTicks",
         "symbol": "cna_accelerometer_get_time_between_updates_ticks"
+      },
+      {
+        "java": "accelerometerInjectSyntheticUpdateExt",
+        "symbol": "cna_accelerometer_inject_synthetic_update_ext"
+      },
+      {
+        "java": "accelerometerIsSensorConnectedForTestsExt",
+        "symbol": "cna_accelerometer_is_sensor_connected_for_tests_ext"
+      },
+      {
+        "java": "accelerometerRegisterStartedInstanceForTestsExt",
+        "symbol": "cna_accelerometer_register_started_instance_for_tests_ext"
+      },
+      {
+        "java": "accelerometerSetEventWatchRegistrationFailureForTestsExt",
+        "symbol": "cna_accelerometer_set_event_watch_registration_failure_for_tests_ext"
+      },
+      {
+        "java": "accelerometerSetStartedForTestsExt",
+        "symbol": "cna_accelerometer_set_started_for_tests_ext"
+      },
+      {
+        "java": "accelerometerSetSupportedForTestsExt",
+        "symbol": "cna_accelerometer_set_supported_for_tests_ext"
       },
       {
         "java": "accelerometerSetTimeBetweenUpdatesTicks",
@@ -2170,12 +2218,20 @@
         "symbol": "cna_accelerometer_stop"
       },
       {
+        "java": "accelerometerUnregisterStartedInstanceForTestsExt",
+        "symbol": "cna_accelerometer_unregister_started_instance_for_tests_ext"
+      },
+      {
         "java": "compassCreate",
         "symbol": "cna_compass_create"
       },
       {
         "java": "compassDestroy",
         "symbol": "cna_compass_destroy"
+      },
+      {
+        "java": "compassDispose",
+        "symbol": "cna_compass_dispose"
       },
       {
         "java": "compassGetCurrentValue",
@@ -2198,6 +2254,18 @@
         "symbol": "cna_compass_get_time_between_updates_ticks"
       },
       {
+        "java": "compassInjectCalibrationRequestExt",
+        "symbol": "cna_compass_inject_calibration_request_ext"
+      },
+      {
+        "java": "compassInjectSyntheticUpdateExt",
+        "symbol": "cna_compass_inject_synthetic_update_ext"
+      },
+      {
+        "java": "compassSetTestBackendExt",
+        "symbol": "cna_compass_set_test_backend_ext"
+      },
+      {
         "java": "compassSetTimeBetweenUpdatesTicks",
         "symbol": "cna_compass_set_time_between_updates_ticks"
       },
@@ -2210,6 +2278,10 @@
         "symbol": "cna_compass_stop"
       },
       {
+        "java": "gyroscopeCopyLastDispatchExceptionMessageForTestsExt",
+        "symbol": "cna_gyroscope_copy_last_dispatch_exception_message_for_tests_ext"
+      },
+      {
         "java": "gyroscopeCreate",
         "symbol": "cna_gyroscope_create"
       },
@@ -2218,8 +2290,20 @@
         "symbol": "cna_gyroscope_destroy"
       },
       {
+        "java": "gyroscopeDispatchToInstancesForTestsExt",
+        "symbol": "cna_gyroscope_dispatch_to_instances_for_tests_ext"
+      },
+      {
+        "java": "gyroscopeDispose",
+        "symbol": "cna_gyroscope_dispose"
+      },
+      {
         "java": "gyroscopeGetCurrentValue",
         "symbol": "cna_gyroscope_get_current_value"
+      },
+      {
+        "java": "gyroscopeGetDispatchExceptionCountForTestsExt",
+        "symbol": "cna_gyroscope_get_dispatch_exception_count_for_tests_ext"
       },
       {
         "java": "gyroscopeGetIsDataValid",
@@ -2230,12 +2314,44 @@
         "symbol": "cna_gyroscope_get_is_supported"
       },
       {
+        "java": "gyroscopeGetLastDispatchExceptionMessageSizeForTestsExt",
+        "symbol": "cna_gyroscope_get_last_dispatch_exception_message_size_for_tests_ext"
+      },
+      {
         "java": "gyroscopeGetState",
         "symbol": "cna_gyroscope_get_state"
       },
       {
+        "java": "gyroscopeGetSubsystemHeldForTestsExt",
+        "symbol": "cna_gyroscope_get_subsystem_held_for_tests_ext"
+      },
+      {
         "java": "gyroscopeGetTimeBetweenUpdatesTicks",
         "symbol": "cna_gyroscope_get_time_between_updates_ticks"
+      },
+      {
+        "java": "gyroscopeInjectSyntheticUpdateExt",
+        "symbol": "cna_gyroscope_inject_synthetic_update_ext"
+      },
+      {
+        "java": "gyroscopeIsSensorConnectedForTestsExt",
+        "symbol": "cna_gyroscope_is_sensor_connected_for_tests_ext"
+      },
+      {
+        "java": "gyroscopeRegisterStartedInstanceForTestsExt",
+        "symbol": "cna_gyroscope_register_started_instance_for_tests_ext"
+      },
+      {
+        "java": "gyroscopeSetEventWatchRegistrationFailureForTestsExt",
+        "symbol": "cna_gyroscope_set_event_watch_registration_failure_for_tests_ext"
+      },
+      {
+        "java": "gyroscopeSetStartedForTestsExt",
+        "symbol": "cna_gyroscope_set_started_for_tests_ext"
+      },
+      {
+        "java": "gyroscopeSetSupportedForTestsExt",
+        "symbol": "cna_gyroscope_set_supported_for_tests_ext"
       },
       {
         "java": "gyroscopeSetTimeBetweenUpdatesTicks",
@@ -2250,12 +2366,20 @@
         "symbol": "cna_gyroscope_stop"
       },
       {
+        "java": "gyroscopeUnregisterStartedInstanceForTestsExt",
+        "symbol": "cna_gyroscope_unregister_started_instance_for_tests_ext"
+      },
+      {
         "java": "motionCreate",
         "symbol": "cna_motion_create"
       },
       {
         "java": "motionDestroy",
         "symbol": "cna_motion_destroy"
+      },
+      {
+        "java": "motionDispose",
+        "symbol": "cna_motion_dispose"
       },
       {
         "java": "motionGetCurrentValue",
@@ -2282,6 +2406,18 @@
         "symbol": "cna_motion_get_time_between_updates_ticks"
       },
       {
+        "java": "motionInjectCalibrationRequestExt",
+        "symbol": "cna_motion_inject_calibration_request_ext"
+      },
+      {
+        "java": "motionInjectSyntheticUpdateExt",
+        "symbol": "cna_motion_inject_synthetic_update_ext"
+      },
+      {
+        "java": "motionSetTestBackendExt",
+        "symbol": "cna_motion_set_test_backend_ext"
+      },
+      {
         "java": "motionSetTimeBetweenUpdatesTicks",
         "symbol": "cna_motion_set_time_between_updates_ticks"
       },
@@ -2292,6 +2428,10 @@
       {
         "java": "motionStop",
         "symbol": "cna_motion_stop"
+      },
+      {
+        "java": "sensorUnsubscribeExt",
+        "symbol": "cna_sensor_unsubscribe_ext"
       },
       {
         "java": "sensorsCopyNameAt",

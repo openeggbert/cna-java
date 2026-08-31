@@ -1,131 +1,18 @@
 {
   "abiVersion": "0.21.0",
   "actionableLocal": [
-    "cna_accelerometer_copy_last_dispatch_exception_message_for_tests_ext",
-    "cna_accelerometer_copy_type_name",
-    "cna_accelerometer_dispatch_to_instances_for_tests_ext",
-    "cna_accelerometer_dispose",
-    "cna_accelerometer_get_dispatch_exception_count_for_tests_ext",
-    "cna_accelerometer_get_last_dispatch_exception_message_size_for_tests_ext",
-    "cna_accelerometer_get_subsystem_held_for_tests_ext",
-    "cna_accelerometer_get_type_name_size",
-    "cna_accelerometer_inject_synthetic_update_ext",
-    "cna_accelerometer_is_sensor_connected_for_tests_ext",
-    "cna_accelerometer_reading_copy_string",
-    "cna_accelerometer_reading_copy_type_name",
-    "cna_accelerometer_reading_equals",
-    "cna_accelerometer_reading_event_info_copy_string",
-    "cna_accelerometer_reading_event_info_copy_type_name",
-    "cna_accelerometer_reading_event_info_equals",
-    "cna_accelerometer_reading_event_info_get_hash_code",
-    "cna_accelerometer_reading_event_info_get_string_size",
-    "cna_accelerometer_reading_event_info_get_type_name_size",
-    "cna_accelerometer_reading_event_info_init",
-    "cna_accelerometer_reading_event_info_init_from_values",
-    "cna_accelerometer_reading_get_hash_code",
-    "cna_accelerometer_reading_get_string_size",
-    "cna_accelerometer_reading_get_type_name_size",
-    "cna_accelerometer_reading_init",
-    "cna_accelerometer_reading_init_from_values",
-    "cna_accelerometer_register_started_instance_for_tests_ext",
-    "cna_accelerometer_set_disposal_cleanup_hook_for_tests_ext",
-    "cna_accelerometer_set_event_watch_registration_failure_for_tests_ext",
-    "cna_accelerometer_set_started_for_tests_ext",
-    "cna_accelerometer_set_supported_for_tests_ext",
-    "cna_accelerometer_subscribe_current_value_changed",
-    "cna_accelerometer_subscribe_reading_changed",
-    "cna_accelerometer_unregister_started_instance_for_tests_ext",
-    "cna_attitude_reading_copy_string",
-    "cna_attitude_reading_copy_type_name",
-    "cna_attitude_reading_equals",
-    "cna_attitude_reading_get_hash_code",
-    "cna_attitude_reading_get_string_size",
-    "cna_attitude_reading_get_type_name_size",
-    "cna_attitude_reading_init",
-    "cna_attitude_reading_init_from_values",
     "cna_avatar_renderer_draw_real_ext",
-    "cna_avatar_renderer_enable_real_rendering_ext",
-    "cna_calibration_event_info_copy_type_name",
-    "cna_calibration_event_info_get_type_name_size",
-    "cna_compass_copy_type_name",
-    "cna_compass_dispose",
-    "cna_compass_get_type_name_size",
-    "cna_compass_inject_calibration_request_ext",
-    "cna_compass_inject_synthetic_update_ext",
-    "cna_compass_reading_copy_string",
-    "cna_compass_reading_copy_type_name",
-    "cna_compass_reading_equals",
-    "cna_compass_reading_get_hash_code",
-    "cna_compass_reading_get_string_size",
-    "cna_compass_reading_get_type_name_size",
-    "cna_compass_reading_init",
-    "cna_compass_reading_init_from_values",
-    "cna_compass_set_test_backend_ext",
-    "cna_compass_subscribe_calibrate",
-    "cna_compass_subscribe_current_value_changed",
-    "cna_gyroscope_copy_last_dispatch_exception_message_for_tests_ext",
-    "cna_gyroscope_copy_type_name",
-    "cna_gyroscope_dispatch_to_instances_for_tests_ext",
-    "cna_gyroscope_dispose",
-    "cna_gyroscope_get_dispatch_exception_count_for_tests_ext",
-    "cna_gyroscope_get_last_dispatch_exception_message_size_for_tests_ext",
-    "cna_gyroscope_get_subsystem_held_for_tests_ext",
-    "cna_gyroscope_get_type_name_size",
-    "cna_gyroscope_inject_synthetic_update_ext",
-    "cna_gyroscope_is_sensor_connected_for_tests_ext",
-    "cna_gyroscope_reading_copy_string",
-    "cna_gyroscope_reading_copy_type_name",
-    "cna_gyroscope_reading_equals",
-    "cna_gyroscope_reading_get_hash_code",
-    "cna_gyroscope_reading_get_string_size",
-    "cna_gyroscope_reading_get_type_name_size",
-    "cna_gyroscope_reading_init",
-    "cna_gyroscope_reading_init_from_values",
-    "cna_gyroscope_register_started_instance_for_tests_ext",
-    "cna_gyroscope_set_disposal_cleanup_hook_for_tests_ext",
-    "cna_gyroscope_set_event_watch_registration_failure_for_tests_ext",
-    "cna_gyroscope_set_started_for_tests_ext",
-    "cna_gyroscope_set_supported_for_tests_ext",
-    "cna_gyroscope_subscribe_current_value_changed",
-    "cna_gyroscope_unregister_started_instance_for_tests_ext",
-    "cna_haptic_capabilities_equals",
-    "cna_haptic_capabilities_init",
-    "cna_haptic_direction_equals",
-    "cna_haptic_direction_init",
-    "cna_haptic_effect_equals",
-    "cna_haptic_effect_init",
-    "cna_joystick_capabilities_equals",
-    "cna_joystick_capabilities_init",
-    "cna_joystick_info_equals",
-    "cna_joystick_info_init",
-    "cna_joystick_state_equals",
-    "cna_motion_copy_type_name",
-    "cna_motion_dispose",
-    "cna_motion_get_type_name_size",
-    "cna_motion_inject_calibration_request_ext",
-    "cna_motion_inject_synthetic_update_ext",
-    "cna_motion_reading_copy_string",
-    "cna_motion_reading_copy_type_name",
-    "cna_motion_reading_equals",
-    "cna_motion_reading_get_hash_code",
-    "cna_motion_reading_get_string_size",
-    "cna_motion_reading_get_type_name_size",
-    "cna_motion_reading_init",
-    "cna_motion_reading_init_from_values",
-    "cna_motion_set_test_backend_ext",
-    "cna_motion_subscribe_calibrate",
-    "cna_motion_subscribe_current_value_changed",
-    "cna_sensor_unsubscribe_ext"
+    "cna_avatar_renderer_enable_real_rendering_ext"
   ],
   "bindingStatusCounts": {
-    "ACTIONABLE_LOCAL": 115,
-    "BLOCKED_UPSTREAM": 128,
-    "BOUND": 2627,
-    "DEFERRED_TRACKED": 402,
-    "DELIBERATE_NON_BINDING": 782
+    "ACTIONABLE_LOCAL": 2,
+    "BLOCKED_UPSTREAM": 126,
+    "BOUND": 2669,
+    "DEFERRED_TRACKED": 326,
+    "DELIBERATE_NON_BINDING": 931
   },
   "boundButUnreached": [],
-  "boundFunctions": 2627,
+  "boundFunctions": 2669,
   "boundWithoutJavaCallSite": [],
   "byHeader": {
     "abi.h": {
@@ -133,7 +20,8 @@
       "total": 1
     },
     "audio.h": {
-      "DEFERRED_RUNTIME": 26,
+      "DEFERRED_RUNTIME": 18,
+      "NOT_USEFUL_IN_JAVA": 8,
       "XNA_BACKING": 48,
       "total": 74
     },
@@ -201,12 +89,14 @@
     },
     "graphics.h": {
       "CNA_EXTENSION_CANDIDATE": 6,
-      "DEFERRED_RUNTIME": 8,
+      "DEFERRED_RUNTIME": 6,
+      "NOT_USEFUL_IN_JAVA": 2,
       "XNA_BACKING": 14,
       "total": 28
     },
     "graphics_device.h": {
-      "DEFERRED_RUNTIME": 43,
+      "DEFERRED_RUNTIME": 41,
+      "NOT_USEFUL_IN_JAVA": 2,
       "XNA_BACKING": 44,
       "total": 87
     },
@@ -226,7 +116,8 @@
       "total": 14
     },
     "index_resources.h": {
-      "DEFERRED_RUNTIME": 2,
+      "DEFERRED_RUNTIME": 1,
+      "NOT_USEFUL_IN_JAVA": 1,
       "XNA_BACKING": 8,
       "total": 10
     },
@@ -251,12 +142,14 @@
       "total": 63
     },
     "input_haptics.h": {
-      "CNA_EXTENSION_CANDIDATE": 36,
+      "CNA_EXTENSION_CANDIDATE": 30,
+      "NOT_USEFUL_IN_JAVA": 6,
       "total": 36
     },
     "input_joystick.h": {
-      "CNA_EXTENSION_CANDIDATE": 29,
+      "CNA_EXTENSION_CANDIDATE": 24,
       "JAVA_INTERNAL_ONLY": 1,
+      "NOT_USEFUL_IN_JAVA": 5,
       "total": 30
     },
     "input_keyboard.h": {
@@ -293,25 +186,28 @@
       "total": 57
     },
     "media.h": {
-      "DEFERRED_RUNTIME": 16,
+      "DEFERRED_RUNTIME": 8,
+      "NOT_USEFUL_IN_JAVA": 8,
       "XNA_BACKING": 23,
       "total": 39
     },
     "media_library.h": {
-      "DEFERRED_RUNTIME": 29,
+      "DEFERRED_RUNTIME": 3,
+      "NOT_USEFUL_IN_JAVA": 26,
       "XNA_BACKING": 119,
       "total": 148
     },
     "media_player.h": {
-      "DEFERRED_RUNTIME": 7,
+      "DEFERRED_RUNTIME": 5,
       "JAVA_INTERNAL_ONLY": 2,
+      "NOT_USEFUL_IN_JAVA": 2,
       "XNA_BACKING": 32,
       "total": 41
     },
     "models.h": {
-      "CNA_EXTENSION_CANDIDATE": 184,
+      "CNA_EXTENSION_CANDIDATE": 182,
       "DEFERRED_RUNTIME": 1,
-      "NOT_USEFUL_IN_JAVA": 31,
+      "NOT_USEFUL_IN_JAVA": 33,
       "total": 216
     },
     "net.h": {
@@ -345,7 +241,8 @@
       "total": 12
     },
     "runtime.h": {
-      "DEFERRED_RUNTIME": 20,
+      "DEFERRED_RUNTIME": 18,
+      "NOT_USEFUL_IN_JAVA": 2,
       "XNA_BACKING": 22,
       "total": 42
     },
@@ -354,17 +251,20 @@
       "total": 39
     },
     "runtime_graphics_manager.h": {
-      "DEFERRED_RUNTIME": 10,
+      "DEFERRED_RUNTIME": 6,
+      "NOT_USEFUL_IN_JAVA": 4,
       "XNA_BACKING": 28,
       "total": 38
     },
     "runtime_window.h": {
-      "DEFERRED_RUNTIME": 10,
+      "DEFERRED_RUNTIME": 8,
+      "NOT_USEFUL_IN_JAVA": 2,
       "XNA_BACKING": 10,
       "total": 20
     },
     "sensors.h": {
-      "CNA_EXTENSION_CANDIDATE": 144,
+      "CNA_EXTENSION_CANDIDATE": 86,
+      "NOT_USEFUL_IN_JAVA": 58,
       "total": 144
     },
     "sprite_font.h": {
@@ -373,17 +273,20 @@
       "total": 9
     },
     "storage.h": {
-      "DEFERRED_RUNTIME": 8,
+      "DEFERRED_RUNTIME": 6,
+      "NOT_USEFUL_IN_JAVA": 2,
       "XNA_BACKING": 41,
       "total": 49
     },
     "texture.h": {
-      "DEFERRED_RUNTIME": 16,
+      "DEFERRED_RUNTIME": 15,
+      "NOT_USEFUL_IN_JAVA": 1,
       "XNA_BACKING": 5,
       "total": 21
     },
     "texture_volume.h": {
-      "DEFERRED_RUNTIME": 6,
+      "DEFERRED_RUNTIME": 4,
+      "NOT_USEFUL_IN_JAVA": 2,
       "XNA_BACKING": 10,
       "total": 16
     },
@@ -392,7 +295,8 @@
       "total": 137
     },
     "vertex_resources.h": {
-      "DEFERRED_RUNTIME": 13,
+      "DEFERRED_RUNTIME": 11,
+      "NOT_USEFUL_IN_JAVA": 2,
       "XNA_BACKING": 11,
       "total": 24
     },
@@ -401,28 +305,30 @@
       "total": 13
     },
     "video.h": {
-      "DEFERRED_RUNTIME": 26,
+      "DEFERRED_RUNTIME": 22,
+      "NOT_USEFUL_IN_JAVA": 4,
       "XNA_BACKING": 16,
       "total": 42
     },
     "xact.h": {
-      "DEFERRED_RUNTIME": 22,
+      "DEFERRED_RUNTIME": 14,
+      "NOT_USEFUL_IN_JAVA": 8,
       "XNA_BACKING": 40,
       "total": 62
     }
   },
   "canonicalFunctions": 4054,
   "classificationCounts": {
-    "CNA_EXTENSION_CANDIDATE": 1922,
-    "DEFERRED_RUNTIME": 403,
+    "CNA_EXTENSION_CANDIDATE": 1851,
+    "DEFERRED_RUNTIME": 327,
     "JAVA_INTERNAL_ONLY": 11,
-    "NOT_USEFUL_IN_JAVA": 732,
+    "NOT_USEFUL_IN_JAVA": 879,
     "XNA_BACKING": 986
   },
   "cnaInventorySha256": "b485d17b1df9a86c6099700baedcd435c8a3f07487af8741b01d8c471956bfe7",
   "deferredTasks": {
     "JAVA-EXT-006": 2,
-    "JAVA-EXT-007": 82,
+    "JAVA-EXT-007": 80,
     "JAVA-EXT-008": 1,
     "JAVA-EXT-010": 8,
     "JAVA-EXT-012": 1,
@@ -431,14 +337,14 @@
     "JAVA-NATIVE-012": 37,
     "JAVA-NATIVE-013": 25,
     "JAVA-NATIVE-014": 39,
-    "JAVA-NATIVE-015": 65,
-    "JAVA-NATIVE-016": 25,
-    "JAVA-NATIVE-017": 15,
+    "JAVA-NATIVE-015": 61,
+    "JAVA-NATIVE-016": 22,
+    "JAVA-NATIVE-017": 12,
     "JAVA-NATIVE-018": 1,
-    "JAVA-NATIVE-019": 48,
-    "JAVA-NATIVE-020": 78,
-    "JAVA-NATIVE-021": 8,
-    "JAVA-NATIVE-023": 41,
+    "JAVA-NATIVE-019": 32,
+    "JAVA-NATIVE-020": 38,
+    "JAVA-NATIVE-021": 6,
+    "JAVA-NATIVE-023": 33,
     "JAVA-UPSTREAM-004": 13,
     "JAVA-UPSTREAM-011": 1,
     "JAVA-UPSTREAM-018": 4,
@@ -485,21 +391,13 @@
       "DELIBERATE_NON_BINDING": 1,
       "total": 1
     },
-    "input_haptics.h": {
-      "ACTIONABLE_LOCAL": 6,
-      "total": 6
-    },
-    "input_joystick.h": {
-      "ACTIONABLE_LOCAL": 5,
-      "total": 5
-    },
     "models.h": {
-      "BLOCKED_UPSTREAM": 107,
-      "total": 107
+      "BLOCKED_UPSTREAM": 105,
+      "total": 105
     },
     "sensors.h": {
-      "ACTIONABLE_LOCAL": 102,
-      "total": 102
+      "DELIBERATE_NON_BINDING": 2,
+      "total": 2
     }
   },
   "fullMatrixCommand": "python3 tools/native-abi/coverage.py --cna-root <cna> --output build/cna-c-api-coverage.json",

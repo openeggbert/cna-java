@@ -1270,6 +1270,53 @@ public final class NativeBindings {
             int[] clipTrackCounts, int[] boneIndices, int[] keyframeCounts, double[] times,
             float[] values, long[] outAnimations);
 
+    /** The adapter's own subscription kinds; seven routes with six callback types. */
+    public static final int SENSOR_ACCELEROMETER_CURRENT = 0;
+
+    /** The accelerometer's obsolete reading-changed event, which carries its own description. */
+    public static final int SENSOR_ACCELEROMETER_READING = 1;
+
+    /** The gyroscope's current-value event. */
+    public static final int SENSOR_GYROSCOPE_CURRENT = 2;
+
+    /** The compass's current-value event. */
+    public static final int SENSOR_COMPASS_CURRENT = 3;
+
+    /** The compass's calibration-requested event, which carries no reading. */
+    public static final int SENSOR_COMPASS_CALIBRATE = 4;
+
+    /** The motion sensor's current-value event. */
+    public static final int SENSOR_MOTION_CURRENT = 5;
+
+    /** The motion sensor's calibration-requested event, which carries no reading. */
+    public static final int SENSOR_MOTION_CALIBRATE = 6;
+
+    /**
+     * Subscribes a Java handler to one sensor event.
+     *
+     * <p>Hand-written rather than generated because each route takes a C function pointer, and
+     * the six reading shapes cannot be selected by a handle -- so the kind is this adapter's own
+     * constant. The registration outlives the call that made it, so the handler is pinned by a
+     * token the registration owns and released when it unsubscribes.
+     *
+     * <p>The handler receives the reading's leaves as one {@code double[]} in declaration order.
+     *
+     * @param kind which of the {@code SENSOR_*} subscriptions to make
+     * @param sensor the native sensor handle
+     * @param token a token from {@link #newCallbackToken(Object)} over a
+     *        {@code Consumer<double[]>}
+     * @param outRegistration receives the owned registration handle
+     * @return CNA's result
+     */
+    public static int sensorSubscribe(int kind, long sensor, long token, long[] outRegistration) {
+        requireAvailable();
+        return nativeSensorSubscribe(kind, sensor, token, outRegistration);
+    }
+
+    private static native int nativeSensorSubscribe(int kind, long sensor, long token,
+            long[] outRegistration);
+
+
     /**
      * Releases a texture handle that names a texture without keeping it alive.
      *

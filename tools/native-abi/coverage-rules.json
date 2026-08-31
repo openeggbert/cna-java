@@ -319,12 +319,106 @@
     },
     {
       "match": {
+        "symbols": [
+          "cna_accelerometer_set_disposal_cleanup_hook_for_tests_ext",
+          "cna_gyroscope_set_disposal_cleanup_hook_for_tests_ext"
+        ]
+      },
+      "classification": "CNA_EXTENSION_CANDIDATE",
+      "purposeReason": "Installs the hook CNA calls when a sensor is disposed, so its own tests can watch a teardown they cannot otherwise observe.",
+      "bindingStatus": "DELIBERATE_NON_BINDING",
+      "bindingReason": "The one sensor callback with no registration to release: it is cleared by passing null or by the sensor going away, so a Java handler would be pinned for the sensor's whole life with no deterministic release point a caller could reach. What it observes is CNA's own disposal ordering, which a Java caller already knows -- it is the caller that called dispose.",
+      "evidence": "SensorInjectionTests exercises the disposal path directly instead: dispose stops the sensor, every route on it then answers INVALID_STATE, and a second dispose is refused."
+    },
+    {
+      "match": {
+        "contains": "_reading_event_info_"
+      },
+      "classification": "NOT_USEFUL_IN_JAVA",
+      "purposeReason": "Constructing, comparing, hashing and printing the description CNA's obsolete reading-changed event carries instead of a reading.",
+      "bindingStatus": "DELIBERATE_NON_BINDING",
+      "bindingReason": "AccelerometerReading is a Java record, and the obsolete event is projected onto it rather than onto a second value type: the description holds one reading's three axes and a timestamp, which is what the record already is. Construction, equality, hashing and toString are the language's and are exact."
+    },
+    {
+      "match": {
+        "prefix": "cna_accelerometer_reading_"
+      },
+      "classification": "NOT_USEFUL_IN_JAVA",
+      "purposeReason": "Constructing, comparing, hashing and printing an accelerometer sample.",
+      "bindingStatus": "DELIBERATE_NON_BINDING",
+      "bindingReason": "Every reading here is a Java record, so its construction, equality, hashing and string form are the language's and are exact. A native constructor would be a second way to build a value the sensor already hands over complete, and a native equality a second definition of the one the record generates. This is the rule the whole input and vector value-type families already carry, and the readings are flattened into and out of CNA's own structures where it matters -- which is what the injection tests assert field by field."
+    },
+    {
+      "match": {
+        "prefix": "cna_gyroscope_reading_"
+      },
+      "classification": "NOT_USEFUL_IN_JAVA",
+      "purposeReason": "Constructing, comparing, hashing and printing a gyroscope sample.",
+      "bindingStatus": "DELIBERATE_NON_BINDING",
+      "bindingReason": "Every reading here is a Java record, so its construction, equality, hashing and string form are the language's and are exact. A native constructor would be a second way to build a value the sensor already hands over complete, and a native equality a second definition of the one the record generates. This is the rule the whole input and vector value-type families already carry, and the readings are flattened into and out of CNA's own structures where it matters -- which is what the injection tests assert field by field."
+    },
+    {
+      "match": {
+        "prefix": "cna_compass_reading_"
+      },
+      "classification": "NOT_USEFUL_IN_JAVA",
+      "purposeReason": "Constructing, comparing, hashing and printing a compass sample.",
+      "bindingStatus": "DELIBERATE_NON_BINDING",
+      "bindingReason": "Every reading here is a Java record, so its construction, equality, hashing and string form are the language's and are exact. A native constructor would be a second way to build a value the sensor already hands over complete, and a native equality a second definition of the one the record generates. This is the rule the whole input and vector value-type families already carry, and the readings are flattened into and out of CNA's own structures where it matters -- which is what the injection tests assert field by field."
+    },
+    {
+      "match": {
+        "prefix": "cna_motion_reading_"
+      },
+      "classification": "NOT_USEFUL_IN_JAVA",
+      "purposeReason": "Constructing, comparing, hashing and printing a motion sample.",
+      "bindingStatus": "DELIBERATE_NON_BINDING",
+      "bindingReason": "Every reading here is a Java record, so its construction, equality, hashing and string form are the language's and are exact. A native constructor would be a second way to build a value the sensor already hands over complete, and a native equality a second definition of the one the record generates. This is the rule the whole input and vector value-type families already carry, and the readings are flattened into and out of CNA's own structures where it matters -- which is what the injection tests assert field by field."
+    },
+    {
+      "match": {
+        "prefix": "cna_attitude_reading_"
+      },
+      "classification": "NOT_USEFUL_IN_JAVA",
+      "purposeReason": "Constructing, comparing, hashing and printing a fused device orientation.",
+      "bindingStatus": "DELIBERATE_NON_BINDING",
+      "bindingReason": "Every reading here is a Java record, so its construction, equality, hashing and string form are the language's and are exact. A native constructor would be a second way to build a value the sensor already hands over complete, and a native equality a second definition of the one the record generates. This is the rule the whole input and vector value-type families already carry, and the readings are flattened into and out of CNA's own structures where it matters -- which is what the injection tests assert field by field."
+    },
+    {
+      "match": {
+        "prefix": "cna_calibration_event_info_"
+      },
+      "classification": "NOT_USEFUL_IN_JAVA",
+      "purposeReason": "Constructing, comparing, hashing and printing a calibration request.",
+      "bindingStatus": "DELIBERATE_NON_BINDING",
+      "bindingReason": "Every reading here is a Java record, so its construction, equality, hashing and string form are the language's and are exact. A native constructor would be a second way to build a value the sensor already hands over complete, and a native equality a second definition of the one the record generates. This is the rule the whole input and vector value-type families already carry, and the readings are flattened into and out of CNA's own structures where it matters -- which is what the injection tests assert field by field."
+    },
+    {
+      "match": {
+        "contains": "_copy_type_name"
+      },
+      "classification": "NOT_USEFUL_IN_JAVA",
+      "purposeReason": "Copies a sensor's or a reading's canonical .NET type name.",
+      "bindingStatus": "DELIBERATE_NON_BINDING",
+      "bindingReason": "The answer is the same for every instance of a type, so a Java caller that wants it can write it down; and what it names is a .NET type, which the Java projection is not. Class.getName() answers the question a Java caller is actually asking."
+    },
+    {
+      "match": {
+        "contains": "_get_type_name_size"
+      },
+      "classification": "NOT_USEFUL_IN_JAVA",
+      "purposeReason": "The size half of the type-name pair beside it.",
+      "bindingStatus": "DELIBERATE_NON_BINDING",
+      "bindingReason": "Half of a count/copy pair whose copy is deliberately not bound."
+    },
+    {
+      "match": {
         "header": "sensors.h"
       },
       "classification": "CNA_EXTENSION_CANDIDATE",
       "purposeReason": "Host sensors are a CNA device extension; XNA 4.0 exposes no sensor API on the desktop profile.",
-      "bindingStatus": "ACTIONABLE_LOCAL",
-      "bindingReason": "placeholder"
+      "bindingStatus": "DELIBERATE_NON_BINDING",
+      "bindingReason": "Nothing is left unbound here; this catch-all exists so a new sensors.h declaration is classified rather than unexplained."
     },
     {
       "match": {
@@ -348,12 +442,43 @@
     },
     {
       "match": {
+        "symbols": [
+          "cna_haptic_capabilities_init",
+          "cna_haptic_capabilities_equals",
+          "cna_haptic_direction_init",
+          "cna_haptic_direction_equals",
+          "cna_haptic_effect_init",
+          "cna_haptic_effect_equals"
+        ]
+      },
+      "classification": "NOT_USEFUL_IN_JAVA",
+      "purposeReason": "Constructing and comparing one force-feedback value: a device's capabilities, an effect's direction, an effect itself.",
+      "bindingStatus": "DELIBERATE_NON_BINDING",
+      "bindingReason": "HapticCapabilities, HapticDirection, HapticEffect, JoystickCapabilities, JoystickInfo and JoystickState are Java records and enums, so their construction, equality and hashing are the language's and are exact. A native constructor would be a second way to build a value the enumeration already hands over complete, and a native equality a second definition of the one the record generates -- which is the rule the whole input value-type family already carries."
+    },
+    {
+      "match": {
         "header": "input_haptics.h"
       },
       "classification": "CNA_EXTENSION_CANDIDATE",
       "purposeReason": "Haptic devices and effects are a CNA input extension; XNA 4.0 has only GamePad.SetVibration.",
-      "bindingStatus": "ACTIONABLE_LOCAL",
-      "bindingReason": "placeholder"
+      "bindingStatus": "DELIBERATE_NON_BINDING",
+      "bindingReason": "Nothing is left unbound here; this catch-all exists so a new input_haptics.h declaration is classified rather than unexplained."
+    },
+    {
+      "match": {
+        "symbols": [
+          "cna_joystick_capabilities_init",
+          "cna_joystick_capabilities_equals",
+          "cna_joystick_info_init",
+          "cna_joystick_info_equals",
+          "cna_joystick_state_equals"
+        ]
+      },
+      "classification": "NOT_USEFUL_IN_JAVA",
+      "purposeReason": "Constructing and comparing one raw joystick's descriptor, its capabilities and its state.",
+      "bindingStatus": "DELIBERATE_NON_BINDING",
+      "bindingReason": "HapticCapabilities, HapticDirection, HapticEffect, JoystickCapabilities, JoystickInfo and JoystickState are Java records and enums, so their construction, equality and hashing are the language's and are exact. A native constructor would be a second way to build a value the enumeration already hands over complete, and a native equality a second definition of the one the record generates -- which is the rule the whole input value-type family already carries."
     },
     {
       "match": {
@@ -361,8 +486,8 @@
       },
       "classification": "CNA_EXTENSION_CANDIDATE",
       "purposeReason": "Raw joysticks with arbitrary axis, hat and trackball counts are a CNA input extension; XNA 4.0 models only the four-slot gamepad.",
-      "bindingStatus": "ACTIONABLE_LOCAL",
-      "bindingReason": "placeholder"
+      "bindingStatus": "DELIBERATE_NON_BINDING",
+      "bindingReason": "Nothing is left unbound here; this catch-all exists so a new input_joystick.h declaration is classified rather than unexplained."
     },
     {
       "match": {
@@ -370,8 +495,8 @@
       },
       "classification": "CNA_EXTENSION_CANDIDATE",
       "purposeReason": "Text input, IME composition and the screen keyboard are a CNA input extension; XNA 4.0 exposes only Guide.BeginShowKeyboardInput.",
-      "bindingStatus": "ACTIONABLE_LOCAL",
-      "bindingReason": "placeholder"
+      "bindingStatus": "DELIBERATE_NON_BINDING",
+      "bindingReason": "Nothing is left unbound here; this catch-all exists so a new input_text.h declaration is classified rather than unexplained."
     },
     {
       "match": {
@@ -850,8 +975,8 @@
       },
       "classification": "CNA_EXTENSION_CANDIDATE",
       "purposeReason": "Model animation clips are a CNA model extension.",
-      "bindingStatus": "ACTIONABLE_LOCAL",
-      "bindingReason": "placeholder"
+      "bindingStatus": "DELIBERATE_NON_BINDING",
+      "bindingReason": "Nothing is left unbound here; this catch-all exists so a new model-animations declaration is classified rather than unexplained."
     },
     {
       "match": {

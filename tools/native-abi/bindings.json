@@ -9,6 +9,18 @@
   "cnaInventorySha256": "be9a2bf818318002adc100ad1db22949b164726d2d124352f3b29aa3fdc48ea2",
   "functions": [
     {
+      "name": "cna_accelerometer_copy_last_dispatch_exception_message_for_tests_ext",
+      "header": "sensors.h",
+      "ownership": "borrows game; copies into the caller buffer",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_Handle",
+        "char*",
+        "uint64_t",
+        "uint64_t*"
+      ]
+    },
+    {
       "name": "cna_accelerometer_create",
       "header": "sensors.h",
       "ownership": "borrows game; returns an owned sensor handle",
@@ -28,6 +40,29 @@
       ]
     },
     {
+      "name": "cna_accelerometer_dispatch_to_instances_for_tests_ext",
+      "header": "sensors.h",
+      "ownership": "borrows game and the sensor array for the call",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_Handle",
+        "const CNA_AccelerometerHandle*",
+        "uint64_t",
+        "float",
+        "float",
+        "float"
+      ]
+    },
+    {
+      "name": "cna_accelerometer_dispose",
+      "header": "sensors.h",
+      "ownership": "borrows sensor; stops it without releasing the handle",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_AccelerometerHandle"
+      ]
+    },
+    {
       "name": "cna_accelerometer_get_current_value",
       "header": "sensors.h",
       "ownership": "borrows sensor; caller structure output",
@@ -35,6 +70,16 @@
       "parameters": [
         "CNA_AccelerometerHandle",
         "CNA_AccelerometerReading*"
+      ]
+    },
+    {
+      "name": "cna_accelerometer_get_dispatch_exception_count_for_tests_ext",
+      "header": "sensors.h",
+      "ownership": "borrows game; returns a value",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_Handle",
+        "int32_t*"
       ]
     },
     {
@@ -58,6 +103,16 @@
       ]
     },
     {
+      "name": "cna_accelerometer_get_last_dispatch_exception_message_size_for_tests_ext",
+      "header": "sensors.h",
+      "ownership": "borrows game; returns a value",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_Handle",
+        "uint64_t*"
+      ]
+    },
+    {
       "name": "cna_accelerometer_get_state",
       "header": "sensors.h",
       "ownership": "borrows sensor; caller identity output",
@@ -68,6 +123,16 @@
       ]
     },
     {
+      "name": "cna_accelerometer_get_subsystem_held_for_tests_ext",
+      "header": "sensors.h",
+      "ownership": "borrows sensor; returns a value",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_AccelerometerHandle",
+        "CNA_Bool*"
+      ]
+    },
+    {
       "name": "cna_accelerometer_get_time_between_updates_ticks",
       "header": "sensors.h",
       "ownership": "borrows sensor; caller integer output",
@@ -75,6 +140,68 @@
       "parameters": [
         "CNA_AccelerometerHandle",
         "int64_t*"
+      ]
+    },
+    {
+      "name": "cna_accelerometer_inject_synthetic_update_ext",
+      "header": "sensors.h",
+      "ownership": "borrows sensor",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_AccelerometerHandle",
+        "float",
+        "float",
+        "float"
+      ]
+    },
+    {
+      "name": "cna_accelerometer_is_sensor_connected_for_tests_ext",
+      "header": "sensors.h",
+      "ownership": "borrows game; returns a value",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_Handle",
+        "int64_t",
+        "CNA_Bool*"
+      ]
+    },
+    {
+      "name": "cna_accelerometer_register_started_instance_for_tests_ext",
+      "header": "sensors.h",
+      "ownership": "borrows sensor; adds it to the started registry",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_AccelerometerHandle"
+      ]
+    },
+    {
+      "name": "cna_accelerometer_set_event_watch_registration_failure_for_tests_ext",
+      "header": "sensors.h",
+      "ownership": "borrows game",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_Handle",
+        "CNA_Bool"
+      ]
+    },
+    {
+      "name": "cna_accelerometer_set_started_for_tests_ext",
+      "header": "sensors.h",
+      "ownership": "borrows sensor",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_AccelerometerHandle",
+        "CNA_Bool"
+      ]
+    },
+    {
+      "name": "cna_accelerometer_set_supported_for_tests_ext",
+      "header": "sensors.h",
+      "ownership": "borrows sensor",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_AccelerometerHandle",
+        "CNA_Bool"
       ]
     },
     {
@@ -100,6 +227,39 @@
       "name": "cna_accelerometer_stop",
       "header": "sensors.h",
       "ownership": "borrows sensor",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_AccelerometerHandle"
+      ]
+    },
+    {
+      "name": "cna_accelerometer_subscribe_current_value_changed",
+      "header": "sensors.h",
+      "ownership": "borrows sensor; CNA keeps the caller context until the registration is released; returns an owned registration handle",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_AccelerometerHandle",
+        "CNA_AccelerometerReadingCallback",
+        "void*",
+        "CNA_SensorEventRegistrationHandle*"
+      ]
+    },
+    {
+      "name": "cna_accelerometer_subscribe_reading_changed",
+      "header": "sensors.h",
+      "ownership": "borrows sensor; CNA keeps the caller context until the registration is released; returns an owned registration handle",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_AccelerometerHandle",
+        "CNA_AccelerometerReadingEventCallback",
+        "void*",
+        "CNA_SensorEventRegistrationHandle*"
+      ]
+    },
+    {
+      "name": "cna_accelerometer_unregister_started_instance_for_tests_ext",
+      "header": "sensors.h",
+      "ownership": "borrows sensor; removes it from the started registry",
       "returnType": "CNA_Result",
       "parameters": [
         "CNA_AccelerometerHandle"
@@ -7008,6 +7168,15 @@
       ]
     },
     {
+      "name": "cna_compass_dispose",
+      "header": "sensors.h",
+      "ownership": "borrows sensor; stops it without releasing the handle",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_CompassHandle"
+      ]
+    },
+    {
       "name": "cna_compass_get_current_value",
       "header": "sensors.h",
       "ownership": "borrows sensor; caller structure output",
@@ -7058,6 +7227,36 @@
       ]
     },
     {
+      "name": "cna_compass_inject_calibration_request_ext",
+      "header": "sensors.h",
+      "ownership": "borrows sensor",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_CompassHandle"
+      ]
+    },
+    {
+      "name": "cna_compass_inject_synthetic_update_ext",
+      "header": "sensors.h",
+      "ownership": "borrows sensor and the reading for the call",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_CompassHandle",
+        "const CNA_CompassReading*"
+      ]
+    },
+    {
+      "name": "cna_compass_set_test_backend_ext",
+      "header": "sensors.h",
+      "ownership": "borrows sensor; installs a per-sensor backend",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_CompassHandle",
+        "CNA_Bool",
+        "CNA_Bool"
+      ]
+    },
+    {
       "name": "cna_compass_set_time_between_updates_ticks",
       "header": "sensors.h",
       "ownership": "borrows sensor",
@@ -7083,6 +7282,30 @@
       "returnType": "CNA_Result",
       "parameters": [
         "CNA_CompassHandle"
+      ]
+    },
+    {
+      "name": "cna_compass_subscribe_calibrate",
+      "header": "sensors.h",
+      "ownership": "borrows sensor; CNA keeps the caller context until the registration is released; returns an owned registration handle",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_CompassHandle",
+        "CNA_SensorEventCallback",
+        "void*",
+        "CNA_SensorEventRegistrationHandle*"
+      ]
+    },
+    {
+      "name": "cna_compass_subscribe_current_value_changed",
+      "header": "sensors.h",
+      "ownership": "borrows sensor; CNA keeps the caller context until the registration is released; returns an owned registration handle",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_CompassHandle",
+        "CNA_CompassReadingCallback",
+        "void*",
+        "CNA_SensorEventRegistrationHandle*"
       ]
     },
     {
@@ -14239,6 +14462,18 @@
       ]
     },
     {
+      "name": "cna_gyroscope_copy_last_dispatch_exception_message_for_tests_ext",
+      "header": "sensors.h",
+      "ownership": "borrows game; copies into the caller buffer",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_Handle",
+        "char*",
+        "uint64_t",
+        "uint64_t*"
+      ]
+    },
+    {
       "name": "cna_gyroscope_create",
       "header": "sensors.h",
       "ownership": "borrows game; returns an owned sensor handle",
@@ -14258,6 +14493,29 @@
       ]
     },
     {
+      "name": "cna_gyroscope_dispatch_to_instances_for_tests_ext",
+      "header": "sensors.h",
+      "ownership": "borrows game and the sensor array for the call",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_Handle",
+        "const CNA_GyroscopeHandle*",
+        "uint64_t",
+        "float",
+        "float",
+        "float"
+      ]
+    },
+    {
+      "name": "cna_gyroscope_dispose",
+      "header": "sensors.h",
+      "ownership": "borrows sensor; stops it without releasing the handle",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_GyroscopeHandle"
+      ]
+    },
+    {
       "name": "cna_gyroscope_get_current_value",
       "header": "sensors.h",
       "ownership": "borrows sensor; caller structure output",
@@ -14265,6 +14523,16 @@
       "parameters": [
         "CNA_GyroscopeHandle",
         "CNA_GyroscopeReading*"
+      ]
+    },
+    {
+      "name": "cna_gyroscope_get_dispatch_exception_count_for_tests_ext",
+      "header": "sensors.h",
+      "ownership": "borrows game; returns a value",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_Handle",
+        "int32_t*"
       ]
     },
     {
@@ -14288,6 +14556,16 @@
       ]
     },
     {
+      "name": "cna_gyroscope_get_last_dispatch_exception_message_size_for_tests_ext",
+      "header": "sensors.h",
+      "ownership": "borrows game; returns a value",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_Handle",
+        "uint64_t*"
+      ]
+    },
+    {
       "name": "cna_gyroscope_get_state",
       "header": "sensors.h",
       "ownership": "borrows sensor; caller identity output",
@@ -14298,6 +14576,16 @@
       ]
     },
     {
+      "name": "cna_gyroscope_get_subsystem_held_for_tests_ext",
+      "header": "sensors.h",
+      "ownership": "borrows sensor; returns a value",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_GyroscopeHandle",
+        "CNA_Bool*"
+      ]
+    },
+    {
       "name": "cna_gyroscope_get_time_between_updates_ticks",
       "header": "sensors.h",
       "ownership": "borrows sensor; caller integer output",
@@ -14305,6 +14593,68 @@
       "parameters": [
         "CNA_GyroscopeHandle",
         "int64_t*"
+      ]
+    },
+    {
+      "name": "cna_gyroscope_inject_synthetic_update_ext",
+      "header": "sensors.h",
+      "ownership": "borrows sensor",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_GyroscopeHandle",
+        "float",
+        "float",
+        "float"
+      ]
+    },
+    {
+      "name": "cna_gyroscope_is_sensor_connected_for_tests_ext",
+      "header": "sensors.h",
+      "ownership": "borrows game; returns a value",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_Handle",
+        "int64_t",
+        "CNA_Bool*"
+      ]
+    },
+    {
+      "name": "cna_gyroscope_register_started_instance_for_tests_ext",
+      "header": "sensors.h",
+      "ownership": "borrows sensor; adds it to the started registry",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_GyroscopeHandle"
+      ]
+    },
+    {
+      "name": "cna_gyroscope_set_event_watch_registration_failure_for_tests_ext",
+      "header": "sensors.h",
+      "ownership": "borrows game",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_Handle",
+        "CNA_Bool"
+      ]
+    },
+    {
+      "name": "cna_gyroscope_set_started_for_tests_ext",
+      "header": "sensors.h",
+      "ownership": "borrows sensor",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_GyroscopeHandle",
+        "CNA_Bool"
+      ]
+    },
+    {
+      "name": "cna_gyroscope_set_supported_for_tests_ext",
+      "header": "sensors.h",
+      "ownership": "borrows sensor",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_GyroscopeHandle",
+        "CNA_Bool"
       ]
     },
     {
@@ -14330,6 +14680,27 @@
       "name": "cna_gyroscope_stop",
       "header": "sensors.h",
       "ownership": "borrows sensor",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_GyroscopeHandle"
+      ]
+    },
+    {
+      "name": "cna_gyroscope_subscribe_current_value_changed",
+      "header": "sensors.h",
+      "ownership": "borrows sensor; CNA keeps the caller context until the registration is released; returns an owned registration handle",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_GyroscopeHandle",
+        "CNA_GyroscopeReadingCallback",
+        "void*",
+        "CNA_SensorEventRegistrationHandle*"
+      ]
+    },
+    {
+      "name": "cna_gyroscope_unregister_started_instance_for_tests_ext",
+      "header": "sensors.h",
+      "ownership": "borrows sensor; removes it from the started registry",
       "returnType": "CNA_Result",
       "parameters": [
         "CNA_GyroscopeHandle"
@@ -18666,6 +19037,15 @@
       ]
     },
     {
+      "name": "cna_motion_dispose",
+      "header": "sensors.h",
+      "ownership": "borrows sensor; stops it without releasing the handle",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_MotionHandle"
+      ]
+    },
+    {
       "name": "cna_motion_get_current_value",
       "header": "sensors.h",
       "ownership": "borrows sensor; caller structure output",
@@ -18726,6 +19106,37 @@
       ]
     },
     {
+      "name": "cna_motion_inject_calibration_request_ext",
+      "header": "sensors.h",
+      "ownership": "borrows sensor",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_MotionHandle"
+      ]
+    },
+    {
+      "name": "cna_motion_inject_synthetic_update_ext",
+      "header": "sensors.h",
+      "ownership": "borrows sensor and the reading for the call",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_MotionHandle",
+        "const CNA_MotionReading*"
+      ]
+    },
+    {
+      "name": "cna_motion_set_test_backend_ext",
+      "header": "sensors.h",
+      "ownership": "borrows sensor; installs a per-sensor backend",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_MotionHandle",
+        "CNA_Bool",
+        "CNA_Bool",
+        "CNA_Bool"
+      ]
+    },
+    {
       "name": "cna_motion_set_time_between_updates_ticks",
       "header": "sensors.h",
       "ownership": "borrows sensor",
@@ -18751,6 +19162,30 @@
       "returnType": "CNA_Result",
       "parameters": [
         "CNA_MotionHandle"
+      ]
+    },
+    {
+      "name": "cna_motion_subscribe_calibrate",
+      "header": "sensors.h",
+      "ownership": "borrows sensor; CNA keeps the caller context until the registration is released; returns an owned registration handle",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_MotionHandle",
+        "CNA_SensorEventCallback",
+        "void*",
+        "CNA_SensorEventRegistrationHandle*"
+      ]
+    },
+    {
+      "name": "cna_motion_subscribe_current_value_changed",
+      "header": "sensors.h",
+      "ownership": "borrows sensor; CNA keeps the caller context until the registration is released; returns an owned registration handle",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_MotionHandle",
+        "CNA_MotionReadingCallback",
+        "void*",
+        "CNA_SensorEventRegistrationHandle*"
       ]
     },
     {
@@ -22904,6 +23339,15 @@
       "parameters": [
         "CNA_ScopedRenderTargetHandle",
         "CNA_Bool*"
+      ]
+    },
+    {
+      "name": "cna_sensor_unsubscribe_ext",
+      "header": "sensors.h",
+      "ownership": "destroys an owned registration handle",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_SensorEventRegistrationHandle"
       ]
     },
     {

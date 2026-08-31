@@ -46,8 +46,18 @@ public final class Motion extends Sensor<MotionReading> {
         }
 
         @Override
+        public int dispose(long sensor) {
+            return NativeSensorExtensionRoutes.motionDispose(sensor);
+        }
+
+        @Override
         public int destroy(long sensor) {
             return NativeSensorExtensionRoutes.motionDestroy(sensor);
+        }
+
+        @Override
+        public int currentValueKind() {
+            return org.openeggbert.cna.internal.NativeBindings.SENSOR_MOTION_CURRENT;
         }
     };
 
@@ -115,5 +125,84 @@ public final class Motion extends Sensor<MotionReading> {
                 new Vector3(floating[23], floating[24], floating[25]),
                 new Vector3(floating[26], floating[27], floating[28]),
                 new Vector3(floating[29], floating[30], floating[31]));
+    }
+
+    @Override
+    MotionReading readingOf(double[] leaves) {
+        AttitudeReading attitude = new AttitudeReading(
+                SensorExtension.timestamp((long) leaves[2], (long) leaves[3]),
+                (float) leaves[4], (float) leaves[5], (float) leaves[6],
+                new Quaternion((float) leaves[7], (float) leaves[8], (float) leaves[9],
+                        (float) leaves[10]),
+                new Matrix(
+                        (float) leaves[11], (float) leaves[12], (float) leaves[13],
+                        (float) leaves[14], (float) leaves[15], (float) leaves[16],
+                        (float) leaves[17], (float) leaves[18], (float) leaves[19],
+                        (float) leaves[20], (float) leaves[21], (float) leaves[22],
+                        (float) leaves[23], (float) leaves[24], (float) leaves[25],
+                        (float) leaves[26]));
+        return new MotionReading(
+                SensorExtension.timestamp((long) leaves[0], (long) leaves[1]),
+                attitude,
+                new Vector3((float) leaves[27], (float) leaves[28], (float) leaves[29]),
+                new Vector3((float) leaves[30], (float) leaves[31], (float) leaves[32]),
+                new Vector3((float) leaves[33], (float) leaves[34], (float) leaves[35]));
+    }
+
+    /**
+     * Installs or removes CNA's own stand-in backend for this sensor.
+     *
+     * <p>The canonical hook takes a caller-implemented backend object, which C cannot write, so
+     * CNA supplies the backend and publishes only the switch. Without it there is no motion
+     * on any desktop and no way to reach a single line past the unsupported refusal.
+     *
+     * <p><strong>Motion.getIsSupported() still answers false afterwards</strong>, and that is not
+     * a defect: the backend is installed on this sensor and the static query asks the platform.
+     * Measured in {@code tools/native-abi/probes/sensor_injection.c}.
+     *
+     * @param installed whether to install it
+     * @param supported what the installed backend reports for support
+     * @param northReferenced whether the installed backend reports a north-referenced attitude
+     * @throws IllegalStateException when acquisition is currently started, which CNA refuses
+     */
+    public void setTestBackend(boolean installed, boolean supported, boolean northReferenced) {
+        check("setTestBackend", NativeSensorExtensionRoutes
+                .motionSetTestBackendExt(open(), installed, supported, northReferenced));
+    }
+
+    /**
+     * Feeds the sensor a synthetic reading.
+     *
+     * @param reading the reading the sensor then reports
+     */
+    public void injectSyntheticUpdate(MotionReading reading) {
+        java.util.Objects.requireNonNull(reading, "reading");
+        check("injectSyntheticUpdate", NativeSensorExtensionRoutes
+                .motionInjectSyntheticUpdateExt(open(), reading.toIntegralLeaves(), reading.toFloatingLeaves()));
+    }
+
+    /**
+     * Raises the sensor's calibration-requested event.
+     *
+     * @throws IllegalStateException when the sensor is closed
+     */
+    public void injectCalibrationRequest() {
+        check("injectCalibrationRequest", NativeSensorExtensionRoutes
+                .motionInjectCalibrationRequestExt(open()));
+    }
+
+    /**
+     * Calls a handler whenever the host asks for the sensor to be calibrated.
+     *
+     * <p>The event carries no reading: it is a request to the player to wave the device, not a
+     * measurement.
+     *
+     * @param handler what to do when calibration is requested
+     * @return the subscription, which the caller closes
+     */
+    public SensorSubscription addCalibrateListener(Runnable handler) {
+        java.util.Objects.requireNonNull(handler, "handler");
+        return subscribe(org.openeggbert.cna.internal.NativeBindings.SENSOR_MOTION_CALIBRATE,
+                leaves -> handler.run());
     }
 }

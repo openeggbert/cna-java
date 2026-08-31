@@ -60,6 +60,21 @@ final class SensorExtension {
      * epoch of 0001-01-01, so UTC is {@code ticks - offsetTicks}; that is the value the canonical
      * equality compares, and the one an {@link Instant} has to be built from.
      */
+    /**
+     * Turns one timestamp back into the two leaves CNA's structure carries.
+     *
+     * <p>The inverse of {@link #timestamp(long, long)}, and the one place that knows the epoch
+     * and the tick size in that direction -- so a reading injected and read back is the same
+     * instant rather than two conventions that happen to agree.
+     */
+    static long[] timestampLeaves(OffsetDateTime timestamp) {
+        long offsetTicks = (long) timestamp.getOffset().getTotalSeconds() * TICKS_PER_SECOND;
+        long utcTicks = TICKS_AT_UNIX_EPOCH
+                + Math.multiplyExact(timestamp.toEpochSecond(), TICKS_PER_SECOND)
+                + timestamp.getNano() / NANOSECONDS_PER_TICK;
+        return new long[] {utcTicks + offsetTicks, offsetTicks};
+    }
+
     static OffsetDateTime timestamp(long ticks, long offsetTicks) {
         long utcTicks = Math.subtractExact(ticks, offsetTicks) - TICKS_AT_UNIX_EPOCH;
         Instant instant = Instant.ofEpochSecond(

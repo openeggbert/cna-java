@@ -858,6 +858,23 @@ typedef struct CnaFunctions {
     CNA_JNI_ROUTE(cna_cnb_model_add_animation) cnb_model_add_animation;
     CNA_JNI_ROUTE(cna_model_animations_ext_create) model_animations_ext_create;
 
+    /* The seven sensor subscriptions. Each takes a C function pointer with its own reading
+       shape, and each registration outlives the call that made it -- a sensor raises its event
+       whenever a reading arrives -- so the Java handler is pinned by a token the registration
+       owns and released when it is unsubscribed. */
+    CNA_JNI_ROUTE(cna_accelerometer_subscribe_current_value_changed)
+        accelerometer_subscribe_current_value_changed;
+    CNA_JNI_ROUTE(cna_accelerometer_subscribe_reading_changed)
+        accelerometer_subscribe_reading_changed;
+    CNA_JNI_ROUTE(cna_gyroscope_subscribe_current_value_changed)
+        gyroscope_subscribe_current_value_changed;
+    CNA_JNI_ROUTE(cna_compass_subscribe_current_value_changed)
+        compass_subscribe_current_value_changed;
+    CNA_JNI_ROUTE(cna_compass_subscribe_calibrate) compass_subscribe_calibrate;
+    CNA_JNI_ROUTE(cna_motion_subscribe_current_value_changed)
+        motion_subscribe_current_value_changed;
+    CNA_JNI_ROUTE(cna_motion_subscribe_calibrate) motion_subscribe_calibrate;
+
     CNA_JNI_ROUTE(cna_system_tray_add_entry) system_tray_add_entry;
     CNA_JNI_ROUTE(cna_file_dialog_show_open_file_ext) file_dialog_show_open_file_ext;
     CNA_JNI_ROUTE(cna_file_dialog_show_save_file_ext) file_dialog_show_save_file_ext;
@@ -3030,6 +3047,17 @@ JNIEXPORT jint JNICALL Java_org_openeggbert_cna_internal_NativeBindings_nativeLo
     LOAD(cnb_encode_animation_clip, "cna_cnb_encode_animation_clip");
     LOAD(cnb_model_add_animation, "cna_cnb_model_add_animation");
     LOAD(model_animations_ext_create, "cna_model_animations_ext_create");
+    LOAD(accelerometer_subscribe_current_value_changed,
+         "cna_accelerometer_subscribe_current_value_changed");
+    LOAD(accelerometer_subscribe_reading_changed,
+         "cna_accelerometer_subscribe_reading_changed");
+    LOAD(gyroscope_subscribe_current_value_changed,
+         "cna_gyroscope_subscribe_current_value_changed");
+    LOAD(compass_subscribe_current_value_changed,
+         "cna_compass_subscribe_current_value_changed");
+    LOAD(compass_subscribe_calibrate, "cna_compass_subscribe_calibrate");
+    LOAD(motion_subscribe_current_value_changed, "cna_motion_subscribe_current_value_changed");
+    LOAD(motion_subscribe_calibrate, "cna_motion_subscribe_calibrate");
     LOAD(system_tray_add_entry, "cna_system_tray_add_entry");
     LOAD(file_dialog_show_open_file_ext, "cna_file_dialog_show_open_file_ext");
     LOAD(file_dialog_show_save_file_ext, "cna_file_dialog_show_save_file_ext");
@@ -13557,6 +13585,213 @@ Java_org_openeggbert_cna_internal_NativeBindings_nativeModelAnimationsCreate(
     if (call_result == CNA_RESULT_SUCCESS) {
         const jlong handle = (jlong)created;
         (*environment)->SetLongArrayRegion(environment, out_animations, 0, 1, &handle);
+    }
+    return (jint)call_result;
+}
+
+/*
+ * The sensor subscriptions.
+ *
+ * Seven routes, six reading shapes and one bare event, and they are hand-written for the shape
+ * rather than the lifetime: each takes a C function pointer, and CNA calls it whenever a reading
+ * arrives -- which is after the call that registered it and for as long as the registration
+ * lives. That is the pipeline-scene-callback lifetime, so it uses the same token: a global
+ * reference the Java registration holds and releases when it unsubscribes.
+ *
+ * Every reading crosses as one `double[]` of its leaves in declaration order. A `float` widens
+ * to a `double` without loss and a `double` is already one, so the single array costs nothing in
+ * precision and saves six near-identical trampolines from becoming twelve. The Java side knows
+ * which shape it subscribed to and decodes accordingly; the layouts are pinned by the tests that
+ * inject a known reading and read the leaves back.
+ */
+static void sensor_leaves(void* context, const jdouble* leaves, jsize count)
+{
+    if (context == NULL) {
+        return;
+    }
+    int attached = 0;
+    JNIEnv* environment = callback_environment(&attached);
+    if (environment == NULL) {
+        return;
+    }
+    if ((*environment)->ExceptionCheck(environment) == JNI_FALSE) {
+        jclass consumer = (*environment)->FindClass(environment, "java/util/function/Consumer");
+        jmethodID accept = consumer == NULL ? NULL
+            : (*environment)->GetMethodID(environment, consumer, "accept",
+                                          "(Ljava/lang/Object;)V");
+        if (consumer != NULL) {
+            (*environment)->DeleteLocalRef(environment, consumer);
+        }
+        jdoubleArray values = accept == NULL ? NULL
+            : (*environment)->NewDoubleArray(environment, count);
+        if (values != NULL) {
+            (*environment)->SetDoubleArrayRegion(environment, values, 0, count, leaves);
+            (*environment)->CallVoidMethod(environment, (jobject)context, accept, values);
+            (*environment)->DeleteLocalRef(environment, values);
+            if ((*environment)->ExceptionCheck(environment) == JNI_TRUE) {
+                /* CNA's sensor callbacks return void and are raised from inside its own event
+                   dispatch, which counts its exceptions rather than propagating them. There is
+                   no Java frame to carry this to, so it is described and cleared. */
+                (*environment)->ExceptionDescribe(environment);
+                (*environment)->ExceptionClear(environment);
+            }
+        } else if ((*environment)->ExceptionCheck(environment) == JNI_TRUE) {
+            (*environment)->ExceptionClear(environment);
+        }
+    }
+    finish_callback_environment(attached);
+}
+
+#define SENSOR_TIMESTAMP(reading) \
+    (jdouble)(reading)->timestamp.ticks, (jdouble)(reading)->timestamp.offset_ticks
+
+static void on_accelerometer_reading(const CNA_AccelerometerReading* reading, void* context)
+{
+    if (reading == NULL) return;
+    const jdouble leaves[5] = {SENSOR_TIMESTAMP(reading),
+        (jdouble)reading->acceleration.x, (jdouble)reading->acceleration.y,
+        (jdouble)reading->acceleration.z};
+    sensor_leaves(context, leaves, 5);
+}
+
+static void on_accelerometer_reading_event(
+    const CNA_AccelerometerReadingEventInfo* info, void* context)
+{
+    if (info == NULL) return;
+    const jdouble leaves[5] = {SENSOR_TIMESTAMP(info),
+        (jdouble)info->x, (jdouble)info->y, (jdouble)info->z};
+    sensor_leaves(context, leaves, 5);
+}
+
+static void on_gyroscope_reading(const CNA_GyroscopeReading* reading, void* context)
+{
+    if (reading == NULL) return;
+    const jdouble leaves[5] = {SENSOR_TIMESTAMP(reading),
+        (jdouble)reading->rotation_rate.x, (jdouble)reading->rotation_rate.y,
+        (jdouble)reading->rotation_rate.z};
+    sensor_leaves(context, leaves, 5);
+}
+
+static void on_compass_reading(const CNA_CompassReading* reading, void* context)
+{
+    if (reading == NULL) return;
+    const jdouble leaves[8] = {SENSOR_TIMESTAMP(reading),
+        (jdouble)reading->heading_accuracy, (jdouble)reading->magnetic_heading,
+        (jdouble)reading->true_heading,
+        (jdouble)reading->magnetometer_reading.x, (jdouble)reading->magnetometer_reading.y,
+        (jdouble)reading->magnetometer_reading.z};
+    sensor_leaves(context, leaves, 8);
+}
+
+/* Attitude first, because the motion reading carries one whole and the flattening has to be the
+   declaration's order rather than a convenient one: pitch, roll, yaw, the quaternion, then the
+   sixteen elements of the rotation matrix. */
+static jsize attitude_leaves(const CNA_AttitudeReading* attitude, jdouble* out, jsize at)
+{
+    out[at++] = (jdouble)attitude->timestamp.ticks;
+    out[at++] = (jdouble)attitude->timestamp.offset_ticks;
+    out[at++] = (jdouble)attitude->pitch;
+    out[at++] = (jdouble)attitude->roll;
+    out[at++] = (jdouble)attitude->yaw;
+    out[at++] = (jdouble)attitude->quaternion.x;
+    out[at++] = (jdouble)attitude->quaternion.y;
+    out[at++] = (jdouble)attitude->quaternion.z;
+    out[at++] = (jdouble)attitude->quaternion.w;
+    const float* matrix = &attitude->rotation_matrix.m11;
+    for (int index = 0; index < 16; ++index) {
+        out[at++] = (jdouble)matrix[index];
+    }
+    return at;
+}
+
+static void on_motion_reading(const CNA_MotionReading* reading, void* context)
+{
+    if (reading == NULL) return;
+    jdouble leaves[36];
+    jsize at = 0;
+    leaves[at++] = (jdouble)reading->timestamp.ticks;
+    leaves[at++] = (jdouble)reading->timestamp.offset_ticks;
+    at = attitude_leaves(&reading->attitude, leaves, at);
+    leaves[at++] = (jdouble)reading->device_acceleration.x;
+    leaves[at++] = (jdouble)reading->device_acceleration.y;
+    leaves[at++] = (jdouble)reading->device_acceleration.z;
+    leaves[at++] = (jdouble)reading->device_rotation_rate.x;
+    leaves[at++] = (jdouble)reading->device_rotation_rate.y;
+    leaves[at++] = (jdouble)reading->device_rotation_rate.z;
+    leaves[at++] = (jdouble)reading->gravity.x;
+    leaves[at++] = (jdouble)reading->gravity.y;
+    leaves[at++] = (jdouble)reading->gravity.z;
+    sensor_leaves(context, leaves, at);
+}
+
+static void on_sensor_event(void* context)
+{
+    sensor_leaves(context, NULL, 0);
+}
+
+/* Which subscription a Java caller asked for. The kinds are this adapter's own, not CNA's:
+   seven routes with six different callback types cannot be selected by a handle. */
+#define SENSOR_ACCELEROMETER_CURRENT 0
+#define SENSOR_ACCELEROMETER_READING 1
+#define SENSOR_GYROSCOPE_CURRENT 2
+#define SENSOR_COMPASS_CURRENT 3
+#define SENSOR_COMPASS_CALIBRATE 4
+#define SENSOR_MOTION_CURRENT 5
+#define SENSOR_MOTION_CALIBRATE 6
+
+JNIEXPORT jint JNICALL
+Java_org_openeggbert_cna_internal_NativeBindings_nativeSensorSubscribe(
+    JNIEnv* environment,
+    jclass type,
+    jint kind,
+    jlong sensor,
+    jlong token,
+    jlongArray out_registration)
+{
+    (void)type;
+    if (token == 0) {
+        return (jint)CNA_RESULT_INVALID_ARGUMENT;
+    }
+    void* context = (void*)(intptr_t)token;
+    CNA_SensorEventRegistrationHandle registration = 0;
+    CNA_Result call_result;
+    switch (kind) {
+        case SENSOR_ACCELEROMETER_CURRENT:
+            call_result = cna.accelerometer_subscribe_current_value_changed(
+                (CNA_AccelerometerHandle)sensor, on_accelerometer_reading, context,
+                &registration);
+            break;
+        case SENSOR_ACCELEROMETER_READING:
+            call_result = cna.accelerometer_subscribe_reading_changed(
+                (CNA_AccelerometerHandle)sensor, on_accelerometer_reading_event, context,
+                &registration);
+            break;
+        case SENSOR_GYROSCOPE_CURRENT:
+            call_result = cna.gyroscope_subscribe_current_value_changed(
+                (CNA_GyroscopeHandle)sensor, on_gyroscope_reading, context, &registration);
+            break;
+        case SENSOR_COMPASS_CURRENT:
+            call_result = cna.compass_subscribe_current_value_changed(
+                (CNA_CompassHandle)sensor, on_compass_reading, context, &registration);
+            break;
+        case SENSOR_COMPASS_CALIBRATE:
+            call_result = cna.compass_subscribe_calibrate(
+                (CNA_CompassHandle)sensor, on_sensor_event, context, &registration);
+            break;
+        case SENSOR_MOTION_CURRENT:
+            call_result = cna.motion_subscribe_current_value_changed(
+                (CNA_MotionHandle)sensor, on_motion_reading, context, &registration);
+            break;
+        case SENSOR_MOTION_CALIBRATE:
+            call_result = cna.motion_subscribe_calibrate(
+                (CNA_MotionHandle)sensor, on_sensor_event, context, &registration);
+            break;
+        default:
+            return (jint)CNA_RESULT_INVALID_ARGUMENT;
+    }
+    if (call_result == CNA_RESULT_SUCCESS) {
+        const jlong handle = (jlong)registration;
+        (*environment)->SetLongArrayRegion(environment, out_registration, 0, 1, &handle);
     }
     return (jint)call_result;
 }

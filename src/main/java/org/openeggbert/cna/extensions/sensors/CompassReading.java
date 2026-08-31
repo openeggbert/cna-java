@@ -22,4 +22,19 @@ public record CompassReading(
         double MagneticHeading,
         double TrueHeading,
         Vector3 MagnetometerReading) {
+
+    /** The two integral leaves CNA's structure declares: the timestamp. */
+    long[] toIntegralLeaves() {
+        return SensorExtension.timestampLeaves(Timestamp);
+    }
+
+    /** The three floating leaves: the magnetometer vector. */
+    float[] toFloatingLeaves() {
+        return new float[] {MagnetometerReading.X, MagnetometerReading.Y, MagnetometerReading.Z};
+    }
+
+    /** The three double leaves, in declaration order: accuracy, magnetic heading, true heading. */
+    double[] toDoubleLeaves() {
+        return new double[] {HeadingAccuracy, MagneticHeading, TrueHeading};
+    }
 }

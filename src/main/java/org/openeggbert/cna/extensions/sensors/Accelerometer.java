@@ -47,8 +47,18 @@ public final class Accelerometer extends Sensor<AccelerometerReading> {
         }
 
         @Override
+        public int dispose(long sensor) {
+            return NativeSensorExtensionRoutes.accelerometerDispose(sensor);
+        }
+
+        @Override
         public int destroy(long sensor) {
             return NativeSensorExtensionRoutes.accelerometerDestroy(sensor);
+        }
+
+        @Override
+        public int currentValueKind() {
+            return org.openeggbert.cna.internal.NativeBindings.SENSOR_ACCELEROMETER_CURRENT;
         }
     };
 
@@ -94,5 +104,52 @@ public final class Accelerometer extends Sensor<AccelerometerReading> {
         return new AccelerometerReading(
                 SensorExtension.timestamp(integral[0], integral[1]),
                 new Vector3(floating[0], floating[1], floating[2]));
+    }
+
+    @Override
+    AccelerometerReading readingOf(double[] leaves) {
+        return new AccelerometerReading(
+                SensorExtension.timestamp((long) leaves[0], (long) leaves[1]),
+                new Vector3((float) leaves[2], (float) leaves[3], (float) leaves[4]));
+    }
+
+    /**
+     * Feeds the sensor a synthetic reading, in the host's own units.
+     *
+     * <p><strong>The units are the platform's and the reading that comes back is canonical.</strong>
+     * That is the header's contract and it is measured rather than assumed: injecting 9.80665
+     * metres per second squared into an accelerometer reads back as one g.
+     *
+     * <p>This is CNA's canonical test-support injector, and it exists because a game's own event
+     * wiring has to be exercisable on a machine with no sensor -- which is every desktop. A
+     * sensor only delivers it once acquisition has started, which on such a machine means
+     * {@link SensorTestBackends}.
+     *
+     * @param x the first axis, in platform units
+     * @param y the second axis
+     * @param z the third axis
+     */
+    public void injectSyntheticUpdate(float x, float y, float z) {
+        check("injectSyntheticUpdate", NativeSensorExtensionRoutes
+                .accelerometerInjectSyntheticUpdateExt(open(), x, y, z));
+    }
+
+    /**
+     * Calls a handler with every reading, through the obsolete event rather than the current one.
+     *
+     * <p>The canonical event this projects is superseded by
+     * {@link #addCurrentValueChangedListener}, which is why it delivers a description of its own
+     * rather than a reading. Both are raised for the same reading and the order is fixed: the
+     * current-value handlers run first and this one second. Unlike the current-value event,
+     * <strong>this one is raised only when the reading is valid</strong>.
+     *
+     * @param handler what to do with each reading
+     * @return the subscription, which the caller closes
+     */
+    public SensorSubscription addReadingChangedListener(
+            java.util.function.Consumer<AccelerometerReading> handler) {
+        java.util.Objects.requireNonNull(handler, "handler");
+        return subscribe(org.openeggbert.cna.internal.NativeBindings.SENSOR_ACCELEROMETER_READING,
+                leaves -> handler.accept(readingOf(leaves)));
     }
 }
