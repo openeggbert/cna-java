@@ -45,6 +45,152 @@ Java_org_openeggbert_cna_internal_generated_NativeModelExtensionRoutes_effectGet
 }
 
 JNIEXPORT jint JNICALL
+Java_org_openeggbert_cna_internal_generated_NativeModelExtensionRoutes_modelAnimationsCopyClipNameAt(
+    JNIEnv* environment, jclass declaring_class, jlong animations, jlong clip_index, jbyteArray destination, jlongArray out_byte_count)
+{
+    (void)environment;
+    (void)declaring_class;
+    jsize destination_size = (*environment)->GetArrayLength(environment, destination);
+    jbyte* destination_bytes = (*environment)->GetByteArrayElements(environment, destination, NULL);
+    if (destination_bytes == NULL) {
+        return (jint)CNA_RESULT_OUT_OF_MEMORY;
+    }
+    uint64_t destination_written = 0;
+    CNA_Result call_result = cna.model_animations_ext_copy_clip_name_at((CNA_ModelAnimationsEXTHandle)animations, (uint64_t)clip_index, (char*)destination_bytes, (uint64_t)destination_size, &destination_written);
+    (*environment)->ReleaseByteArrayElements(environment, destination, destination_bytes, 0);
+    if (call_result == CNA_RESULT_SUCCESS || call_result == CNA_RESULT_BUFFER_TOO_SMALL) {
+        jlong destination_element = (jlong)destination_written;
+        (*environment)->SetLongArrayRegion(
+            environment, out_byte_count, 0, 1, &destination_element);
+    }
+    return (jint)call_result;
+}
+
+JNIEXPORT jint JNICALL
+Java_org_openeggbert_cna_internal_generated_NativeModelExtensionRoutes_modelAnimationsCopyTypeName(
+    JNIEnv* environment, jclass declaring_class, jlong animations, jbyteArray destination, jlongArray out_byte_count)
+{
+    (void)environment;
+    (void)declaring_class;
+    jsize destination_size = (*environment)->GetArrayLength(environment, destination);
+    jbyte* destination_bytes = (*environment)->GetByteArrayElements(environment, destination, NULL);
+    if (destination_bytes == NULL) {
+        return (jint)CNA_RESULT_OUT_OF_MEMORY;
+    }
+    uint64_t destination_written = 0;
+    CNA_Result call_result = cna.model_animations_ext_copy_type_name((CNA_ModelAnimationsEXTHandle)animations, (char*)destination_bytes, (uint64_t)destination_size, &destination_written);
+    (*environment)->ReleaseByteArrayElements(environment, destination, destination_bytes, 0);
+    if (call_result == CNA_RESULT_SUCCESS || call_result == CNA_RESULT_BUFFER_TOO_SMALL) {
+        jlong destination_element = (jlong)destination_written;
+        (*environment)->SetLongArrayRegion(
+            environment, out_byte_count, 0, 1, &destination_element);
+    }
+    return (jint)call_result;
+}
+
+JNIEXPORT jint JNICALL
+Java_org_openeggbert_cna_internal_generated_NativeModelExtensionRoutes_modelAnimationsDestroy(
+    JNIEnv* environment, jclass declaring_class, jlong animations)
+{
+    (void)environment;
+    (void)declaring_class;
+    CNA_Result call_result = cna.model_animations_ext_destroy((CNA_ModelAnimationsEXTHandle)animations);
+    return (jint)call_result;
+}
+
+JNIEXPORT jint JNICALL
+Java_org_openeggbert_cna_internal_generated_NativeModelExtensionRoutes_modelAnimationsGetClipCount(
+    JNIEnv* environment, jclass declaring_class, jlong animations, jlongArray out_count)
+{
+    (void)environment;
+    (void)declaring_class;
+    uint64_t out_count_value = 0;
+    CNA_Result call_result = cna.model_animations_ext_get_clip_count((CNA_ModelAnimationsEXTHandle)animations, &out_count_value);
+    if (call_result == CNA_RESULT_SUCCESS || call_result == CNA_RESULT_BUFFER_TOO_SMALL) {
+        jlong out_count_element = (jlong)out_count_value;
+        (*environment)->SetLongArrayRegion(
+            environment, out_count, 0, 1, &out_count_element);
+    }
+    return (jint)call_result;
+}
+
+JNIEXPORT jint JNICALL
+Java_org_openeggbert_cna_internal_generated_NativeModelExtensionRoutes_modelAnimationsGetClipInfoAt(
+    JNIEnv* environment, jclass declaring_class, jlong animations, jlong clip_index, jdoubleArray out_duration_seconds, jlongArray out_track_count, jintArray out_target_space)
+{
+    (void)environment;
+    (void)declaring_class;
+    double out_duration_seconds_value = 0;
+    uint64_t out_track_count_value = 0;
+    CNA_ClipTargetSpaceEXT out_target_space_value = 0;
+    CNA_Result call_result = cna.model_animations_ext_get_clip_info_at((CNA_ModelAnimationsEXTHandle)animations, (uint64_t)clip_index, &out_duration_seconds_value, &out_track_count_value, &out_target_space_value);
+    if (call_result == CNA_RESULT_SUCCESS || call_result == CNA_RESULT_BUFFER_TOO_SMALL) {
+        jdouble out_duration_seconds_element = (jdouble)out_duration_seconds_value;
+        (*environment)->SetDoubleArrayRegion(
+            environment, out_duration_seconds, 0, 1, &out_duration_seconds_element);
+        jlong out_track_count_element = (jlong)out_track_count_value;
+        (*environment)->SetLongArrayRegion(
+            environment, out_track_count, 0, 1, &out_track_count_element);
+        jint out_target_space_element = (jint)out_target_space_value;
+        (*environment)->SetIntArrayRegion(
+            environment, out_target_space, 0, 1, &out_target_space_element);
+    }
+    return (jint)call_result;
+}
+
+JNIEXPORT jint JNICALL
+Java_org_openeggbert_cna_internal_generated_NativeModelExtensionRoutes_modelAnimationsGetClipNameByteCountAt(
+    JNIEnv* environment, jclass declaring_class, jlong animations, jlong clip_index, jlongArray out_byte_count)
+{
+    (void)environment;
+    (void)declaring_class;
+    uint64_t out_byte_count_value = 0;
+    CNA_Result call_result = cna.model_animations_ext_get_clip_name_byte_count_at((CNA_ModelAnimationsEXTHandle)animations, (uint64_t)clip_index, &out_byte_count_value);
+    if (call_result == CNA_RESULT_SUCCESS || call_result == CNA_RESULT_BUFFER_TOO_SMALL) {
+        jlong out_byte_count_element = (jlong)out_byte_count_value;
+        (*environment)->SetLongArrayRegion(
+            environment, out_byte_count, 0, 1, &out_byte_count_element);
+    }
+    return (jint)call_result;
+}
+
+JNIEXPORT jint JNICALL
+Java_org_openeggbert_cna_internal_generated_NativeModelExtensionRoutes_modelAnimationsGetTypeNameByteCount(
+    JNIEnv* environment, jclass declaring_class, jlong animations, jlongArray out_byte_count)
+{
+    (void)environment;
+    (void)declaring_class;
+    uint64_t out_byte_count_value = 0;
+    CNA_Result call_result = cna.model_animations_ext_get_type_name_byte_count((CNA_ModelAnimationsEXTHandle)animations, &out_byte_count_value);
+    if (call_result == CNA_RESULT_SUCCESS || call_result == CNA_RESULT_BUFFER_TOO_SMALL) {
+        jlong out_byte_count_element = (jlong)out_byte_count_value;
+        (*environment)->SetLongArrayRegion(
+            environment, out_byte_count, 0, 1, &out_byte_count_element);
+    }
+    return (jint)call_result;
+}
+
+JNIEXPORT jint JNICALL
+Java_org_openeggbert_cna_internal_generated_NativeModelExtensionRoutes_modelAnimationsSetClipTargetSpaceAt(
+    JNIEnv* environment, jclass declaring_class, jlong animations, jlong clip_index, jint value)
+{
+    (void)environment;
+    (void)declaring_class;
+    CNA_Result call_result = cna.model_animations_ext_set_clip_target_space_at((CNA_ModelAnimationsEXTHandle)animations, (uint64_t)clip_index, (CNA_ClipTargetSpaceEXT)value);
+    return (jint)call_result;
+}
+
+JNIEXPORT jint JNICALL
+Java_org_openeggbert_cna_internal_generated_NativeModelExtensionRoutes_modelApplyClipToBonesExt(
+    JNIEnv* environment, jclass declaring_class, jlong model, jlong animations, jlong clip_index, jdouble time_seconds)
+{
+    (void)environment;
+    (void)declaring_class;
+    CNA_Result call_result = cna.model_apply_clip_to_bones_ext((CNA_ModelHandle)model, (CNA_ModelAnimationsEXTHandle)animations, (uint64_t)clip_index, (double)time_seconds);
+    return (jint)call_result;
+}
+
+JNIEXPORT jint JNICALL
 Java_org_openeggbert_cna_internal_generated_NativeModelExtensionRoutes_modelBoneAddChild(
     JNIEnv* environment, jclass declaring_class, jlong bone, jlong child)
 {

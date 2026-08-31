@@ -575,6 +575,16 @@ Java_org_openeggbert_cna_internal_generated_NativeInputExtensionRoutes_hapticDev
 }
 
 JNIEXPORT jint JNICALL
+Java_org_openeggbert_cna_internal_generated_NativeInputExtensionRoutes_hapticDeviceDispose(
+    JNIEnv* environment, jclass declaring_class, jlong device)
+{
+    (void)environment;
+    (void)declaring_class;
+    CNA_Result call_result = cna.haptic_device_dispose((CNA_HapticDeviceHandle)device);
+    return (jint)call_result;
+}
+
+JNIEXPORT jint JNICALL
 Java_org_openeggbert_cna_internal_generated_NativeInputExtensionRoutes_hapticDeviceGetCapabilities(
     JNIEnv* environment, jclass declaring_class, jlong device, jbyteArray out_capabilitiesBytes, jlongArray out_capabilitiesIntegral)
 {
@@ -1628,6 +1638,16 @@ Java_org_openeggbert_cna_internal_generated_NativeInputExtensionRoutes_joysticks
 }
 
 JNIEXPORT jint JNICALL
+Java_org_openeggbert_cna_internal_generated_NativeInputExtensionRoutes_joysticksResetForTestsExt(
+    JNIEnv* environment, jclass declaring_class, jlong game)
+{
+    (void)environment;
+    (void)declaring_class;
+    CNA_Result call_result = cna.joysticks_reset_for_tests_ext((CNA_Handle)game);
+    return (jint)call_result;
+}
+
+JNIEXPORT jint JNICALL
 Java_org_openeggbert_cna_internal_generated_NativeInputExtensionRoutes_keyboardCopyKeyNameExt(
     JNIEnv* environment, jclass declaring_class, jlong game, jint key, jbyteArray destination, jlongArray out_bytes)
 {
@@ -1948,6 +1968,22 @@ Java_org_openeggbert_cna_internal_generated_NativeInputExtensionRoutes_mouseWarp
 }
 
 JNIEXPORT jint JNICALL
+Java_org_openeggbert_cna_internal_generated_NativeInputExtensionRoutes_textInputGetWindowHandleExt(
+    JNIEnv* environment, jclass declaring_class, jlong game, jlongArray out_window)
+{
+    (void)environment;
+    (void)declaring_class;
+    uint64_t out_window_value = 0;
+    CNA_Result call_result = cna.text_input_get_window_handle_ext((CNA_Handle)game, &out_window_value);
+    if (call_result == CNA_RESULT_SUCCESS || call_result == CNA_RESULT_BUFFER_TOO_SMALL) {
+        jlong out_window_element = (jlong)out_window_value;
+        (*environment)->SetLongArrayRegion(
+            environment, out_window, 0, 1, &out_window_element);
+    }
+    return (jint)call_result;
+}
+
+JNIEXPORT jint JNICALL
 Java_org_openeggbert_cna_internal_generated_NativeInputExtensionRoutes_textInputIsActiveExt(
     JNIEnv* environment, jclass declaring_class, jlong game, jbooleanArray out_active)
 {
@@ -1971,6 +2007,22 @@ Java_org_openeggbert_cna_internal_generated_NativeInputExtensionRoutes_textInput
     (void)declaring_class;
     CNA_Bool out_shown_value = 0;
     CNA_Result call_result = cna.text_input_is_screen_keyboard_shown_ext((CNA_Handle)game, &out_shown_value);
+    if (call_result == CNA_RESULT_SUCCESS || call_result == CNA_RESULT_BUFFER_TOO_SMALL) {
+        jboolean out_shown_element = (jboolean)out_shown_value;
+        (*environment)->SetBooleanArrayRegion(
+            environment, out_shown, 0, 1, &out_shown_element);
+    }
+    return (jint)call_result;
+}
+
+JNIEXPORT jint JNICALL
+Java_org_openeggbert_cna_internal_generated_NativeInputExtensionRoutes_textInputIsScreenKeyboardShownForWindowExt(
+    JNIEnv* environment, jclass declaring_class, jlong game, jlong window, jbooleanArray out_shown)
+{
+    (void)environment;
+    (void)declaring_class;
+    CNA_Bool out_shown_value = 0;
+    CNA_Result call_result = cna.text_input_is_screen_keyboard_shown_for_window_ext((CNA_Handle)game, (uint64_t)window, &out_shown_value);
     if (call_result == CNA_RESULT_SUCCESS || call_result == CNA_RESULT_BUFFER_TOO_SMALL) {
         jboolean out_shown_element = (jboolean)out_shown_value;
         (*environment)->SetBooleanArrayRegion(
@@ -2007,6 +2059,16 @@ Java_org_openeggbert_cna_internal_generated_NativeInputExtensionRoutes_textInput
 }
 
 JNIEXPORT jint JNICALL
+Java_org_openeggbert_cna_internal_generated_NativeInputExtensionRoutes_textInputResetForTestsExt(
+    JNIEnv* environment, jclass declaring_class, jlong game)
+{
+    (void)environment;
+    (void)declaring_class;
+    CNA_Result call_result = cna.text_input_reset_for_tests_ext((CNA_Handle)game);
+    return (jint)call_result;
+}
+
+JNIEXPORT jint JNICALL
 Java_org_openeggbert_cna_internal_generated_NativeInputExtensionRoutes_textInputSetInputRectangleExt(
     JNIEnv* environment, jclass declaring_class, jlong game, jlongArray rectangleIntegral)
 {
@@ -2023,6 +2085,16 @@ Java_org_openeggbert_cna_internal_generated_NativeInputExtensionRoutes_textInput
         rectangle_value.height = (int32_t)rectangleIntegral_values[3];
     }
     CNA_Result call_result = cna.text_input_set_input_rectangle_ext((CNA_Handle)game, rectangle_value);
+    return (jint)call_result;
+}
+
+JNIEXPORT jint JNICALL
+Java_org_openeggbert_cna_internal_generated_NativeInputExtensionRoutes_textInputSetWindowHandleExt(
+    JNIEnv* environment, jclass declaring_class, jlong game, jlong window)
+{
+    (void)environment;
+    (void)declaring_class;
+    CNA_Result call_result = cna.text_input_set_window_handle_ext((CNA_Handle)game, (uint64_t)window);
     return (jint)call_result;
 }
 

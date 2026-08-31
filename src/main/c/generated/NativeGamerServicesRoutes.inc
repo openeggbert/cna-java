@@ -4089,3 +4089,20 @@ Java_org_openeggbert_cna_internal_generated_NativeGamerServicesRoutes_signedInGa
     CNA_Result call_result = cna.signed_in_gamer_set_presence((CNA_SignedInGamerHandle)gamer, &presence_value);
     return (jint)call_result;
 }
+
+JNIEXPORT jint JNICALL
+Java_org_openeggbert_cna_internal_generated_NativeGamerServicesRoutes_signedInGamerSetPresenceModeStringExt(
+    JNIEnv* environment, jclass declaring_class, jlong gamer, jbyteArray mode)
+{
+    (void)environment;
+    (void)declaring_class;
+    jsize mode_size = (*environment)->GetArrayLength(environment, mode);
+    jbyte* mode_bytes = (*environment)->GetByteArrayElements(environment, mode, NULL);
+    if (mode_bytes == NULL) {
+        return (jint)CNA_RESULT_OUT_OF_MEMORY;
+    }
+    CNA_StringView mode_view = {(const char*)mode_bytes, (uint64_t)mode_size};
+    CNA_Result call_result = cna.signed_in_gamer_set_presence_mode_string_ext((CNA_SignedInGamerHandle)gamer, mode_view);
+    (*environment)->ReleaseByteArrayElements(environment, mode, mode_bytes, JNI_ABORT);
+    return (jint)call_result;
+}

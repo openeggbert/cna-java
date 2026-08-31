@@ -569,6 +569,19 @@
     {
       "match": {
         "symbols": [
+          "cna_avatar_renderer_draw_real_ext",
+          "cna_avatar_renderer_enable_real_rendering_ext"
+        ]
+      },
+      "classification": "CNA_EXTENSION_CANDIDATE",
+      "purposeReason": "Switches an avatar renderer from CNA's placeholder to a real skinned model and draws a named clip on it. XNA's AvatarRenderer draws the Xbox runtime's own avatar and exposes none of this.",
+      "bindingStatus": "ACTIONABLE_LOCAL",
+      "bindingReason": "Both take a CNA_SkinnedModelEXT handle, and this projection has no Java type for one yet. Exposing them over a raw handle is not an option -- an API whose parameter is a native pointer is not one a game can safely use, and half of a two-step contract is worse than none. The skinned-model family is what finishes it.",
+      "task": "JAVA-EXT-007"
+    },
+    {
+      "match": {
+        "symbols": [
           "cna_avatar_expression_init",
           "cna_avatar_renderer_draw_real_ext",
           "cna_avatar_renderer_enable_real_rendering_ext"
@@ -685,18 +698,6 @@
       "purposeReason": "A second spelling of something already answered. The session's runtime type name is a C++ diagnostic string XNA's ToString does not promise, and a signed-in gamer's gamertag is the Gamer.Gamertag the base route already reads.",
       "bindingStatus": "DELIBERATE_NON_BINDING",
       "bindingReason": "A second spelling of something already answered: the session's runtime type name is a C++ diagnostic string XNA's ToString does not promise, and the gamertag is the Gamer.Gamertag the base route already reads."
-    },
-    {
-      "match": {
-        "symbols": [
-          "cna_signed_in_gamer_set_presence_mode_string_ext"
-        ]
-      },
-      "classification": "CNA_EXTENSION_CANDIDATE",
-      "purposeReason": "The host and port a discovered session was found at, and a presence line of the title's own words. XNA's AvailableNetworkSession names no address and its PresenceMode is a closed enumeration, so both belong under org.openeggbert.cna.extensions.",
-      "bindingStatus": "ACTIONABLE_LOCAL",
-      "bindingReason": "placeholder",
-      "task": "JAVA-EXT-006"
     },
     {
       "match": {
@@ -996,7 +997,6 @@
           "cna_model_add_skin_ext",
           "cna_model_clear_skins_ext",
           "cna_model_create_skin_skeleton_handle_ext",
-          "cna_model_apply_clip_to_bones_ext",
           "cna_model_apply_bind_pose_bone_transforms_ext",
           "cna_model_mesh_part_get_primitive_type_ext",
           "cna_model_mesh_part_set_primitive_type_ext",

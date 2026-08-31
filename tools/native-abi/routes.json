@@ -756,6 +756,10 @@
       {
         "java": "signedInGamerSetPresence",
         "symbol": "cna_signed_in_gamer_set_presence"
+      },
+      {
+        "java": "signedInGamerSetPresenceModeStringExt",
+        "symbol": "cna_signed_in_gamer_set_presence_mode_string_ext"
       }
     ],
     "NativeNetworkRoutes": [
@@ -1792,6 +1796,10 @@
         "symbol": "cna_haptic_device_destroy_effect"
       },
       {
+        "java": "hapticDeviceDispose",
+        "symbol": "cna_haptic_device_dispose"
+      },
+      {
         "java": "hapticDeviceGetCapabilities",
         "symbol": "cna_haptic_device_get_capabilities"
       },
@@ -1976,6 +1984,10 @@
         "symbol": "cna_joysticks_raise_disconnected_ext"
       },
       {
+        "java": "joysticksResetForTestsExt",
+        "symbol": "cna_joysticks_reset_for_tests_ext"
+      },
+      {
         "java": "keyboardCopyKeyNameExt",
         "symbol": "cna_keyboard_copy_key_name_ext"
       },
@@ -2056,12 +2068,20 @@
         "symbol": "cna_mouse_warp_global_ext"
       },
       {
+        "java": "textInputGetWindowHandleExt",
+        "symbol": "cna_text_input_get_window_handle_ext"
+      },
+      {
         "java": "textInputIsActiveExt",
         "symbol": "cna_text_input_is_active_ext"
       },
       {
         "java": "textInputIsScreenKeyboardShownExt",
         "symbol": "cna_text_input_is_screen_keyboard_shown_ext"
+      },
+      {
+        "java": "textInputIsScreenKeyboardShownForWindowExt",
+        "symbol": "cna_text_input_is_screen_keyboard_shown_for_window_ext"
       },
       {
         "java": "textInputRaiseTextEditingExt",
@@ -2072,8 +2092,16 @@
         "symbol": "cna_text_input_raise_text_input_ext"
       },
       {
+        "java": "textInputResetForTestsExt",
+        "symbol": "cna_text_input_reset_for_tests_ext"
+      },
+      {
         "java": "textInputSetInputRectangleExt",
         "symbol": "cna_text_input_set_input_rectangle_ext"
+      },
+      {
+        "java": "textInputSetWindowHandleExt",
+        "symbol": "cna_text_input_set_window_handle_ext"
       },
       {
         "java": "textInputStartExt",
@@ -2302,6 +2330,42 @@
       {
         "java": "effectGetTypeNameByteCount",
         "symbol": "cna_effect_get_type_name_byte_count"
+      },
+      {
+        "java": "modelAnimationsCopyClipNameAt",
+        "symbol": "cna_model_animations_ext_copy_clip_name_at"
+      },
+      {
+        "java": "modelAnimationsCopyTypeName",
+        "symbol": "cna_model_animations_ext_copy_type_name"
+      },
+      {
+        "java": "modelAnimationsDestroy",
+        "symbol": "cna_model_animations_ext_destroy"
+      },
+      {
+        "java": "modelAnimationsGetClipCount",
+        "symbol": "cna_model_animations_ext_get_clip_count"
+      },
+      {
+        "java": "modelAnimationsGetClipInfoAt",
+        "symbol": "cna_model_animations_ext_get_clip_info_at"
+      },
+      {
+        "java": "modelAnimationsGetClipNameByteCountAt",
+        "symbol": "cna_model_animations_ext_get_clip_name_byte_count_at"
+      },
+      {
+        "java": "modelAnimationsGetTypeNameByteCount",
+        "symbol": "cna_model_animations_ext_get_type_name_byte_count"
+      },
+      {
+        "java": "modelAnimationsSetClipTargetSpaceAt",
+        "symbol": "cna_model_animations_ext_set_clip_target_space_at"
+      },
+      {
+        "java": "modelApplyClipToBonesExt",
+        "symbol": "cna_model_apply_clip_to_bones_ext"
       },
       {
         "java": "modelBoneAddChild",

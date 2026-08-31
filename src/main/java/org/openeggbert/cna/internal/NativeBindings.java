@@ -461,6 +461,32 @@ public final class NativeBindings {
                 currentGameHandle("TouchPanel test update").requireValue()));
     }
 
+    /**
+     * Clears the text-input subsystem's own state.
+     *
+     * <p>A CNA test seam, reached only from this projection's tests: the composition buffer, the
+     * candidate list and the bound window survive a game, so a suite that raised a composition
+     * would otherwise leave it for the next one to find.
+     */
+    public static void resetTextInputForTests() {
+        check("cna_text_input_reset_for_tests_ext",
+                org.openeggbert.cna.internal.generated.NativeInputExtensionRoutes.textInputResetForTestsExt(
+                        currentGameHandle("TextInput test reset").requireValue()));
+    }
+
+    /**
+     * Clears the joystick subsystem's enumerated devices.
+     *
+     * <p>The same kind of seam: the enumerated joysticks survive a game, so a suite that raised
+     * a hot-plug event would otherwise leave the device for the next one to find.
+     */
+    public static void resetJoysticksForTests() {
+        check("cna_joysticks_reset_for_tests_ext",
+                org.openeggbert.cna.internal.generated.NativeInputExtensionRoutes
+                        .joysticksResetForTestsExt(
+                                currentGameHandle("Joysticks test reset").requireValue()));
+    }
+
     public static void resetTouchPanelForTests() {
         check("cna_touch_panel_reset_for_tests_ext", nativeResetTouchPanel(
                 currentGameHandle("TouchPanel test reset").requireValue()));
@@ -1214,6 +1240,35 @@ public final class NativeBindings {
     private static native int nativeCnbModelAddAnimation(long model, byte[] clipName,
             double durationSeconds, int[] boneIndices, int[] keyframeCounts, double[] times,
             float[] values, int targetSpace, long[] outIndex);
+
+    /**
+     * Creates a named set of animation clips from the flattened clip graph.
+     *
+     * <p>The same pointer graph one level deeper -- named clips to clips to tracks to keyframes
+     * -- and hand-written for the same reason. CNA copies every clip, so nothing here outlives
+     * the call.
+     *
+     * @param names each clip's name as UTF-8 bytes
+     * @param durations each clip's duration
+     * @param clipTrackCounts how many tracks each clip has
+     * @param boneIndices which bone each track drives, across every clip in order
+     * @param keyframeCounts how many keyframes each track has
+     * @param times each keyframe's time, in track order
+     * @param values ten floats per keyframe
+     * @param outAnimations receives the owned handle
+     * @return CNA's result
+     */
+    public static int modelAnimationsCreate(byte[][] names, double[] durations,
+            int[] clipTrackCounts, int[] boneIndices, int[] keyframeCounts, double[] times,
+            float[] values, long[] outAnimations) {
+        requireAvailable();
+        return nativeModelAnimationsCreate(names, durations, clipTrackCounts, boneIndices,
+                keyframeCounts, times, values, outAnimations);
+    }
+
+    private static native int nativeModelAnimationsCreate(byte[][] names, double[] durations,
+            int[] clipTrackCounts, int[] boneIndices, int[] keyframeCounts, double[] times,
+            float[] values, long[] outAnimations);
 
     /**
      * Releases a texture handle that names a texture without keeping it alive.
@@ -4588,7 +4643,8 @@ public final class NativeBindings {
         return null;
     }
 
-    private static WindowHandle knownWindowHandle(long value, String operation) {
+    /** Wraps an opaque host window value the extensions hand back to a game. */
+    public static WindowHandle knownWindowHandle(long value, String operation) {
         if (value == 0L) {
             return WindowHandle.Zero;
         }
@@ -4602,7 +4658,8 @@ public final class NativeBindings {
                 "CNA returned an unrecognized opaque token for " + operation);
     }
 
-    private static long knownWindowValue(WindowHandle window, String operation) {
+    /** Unwraps a host window value the extensions pass into CNA. */
+    public static long knownWindowValue(WindowHandle window, String operation) {
         synchronized (GAMES) {
             Long registered = WINDOW_HANDLES.get(Objects.requireNonNull(window, "window"));
             if (registered == null && !window.getIsZero()) {

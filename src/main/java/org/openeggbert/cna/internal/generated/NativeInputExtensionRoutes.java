@@ -224,6 +224,11 @@ public final class NativeInputExtensionRoutes {
     public static native int hapticDeviceDestroyEffect(long device, int effectId);
 
     /**
+     * cna_haptic_device_dispose (input_haptics.h).
+     */
+    public static native int hapticDeviceDispose(long device);
+
+    /**
      * cna_haptic_device_get_capabilities (input_haptics.h).
      *
      * <p>outCapabilitiesBytes carries CNA_HapticCapabilities in this order:
@@ -591,6 +596,11 @@ public final class NativeInputExtensionRoutes {
     public static native int joysticksRaiseDisconnectedExt(long game, int id);
 
     /**
+     * cna_joysticks_reset_for_tests_ext (input_joystick.h).
+     */
+    public static native int joysticksResetForTestsExt(long game);
+
+    /**
      * cna_keyboard_copy_key_name_ext (input_keyboard.h).
      */
     public static native int keyboardCopyKeyNameExt(long game, int key, byte[] destination, long[] outBytes);
@@ -691,6 +701,11 @@ public final class NativeInputExtensionRoutes {
     public static native int mouseWarpGlobalExt(long game, int x, int y, boolean[] outApplied);
 
     /**
+     * cna_text_input_get_window_handle_ext (input_text.h).
+     */
+    public static native int textInputGetWindowHandleExt(long game, long[] outWindow);
+
+    /**
      * cna_text_input_is_active_ext (input_text.h).
      */
     public static native int textInputIsActiveExt(long game, boolean[] outActive);
@@ -699,6 +714,11 @@ public final class NativeInputExtensionRoutes {
      * cna_text_input_is_screen_keyboard_shown_ext (input_text.h).
      */
     public static native int textInputIsScreenKeyboardShownExt(long game, boolean[] outShown);
+
+    /**
+     * cna_text_input_is_screen_keyboard_shown_for_window_ext (input_text.h).
+     */
+    public static native int textInputIsScreenKeyboardShownForWindowExt(long game, long window, boolean[] outShown);
 
     /**
      * cna_text_input_raise_text_editing_ext (input_text.h).
@@ -711,9 +731,19 @@ public final class NativeInputExtensionRoutes {
     public static native int textInputRaiseTextInputExt(long game, int codeUnit);
 
     /**
+     * cna_text_input_reset_for_tests_ext (input_text.h).
+     */
+    public static native int textInputResetForTestsExt(long game);
+
+    /**
      * cna_text_input_set_input_rectangle_ext (input_text.h).
      */
     public static native int textInputSetInputRectangleExt(long game, long[] rectangleIntegral);
+
+    /**
+     * cna_text_input_set_window_handle_ext (input_text.h).
+     */
+    public static native int textInputSetWindowHandleExt(long game, long window);
 
     /**
      * cna_text_input_start_ext (input_text.h).

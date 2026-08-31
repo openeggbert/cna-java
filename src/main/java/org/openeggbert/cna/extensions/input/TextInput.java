@@ -1,6 +1,7 @@
 package org.openeggbert.cna.extensions.input;
 
 import Microsoft.Xna.Framework.Rectangle;
+import Microsoft.Xna.Framework.WindowHandle;
 import org.openeggbert.cna.internal.GamerEventPump;
 import org.openeggbert.cna.internal.NativeBindings;
 import org.openeggbert.cna.internal.NativeGamerServices;
@@ -178,6 +179,50 @@ public final class TextInput {
         boolean[] shown = new boolean[1];
         check("TextInput.IsScreenKeyboardShown",
                 NativeInputExtensionRoutes.textInputIsScreenKeyboardShownExt(game(), shown));
+        return shown[0];
+    }
+
+    /**
+     * Returns the host window the text-input APIs are bound to.
+     *
+     * <p>A game with one window never needs this: CNA binds the game's own. A game that opens a
+     * second window -- a tool's inspector, a level editor's preview -- has to say which one an
+     * input method should attach to, and that is what this pair is for.
+     *
+     * @return the bound window, or {@code null} when none is bound
+     */
+    public static WindowHandle getWindowHandle() {
+        long[] window = new long[1];
+        check("TextInput.WindowHandle",
+                NativeInputExtensionRoutes.textInputGetWindowHandleExt(game(), window));
+        return NativeBindings.knownWindowHandle(window[0], "TextInput.WindowHandle");
+    }
+
+    /**
+     * Binds the text-input APIs to a host window.
+     *
+     * @param window the window to bind, or {@code null} to unbind
+     */
+    public static void setWindowHandle(WindowHandle window) {
+        check("TextInput.WindowHandle", NativeInputExtensionRoutes.textInputSetWindowHandleExt(
+                game(), NativeBindings.knownWindowValue(window, "TextInput.WindowHandle")));
+    }
+
+    /**
+     * Reports whether the screen keyboard is shown for one particular window.
+     *
+     * <p>Different from {@link #getIsScreenKeyboardShown()} in the case a game with two windows
+     * has: that one asks about the bound window, and this one asks about the window named.
+     *
+     * @param window the window to ask about
+     * @return whether a screen keyboard is shown for it
+     */
+    public static boolean getIsScreenKeyboardShown(WindowHandle window) {
+        boolean[] shown = new boolean[1];
+        check("TextInput.IsScreenKeyboardShown",
+                NativeInputExtensionRoutes.textInputIsScreenKeyboardShownForWindowExt(game(),
+                        NativeBindings.knownWindowValue(window, "TextInput.WindowHandle"),
+                        shown));
         return shown[0];
     }
 

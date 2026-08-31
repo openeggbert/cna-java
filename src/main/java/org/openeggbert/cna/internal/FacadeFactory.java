@@ -49,6 +49,8 @@ public final class FacadeFactory {
             hiddenHandle(AvatarRenderer.class);
     private static final Method AVATAR_ANIMATION_HANDLE =
             hiddenHandle(AvatarAnimation.class);
+    private static final Method SIGNED_IN_GAMER_HANDLE =
+            hiddenHandle(Microsoft.Xna.Framework.GamerServices.Gamer.class);
     private static final Method EFFECT_ADOPT_EXTENSION = effectAdoptExtensionMethod();
     private static final Method EFFECT_ADOPT_BORROWED = effectAdoptBorrowedMethod();
     private static final Method CONTENT_MANAGER_DEVICE = contentManagerDeviceMethod();
@@ -281,6 +283,20 @@ public final class FacadeFactory {
      */
     public static long avatarAnimationHandle(AvatarAnimation animation) {
         return hiddenHandleValue(AVATAR_ANIMATION_HANDLE, "AvatarAnimation", animation);
+    }
+
+    /**
+     * Returns the gamer's native handle, borrowed for the length of one call.
+     *
+     * <p>The accessor is package-private in {@code Microsoft.Xna.Framework.GamerServices} because
+     * XNA has no such member. The gamer keeps ownership.
+     *
+     * @param gamer the gamer to ask
+     * @return its native handle
+     */
+    public static long signedInGamerHandle(
+            Microsoft.Xna.Framework.GamerServices.SignedInGamer gamer) {
+        return hiddenHandleValue(SIGNED_IN_GAMER_HANDLE, "SignedInGamer", gamer);
     }
 
     private static long hiddenHandleValue(Method accessor, String what, Object subject) {

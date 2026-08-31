@@ -1704,4 +1704,9 @@ public final class NativeGamerServicesRoutes {
      * </ol>
      */
     public static native int signedInGamerSetPresence(long gamer, long[] presenceIntegral);
+
+    /**
+     * cna_signed_in_gamer_set_presence_mode_string_ext (gamer_services.h).
+     */
+    public static native int signedInGamerSetPresenceModeStringExt(long gamer, byte[] mode);
 }

@@ -14380,6 +14380,15 @@
       ]
     },
     {
+      "name": "cna_haptic_device_dispose",
+      "header": "input_haptics.h",
+      "ownership": "borrows device; closes it without releasing the handle",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_HapticDeviceHandle"
+      ]
+    },
+    {
       "name": "cna_haptic_device_get_capabilities",
       "header": "input_haptics.h",
       "ownership": "borrows device; caller structure output",
@@ -15679,6 +15688,15 @@
       "parameters": [
         "CNA_Handle",
         "uint32_t"
+      ]
+    },
+    {
+      "name": "cna_joysticks_reset_for_tests_ext",
+      "header": "input_joystick.h",
+      "ownership": "no handle",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_Handle"
       ]
     },
     {
@@ -17747,6 +17765,118 @@
         "CNA_AudioEventCallback",
         "void*",
         "CNA_AudioEventRegistrationHandle*"
+      ]
+    },
+    {
+      "name": "cna_model_animations_ext_copy_clip_name_at",
+      "header": "models.h",
+      "ownership": "borrows animations; copies into the caller buffer",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_ModelAnimationsEXTHandle",
+        "uint64_t",
+        "char*",
+        "uint64_t",
+        "uint64_t*"
+      ]
+    },
+    {
+      "name": "cna_model_animations_ext_copy_type_name",
+      "header": "models.h",
+      "ownership": "borrows animations; copies into the caller buffer",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_ModelAnimationsEXTHandle",
+        "char*",
+        "uint64_t",
+        "uint64_t*"
+      ]
+    },
+    {
+      "name": "cna_model_animations_ext_create",
+      "header": "models.h",
+      "ownership": "copies the clip graph; returns an owned animations handle",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "const CNA_NamedAnimationClipEXTDescriptor*",
+        "uint64_t",
+        "CNA_ModelAnimationsEXTHandle*"
+      ]
+    },
+    {
+      "name": "cna_model_animations_ext_destroy",
+      "header": "models.h",
+      "ownership": "destroys an owned animations handle",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_ModelAnimationsEXTHandle"
+      ]
+    },
+    {
+      "name": "cna_model_animations_ext_get_clip_count",
+      "header": "models.h",
+      "ownership": "borrows animations; returns a value",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_ModelAnimationsEXTHandle",
+        "uint64_t*"
+      ]
+    },
+    {
+      "name": "cna_model_animations_ext_get_clip_info_at",
+      "header": "models.h",
+      "ownership": "borrows animations; returns three values",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_ModelAnimationsEXTHandle",
+        "uint64_t",
+        "double*",
+        "uint64_t*",
+        "CNA_ClipTargetSpaceEXT*"
+      ]
+    },
+    {
+      "name": "cna_model_animations_ext_get_clip_name_byte_count_at",
+      "header": "models.h",
+      "ownership": "borrows animations; returns a value",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_ModelAnimationsEXTHandle",
+        "uint64_t",
+        "uint64_t*"
+      ]
+    },
+    {
+      "name": "cna_model_animations_ext_get_type_name_byte_count",
+      "header": "models.h",
+      "ownership": "borrows animations; returns a value",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_ModelAnimationsEXTHandle",
+        "uint64_t*"
+      ]
+    },
+    {
+      "name": "cna_model_animations_ext_set_clip_target_space_at",
+      "header": "models.h",
+      "ownership": "borrows animations",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_ModelAnimationsEXTHandle",
+        "uint64_t",
+        "CNA_ClipTargetSpaceEXT"
+      ]
+    },
+    {
+      "name": "cna_model_apply_clip_to_bones_ext",
+      "header": "models.h",
+      "ownership": "borrows model and animations for the call",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_ModelHandle",
+        "CNA_ModelAnimationsEXTHandle",
+        "uint64_t",
+        "double"
       ]
     },
     {
@@ -23534,6 +23664,16 @@
       ]
     },
     {
+      "name": "cna_signed_in_gamer_set_presence_mode_string_ext",
+      "header": "gamer_services.h",
+      "ownership": "borrows gamer and the text for the call",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_SignedInGamerHandle",
+        "CNA_StringView"
+      ]
+    },
+    {
       "name": "cna_signed_in_gamer_subscribe_signed_in_ext",
       "header": "gamer_services.h",
       "ownership": "returns an owned registration; copies the callback and borrows its context",
@@ -25980,6 +26120,16 @@
       ]
     },
     {
+      "name": "cna_text_input_get_window_handle_ext",
+      "header": "input_text.h",
+      "ownership": "borrows game; returns an opaque host window value",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_Handle",
+        "uint64_t*"
+      ]
+    },
+    {
       "name": "cna_text_input_is_active_ext",
       "header": "input_text.h",
       "ownership": "borrows its inputs; caller output",
@@ -25996,6 +26146,17 @@
       "returnType": "CNA_Result",
       "parameters": [
         "CNA_Handle",
+        "CNA_Bool*"
+      ]
+    },
+    {
+      "name": "cna_text_input_is_screen_keyboard_shown_for_window_ext",
+      "header": "input_text.h",
+      "ownership": "borrows game; returns a value",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_Handle",
+        "uint64_t",
         "CNA_Bool*"
       ]
     },
@@ -26035,6 +26196,15 @@
       ]
     },
     {
+      "name": "cna_text_input_reset_for_tests_ext",
+      "header": "input_text.h",
+      "ownership": "borrows game",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_Handle"
+      ]
+    },
+    {
       "name": "cna_text_input_set_input_rectangle_ext",
       "header": "input_text.h",
       "ownership": "borrows its inputs",
@@ -26042,6 +26212,16 @@
       "parameters": [
         "CNA_Handle",
         "CNA_Rectangle"
+      ]
+    },
+    {
+      "name": "cna_text_input_set_window_handle_ext",
+      "header": "input_text.h",
+      "ownership": "borrows game; stores an opaque host window value",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_Handle",
+        "uint64_t"
       ]
     },
     {

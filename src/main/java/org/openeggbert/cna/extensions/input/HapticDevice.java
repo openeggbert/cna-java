@@ -34,6 +34,21 @@ public final class HapticDevice implements AutoCloseable {
         this.handle = handle;
     }
 
+    /**
+     * Closes the device without releasing the handle.
+     *
+     * <p>The canonical disposal, and it is not {@link #close()}: afterwards this object is still
+     * usable and {@link #getIsOpen()} reports {@code false}, with every other operation a safe
+     * no-op that reports nothing was applied. That is exactly what a device that failed to open
+     * already behaves like, so a game has one code path for both. Idempotent.
+     *
+     * <p>{@link #close()} is the other end: it releases the handle, and a second release is
+     * refused.
+     */
+    public void dispose() {
+        check("dispose", NativeInputExtensionRoutes.hapticDeviceDispose(open()));
+    }
+
     /** Reports whether the handle is actually attached to hardware. */
     public boolean getIsOpen() {
         boolean[] open = new boolean[1];

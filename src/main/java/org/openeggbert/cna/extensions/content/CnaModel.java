@@ -283,6 +283,30 @@ public final class CnaModel implements AutoCloseable {
         return present[0] ? sphere(sphere) : null;
     }
 
+    /**
+     * Poses the model's bones from one clip at a point in time.
+     *
+     * <p>The result lands in {@link #getBoneTransforms()}, so a game animates an ordinary XNA
+     * {@code Model} without a skinning runtime of its own -- which is what XNA left to its
+     * {@code SkinnedModel} sample and every game that used it reimplemented.
+     *
+     * <p><strong>The clip must be a scene-node clip.</strong> Its bone indices select
+     * {@code Model.Bones} entries directly; a joint-palette clip's indices select a skinning
+     * skeleton's joints, and applying one as the other would pose the wrong bones without
+     * failing. CNA refuses it instead, which is the reason the target space is stated rather
+     * than inferred.
+     *
+     * @param animations the set holding the clip
+     * @param clipIndex which clip to evaluate
+     * @param timeSeconds when to evaluate it, clamped to the clip's duration
+     */
+    public void applyClipToBones(CnaModelAnimations animations, int clipIndex,
+            double timeSeconds) {
+        Objects.requireNonNull(animations, "animations");
+        check("applyClipToBones", NativeModelExtensionRoutes.modelApplyClipToBonesExt(
+                open(), animations.handle(), clipIndex, timeSeconds));
+    }
+
     /** Returns the cameras the asset's scene carried. */
     public List<CnaModelCamera> getCameras() {
         long model = open();

@@ -977,6 +977,7 @@
     CNA_JNI_ROUTE(cna_haptic_device_create_effect) haptic_device_create_effect;
     CNA_JNI_ROUTE(cna_haptic_device_destroy) haptic_device_destroy;
     CNA_JNI_ROUTE(cna_haptic_device_destroy_effect) haptic_device_destroy_effect;
+    CNA_JNI_ROUTE(cna_haptic_device_dispose) haptic_device_dispose;
     CNA_JNI_ROUTE(cna_haptic_device_get_capabilities) haptic_device_get_capabilities;
     CNA_JNI_ROUTE(cna_haptic_device_get_effect_status) haptic_device_get_effect_status;
     CNA_JNI_ROUTE(cna_haptic_device_get_is_effect_supported) haptic_device_get_is_effect_supported;
@@ -1086,6 +1087,7 @@
     CNA_JNI_ROUTE(cna_joysticks_get_name_size_at) joysticks_get_name_size_at;
     CNA_JNI_ROUTE(cna_joysticks_raise_connected_ext) joysticks_raise_connected_ext;
     CNA_JNI_ROUTE(cna_joysticks_raise_disconnected_ext) joysticks_raise_disconnected_ext;
+    CNA_JNI_ROUTE(cna_joysticks_reset_for_tests_ext) joysticks_reset_for_tests_ext;
     CNA_JNI_ROUTE(cna_keyboard_copy_key_name_ext) keyboard_copy_key_name_ext;
     CNA_JNI_ROUTE(cna_keyboard_copy_scancode_name_ext) keyboard_copy_scancode_name_ext;
     CNA_JNI_ROUTE(cna_keyboard_get_key_from_name_ext) keyboard_get_key_from_name_ext;
@@ -1204,6 +1206,15 @@
     CNA_JNI_ROUTE(cna_message_box_set_test_backend_ext) message_box_set_test_backend_ext;
     CNA_JNI_ROUTE(cna_message_box_show_ext) message_box_show_ext;
     CNA_JNI_ROUTE(cna_message_box_show_simple_ext) message_box_show_simple_ext;
+    CNA_JNI_ROUTE(cna_model_animations_ext_copy_clip_name_at) model_animations_ext_copy_clip_name_at;
+    CNA_JNI_ROUTE(cna_model_animations_ext_copy_type_name) model_animations_ext_copy_type_name;
+    CNA_JNI_ROUTE(cna_model_animations_ext_destroy) model_animations_ext_destroy;
+    CNA_JNI_ROUTE(cna_model_animations_ext_get_clip_count) model_animations_ext_get_clip_count;
+    CNA_JNI_ROUTE(cna_model_animations_ext_get_clip_info_at) model_animations_ext_get_clip_info_at;
+    CNA_JNI_ROUTE(cna_model_animations_ext_get_clip_name_byte_count_at) model_animations_ext_get_clip_name_byte_count_at;
+    CNA_JNI_ROUTE(cna_model_animations_ext_get_type_name_byte_count) model_animations_ext_get_type_name_byte_count;
+    CNA_JNI_ROUTE(cna_model_animations_ext_set_clip_target_space_at) model_animations_ext_set_clip_target_space_at;
+    CNA_JNI_ROUTE(cna_model_apply_clip_to_bones_ext) model_apply_clip_to_bones_ext;
     CNA_JNI_ROUTE(cna_model_bone_add_child) model_bone_add_child;
     CNA_JNI_ROUTE(cna_model_bone_collection_destroy) model_bone_collection_destroy;
     CNA_JNI_ROUTE(cna_model_bone_collection_get_at) model_bone_collection_get_at;
@@ -1684,6 +1695,7 @@
     CNA_JNI_ROUTE(cna_signed_in_gamer_is_headset) signed_in_gamer_is_headset;
     CNA_JNI_ROUTE(cna_signed_in_gamer_set_party_size) signed_in_gamer_set_party_size;
     CNA_JNI_ROUTE(cna_signed_in_gamer_set_presence) signed_in_gamer_set_presence;
+    CNA_JNI_ROUTE(cna_signed_in_gamer_set_presence_mode_string_ext) signed_in_gamer_set_presence_mode_string_ext;
     CNA_JNI_ROUTE(cna_skinned_pbr_effect_apply_material) skinned_pbr_effect_apply_material;
     CNA_JNI_ROUTE(cna_skinned_pbr_effect_copy_bone_transforms) skinned_pbr_effect_copy_bone_transforms;
     CNA_JNI_ROUTE(cna_skinned_pbr_effect_create) skinned_pbr_effect_create;
@@ -1780,11 +1792,15 @@
     CNA_JNI_ROUTE(cna_system_tray_set_entry_enabled) system_tray_set_entry_enabled;
     CNA_JNI_ROUTE(cna_system_tray_set_entry_label) system_tray_set_entry_label;
     CNA_JNI_ROUTE(cna_system_tray_set_tooltip) system_tray_set_tooltip;
+    CNA_JNI_ROUTE(cna_text_input_get_window_handle_ext) text_input_get_window_handle_ext;
     CNA_JNI_ROUTE(cna_text_input_is_active_ext) text_input_is_active_ext;
     CNA_JNI_ROUTE(cna_text_input_is_screen_keyboard_shown_ext) text_input_is_screen_keyboard_shown_ext;
+    CNA_JNI_ROUTE(cna_text_input_is_screen_keyboard_shown_for_window_ext) text_input_is_screen_keyboard_shown_for_window_ext;
     CNA_JNI_ROUTE(cna_text_input_raise_text_editing_ext) text_input_raise_text_editing_ext;
     CNA_JNI_ROUTE(cna_text_input_raise_text_input_ext) text_input_raise_text_input_ext;
+    CNA_JNI_ROUTE(cna_text_input_reset_for_tests_ext) text_input_reset_for_tests_ext;
     CNA_JNI_ROUTE(cna_text_input_set_input_rectangle_ext) text_input_set_input_rectangle_ext;
+    CNA_JNI_ROUTE(cna_text_input_set_window_handle_ext) text_input_set_window_handle_ext;
     CNA_JNI_ROUTE(cna_text_input_start_ext) text_input_start_ext;
     CNA_JNI_ROUTE(cna_text_input_start_with_type_ext) text_input_start_with_type_ext;
     CNA_JNI_ROUTE(cna_text_input_stop_ext) text_input_stop_ext;

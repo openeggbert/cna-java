@@ -23,6 +23,51 @@ public final class NativeModelExtensionRoutes {
     public static native int effectGetTypeNameByteCount(long effect, long[] outByteCount);
 
     /**
+     * cna_model_animations_ext_copy_clip_name_at (models.h).
+     */
+    public static native int modelAnimationsCopyClipNameAt(long animations, long clipIndex, byte[] destination, long[] outByteCount);
+
+    /**
+     * cna_model_animations_ext_copy_type_name (models.h).
+     */
+    public static native int modelAnimationsCopyTypeName(long animations, byte[] destination, long[] outByteCount);
+
+    /**
+     * cna_model_animations_ext_destroy (models.h).
+     */
+    public static native int modelAnimationsDestroy(long animations);
+
+    /**
+     * cna_model_animations_ext_get_clip_count (models.h).
+     */
+    public static native int modelAnimationsGetClipCount(long animations, long[] outCount);
+
+    /**
+     * cna_model_animations_ext_get_clip_info_at (models.h).
+     */
+    public static native int modelAnimationsGetClipInfoAt(long animations, long clipIndex, double[] outDurationSeconds, long[] outTrackCount, int[] outTargetSpace);
+
+    /**
+     * cna_model_animations_ext_get_clip_name_byte_count_at (models.h).
+     */
+    public static native int modelAnimationsGetClipNameByteCountAt(long animations, long clipIndex, long[] outByteCount);
+
+    /**
+     * cna_model_animations_ext_get_type_name_byte_count (models.h).
+     */
+    public static native int modelAnimationsGetTypeNameByteCount(long animations, long[] outByteCount);
+
+    /**
+     * cna_model_animations_ext_set_clip_target_space_at (models.h).
+     */
+    public static native int modelAnimationsSetClipTargetSpaceAt(long animations, long clipIndex, int value);
+
+    /**
+     * cna_model_apply_clip_to_bones_ext (models.h).
+     */
+    public static native int modelApplyClipToBonesExt(long model, long animations, long clipIndex, double timeSeconds);
+
+    /**
      * cna_model_bone_add_child (models.h).
      */
     public static native int modelBoneAddChild(long bone, long child);

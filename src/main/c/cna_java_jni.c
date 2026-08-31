@@ -856,6 +856,7 @@ typedef struct CnaFunctions {
        the call and CNA deeply copies what it keeps. */
     CNA_JNI_ROUTE(cna_cnb_encode_animation_clip) cnb_encode_animation_clip;
     CNA_JNI_ROUTE(cna_cnb_model_add_animation) cnb_model_add_animation;
+    CNA_JNI_ROUTE(cna_model_animations_ext_create) model_animations_ext_create;
 
     CNA_JNI_ROUTE(cna_system_tray_add_entry) system_tray_add_entry;
     CNA_JNI_ROUTE(cna_file_dialog_show_open_file_ext) file_dialog_show_open_file_ext;
@@ -1664,6 +1665,185 @@ static CNA_Result cna_jni_borrow_clip(
     out_graph->clip.tracks = out_graph->tracks;
     out_graph->clip.track_count = (uint64_t)track_count;
     return CNA_RESULT_SUCCESS;
+}
+
+/* Several named clips at once, which is the same graph one level deeper.
+ *
+ * `cna_model_animations_ext_create` and `cna_skinning_data_create` both take an array of named
+ * clip descriptors, each holding a clip descriptor, each holding tracks, each holding keyframes.
+ * The flattening adds one level to the clip form above: a name and a duration and a track count
+ * per clip, and then the track and keyframe arrays run end to end across every clip.
+ *
+ * Every relationship is checked before anything is allocated, for the same reason: a count that
+ * does not add up would make CNA read past an array's end from inside C.
+ */
+typedef struct CnaJniClipSet {
+    CNA_NamedAnimationClipEXTDescriptor* clips;
+    CNA_BoneTrackEXTDescriptor* tracks;
+    CNA_KeyframeEXT* keyframes;
+    CnaJniStringViews names;
+    jsize clip_count;
+} CnaJniClipSet;
+
+static void cna_jni_free_clip_set(JNIEnv* environment, CnaJniClipSet* set)
+{
+    (void)environment;
+    free(set->clips);
+    set->clips = NULL;
+    free(set->tracks);
+    set->tracks = NULL;
+    free(set->keyframes);
+    set->keyframes = NULL;
+    cna_jni_free_string_views(&set->names);
+    set->clip_count = 0;
+}
+
+static CNA_Result cna_jni_borrow_clip_set(
+    JNIEnv* environment,
+    jobjectArray names,
+    jdoubleArray durations,
+    jintArray clip_track_counts,
+    jintArray bone_indices,
+    jintArray keyframe_counts,
+    jdoubleArray times,
+    jfloatArray values,
+    CnaJniClipSet* out_set)
+{
+    memset(out_set, 0, sizeof(*out_set));
+    if (names == NULL || durations == NULL || clip_track_counts == NULL || bone_indices == NULL
+            || keyframe_counts == NULL || times == NULL || values == NULL) {
+        return CNA_RESULT_INVALID_ARGUMENT;
+    }
+    const jsize clip_count = (*environment)->GetArrayLength(environment, names);
+    const jsize track_count = (*environment)->GetArrayLength(environment, bone_indices);
+    const jsize keyframe_count = (*environment)->GetArrayLength(environment, times);
+    if ((*environment)->GetArrayLength(environment, durations) != clip_count
+            || (*environment)->GetArrayLength(environment, clip_track_counts) != clip_count
+            || (*environment)->GetArrayLength(environment, keyframe_counts) != track_count
+            || (*environment)->GetArrayLength(environment, values)
+                    != keyframe_count * CNA_JNI_KEYFRAME_FLOATS) {
+        return CNA_RESULT_INVALID_ARGUMENT;
+    }
+
+    const CNA_Result borrowed = cna_jni_borrow_string_views(environment, names, &out_set->names);
+    if (borrowed != CNA_RESULT_SUCCESS) {
+        return borrowed;
+    }
+
+    jdouble* duration_elements =
+        (*environment)->GetDoubleArrayElements(environment, durations, NULL);
+    jint* clip_track_elements =
+        (*environment)->GetIntArrayElements(environment, clip_track_counts, NULL);
+    jint* bone_elements = (*environment)->GetIntArrayElements(environment, bone_indices, NULL);
+    jint* count_elements = (*environment)->GetIntArrayElements(environment, keyframe_counts, NULL);
+    jdouble* time_elements = (*environment)->GetDoubleArrayElements(environment, times, NULL);
+    jfloat* value_elements = (*environment)->GetFloatArrayElements(environment, values, NULL);
+
+    CNA_Result answer = CNA_RESULT_SUCCESS;
+    if (duration_elements == NULL || clip_track_elements == NULL || bone_elements == NULL
+            || count_elements == NULL || time_elements == NULL || value_elements == NULL) {
+        answer = CNA_RESULT_OUT_OF_MEMORY;
+    }
+
+    if (answer == CNA_RESULT_SUCCESS) {
+        jlong tracks_promised = 0;
+        for (jsize index = 0; index < clip_count; ++index) {
+            if (clip_track_elements[index] < 0) {
+                answer = CNA_RESULT_INVALID_ARGUMENT;
+                break;
+            }
+            tracks_promised += (jlong)clip_track_elements[index];
+        }
+        jlong keyframes_promised = 0;
+        for (jsize index = 0; answer == CNA_RESULT_SUCCESS && index < track_count; ++index) {
+            if (count_elements[index] < 0) {
+                answer = CNA_RESULT_INVALID_ARGUMENT;
+                break;
+            }
+            keyframes_promised += (jlong)count_elements[index];
+        }
+        if (answer == CNA_RESULT_SUCCESS
+                && (tracks_promised != (jlong)track_count
+                    || keyframes_promised != (jlong)keyframe_count)) {
+            answer = CNA_RESULT_INVALID_ARGUMENT;
+        }
+    }
+
+    if (answer == CNA_RESULT_SUCCESS) {
+        out_set->clips = (CNA_NamedAnimationClipEXTDescriptor*)calloc(
+            (size_t)clip_count + 1U, sizeof(*out_set->clips));
+        out_set->tracks = (CNA_BoneTrackEXTDescriptor*)calloc(
+            (size_t)track_count + 1U, sizeof(*out_set->tracks));
+        out_set->keyframes = (CNA_KeyframeEXT*)calloc(
+            (size_t)keyframe_count + 1U, sizeof(*out_set->keyframes));
+        if (out_set->clips == NULL || out_set->tracks == NULL || out_set->keyframes == NULL) {
+            answer = CNA_RESULT_OUT_OF_MEMORY;
+        }
+    }
+
+    if (answer == CNA_RESULT_SUCCESS) {
+        for (jsize index = 0; index < keyframe_count; ++index) {
+            const jfloat* leaves = value_elements + (jlong)index * CNA_JNI_KEYFRAME_FLOATS;
+            CNA_KeyframeEXT* keyframe = &out_set->keyframes[index];
+            keyframe->time_seconds = (double)time_elements[index];
+            keyframe->translation.x = (float)leaves[0];
+            keyframe->translation.y = (float)leaves[1];
+            keyframe->translation.z = (float)leaves[2];
+            keyframe->rotation.x = (float)leaves[3];
+            keyframe->rotation.y = (float)leaves[4];
+            keyframe->rotation.z = (float)leaves[5];
+            keyframe->rotation.w = (float)leaves[6];
+            keyframe->scale.x = (float)leaves[7];
+            keyframe->scale.y = (float)leaves[8];
+            keyframe->scale.z = (float)leaves[9];
+        }
+        jlong keyframes_used = 0;
+        for (jsize index = 0; index < track_count; ++index) {
+            CNA_BoneTrackEXTDescriptor* track = &out_set->tracks[index];
+            track->bone_index = (int32_t)bone_elements[index];
+            track->reserved = 0U;
+            track->keyframes = out_set->keyframes + keyframes_used;
+            track->keyframe_count = (uint64_t)count_elements[index];
+            keyframes_used += (jlong)count_elements[index];
+        }
+        jlong tracks_used = 0;
+        for (jsize index = 0; index < clip_count; ++index) {
+            CNA_NamedAnimationClipEXTDescriptor* clip = &out_set->clips[index];
+            clip->name = out_set->names.views[index];
+            clip->clip.duration_seconds = (double)duration_elements[index];
+            clip->clip.tracks = out_set->tracks + tracks_used;
+            clip->clip.track_count = (uint64_t)clip_track_elements[index];
+            tracks_used += (jlong)clip_track_elements[index];
+        }
+        out_set->clip_count = clip_count;
+    }
+
+    if (value_elements != NULL) {
+        (*environment)->ReleaseFloatArrayElements(environment, values, value_elements, JNI_ABORT);
+    }
+    if (time_elements != NULL) {
+        (*environment)->ReleaseDoubleArrayElements(environment, times, time_elements, JNI_ABORT);
+    }
+    if (count_elements != NULL) {
+        (*environment)->ReleaseIntArrayElements(
+            environment, keyframe_counts, count_elements, JNI_ABORT);
+    }
+    if (bone_elements != NULL) {
+        (*environment)->ReleaseIntArrayElements(
+            environment, bone_indices, bone_elements, JNI_ABORT);
+    }
+    if (clip_track_elements != NULL) {
+        (*environment)->ReleaseIntArrayElements(
+            environment, clip_track_counts, clip_track_elements, JNI_ABORT);
+    }
+    if (duration_elements != NULL) {
+        (*environment)->ReleaseDoubleArrayElements(
+            environment, durations, duration_elements, JNI_ABORT);
+    }
+    if (answer != CNA_RESULT_SUCCESS) {
+        cna_jni_free_clip_set(environment, out_set);
+    }
+    return answer;
 }
 
 static CNA_Result set_handle_output(JNIEnv* environment, jlongArray output, CNA_Handle value)
@@ -2849,6 +3029,7 @@ JNIEXPORT jint JNICALL Java_org_openeggbert_cna_internal_NativeBindings_nativeLo
     LOAD(render_pipeline_set_shadow_scene, "cna_render_pipeline_set_shadow_scene");
     LOAD(cnb_encode_animation_clip, "cna_cnb_encode_animation_clip");
     LOAD(cnb_model_add_animation, "cna_cnb_model_add_animation");
+    LOAD(model_animations_ext_create, "cna_model_animations_ext_create");
     LOAD(system_tray_add_entry, "cna_system_tray_add_entry");
     LOAD(file_dialog_show_open_file_ext, "cna_file_dialog_show_open_file_ext");
     LOAD(file_dialog_show_save_file_ext, "cna_file_dialog_show_save_file_ext");
@@ -13344,6 +13525,38 @@ Java_org_openeggbert_cna_internal_NativeBindings_nativeCnbModelAddAnimation(
     if (call_result == CNA_RESULT_SUCCESS) {
         const jlong written = (jlong)index;
         (*environment)->SetLongArrayRegion(environment, out_index, 0, 1, &written);
+    }
+    return (jint)call_result;
+}
+
+JNIEXPORT jint JNICALL
+Java_org_openeggbert_cna_internal_NativeBindings_nativeModelAnimationsCreate(
+    JNIEnv* environment,
+    jclass type,
+    jobjectArray names,
+    jdoubleArray durations,
+    jintArray clip_track_counts,
+    jintArray bone_indices,
+    jintArray keyframe_counts,
+    jdoubleArray times,
+    jfloatArray values,
+    jlongArray out_animations)
+{
+    (void)type;
+    CnaJniClipSet set;
+    const CNA_Result borrowed = cna_jni_borrow_clip_set(
+        environment, names, durations, clip_track_counts, bone_indices, keyframe_counts, times,
+        values, &set);
+    if (borrowed != CNA_RESULT_SUCCESS) {
+        return (jint)borrowed;
+    }
+    CNA_ModelAnimationsEXTHandle created = 0;
+    const CNA_Result call_result = cna.model_animations_ext_create(
+        set.clips, (uint64_t)set.clip_count, &created);
+    cna_jni_free_clip_set(environment, &set);
+    if (call_result == CNA_RESULT_SUCCESS) {
+        const jlong handle = (jlong)created;
+        (*environment)->SetLongArrayRegion(environment, out_animations, 0, 1, &handle);
     }
     return (jint)call_result;
 }

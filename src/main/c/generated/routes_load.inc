@@ -977,6 +977,7 @@
     LOAD(haptic_device_create_effect, "cna_haptic_device_create_effect");
     LOAD(haptic_device_destroy, "cna_haptic_device_destroy");
     LOAD(haptic_device_destroy_effect, "cna_haptic_device_destroy_effect");
+    LOAD(haptic_device_dispose, "cna_haptic_device_dispose");
     LOAD(haptic_device_get_capabilities, "cna_haptic_device_get_capabilities");
     LOAD(haptic_device_get_effect_status, "cna_haptic_device_get_effect_status");
     LOAD(haptic_device_get_is_effect_supported, "cna_haptic_device_get_is_effect_supported");
@@ -1086,6 +1087,7 @@
     LOAD(joysticks_get_name_size_at, "cna_joysticks_get_name_size_at");
     LOAD(joysticks_raise_connected_ext, "cna_joysticks_raise_connected_ext");
     LOAD(joysticks_raise_disconnected_ext, "cna_joysticks_raise_disconnected_ext");
+    LOAD(joysticks_reset_for_tests_ext, "cna_joysticks_reset_for_tests_ext");
     LOAD(keyboard_copy_key_name_ext, "cna_keyboard_copy_key_name_ext");
     LOAD(keyboard_copy_scancode_name_ext, "cna_keyboard_copy_scancode_name_ext");
     LOAD(keyboard_get_key_from_name_ext, "cna_keyboard_get_key_from_name_ext");
@@ -1204,6 +1206,15 @@
     LOAD(message_box_set_test_backend_ext, "cna_message_box_set_test_backend_ext");
     LOAD(message_box_show_ext, "cna_message_box_show_ext");
     LOAD(message_box_show_simple_ext, "cna_message_box_show_simple_ext");
+    LOAD(model_animations_ext_copy_clip_name_at, "cna_model_animations_ext_copy_clip_name_at");
+    LOAD(model_animations_ext_copy_type_name, "cna_model_animations_ext_copy_type_name");
+    LOAD(model_animations_ext_destroy, "cna_model_animations_ext_destroy");
+    LOAD(model_animations_ext_get_clip_count, "cna_model_animations_ext_get_clip_count");
+    LOAD(model_animations_ext_get_clip_info_at, "cna_model_animations_ext_get_clip_info_at");
+    LOAD(model_animations_ext_get_clip_name_byte_count_at, "cna_model_animations_ext_get_clip_name_byte_count_at");
+    LOAD(model_animations_ext_get_type_name_byte_count, "cna_model_animations_ext_get_type_name_byte_count");
+    LOAD(model_animations_ext_set_clip_target_space_at, "cna_model_animations_ext_set_clip_target_space_at");
+    LOAD(model_apply_clip_to_bones_ext, "cna_model_apply_clip_to_bones_ext");
     LOAD(model_bone_add_child, "cna_model_bone_add_child");
     LOAD(model_bone_collection_destroy, "cna_model_bone_collection_destroy");
     LOAD(model_bone_collection_get_at, "cna_model_bone_collection_get_at");
@@ -1684,6 +1695,7 @@
     LOAD(signed_in_gamer_is_headset, "cna_signed_in_gamer_is_headset");
     LOAD(signed_in_gamer_set_party_size, "cna_signed_in_gamer_set_party_size");
     LOAD(signed_in_gamer_set_presence, "cna_signed_in_gamer_set_presence");
+    LOAD(signed_in_gamer_set_presence_mode_string_ext, "cna_signed_in_gamer_set_presence_mode_string_ext");
     LOAD(skinned_pbr_effect_apply_material, "cna_skinned_pbr_effect_apply_material");
     LOAD(skinned_pbr_effect_copy_bone_transforms, "cna_skinned_pbr_effect_copy_bone_transforms");
     LOAD(skinned_pbr_effect_create, "cna_skinned_pbr_effect_create");
@@ -1780,11 +1792,15 @@
     LOAD(system_tray_set_entry_enabled, "cna_system_tray_set_entry_enabled");
     LOAD(system_tray_set_entry_label, "cna_system_tray_set_entry_label");
     LOAD(system_tray_set_tooltip, "cna_system_tray_set_tooltip");
+    LOAD(text_input_get_window_handle_ext, "cna_text_input_get_window_handle_ext");
     LOAD(text_input_is_active_ext, "cna_text_input_is_active_ext");
     LOAD(text_input_is_screen_keyboard_shown_ext, "cna_text_input_is_screen_keyboard_shown_ext");
+    LOAD(text_input_is_screen_keyboard_shown_for_window_ext, "cna_text_input_is_screen_keyboard_shown_for_window_ext");
     LOAD(text_input_raise_text_editing_ext, "cna_text_input_raise_text_editing_ext");
     LOAD(text_input_raise_text_input_ext, "cna_text_input_raise_text_input_ext");
+    LOAD(text_input_reset_for_tests_ext, "cna_text_input_reset_for_tests_ext");
     LOAD(text_input_set_input_rectangle_ext, "cna_text_input_set_input_rectangle_ext");
+    LOAD(text_input_set_window_handle_ext, "cna_text_input_set_window_handle_ext");
     LOAD(text_input_start_ext, "cna_text_input_start_ext");
     LOAD(text_input_start_with_type_ext, "cna_text_input_start_with_type_ext");
     LOAD(text_input_stop_ext, "cna_text_input_stop_ext");
