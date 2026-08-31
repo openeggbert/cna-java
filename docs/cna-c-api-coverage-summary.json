@@ -115,7 +115,6 @@
     "cna_network_session_properties_add",
     "cna_network_session_properties_contains",
     "cna_network_session_properties_create_enumerator",
-    "cna_network_session_properties_destroy",
     "cna_network_session_properties_get_is_read_only",
     "cna_network_session_properties_remove",
     "cna_network_session_property_enumerator_destroy",
@@ -347,8 +346,8 @@
       "total": 216
     },
     "net.h": {
-      "JAVA_INTERNAL_ONLY": 41,
-      "XNA_BACKING": 9,
+      "JAVA_INTERNAL_ONLY": 40,
+      "XNA_BACKING": 10,
       "total": 50
     },
     "net_gamers.h": {
@@ -446,9 +445,9 @@
   "classificationCounts": {
     "CNA_EXTENSION_CANDIDATE": 1871,
     "DEFERRED_RUNTIME": 417,
-    "JAVA_INTERNAL_ONLY": 170,
+    "JAVA_INTERNAL_ONLY": 169,
     "NOT_USEFUL_IN_JAVA": 620,
-    "XNA_BACKING": 976
+    "XNA_BACKING": 977
   },
   "cnaInventorySha256": "be9a2bf818318002adc100ad1db22949b164726d2d124352f3b29aa3fdc48ea2",
   "deferredTasks": {
@@ -586,7 +585,6 @@
     "cna_network_session_properties_add",
     "cna_network_session_properties_contains",
     "cna_network_session_properties_create_enumerator",
-    "cna_network_session_properties_destroy",
     "cna_network_session_properties_get_is_read_only",
     "cna_network_session_properties_remove",
     "cna_network_session_property_enumerator_destroy",

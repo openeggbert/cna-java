@@ -145,6 +145,45 @@ final class NetworkSessionNativeIntegrationTests {
             properties.set(1, 0);
             assertEquals(0, properties.toArray()[1],
                     "a slot set to zero is a value, not an absent slot");
+            propertiesGoBackToCna();
+        }
+
+        /**
+         * Proves a game-created property list gives its native handle back.
+         *
+         * <p>XNA's type is not disposable, so a game has nothing to close and the handle can
+         * only go back once the object is unreachable. CNA refuses the release from any thread
+         * but the one that created it -- so the cleaner records it and this thread, the one
+         * pumping, is what actually releases it. A leak here would be silent and permanent.
+         */
+        private void propertiesGoBackToCna() {
+            int before = org.openeggbert.cna.internal.NativeDeferredRelease.pendingCount();
+            for (int index = 0; index < 32; index++) {
+                NetworkSessionProperties discarded = new NetworkSessionProperties();
+                discarded.add(0, index);
+                assertEquals(1, discarded.size());
+            }
+            // Nothing is owed until the collector has actually run, so the loop is the honest
+            // shape: ask for a collection, pump, and see whether anything came back.
+            int released = 0;
+            for (int attempt = 0; attempt < 50 && released == 0; attempt++) {
+                System.gc();
+                try {
+                    Thread.sleep(10L);
+                } catch (InterruptedException interrupted) {
+                    Thread.currentThread().interrupt();
+                    break;
+                }
+                int owed = org.openeggbert.cna.internal.NativeDeferredRelease.pendingCount();
+                if (owed > before) {
+                    Microsoft.Xna.Framework.FrameworkDispatcher.Update();
+                    released = owed - before;
+                }
+            }
+            assertTrue(released > 0,
+                    "a collected property list must hand its native handle back on this thread");
+            assertEquals(0, org.openeggbert.cna.internal.NativeDeferredRelease.pendingCount(),
+                    "the drain must leave nothing owed");
         }
     }
 }

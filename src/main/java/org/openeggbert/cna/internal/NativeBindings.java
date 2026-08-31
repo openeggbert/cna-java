@@ -48,8 +48,14 @@ import java.util.WeakHashMap;
 /** JNI entry point for CNA's stable C ABI. This class is not application API. */
 public final class NativeBindings {
 
-    /** CNA C headers used to compile this binding: ABI 0.20.0. */
-    public static final int COMPILED_ABI_VERSION = encodeVersion(0, 20, 0);
+    /**
+     * CNA C headers used to compile this binding: ABI 0.21.0.
+     *
+     * <p>Kept in step with {@code tools/native-abi/bindings.json}'s {@code compiledAbi} by
+     * {@code nativeAbiCheck}, because this constant is what a game actually hits at load time
+     * and a manifest that moved without it would pass every gate and then refuse the library.
+     */
+    public static final int COMPILED_ABI_VERSION = encodeVersion(0, 21, 0);
 
     private static boolean bridgeLoaded;
     private static int runtimeAbiVersion;
@@ -788,6 +794,9 @@ public final class NativeBindings {
         // XNA pumps its framework services here, and CNA's typed-character events are one of
         // them: a game that never touches gamer services still expects text it typed to arrive.
         GamerEventPump.drain();
+        // And this is where a thread-affine handle whose Java owner has been collected goes
+        // back to CNA, because this is the thread CNA will accept it from.
+        NativeDeferredRelease.drain();
     }
 
     /** Initializes the selected-profile GamerServices component against its owning game. */

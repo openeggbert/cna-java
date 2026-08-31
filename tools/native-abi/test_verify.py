@@ -108,6 +108,17 @@ def test_jni(live: dict) -> None:
           "every CNA_JNI_ROUTE names a manifest symbol")
 
 
+def test_java_abi() -> None:
+    """The Java load-time constant must be pinned to the manifest, and a drift must fail."""
+    manifest = json.loads(verify_tool.MANIFEST.read_text(encoding="utf-8"))
+    check(not verify_tool.check_java_abi(manifest),
+          "the Java load-time ABI constant matches the manifest")
+    drifted = copy.deepcopy(manifest)
+    drifted["compiledAbi"] = "0.99.0"
+    check(prefixed(verify_tool.check_java_abi(drifted), "JAVA_COMPILED_ABI_DRIFT"),
+          "a manifest that moved without the Java constant is rejected")
+
+
 def test_policy() -> None:
     manifest = json.loads(verify_tool.MANIFEST.read_text(encoding="utf-8"))
     major, minor, patch = (int(value) for value in manifest["compiledAbi"].split("."))
@@ -257,6 +268,7 @@ def main() -> int:
     live = test_inventory(include)
     test_manifest(live)
     test_jni(live)
+    test_java_abi()
     test_policy()
     test_coverage(cna_root)
     test_generator(live)

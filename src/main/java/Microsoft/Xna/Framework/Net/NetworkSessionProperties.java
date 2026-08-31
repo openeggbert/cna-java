@@ -1,5 +1,6 @@
 package Microsoft.Xna.Framework.Net;
 
+import org.openeggbert.cna.internal.NativeDeferredRelease;
 import org.openeggbert.cna.internal.NativeGamerServices;
 import org.openeggbert.cna.internal.generated.NativeNetworkRoutes;
 
@@ -42,13 +43,37 @@ public class NetworkSessionProperties implements List<Integer> {
         }
     };
 
+    /**
+     * Creates an empty property list, as a game does before searching for a session.
+     *
+     * <p>The native list this owns is released once this object is unreachable, on the thread
+     * that created it, the next time that thread pumps the framework dispatcher. XNA's type is
+     * not disposable, so there is nothing for a game to close and nothing it has to remember;
+     * CNA refuses the release from any other thread, which is why it waits for this one rather
+     * than happening on a cleaner thread.
+     */
+    // The cleaner registration hands `this` out of the constructor, and this type is not final
+    // because XNA's is not sealed. The escape is inert: Cleaner.register only takes a phantom
+    // reference and never calls a method on the object, and the cleaning action captures the
+    // handle and the thread by value rather than the object -- capturing the object would keep
+    // it reachable from its own cleaner and it could never be collected at all.
+    @SuppressWarnings("this-escape")
     public NetworkSessionProperties() {
         long[] properties = new long[1];
         NativeGamerServices.check("NetworkSessionProperties",
                 NativeNetworkRoutes.networkSessionPropertiesCreate(properties));
         handle = properties[0];
+        NativeDeferredRelease.onOwningThread(this, handle,
+                NativeNetworkRoutes::networkSessionPropertiesDestroy,
+                "cna_network_session_properties_destroy");
     }
 
+    /**
+     * Adopts a list a session owns.
+     *
+     * <p>No release is registered: the session owns it and frees it, and a second owner would be
+     * a double free.
+     */
     NetworkSessionProperties(long handle) {
         this.handle = handle;
     }

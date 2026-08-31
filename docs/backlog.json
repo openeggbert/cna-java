@@ -363,6 +363,33 @@
       "blocker": "cnanext content: PartResource's destructor reaches a ModelMeshPart whose owner is already gone. cnanext's own CApi_ContentSmoke fixtures are models with one bone and no meshes, which is why the path is uncovered upstream.",
       "priority": 5,
       "status": "blocked"
+    },
+    {
+      "id": "JAVA-NATIVE-024",
+      "title": "NetworkSessionProperties leaked its native list, and no gate could see it",
+      "family": "Microsoft.Xna.Framework.Net",
+      "authority": "cna_network_session_properties_create and _destroy",
+      "currentState": "Fixed. The public constructor created an owned CNA list and nothing ever released it; XNA's type is not IDisposable, so a game had nothing to close. Measured: cna_network_session_properties_destroy answers CNA_RESULT_THREAD from any thread but the creating one, so a Cleaner could not release it either.",
+      "expectedState": "org.openeggbert.cna.internal.NativeDeferredRelease records the handle when the Java object becomes unreachable and the owning thread releases it at the next FrameworkDispatcher.Update, which is where this binding already does deferred native work. A session-owned list registers nothing, because the session frees it.",
+      "tests": [
+        "NetworkSessionNativeIntegrationTests"
+      ],
+      "priority": 4,
+      "status": "done"
+    },
+    {
+      "id": "JAVA-NATIVE-025",
+      "title": "Two gates could not see an ABI migration go wrong",
+      "family": "native boundary",
+      "authority": "tools/native-abi/verify.py, build.gradle",
+      "currentState": "Fixed. NativeBindings.COMPILED_ABI_VERSION is what a game hits at load time and was hand-maintained: the 0.21.0 migration moved the manifest and the probe and left it at 0.20, which every gate passed and which then refused the library. And the test task treated neither native library as an input, so rebuilding libcna_c_api left the suite up to date and reporting the previous run's results against a different library.",
+      "expectedState": "nativeAbiCheck fails on JAVA_COMPILED_ABI_DRIFT, with a negative-mutation test; the test task declares both native libraries as inputs.",
+      "tests": [
+        "tools/native-abi/test_verify.py",
+        "nativeAbiCheck"
+      ],
+      "priority": 3,
+      "status": "done"
     }
   ]
 }

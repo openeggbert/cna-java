@@ -106,6 +106,29 @@ def compile_probe(include: Path) -> None:
                         "-I", str(include), "-c", str(PROBE), "-o", str(output)], check=True)
 
 
+JAVA_COMPILED_ABI = re.compile(
+    r"COMPILED_ABI_VERSION\s*=\s*encodeVersion\(\s*(\d+)\s*,\s*(\d+)\s*,\s*(\d+)\s*\)")
+
+
+def check_java_abi(manifest: dict) -> list[str]:
+    """The Java load-time gate must state the same ABI the manifest does.
+
+    ``NativeBindings.COMPILED_ABI_VERSION`` is what a game actually hits when it loads the
+    library; the manifest is what every tool here measures. A manifest that moved without the
+    constant would pass every check and then refuse the library at run time, which is the one
+    failure a build gate exists to prevent.
+    """
+    source = (ROOT / "src/main/java/org/openeggbert/cna/internal/NativeBindings.java").read_text(
+        encoding="utf-8")
+    found = JAVA_COMPILED_ABI.search(source)
+    if found is None:
+        return ["JAVA_COMPILED_ABI_NOT_FOUND=NativeBindings.COMPILED_ABI_VERSION"]
+    java = ".".join(found.groups())
+    if java != manifest["compiledAbi"]:
+        return [f"JAVA_COMPILED_ABI_DRIFT=java {java}, manifest {manifest['compiledAbi']}"]
+    return []
+
+
 def check_policy(manifest: dict, encoded: int) -> list[str]:
     policy = manifest.get("abiPolicy", {})
     required = manifest["compiledAbi"].split(".")
@@ -145,6 +168,7 @@ def main() -> int:
     if manifest["compiledAbi"] != header_abi:
         failures.append(
             f"MANIFEST_ABI_DRIFT=manifest {manifest['compiledAbi']}, headers {header_abi}")
+    failures.extend(check_java_abi(manifest))
     failures.extend(check_manifest(manifest, live))
     failures.extend(check_jni(manifest))
 
@@ -164,6 +188,7 @@ def main() -> int:
     print("MANIFEST_SIGNATURE_CHECK=PASS")
     print("MANIFEST_JNI_BINDING_CHECK=PASS")
     print("JNI_HEADER_DERIVED_SLOT_CHECK=PASS")
+    print("JAVA_COMPILED_ABI_CHECK=PASS")
     print("LAYOUT_SIGNATURE_PROBE=PASS")
 
     if not arguments.library:

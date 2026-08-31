@@ -88,8 +88,16 @@ tasks.register('compileJni', Exec) {
 test {
     dependsOn tasks.named('compileJni')
     systemProperty 'cna.java.jniLibrary', nativeOutput.get().asFile.absolutePath
+    // Both native libraries are inputs, not just paths handed over as properties. A rebuilt
+    // libcna_c_api changes no Java class and no property value, so without this Gradle calls
+    // the suite up to date and reports the previous run's results against a different library
+    // -- which is how an ABI migration once looked green while every native test would have
+    // failed.
+    inputs.file(nativeOutput).withPropertyName('jniLibrary')
     if (System.getenv('CNA_NATIVE_LIBRARY')) {
         systemProperty 'cna.native.library', System.getenv('CNA_NATIVE_LIBRARY')
+        inputs.file(file(System.getenv('CNA_NATIVE_LIBRARY')))
+                .withPropertyName('cnaLibrary')
     }
     // The CNA checkout the build already qualifies against. A test that needs an authored
     // asset -- an XNA 4.0 .xnb no fixture generator can honestly stand in for -- reads it from
