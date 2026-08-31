@@ -829,6 +829,21 @@
       "tests": [
         "tools/native-abi/probes/camera_test_backend.c"
       ]
+    },
+    {
+      "id": "JAVA-UPSTREAM-022",
+      "title": "The route that exists so a caller need not guess the shading dialect answers UNKNOWN on every renderer",
+      "family": "cnanext",
+      "authority": "graphics.h",
+      "status": "blocked",
+      "priority": 3,
+      "currentState": "cna_graphics_device_get_shader_dialect_ext answers CNA_SHADER_DIALECT_UNKNOWN on all five renderers this build carries -- HEADLESS, SOFTWARE, OPENGL4, OPENGLES3 and OPENGL33 -- while a GLSL ES source compiles and, on the two EasyGL renderers, draws. IGraphicsRenderer.hpp declares GetShaderDialectEXT as a virtual whose default body returns Unknown, and WebGPURenderer is the only renderer in the tree that overrides it. cna_graphics_device_supports_capability(CUSTOM_EFFECTS) is no substitute: it answers true on all five, including the two that execute no shader at all.",
+      "expectedState": "A renderer that compiles shader sources names the dialect those sources must be written in. graphics.h tells a caller that the renderer identity is not a safe way to infer it -- \"wrong in a build carrying several renderers\", which this is -- and to ask this route instead, so the route needs an answer to give.",
+      "blocker": "Upstream. The fifth instance in this backlog of a capability query that does not predict the behaviour behind it. The route is bound anyway: UNKNOWN is a documented answer meaning \"do not guess\", and a caller that refuses to build sources from it is behaving correctly.",
+      "tests": [
+        "tools/native-abi/probes/shader_dialect_answer.c",
+        "ColorMatrixEffectTests.theDialectRouteAnswersUnknownOnEveryRendererThisBuildHas"
+      ]
     }
   ]
 }

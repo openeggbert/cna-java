@@ -8,6 +8,7 @@
 
 #include "NativeCnbRoutes.inc"
 #include "NativeDeviceExtensionRoutes.inc"
+#include "NativeEffectExtensionRoutes.inc"
 #include "NativeEngineLayerRoutes.inc"
 #include "NativeGamerServicesRoutes.inc"
 #include "NativeGraphicsExtensionRoutes.inc"

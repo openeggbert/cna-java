@@ -1262,6 +1262,10 @@
         "symbol": "cna_graphics_device_get_renderer_name_size"
       },
       {
+        "java": "graphicsDeviceGetShaderDialectExt",
+        "symbol": "cna_graphics_device_get_shader_dialect_ext"
+      },
+      {
         "java": "graphicsDeviceSupportsCapability",
         "symbol": "cna_graphics_device_supports_capability"
       },
@@ -7235,6 +7239,16 @@
         "symbol": "cna_shader_effect_create"
       },
       {
+        "java": "shaderEffectDeclareUniformBlockExt",
+        "symbol": "cna_shader_effect_declare_uniform_block_ext",
+        "parallelArrays": {
+          "count": [
+            "names",
+            "offsets"
+          ]
+        }
+      },
+      {
         "java": "shaderEffectGetProjection",
         "symbol": "cna_shader_effect_get_projection"
       },
@@ -7326,6 +7340,36 @@
       {
         "java": "shaderEffectSetWorld",
         "symbol": "cna_shader_effect_set_world"
+      }
+    ],
+    "NativeEffectExtensionRoutes": [
+      {
+        "java": "colorMatrixEffectCreate",
+        "symbol": "cna_color_matrix_effect_create"
+      },
+      {
+        "java": "colorMatrixEffectGetMatrix",
+        "symbol": "cna_color_matrix_effect_get_matrix"
+      },
+      {
+        "java": "colorMatrixEffectGetOffset",
+        "symbol": "cna_color_matrix_effect_get_offset"
+      },
+      {
+        "java": "colorMatrixEffectReset",
+        "symbol": "cna_color_matrix_effect_reset"
+      },
+      {
+        "java": "colorMatrixEffectSetGrayscale",
+        "symbol": "cna_color_matrix_effect_set_grayscale"
+      },
+      {
+        "java": "colorMatrixEffectSetMatrix",
+        "symbol": "cna_color_matrix_effect_set_matrix"
+      },
+      {
+        "java": "colorMatrixEffectSetOffset",
+        "symbol": "cna_color_matrix_effect_set_offset"
       }
     ]
   }

@@ -161,6 +161,11 @@ public final class NativeGraphicsExtensionRoutes {
     public static native int graphicsDeviceGetRendererNameSize(long graphicsDevice, long[] outBytes);
 
     /**
+     * cna_graphics_device_get_shader_dialect_ext (graphics.h).
+     */
+    public static native int graphicsDeviceGetShaderDialectExt(long graphicsDevice, int[] outDialect);
+
+    /**
      * cna_graphics_device_supports_capability (graphics.h).
      */
     public static native int graphicsDeviceSupportsCapability(long graphicsDevice, int capability, boolean[] outSupported);

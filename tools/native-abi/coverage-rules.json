@@ -215,12 +215,24 @@
     },
     {
       "match": {
+        "symbols": [
+          "cna_pbr_material_ext_init"
+        ]
+      },
+      "classification": "CNA_EXTENSION_CANDIDATE",
+      "purposeReason": "Fills a CNA_PbrMaterialEXT with its documented defaults and its size and version headers; the material itself is a CNA extension with no XNA 4.0 counterpart.",
+      "bindingStatus": "DELIBERATE_NON_BINDING",
+      "bindingReason": "The generated adapter already writes struct_size and struct_version for every route that consumes this structure, from sizeof against the live header and the header's own declared version -- a compile-time value that breaks the build when the header changes, where this runtime route would absorb the same change silently. The remaining defaults are what PbrMaterialExt's own Java constructor sets, and a Java record is where a default belongs when the caller is Java.",
+      "evidence": "The same decision the two glTF material struct initialisers already carry, and the same argument: a compile-time size is stronger than a runtime one."
+    },
+    {
+      "match": {
         "header": "graphics_ext.h"
       },
       "classification": "CNA_EXTENSION_CANDIDATE",
       "purposeReason": "The extended graphics layer -- render pipeline settings, tone mapping, render and shadow quality, ASCII/CRT/dither post-process identities -- is explicitly beyond XNA 4.0.",
-      "bindingStatus": "ACTIONABLE_LOCAL",
-      "bindingReason": "placeholder"
+      "bindingStatus": "DELIBERATE_NON_BINDING",
+      "bindingReason": "Nothing is left unbound here; the rule exists so a new graphics_ext.h declaration is classified rather than unexplained."
     },
     {
       "match": {
@@ -735,8 +747,8 @@
       },
       "classification": "CNA_EXTENSION_CANDIDATE",
       "purposeReason": "Building an effect from shader source at runtime is a CNA extension; XNA 4.0 loads compiled effect bytecode only.",
-      "bindingStatus": "ACTIONABLE_LOCAL",
-      "bindingReason": "placeholder"
+      "bindingStatus": "DELIBERATE_NON_BINDING",
+      "bindingReason": "Nothing is left unbound here; the rule exists so a new shader-effect declaration is classified rather than unexplained."
     },
     {
       "match": {
@@ -744,8 +756,9 @@
       },
       "classification": "CNA_EXTENSION_CANDIDATE",
       "purposeReason": "Texture transforms are a CNA material extension with no XNA 4.0 counterpart.",
-      "bindingStatus": "ACTIONABLE_LOCAL",
-      "bindingReason": "placeholder"
+      "bindingStatus": "DELIBERATE_NON_BINDING",
+      "bindingReason": "TextureTransform is a Java record, so its construction and equality are the language's and are exact. cna_texture_transform_ext_init fills struct_size and struct_version, which the generated adapter already writes for every route that consumes the structure -- as sizeof against the live header rather than as a runtime call that would absorb a header change silently -- and its remaining defaults are the identity that TextureTransform.identity() spells out. The same reasoning the glTF material struct initialisers carry.",
+      "evidence": "PbrMaterialExtensions round-trips a transform through CNA and back in PbrMaterialTests; the defaults it reads are offset zero, unit scale and zero rotation."
     },
     {
       "match": {
@@ -753,8 +766,8 @@
       },
       "classification": "CNA_EXTENSION_CANDIDATE",
       "purposeReason": "The colour-matrix effect is a CNA extension.",
-      "bindingStatus": "ACTIONABLE_LOCAL",
-      "bindingReason": "placeholder"
+      "bindingStatus": "DELIBERATE_NON_BINDING",
+      "bindingReason": "Nothing is left unbound here; the rule exists so a new colour-matrix declaration is classified rather than unexplained."
     },
     {
       "match": {

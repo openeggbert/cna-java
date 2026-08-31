@@ -526,6 +526,13 @@
     LOAD(color_grade_pass_set_lut, "cna_color_grade_pass_set_lut");
     LOAD(color_grade_pass_set_strength, "cna_color_grade_pass_set_strength");
     LOAD(color_grade_pass_set_volume_lut, "cna_color_grade_pass_set_volume_lut");
+    LOAD(color_matrix_effect_create, "cna_color_matrix_effect_create");
+    LOAD(color_matrix_effect_get_matrix, "cna_color_matrix_effect_get_matrix");
+    LOAD(color_matrix_effect_get_offset, "cna_color_matrix_effect_get_offset");
+    LOAD(color_matrix_effect_reset, "cna_color_matrix_effect_reset");
+    LOAD(color_matrix_effect_set_grayscale, "cna_color_matrix_effect_set_grayscale");
+    LOAD(color_matrix_effect_set_matrix, "cna_color_matrix_effect_set_matrix");
+    LOAD(color_matrix_effect_set_offset, "cna_color_matrix_effect_set_offset");
     LOAD(compass_create, "cna_compass_create");
     LOAD(compass_destroy, "cna_compass_destroy");
     LOAD(compass_get_current_value, "cna_compass_get_current_value");
@@ -861,6 +868,7 @@
     LOAD(graphics_device_draw_primitives_indirect_ext, "cna_graphics_device_draw_primitives_indirect_ext");
     LOAD(graphics_device_get_capability_report_size_ext, "cna_graphics_device_get_capability_report_size_ext");
     LOAD(graphics_device_get_renderer_name_size, "cna_graphics_device_get_renderer_name_size");
+    LOAD(graphics_device_get_shader_dialect_ext, "cna_graphics_device_get_shader_dialect_ext");
     LOAD(graphics_device_supports_capability, "cna_graphics_device_supports_capability");
     LOAD(graphics_device_supports_shadow_sampling_ext, "cna_graphics_device_supports_shadow_sampling_ext");
     LOAD(graphics_ext_is_available, "cna_graphics_ext_is_available");
@@ -1571,6 +1579,7 @@
     LOAD(sensors_get_name_size_at, "cna_sensors_get_name_size_at");
     LOAD(shader_effect_copy_compile_error_ext, "cna_shader_effect_copy_compile_error_ext");
     LOAD(shader_effect_create, "cna_shader_effect_create");
+    LOAD(shader_effect_declare_uniform_block_ext, "cna_shader_effect_declare_uniform_block_ext");
     LOAD(shader_effect_factory_acquire, "cna_shader_effect_factory_acquire");
     LOAD(shader_effect_factory_clear, "cna_shader_effect_factory_clear");
     LOAD(shader_effect_factory_contains, "cna_shader_effect_factory_contains");

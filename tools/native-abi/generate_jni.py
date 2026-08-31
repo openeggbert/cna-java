@@ -27,6 +27,11 @@ Supported parameter shapes, all derived from the header:
               a ``const CNA_StringView*`` input followed by its count, projected
               as one ``byte[][]``; each element is copied out rather than pinned
 
+``parallelArrays`` names two or more array parameters that share one count parameter, which C
+writes as ``T* a, U* b, uint64_t n`` without saying whether ``n`` counts one of them or both.
+Java carries each length in its own array, so the count disappears and a mismatch between the
+arrays is refused before either is acquired.
+
 A route whose declaration uses anything else -- a callback, an undeclared
 ``void*``, an array of structs -- is refused with a diagnostic rather than
 guessed at, and stays hand-written.
@@ -358,6 +363,14 @@ def plan(route: dict, live: dict) -> dict:
     parameters = declaration["parameters"]
     declared_names = {parameter["name"] for parameter in parameters}
     steps: list[dict] = []
+    # Two arrays that share one count. C writes them as `T* a, U* b, uint64_t n` and says
+    # nothing about whether `n` counts one of them or both, so routes.json states it: the key
+    # is the count parameter and the value is every array it counts. Java carries the length in
+    # each array, so the count disappears and a mismatch between the two is refused.
+    shared_count: dict[str, str] = {}
+    for count_name, members in route.get("parallelArrays", {}).items():
+        for member in members:
+            shared_count[member] = count_name
     # Where each parameter's value can be read in C before anything has been acquired. A count
     # that CNA declares as its own parameter is a JNI argument; one that a preceding array
     # consumed is that array's length, which GetArrayLength answers with no side effect.
@@ -389,6 +402,12 @@ def plan(route: dict, live: dict) -> dict:
             # callback and null context and reads its result from the out-parameters.
             steps.append({"shape": "null_callback", "name": name, "ctype": type_name})
             index += 2
+            continue
+        if pointers == 0 and name in route.get("parallelArrays", {}):
+            members = route["parallelArrays"][name]
+            steps.append({"shape": "shared_count", "name": name, "members": members,
+                          "ctype": type_name})
+            index += 1
             continue
         if pointers == 0 and type_name == "CNA_StringView":
             steps.append({"shape": "string", "name": name})
@@ -441,8 +460,10 @@ def plan(route: dict, live: dict) -> dict:
                 index += 3
                 continue
             raise Unsupported(f"{route['symbol']}: char* is not a count/copy triple")
-        if (pointers == 1 and type_name == "CNA_StringView" and following is not None
-                and bare(following["type"]) == ("uint64_t", 0)):
+        if (pointers == 1 and type_name == "CNA_StringView"
+                and (name in shared_count
+                     or (following is not None
+                         and bare(following["type"]) == ("uint64_t", 0)))):
             # An array of string views: a message box's button labels, a file dialog's answer
             # list. Every other string crosses as one pinned byte[]; several at once cannot,
             # because each pinned array needs a local reference held for as long as it is
@@ -456,7 +477,12 @@ def plan(route: dict, live: dict) -> dict:
                 raise Unsupported(
                     f"{route['symbol']}: '{name}' is a non-const CNA_StringView*, so it is an "
                     "output array of views whose lifetime the declaration does not state")
-            steps.append({"shape": "string_array", "name": name,
+            if name in shared_count:
+                steps.append({"shape": "string_array", "name": name, "shared": True,
+                              "count": shared_count[name]})
+                index += 1
+                continue
+            steps.append({"shape": "string_array", "name": name, "shared": False,
                           "count": following["name"] or "count"})
             index += 2
             continue
@@ -536,6 +562,14 @@ def plan(route: dict, live: dict) -> dict:
                           "optional": name in route.get("optionalStructs", ()),
                           "versions": version_paths(type_name, live, declared=declared),
                           **groups})
+            index += 1
+            continue
+        if pointers == 1 and name in shared_count:
+            jni, kind = classify_scalar(type_name, live)
+            steps.append({"shape": "array", "name": name, "jni": jni, "kind": kind,
+                          "ctype": type_name, "input": constant, "shared": True,
+                          "countType": "uint64_t", "grouping": 1,
+                          "count": shared_count[name]})
             index += 1
             continue
         if (pointers == 1 and following is not None
@@ -641,6 +675,9 @@ def java_signature(entry: dict) -> tuple[str, list[str]]:
             parameters.append(f"byte[] {java_name(step['name'])}")
         elif step["shape"] == "string_array":
             parameters.append(f"byte[][] {java_name(step['name'])}")
+        elif step["shape"] == "shared_count":
+            # Java carries the length in each array, so the parameter the two share disappears.
+            continue
         elif step["shape"] in ("struct", "struct_array", "struct_value"):
             for group, _, _, java in STRUCT_GROUPS:
                 if step[group]:
@@ -747,6 +784,19 @@ def render_c(class_name: str, entries: list[dict]) -> str:
                             f"{{(const char*){name}_bytes, (uint64_t){name}_size}};")
                 arguments.append(f"{name}_view")
                 cleanup.append(release_bytes(name, abort=True))
+            elif shape == "shared_count":
+                # Refused in the prologue, before anything is acquired: two arrays that CNA is
+                # told are the same length and are not would make it read past the end of the
+                # shorter one, which no Java exception could describe afterwards.
+                first = step["members"][0]
+                for member in step["members"][1:]:
+                    prologue.append(
+                        f"    if ((*environment)->GetArrayLength(environment, {first}) !="
+                        f"\n            (*environment)->GetArrayLength(environment, {member})) {{")
+                    prologue.append("        return (jint)CNA_RESULT_INVALID_ARGUMENT;")
+                    prologue.append("    }")
+                arguments.append(
+                    f"({step['ctype']})(*environment)->GetArrayLength(environment, {first})")
             elif shape == "string_array":
                 parameters.append(f"jobjectArray {name}")
                 body.append(f"    CnaJniStringViews {name}_views;")
@@ -757,7 +807,8 @@ def render_c(class_name: str, entries: list[dict]) -> str:
                 body.append(f"        return (jint){name}_borrowed;")
                 body.append("    }")
                 arguments.append(f"(const CNA_StringView*){name}_views.views")
-                arguments.append(f"(uint64_t){name}_views.count")
+                if not step.get("shared"):
+                    arguments.append(f"(uint64_t){name}_views.count")
                 release = f"    cna_jni_free_string_views(&{name}_views);"
                 unwind.append(release)
                 cleanup.append(release)
@@ -901,9 +952,10 @@ def render_c(class_name: str, entries: list[dict]) -> str:
                     body.append("        return (jint)CNA_RESULT_INVALID_ARGUMENT;")
                     body.append("    }")
                 count_type = step.get("countType", "uint64_t")
-                arguments.append(
-                    f"({count_type})({name}_size / {grouping})" if grouping != 1
-                    else f"({count_type}){name}_size")
+                if not step.get("shared"):
+                    arguments.append(
+                        f"({count_type})({name}_size / {grouping})" if grouping != 1
+                        else f"({count_type}){name}_size")
                 writeback = ""
                 if not step["input"]:
                     # The copy back has to happen before the buffer is released, so it

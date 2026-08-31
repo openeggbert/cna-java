@@ -15,6 +15,7 @@ import org.openeggbert.cna.internal.generated.NativeShaderEffectRoutes;
 
 import java.nio.charset.StandardCharsets;
 import java.util.List;
+import java.util.Map;
 import java.util.Objects;
 
 /**
@@ -324,6 +325,35 @@ public final class ShaderEffect implements AutoCloseable {
         GraphicsExtension.check("ShaderEffect.setUniform", NativeShaderEffectRoutes
                 .shaderEffectSetUniformMatrix(handle(), utf8(name),
                         EngineValues.floats(value, "value")));
+    }
+
+    /**
+     * Declares the std140 uniform block this effect's parameters live in.
+     *
+     * <p><strong>Required on a dialect with no loose uniforms, and harmless everywhere else.</strong>
+     * Every SPIR-V target -- {@link ShaderDialect#GlslVulkan} and what compiles through it --
+     * has no non-block uniforms at all, so a {@code setUniform} call on such a renderer has
+     * nowhere to write until the block is declared. On GLSL and GLSL ES the declaration is
+     * ignored, which is why it can sit unconditionally beside the effect's construction rather
+     * than behind a test of the dialect. {@link RendererCapabilities#getShaderDialect} is how to
+     * ask which one is running, when a game wants to know.
+     *
+     * @param blockSizeBytes the whole block's size in bytes, std140-padded; must not be negative
+     * @param members each member's name and its byte offset from the start of the block; an
+     *        empty map clears any previous declaration
+     */
+    public void declareUniformBlock(int blockSizeBytes, Map<String, Integer> members) {
+        Objects.requireNonNull(members, "members");
+        byte[][] names = new byte[members.size()][];
+        int[] offsets = new int[members.size()];
+        int index = 0;
+        for (Map.Entry<String, Integer> member : members.entrySet()) {
+            names[index] = utf8(Objects.requireNonNull(member.getKey(), "member name"));
+            offsets[index] = Objects.requireNonNull(member.getValue(), "member offset");
+            index++;
+        }
+        GraphicsExtension.check("ShaderEffect.declareUniformBlock", NativeShaderEffectRoutes
+                .shaderEffectDeclareUniformBlockExt(handle(), blockSizeBytes, names, offsets));
     }
 
     /**

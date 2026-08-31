@@ -168,6 +168,47 @@ Java_org_openeggbert_cna_internal_generated_NativeShaderEffectRoutes_shaderEffec
 }
 
 JNIEXPORT jint JNICALL
+Java_org_openeggbert_cna_internal_generated_NativeShaderEffectRoutes_shaderEffectDeclareUniformBlockExt(
+    JNIEnv* environment, jclass declaring_class, jlong effect, jint block_size_bytes, jobjectArray names, jintArray offsets)
+{
+    (void)environment;
+    (void)declaring_class;
+    if ((*environment)->GetArrayLength(environment, names) !=
+            (*environment)->GetArrayLength(environment, offsets)) {
+        return (jint)CNA_RESULT_INVALID_ARGUMENT;
+    }
+    CnaJniStringViews names_views;
+    const CNA_Result names_borrowed = cna_jni_borrow_string_views(
+        environment, names, &names_views);
+    if (names_borrowed != CNA_RESULT_SUCCESS) {
+        return (jint)names_borrowed;
+    }
+    jsize offsets_size = (*environment)->GetArrayLength(environment, offsets);
+    jint* offsets_elements = (*environment)->GetIntArrayElements(environment, offsets, NULL);
+    if (offsets_elements == NULL) {
+    cna_jni_free_string_views(&names_views);
+        return (jint)CNA_RESULT_OUT_OF_MEMORY;
+    }
+    int32_t* offsets_values = (int32_t*)malloc(
+        ((size_t)offsets_size + 1U) * sizeof(*offsets_values));
+    if (offsets_values == NULL) {
+        (*environment)->ReleaseIntArrayElements(
+            environment, offsets, offsets_elements, JNI_ABORT);
+    cna_jni_free_string_views(&names_views);
+        return (jint)CNA_RESULT_OUT_OF_MEMORY;
+    }
+    for (jsize index = 0; index < offsets_size; ++index) {
+        offsets_values[index] = (int32_t)offsets_elements[index];
+    }
+    CNA_Result call_result = cna.shader_effect_declare_uniform_block_ext((CNA_EffectHandle)effect, (int32_t)block_size_bytes, (const CNA_StringView*)names_views.views, offsets_values, (uint64_t)(*environment)->GetArrayLength(environment, names));
+    cna_jni_free_string_views(&names_views);
+    free(offsets_values);
+    (*environment)->ReleaseIntArrayElements(
+        environment, offsets, offsets_elements, JNI_ABORT);
+    return (jint)call_result;
+}
+
+JNIEXPORT jint JNICALL
 Java_org_openeggbert_cna_internal_generated_NativeShaderEffectRoutes_shaderEffectGetProjection(
     JNIEnv* environment, jclass declaring_class, jlong effect, jfloatArray out_valueFloating)
 {

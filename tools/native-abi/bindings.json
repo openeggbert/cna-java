@@ -6613,6 +6613,74 @@
       ]
     },
     {
+      "name": "cna_color_matrix_effect_create",
+      "header": "effects.h",
+      "ownership": "borrows graphics device; returns an owned effect handle",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_Handle",
+        "CNA_EffectHandle*"
+      ]
+    },
+    {
+      "name": "cna_color_matrix_effect_get_matrix",
+      "header": "effects.h",
+      "ownership": "borrows effect; fills a caller-provided struct",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_EffectHandle",
+        "CNA_ColorMatrix4x4*"
+      ]
+    },
+    {
+      "name": "cna_color_matrix_effect_get_offset",
+      "header": "effects.h",
+      "ownership": "borrows effect; fills a caller-provided struct",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_EffectHandle",
+        "CNA_Vector4*"
+      ]
+    },
+    {
+      "name": "cna_color_matrix_effect_reset",
+      "header": "effects.h",
+      "ownership": "borrows effect",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_EffectHandle"
+      ]
+    },
+    {
+      "name": "cna_color_matrix_effect_set_grayscale",
+      "header": "effects.h",
+      "ownership": "borrows effect",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_EffectHandle"
+      ]
+    },
+    {
+      "name": "cna_color_matrix_effect_set_matrix",
+      "header": "effects.h",
+      "ownership": "borrows effect; copies the value",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_EffectHandle",
+        "CNA_ColorMatrix4x4"
+      ]
+    },
+    {
+      "name": "cna_color_matrix_effect_set_offset",
+      "header": "effects.h",
+      "ownership": "borrows effect; copies the value",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_EffectHandle",
+        "CNA_Vector4"
+      ]
+    },
+    {
       "name": "cna_compass_create",
       "header": "sensors.h",
       "ownership": "borrows game; returns an owned sensor handle",
@@ -12602,6 +12670,16 @@
       "parameters": [
         "CNA_Handle",
         "CNA_Rectangle*"
+      ]
+    },
+    {
+      "name": "cna_graphics_device_get_shader_dialect_ext",
+      "header": "graphics.h",
+      "ownership": "borrows graphics device; returns a value",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_Handle",
+        "CNA_ShaderDialect*"
       ]
     },
     {
@@ -22316,6 +22394,19 @@
         "CNA_StringView",
         "CNA_StringView",
         "CNA_EffectHandle*"
+      ]
+    },
+    {
+      "name": "cna_shader_effect_declare_uniform_block_ext",
+      "header": "effects.h",
+      "ownership": "borrows effect; copies the names and offsets",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_EffectHandle",
+        "int32_t",
+        "const CNA_StringView*",
+        "const int32_t*",
+        "uint64_t"
       ]
     },
     {

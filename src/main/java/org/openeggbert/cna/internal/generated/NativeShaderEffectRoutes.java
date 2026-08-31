@@ -53,6 +53,11 @@ public final class NativeShaderEffectRoutes {
     public static native int shaderEffectCreate(long graphicsDevice, byte[] vertexSource, byte[] fragmentSource, long[] outEffect);
 
     /**
+     * cna_shader_effect_declare_uniform_block_ext (effects.h).
+     */
+    public static native int shaderEffectDeclareUniformBlockExt(long effect, int blockSizeBytes, byte[][] names, int[] offsets);
+
+    /**
      * cna_shader_effect_get_projection (effects.h).
      *
      * <p>outValueFloating carries CNA_Matrix in this order:

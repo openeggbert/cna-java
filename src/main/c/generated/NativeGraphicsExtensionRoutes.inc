@@ -422,6 +422,22 @@ Java_org_openeggbert_cna_internal_generated_NativeGraphicsExtensionRoutes_graphi
 }
 
 JNIEXPORT jint JNICALL
+Java_org_openeggbert_cna_internal_generated_NativeGraphicsExtensionRoutes_graphicsDeviceGetShaderDialectExt(
+    JNIEnv* environment, jclass declaring_class, jlong graphics_device, jintArray out_dialect)
+{
+    (void)environment;
+    (void)declaring_class;
+    CNA_ShaderDialect out_dialect_value = 0;
+    CNA_Result call_result = cna.graphics_device_get_shader_dialect_ext((CNA_Handle)graphics_device, &out_dialect_value);
+    if (call_result == CNA_RESULT_SUCCESS || call_result == CNA_RESULT_BUFFER_TOO_SMALL) {
+        jint out_dialect_element = (jint)out_dialect_value;
+        (*environment)->SetIntArrayRegion(
+            environment, out_dialect, 0, 1, &out_dialect_element);
+    }
+    return (jint)call_result;
+}
+
+JNIEXPORT jint JNICALL
 Java_org_openeggbert_cna_internal_generated_NativeGraphicsExtensionRoutes_graphicsDeviceSupportsCapability(
     JNIEnv* environment, jclass declaring_class, jlong graphics_device, jint capability, jbooleanArray out_supported)
 {

@@ -526,6 +526,13 @@
     CNA_JNI_ROUTE(cna_color_grade_pass_set_lut) color_grade_pass_set_lut;
     CNA_JNI_ROUTE(cna_color_grade_pass_set_strength) color_grade_pass_set_strength;
     CNA_JNI_ROUTE(cna_color_grade_pass_set_volume_lut) color_grade_pass_set_volume_lut;
+    CNA_JNI_ROUTE(cna_color_matrix_effect_create) color_matrix_effect_create;
+    CNA_JNI_ROUTE(cna_color_matrix_effect_get_matrix) color_matrix_effect_get_matrix;
+    CNA_JNI_ROUTE(cna_color_matrix_effect_get_offset) color_matrix_effect_get_offset;
+    CNA_JNI_ROUTE(cna_color_matrix_effect_reset) color_matrix_effect_reset;
+    CNA_JNI_ROUTE(cna_color_matrix_effect_set_grayscale) color_matrix_effect_set_grayscale;
+    CNA_JNI_ROUTE(cna_color_matrix_effect_set_matrix) color_matrix_effect_set_matrix;
+    CNA_JNI_ROUTE(cna_color_matrix_effect_set_offset) color_matrix_effect_set_offset;
     CNA_JNI_ROUTE(cna_compass_create) compass_create;
     CNA_JNI_ROUTE(cna_compass_destroy) compass_destroy;
     CNA_JNI_ROUTE(cna_compass_get_current_value) compass_get_current_value;
@@ -861,6 +868,7 @@
     CNA_JNI_ROUTE(cna_graphics_device_draw_primitives_indirect_ext) graphics_device_draw_primitives_indirect_ext;
     CNA_JNI_ROUTE(cna_graphics_device_get_capability_report_size_ext) graphics_device_get_capability_report_size_ext;
     CNA_JNI_ROUTE(cna_graphics_device_get_renderer_name_size) graphics_device_get_renderer_name_size;
+    CNA_JNI_ROUTE(cna_graphics_device_get_shader_dialect_ext) graphics_device_get_shader_dialect_ext;
     CNA_JNI_ROUTE(cna_graphics_device_supports_capability) graphics_device_supports_capability;
     CNA_JNI_ROUTE(cna_graphics_device_supports_shadow_sampling_ext) graphics_device_supports_shadow_sampling_ext;
     CNA_JNI_ROUTE(cna_graphics_ext_is_available) graphics_ext_is_available;
@@ -1571,6 +1579,7 @@
     CNA_JNI_ROUTE(cna_sensors_get_name_size_at) sensors_get_name_size_at;
     CNA_JNI_ROUTE(cna_shader_effect_copy_compile_error_ext) shader_effect_copy_compile_error_ext;
     CNA_JNI_ROUTE(cna_shader_effect_create) shader_effect_create;
+    CNA_JNI_ROUTE(cna_shader_effect_declare_uniform_block_ext) shader_effect_declare_uniform_block_ext;
     CNA_JNI_ROUTE(cna_shader_effect_factory_acquire) shader_effect_factory_acquire;
     CNA_JNI_ROUTE(cna_shader_effect_factory_clear) shader_effect_factory_clear;
     CNA_JNI_ROUTE(cna_shader_effect_factory_contains) shader_effect_factory_contains;
