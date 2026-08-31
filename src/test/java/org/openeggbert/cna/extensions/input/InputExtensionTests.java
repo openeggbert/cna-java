@@ -105,7 +105,12 @@ final class InputExtensionTests {
             }
 
             MouseCursor arrow = MouseCursor.FromStock(MouseCursorStock.Arrow);
-            arrow.Apply();
+            // Applying a cursor needs a host that has one. A platform whose video subsystem was
+            // never started -- which is what a windowless renderer leaves behind -- refuses with
+            // "CreateSystemCursor is not currently supported", and that refusal is an answer
+            // about the host rather than a failure of the projection. Both are accepted, and
+            // nothing else is.
+            boolean cursorsExist = applyIfTheHostHasCursors(arrow);
             // A stock cursor is a borrowed view of a process-lifetime object, so closing it
             // never frees the shared cursor, and closing twice is a no-op.
             arrow.close();
@@ -113,7 +118,8 @@ final class InputExtensionTests {
             assertThrows(IllegalStateException.class, arrow::Apply);
 
             try (MouseCursor empty = MouseCursor.CreateEmpty()) {
-                empty.Apply();
+                assertEquals(cursorsExist, applyIfTheHostHasCursors(empty),
+                        "a host either has cursors or has none; it cannot have one kind");
             }
 
             assertThrows(NullPointerException.class, () -> MouseCursor.FromStock(null));
@@ -121,6 +127,25 @@ final class InputExtensionTests {
                     () -> MouseCursor.FromTexture(null, 0, 0));
             assertThrows(NullPointerException.class, () -> TextInput.Start(null));
             assertThrows(NullPointerException.class, () -> TextInput.setInputRectangle(null));
+        }
+
+        /**
+         * Applies a cursor, accepting the one refusal a host without cursors gives.
+         *
+         * @param cursor the cursor to apply
+         * @return whether the host applied it
+         */
+        private static boolean applyIfTheHostHasCursors(MouseCursor cursor) {
+            try {
+                cursor.Apply();
+                return true;
+            } catch (org.openeggbert.cna.internal.CnaNativeException refusal) {
+                assertTrue(refusal.getMessage().contains("CreateSystemCursor")
+                                || refusal.getMessage().contains("not currently supported"),
+                        "the only refusal accepted here is a host with no cursors, and it said: "
+                                + refusal.getMessage());
+                return false;
+            }
         }
     }
 }

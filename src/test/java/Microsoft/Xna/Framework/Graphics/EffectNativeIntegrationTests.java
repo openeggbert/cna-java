@@ -494,7 +494,16 @@ final class EffectNativeIntegrationTests {
             assertTrue(!query.getIsComplete());
             query.Begin();
             query.End();
-            assertTrue(query.getIsComplete());
+            // An occlusion query is answered by the GPU, not by the call that ended it. A
+            // renderer with no GPU answers instantly; a real one answers when it gets to the
+            // query, which is typically a frame or more later -- so this waits rather than
+            // assuming, and reports what it saw if it never arrives.
+            long deadline = System.nanoTime() + 5_000_000_000L;
+            while (!query.getIsComplete() && System.nanoTime() < deadline) {
+                Thread.onSpinWait();
+            }
+            assertTrue(query.getIsComplete(),
+                    "the GPU must answer the query; it had five seconds");
             assertTrue(query.getPixelCount() >= 0);
             query.close();
             query.close();

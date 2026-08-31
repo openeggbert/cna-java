@@ -12,6 +12,7 @@ import java.util.List;
 import java.util.function.BiConsumer;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -83,6 +84,21 @@ final class InputDeviceEnumerationTests {
             }
         }
 
+        /**
+         * Asserts that a list ends with an expected tail.
+         *
+         * <p>The events a test raises are the last ones raised, so they are the last ones
+         * delivered; whatever a host's own hardware contributed arrived before them and cannot
+         * be predicted from here.
+         */
+        private static void assertEndsWith(List<String> expected, List<String> observed,
+                String message) {
+            assertTrue(observed.size() >= expected.size(),
+                    message + " -- got " + observed);
+            assertEquals(expected, observed.subList(observed.size() - expected.size(),
+                    observed.size()), message + " -- got " + observed);
+        }
+
         private void probe() {
             // Zero devices is an ordinary answer on a headless host, so what is asserted is
             // that the snapshot is well formed and self-consistent, not that hardware exists.
@@ -116,7 +132,12 @@ final class InputDeviceEnumerationTests {
                 InputDevices.RaiseDisconnected(InputDeviceKind.Keyboard, 9);
                 assertEquals(List.of(), observed, "no event may arrive before the pump runs");
                 FrameworkDispatcher.Update();
-                assertEquals(List.of("+Mouse:7", "-Keyboard:9"), observed,
+                // The last two, rather than the only two. A platform with real input hardware
+                // reports its own devices through the same subscription, and those arrive first
+                // because they were queued when the subscription was taken -- so a test that
+                // demanded an exact list was describing a host with no mouse rather than the
+                // ordering CNA guarantees.
+                assertEndsWith(List.of("+Mouse:7", "-Keyboard:9"), observed,
                         "both events must arrive, in the order CNA raised them");
 
                 // A removed listener stops receiving, and the other one keeps working.
@@ -125,7 +146,10 @@ final class InputDeviceEnumerationTests {
                 InputDevices.RaiseConnected(InputDeviceKind.Mouse, 11);
                 InputDevices.RaiseDisconnected(InputDeviceKind.Mouse, 12);
                 FrameworkDispatcher.Update();
-                assertEquals(List.of("-Mouse:12"), observed);
+                assertEndsWith(List.of("-Mouse:12"), observed,
+                        "the removed listener saw nothing and the other one saw its event");
+                assertFalse(observed.contains("+Mouse:11"),
+                        "a removed listener must receive nothing at all");
             } finally {
                 InputDevices.removeConnectedListener(connected);
                 InputDevices.removeDisconnectedListener(disconnected);
@@ -166,8 +190,10 @@ final class InputDeviceEnumerationTests {
                 InputDevices.removeConnectedListener(listener);
                 InputDevices.RaiseConnected(InputDeviceKind.Keyboard, 22);
                 FrameworkDispatcher.Update();
-                assertEquals(List.of("Keyboard:22"), observed,
+                assertEndsWith(List.of("Keyboard:22"), observed,
                         "one listener remains registered, so exactly one record arrives");
+                assertFalse(observed.contains("Mouse:21"),
+                        "and the event raised while released is not replayed");
             } finally {
                 InputDevices.removeConnectedListener(listener);
                 InputDevices.removeConnectedListener(listener);

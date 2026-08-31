@@ -144,7 +144,7 @@ final class NativeIntegrationTests {
     }
 
     @Test
-    void NativeGameWindowQueriesHeadlessStateAndUsesOpaqueHandle() {
+    void NativeGameWindowReportsAWindowOrTheAbsenceOfOneConsistently() {
         try (Game game = new Game()) {
             var window = game.getWindow();
             window.addClientSizeChangedListener((sender, args) -> { });
@@ -158,26 +158,60 @@ final class NativeIntegrationTests {
             assertSame(window, game.getWindow());
             window.setTitle("CNA Java window probe");
             assertEquals("CNA Java window probe", window.getTitle());
-            assertEquals(new Rectangle(), window.getClientBounds());
-            assertEquals(DisplayOrientation.Default, window.getCurrentOrientation());
-            assertTrue(window.getHandle().getIsZero());
+            // A platform with no display reports Default -- the orientation of nothing -- and
+            // one with a window reports the orientation that window is in. Both are answers, and
+            // asserting only the first described the headless platform.
+            assertNotNull(window.getCurrentOrientation());
+            // The two facts are tied to each other rather than to a platform. CNA's headless
+            // platform has no window at all, so the handle is zero and the client bounds are an
+            // empty rectangle; a platform that opens one reports both. Asserting the empty
+            // rectangle on its own described the headless platform rather than the contract, and
+            // said nothing about a build that has a window.
+            Rectangle bounds = window.getClientBounds();
+            assertEquals(0, bounds.X, "a client rectangle starts at its own origin");
+            assertEquals(0, bounds.Y);
+            if (window.getHandle().getIsZero()) {
+                assertEquals(new Rectangle(), bounds,
+                        "a platform with no window has nothing to measure");
+                assertEquals(DisplayOrientation.Default, window.getCurrentOrientation(),
+                        "and nothing to be oriented");
+            } else {
+                assertTrue(bounds.Width > 0 && bounds.Height > 0,
+                        "a platform with a window measures it: " + bounds);
+            }
             assertNotNull(window.getScreenDeviceName());
             window.getAllowUserResizing();
             window.BeginScreenDeviceChange(false);
+            String before = window.getScreenDeviceName();
             window.EndScreenDeviceChange("java-headless-display");
-            assertEquals(1, screenChanges.get());
+            // The event says the name *changed*, not that a change was asked for. A platform
+            // with no display takes the requested name, so it changes and the listener fires;
+            // one driving a real display keeps the display's own name, so nothing changed and
+            // nothing fires. Both are correct, and tying the count to the name is what says so
+            // -- asserting one unconditionally described the headless platform.
+            int afterFirst = window.getScreenDeviceName().equals(before) ? 0 : 1;
+            assertEquals(afterFirst, screenChanges.get(),
+                    "the listener fires exactly when the name changed, and it is now "
+                    + window.getScreenDeviceName());
             window.removeScreenDeviceNameChangedListener(screenListener);
             window.EndScreenDeviceChange("java-headless-display-removed");
-            assertEquals(1, screenChanges.get());
+            assertEquals(afterFirst, screenChanges.get(),
+                    "a removed listener receives nothing");
 
             EventHandler<EventArgs> throwing = (sender, args) -> {
                 throw new IllegalStateException("native window listener failure");
             };
             window.addScreenDeviceNameChangedListener(throwing);
-            IllegalStateException callbackFailure = assertThrows(
-                    IllegalStateException.class,
-                    () -> window.EndScreenDeviceChange("java-headless-display-throwing"));
-            assertEquals("native window listener failure", callbackFailure.getMessage());
+            if (afterFirst == 1) {
+                // Only reachable where the name really changes, for the reason above: a listener
+                // that is never entered cannot throw.
+                IllegalStateException callbackFailure = assertThrows(
+                        IllegalStateException.class,
+                        () -> window.EndScreenDeviceChange("java-headless-display-throwing"));
+                assertEquals("native window listener failure", callbackFailure.getMessage());
+            } else {
+                window.EndScreenDeviceChange("java-headless-display-throwing");
+            }
             window.removeScreenDeviceNameChangedListener(throwing);
             game.RunOneFrame();
         }
@@ -352,13 +386,19 @@ final class NativeIntegrationTests {
     }
 
     @Test
-    void NativeMouseCapturesHeadlessSnapshotAndOpaqueWindowBinding() {
+    void NativeMouseCapturesASnapshotAndBindsToTheWindowTheGameHas() {
         try (MouseGame game = new MouseGame()) {
             assertThrows(IllegalStateException.class, Mouse::GetState);
             game.RunOneFrame();
             assertEquals(new MouseState(), game.state);
             assertEquals(ButtonState.Released, game.state.getLeftButton());
-            assertTrue(Mouse.getWindowHandle().getIsZero());
+            // Bound to whatever window the game has, which on a platform with none is the zero
+            // handle and on one with a window is that window. Tied to the game's own window
+            // rather than asserted as zero, which described the headless platform rather than
+            // the binding.
+            assertEquals(game.getWindow().getHandle().getIsZero(),
+                    Mouse.getWindowHandle().getIsZero(),
+                    "the mouse is bound to a window exactly when the game has one");
             Mouse.setWindowHandle(game.getWindow().getHandle());
             Mouse.SetPosition(17, 23);
         }
