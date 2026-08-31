@@ -694,8 +694,12 @@
     LOAD(directional_light_ext_init, "cna_directional_light_ext_init");
     LOAD(display_info_get_content_scale_ext, "cna_display_info_get_content_scale_ext");
     LOAD(display_info_get_safe_area_ext, "cna_display_info_get_safe_area_ext");
+    LOAD(effect_copy_fragment_source, "cna_effect_copy_fragment_source");
     LOAD(effect_copy_type_name, "cna_effect_copy_type_name");
+    LOAD(effect_copy_vertex_source, "cna_effect_copy_vertex_source");
+    LOAD(effect_get_fragment_source_byte_count, "cna_effect_get_fragment_source_byte_count");
     LOAD(effect_get_image_based_light_ext, "cna_effect_get_image_based_light_ext");
+    LOAD(effect_get_is_compiled_ext, "cna_effect_get_is_compiled_ext");
     LOAD(effect_get_light_view_projection_ext, "cna_effect_get_light_view_projection_ext");
     LOAD(effect_get_punctual_light_ext, "cna_effect_get_punctual_light_ext");
     LOAD(effect_get_shadow_cascades_ext, "cna_effect_get_shadow_cascades_ext");
@@ -703,6 +707,8 @@
     LOAD(effect_get_shadow_filter_radius_ext, "cna_effect_get_shadow_filter_radius_ext");
     LOAD(effect_get_shadow_map_ext, "cna_effect_get_shadow_map_ext");
     LOAD(effect_get_type_name_byte_count, "cna_effect_get_type_name_byte_count");
+    LOAD(effect_get_vertex_source_byte_count, "cna_effect_get_vertex_source_byte_count");
+    LOAD(effect_has_renderer, "cna_effect_has_renderer");
     LOAD(effect_is_shadows_enabled_ext, "cna_effect_is_shadows_enabled_ext");
     LOAD(effect_set_image_based_light_ext, "cna_effect_set_image_based_light_ext");
     LOAD(effect_set_light_view_projection_ext, "cna_effect_set_light_view_projection_ext");

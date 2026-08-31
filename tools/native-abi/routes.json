@@ -7031,6 +7031,30 @@
     ],
     "NativeShaderEffectRoutes": [
       {
+        "java": "effectCopyFragmentSource",
+        "symbol": "cna_effect_copy_fragment_source"
+      },
+      {
+        "java": "effectCopyVertexSource",
+        "symbol": "cna_effect_copy_vertex_source"
+      },
+      {
+        "java": "effectGetFragmentSourceByteCount",
+        "symbol": "cna_effect_get_fragment_source_byte_count"
+      },
+      {
+        "java": "effectGetIsCompiledExt",
+        "symbol": "cna_effect_get_is_compiled_ext"
+      },
+      {
+        "java": "effectGetVertexSourceByteCount",
+        "symbol": "cna_effect_get_vertex_source_byte_count"
+      },
+      {
+        "java": "effectHasRenderer",
+        "symbol": "cna_effect_has_renderer"
+      },
+      {
         "java": "shaderEffectCopyCompileErrorExt",
         "symbol": "cna_shader_effect_copy_compile_error_ext"
       },

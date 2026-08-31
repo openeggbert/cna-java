@@ -7,6 +7,114 @@
  */
 
 JNIEXPORT jint JNICALL
+Java_org_openeggbert_cna_internal_generated_NativeShaderEffectRoutes_effectCopyFragmentSource(
+    JNIEnv* environment, jclass declaring_class, jlong effect, jbyteArray destination, jlongArray out_byte_count)
+{
+    (void)environment;
+    (void)declaring_class;
+    jsize destination_size = (*environment)->GetArrayLength(environment, destination);
+    jbyte* destination_bytes = (*environment)->GetByteArrayElements(environment, destination, NULL);
+    if (destination_bytes == NULL) {
+        return (jint)CNA_RESULT_OUT_OF_MEMORY;
+    }
+    uint64_t destination_written = 0;
+    CNA_Result call_result = cna.effect_copy_fragment_source((CNA_EffectHandle)effect, (char*)destination_bytes, (uint64_t)destination_size, &destination_written);
+    (*environment)->ReleaseByteArrayElements(environment, destination, destination_bytes, 0);
+    if (call_result == CNA_RESULT_SUCCESS || call_result == CNA_RESULT_BUFFER_TOO_SMALL) {
+        jlong destination_element = (jlong)destination_written;
+        (*environment)->SetLongArrayRegion(
+            environment, out_byte_count, 0, 1, &destination_element);
+    }
+    return (jint)call_result;
+}
+
+JNIEXPORT jint JNICALL
+Java_org_openeggbert_cna_internal_generated_NativeShaderEffectRoutes_effectCopyVertexSource(
+    JNIEnv* environment, jclass declaring_class, jlong effect, jbyteArray destination, jlongArray out_byte_count)
+{
+    (void)environment;
+    (void)declaring_class;
+    jsize destination_size = (*environment)->GetArrayLength(environment, destination);
+    jbyte* destination_bytes = (*environment)->GetByteArrayElements(environment, destination, NULL);
+    if (destination_bytes == NULL) {
+        return (jint)CNA_RESULT_OUT_OF_MEMORY;
+    }
+    uint64_t destination_written = 0;
+    CNA_Result call_result = cna.effect_copy_vertex_source((CNA_EffectHandle)effect, (char*)destination_bytes, (uint64_t)destination_size, &destination_written);
+    (*environment)->ReleaseByteArrayElements(environment, destination, destination_bytes, 0);
+    if (call_result == CNA_RESULT_SUCCESS || call_result == CNA_RESULT_BUFFER_TOO_SMALL) {
+        jlong destination_element = (jlong)destination_written;
+        (*environment)->SetLongArrayRegion(
+            environment, out_byte_count, 0, 1, &destination_element);
+    }
+    return (jint)call_result;
+}
+
+JNIEXPORT jint JNICALL
+Java_org_openeggbert_cna_internal_generated_NativeShaderEffectRoutes_effectGetFragmentSourceByteCount(
+    JNIEnv* environment, jclass declaring_class, jlong effect, jlongArray out_byte_count)
+{
+    (void)environment;
+    (void)declaring_class;
+    uint64_t out_byte_count_value = 0;
+    CNA_Result call_result = cna.effect_get_fragment_source_byte_count((CNA_EffectHandle)effect, &out_byte_count_value);
+    if (call_result == CNA_RESULT_SUCCESS || call_result == CNA_RESULT_BUFFER_TOO_SMALL) {
+        jlong out_byte_count_element = (jlong)out_byte_count_value;
+        (*environment)->SetLongArrayRegion(
+            environment, out_byte_count, 0, 1, &out_byte_count_element);
+    }
+    return (jint)call_result;
+}
+
+JNIEXPORT jint JNICALL
+Java_org_openeggbert_cna_internal_generated_NativeShaderEffectRoutes_effectGetIsCompiledExt(
+    JNIEnv* environment, jclass declaring_class, jlong effect, jbooleanArray out_is_compiled)
+{
+    (void)environment;
+    (void)declaring_class;
+    CNA_Bool out_is_compiled_value = 0;
+    CNA_Result call_result = cna.effect_get_is_compiled_ext((CNA_EffectHandle)effect, &out_is_compiled_value);
+    if (call_result == CNA_RESULT_SUCCESS || call_result == CNA_RESULT_BUFFER_TOO_SMALL) {
+        jboolean out_is_compiled_element = (jboolean)out_is_compiled_value;
+        (*environment)->SetBooleanArrayRegion(
+            environment, out_is_compiled, 0, 1, &out_is_compiled_element);
+    }
+    return (jint)call_result;
+}
+
+JNIEXPORT jint JNICALL
+Java_org_openeggbert_cna_internal_generated_NativeShaderEffectRoutes_effectGetVertexSourceByteCount(
+    JNIEnv* environment, jclass declaring_class, jlong effect, jlongArray out_byte_count)
+{
+    (void)environment;
+    (void)declaring_class;
+    uint64_t out_byte_count_value = 0;
+    CNA_Result call_result = cna.effect_get_vertex_source_byte_count((CNA_EffectHandle)effect, &out_byte_count_value);
+    if (call_result == CNA_RESULT_SUCCESS || call_result == CNA_RESULT_BUFFER_TOO_SMALL) {
+        jlong out_byte_count_element = (jlong)out_byte_count_value;
+        (*environment)->SetLongArrayRegion(
+            environment, out_byte_count, 0, 1, &out_byte_count_element);
+    }
+    return (jint)call_result;
+}
+
+JNIEXPORT jint JNICALL
+Java_org_openeggbert_cna_internal_generated_NativeShaderEffectRoutes_effectHasRenderer(
+    JNIEnv* environment, jclass declaring_class, jlong effect, jbooleanArray out_has_renderer)
+{
+    (void)environment;
+    (void)declaring_class;
+    CNA_Bool out_has_renderer_value = 0;
+    CNA_Result call_result = cna.effect_has_renderer((CNA_EffectHandle)effect, &out_has_renderer_value);
+    if (call_result == CNA_RESULT_SUCCESS || call_result == CNA_RESULT_BUFFER_TOO_SMALL) {
+        jboolean out_has_renderer_element = (jboolean)out_has_renderer_value;
+        (*environment)->SetBooleanArrayRegion(
+            environment, out_has_renderer, 0, 1, &out_has_renderer_element);
+    }
+    return (jint)call_result;
+}
+
+JNIEXPORT jint JNICALL
 Java_org_openeggbert_cna_internal_generated_NativeShaderEffectRoutes_shaderEffectCopyCompileErrorExt(
     JNIEnv* environment, jclass declaring_class, jlong effect, jbyteArray destination, jlongArray out_bytes)
 {

@@ -13,6 +13,36 @@ public final class NativeShaderEffectRoutes {
     }
 
     /**
+     * cna_effect_copy_fragment_source (effects.h).
+     */
+    public static native int effectCopyFragmentSource(long effect, byte[] destination, long[] outByteCount);
+
+    /**
+     * cna_effect_copy_vertex_source (effects.h).
+     */
+    public static native int effectCopyVertexSource(long effect, byte[] destination, long[] outByteCount);
+
+    /**
+     * cna_effect_get_fragment_source_byte_count (effects.h).
+     */
+    public static native int effectGetFragmentSourceByteCount(long effect, long[] outByteCount);
+
+    /**
+     * cna_effect_get_is_compiled_ext (effects.h).
+     */
+    public static native int effectGetIsCompiledExt(long effect, boolean[] outIsCompiled);
+
+    /**
+     * cna_effect_get_vertex_source_byte_count (effects.h).
+     */
+    public static native int effectGetVertexSourceByteCount(long effect, long[] outByteCount);
+
+    /**
+     * cna_effect_has_renderer (effects.h).
+     */
+    public static native int effectHasRenderer(long effect, boolean[] outHasRenderer);
+
+    /**
      * cna_shader_effect_copy_compile_error_ext (effects.h).
      */
     public static native int shaderEffectCopyCompileErrorExt(long effect, byte[] destination, long[] outBytes);

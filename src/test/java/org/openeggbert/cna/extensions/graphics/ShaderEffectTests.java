@@ -270,6 +270,40 @@ final class ShaderEffectTests {
     }
 
     @Test
+    void anEffectSaysWhatItIsMadeOfAndWhetherARendererIsBehindIt() {
+        GameProbe.run(probe -> {
+            GraphicsDevice device = probe.device();
+            try (ShaderEffect shader = ShaderEffect.compile(device, VERTEX, CONSTANT_COLOUR);
+                    Microsoft.Xna.Framework.Graphics.BasicEffect stock =
+                            new Microsoft.Xna.Framework.Graphics.BasicEffect(device)) {
+
+                // An effect built from source is not a compiled one, however well it works. The
+                // two are different provenances and CNA keeps them apart.
+                assertFalse(EffectDiagnostics.isCompiled(shader.getEffect()),
+                        "source is not bytecode");
+                assertFalse(EffectDiagnostics.isCompiled(stock),
+                        "and neither is a stock effect");
+
+                // The source comes back exactly as it went in, which is what a shader-editing
+                // tool needs and what nothing else here can answer.
+                assertEquals(VERTEX, EffectDiagnostics.getVertexSource(shader.getEffect()));
+                assertEquals(CONSTANT_COLOUR,
+                        EffectDiagnostics.getFragmentSource(shader.getEffect()));
+
+                // Whether a program is behind it is the renderer's answer, and it agrees with the
+                // effect's own -- two routes, one fact, which is what makes the pair worth having.
+                assertEquals(EffectDiagnostics.hasRenderer(shader.getEffect()),
+                        shader.hasRenderer());
+
+                assertThrows(NullPointerException.class,
+                        () -> EffectDiagnostics.isCompiled(null));
+                assertThrows(NullPointerException.class,
+                        () -> EffectDiagnostics.getVertexSource(null));
+            }
+        });
+    }
+
+    @Test
     void aClosedShaderEffectRefusesFurtherUse() {
         GameProbe.run(probe -> {
             ShaderEffect shader =

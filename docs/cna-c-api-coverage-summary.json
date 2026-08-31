@@ -1,7 +1,7 @@
 {
   "abiVersion": "0.21.0",
   "boundButUnreached": [],
-  "boundFunctions": 2504,
+  "boundFunctions": 2510,
   "boundWithoutJavaCallSite": [],
   "byHeader": {
     "abi.h": {
@@ -55,8 +55,8 @@
       "total": 22
     },
     "effects.h": {
-      "CNA_EXTENSION_CANDIDATE": 79,
-      "DEFERRED_RUNTIME": 45,
+      "CNA_EXTENSION_CANDIDATE": 85,
+      "DEFERRED_RUNTIME": 39,
       "XNA_BACKING": 166,
       "total": 290
     },
@@ -286,8 +286,8 @@
   },
   "canonicalFunctions": 4054,
   "classificationCounts": {
-    "CNA_EXTENSION_CANDIDATE": 1921,
-    "DEFERRED_RUNTIME": 411,
+    "CNA_EXTENSION_CANDIDATE": 1927,
+    "DEFERRED_RUNTIME": 405,
     "JAVA_INTERNAL_ONLY": 9,
     "NOT_USEFUL_IN_JAVA": 727,
     "XNA_BACKING": 986
@@ -299,7 +299,7 @@
     "JAVA-NATIVE-011": 16,
     "JAVA-NATIVE-012": 38,
     "JAVA-NATIVE-013": 25,
-    "JAVA-NATIVE-014": 45,
+    "JAVA-NATIVE-014": 39,
     "JAVA-NATIVE-015": 66,
     "JAVA-NATIVE-016": 25,
     "JAVA-NATIVE-017": 15,

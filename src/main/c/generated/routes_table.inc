@@ -694,8 +694,12 @@
     CNA_JNI_ROUTE(cna_directional_light_ext_init) directional_light_ext_init;
     CNA_JNI_ROUTE(cna_display_info_get_content_scale_ext) display_info_get_content_scale_ext;
     CNA_JNI_ROUTE(cna_display_info_get_safe_area_ext) display_info_get_safe_area_ext;
+    CNA_JNI_ROUTE(cna_effect_copy_fragment_source) effect_copy_fragment_source;
     CNA_JNI_ROUTE(cna_effect_copy_type_name) effect_copy_type_name;
+    CNA_JNI_ROUTE(cna_effect_copy_vertex_source) effect_copy_vertex_source;
+    CNA_JNI_ROUTE(cna_effect_get_fragment_source_byte_count) effect_get_fragment_source_byte_count;
     CNA_JNI_ROUTE(cna_effect_get_image_based_light_ext) effect_get_image_based_light_ext;
+    CNA_JNI_ROUTE(cna_effect_get_is_compiled_ext) effect_get_is_compiled_ext;
     CNA_JNI_ROUTE(cna_effect_get_light_view_projection_ext) effect_get_light_view_projection_ext;
     CNA_JNI_ROUTE(cna_effect_get_punctual_light_ext) effect_get_punctual_light_ext;
     CNA_JNI_ROUTE(cna_effect_get_shadow_cascades_ext) effect_get_shadow_cascades_ext;
@@ -703,6 +707,8 @@
     CNA_JNI_ROUTE(cna_effect_get_shadow_filter_radius_ext) effect_get_shadow_filter_radius_ext;
     CNA_JNI_ROUTE(cna_effect_get_shadow_map_ext) effect_get_shadow_map_ext;
     CNA_JNI_ROUTE(cna_effect_get_type_name_byte_count) effect_get_type_name_byte_count;
+    CNA_JNI_ROUTE(cna_effect_get_vertex_source_byte_count) effect_get_vertex_source_byte_count;
+    CNA_JNI_ROUTE(cna_effect_has_renderer) effect_has_renderer;
     CNA_JNI_ROUTE(cna_effect_is_shadows_enabled_ext) effect_is_shadows_enabled_ext;
     CNA_JNI_ROUTE(cna_effect_set_image_based_light_ext) effect_set_image_based_light_ext;
     CNA_JNI_ROUTE(cna_effect_set_light_view_projection_ext) effect_set_light_view_projection_ext;

@@ -8941,9 +8941,33 @@
       ]
     },
     {
+      "name": "cna_effect_copy_fragment_source",
+      "header": "effects.h",
+      "ownership": "borrows the effect; fills the caller's buffer and writes no partial string",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_EffectHandle",
+        "char*",
+        "uint64_t",
+        "uint64_t*"
+      ]
+    },
+    {
       "name": "cna_effect_copy_type_name",
       "header": "effects.h",
       "ownership": "borrows effect; caller buffer",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_EffectHandle",
+        "char*",
+        "uint64_t",
+        "uint64_t*"
+      ]
+    },
+    {
+      "name": "cna_effect_copy_vertex_source",
+      "header": "effects.h",
+      "ownership": "borrows the effect; fills the caller's buffer and writes no partial string",
       "returnType": "CNA_Result",
       "parameters": [
         "CNA_EffectHandle",
@@ -9074,6 +9098,16 @@
       ]
     },
     {
+      "name": "cna_effect_get_fragment_source_byte_count",
+      "header": "effects.h",
+      "ownership": "borrows the effect; returns a value",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_EffectHandle",
+        "uint64_t*"
+      ]
+    },
+    {
       "name": "cna_effect_get_image_based_light_ext",
       "header": "engine_layer.h",
       "ownership": "borrows the effect; returns three fresh names for its own textures, each of which retains the effect while it exists and each of which the caller must release",
@@ -9081,6 +9115,16 @@
       "parameters": [
         "CNA_EffectHandle",
         "CNA_ImageBasedLightEXT*"
+      ]
+    },
+    {
+      "name": "cna_effect_get_is_compiled_ext",
+      "header": "effects.h",
+      "ownership": "borrows the effect; returns a value",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_EffectHandle",
+        "CNA_Bool*"
       ]
     },
     {
@@ -9171,6 +9215,26 @@
       "parameters": [
         "CNA_EffectHandle",
         "uint64_t*"
+      ]
+    },
+    {
+      "name": "cna_effect_get_vertex_source_byte_count",
+      "header": "effects.h",
+      "ownership": "borrows the effect; returns a value",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_EffectHandle",
+        "uint64_t*"
+      ]
+    },
+    {
+      "name": "cna_effect_has_renderer",
+      "header": "effects.h",
+      "ownership": "borrows the effect; returns a value",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_EffectHandle",
+        "CNA_Bool*"
       ]
     },
     {
