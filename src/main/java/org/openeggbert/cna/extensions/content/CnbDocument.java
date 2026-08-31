@@ -444,6 +444,32 @@ public final class CnbDocument implements AutoCloseable {
         return new CnbModelData(model[0]);
     }
 
+    /**
+     * Decodes the whole file as a cube texture.
+     *
+     * @return the texture data, with six faces, which the caller closes
+     * @throws CnbFormatException when the file is not a TextureCube asset
+     */
+    public CnbTextureData decodeTextureCube() {
+        long[] texture = new long[1];
+        CnbExtension.check("CnbDocument.decodeTextureCube",
+                NativeCnbRoutes.cnbDecodeTextureCube(open(), texture));
+        return new CnbTextureData(texture[0]);
+    }
+
+    /**
+     * Decodes the whole file as a volume texture.
+     *
+     * @return the texture data, which the caller closes
+     * @throws CnbFormatException when the file is not a Texture3D asset
+     */
+    public CnbTextureData decodeTexture3D() {
+        long[] texture = new long[1];
+        CnbExtension.check("CnbDocument.decodeTexture3D",
+                NativeCnbRoutes.cnbDecodeTexture3d(open(), texture));
+        return new CnbTextureData(texture[0]);
+    }
+
     /** Releases the document. Closing twice is a no-op. */
     @Override
     public void close() {

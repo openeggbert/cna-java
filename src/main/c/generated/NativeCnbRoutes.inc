@@ -537,6 +537,47 @@ Java_org_openeggbert_cna_internal_generated_NativeCnbRoutes_cnbDecodeCurve(
 }
 
 JNIEXPORT jint JNICALL
+Java_org_openeggbert_cna_internal_generated_NativeCnbRoutes_cnbDecodeDdsAsTextureCube(
+    JNIEnv* environment, jclass declaring_class, jbyteArray bytes, jbyteArray origin, jlongArray out_texture)
+{
+    (void)environment;
+    (void)declaring_class;
+    jsize bytes_size = (*environment)->GetArrayLength(environment, bytes);
+    jbyte* bytes_elements = (*environment)->GetByteArrayElements(environment, bytes, NULL);
+    if (bytes_elements == NULL) {
+        return (jint)CNA_RESULT_OUT_OF_MEMORY;
+    }
+    uint8_t* bytes_values = (uint8_t*)malloc(
+        ((size_t)bytes_size + 1U) * sizeof(*bytes_values));
+    if (bytes_values == NULL) {
+        (*environment)->ReleaseByteArrayElements(
+            environment, bytes, bytes_elements, JNI_ABORT);
+        return (jint)CNA_RESULT_OUT_OF_MEMORY;
+    }
+    for (jsize index = 0; index < bytes_size; ++index) {
+        bytes_values[index] = (uint8_t)bytes_elements[index];
+    }
+    jsize origin_size = (*environment)->GetArrayLength(environment, origin);
+    jbyte* origin_bytes = (*environment)->GetByteArrayElements(environment, origin, NULL);
+    if (origin_bytes == NULL) {
+        return (jint)CNA_RESULT_OUT_OF_MEMORY;
+    }
+    CNA_StringView origin_view = {(const char*)origin_bytes, (uint64_t)origin_size};
+    CNA_CnbTextureDataHandle out_texture_value = 0;
+    CNA_Result result = cna.cnb_decode_dds_as_texture_cube(bytes_values, (uint64_t)bytes_size, origin_view, &out_texture_value);
+    free(bytes_values);
+    (*environment)->ReleaseByteArrayElements(
+        environment, bytes, bytes_elements, JNI_ABORT);
+    (*environment)->ReleaseByteArrayElements(environment, origin, origin_bytes, JNI_ABORT);
+    if (result == CNA_RESULT_SUCCESS || result == CNA_RESULT_BUFFER_TOO_SMALL) {
+        jlong out_texture_element = (jlong)out_texture_value;
+        (*environment)->SetLongArrayRegion(
+            environment, out_texture, 0, 1, &out_texture_element);
+    }
+    return (jint)result;
+}
+
+JNIEXPORT jint JNICALL
 Java_org_openeggbert_cna_internal_generated_NativeCnbRoutes_cnbDecodeModel(
     JNIEnv* environment, jclass declaring_class, jlong document, jlongArray out_model)
 {
@@ -693,6 +734,38 @@ Java_org_openeggbert_cna_internal_generated_NativeCnbRoutes_cnbDecodeTexture2d(
 }
 
 JNIEXPORT jint JNICALL
+Java_org_openeggbert_cna_internal_generated_NativeCnbRoutes_cnbDecodeTexture3d(
+    JNIEnv* environment, jclass declaring_class, jlong document, jlongArray out_texture)
+{
+    (void)environment;
+    (void)declaring_class;
+    CNA_CnbTextureDataHandle out_texture_value = 0;
+    CNA_Result result = cna.cnb_decode_texture3d((CNA_CnbDocumentHandle)document, &out_texture_value);
+    if (result == CNA_RESULT_SUCCESS || result == CNA_RESULT_BUFFER_TOO_SMALL) {
+        jlong out_texture_element = (jlong)out_texture_value;
+        (*environment)->SetLongArrayRegion(
+            environment, out_texture, 0, 1, &out_texture_element);
+    }
+    return (jint)result;
+}
+
+JNIEXPORT jint JNICALL
+Java_org_openeggbert_cna_internal_generated_NativeCnbRoutes_cnbDecodeTextureCube(
+    JNIEnv* environment, jclass declaring_class, jlong document, jlongArray out_texture)
+{
+    (void)environment;
+    (void)declaring_class;
+    CNA_CnbTextureDataHandle out_texture_value = 0;
+    CNA_Result result = cna.cnb_decode_texture_cube((CNA_CnbDocumentHandle)document, &out_texture_value);
+    if (result == CNA_RESULT_SUCCESS || result == CNA_RESULT_BUFFER_TOO_SMALL) {
+        jlong out_texture_element = (jlong)out_texture_value;
+        (*environment)->SetLongArrayRegion(
+            environment, out_texture, 0, 1, &out_texture_element);
+    }
+    return (jint)result;
+}
+
+JNIEXPORT jint JNICALL
 Java_org_openeggbert_cna_internal_generated_NativeCnbRoutes_cnbDecodeVideo(
     JNIEnv* environment, jclass declaring_class, jlong document, jlongArray out_infoIntegral, jfloatArray out_infoFloating)
 {
@@ -758,6 +831,47 @@ Java_org_openeggbert_cna_internal_generated_NativeCnbRoutes_cnbDecodeVideoStream
         jlong out_byte_count_element = (jlong)out_byte_count_value;
         (*environment)->SetLongArrayRegion(
             environment, out_byte_count, 0, 1, &out_byte_count_element);
+    }
+    return (jint)result;
+}
+
+JNIEXPORT jint JNICALL
+Java_org_openeggbert_cna_internal_generated_NativeCnbRoutes_cnbDecodeWavAsSoundEffect(
+    JNIEnv* environment, jclass declaring_class, jbyteArray bytes, jbyteArray origin, jlongArray out_sound)
+{
+    (void)environment;
+    (void)declaring_class;
+    jsize bytes_size = (*environment)->GetArrayLength(environment, bytes);
+    jbyte* bytes_elements = (*environment)->GetByteArrayElements(environment, bytes, NULL);
+    if (bytes_elements == NULL) {
+        return (jint)CNA_RESULT_OUT_OF_MEMORY;
+    }
+    uint8_t* bytes_values = (uint8_t*)malloc(
+        ((size_t)bytes_size + 1U) * sizeof(*bytes_values));
+    if (bytes_values == NULL) {
+        (*environment)->ReleaseByteArrayElements(
+            environment, bytes, bytes_elements, JNI_ABORT);
+        return (jint)CNA_RESULT_OUT_OF_MEMORY;
+    }
+    for (jsize index = 0; index < bytes_size; ++index) {
+        bytes_values[index] = (uint8_t)bytes_elements[index];
+    }
+    jsize origin_size = (*environment)->GetArrayLength(environment, origin);
+    jbyte* origin_bytes = (*environment)->GetByteArrayElements(environment, origin, NULL);
+    if (origin_bytes == NULL) {
+        return (jint)CNA_RESULT_OUT_OF_MEMORY;
+    }
+    CNA_StringView origin_view = {(const char*)origin_bytes, (uint64_t)origin_size};
+    CNA_CnbSoundEffectDataHandle out_sound_value = 0;
+    CNA_Result result = cna.cnb_decode_wav_as_sound_effect(bytes_values, (uint64_t)bytes_size, origin_view, &out_sound_value);
+    free(bytes_values);
+    (*environment)->ReleaseByteArrayElements(
+        environment, bytes, bytes_elements, JNI_ABORT);
+    (*environment)->ReleaseByteArrayElements(environment, origin, origin_bytes, JNI_ABORT);
+    if (result == CNA_RESULT_SUCCESS || result == CNA_RESULT_BUFFER_TOO_SMALL) {
+        jlong out_sound_element = (jlong)out_sound_value;
+        (*environment)->SetLongArrayRegion(
+            environment, out_sound, 0, 1, &out_sound_element);
     }
     return (jint)result;
 }
@@ -1715,6 +1829,98 @@ Java_org_openeggbert_cna_internal_generated_NativeCnbRoutes_cnbEncodeTexture2d(
 }
 
 JNIEXPORT jint JNICALL
+Java_org_openeggbert_cna_internal_generated_NativeCnbRoutes_cnbEncodeTexture3d(
+    JNIEnv* environment, jclass declaring_class, jlong texture, jbyteArray content_name, jbyteArray destination, jlongArray out_byte_count)
+{
+    (void)environment;
+    (void)declaring_class;
+    jsize content_name_size = (*environment)->GetArrayLength(environment, content_name);
+    jbyte* content_name_bytes = (*environment)->GetByteArrayElements(environment, content_name, NULL);
+    if (content_name_bytes == NULL) {
+        return (jint)CNA_RESULT_OUT_OF_MEMORY;
+    }
+    CNA_StringView content_name_view = {(const char*)content_name_bytes, (uint64_t)content_name_size};
+    jsize destination_size = (*environment)->GetArrayLength(environment, destination);
+    jbyte* destination_elements = (*environment)->GetByteArrayElements(environment, destination, NULL);
+    if (destination_elements == NULL) {
+        return (jint)CNA_RESULT_OUT_OF_MEMORY;
+    }
+    uint8_t* destination_values = (uint8_t*)malloc(
+        ((size_t)destination_size + 1U) * sizeof(*destination_values));
+    if (destination_values == NULL) {
+        (*environment)->ReleaseByteArrayElements(
+            environment, destination, destination_elements, JNI_ABORT);
+        return (jint)CNA_RESULT_OUT_OF_MEMORY;
+    }
+    for (jsize index = 0; index < destination_size; ++index) {
+        destination_values[index] = (uint8_t)destination_elements[index];
+    }
+    uint64_t out_byte_count_value = 0;
+    CNA_Result result = cna.cnb_encode_texture3d((CNA_CnbTextureDataHandle)texture, content_name_view, destination_values, (uint64_t)destination_size, &out_byte_count_value);
+    (*environment)->ReleaseByteArrayElements(environment, content_name, content_name_bytes, JNI_ABORT);
+    if (result == CNA_RESULT_SUCCESS) {
+        for (jsize index = 0; index < destination_size; ++index) {
+            destination_elements[index] = (jbyte)destination_values[index];
+        }
+    }
+    free(destination_values);
+    (*environment)->ReleaseByteArrayElements(
+        environment, destination, destination_elements, 0);
+    if (result == CNA_RESULT_SUCCESS || result == CNA_RESULT_BUFFER_TOO_SMALL) {
+        jlong out_byte_count_element = (jlong)out_byte_count_value;
+        (*environment)->SetLongArrayRegion(
+            environment, out_byte_count, 0, 1, &out_byte_count_element);
+    }
+    return (jint)result;
+}
+
+JNIEXPORT jint JNICALL
+Java_org_openeggbert_cna_internal_generated_NativeCnbRoutes_cnbEncodeTextureCube(
+    JNIEnv* environment, jclass declaring_class, jlong texture, jbyteArray content_name, jbyteArray destination, jlongArray out_byte_count)
+{
+    (void)environment;
+    (void)declaring_class;
+    jsize content_name_size = (*environment)->GetArrayLength(environment, content_name);
+    jbyte* content_name_bytes = (*environment)->GetByteArrayElements(environment, content_name, NULL);
+    if (content_name_bytes == NULL) {
+        return (jint)CNA_RESULT_OUT_OF_MEMORY;
+    }
+    CNA_StringView content_name_view = {(const char*)content_name_bytes, (uint64_t)content_name_size};
+    jsize destination_size = (*environment)->GetArrayLength(environment, destination);
+    jbyte* destination_elements = (*environment)->GetByteArrayElements(environment, destination, NULL);
+    if (destination_elements == NULL) {
+        return (jint)CNA_RESULT_OUT_OF_MEMORY;
+    }
+    uint8_t* destination_values = (uint8_t*)malloc(
+        ((size_t)destination_size + 1U) * sizeof(*destination_values));
+    if (destination_values == NULL) {
+        (*environment)->ReleaseByteArrayElements(
+            environment, destination, destination_elements, JNI_ABORT);
+        return (jint)CNA_RESULT_OUT_OF_MEMORY;
+    }
+    for (jsize index = 0; index < destination_size; ++index) {
+        destination_values[index] = (uint8_t)destination_elements[index];
+    }
+    uint64_t out_byte_count_value = 0;
+    CNA_Result result = cna.cnb_encode_texture_cube((CNA_CnbTextureDataHandle)texture, content_name_view, destination_values, (uint64_t)destination_size, &out_byte_count_value);
+    (*environment)->ReleaseByteArrayElements(environment, content_name, content_name_bytes, JNI_ABORT);
+    if (result == CNA_RESULT_SUCCESS) {
+        for (jsize index = 0; index < destination_size; ++index) {
+            destination_elements[index] = (jbyte)destination_values[index];
+        }
+    }
+    free(destination_values);
+    (*environment)->ReleaseByteArrayElements(
+        environment, destination, destination_elements, 0);
+    if (result == CNA_RESULT_SUCCESS || result == CNA_RESULT_BUFFER_TOO_SMALL) {
+        jlong out_byte_count_element = (jlong)out_byte_count_value;
+        (*environment)->SetLongArrayRegion(
+            environment, out_byte_count, 0, 1, &out_byte_count_element);
+    }
+    return (jint)result;
+}
+
+JNIEXPORT jint JNICALL
 Java_org_openeggbert_cna_internal_generated_NativeCnbRoutes_cnbEncodeVideo(
     JNIEnv* environment, jclass declaring_class, jbyteArray stream_reference, jlongArray infoIntegral, jfloatArray infoFloating, jbyteArray content_name, jbyteArray destination, jlongArray out_byte_count)
 {
@@ -1984,6 +2190,91 @@ Java_org_openeggbert_cna_internal_generated_NativeCnbRoutes_cnbHasMagic(
         jboolean out_has_magic_element = (jboolean)out_has_magic_value;
         (*environment)->SetBooleanArrayRegion(
             environment, out_has_magic, 0, 1, &out_has_magic_element);
+    }
+    return (jint)result;
+}
+
+JNIEXPORT jint JNICALL
+Java_org_openeggbert_cna_internal_generated_NativeCnbRoutes_cnbImportDdsAsTextureCube(
+    JNIEnv* environment, jclass declaring_class, jbyteArray dds_path, jlongArray out_texture)
+{
+    (void)environment;
+    (void)declaring_class;
+    jsize dds_path_size = (*environment)->GetArrayLength(environment, dds_path);
+    jbyte* dds_path_bytes = (*environment)->GetByteArrayElements(environment, dds_path, NULL);
+    if (dds_path_bytes == NULL) {
+        return (jint)CNA_RESULT_OUT_OF_MEMORY;
+    }
+    CNA_StringView dds_path_view = {(const char*)dds_path_bytes, (uint64_t)dds_path_size};
+    CNA_CnbTextureDataHandle out_texture_value = 0;
+    CNA_Result result = cna.cnb_import_dds_as_texture_cube(dds_path_view, &out_texture_value);
+    (*environment)->ReleaseByteArrayElements(environment, dds_path, dds_path_bytes, JNI_ABORT);
+    if (result == CNA_RESULT_SUCCESS || result == CNA_RESULT_BUFFER_TOO_SMALL) {
+        jlong out_texture_element = (jlong)out_texture_value;
+        (*environment)->SetLongArrayRegion(
+            environment, out_texture, 0, 1, &out_texture_element);
+    }
+    return (jint)result;
+}
+
+JNIEXPORT jint JNICALL
+Java_org_openeggbert_cna_internal_generated_NativeCnbRoutes_cnbImportImageAsTexture2d(
+    JNIEnv* environment, jclass declaring_class, jbyteArray image_path, jbyteArray optionsBytes, jlongArray optionsIntegral, jlongArray out_texture)
+{
+    (void)environment;
+    (void)declaring_class;
+    jsize image_path_size = (*environment)->GetArrayLength(environment, image_path);
+    jbyte* image_path_bytes = (*environment)->GetByteArrayElements(environment, image_path, NULL);
+    if (image_path_bytes == NULL) {
+        return (jint)CNA_RESULT_OUT_OF_MEMORY;
+    }
+    CNA_StringView image_path_view = {(const char*)image_path_bytes, (uint64_t)image_path_size};
+    CNA_CnbImageImportOptions options_value;
+    memset(&options_value, 0, sizeof options_value);
+    options_value.struct_size = (uint32_t)(sizeof options_value);
+    options_value.struct_version = CNA_CNB_IMAGE_IMPORT_OPTIONS_STRUCT_VERSION;
+    {
+        jbyte optionsBytes_values[3];
+        (*environment)->GetByteArrayRegion(environment, optionsBytes, 0, 3, optionsBytes_values);
+        options_value.color_key[0] = (uint8_t)optionsBytes_values[0];
+        options_value.color_key[1] = (uint8_t)optionsBytes_values[1];
+        options_value.color_key[2] = (uint8_t)optionsBytes_values[2];
+    }
+    {
+        jlong optionsIntegral_values[1];
+        (*environment)->GetLongArrayRegion(environment, optionsIntegral, 0, 1, optionsIntegral_values);
+        options_value.has_color_key = (CNA_Bool)optionsIntegral_values[0];
+    }
+    CNA_CnbTextureDataHandle out_texture_value = 0;
+    CNA_Result result = cna.cnb_import_image_as_texture2d(image_path_view, &options_value, &out_texture_value);
+    (*environment)->ReleaseByteArrayElements(environment, image_path, image_path_bytes, JNI_ABORT);
+    if (result == CNA_RESULT_SUCCESS || result == CNA_RESULT_BUFFER_TOO_SMALL) {
+        jlong out_texture_element = (jlong)out_texture_value;
+        (*environment)->SetLongArrayRegion(
+            environment, out_texture, 0, 1, &out_texture_element);
+    }
+    return (jint)result;
+}
+
+JNIEXPORT jint JNICALL
+Java_org_openeggbert_cna_internal_generated_NativeCnbRoutes_cnbImportWavAsSoundEffect(
+    JNIEnv* environment, jclass declaring_class, jbyteArray wav_path, jlongArray out_sound)
+{
+    (void)environment;
+    (void)declaring_class;
+    jsize wav_path_size = (*environment)->GetArrayLength(environment, wav_path);
+    jbyte* wav_path_bytes = (*environment)->GetByteArrayElements(environment, wav_path, NULL);
+    if (wav_path_bytes == NULL) {
+        return (jint)CNA_RESULT_OUT_OF_MEMORY;
+    }
+    CNA_StringView wav_path_view = {(const char*)wav_path_bytes, (uint64_t)wav_path_size};
+    CNA_CnbSoundEffectDataHandle out_sound_value = 0;
+    CNA_Result result = cna.cnb_import_wav_as_sound_effect(wav_path_view, &out_sound_value);
+    (*environment)->ReleaseByteArrayElements(environment, wav_path, wav_path_bytes, JNI_ABORT);
+    if (result == CNA_RESULT_SUCCESS || result == CNA_RESULT_BUFFER_TOO_SMALL) {
+        jlong out_sound_element = (jlong)out_sound_value;
+        (*environment)->SetLongArrayRegion(
+            environment, out_sound, 0, 1, &out_sound_element);
     }
     return (jint)result;
 }

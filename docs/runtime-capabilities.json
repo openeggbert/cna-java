@@ -4,14 +4,14 @@
   "profile": "XNA 4.0 full runtime superset projected to Java 17, plus the CNA extension surface",
   "qualifiedRuntime": {
     "platform": "Linux x86-64",
-    "cnaAbi": "0.20.0",
-    "cnaHead": "17b5a90a0878f3f44c23bc8e3197d5d30373dc72",
+    "cnaAbi": "0.21.0",
+    "cnaHead": "599d14e54e073b566d77b3d6fb30ac52d3d810b7",
     "sharpRuntimeHead": "4a49afb0cfe6a41e6e0af0bb62dc5175976731bb",
     "renderer": "HEADLESS",
     "audio": "NULL",
     "extendedGraphicsLayer": true,
     "devices": true,
-    "cnaInventorySha256": "e9e0be892dbdce49dedf195dac35f604a9263565a74473195d878ee9e580696d"
+    "cnaInventorySha256": "be9a2bf818318002adc100ad1db22949b164726d2d124352f3b29aa3fdc48ea2"
   },
   "statusVocabulary": [
     "ASSET_PENDING",
@@ -278,6 +278,27 @@
         "NATIVE_VERIFIED"
       ],
       "detail": "XNA's Guide draws its own on-screen keyboard and message box because an Xbox has a system overlay; CNA has none, so the request becomes the game's to show and that question has no XNA member. Verified end to end against the live runtime: Guide.BeginShowKeyboardInput makes a request the game finds pending with exactly the title, description and current text it asked for; discarding drops it unanswered; cancelling answers it and it stops being pending. Guide.BeginShowMessageBox reports the focused button the game does not otherwise know, and a click answers it. CNA's own plain renderer is reachable through Draw over a SpriteBatch, SpriteFont and white pixel the game supplies; drawing was not exercised on the headless renderer."
+    },
+    {
+      "id": "cnb-source-import",
+      "surface": "org.openeggbert.cna.extensions.content.CnbImport",
+      "statuses": [
+        "EXTENSION_VERIFIED",
+        "NATIVE_VERIFIED"
+      ],
+      "detail": "CNA reads ordinary source assets into compiled descriptions with no graphics or audio device: a PNG or JPEG becomes single-level RGBA8 texture data, optionally with one painted colour keyed to transparent, and a WAV becomes a PCM16 sound whose data chunk comes back byte for byte. Both are qualified against fixtures this repository authors -- a PNG written by the JDK and a WAV written from its published layout -- because the source formats are what is under test and a CNA-authored input would prove nothing.",
+      "limitation": "DDS cube import takes DXT1, DXT3 and DXT5 only. An uncompressed cube map is a real file this build declines, answering NOT_SUPPORTED with its own identity rather than failing as though the bytes were malformed; the first fixture written here was B8G8R8A8 and is what found that out."
+    },
+    {
+      "id": "cnb-model-tooling",
+      "surface": "org.openeggbert.cna.extensions.content.CnbModelData",
+      "statuses": [
+        "EXTENSION_VERIFIED",
+        "NATIVE_VERIFIED",
+        "LANGUAGE_MAPPING_LIMITATION"
+      ],
+      "detail": "The whole compiled-model graph reads and writes with no graphics device: bones, parts with their vertex and index bytes, meshes, the skinning skeleton with all three matrix sets, baked lights, and the glTF material factors with their eight texture names and seven per-slot states. Probed in C before binding, because JAVA-UPSTREAM-004 found CNA's content-manager model loader segfaulting during teardown; the .cnb path survives a build-encode-decode-destroy cycle cleanly.",
+      "limitation": "There is no CnbModelData.toModel(GraphicsDevice). XNA's Model has no public constructor and CNA offers no route that builds one from this description, so this is the tooling side of the file and a game still loads a model through the content manager. Animations are readable but not writable: cna_cnb_model_add_animation takes a nested descriptor graph the JNI generator refuses rather than guesses at, which is the same shape that blocks JAVA-EXT-007."
     }
   ]
 }

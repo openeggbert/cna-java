@@ -105,6 +105,7 @@
     CNA_JNI_ROUTE(cna_cnb_crc32c_portable) cnb_crc32c_portable;
     CNA_JNI_ROUTE(cna_cnb_crc32c_uses_hardware) cnb_crc32c_uses_hardware;
     CNA_JNI_ROUTE(cna_cnb_decode_curve) cnb_decode_curve;
+    CNA_JNI_ROUTE(cna_cnb_decode_dds_as_texture_cube) cnb_decode_dds_as_texture_cube;
     CNA_JNI_ROUTE(cna_cnb_decode_model) cnb_decode_model;
     CNA_JNI_ROUTE(cna_cnb_decode_song_duration_milliseconds) cnb_decode_song_duration_milliseconds;
     CNA_JNI_ROUTE(cna_cnb_decode_song_name) cnb_decode_song_name;
@@ -114,9 +115,12 @@
     CNA_JNI_ROUTE(cna_cnb_decode_sound_effect) cnb_decode_sound_effect;
     CNA_JNI_ROUTE(cna_cnb_decode_sprite_font) cnb_decode_sprite_font;
     CNA_JNI_ROUTE(cna_cnb_decode_texture2d) cnb_decode_texture2d;
+    CNA_JNI_ROUTE(cna_cnb_decode_texture3d) cnb_decode_texture3d;
+    CNA_JNI_ROUTE(cna_cnb_decode_texture_cube) cnb_decode_texture_cube;
     CNA_JNI_ROUTE(cna_cnb_decode_video) cnb_decode_video;
     CNA_JNI_ROUTE(cna_cnb_decode_video_stream_reference) cnb_decode_video_stream_reference;
     CNA_JNI_ROUTE(cna_cnb_decode_video_stream_reference_size) cnb_decode_video_stream_reference_size;
+    CNA_JNI_ROUTE(cna_cnb_decode_wav_as_sound_effect) cnb_decode_wav_as_sound_effect;
     CNA_JNI_ROUTE(cna_cnb_document_copy_chunk_data) cnb_document_copy_chunk_data;
     CNA_JNI_ROUTE(cna_cnb_document_copy_external_reference_name) cnb_document_copy_external_reference_name;
     CNA_JNI_ROUTE(cna_cnb_document_copy_metadata_asset_type_name) cnb_document_copy_metadata_asset_type_name;
@@ -152,6 +156,8 @@
     CNA_JNI_ROUTE(cna_cnb_encode_sound_effect) cnb_encode_sound_effect;
     CNA_JNI_ROUTE(cna_cnb_encode_sprite_font) cnb_encode_sprite_font;
     CNA_JNI_ROUTE(cna_cnb_encode_texture2d) cnb_encode_texture2d;
+    CNA_JNI_ROUTE(cna_cnb_encode_texture3d) cnb_encode_texture3d;
+    CNA_JNI_ROUTE(cna_cnb_encode_texture_cube) cnb_encode_texture_cube;
     CNA_JNI_ROUTE(cna_cnb_encode_video) cnb_encode_video;
     CNA_JNI_ROUTE(cna_cnb_get_asset_type_name_size) cnb_get_asset_type_name_size;
     CNA_JNI_ROUTE(cna_cnb_get_audio_format_name_size) cnb_get_audio_format_name_size;
@@ -163,6 +169,9 @@
     CNA_JNI_ROUTE(cna_cnb_get_texture_format_unit_bytes) cnb_get_texture_format_unit_bytes;
     CNA_JNI_ROUTE(cna_cnb_get_texture_level_byte_size) cnb_get_texture_level_byte_size;
     CNA_JNI_ROUTE(cna_cnb_has_magic) cnb_has_magic;
+    CNA_JNI_ROUTE(cna_cnb_import_dds_as_texture_cube) cnb_import_dds_as_texture_cube;
+    CNA_JNI_ROUTE(cna_cnb_import_image_as_texture2d) cnb_import_image_as_texture2d;
+    CNA_JNI_ROUTE(cna_cnb_import_wav_as_sound_effect) cnb_import_wav_as_sound_effect;
     CNA_JNI_ROUTE(cna_cnb_is_block_compressed_texture_format) cnb_is_block_compressed_texture_format;
     CNA_JNI_ROUTE(cna_cnb_is_compression_supported) cnb_is_compression_supported;
     CNA_JNI_ROUTE(cna_cnb_is_custom_asset_type_id) cnb_is_custom_asset_type_id;

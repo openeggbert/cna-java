@@ -126,4 +126,54 @@ public final class Cnb {
                 .cnbEncodeModel(model.handle(), name, destination, written));
         return CnbExtension.trim(destination, written[0]);
     }
+
+    /**
+     * Encodes a cube texture as a complete TextureCube {@code .cnb} file.
+     *
+     * @param texture a texture with six faces, a depth of one and square levels
+     * @param contentName the source content name to record
+     * @return the whole file
+     * @throws CnbFormatException when the texture is not shaped like a cube map
+     */
+    public static byte[] encodeTextureCube(CnbTextureData texture, String contentName) {
+        return encode("Cnb.encodeTextureCube", texture, contentName,
+                NativeCnbRoutes::cnbEncodeTextureCube);
+    }
+
+    /**
+     * Encodes a volume texture as a complete Texture3D {@code .cnb} file.
+     *
+     * @param texture a texture with one face and any positive depth
+     * @param contentName the source content name to record
+     * @return the whole file
+     * @throws CnbFormatException when the texture is not shaped like a volume
+     */
+    public static byte[] encodeTexture3D(CnbTextureData texture, String contentName) {
+        return encode("Cnb.encodeTexture3D", texture, contentName,
+                NativeCnbRoutes::cnbEncodeTexture3d);
+    }
+
+    /** The size-then-write protocol every texture encoder shares. */
+    private static byte[] encode(
+            String operation, CnbTextureData texture, String contentName, Encoder encoder) {
+        CnbExtension.requireAvailable();
+        Objects.requireNonNull(texture, "texture");
+        Objects.requireNonNull(contentName, "contentName");
+        byte[] name = CnbExtension.utf8(contentName);
+        long[] size = new long[1];
+        int probe = encoder.encode(texture.handle(), name, new byte[0], size);
+        if (probe != CnbExtension.RESULT_BUFFER_TOO_SMALL) {
+            CnbExtension.check(operation, probe);
+        }
+        byte[] destination = new byte[Math.toIntExact(size[0])];
+        long[] written = new long[1];
+        CnbExtension.check(operation,
+                encoder.encode(texture.handle(), name, destination, written));
+        return CnbExtension.trim(destination, written[0]);
+    }
+
+    /** One of CNA's texture encoders, which all share the same shape. */
+    private interface Encoder {
+        int encode(long texture, byte[] contentName, byte[] destination, long[] written);
+    }
 }

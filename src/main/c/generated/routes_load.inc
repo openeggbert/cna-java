@@ -105,6 +105,7 @@
     LOAD(cnb_crc32c_portable, "cna_cnb_crc32c_portable");
     LOAD(cnb_crc32c_uses_hardware, "cna_cnb_crc32c_uses_hardware");
     LOAD(cnb_decode_curve, "cna_cnb_decode_curve");
+    LOAD(cnb_decode_dds_as_texture_cube, "cna_cnb_decode_dds_as_texture_cube");
     LOAD(cnb_decode_model, "cna_cnb_decode_model");
     LOAD(cnb_decode_song_duration_milliseconds, "cna_cnb_decode_song_duration_milliseconds");
     LOAD(cnb_decode_song_name, "cna_cnb_decode_song_name");
@@ -114,9 +115,12 @@
     LOAD(cnb_decode_sound_effect, "cna_cnb_decode_sound_effect");
     LOAD(cnb_decode_sprite_font, "cna_cnb_decode_sprite_font");
     LOAD(cnb_decode_texture2d, "cna_cnb_decode_texture2d");
+    LOAD(cnb_decode_texture3d, "cna_cnb_decode_texture3d");
+    LOAD(cnb_decode_texture_cube, "cna_cnb_decode_texture_cube");
     LOAD(cnb_decode_video, "cna_cnb_decode_video");
     LOAD(cnb_decode_video_stream_reference, "cna_cnb_decode_video_stream_reference");
     LOAD(cnb_decode_video_stream_reference_size, "cna_cnb_decode_video_stream_reference_size");
+    LOAD(cnb_decode_wav_as_sound_effect, "cna_cnb_decode_wav_as_sound_effect");
     LOAD(cnb_document_copy_chunk_data, "cna_cnb_document_copy_chunk_data");
     LOAD(cnb_document_copy_external_reference_name, "cna_cnb_document_copy_external_reference_name");
     LOAD(cnb_document_copy_metadata_asset_type_name, "cna_cnb_document_copy_metadata_asset_type_name");
@@ -152,6 +156,8 @@
     LOAD(cnb_encode_sound_effect, "cna_cnb_encode_sound_effect");
     LOAD(cnb_encode_sprite_font, "cna_cnb_encode_sprite_font");
     LOAD(cnb_encode_texture2d, "cna_cnb_encode_texture2d");
+    LOAD(cnb_encode_texture3d, "cna_cnb_encode_texture3d");
+    LOAD(cnb_encode_texture_cube, "cna_cnb_encode_texture_cube");
     LOAD(cnb_encode_video, "cna_cnb_encode_video");
     LOAD(cnb_get_asset_type_name_size, "cna_cnb_get_asset_type_name_size");
     LOAD(cnb_get_audio_format_name_size, "cna_cnb_get_audio_format_name_size");
@@ -163,6 +169,9 @@
     LOAD(cnb_get_texture_format_unit_bytes, "cna_cnb_get_texture_format_unit_bytes");
     LOAD(cnb_get_texture_level_byte_size, "cna_cnb_get_texture_level_byte_size");
     LOAD(cnb_has_magic, "cna_cnb_has_magic");
+    LOAD(cnb_import_dds_as_texture_cube, "cna_cnb_import_dds_as_texture_cube");
+    LOAD(cnb_import_image_as_texture2d, "cna_cnb_import_image_as_texture2d");
+    LOAD(cnb_import_wav_as_sound_effect, "cna_cnb_import_wav_as_sound_effect");
     LOAD(cnb_is_block_compressed_texture_format, "cna_cnb_is_block_compressed_texture_format");
     LOAD(cnb_is_compression_supported, "cna_cnb_is_compression_supported");
     LOAD(cnb_is_custom_asset_type_id, "cna_cnb_is_custom_asset_type_id");

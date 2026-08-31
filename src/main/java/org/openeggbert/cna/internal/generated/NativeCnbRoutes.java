@@ -121,6 +121,11 @@ public final class NativeCnbRoutes {
     public static native int cnbDecodeCurve(long document, long[] outCurve);
 
     /**
+     * cna_cnb_decode_dds_as_texture_cube (cnb.h).
+     */
+    public static native int cnbDecodeDdsAsTextureCube(byte[] bytes, byte[] origin, long[] outTexture);
+
+    /**
      * cna_cnb_decode_model (cnb.h).
      */
     public static native int cnbDecodeModel(long document, long[] outModel);
@@ -166,6 +171,16 @@ public final class NativeCnbRoutes {
     public static native int cnbDecodeTexture2d(long document, long[] outTexture);
 
     /**
+     * cna_cnb_decode_texture3d (cnb.h).
+     */
+    public static native int cnbDecodeTexture3d(long document, long[] outTexture);
+
+    /**
+     * cna_cnb_decode_texture_cube (cnb.h).
+     */
+    public static native int cnbDecodeTextureCube(long document, long[] outTexture);
+
+    /**
      * cna_cnb_decode_video (cnb.h).
      *
      * <p>outInfoIntegral carries CNA_CnbVideoInfo in this order:
@@ -193,6 +208,11 @@ public final class NativeCnbRoutes {
      * cna_cnb_decode_video_stream_reference_size (cnb.h).
      */
     public static native int cnbDecodeVideoStreamReferenceSize(long document, long[] outByteCount);
+
+    /**
+     * cna_cnb_decode_wav_as_sound_effect (cnb.h).
+     */
+    public static native int cnbDecodeWavAsSoundEffect(byte[] bytes, byte[] origin, long[] outSound);
 
     /**
      * cna_cnb_document_copy_chunk_data (cnb.h).
@@ -435,6 +455,16 @@ public final class NativeCnbRoutes {
     public static native int cnbEncodeTexture2d(long texture, byte[] contentName, byte[] destination, long[] outByteCount);
 
     /**
+     * cna_cnb_encode_texture3d (cnb.h).
+     */
+    public static native int cnbEncodeTexture3d(long texture, byte[] contentName, byte[] destination, long[] outByteCount);
+
+    /**
+     * cna_cnb_encode_texture_cube (cnb.h).
+     */
+    public static native int cnbEncodeTextureCube(long texture, byte[] contentName, byte[] destination, long[] outByteCount);
+
+    /**
      * cna_cnb_encode_video (cnb.h).
      *
      * <p>infoIntegral carries CNA_CnbVideoInfo in this order:
@@ -502,6 +532,33 @@ public final class NativeCnbRoutes {
      * cna_cnb_has_magic (cnb.h).
      */
     public static native int cnbHasMagic(byte[] bytes, boolean[] outHasMagic);
+
+    /**
+     * cna_cnb_import_dds_as_texture_cube (cnb.h).
+     */
+    public static native int cnbImportDdsAsTextureCube(byte[] ddsPath, long[] outTexture);
+
+    /**
+     * cna_cnb_import_image_as_texture2d (cnb.h).
+     *
+     * <p>optionsBytes carries CNA_CnbImageImportOptions in this order:
+     * <ol start="0">
+     *   <li>{@code color_key[0]} (uint8_t)</li>
+     *   <li>{@code color_key[1]} (uint8_t)</li>
+     *   <li>{@code color_key[2]} (uint8_t)</li>
+     * </ol>
+     *
+     * <p>optionsIntegral carries CNA_CnbImageImportOptions in this order:
+     * <ol start="0">
+     *   <li>{@code has_color_key} (CNA_Bool)</li>
+     * </ol>
+     */
+    public static native int cnbImportImageAsTexture2d(byte[] imagePath, byte[] optionsBytes, long[] optionsIntegral, long[] outTexture);
+
+    /**
+     * cna_cnb_import_wav_as_sound_effect (cnb.h).
+     */
+    public static native int cnbImportWavAsSoundEffect(byte[] wavPath, long[] outSound);
 
     /**
      * cna_cnb_is_block_compressed_texture_format (cnb.h).

@@ -2454,6 +2454,10 @@
         "symbol": "cna_cnb_decode_curve"
       },
       {
+        "java": "cnbDecodeDdsAsTextureCube",
+        "symbol": "cna_cnb_decode_dds_as_texture_cube"
+      },
+      {
         "java": "cnbDecodeModel",
         "symbol": "cna_cnb_decode_model"
       },
@@ -2490,6 +2494,14 @@
         "symbol": "cna_cnb_decode_texture2d"
       },
       {
+        "java": "cnbDecodeTexture3d",
+        "symbol": "cna_cnb_decode_texture3d"
+      },
+      {
+        "java": "cnbDecodeTextureCube",
+        "symbol": "cna_cnb_decode_texture_cube"
+      },
+      {
         "java": "cnbDecodeVideo",
         "symbol": "cna_cnb_decode_video"
       },
@@ -2500,6 +2512,10 @@
       {
         "java": "cnbDecodeVideoStreamReferenceSize",
         "symbol": "cna_cnb_decode_video_stream_reference_size"
+      },
+      {
+        "java": "cnbDecodeWavAsSoundEffect",
+        "symbol": "cna_cnb_decode_wav_as_sound_effect"
       },
       {
         "java": "cnbDocumentCopyChunkData",
@@ -2642,6 +2658,14 @@
         "symbol": "cna_cnb_encode_texture2d"
       },
       {
+        "java": "cnbEncodeTexture3d",
+        "symbol": "cna_cnb_encode_texture3d"
+      },
+      {
+        "java": "cnbEncodeTextureCube",
+        "symbol": "cna_cnb_encode_texture_cube"
+      },
+      {
         "java": "cnbEncodeVideo",
         "symbol": "cna_cnb_encode_video"
       },
@@ -2684,6 +2708,18 @@
       {
         "java": "cnbHasMagic",
         "symbol": "cna_cnb_has_magic"
+      },
+      {
+        "java": "cnbImportDdsAsTextureCube",
+        "symbol": "cna_cnb_import_dds_as_texture_cube"
+      },
+      {
+        "java": "cnbImportImageAsTexture2d",
+        "symbol": "cna_cnb_import_image_as_texture2d"
+      },
+      {
+        "java": "cnbImportWavAsSoundEffect",
+        "symbol": "cna_cnb_import_wav_as_sound_effect"
       },
       {
         "java": "cnbIsBlockCompressedTextureFormat",
