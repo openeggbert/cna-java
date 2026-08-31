@@ -16424,6 +16424,253 @@
       ]
     },
     {
+      "name": "cna_particle_emitter_settings_init",
+      "header": "engine_layer.h",
+      "ownership": "no handle; fills the caller's value",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_ParticleEmitterSettings*"
+      ]
+    },
+    {
+      "name": "cna_particle_init",
+      "header": "engine_layer.h",
+      "ownership": "no handle; fills the caller's value",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_Particle*"
+      ]
+    },
+    {
+      "name": "cna_particle_system_copy_particle_lookup_glsl",
+      "header": "engine_layer.h",
+      "ownership": "no handle; a pure function of its arguments",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "char*",
+        "uint64_t",
+        "uint64_t*"
+      ]
+    },
+    {
+      "name": "cna_particle_system_copy_particles_ext",
+      "header": "engine_layer.h",
+      "ownership": "borrows the system; fills the caller's buffer",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_ParticleSystemHandle",
+        "CNA_Particle*",
+        "uint64_t",
+        "uint64_t*"
+      ]
+    },
+    {
+      "name": "cna_particle_system_copy_unsupported_reason",
+      "header": "engine_layer.h",
+      "ownership": "borrows the system; fills the caller's buffer",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_ParticleSystemHandle",
+        "char*",
+        "uint64_t",
+        "uint64_t*"
+      ]
+    },
+    {
+      "name": "cna_particle_system_create",
+      "header": "engine_layer.h",
+      "ownership": "borrows the graphics device; returns an owned particle-system handle",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_Handle",
+        "CNA_ParticleSystemHandle*"
+      ]
+    },
+    {
+      "name": "cna_particle_system_create_with_capacity",
+      "header": "engine_layer.h",
+      "ownership": "borrows the graphics device; returns an owned particle-system handle",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_Handle",
+        "int32_t",
+        "CNA_ParticleSystemHandle*"
+      ]
+    },
+    {
+      "name": "cna_particle_system_destroy",
+      "header": "engine_layer.h",
+      "ownership": "releases the owned particle-system handle and its buffers",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_ParticleSystemHandle"
+      ]
+    },
+    {
+      "name": "cna_particle_system_draw",
+      "header": "engine_layer.h",
+      "ownership": "borrows the system and the caller's texture for the duration of the call",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_ParticleSystemHandle",
+        "const CNA_Matrix*",
+        "const CNA_Matrix*",
+        "CNA_Handle"
+      ]
+    },
+    {
+      "name": "cna_particle_system_get_active_count",
+      "header": "engine_layer.h",
+      "ownership": "borrows the system",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_ParticleSystemHandle",
+        "int32_t*"
+      ]
+    },
+    {
+      "name": "cna_particle_system_get_capacity",
+      "header": "engine_layer.h",
+      "ownership": "borrows the system",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_ParticleSystemHandle",
+        "int32_t*"
+      ]
+    },
+    {
+      "name": "cna_particle_system_get_settings",
+      "header": "engine_layer.h",
+      "ownership": "borrows the system",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_ParticleSystemHandle",
+        "CNA_ParticleEmitterSettings*"
+      ]
+    },
+    {
+      "name": "cna_particle_system_get_softness_ext",
+      "header": "engine_layer.h",
+      "ownership": "borrows the system",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_ParticleSystemHandle",
+        "float*"
+      ]
+    },
+    {
+      "name": "cna_particle_system_is_emission_rate_clamped",
+      "header": "engine_layer.h",
+      "ownership": "borrows the system",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_ParticleSystemHandle",
+        "CNA_Bool*"
+      ]
+    },
+    {
+      "name": "cna_particle_system_is_simulation_on_cpu_ext",
+      "header": "engine_layer.h",
+      "ownership": "borrows the system",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_ParticleSystemHandle",
+        "CNA_Bool*"
+      ]
+    },
+    {
+      "name": "cna_particle_system_random",
+      "header": "engine_layer.h",
+      "ownership": "no handle; a pure function of its arguments",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "uint32_t",
+        "float*"
+      ]
+    },
+    {
+      "name": "cna_particle_system_reset",
+      "header": "engine_layer.h",
+      "ownership": "borrows the system",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_ParticleSystemHandle"
+      ]
+    },
+    {
+      "name": "cna_particle_system_set_depth_input_ext",
+      "header": "engine_layer.h",
+      "ownership": "borrows the system and the caller's texture for the duration of the call",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_ParticleSystemHandle",
+        "CNA_Handle",
+        "float"
+      ]
+    },
+    {
+      "name": "cna_particle_system_set_settings",
+      "header": "engine_layer.h",
+      "ownership": "borrows the system",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_ParticleSystemHandle",
+        "const CNA_ParticleEmitterSettings*"
+      ]
+    },
+    {
+      "name": "cna_particle_system_set_simulation_on_cpu_ext",
+      "header": "engine_layer.h",
+      "ownership": "borrows the system",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_ParticleSystemHandle",
+        "CNA_Bool"
+      ]
+    },
+    {
+      "name": "cna_particle_system_set_softness_ext",
+      "header": "engine_layer.h",
+      "ownership": "borrows the system",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_ParticleSystemHandle",
+        "float"
+      ]
+    },
+    {
+      "name": "cna_particle_system_step",
+      "header": "engine_layer.h",
+      "ownership": "no handle; a pure function of its arguments",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_Particle*",
+        "int32_t",
+        "const CNA_ParticleEmitterSettings*",
+        "float"
+      ]
+    },
+    {
+      "name": "cna_particle_system_update",
+      "header": "engine_layer.h",
+      "ownership": "borrows the system",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_ParticleSystemHandle",
+        "float"
+      ]
+    },
+    {
+      "name": "cna_particle_system_uses_compute",
+      "header": "engine_layer.h",
+      "ownership": "borrows the system",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_ParticleSystemHandle",
+        "CNA_Bool*"
+      ]
+    },
+    {
       "name": "cna_pbr_material_init",
       "header": "graphics_ext.h",
       "ownership": "caller output only; initializes a value structure",

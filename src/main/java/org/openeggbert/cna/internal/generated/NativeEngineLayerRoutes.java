@@ -2668,6 +2668,318 @@ public final class NativeEngineLayerRoutes {
     public static native int motionBlurPassSetStrength(long pass, float value);
 
     /**
+     * cna_particle_emitter_settings_init (engine_layer.h).
+     *
+     * <p>outSettingsFloating carries CNA_ParticleEmitterSettings in this order:
+     * <ol start="0">
+     *   <li>{@code position.x} (float)</li>
+     *   <li>{@code position.y} (float)</li>
+     *   <li>{@code position.z} (float)</li>
+     *   <li>{@code direction.x} (float)</li>
+     *   <li>{@code direction.y} (float)</li>
+     *   <li>{@code direction.z} (float)</li>
+     *   <li>{@code gravity.x} (float)</li>
+     *   <li>{@code gravity.y} (float)</li>
+     *   <li>{@code gravity.z} (float)</li>
+     *   <li>{@code start_color.x} (float)</li>
+     *   <li>{@code start_color.y} (float)</li>
+     *   <li>{@code start_color.z} (float)</li>
+     *   <li>{@code start_color.w} (float)</li>
+     *   <li>{@code end_color.x} (float)</li>
+     *   <li>{@code end_color.y} (float)</li>
+     *   <li>{@code end_color.z} (float)</li>
+     *   <li>{@code end_color.w} (float)</li>
+     *   <li>{@code cone_angle} (float)</li>
+     *   <li>{@code speed} (float)</li>
+     *   <li>{@code speed_variance} (float)</li>
+     *   <li>{@code lifetime} (float)</li>
+     *   <li>{@code lifetime_variance} (float)</li>
+     *   <li>{@code drag} (float)</li>
+     *   <li>{@code emission_rate} (float)</li>
+     *   <li>{@code start_size} (float)</li>
+     *   <li>{@code end_size} (float)</li>
+     * </ol>
+     */
+    public static native int particleEmitterSettingsInit(float[] outSettingsFloating);
+
+    /**
+     * cna_particle_init (engine_layer.h).
+     *
+     * <p>outParticleFloating carries CNA_Particle in this order:
+     * <ol start="0">
+     *   <li>{@code position.x} (float)</li>
+     *   <li>{@code position.y} (float)</li>
+     *   <li>{@code position.z} (float)</li>
+     *   <li>{@code position.w} (float)</li>
+     *   <li>{@code velocity.x} (float)</li>
+     *   <li>{@code velocity.y} (float)</li>
+     *   <li>{@code velocity.z} (float)</li>
+     *   <li>{@code velocity.w} (float)</li>
+     *   <li>{@code state.x} (float)</li>
+     *   <li>{@code state.y} (float)</li>
+     *   <li>{@code state.z} (float)</li>
+     *   <li>{@code state.w} (float)</li>
+     * </ol>
+     */
+    public static native int particleInit(float[] outParticleFloating);
+
+    /**
+     * cna_particle_system_copy_particle_lookup_glsl (engine_layer.h).
+     */
+    public static native int particleSystemCopyParticleLookupGlsl(byte[] destination, long[] outBytes);
+
+    /**
+     * cna_particle_system_copy_particles_ext (engine_layer.h).
+     */
+    public static native int particleSystemCopyParticlesExt(long system, float[] destinationFloating, long[] outCount);
+
+    /**
+     * cna_particle_system_copy_unsupported_reason (engine_layer.h).
+     */
+    public static native int particleSystemCopyUnsupportedReason(long system, byte[] destination, long[] outBytes);
+
+    /**
+     * cna_particle_system_create (engine_layer.h).
+     */
+    public static native int particleSystemCreate(long graphicsDevice, long[] outSystem);
+
+    /**
+     * cna_particle_system_create_with_capacity (engine_layer.h).
+     */
+    public static native int particleSystemCreateWithCapacity(long graphicsDevice, int capacity, long[] outSystem);
+
+    /**
+     * cna_particle_system_destroy (engine_layer.h).
+     */
+    public static native int particleSystemDestroy(long system);
+
+    /**
+     * cna_particle_system_draw (engine_layer.h).
+     *
+     * <p>viewFloating carries CNA_Matrix in this order:
+     * <ol start="0">
+     *   <li>{@code m11} (float)</li>
+     *   <li>{@code m12} (float)</li>
+     *   <li>{@code m13} (float)</li>
+     *   <li>{@code m14} (float)</li>
+     *   <li>{@code m21} (float)</li>
+     *   <li>{@code m22} (float)</li>
+     *   <li>{@code m23} (float)</li>
+     *   <li>{@code m24} (float)</li>
+     *   <li>{@code m31} (float)</li>
+     *   <li>{@code m32} (float)</li>
+     *   <li>{@code m33} (float)</li>
+     *   <li>{@code m34} (float)</li>
+     *   <li>{@code m41} (float)</li>
+     *   <li>{@code m42} (float)</li>
+     *   <li>{@code m43} (float)</li>
+     *   <li>{@code m44} (float)</li>
+     * </ol>
+     *
+     * <p>projectionFloating carries CNA_Matrix in this order:
+     * <ol start="0">
+     *   <li>{@code m11} (float)</li>
+     *   <li>{@code m12} (float)</li>
+     *   <li>{@code m13} (float)</li>
+     *   <li>{@code m14} (float)</li>
+     *   <li>{@code m21} (float)</li>
+     *   <li>{@code m22} (float)</li>
+     *   <li>{@code m23} (float)</li>
+     *   <li>{@code m24} (float)</li>
+     *   <li>{@code m31} (float)</li>
+     *   <li>{@code m32} (float)</li>
+     *   <li>{@code m33} (float)</li>
+     *   <li>{@code m34} (float)</li>
+     *   <li>{@code m41} (float)</li>
+     *   <li>{@code m42} (float)</li>
+     *   <li>{@code m43} (float)</li>
+     *   <li>{@code m44} (float)</li>
+     * </ol>
+     */
+    public static native int particleSystemDraw(long system, float[] viewFloating, float[] projectionFloating, long texture);
+
+    /**
+     * cna_particle_system_get_active_count (engine_layer.h).
+     */
+    public static native int particleSystemGetActiveCount(long system, int[] outCount);
+
+    /**
+     * cna_particle_system_get_capacity (engine_layer.h).
+     */
+    public static native int particleSystemGetCapacity(long system, int[] outCapacity);
+
+    /**
+     * cna_particle_system_get_settings (engine_layer.h).
+     *
+     * <p>outSettingsFloating carries CNA_ParticleEmitterSettings in this order:
+     * <ol start="0">
+     *   <li>{@code position.x} (float)</li>
+     *   <li>{@code position.y} (float)</li>
+     *   <li>{@code position.z} (float)</li>
+     *   <li>{@code direction.x} (float)</li>
+     *   <li>{@code direction.y} (float)</li>
+     *   <li>{@code direction.z} (float)</li>
+     *   <li>{@code gravity.x} (float)</li>
+     *   <li>{@code gravity.y} (float)</li>
+     *   <li>{@code gravity.z} (float)</li>
+     *   <li>{@code start_color.x} (float)</li>
+     *   <li>{@code start_color.y} (float)</li>
+     *   <li>{@code start_color.z} (float)</li>
+     *   <li>{@code start_color.w} (float)</li>
+     *   <li>{@code end_color.x} (float)</li>
+     *   <li>{@code end_color.y} (float)</li>
+     *   <li>{@code end_color.z} (float)</li>
+     *   <li>{@code end_color.w} (float)</li>
+     *   <li>{@code cone_angle} (float)</li>
+     *   <li>{@code speed} (float)</li>
+     *   <li>{@code speed_variance} (float)</li>
+     *   <li>{@code lifetime} (float)</li>
+     *   <li>{@code lifetime_variance} (float)</li>
+     *   <li>{@code drag} (float)</li>
+     *   <li>{@code emission_rate} (float)</li>
+     *   <li>{@code start_size} (float)</li>
+     *   <li>{@code end_size} (float)</li>
+     * </ol>
+     */
+    public static native int particleSystemGetSettings(long system, float[] outSettingsFloating);
+
+    /**
+     * cna_particle_system_get_softness_ext (engine_layer.h).
+     */
+    public static native int particleSystemGetSoftnessExt(long system, float[] outSoftness);
+
+    /**
+     * cna_particle_system_is_emission_rate_clamped (engine_layer.h).
+     */
+    public static native int particleSystemIsEmissionRateClamped(long system, boolean[] outClamped);
+
+    /**
+     * cna_particle_system_is_simulation_on_cpu_ext (engine_layer.h).
+     */
+    public static native int particleSystemIsSimulationOnCpuExt(long system, boolean[] outForced);
+
+    /**
+     * cna_particle_system_random (engine_layer.h).
+     */
+    public static native int particleSystemRandom(int seed, float[] outValue);
+
+    /**
+     * cna_particle_system_reset (engine_layer.h).
+     */
+    public static native int particleSystemReset(long system);
+
+    /**
+     * cna_particle_system_set_depth_input_ext (engine_layer.h).
+     */
+    public static native int particleSystemSetDepthInputExt(long system, long depth, float farPlane);
+
+    /**
+     * cna_particle_system_set_settings (engine_layer.h).
+     *
+     * <p>settingsFloating carries CNA_ParticleEmitterSettings in this order:
+     * <ol start="0">
+     *   <li>{@code position.x} (float)</li>
+     *   <li>{@code position.y} (float)</li>
+     *   <li>{@code position.z} (float)</li>
+     *   <li>{@code direction.x} (float)</li>
+     *   <li>{@code direction.y} (float)</li>
+     *   <li>{@code direction.z} (float)</li>
+     *   <li>{@code gravity.x} (float)</li>
+     *   <li>{@code gravity.y} (float)</li>
+     *   <li>{@code gravity.z} (float)</li>
+     *   <li>{@code start_color.x} (float)</li>
+     *   <li>{@code start_color.y} (float)</li>
+     *   <li>{@code start_color.z} (float)</li>
+     *   <li>{@code start_color.w} (float)</li>
+     *   <li>{@code end_color.x} (float)</li>
+     *   <li>{@code end_color.y} (float)</li>
+     *   <li>{@code end_color.z} (float)</li>
+     *   <li>{@code end_color.w} (float)</li>
+     *   <li>{@code cone_angle} (float)</li>
+     *   <li>{@code speed} (float)</li>
+     *   <li>{@code speed_variance} (float)</li>
+     *   <li>{@code lifetime} (float)</li>
+     *   <li>{@code lifetime_variance} (float)</li>
+     *   <li>{@code drag} (float)</li>
+     *   <li>{@code emission_rate} (float)</li>
+     *   <li>{@code start_size} (float)</li>
+     *   <li>{@code end_size} (float)</li>
+     * </ol>
+     */
+    public static native int particleSystemSetSettings(long system, float[] settingsFloating);
+
+    /**
+     * cna_particle_system_set_simulation_on_cpu_ext (engine_layer.h).
+     */
+    public static native int particleSystemSetSimulationOnCpuExt(long system, boolean forced);
+
+    /**
+     * cna_particle_system_set_softness_ext (engine_layer.h).
+     */
+    public static native int particleSystemSetSoftnessExt(long system, float softness);
+
+    /**
+     * cna_particle_system_step (engine_layer.h).
+     *
+     * <p>particleFloating carries CNA_Particle in this order:
+     * <ol start="0">
+     *   <li>{@code position.x} (float)</li>
+     *   <li>{@code position.y} (float)</li>
+     *   <li>{@code position.z} (float)</li>
+     *   <li>{@code position.w} (float)</li>
+     *   <li>{@code velocity.x} (float)</li>
+     *   <li>{@code velocity.y} (float)</li>
+     *   <li>{@code velocity.z} (float)</li>
+     *   <li>{@code velocity.w} (float)</li>
+     *   <li>{@code state.x} (float)</li>
+     *   <li>{@code state.y} (float)</li>
+     *   <li>{@code state.z} (float)</li>
+     *   <li>{@code state.w} (float)</li>
+     * </ol>
+     *
+     * <p>settingsFloating carries CNA_ParticleEmitterSettings in this order:
+     * <ol start="0">
+     *   <li>{@code position.x} (float)</li>
+     *   <li>{@code position.y} (float)</li>
+     *   <li>{@code position.z} (float)</li>
+     *   <li>{@code direction.x} (float)</li>
+     *   <li>{@code direction.y} (float)</li>
+     *   <li>{@code direction.z} (float)</li>
+     *   <li>{@code gravity.x} (float)</li>
+     *   <li>{@code gravity.y} (float)</li>
+     *   <li>{@code gravity.z} (float)</li>
+     *   <li>{@code start_color.x} (float)</li>
+     *   <li>{@code start_color.y} (float)</li>
+     *   <li>{@code start_color.z} (float)</li>
+     *   <li>{@code start_color.w} (float)</li>
+     *   <li>{@code end_color.x} (float)</li>
+     *   <li>{@code end_color.y} (float)</li>
+     *   <li>{@code end_color.z} (float)</li>
+     *   <li>{@code end_color.w} (float)</li>
+     *   <li>{@code cone_angle} (float)</li>
+     *   <li>{@code speed} (float)</li>
+     *   <li>{@code speed_variance} (float)</li>
+     *   <li>{@code lifetime} (float)</li>
+     *   <li>{@code lifetime_variance} (float)</li>
+     *   <li>{@code drag} (float)</li>
+     *   <li>{@code emission_rate} (float)</li>
+     *   <li>{@code start_size} (float)</li>
+     *   <li>{@code end_size} (float)</li>
+     * </ol>
+     */
+    public static native int particleSystemStep(float[] particleFloating, int index, float[] settingsFloating, float elapsedSeconds);
+
+    /**
+     * cna_particle_system_update (engine_layer.h).
+     */
+    public static native int particleSystemUpdate(long system, float elapsedSeconds);
+
+    /**
+     * cna_particle_system_uses_compute (engine_layer.h).
+     */
+    public static native int particleSystemUsesCompute(long system, boolean[] outUsesCompute);
+
+    /**
      * cna_point_light_ext_init (engine_layer.h).
      *
      * <p>outLightBytes carries CNA_PointLightEXT in this order:

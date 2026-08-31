@@ -6724,6 +6724,635 @@ Java_org_openeggbert_cna_internal_generated_NativeEngineLayerRoutes_motionBlurPa
 }
 
 JNIEXPORT jint JNICALL
+Java_org_openeggbert_cna_internal_generated_NativeEngineLayerRoutes_particleEmitterSettingsInit(
+    JNIEnv* environment, jclass declaring_class, jfloatArray out_settingsFloating)
+{
+    (void)environment;
+    (void)declaring_class;
+    CNA_ParticleEmitterSettings out_settings_value;
+    memset(&out_settings_value, 0, sizeof out_settings_value);
+    out_settings_value.struct_size = (uint32_t)(sizeof out_settings_value);
+    out_settings_value.struct_version = UINT32_C(1);
+    CNA_Result call_result = cna.particle_emitter_settings_init(&out_settings_value);
+    if (call_result == CNA_RESULT_SUCCESS || call_result == CNA_RESULT_BUFFER_TOO_SMALL) {
+        jfloat out_settingsFloating_values[] = {
+            (jfloat)out_settings_value.position.x,
+            (jfloat)out_settings_value.position.y,
+            (jfloat)out_settings_value.position.z,
+            (jfloat)out_settings_value.direction.x,
+            (jfloat)out_settings_value.direction.y,
+            (jfloat)out_settings_value.direction.z,
+            (jfloat)out_settings_value.gravity.x,
+            (jfloat)out_settings_value.gravity.y,
+            (jfloat)out_settings_value.gravity.z,
+            (jfloat)out_settings_value.start_color.x,
+            (jfloat)out_settings_value.start_color.y,
+            (jfloat)out_settings_value.start_color.z,
+            (jfloat)out_settings_value.start_color.w,
+            (jfloat)out_settings_value.end_color.x,
+            (jfloat)out_settings_value.end_color.y,
+            (jfloat)out_settings_value.end_color.z,
+            (jfloat)out_settings_value.end_color.w,
+            (jfloat)out_settings_value.cone_angle,
+            (jfloat)out_settings_value.speed,
+            (jfloat)out_settings_value.speed_variance,
+            (jfloat)out_settings_value.lifetime,
+            (jfloat)out_settings_value.lifetime_variance,
+            (jfloat)out_settings_value.drag,
+            (jfloat)out_settings_value.emission_rate,
+            (jfloat)out_settings_value.start_size,
+            (jfloat)out_settings_value.end_size
+        };
+        (*environment)->SetFloatArrayRegion(environment, out_settingsFloating, 0,
+            (jsize)(sizeof out_settingsFloating_values / sizeof out_settingsFloating_values[0]),
+            out_settingsFloating_values);
+    }
+    return (jint)call_result;
+}
+
+JNIEXPORT jint JNICALL
+Java_org_openeggbert_cna_internal_generated_NativeEngineLayerRoutes_particleInit(
+    JNIEnv* environment, jclass declaring_class, jfloatArray out_particleFloating)
+{
+    (void)environment;
+    (void)declaring_class;
+    CNA_Particle out_particle_value;
+    memset(&out_particle_value, 0, sizeof out_particle_value);
+    CNA_Result call_result = cna.particle_init(&out_particle_value);
+    if (call_result == CNA_RESULT_SUCCESS || call_result == CNA_RESULT_BUFFER_TOO_SMALL) {
+        jfloat out_particleFloating_values[] = {
+            (jfloat)out_particle_value.position.x,
+            (jfloat)out_particle_value.position.y,
+            (jfloat)out_particle_value.position.z,
+            (jfloat)out_particle_value.position.w,
+            (jfloat)out_particle_value.velocity.x,
+            (jfloat)out_particle_value.velocity.y,
+            (jfloat)out_particle_value.velocity.z,
+            (jfloat)out_particle_value.velocity.w,
+            (jfloat)out_particle_value.state.x,
+            (jfloat)out_particle_value.state.y,
+            (jfloat)out_particle_value.state.z,
+            (jfloat)out_particle_value.state.w
+        };
+        (*environment)->SetFloatArrayRegion(environment, out_particleFloating, 0,
+            (jsize)(sizeof out_particleFloating_values / sizeof out_particleFloating_values[0]),
+            out_particleFloating_values);
+    }
+    return (jint)call_result;
+}
+
+JNIEXPORT jint JNICALL
+Java_org_openeggbert_cna_internal_generated_NativeEngineLayerRoutes_particleSystemCopyParticleLookupGlsl(
+    JNIEnv* environment, jclass declaring_class, jbyteArray destination, jlongArray out_bytes)
+{
+    (void)environment;
+    (void)declaring_class;
+    jsize destination_size = (*environment)->GetArrayLength(environment, destination);
+    jbyte* destination_bytes = (*environment)->GetByteArrayElements(environment, destination, NULL);
+    if (destination_bytes == NULL) {
+        return (jint)CNA_RESULT_OUT_OF_MEMORY;
+    }
+    uint64_t destination_written = 0;
+    CNA_Result call_result = cna.particle_system_copy_particle_lookup_glsl((char*)destination_bytes, (uint64_t)destination_size, &destination_written);
+    (*environment)->ReleaseByteArrayElements(environment, destination, destination_bytes, 0);
+    if (call_result == CNA_RESULT_SUCCESS || call_result == CNA_RESULT_BUFFER_TOO_SMALL) {
+        jlong destination_element = (jlong)destination_written;
+        (*environment)->SetLongArrayRegion(
+            environment, out_bytes, 0, 1, &destination_element);
+    }
+    return (jint)call_result;
+}
+
+JNIEXPORT jint JNICALL
+Java_org_openeggbert_cna_internal_generated_NativeEngineLayerRoutes_particleSystemCopyParticlesExt(
+    JNIEnv* environment, jclass declaring_class, jlong system, jfloatArray destinationFloating, jlongArray out_count)
+{
+    (void)environment;
+    (void)declaring_class;
+    jsize destination_count = (*environment)->GetArrayLength(environment, destinationFloating) / 12;
+    if ((*environment)->GetArrayLength(environment, destinationFloating) != destination_count * 12) {
+        return (jint)CNA_RESULT_INVALID_ARGUMENT;
+    }
+    CNA_Particle* destination_values = (CNA_Particle*)calloc(
+        (size_t)destination_count + 1U, sizeof(*destination_values));
+    if (destination_values == NULL) {
+        return (jint)CNA_RESULT_OUT_OF_MEMORY;
+    }
+    {
+        jsize destinationFloating_length = (*environment)->GetArrayLength(environment, destinationFloating);
+        jfloat* destinationFloating_values = (jfloat*)malloc(
+            ((size_t)destinationFloating_length + 1U) * sizeof(*destinationFloating_values));
+        if (destinationFloating_values == NULL) {
+            free(destination_values);
+            return (jint)CNA_RESULT_OUT_OF_MEMORY;
+        }
+        (*environment)->GetFloatArrayRegion(environment, destinationFloating, 0, destinationFloating_length, destinationFloating_values);
+        for (jsize element = 0; element < destination_count; ++element) {
+            destination_values[element].position.x = (float)destinationFloating_values[element * 12 + 0];
+            destination_values[element].position.y = (float)destinationFloating_values[element * 12 + 1];
+            destination_values[element].position.z = (float)destinationFloating_values[element * 12 + 2];
+            destination_values[element].position.w = (float)destinationFloating_values[element * 12 + 3];
+            destination_values[element].velocity.x = (float)destinationFloating_values[element * 12 + 4];
+            destination_values[element].velocity.y = (float)destinationFloating_values[element * 12 + 5];
+            destination_values[element].velocity.z = (float)destinationFloating_values[element * 12 + 6];
+            destination_values[element].velocity.w = (float)destinationFloating_values[element * 12 + 7];
+            destination_values[element].state.x = (float)destinationFloating_values[element * 12 + 8];
+            destination_values[element].state.y = (float)destinationFloating_values[element * 12 + 9];
+            destination_values[element].state.z = (float)destinationFloating_values[element * 12 + 10];
+            destination_values[element].state.w = (float)destinationFloating_values[element * 12 + 11];
+        }
+        free(destinationFloating_values);
+    }
+    uint64_t out_count_value = 0;
+    CNA_Result call_result = cna.particle_system_copy_particles_ext((CNA_ParticleSystemHandle)system, destination_values, (uint64_t)destination_count, &out_count_value);
+    if (call_result == CNA_RESULT_SUCCESS) {
+        {
+            jfloat* destinationFloating_out = (jfloat*)malloc(
+                ((size_t)destination_count * 12 + 1U) * sizeof(*destinationFloating_out));
+            if (destinationFloating_out != NULL) {
+                for (jsize element = 0; element < destination_count; ++element) {
+                    destinationFloating_out[element * 12 + 0] = (jfloat)destination_values[element].position.x;
+                    destinationFloating_out[element * 12 + 1] = (jfloat)destination_values[element].position.y;
+                    destinationFloating_out[element * 12 + 2] = (jfloat)destination_values[element].position.z;
+                    destinationFloating_out[element * 12 + 3] = (jfloat)destination_values[element].position.w;
+                    destinationFloating_out[element * 12 + 4] = (jfloat)destination_values[element].velocity.x;
+                    destinationFloating_out[element * 12 + 5] = (jfloat)destination_values[element].velocity.y;
+                    destinationFloating_out[element * 12 + 6] = (jfloat)destination_values[element].velocity.z;
+                    destinationFloating_out[element * 12 + 7] = (jfloat)destination_values[element].velocity.w;
+                    destinationFloating_out[element * 12 + 8] = (jfloat)destination_values[element].state.x;
+                    destinationFloating_out[element * 12 + 9] = (jfloat)destination_values[element].state.y;
+                    destinationFloating_out[element * 12 + 10] = (jfloat)destination_values[element].state.z;
+                    destinationFloating_out[element * 12 + 11] = (jfloat)destination_values[element].state.w;
+                }
+                (*environment)->SetFloatArrayRegion(
+                    environment, destinationFloating, 0,
+                    (jsize)(destination_count * 12), destinationFloating_out);
+                free(destinationFloating_out);
+            }
+        }
+    }
+    free(destination_values);
+    if (call_result == CNA_RESULT_SUCCESS || call_result == CNA_RESULT_BUFFER_TOO_SMALL) {
+        jlong out_count_element = (jlong)out_count_value;
+        (*environment)->SetLongArrayRegion(
+            environment, out_count, 0, 1, &out_count_element);
+    }
+    return (jint)call_result;
+}
+
+JNIEXPORT jint JNICALL
+Java_org_openeggbert_cna_internal_generated_NativeEngineLayerRoutes_particleSystemCopyUnsupportedReason(
+    JNIEnv* environment, jclass declaring_class, jlong system, jbyteArray destination, jlongArray out_bytes)
+{
+    (void)environment;
+    (void)declaring_class;
+    jsize destination_size = (*environment)->GetArrayLength(environment, destination);
+    jbyte* destination_bytes = (*environment)->GetByteArrayElements(environment, destination, NULL);
+    if (destination_bytes == NULL) {
+        return (jint)CNA_RESULT_OUT_OF_MEMORY;
+    }
+    uint64_t destination_written = 0;
+    CNA_Result call_result = cna.particle_system_copy_unsupported_reason((CNA_ParticleSystemHandle)system, (char*)destination_bytes, (uint64_t)destination_size, &destination_written);
+    (*environment)->ReleaseByteArrayElements(environment, destination, destination_bytes, 0);
+    if (call_result == CNA_RESULT_SUCCESS || call_result == CNA_RESULT_BUFFER_TOO_SMALL) {
+        jlong destination_element = (jlong)destination_written;
+        (*environment)->SetLongArrayRegion(
+            environment, out_bytes, 0, 1, &destination_element);
+    }
+    return (jint)call_result;
+}
+
+JNIEXPORT jint JNICALL
+Java_org_openeggbert_cna_internal_generated_NativeEngineLayerRoutes_particleSystemCreate(
+    JNIEnv* environment, jclass declaring_class, jlong graphics_device, jlongArray out_system)
+{
+    (void)environment;
+    (void)declaring_class;
+    CNA_ParticleSystemHandle out_system_value = 0;
+    CNA_Result call_result = cna.particle_system_create((CNA_Handle)graphics_device, &out_system_value);
+    if (call_result == CNA_RESULT_SUCCESS || call_result == CNA_RESULT_BUFFER_TOO_SMALL) {
+        jlong out_system_element = (jlong)out_system_value;
+        (*environment)->SetLongArrayRegion(
+            environment, out_system, 0, 1, &out_system_element);
+    }
+    return (jint)call_result;
+}
+
+JNIEXPORT jint JNICALL
+Java_org_openeggbert_cna_internal_generated_NativeEngineLayerRoutes_particleSystemCreateWithCapacity(
+    JNIEnv* environment, jclass declaring_class, jlong graphics_device, jint capacity, jlongArray out_system)
+{
+    (void)environment;
+    (void)declaring_class;
+    CNA_ParticleSystemHandle out_system_value = 0;
+    CNA_Result call_result = cna.particle_system_create_with_capacity((CNA_Handle)graphics_device, (int32_t)capacity, &out_system_value);
+    if (call_result == CNA_RESULT_SUCCESS || call_result == CNA_RESULT_BUFFER_TOO_SMALL) {
+        jlong out_system_element = (jlong)out_system_value;
+        (*environment)->SetLongArrayRegion(
+            environment, out_system, 0, 1, &out_system_element);
+    }
+    return (jint)call_result;
+}
+
+JNIEXPORT jint JNICALL
+Java_org_openeggbert_cna_internal_generated_NativeEngineLayerRoutes_particleSystemDestroy(
+    JNIEnv* environment, jclass declaring_class, jlong system)
+{
+    (void)environment;
+    (void)declaring_class;
+    CNA_Result call_result = cna.particle_system_destroy((CNA_ParticleSystemHandle)system);
+    return (jint)call_result;
+}
+
+JNIEXPORT jint JNICALL
+Java_org_openeggbert_cna_internal_generated_NativeEngineLayerRoutes_particleSystemDraw(
+    JNIEnv* environment, jclass declaring_class, jlong system, jfloatArray viewFloating, jfloatArray projectionFloating, jlong texture)
+{
+    (void)environment;
+    (void)declaring_class;
+    CNA_Matrix view_value;
+    memset(&view_value, 0, sizeof view_value);
+    {
+        jfloat viewFloating_values[16];
+        (*environment)->GetFloatArrayRegion(environment, viewFloating, 0, 16, viewFloating_values);
+        view_value.m11 = (float)viewFloating_values[0];
+        view_value.m12 = (float)viewFloating_values[1];
+        view_value.m13 = (float)viewFloating_values[2];
+        view_value.m14 = (float)viewFloating_values[3];
+        view_value.m21 = (float)viewFloating_values[4];
+        view_value.m22 = (float)viewFloating_values[5];
+        view_value.m23 = (float)viewFloating_values[6];
+        view_value.m24 = (float)viewFloating_values[7];
+        view_value.m31 = (float)viewFloating_values[8];
+        view_value.m32 = (float)viewFloating_values[9];
+        view_value.m33 = (float)viewFloating_values[10];
+        view_value.m34 = (float)viewFloating_values[11];
+        view_value.m41 = (float)viewFloating_values[12];
+        view_value.m42 = (float)viewFloating_values[13];
+        view_value.m43 = (float)viewFloating_values[14];
+        view_value.m44 = (float)viewFloating_values[15];
+    }
+    CNA_Matrix projection_value;
+    memset(&projection_value, 0, sizeof projection_value);
+    {
+        jfloat projectionFloating_values[16];
+        (*environment)->GetFloatArrayRegion(environment, projectionFloating, 0, 16, projectionFloating_values);
+        projection_value.m11 = (float)projectionFloating_values[0];
+        projection_value.m12 = (float)projectionFloating_values[1];
+        projection_value.m13 = (float)projectionFloating_values[2];
+        projection_value.m14 = (float)projectionFloating_values[3];
+        projection_value.m21 = (float)projectionFloating_values[4];
+        projection_value.m22 = (float)projectionFloating_values[5];
+        projection_value.m23 = (float)projectionFloating_values[6];
+        projection_value.m24 = (float)projectionFloating_values[7];
+        projection_value.m31 = (float)projectionFloating_values[8];
+        projection_value.m32 = (float)projectionFloating_values[9];
+        projection_value.m33 = (float)projectionFloating_values[10];
+        projection_value.m34 = (float)projectionFloating_values[11];
+        projection_value.m41 = (float)projectionFloating_values[12];
+        projection_value.m42 = (float)projectionFloating_values[13];
+        projection_value.m43 = (float)projectionFloating_values[14];
+        projection_value.m44 = (float)projectionFloating_values[15];
+    }
+    CNA_Result call_result = cna.particle_system_draw((CNA_ParticleSystemHandle)system, &view_value, &projection_value, (CNA_Handle)texture);
+    return (jint)call_result;
+}
+
+JNIEXPORT jint JNICALL
+Java_org_openeggbert_cna_internal_generated_NativeEngineLayerRoutes_particleSystemGetActiveCount(
+    JNIEnv* environment, jclass declaring_class, jlong system, jintArray out_count)
+{
+    (void)environment;
+    (void)declaring_class;
+    int32_t out_count_value = 0;
+    CNA_Result call_result = cna.particle_system_get_active_count((CNA_ParticleSystemHandle)system, &out_count_value);
+    if (call_result == CNA_RESULT_SUCCESS || call_result == CNA_RESULT_BUFFER_TOO_SMALL) {
+        jint out_count_element = (jint)out_count_value;
+        (*environment)->SetIntArrayRegion(
+            environment, out_count, 0, 1, &out_count_element);
+    }
+    return (jint)call_result;
+}
+
+JNIEXPORT jint JNICALL
+Java_org_openeggbert_cna_internal_generated_NativeEngineLayerRoutes_particleSystemGetCapacity(
+    JNIEnv* environment, jclass declaring_class, jlong system, jintArray out_capacity)
+{
+    (void)environment;
+    (void)declaring_class;
+    int32_t out_capacity_value = 0;
+    CNA_Result call_result = cna.particle_system_get_capacity((CNA_ParticleSystemHandle)system, &out_capacity_value);
+    if (call_result == CNA_RESULT_SUCCESS || call_result == CNA_RESULT_BUFFER_TOO_SMALL) {
+        jint out_capacity_element = (jint)out_capacity_value;
+        (*environment)->SetIntArrayRegion(
+            environment, out_capacity, 0, 1, &out_capacity_element);
+    }
+    return (jint)call_result;
+}
+
+JNIEXPORT jint JNICALL
+Java_org_openeggbert_cna_internal_generated_NativeEngineLayerRoutes_particleSystemGetSettings(
+    JNIEnv* environment, jclass declaring_class, jlong system, jfloatArray out_settingsFloating)
+{
+    (void)environment;
+    (void)declaring_class;
+    CNA_ParticleEmitterSettings out_settings_value;
+    memset(&out_settings_value, 0, sizeof out_settings_value);
+    out_settings_value.struct_size = (uint32_t)(sizeof out_settings_value);
+    out_settings_value.struct_version = UINT32_C(1);
+    CNA_Result call_result = cna.particle_system_get_settings((CNA_ParticleSystemHandle)system, &out_settings_value);
+    if (call_result == CNA_RESULT_SUCCESS || call_result == CNA_RESULT_BUFFER_TOO_SMALL) {
+        jfloat out_settingsFloating_values[] = {
+            (jfloat)out_settings_value.position.x,
+            (jfloat)out_settings_value.position.y,
+            (jfloat)out_settings_value.position.z,
+            (jfloat)out_settings_value.direction.x,
+            (jfloat)out_settings_value.direction.y,
+            (jfloat)out_settings_value.direction.z,
+            (jfloat)out_settings_value.gravity.x,
+            (jfloat)out_settings_value.gravity.y,
+            (jfloat)out_settings_value.gravity.z,
+            (jfloat)out_settings_value.start_color.x,
+            (jfloat)out_settings_value.start_color.y,
+            (jfloat)out_settings_value.start_color.z,
+            (jfloat)out_settings_value.start_color.w,
+            (jfloat)out_settings_value.end_color.x,
+            (jfloat)out_settings_value.end_color.y,
+            (jfloat)out_settings_value.end_color.z,
+            (jfloat)out_settings_value.end_color.w,
+            (jfloat)out_settings_value.cone_angle,
+            (jfloat)out_settings_value.speed,
+            (jfloat)out_settings_value.speed_variance,
+            (jfloat)out_settings_value.lifetime,
+            (jfloat)out_settings_value.lifetime_variance,
+            (jfloat)out_settings_value.drag,
+            (jfloat)out_settings_value.emission_rate,
+            (jfloat)out_settings_value.start_size,
+            (jfloat)out_settings_value.end_size
+        };
+        (*environment)->SetFloatArrayRegion(environment, out_settingsFloating, 0,
+            (jsize)(sizeof out_settingsFloating_values / sizeof out_settingsFloating_values[0]),
+            out_settingsFloating_values);
+    }
+    return (jint)call_result;
+}
+
+JNIEXPORT jint JNICALL
+Java_org_openeggbert_cna_internal_generated_NativeEngineLayerRoutes_particleSystemGetSoftnessExt(
+    JNIEnv* environment, jclass declaring_class, jlong system, jfloatArray out_softness)
+{
+    (void)environment;
+    (void)declaring_class;
+    float out_softness_value = 0;
+    CNA_Result call_result = cna.particle_system_get_softness_ext((CNA_ParticleSystemHandle)system, &out_softness_value);
+    if (call_result == CNA_RESULT_SUCCESS || call_result == CNA_RESULT_BUFFER_TOO_SMALL) {
+        jfloat out_softness_element = (jfloat)out_softness_value;
+        (*environment)->SetFloatArrayRegion(
+            environment, out_softness, 0, 1, &out_softness_element);
+    }
+    return (jint)call_result;
+}
+
+JNIEXPORT jint JNICALL
+Java_org_openeggbert_cna_internal_generated_NativeEngineLayerRoutes_particleSystemIsEmissionRateClamped(
+    JNIEnv* environment, jclass declaring_class, jlong system, jbooleanArray out_clamped)
+{
+    (void)environment;
+    (void)declaring_class;
+    CNA_Bool out_clamped_value = 0;
+    CNA_Result call_result = cna.particle_system_is_emission_rate_clamped((CNA_ParticleSystemHandle)system, &out_clamped_value);
+    if (call_result == CNA_RESULT_SUCCESS || call_result == CNA_RESULT_BUFFER_TOO_SMALL) {
+        jboolean out_clamped_element = (jboolean)out_clamped_value;
+        (*environment)->SetBooleanArrayRegion(
+            environment, out_clamped, 0, 1, &out_clamped_element);
+    }
+    return (jint)call_result;
+}
+
+JNIEXPORT jint JNICALL
+Java_org_openeggbert_cna_internal_generated_NativeEngineLayerRoutes_particleSystemIsSimulationOnCpuExt(
+    JNIEnv* environment, jclass declaring_class, jlong system, jbooleanArray out_forced)
+{
+    (void)environment;
+    (void)declaring_class;
+    CNA_Bool out_forced_value = 0;
+    CNA_Result call_result = cna.particle_system_is_simulation_on_cpu_ext((CNA_ParticleSystemHandle)system, &out_forced_value);
+    if (call_result == CNA_RESULT_SUCCESS || call_result == CNA_RESULT_BUFFER_TOO_SMALL) {
+        jboolean out_forced_element = (jboolean)out_forced_value;
+        (*environment)->SetBooleanArrayRegion(
+            environment, out_forced, 0, 1, &out_forced_element);
+    }
+    return (jint)call_result;
+}
+
+JNIEXPORT jint JNICALL
+Java_org_openeggbert_cna_internal_generated_NativeEngineLayerRoutes_particleSystemRandom(
+    JNIEnv* environment, jclass declaring_class, jint seed, jfloatArray out_value)
+{
+    (void)environment;
+    (void)declaring_class;
+    float out_value_value = 0;
+    CNA_Result call_result = cna.particle_system_random((uint32_t)seed, &out_value_value);
+    if (call_result == CNA_RESULT_SUCCESS || call_result == CNA_RESULT_BUFFER_TOO_SMALL) {
+        jfloat out_value_element = (jfloat)out_value_value;
+        (*environment)->SetFloatArrayRegion(
+            environment, out_value, 0, 1, &out_value_element);
+    }
+    return (jint)call_result;
+}
+
+JNIEXPORT jint JNICALL
+Java_org_openeggbert_cna_internal_generated_NativeEngineLayerRoutes_particleSystemReset(
+    JNIEnv* environment, jclass declaring_class, jlong system)
+{
+    (void)environment;
+    (void)declaring_class;
+    CNA_Result call_result = cna.particle_system_reset((CNA_ParticleSystemHandle)system);
+    return (jint)call_result;
+}
+
+JNIEXPORT jint JNICALL
+Java_org_openeggbert_cna_internal_generated_NativeEngineLayerRoutes_particleSystemSetDepthInputExt(
+    JNIEnv* environment, jclass declaring_class, jlong system, jlong depth, jfloat far_plane)
+{
+    (void)environment;
+    (void)declaring_class;
+    CNA_Result call_result = cna.particle_system_set_depth_input_ext((CNA_ParticleSystemHandle)system, (CNA_Handle)depth, (float)far_plane);
+    return (jint)call_result;
+}
+
+JNIEXPORT jint JNICALL
+Java_org_openeggbert_cna_internal_generated_NativeEngineLayerRoutes_particleSystemSetSettings(
+    JNIEnv* environment, jclass declaring_class, jlong system, jfloatArray settingsFloating)
+{
+    (void)environment;
+    (void)declaring_class;
+    CNA_ParticleEmitterSettings settings_value;
+    memset(&settings_value, 0, sizeof settings_value);
+    settings_value.struct_size = (uint32_t)(sizeof settings_value);
+    settings_value.struct_version = UINT32_C(1);
+    {
+        jfloat settingsFloating_values[26];
+        (*environment)->GetFloatArrayRegion(environment, settingsFloating, 0, 26, settingsFloating_values);
+        settings_value.position.x = (float)settingsFloating_values[0];
+        settings_value.position.y = (float)settingsFloating_values[1];
+        settings_value.position.z = (float)settingsFloating_values[2];
+        settings_value.direction.x = (float)settingsFloating_values[3];
+        settings_value.direction.y = (float)settingsFloating_values[4];
+        settings_value.direction.z = (float)settingsFloating_values[5];
+        settings_value.gravity.x = (float)settingsFloating_values[6];
+        settings_value.gravity.y = (float)settingsFloating_values[7];
+        settings_value.gravity.z = (float)settingsFloating_values[8];
+        settings_value.start_color.x = (float)settingsFloating_values[9];
+        settings_value.start_color.y = (float)settingsFloating_values[10];
+        settings_value.start_color.z = (float)settingsFloating_values[11];
+        settings_value.start_color.w = (float)settingsFloating_values[12];
+        settings_value.end_color.x = (float)settingsFloating_values[13];
+        settings_value.end_color.y = (float)settingsFloating_values[14];
+        settings_value.end_color.z = (float)settingsFloating_values[15];
+        settings_value.end_color.w = (float)settingsFloating_values[16];
+        settings_value.cone_angle = (float)settingsFloating_values[17];
+        settings_value.speed = (float)settingsFloating_values[18];
+        settings_value.speed_variance = (float)settingsFloating_values[19];
+        settings_value.lifetime = (float)settingsFloating_values[20];
+        settings_value.lifetime_variance = (float)settingsFloating_values[21];
+        settings_value.drag = (float)settingsFloating_values[22];
+        settings_value.emission_rate = (float)settingsFloating_values[23];
+        settings_value.start_size = (float)settingsFloating_values[24];
+        settings_value.end_size = (float)settingsFloating_values[25];
+    }
+    CNA_Result call_result = cna.particle_system_set_settings((CNA_ParticleSystemHandle)system, &settings_value);
+    return (jint)call_result;
+}
+
+JNIEXPORT jint JNICALL
+Java_org_openeggbert_cna_internal_generated_NativeEngineLayerRoutes_particleSystemSetSimulationOnCpuExt(
+    JNIEnv* environment, jclass declaring_class, jlong system, jboolean forced)
+{
+    (void)environment;
+    (void)declaring_class;
+    CNA_Result call_result = cna.particle_system_set_simulation_on_cpu_ext((CNA_ParticleSystemHandle)system, (CNA_Bool)forced);
+    return (jint)call_result;
+}
+
+JNIEXPORT jint JNICALL
+Java_org_openeggbert_cna_internal_generated_NativeEngineLayerRoutes_particleSystemSetSoftnessExt(
+    JNIEnv* environment, jclass declaring_class, jlong system, jfloat softness)
+{
+    (void)environment;
+    (void)declaring_class;
+    CNA_Result call_result = cna.particle_system_set_softness_ext((CNA_ParticleSystemHandle)system, (float)softness);
+    return (jint)call_result;
+}
+
+JNIEXPORT jint JNICALL
+Java_org_openeggbert_cna_internal_generated_NativeEngineLayerRoutes_particleSystemStep(
+    JNIEnv* environment, jclass declaring_class, jfloatArray particleFloating, jint index, jfloatArray settingsFloating, jfloat elapsed_seconds)
+{
+    (void)environment;
+    (void)declaring_class;
+    CNA_Particle particle_value;
+    memset(&particle_value, 0, sizeof particle_value);
+    {
+        jfloat particleFloating_values[12];
+        (*environment)->GetFloatArrayRegion(environment, particleFloating, 0, 12, particleFloating_values);
+        particle_value.position.x = (float)particleFloating_values[0];
+        particle_value.position.y = (float)particleFloating_values[1];
+        particle_value.position.z = (float)particleFloating_values[2];
+        particle_value.position.w = (float)particleFloating_values[3];
+        particle_value.velocity.x = (float)particleFloating_values[4];
+        particle_value.velocity.y = (float)particleFloating_values[5];
+        particle_value.velocity.z = (float)particleFloating_values[6];
+        particle_value.velocity.w = (float)particleFloating_values[7];
+        particle_value.state.x = (float)particleFloating_values[8];
+        particle_value.state.y = (float)particleFloating_values[9];
+        particle_value.state.z = (float)particleFloating_values[10];
+        particle_value.state.w = (float)particleFloating_values[11];
+    }
+    CNA_ParticleEmitterSettings settings_value;
+    memset(&settings_value, 0, sizeof settings_value);
+    settings_value.struct_size = (uint32_t)(sizeof settings_value);
+    settings_value.struct_version = UINT32_C(1);
+    {
+        jfloat settingsFloating_values[26];
+        (*environment)->GetFloatArrayRegion(environment, settingsFloating, 0, 26, settingsFloating_values);
+        settings_value.position.x = (float)settingsFloating_values[0];
+        settings_value.position.y = (float)settingsFloating_values[1];
+        settings_value.position.z = (float)settingsFloating_values[2];
+        settings_value.direction.x = (float)settingsFloating_values[3];
+        settings_value.direction.y = (float)settingsFloating_values[4];
+        settings_value.direction.z = (float)settingsFloating_values[5];
+        settings_value.gravity.x = (float)settingsFloating_values[6];
+        settings_value.gravity.y = (float)settingsFloating_values[7];
+        settings_value.gravity.z = (float)settingsFloating_values[8];
+        settings_value.start_color.x = (float)settingsFloating_values[9];
+        settings_value.start_color.y = (float)settingsFloating_values[10];
+        settings_value.start_color.z = (float)settingsFloating_values[11];
+        settings_value.start_color.w = (float)settingsFloating_values[12];
+        settings_value.end_color.x = (float)settingsFloating_values[13];
+        settings_value.end_color.y = (float)settingsFloating_values[14];
+        settings_value.end_color.z = (float)settingsFloating_values[15];
+        settings_value.end_color.w = (float)settingsFloating_values[16];
+        settings_value.cone_angle = (float)settingsFloating_values[17];
+        settings_value.speed = (float)settingsFloating_values[18];
+        settings_value.speed_variance = (float)settingsFloating_values[19];
+        settings_value.lifetime = (float)settingsFloating_values[20];
+        settings_value.lifetime_variance = (float)settingsFloating_values[21];
+        settings_value.drag = (float)settingsFloating_values[22];
+        settings_value.emission_rate = (float)settingsFloating_values[23];
+        settings_value.start_size = (float)settingsFloating_values[24];
+        settings_value.end_size = (float)settingsFloating_values[25];
+    }
+    CNA_Result call_result = cna.particle_system_step(&particle_value, (int32_t)index, &settings_value, (float)elapsed_seconds);
+    if (call_result == CNA_RESULT_SUCCESS || call_result == CNA_RESULT_BUFFER_TOO_SMALL) {
+        jfloat particleFloating_values[] = {
+            (jfloat)particle_value.position.x,
+            (jfloat)particle_value.position.y,
+            (jfloat)particle_value.position.z,
+            (jfloat)particle_value.position.w,
+            (jfloat)particle_value.velocity.x,
+            (jfloat)particle_value.velocity.y,
+            (jfloat)particle_value.velocity.z,
+            (jfloat)particle_value.velocity.w,
+            (jfloat)particle_value.state.x,
+            (jfloat)particle_value.state.y,
+            (jfloat)particle_value.state.z,
+            (jfloat)particle_value.state.w
+        };
+        (*environment)->SetFloatArrayRegion(environment, particleFloating, 0,
+            (jsize)(sizeof particleFloating_values / sizeof particleFloating_values[0]),
+            particleFloating_values);
+    }
+    return (jint)call_result;
+}
+
+JNIEXPORT jint JNICALL
+Java_org_openeggbert_cna_internal_generated_NativeEngineLayerRoutes_particleSystemUpdate(
+    JNIEnv* environment, jclass declaring_class, jlong system, jfloat elapsed_seconds)
+{
+    (void)environment;
+    (void)declaring_class;
+    CNA_Result call_result = cna.particle_system_update((CNA_ParticleSystemHandle)system, (float)elapsed_seconds);
+    return (jint)call_result;
+}
+
+JNIEXPORT jint JNICALL
+Java_org_openeggbert_cna_internal_generated_NativeEngineLayerRoutes_particleSystemUsesCompute(
+    JNIEnv* environment, jclass declaring_class, jlong system, jbooleanArray out_uses_compute)
+{
+    (void)environment;
+    (void)declaring_class;
+    CNA_Bool out_uses_compute_value = 0;
+    CNA_Result call_result = cna.particle_system_uses_compute((CNA_ParticleSystemHandle)system, &out_uses_compute_value);
+    if (call_result == CNA_RESULT_SUCCESS || call_result == CNA_RESULT_BUFFER_TOO_SMALL) {
+        jboolean out_uses_compute_element = (jboolean)out_uses_compute_value;
+        (*environment)->SetBooleanArrayRegion(
+            environment, out_uses_compute, 0, 1, &out_uses_compute_element);
+    }
+    return (jint)call_result;
+}
+
+JNIEXPORT jint JNICALL
 Java_org_openeggbert_cna_internal_generated_NativeEngineLayerRoutes_pointLightExtInit(
     JNIEnv* environment, jclass declaring_class, jbyteArray out_lightBytes, jlongArray out_lightIntegral, jfloatArray out_lightFloating)
 {

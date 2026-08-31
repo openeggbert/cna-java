@@ -4642,6 +4642,105 @@
         "symbol": "cna_motion_blur_pass_set_strength"
       },
       {
+        "java": "particleEmitterSettingsInit",
+        "symbol": "cna_particle_emitter_settings_init"
+      },
+      {
+        "java": "particleInit",
+        "symbol": "cna_particle_init"
+      },
+      {
+        "java": "particleSystemCopyParticleLookupGlsl",
+        "symbol": "cna_particle_system_copy_particle_lookup_glsl"
+      },
+      {
+        "java": "particleSystemCopyParticlesExt",
+        "symbol": "cna_particle_system_copy_particles_ext"
+      },
+      {
+        "java": "particleSystemCopyUnsupportedReason",
+        "symbol": "cna_particle_system_copy_unsupported_reason"
+      },
+      {
+        "java": "particleSystemCreate",
+        "symbol": "cna_particle_system_create"
+      },
+      {
+        "java": "particleSystemCreateWithCapacity",
+        "symbol": "cna_particle_system_create_with_capacity"
+      },
+      {
+        "java": "particleSystemDestroy",
+        "symbol": "cna_particle_system_destroy"
+      },
+      {
+        "java": "particleSystemDraw",
+        "symbol": "cna_particle_system_draw"
+      },
+      {
+        "java": "particleSystemGetActiveCount",
+        "symbol": "cna_particle_system_get_active_count"
+      },
+      {
+        "java": "particleSystemGetCapacity",
+        "symbol": "cna_particle_system_get_capacity"
+      },
+      {
+        "java": "particleSystemGetSettings",
+        "symbol": "cna_particle_system_get_settings"
+      },
+      {
+        "java": "particleSystemGetSoftnessExt",
+        "symbol": "cna_particle_system_get_softness_ext"
+      },
+      {
+        "java": "particleSystemIsEmissionRateClamped",
+        "symbol": "cna_particle_system_is_emission_rate_clamped"
+      },
+      {
+        "java": "particleSystemIsSimulationOnCpuExt",
+        "symbol": "cna_particle_system_is_simulation_on_cpu_ext"
+      },
+      {
+        "java": "particleSystemRandom",
+        "symbol": "cna_particle_system_random"
+      },
+      {
+        "java": "particleSystemReset",
+        "symbol": "cna_particle_system_reset"
+      },
+      {
+        "java": "particleSystemSetDepthInputExt",
+        "symbol": "cna_particle_system_set_depth_input_ext"
+      },
+      {
+        "java": "particleSystemSetSettings",
+        "symbol": "cna_particle_system_set_settings"
+      },
+      {
+        "java": "particleSystemSetSimulationOnCpuExt",
+        "symbol": "cna_particle_system_set_simulation_on_cpu_ext"
+      },
+      {
+        "java": "particleSystemSetSoftnessExt",
+        "symbol": "cna_particle_system_set_softness_ext"
+      },
+      {
+        "java": "particleSystemStep",
+        "symbol": "cna_particle_system_step",
+        "inOut": [
+          "particle"
+        ]
+      },
+      {
+        "java": "particleSystemUpdate",
+        "symbol": "cna_particle_system_update"
+      },
+      {
+        "java": "particleSystemUsesCompute",
+        "symbol": "cna_particle_system_uses_compute"
+      },
+      {
         "java": "pointLightExtInit",
         "symbol": "cna_point_light_ext_init"
       },
