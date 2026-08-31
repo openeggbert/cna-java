@@ -1680,6 +1680,28 @@ public final class NativeBindings {
         registerResource(game, effect, output[0], NativeBindings::destroyEffect);
     }
 
+    /**
+     * Registers an effect handle the extended layer already made as a Java facade.
+     *
+     * <p>Nothing is created here: the handle exists, and this is the Java name for it. Disposing
+     * the facade calls {@code cna_effect_destroy}, which is how the engine layer's lenders --
+     * the shader-effect factory among them -- are given their borrow back. The lender refuses to
+     * clear or close while one is outstanding, so the facade's disposal is not a nicety.
+     *
+     * @param effect the facade to register
+     * @param graphicsDevice the device the effect belongs to
+     * @param nativeEffect the handle the engine layer returned
+     */
+    public static void adoptEffect(
+            Effect effect, GraphicsDevice graphicsDevice, long nativeEffect) {
+        Objects.requireNonNull(effect, "effect");
+        if (nativeEffect == 0L) {
+            throw new IllegalArgumentException("nativeEffect");
+        }
+        registerResource(deviceGame(graphicsDevice), effect, nativeEffect,
+                NativeBindings::destroyEffect);
+    }
+
     public static void createBasicEffect(Effect effect, GraphicsDevice graphicsDevice) {
         Objects.requireNonNull(effect, "effect");
         Game game = deviceGame(graphicsDevice);

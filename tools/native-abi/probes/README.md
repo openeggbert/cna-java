@@ -220,3 +220,55 @@ the near plane before checking would have left `0.5000..200.0000` crossed. The s
 six different matrices, the seventh face is refused, and a face size of zero is refused. A null
 callback answers `INVALID_ARGUMENT` rather than `INVALID_STATE`, so CNA checks its arguments before
 it checks whether it can capture at all.
+
+## shader_effect_cache.c
+
+Can the headless renderer compile a shader at all, and does this runtime actually enforce the
+shader-effect factory's borrow discipline?
+
+The factory's whole contract is that discipline -- an acquired effect is a borrowed view, and clear
+and destroy are refused while one is outstanding -- and a contract stated in a header is not
+evidence that a library implements it. Its output on ABI 0.21.0, HEADLESS:
+
+```text
+compile count, fresh   0
+contains before        0
+acquire                0  effect valid
+contains after         1
+compile count after    1
+clear while borrowed   3
+destroy while borrowed 3
+acquire again          0  same handle 0  compile count 1
+acquire other name     0  compile count 2
+dispose borrowed       0
+clear after release    0
+compile count, cleared 2
+acquire empty name     1
+acquire bad source     0
+destroy                3
+```
+
+Six answers, all of which the Java tests now assert:
+
+The discipline is real: `clear` and `destroy` both answer `INVALID_STATE` while a view is out, and
+`clear` succeeds once it is back.
+
+**The key is the name, not the source.** A second acquire of `tint` does not recompile -- the count
+stays at one -- while the same source under the name `other` compiles again. A game editing a
+shader has to change the name or clear the cache, which is the sort of thing that is obvious in
+retrospect and expensive to discover in a frame budget.
+
+Each acquire returns a **different handle** for the same cached effect (`same handle 0`), so each
+is a view to dispose separately, and disposing one does not destroy the effect the factory holds.
+
+The compile count survives `clear` -- two, not zero -- which is what makes it a measure of work
+done rather than of cache size, and the one number that reveals a game recompiling every frame.
+
+An empty name is refused with `INVALID_ARGUMENT`.
+
+`acquire bad source` **succeeds**: this renderer has no compiler and takes any text at all. That is
+why the Java test asserting it is called `thisRendererAcceptsSourceItCouldNeverRun` -- a game must
+not read a successful acquire as a compiled shader.
+
+The last line is the discipline catching the probe itself: that final `destroy` is refused because
+the effect from `acquire bad source` was never released.

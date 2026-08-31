@@ -5989,6 +5989,36 @@ public final class NativeEngineLayerRoutes {
     public static native int scopedRenderTargetGetHasRecordedPrevious(long scope, boolean[] outRecorded);
 
     /**
+     * cna_shader_effect_factory_acquire (engine_layer.h).
+     */
+    public static native int shaderEffectFactoryAcquire(long factory, byte[] name, byte[] vertexSource, byte[] fragmentSource, long[] outEffect);
+
+    /**
+     * cna_shader_effect_factory_clear (engine_layer.h).
+     */
+    public static native int shaderEffectFactoryClear(long factory);
+
+    /**
+     * cna_shader_effect_factory_contains (engine_layer.h).
+     */
+    public static native int shaderEffectFactoryContains(long factory, byte[] name, boolean[] outContains);
+
+    /**
+     * cna_shader_effect_factory_create (engine_layer.h).
+     */
+    public static native int shaderEffectFactoryCreate(long graphicsDevice, long[] outFactory);
+
+    /**
+     * cna_shader_effect_factory_destroy (engine_layer.h).
+     */
+    public static native int shaderEffectFactoryDestroy(long factory);
+
+    /**
+     * cna_shader_effect_factory_get_compile_count (engine_layer.h).
+     */
+    public static native int shaderEffectFactoryGetCompileCount(long factory, long[] outCompileCount);
+
+    /**
      * cna_shadow_map_apply_caster (engine_layer.h).
      */
     public static native int shadowMapApplyCaster(long shadowMap);

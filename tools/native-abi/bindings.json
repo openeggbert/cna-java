@@ -20511,6 +20511,68 @@
       ]
     },
     {
+      "name": "cna_shader_effect_factory_acquire",
+      "header": "engine_layer.h",
+      "ownership": "borrows the factory; returns a BORROWED view of a cached effect that the factory keeps owning, released with cna_effect_destroy, and counted -- clear and destroy are refused while one is out",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_ShaderEffectFactoryHandle",
+        "CNA_StringView",
+        "CNA_StringView",
+        "CNA_StringView",
+        "CNA_EffectHandle*"
+      ]
+    },
+    {
+      "name": "cna_shader_effect_factory_clear",
+      "header": "engine_layer.h",
+      "ownership": "borrows the factory; destroys every cached effect it owns, and is refused while a borrowed view is outstanding",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_ShaderEffectFactoryHandle"
+      ]
+    },
+    {
+      "name": "cna_shader_effect_factory_contains",
+      "header": "engine_layer.h",
+      "ownership": "borrows the factory; owns nothing",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_ShaderEffectFactoryHandle",
+        "CNA_StringView",
+        "CNA_Bool*"
+      ]
+    },
+    {
+      "name": "cna_shader_effect_factory_create",
+      "header": "engine_layer.h",
+      "ownership": "borrows the graphics device, which outlives the factory; returns an owned factory handle",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_Handle",
+        "CNA_ShaderEffectFactoryHandle*"
+      ]
+    },
+    {
+      "name": "cna_shader_effect_factory_destroy",
+      "header": "engine_layer.h",
+      "ownership": "consumes the factory handle and every effect it owns, and is refused while a borrowed view is outstanding",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_ShaderEffectFactoryHandle"
+      ]
+    },
+    {
+      "name": "cna_shader_effect_factory_get_compile_count",
+      "header": "engine_layer.h",
+      "ownership": "borrows the factory; owns nothing",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_ShaderEffectFactoryHandle",
+        "uint64_t*"
+      ]
+    },
+    {
       "name": "cna_shadow_map_apply_caster",
       "header": "engine_layer.h",
       "ownership": "borrows the directional shadow map",

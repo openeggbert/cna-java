@@ -6275,6 +6275,30 @@
         "symbol": "cna_light_probe_baker_set_planes"
       },
       {
+        "java": "shaderEffectFactoryAcquire",
+        "symbol": "cna_shader_effect_factory_acquire"
+      },
+      {
+        "java": "shaderEffectFactoryClear",
+        "symbol": "cna_shader_effect_factory_clear"
+      },
+      {
+        "java": "shaderEffectFactoryContains",
+        "symbol": "cna_shader_effect_factory_contains"
+      },
+      {
+        "java": "shaderEffectFactoryCreate",
+        "symbol": "cna_shader_effect_factory_create"
+      },
+      {
+        "java": "shaderEffectFactoryDestroy",
+        "symbol": "cna_shader_effect_factory_destroy"
+      },
+      {
+        "java": "shaderEffectFactoryGetCompileCount",
+        "symbol": "cna_shader_effect_factory_get_compile_count"
+      },
+      {
         "java": "transparentDrawListCameraPositionOf",
         "symbol": "cna_transparent_draw_list_camera_position_of"
       },

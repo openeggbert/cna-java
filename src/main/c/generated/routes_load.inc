@@ -1407,6 +1407,12 @@
     LOAD(sensors_get_info_at, "cna_sensors_get_info_at");
     LOAD(sensors_get_last_error_id_ext, "cna_sensors_get_last_error_id_ext");
     LOAD(sensors_get_name_size_at, "cna_sensors_get_name_size_at");
+    LOAD(shader_effect_factory_acquire, "cna_shader_effect_factory_acquire");
+    LOAD(shader_effect_factory_clear, "cna_shader_effect_factory_clear");
+    LOAD(shader_effect_factory_contains, "cna_shader_effect_factory_contains");
+    LOAD(shader_effect_factory_create, "cna_shader_effect_factory_create");
+    LOAD(shader_effect_factory_destroy, "cna_shader_effect_factory_destroy");
+    LOAD(shader_effect_factory_get_compile_count, "cna_shader_effect_factory_get_compile_count");
     LOAD(shadow_map_apply_caster, "cna_shadow_map_apply_caster");
     LOAD(shadow_map_apply_skinned_caster, "cna_shadow_map_apply_skinned_caster");
     LOAD(shadow_map_begin, "cna_shadow_map_begin");

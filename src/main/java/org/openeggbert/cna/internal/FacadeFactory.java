@@ -50,6 +50,7 @@ public final class FacadeFactory {
     private static final Method AVATAR_ANIMATION_HANDLE =
             hiddenHandle(AvatarAnimation.class);
     private static final Method EFFECT_ADOPT_EXTENSION = effectAdoptExtensionMethod();
+    private static final Method EFFECT_ADOPT_BORROWED = effectAdoptBorrowedMethod();
     private static final Method CONTENT_MANAGER_DEVICE = contentManagerDeviceMethod();
     private static final Method TEXTURE_2D_LEVEL_BYTES = texture2DLevelBytesMethod();
     private static final Method STORAGE_CONTAINER_HANDLE = storageContainerHandleMethod();
@@ -428,6 +429,23 @@ public final class FacadeFactory {
     }
 
     /**
+     * Adopts an effect the extended layer already built as an ordinary XNA {@link Effect}.
+     *
+     * <p>Reached from {@code org.openeggbert.cna.extensions.graphics}, for a native effect that
+     * exists already -- a shader-effect factory lends one, and disposing the facade gives the
+     * lender its borrow back.
+     */
+    public static Effect createBorrowedEffect(GraphicsDevice graphicsDevice, long nativeEffect) {
+        try {
+            return (Effect) EFFECT_ADOPT_BORROWED.invoke(null, graphicsDevice, nativeEffect);
+        } catch (IllegalAccessException exception) {
+            throw new IllegalStateException("Cannot construct the borrowed Effect", exception);
+        } catch (InvocationTargetException exception) {
+            throw facadeFailure("Borrowed Effect construction failed", exception);
+        }
+    }
+
+    /**
      * Returns the graphics device a content manager loads against.
      *
      * <p>Reached from {@code org.openeggbert.cna.extensions.content}. XNA's ContentManager has no
@@ -527,6 +545,20 @@ public final class FacadeFactory {
             if (!method.trySetAccessible()) {
                 throw new IllegalStateException(
                         "The runtime denied access to the hidden Effect extension factory");
+            }
+            return method;
+        } catch (NoSuchMethodException exception) {
+            throw new ExceptionInInitializerError(exception);
+        }
+    }
+
+    private static Method effectAdoptBorrowedMethod() {
+        try {
+            Method method = Effect.class.getDeclaredMethod(
+                    "adoptBorrowedEffect", GraphicsDevice.class, long.class);
+            if (!method.trySetAccessible()) {
+                throw new IllegalStateException(
+                        "The runtime denied access to the hidden Effect adoption factory");
             }
             return method;
         } catch (NoSuchMethodException exception) {

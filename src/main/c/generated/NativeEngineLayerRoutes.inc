@@ -13387,6 +13387,121 @@ Java_org_openeggbert_cna_internal_generated_NativeEngineLayerRoutes_scopedRender
 }
 
 JNIEXPORT jint JNICALL
+Java_org_openeggbert_cna_internal_generated_NativeEngineLayerRoutes_shaderEffectFactoryAcquire(
+    JNIEnv* environment, jclass declaring_class, jlong factory, jbyteArray name, jbyteArray vertex_source, jbyteArray fragment_source, jlongArray out_effect)
+{
+    (void)environment;
+    (void)declaring_class;
+    jsize name_size = (*environment)->GetArrayLength(environment, name);
+    jbyte* name_bytes = (*environment)->GetByteArrayElements(environment, name, NULL);
+    if (name_bytes == NULL) {
+        return (jint)CNA_RESULT_OUT_OF_MEMORY;
+    }
+    CNA_StringView name_view = {(const char*)name_bytes, (uint64_t)name_size};
+    jsize vertex_source_size = (*environment)->GetArrayLength(environment, vertex_source);
+    jbyte* vertex_source_bytes = (*environment)->GetByteArrayElements(environment, vertex_source, NULL);
+    if (vertex_source_bytes == NULL) {
+        (*environment)->ReleaseByteArrayElements(environment, name, name_bytes, JNI_ABORT);
+        return (jint)CNA_RESULT_OUT_OF_MEMORY;
+    }
+    CNA_StringView vertex_source_view = {(const char*)vertex_source_bytes, (uint64_t)vertex_source_size};
+    jsize fragment_source_size = (*environment)->GetArrayLength(environment, fragment_source);
+    jbyte* fragment_source_bytes = (*environment)->GetByteArrayElements(environment, fragment_source, NULL);
+    if (fragment_source_bytes == NULL) {
+        (*environment)->ReleaseByteArrayElements(environment, vertex_source, vertex_source_bytes, JNI_ABORT);
+        (*environment)->ReleaseByteArrayElements(environment, name, name_bytes, JNI_ABORT);
+        return (jint)CNA_RESULT_OUT_OF_MEMORY;
+    }
+    CNA_StringView fragment_source_view = {(const char*)fragment_source_bytes, (uint64_t)fragment_source_size};
+    CNA_EffectHandle out_effect_value = 0;
+    CNA_Result call_result = cna.shader_effect_factory_acquire((CNA_ShaderEffectFactoryHandle)factory, name_view, vertex_source_view, fragment_source_view, &out_effect_value);
+    (*environment)->ReleaseByteArrayElements(environment, name, name_bytes, JNI_ABORT);
+    (*environment)->ReleaseByteArrayElements(environment, vertex_source, vertex_source_bytes, JNI_ABORT);
+    (*environment)->ReleaseByteArrayElements(environment, fragment_source, fragment_source_bytes, JNI_ABORT);
+    if (call_result == CNA_RESULT_SUCCESS || call_result == CNA_RESULT_BUFFER_TOO_SMALL) {
+        jlong out_effect_element = (jlong)out_effect_value;
+        (*environment)->SetLongArrayRegion(
+            environment, out_effect, 0, 1, &out_effect_element);
+    }
+    return (jint)call_result;
+}
+
+JNIEXPORT jint JNICALL
+Java_org_openeggbert_cna_internal_generated_NativeEngineLayerRoutes_shaderEffectFactoryClear(
+    JNIEnv* environment, jclass declaring_class, jlong factory)
+{
+    (void)environment;
+    (void)declaring_class;
+    CNA_Result call_result = cna.shader_effect_factory_clear((CNA_ShaderEffectFactoryHandle)factory);
+    return (jint)call_result;
+}
+
+JNIEXPORT jint JNICALL
+Java_org_openeggbert_cna_internal_generated_NativeEngineLayerRoutes_shaderEffectFactoryContains(
+    JNIEnv* environment, jclass declaring_class, jlong factory, jbyteArray name, jbooleanArray out_contains)
+{
+    (void)environment;
+    (void)declaring_class;
+    jsize name_size = (*environment)->GetArrayLength(environment, name);
+    jbyte* name_bytes = (*environment)->GetByteArrayElements(environment, name, NULL);
+    if (name_bytes == NULL) {
+        return (jint)CNA_RESULT_OUT_OF_MEMORY;
+    }
+    CNA_StringView name_view = {(const char*)name_bytes, (uint64_t)name_size};
+    CNA_Bool out_contains_value = 0;
+    CNA_Result call_result = cna.shader_effect_factory_contains((CNA_ShaderEffectFactoryHandle)factory, name_view, &out_contains_value);
+    (*environment)->ReleaseByteArrayElements(environment, name, name_bytes, JNI_ABORT);
+    if (call_result == CNA_RESULT_SUCCESS || call_result == CNA_RESULT_BUFFER_TOO_SMALL) {
+        jboolean out_contains_element = (jboolean)out_contains_value;
+        (*environment)->SetBooleanArrayRegion(
+            environment, out_contains, 0, 1, &out_contains_element);
+    }
+    return (jint)call_result;
+}
+
+JNIEXPORT jint JNICALL
+Java_org_openeggbert_cna_internal_generated_NativeEngineLayerRoutes_shaderEffectFactoryCreate(
+    JNIEnv* environment, jclass declaring_class, jlong graphics_device, jlongArray out_factory)
+{
+    (void)environment;
+    (void)declaring_class;
+    CNA_ShaderEffectFactoryHandle out_factory_value = 0;
+    CNA_Result call_result = cna.shader_effect_factory_create((CNA_Handle)graphics_device, &out_factory_value);
+    if (call_result == CNA_RESULT_SUCCESS || call_result == CNA_RESULT_BUFFER_TOO_SMALL) {
+        jlong out_factory_element = (jlong)out_factory_value;
+        (*environment)->SetLongArrayRegion(
+            environment, out_factory, 0, 1, &out_factory_element);
+    }
+    return (jint)call_result;
+}
+
+JNIEXPORT jint JNICALL
+Java_org_openeggbert_cna_internal_generated_NativeEngineLayerRoutes_shaderEffectFactoryDestroy(
+    JNIEnv* environment, jclass declaring_class, jlong factory)
+{
+    (void)environment;
+    (void)declaring_class;
+    CNA_Result call_result = cna.shader_effect_factory_destroy((CNA_ShaderEffectFactoryHandle)factory);
+    return (jint)call_result;
+}
+
+JNIEXPORT jint JNICALL
+Java_org_openeggbert_cna_internal_generated_NativeEngineLayerRoutes_shaderEffectFactoryGetCompileCount(
+    JNIEnv* environment, jclass declaring_class, jlong factory, jlongArray out_compile_count)
+{
+    (void)environment;
+    (void)declaring_class;
+    uint64_t out_compile_count_value = 0;
+    CNA_Result call_result = cna.shader_effect_factory_get_compile_count((CNA_ShaderEffectFactoryHandle)factory, &out_compile_count_value);
+    if (call_result == CNA_RESULT_SUCCESS || call_result == CNA_RESULT_BUFFER_TOO_SMALL) {
+        jlong out_compile_count_element = (jlong)out_compile_count_value;
+        (*environment)->SetLongArrayRegion(
+            environment, out_compile_count, 0, 1, &out_compile_count_element);
+    }
+    return (jint)call_result;
+}
+
+JNIEXPORT jint JNICALL
 Java_org_openeggbert_cna_internal_generated_NativeEngineLayerRoutes_shadowMapApplyCaster(
     JNIEnv* environment, jclass declaring_class, jlong shadow_map)
 {

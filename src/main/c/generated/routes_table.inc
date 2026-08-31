@@ -1407,6 +1407,12 @@
     CNA_JNI_ROUTE(cna_sensors_get_info_at) sensors_get_info_at;
     CNA_JNI_ROUTE(cna_sensors_get_last_error_id_ext) sensors_get_last_error_id_ext;
     CNA_JNI_ROUTE(cna_sensors_get_name_size_at) sensors_get_name_size_at;
+    CNA_JNI_ROUTE(cna_shader_effect_factory_acquire) shader_effect_factory_acquire;
+    CNA_JNI_ROUTE(cna_shader_effect_factory_clear) shader_effect_factory_clear;
+    CNA_JNI_ROUTE(cna_shader_effect_factory_contains) shader_effect_factory_contains;
+    CNA_JNI_ROUTE(cna_shader_effect_factory_create) shader_effect_factory_create;
+    CNA_JNI_ROUTE(cna_shader_effect_factory_destroy) shader_effect_factory_destroy;
+    CNA_JNI_ROUTE(cna_shader_effect_factory_get_compile_count) shader_effect_factory_get_compile_count;
     CNA_JNI_ROUTE(cna_shadow_map_apply_caster) shadow_map_apply_caster;
     CNA_JNI_ROUTE(cna_shadow_map_apply_skinned_caster) shadow_map_apply_skinned_caster;
     CNA_JNI_ROUTE(cna_shadow_map_begin) shadow_map_begin;
