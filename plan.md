@@ -42,13 +42,13 @@ or put non-XNA API inside `Microsoft.Xna.Framework.*`.
 | Allowlist entries | 0 | 0 |
 | CNA C ABI | 0.7.0 | 0.21.0 |
 | Canonical C API functions | not measured | 4,054 |
-| Bound native routes | 723 | 1,418 |
+| Bound native routes | 723 | 1,546 |
 | Unexplained native routes | 3,328 | 0 |
 | Bound routes no JNI entry point reaches | 1 | 0 |
-| Bound routes no Java call site reaches | not measurable | 161 |
+| Bound routes no Java call site reaches | not measurable | 0 |
 | Deferred input routes | 132 | 0 |
-| CNA extension packages | 0 | 6 |
-| Tests | 156 | 219 |
+| CNA extension packages | 0 | 9 |
+| Tests | 156 | 253 |
 
 ## Milestones reached this session
 
@@ -146,15 +146,15 @@ explicitly reviewed full signature, never a suppression:
 ```text
 HEADER_ABI=0.21.0
 CANONICAL_FUNCTIONS=4054
-BOUND_FUNCTIONS=1418
+BOUND_FUNCTIONS=1546
 MANIFEST_SIGNATURE_CHECK=PASS
 MANIFEST_JNI_BINDING_CHECK=PASS
 JNI_HEADER_DERIVED_SLOT_CHECK=PASS
 LAYOUT_SIGNATURE_PROBE=PASS
 LIBRARY_ABI=0.21.0
-LIBRARY_SYMBOL_CHECK=PASS (1418/1418)
+LIBRARY_SYMBOL_CHECK=PASS (1546/1546)
 ABI_POLICY_CHECK=PASS
-NATIVE_TOOL_TESTS=47 passed, 0 failed
+NATIVE_TOOL_TESTS=62 passed, 0 failed
 ```
 
 Every slot is declared `CNA_JNI_ROUTE(symbol)`, so a signature that moves upstream stops the
@@ -165,11 +165,11 @@ than guessing; `generateJniCheck` fails the build when the committed output goes
 ## Coverage
 
 ```text
-XNA_BACKING              985
+XNA_BACKING              986
 JAVA_INTERNAL_ONLY         9
-CNA_EXTENSION_CANDIDATE 1902
-DEFERRED_RUNTIME         417
-NOT_USEFUL_IN_JAVA       741
+CNA_EXTENSION_CANDIDATE 1916
+DEFERRED_RUNTIME         416
+NOT_USEFUL_IN_JAVA       727
 UNMAPPED_REQUIRES_REVIEW   0
 BOUND_BUT_UNREACHED        0
 BOUND_WITHOUT_JAVA_CALL_SITE 0
@@ -181,12 +181,20 @@ add cost and a native failure mode the original API cannot produce.
 
 ## Next
 
-`docs/backlog.json` is the machine-readable backlog. The largest remaining gaps are the 127
-deferred Model routes behind a managed-only `Load<Model>` (`JAVA-NATIVE-011`), the 272 unbound
-`.cnb` content routes (`JAVA-EXT-003`), the 161 bound routes no Java call site reaches
-(`JAVA-NATIVE-023`), and the Content Pipeline product decision (`JAVA-XNA-006`). CNA's engine
-layer is the bulk of what is left classified as an extension candidate; it belongs under
+`docs/backlog.json` is the machine-readable backlog. Every gap named in the paragraph this
+replaces is closed: the deferred Model routes, the Content Pipeline decision, both reachability
+questions, and 206 of the 272 `.cnb` routes. What is left is smaller and each piece is recorded
+with its own evidence -- the `.cnj` builder, the model's morph targets, a skinned-model slice
+blocked on a marshalling shape the generator refuses rather than guesses at, and an
+out-of-memory-only leak in generated multi-array routes. CNA's engine layer is still the bulk of
+what is classified as an extension candidate; it belongs under
 `org.openeggbert.cna.extensions.*`, never inside the strict packages.
+
+The `.cnb` work is worth naming separately, because it changed what this projection is for. Eight
+asset families read and write, five of them crossing to the XNA type a game uses, and `CnbImport`
+reads PNG, JPEG, WAV and DDS. That is the ingest half of a content pipeline, working with no
+window, no device and no frame -- which is what `docs/content-pipeline-decision.md` concluded
+should exist instead of a reimplementation of Microsoft's MSBuild system.
 
 Both reachability questions are now answered and both are gates. `boundButUnreached` -- a loaded
 symbol no JNI entry point reaches -- is empty. So is `boundWithoutJavaCallSite`, the weaker

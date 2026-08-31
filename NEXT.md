@@ -50,10 +50,11 @@ TARGET_TYPES=340     TARGET_MEMBERS=4022
 TOTAL_DIAGNOSTICS=0  ALLOWLIST_ENTRIES=0
 
 NATIVE
-CANONICAL_FUNCTIONS=4054   BOUND_FUNCTIONS=1418
-XNA_BACKING=985  JAVA_INTERNAL_ONLY=9  CNA_EXTENSION_CANDIDATE=1902
-DEFERRED_RUNTIME=417  NOT_USEFUL_IN_JAVA=741  UNEXPLAINED=0
+CANONICAL_FUNCTIONS=4054   BOUND_FUNCTIONS=1546
+XNA_BACKING=986  JAVA_INTERNAL_ONLY=9  CNA_EXTENSION_CANDIDATE=1916
+DEFERRED_RUNTIME=416  NOT_USEFUL_IN_JAVA=727  UNEXPLAINED=0
 BOUND_BUT_UNREACHED=0  BOUND_WITHOUT_JAVA_CALL_SITE=0
+NATIVE_TOOL_TESTS=62
 
 CNA EXTENSIONS
 org.openeggbert.cna.extensions.graphics   pipeline settings, PBR material, ASCII/CRT/depth effects
@@ -67,10 +68,18 @@ org.openeggbert.cna.extensions.input      typed characters, composition drafts a
                                           relative mode, touch emulation
 org.openeggbert.cna.extensions.sensors    accelerometer, gyroscope, compass, fused motion,
                                           and the host's sensor enumeration
-org.openeggbert.cna.extensions.content    CNA's model over an XNA one, and the .cnb container:
-                                          document, checked reader, texture data, writer
+org.openeggbert.cna.extensions.content    CNA's model over an XNA one, the .cnb container, and
+                                          the ingest half of a content pipeline: textures in all
+                                          three shapes, sounds, sprite fonts, curves, songs,
+                                          videos, whole models with materials, and PNG/JPEG/WAV/
+                                          DDS import
+org.openeggbert.cna.extensions.net        where a discovered session is, and describing one at
+                                          an address so NetworkSession.Join can take it
+org.openeggbert.cna.extensions.gamerservices  CNA's application-rendered Guide
+org.openeggbert.cna.extensions.avatars    real-avatar colours, an animation's clip, and the
+                                          content behind XNA's canonical presets
 
-TESTS=219 SUITES=50 FAILURES=0 ERRORS=0 SKIPPED=0
+TESTS=253 SUITES=55 FAILURES=0 ERRORS=0 SKIPPED=0
 ```
 
 The selected profile is now a **subset gate**: a type the wider profile declares is not an
@@ -141,18 +150,40 @@ unexpected type in the narrower one, so its zero still means what it always mean
     leaks turned up on the way -- `NetworkSessionProperties`, `AvatarDescription` and every
     `LeaderboardEntry` owned a handle nothing released -- and are fixed.
 
+## What changed after that
+
+14. `JAVA-EXT-003` grew from one vertical slice to eight. Five asset families cross to the XNA
+    type a game uses -- a sound becomes a `SoundEffect`, a sprite font a `SpriteFont` that
+    `DrawString` draws with, a curve a `Curve` that evaluates the same on both sides, and a song
+    and a video media objects over the reference the file records. The model family reads and
+    writes the whole graph including materials. And `CnbImport` reads what artists actually hand
+    over: PNG, JPEG, WAV and DDS.
+15. `JAVA-EXT-006` is done in all three slices. The net one found a leak on the way: every
+    `AvailableNetworkSession` owns an independent native handle -- CNA's collection accessor is
+    documented to return a copy that outlives the collection -- and nothing released it.
+16. The JNI generator learned two shapes, each with tool tests and refusals: `CNA_StringView`
+    fields inside a structure, and input arrays whose length CNA states in prose rather than in
+    a count parameter.
+
 ## Next work, in dependency order
 
-`docs/backlog.json` is the machine-readable source. The highest-value ready tasks are:
+`docs/backlog.json` is the machine-readable source. What is left:
 
-1. `JAVA-EXT-003` — the remaining `.cnb` asset families: model, sprite font, sound, song, video,
-   curve, animation clip and `.cnj`. The loader registry needs a design decision rather than
-   more binding, because `cna_cnb_loader_invoke` hands back a `void*`.
-2. `JAVA-EXT-006` — the gamer-services capabilities XNA has no member for, unbound and
-   classified by `JAVA-NATIVE-023`: CNA's application-rendered Guide, its avatar rendering, and
-   a discovered session's host and port.
-3. `JAVA-UPSTREAM-004` — revalidate the CNA model loader when it is fixed, and add
-   `CnaModel.Load` on top of it.
+1. `JAVA-EXT-003` — the `.cnj` builder and compiler (nine routes, all plannable), the model's
+   morph targets, and read-only animations. Two things will not come from more binding:
+   `cna_cnb_model_add_animation` takes the nested descriptor graph the generator refuses, and
+   the loader registry needs a design decision because `cna_cnb_loader_invoke` hands back a
+   `void*` with no Java meaning.
+2. `JAVA-EXT-007` — blocked with evidence. 23 of 26 skinned-model routes plan; the three that do
+   not include `set_clip`, whose descriptor is a pointer graph, and no route takes a clip handle
+   instead. Twenty-three plannable routes that do not add up to a usable feature is not a slice
+   worth shipping, and it is what keeps the two real-avatar-rendering routes unbound.
+3. `JAVA-NATIVE-025` — a generated route that pins several byte arrays leaks the earlier ones if
+   a later pin fails. Reachable only when the JVM is already out of memory; recorded rather than
+   half-fixed.
+4. `JAVA-UPSTREAM-004` — revalidate the CNA content-manager model loader when it is fixed, and
+   add `CnaModel.Load` on top of it. The `.cnb` model path is a different one and was probed
+   clean in C before this session bound it.
 
 Do not weaken either profile's zero, do not add an allowlist, and do not put non-XNA API inside
 `Microsoft.Xna.Framework.*`.
