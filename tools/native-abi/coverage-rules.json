@@ -199,6 +199,46 @@
     },
     {
       "match": {
+        "symbols": [
+          "cna_logger_trace",
+          "cna_logger_debug",
+          "cna_logger_info",
+          "cna_logger_warn",
+          "cna_logger_error",
+          "cna_logger_fatal",
+          "cna_logger_experiment"
+        ]
+      },
+      "classification": "CNA_EXTENSION_CANDIDATE",
+      "reason": "A per-level alias for cna_logger_log(level, message, category), which is bound and which CnaLogger routes every level through. Binding seven more entry points that differ only in a constant would widen the native boundary without widening what a game can do."
+    },
+    {
+      "match": {
+        "symbols": [
+          "cna_logger_trace_if",
+          "cna_logger_debug_if",
+          "cna_logger_info_if",
+          "cna_logger_warn_if",
+          "cna_logger_error_if",
+          "cna_logger_fatal_if",
+          "cna_logger_experiment_if"
+        ]
+      },
+      "classification": "CNA_EXTENSION_CANDIDATE",
+      "reason": "Emits only when a condition holds, and takes no category -- so it is not a conditional form of the route beside it. `if (condition) CnaLogger.Info(message, category)` is the same behaviour with the category kept and without crossing JNI when the condition is false, which is the case these exist for."
+    },
+    {
+      "match": {
+        "symbols": [
+          "cna_logger_set_sink_ext",
+          "cna_logger_reset_sink_ext"
+        ]
+      },
+      "classification": "CNA_EXTENSION_CANDIDATE",
+      "reason": "cna_logger_set_sink_ext takes a CNA_LogSinkCallback, a C function pointer the generator refuses rather than guesses at. reset_sink_ext takes none, but binding it alone would give Java a route that clears a sink it has no way to install."
+    },
+    {
+      "match": {
         "header": "core_ext.h"
       },
       "classification": "CNA_EXTENSION_CANDIDATE",
@@ -568,28 +608,32 @@
         "prefix": "cna_morph_target_"
       },
       "classification": "CNA_EXTENSION_CANDIDATE",
-      "reason": "Morph targets are a CNA model extension; XNA 4.0's Model has no morph data."
+      "reason": "Morph targets are a CNA model extension; XNA 4.0's Model has no morph data. Not bound for the reason JAVA-EXT-007 records and this session rechecked against the live headers: the family is entered through cna_skinning_data_create, which takes a CNA_SkinningDataDescriptor -- a pointer graph the generator refuses rather than guesses at -- and no route takes a clip handle, so there is no other door in. cna_animation_player_create takes the SkinningData handle that door would produce.",
+      "task": "JAVA-EXT-007"
     },
     {
       "match": {
         "prefix": "cna_skinned_model_"
       },
       "classification": "CNA_EXTENSION_CANDIDATE",
-      "reason": "SkinnedModel is a CNA model extension; XNA 4.0 ships skinning only as a sample-level content processor."
+      "reason": "SkinnedModel is a CNA model extension; XNA 4.0 ships skinning only as a sample-level content processor. Not bound for the reason JAVA-EXT-007 records and this session rechecked against the live headers: the family is entered through cna_skinning_data_create, which takes a CNA_SkinningDataDescriptor -- a pointer graph the generator refuses rather than guesses at -- and no route takes a clip handle, so there is no other door in. cna_animation_player_create takes the SkinningData handle that door would produce.",
+      "task": "JAVA-EXT-007"
     },
     {
       "match": {
         "prefix": "cna_skinning_data_"
       },
       "classification": "CNA_EXTENSION_CANDIDATE",
-      "reason": "Skinning data is a CNA model extension."
+      "reason": "Skinning data is a CNA model extension. Not bound for the reason JAVA-EXT-007 records and this session rechecked against the live headers: the family is entered through cna_skinning_data_create, which takes a CNA_SkinningDataDescriptor -- a pointer graph the generator refuses rather than guesses at -- and no route takes a clip handle, so there is no other door in. cna_animation_player_create takes the SkinningData handle that door would produce.",
+      "task": "JAVA-EXT-007"
     },
     {
       "match": {
         "prefix": "cna_animation_player_"
       },
       "classification": "CNA_EXTENSION_CANDIDATE",
-      "reason": "The animation player is a CNA model extension."
+      "reason": "The animation player is a CNA model extension. Not bound for the reason JAVA-EXT-007 records and this session rechecked against the live headers: the family is entered through cna_skinning_data_create, which takes a CNA_SkinningDataDescriptor -- a pointer graph the generator refuses rather than guesses at -- and no route takes a clip handle, so there is no other door in. cna_animation_player_create takes the SkinningData handle that door would produce.",
+      "task": "JAVA-EXT-007"
     },
     {
       "match": {

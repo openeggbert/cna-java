@@ -187,6 +187,26 @@ TESTS=516 SUITES=94 FAILURES=0 ERRORS=0 SKIPPED=0
    undestroyable.
 4. **`cna_content_manager_load_effect`** is `ASSET_PENDING`, not blocked: no `.xnb` effect and no
    `.cnj` describing one exists in the checkout this qualifies against.
+5. **143 extension routes are classified but not explained**, and this is the one piece of local
+   work this session leaves behind rather than finishing. The census is reproducible: of 394
+   unbound `CNA_EXTENSION_CANDIDATE` routes, 125 have a shape that speaks for itself (a callback
+   the generator refuses, a struct-field accessor whose struct already arrives flattened, half of
+   a count/copy pair, a test-injection route), and of the 269 that do not, 126 now carry a
+   measured reason or a blocking task. The remaining 143 carry a reason that explains why the
+   route is a CNA extension rather than XNA -- which is a different question from why it is not
+   bound:
+
+   ```text
+   35 devices.h   35 cnb.h   15 content_readers.h   10 sensors.h   10 effects.h
+    8 input_devices.h   7 input_haptics.h   7 core_ext.h   7 models.h
+    5 input_joystick.h   3 input_text.h   1 graphics_ext.h
+   ```
+
+   Some will turn out to be blocked -- the model remainder almost certainly behind
+   `JAVA-UPSTREAM-004` and `JAVA-EXT-007`, as the rest of that family already is. Some will turn
+   out to be bindable. **Measure before writing the reason**: this session filed one upstream
+   finding from a probe that had rearranged the state it then measured, and had to withdraw four
+   fifths of it.
 
 Do not weaken either profile's zero, do not add an allowlist, and do not put non-XNA API inside
 `Microsoft.Xna.Framework.*`.
