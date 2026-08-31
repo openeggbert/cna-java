@@ -82,11 +82,11 @@ final class PixelReadbackTests {
                 }
                 Color[] linearPixels = read(linear, size);
 
-                // A renderer that drew nothing leaves the target at whatever the clear left. If
-                // both images are one flat colour there was no draw, and no claim is made.
-                if (isFlat(pointPixels) && isFlat(linearPixels)) {
-                    return;
-                }
+                // No escape hatch past this point, and that is deliberate. The readback above is
+                // what a renderer that draws nothing refuses; having got an image back, this
+                // renderer draws, and a flat one would be a defect rather than an excuse. An
+                // earlier version of this test skipped on a flat image and a planted defect that
+                // produced one therefore passed.
 
                 // Point filtering reproduces the source's own texels and nothing between them:
                 // every pixel is one of the two colours the checkerboard was made of.
@@ -189,12 +189,6 @@ final class PixelReadbackTests {
                 } catch (RuntimeException refused) {
                     return;
                 }
-                if (isFlat(pixels) && pixels[0].getR() == 0 && pixels[0].getG() == 0) {
-                    // Nothing was drawn: a renderer with no shader to blit with leaves the
-                    // target as it found it, and no claim is made about an image it did not
-                    // produce.
-                    return;
-                }
                 for (Color pixel : pixels) {
                     assertEquals(200, pixel.getR(), 1, "red arrived from the context's source");
                     assertEquals(120, pixel.getG(), 1, "green");
@@ -240,12 +234,126 @@ final class PixelReadbackTests {
                     return;
                 }
                 Color[] secondPixels = read(second, size);
-                if (isFlat(firstPixels) && isFlat(secondPixels)) {
-                    // Nothing was drawn, so nothing is claimed.
+                // The claim only exists where the grain actually ran. A renderer whose pass is a
+                // pass-through has nothing to seed and nothing to differ, and saying so is better
+                // than asserting a difference that could not appear. Both the pass's own answer
+                // and the image are consulted, because the two disagree on one renderer.
+                boolean grainRan = java.util.Arrays.stream(firstPixels).distinct().count() > 4;
+                if (grain.isSupported(device) || grainRan) {
+                    assertFalse(java.util.Arrays.equals(firstPixels, secondPixels),
+                            "grain seeded from two different times must differ");
+                }
+            }
+        });
+    }
+
+    @Test
+    void aPostProcessChainChangesThePixelsItsPassesSayItShould() {
+        GameProbe.run(probe -> {
+            GraphicsDevice device = probe.device();
+            final int size = 16;
+            try (PostProcessChain chain = PostProcessChain.create(device);
+                    FilmGrainPass grain = FilmGrainPass.create(device);
+                    Texture2D source = new Texture2D(device, size, size);
+                    RenderTarget2D plain = new RenderTarget2D(device, size, size);
+                    RenderTarget2D grained = new RenderTarget2D(device, size, size)) {
+                Color[] flat = new Color[size * size];
+                java.util.Arrays.fill(flat, new Color(128, 128, 128, 255));
+                source.SetData(flat);
+
+                PostProcessContext context = new PostProcessContext();
+                context.setSource(source);
+                context.setSize(size, size);
+                context.setElapsedSeconds(0.5f);
+
+                // An empty chain is the control: whatever it does to the frame, it is what a
+                // chain with one pass has to differ from.
+                context.setDestination(plain);
+                chain.apply(context);
+
+                grain.setIntensity(1.0f);
+                chain.addPass(grain);
+                context.setDestination(grained);
+                chain.apply(context);
+
+                Color[] plainPixels;
+                try {
+                    plainPixels = read(plain, size);
+                } catch (RuntimeException refused) {
+                    // A renderer that cannot read a target back cannot be asked what a chain
+                    // wrote, and nothing is claimed about an image that was never seen.
                     return;
                 }
-                assertFalse(java.util.Arrays.equals(firstPixels, secondPixels),
-                        "grain seeded from two different times must differ");
+                Color[] grainedPixels = read(grained, size);
+                long distinct = java.util.Arrays.stream(grainedPixels).distinct().count();
+
+                if (grain.isSupported(device)) {
+                    // Film grain is noise: a flat grey source comes out as many different greys,
+                    // which is a claim about the image rather than about the call succeeding.
+                    assertTrue(distinct > 4,
+                            "a supported grain pass over a flat frame must produce more than "
+                                    + distinct + " distinct colours");
+                    assertFalse(java.util.Arrays.equals(plainPixels, grainedPixels),
+                            "adding a pass to a chain must change what the chain produces");
+                } else {
+                    // A pass that says it cannot run is not required to have run -- and is not
+                    // required not to, either. SOFTWARE agrees with itself and copies the source
+                    // through unchanged; OPENGL4 says no and grains the frame anyway, which is
+                    // JAVA-UPSTREAM-015 and is measured in C rather than decided here. So the
+                    // claim is the disjunction, which is not vacuous: a chain that wrote the
+                    // target's cleared black would have neither left the frame alone nor grained
+                    // it, and would fail.
+                    boolean unchanged = java.util.Arrays.equals(plainPixels, grainedPixels);
+                    assertTrue(unchanged || distinct > 4,
+                            "a chain must either leave the frame as an empty one left it or "
+                                    + "actually run its pass, and this one wrote "
+                                    + grainedPixels[0] + " with " + distinct + " distinct "
+                                    + "colours");
+                }
+            }
+        });
+    }
+
+    @Test
+    void aGpuTimerThatSaysItWorksCollectsASample() {
+        GameProbe.run(probe -> {
+            GraphicsDevice device = probe.device();
+            try (GpuTimer timer = GpuTimer.create(device)) {
+                if (!timer.isSupported()) {
+                    // The renderer has no timer query. GpuTimerTests qualifies that state; this
+                    // one is about the other.
+                    return;
+                }
+                assertEquals(0, timer.getSampleCount(), "a fresh timer has collected nothing");
+                timer.begin();
+                assertTrue(timer.isOpen());
+                try (RenderTarget2D target = new RenderTarget2D(device, 128, 128)) {
+                    device.SetRenderTarget(target);
+                    for (int step = 0; step < 32; step++) {
+                        device.Clear(new Color(step, step, step, 255));
+                    }
+                    device.SetRenderTarget(null);
+                }
+                timer.end();
+                assertFalse(timer.isOpen());
+
+                // A query is answered when the GPU gets to it, so this waits rather than
+                // assuming -- and the sample count rising is what says a result was collected
+                // rather than a zero being reported as one.
+                long deadline = System.nanoTime() + 5_000_000_000L;
+                boolean collected = false;
+                while (!collected && System.nanoTime() < deadline) {
+                    collected = timer.poll();
+                }
+                assertTrue(collected, "a supported timer must answer within five seconds");
+                assertEquals(1, timer.getSampleCount(), "and count what it collected");
+                // The value itself is deliberately not claimed to be a duration. On a software
+                // GL implementation the query comes back as 0xFFFFFFFF nanoseconds -- a sentinel
+                // rather than a measurement -- and inventing a plausible range here would be
+                // asserting something this host cannot show. What is asserted is that the number
+                // is a time at all.
+                assertTrue(timer.getLastMilliseconds() >= 0.0,
+                        "a collected sample is not negative: " + timer.getLastMilliseconds());
             }
         });
     }
@@ -261,12 +369,4 @@ final class PixelReadbackTests {
         });
     }
 
-    private static boolean isFlat(Color[] pixels) {
-        for (Color pixel : pixels) {
-            if (!pixel.equals(pixels[0])) {
-                return false;
-            }
-        }
-        return true;
-    }
 }

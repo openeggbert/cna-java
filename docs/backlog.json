@@ -690,6 +690,22 @@
         "NativeShutdownSubprocessTests.jvmShutdownWithLiveEffectChildrenBuffersAndCallbacksExitsCleanly"
       ],
       "note": "It reaches every Java program rather than an unusual one: the java launcher runs main on a thread it creates rather than on the process initial thread, so a JVM satisfies the second condition without anyone choosing it. A game that closes its buffers is unaffected; one that calls System.exit, or dies on an unhandled exception, is not. The subprocess test asserts the abort exact signature on the renderers where it is known, so an upstream fix shows up as a failing test."
+    },
+    {
+      "id": "JAVA-UPSTREAM-015",
+      "title": "A post-process pass that reports itself unsupported runs anyway on one renderer",
+      "family": "cnanext",
+      "authority": "engine_layer.h",
+      "status": "blocked",
+      "priority": 6,
+      "currentState": "cna_post_process_pass_is_supported exists so a game can ask before it spends a frame, and the value of the question is that the answer predicts the behaviour. Measured with a film-grain pass over a flat grey frame, read back and counted: HEADLESS answers no and refuses the readback; SOFTWARE answers no and copies the source through unchanged, which agrees with itself; OPENGLES3 and OPENGL33 answer yes and grain the frame; OPENGL4 answers no and grains the frame anyway.",
+      "expectedState": "The answer predicts the behaviour on every renderer, whichever way each one is decided.",
+      "blocker": "Upstream inconsistency in cnanext OPENGL4 renderer or in the support query it answers. CNA-Java cannot fix it.",
+      "tests": [
+        "tools/native-abi/probes/pass_support_versus_behaviour.c",
+        "PixelReadbackTests.aPostProcessChainChangesThePixelsItsPassesSayItShould"
+      ],
+      "note": "The third instance of one shape, after JAVA-UPSTREAM-007 (a cube shadow map that answers no and opens its face passes anyway) and JAVA-UPSTREAM-005 (a documented parameter that is not what the routes take): a capability query disagreeing with what the renderer then does. The Java test asserts the supported case in full and, for the unsupported one, only the disjunction -- either the frame was left as an empty chain left it or the pass really ran -- which is not vacuous and does not decide a question this repository cannot decide."
     }
   ]
 }

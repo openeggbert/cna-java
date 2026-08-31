@@ -993,3 +993,47 @@ thread that made the game and its GL context has already ended by the time the p
 without anyone choosing that. Narrowing from the Java side agreed exactly: a plain game with a
 device and a frame exits cleanly, and adding one `VertexBuffer` -- static or dynamic, bound or
 not, with a listener or without -- aborts.
+
+## pass_support_versus_behaviour.c
+
+`JAVA-UPSTREAM-015`. Does a post-process pass that reports itself unsupported actually decline to
+run?
+
+`cna_post_process_pass_is_supported` exists so a game can ask before it spends a frame, and the
+whole value of the question is that the answer predicts the behaviour. A film-grain pass over a
+flat grey frame, read back and its distinct colours counted, says whether it did:
+
+| renderer | `is_supported` | the image | verdict |
+|---|---|---|---|
+| HEADLESS | no | readback refused | nothing can be said |
+| SOFTWARE | no | 128,128,128, one colour | agrees with itself |
+| OPENGL4 | **no** | 153,153,153, **168 colours** | **grains the frame anyway** |
+| OPENGLES3 | yes | 153,153,153, 168 colours | agrees with itself |
+| OPENGL33 | yes | 153,153,153, 168 colours | agrees with itself |
+
+That is the third instance of one shape, after `JAVA-UPSTREAM-007` -- a cube shadow map that
+answers `is_supported=no` and opens its face passes exactly as documented -- and
+`JAVA-UPSTREAM-005`, whose routes do not take the handle their documentation names. A capability
+query is only worth asking if its answer predicts something.
+
+It is in C rather than only in Java because a Java test can show it on the renderers it happens to
+be run against, and the finding is the disagreement rather than one renderer's answer.
+
+## gpu_deep behaviours worth knowing
+
+Three things the GPU renderers do that HEADLESS could not, measured while deciding what was worth
+asserting:
+
+**A GPU timer collects a sample and the value is not a duration.** `poll` returns true, the sample
+count rises to one, and `getLastMilliseconds` answers **4294.967295** -- which is 0xFFFFFFFF
+nanoseconds, a sentinel rather than a measurement, on this software GL implementation. The Java
+test therefore asserts the protocol (a sample is collected and counted, and the value is not
+negative) and explicitly does not claim the duration means anything. Qualifying a real duration
+needs hardware whose timer query answers.
+
+**The render pipeline runs three passes** with bloom, FXAA and HDR enabled -- on HEADLESS as well
+as on the GL renderers, and with five target switches. `getLastFramePassCount` was never blocked;
+the zero the scene-callback probe reported was a pipeline with nothing turned on.
+
+**A shadow map lends its texture on every renderer**, and answers `is_supported` false only where
+it cannot cast into it.
