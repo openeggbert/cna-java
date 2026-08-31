@@ -13,6 +13,149 @@ public final class NativeEngineLayerRoutes {
     }
 
     /**
+     * cna_aerial_perspective_pass_air_mass_for_distance (engine_layer.h).
+     *
+     * <p>viewDirectionFloating carries CNA_Vector3 in this order:
+     * <ol start="0">
+     *   <li>{@code x} (float)</li>
+     *   <li>{@code y} (float)</li>
+     *   <li>{@code z} (float)</li>
+     * </ol>
+     */
+    public static native int aerialPerspectivePassAirMassForDistance(float[] viewDirectionFloating, float distance, float scaleHeight, float[] outAirMass);
+
+    /**
+     * cna_aerial_perspective_pass_copy_fallback_reason (engine_layer.h).
+     */
+    public static native int aerialPerspectivePassCopyFallbackReason(long pass, byte[] destination, long[] outBytes);
+
+    /**
+     * cna_aerial_perspective_pass_create (engine_layer.h).
+     */
+    public static native int aerialPerspectivePassCreate(long graphicsDevice, long[] outPass);
+
+    /**
+     * cna_aerial_perspective_pass_get_intensity (engine_layer.h).
+     */
+    public static native int aerialPerspectivePassGetIntensity(long pass, float[] outValue);
+
+    /**
+     * cna_aerial_perspective_pass_get_scale_height (engine_layer.h).
+     */
+    public static native int aerialPerspectivePassGetScaleHeight(long pass, float[] outValue);
+
+    /**
+     * cna_aerial_perspective_pass_get_sun_direction (engine_layer.h).
+     *
+     * <p>outValueFloating carries CNA_Vector3 in this order:
+     * <ol start="0">
+     *   <li>{@code x} (float)</li>
+     *   <li>{@code y} (float)</li>
+     *   <li>{@code z} (float)</li>
+     * </ol>
+     */
+    public static native int aerialPerspectivePassGetSunDirection(long pass, float[] outValueFloating);
+
+    /**
+     * cna_aerial_perspective_pass_get_turbidity (engine_layer.h).
+     */
+    public static native int aerialPerspectivePassGetTurbidity(long pass, float[] outValue);
+
+    /**
+     * cna_aerial_perspective_pass_set_intensity (engine_layer.h).
+     */
+    public static native int aerialPerspectivePassSetIntensity(long pass, float value);
+
+    /**
+     * cna_aerial_perspective_pass_set_scale_height (engine_layer.h).
+     */
+    public static native int aerialPerspectivePassSetScaleHeight(long pass, float value);
+
+    /**
+     * cna_aerial_perspective_pass_set_sun_direction (engine_layer.h).
+     *
+     * <p>valueFloating carries CNA_Vector3 in this order:
+     * <ol start="0">
+     *   <li>{@code x} (float)</li>
+     *   <li>{@code y} (float)</li>
+     *   <li>{@code z} (float)</li>
+     * </ol>
+     */
+    public static native int aerialPerspectivePassSetSunDirection(long pass, float[] valueFloating);
+
+    /**
+     * cna_aerial_perspective_pass_set_turbidity (engine_layer.h).
+     */
+    public static native int aerialPerspectivePassSetTurbidity(long pass, float value);
+
+    /**
+     * cna_aerial_perspective_pass_transmittance (engine_layer.h).
+     *
+     * <p>outTransmittanceFloating carries CNA_Vector3 in this order:
+     * <ol start="0">
+     *   <li>{@code x} (float)</li>
+     *   <li>{@code y} (float)</li>
+     *   <li>{@code z} (float)</li>
+     * </ol>
+     */
+    public static native int aerialPerspectivePassTransmittance(float turbidity, float airMass, float[] outTransmittanceFloating);
+
+    /**
+     * cna_blit_pass_create (engine_layer.h).
+     */
+    public static native int blitPassCreate(long graphicsDevice, long[] outPass);
+
+    /**
+     * cna_bloom_pass_create (engine_layer.h).
+     */
+    public static native int bloomPassCreate(long graphicsDevice, long[] outPass);
+
+    /**
+     * cna_bloom_pass_extract_channel (engine_layer.h).
+     */
+    public static native int bloomPassExtractChannel(float value, float threshold, float[] outExtracted);
+
+    /**
+     * cna_bloom_pass_get_intensity (engine_layer.h).
+     */
+    public static native int bloomPassGetIntensity(long pass, float[] outValue);
+
+    /**
+     * cna_bloom_pass_get_iterations (engine_layer.h).
+     */
+    public static native int bloomPassGetIterations(long pass, int[] outValue);
+
+    /**
+     * cna_bloom_pass_get_threshold (engine_layer.h).
+     */
+    public static native int bloomPassGetThreshold(long pass, float[] outValue);
+
+    /**
+     * cna_bloom_pass_iterations_for_quality (engine_layer.h).
+     */
+    public static native int bloomPassIterationsForQuality(int quality, int[] outIterations);
+
+    /**
+     * cna_bloom_pass_reset_targets (engine_layer.h).
+     */
+    public static native int bloomPassResetTargets(long pass);
+
+    /**
+     * cna_bloom_pass_set_intensity (engine_layer.h).
+     */
+    public static native int bloomPassSetIntensity(long pass, float value);
+
+    /**
+     * cna_bloom_pass_set_iterations (engine_layer.h).
+     */
+    public static native int bloomPassSetIterations(long pass, int value);
+
+    /**
+     * cna_bloom_pass_set_threshold (engine_layer.h).
+     */
+    public static native int bloomPassSetThreshold(long pass, float value);
+
+    /**
      * cna_cascaded_shadow_map_apply_to_receiver (engine_layer.h).
      */
     public static native int cascadedShadowMapApplyToReceiver(long shadowMap, long effect);
@@ -270,6 +413,21 @@ public final class NativeEngineLayerRoutes {
      * </ol>
      */
     public static native int cascadedShadowMapUpdate(long shadowMap, byte[] lightBytes, long[] lightIntegral, float[] lightFloating, float[] cameraViewFloating, float[] cameraProjectionFloating);
+
+    /**
+     * cna_chromatic_aberration_pass_create (engine_layer.h).
+     */
+    public static native int chromaticAberrationPassCreate(long graphicsDevice, long[] outPass);
+
+    /**
+     * cna_chromatic_aberration_pass_get_strength (engine_layer.h).
+     */
+    public static native int chromaticAberrationPassGetStrength(long pass, float[] outValue);
+
+    /**
+     * cna_chromatic_aberration_pass_set_strength (engine_layer.h).
+     */
+    public static native int chromaticAberrationPassSetStrength(long pass, float value);
 
     /**
      * cna_clustered_light_assignment_adopt (engine_layer.h).
@@ -873,6 +1031,105 @@ public final class NativeEngineLayerRoutes {
     public static native int clusteredLightSetReplaceAt(long set, int index, byte[] lightBytes, long[] lightIntegral, float[] lightFloating);
 
     /**
+     * cna_contact_shadow_pass_combine_visibility (engine_layer.h).
+     */
+    public static native int contactShadowPassCombineVisibility(float shadowMapVisibility, float contactVisibility, float[] outVisibility);
+
+    /**
+     * cna_contact_shadow_pass_copy_fallback_reason (engine_layer.h).
+     */
+    public static native int contactShadowPassCopyFallbackReason(long pass, byte[] destination, long[] outBytes);
+
+    /**
+     * cna_contact_shadow_pass_copy_occlusion_test_glsl (engine_layer.h).
+     */
+    public static native int contactShadowPassCopyOcclusionTestGlsl(byte[] destination, long[] outBytes);
+
+    /**
+     * cna_contact_shadow_pass_create (engine_layer.h).
+     */
+    public static native int contactShadowPassCreate(long graphicsDevice, long[] outPass);
+
+    /**
+     * cna_contact_shadow_pass_get_bias (engine_layer.h).
+     */
+    public static native int contactShadowPassGetBias(long pass, float[] outBias);
+
+    /**
+     * cna_contact_shadow_pass_get_intensity (engine_layer.h).
+     */
+    public static native int contactShadowPassGetIntensity(long pass, float[] outIntensity);
+
+    /**
+     * cna_contact_shadow_pass_get_light_direction (engine_layer.h).
+     *
+     * <p>outDirectionFloating carries CNA_Vector3 in this order:
+     * <ol start="0">
+     *   <li>{@code x} (float)</li>
+     *   <li>{@code y} (float)</li>
+     *   <li>{@code z} (float)</li>
+     * </ol>
+     */
+    public static native int contactShadowPassGetLightDirection(long pass, float[] outDirectionFloating);
+
+    /**
+     * cna_contact_shadow_pass_get_max_distance (engine_layer.h).
+     */
+    public static native int contactShadowPassGetMaxDistance(long pass, float[] outDistance);
+
+    /**
+     * cna_contact_shadow_pass_get_step_count (engine_layer.h).
+     */
+    public static native int contactShadowPassGetStepCount(long pass, int[] outCount);
+
+    /**
+     * cna_contact_shadow_pass_get_thickness (engine_layer.h).
+     */
+    public static native int contactShadowPassGetThickness(long pass, float[] outThickness);
+
+    /**
+     * cna_contact_shadow_pass_is_occluded (engine_layer.h).
+     */
+    public static native int contactShadowPassIsOccluded(float rayViewDepth, float sceneViewDepth, float bias, float thickness, boolean[] outOccluded);
+
+    /**
+     * cna_contact_shadow_pass_set_bias (engine_layer.h).
+     */
+    public static native int contactShadowPassSetBias(long pass, float bias);
+
+    /**
+     * cna_contact_shadow_pass_set_intensity (engine_layer.h).
+     */
+    public static native int contactShadowPassSetIntensity(long pass, float intensity);
+
+    /**
+     * cna_contact_shadow_pass_set_light_direction (engine_layer.h).
+     *
+     * <p>directionFloating carries CNA_Vector3 in this order:
+     * <ol start="0">
+     *   <li>{@code x} (float)</li>
+     *   <li>{@code y} (float)</li>
+     *   <li>{@code z} (float)</li>
+     * </ol>
+     */
+    public static native int contactShadowPassSetLightDirection(long pass, float[] directionFloating);
+
+    /**
+     * cna_contact_shadow_pass_set_max_distance (engine_layer.h).
+     */
+    public static native int contactShadowPassSetMaxDistance(long pass, float distance);
+
+    /**
+     * cna_contact_shadow_pass_set_step_count (engine_layer.h).
+     */
+    public static native int contactShadowPassSetStepCount(long pass, int count);
+
+    /**
+     * cna_contact_shadow_pass_set_thickness (engine_layer.h).
+     */
+    public static native int contactShadowPassSetThickness(long pass, float thickness);
+
+    /**
      * cna_cube_shadow_map_begin (engine_layer.h).
      */
     public static native int cubeShadowMapBegin(long shadowMap, int faceIndex);
@@ -1325,6 +1582,197 @@ public final class NativeEngineLayerRoutes {
     public static native int debugDrawSetDepthTested(long debug, boolean depthTested);
 
     /**
+     * cna_decal_pass_create (engine_layer.h).
+     */
+    public static native int decalPassCreate(long graphicsDevice, long[] outPass);
+
+    /**
+     * cna_decal_pass_destroy (engine_layer.h).
+     */
+    public static native int decalPassDestroy(long pass);
+
+    /**
+     * cna_decal_pass_draw (engine_layer.h).
+     *
+     * <p>decalWorldFloating carries CNA_Matrix in this order:
+     * <ol start="0">
+     *   <li>{@code m11} (float)</li>
+     *   <li>{@code m12} (float)</li>
+     *   <li>{@code m13} (float)</li>
+     *   <li>{@code m14} (float)</li>
+     *   <li>{@code m21} (float)</li>
+     *   <li>{@code m22} (float)</li>
+     *   <li>{@code m23} (float)</li>
+     *   <li>{@code m24} (float)</li>
+     *   <li>{@code m31} (float)</li>
+     *   <li>{@code m32} (float)</li>
+     *   <li>{@code m33} (float)</li>
+     *   <li>{@code m34} (float)</li>
+     *   <li>{@code m41} (float)</li>
+     *   <li>{@code m42} (float)</li>
+     *   <li>{@code m43} (float)</li>
+     *   <li>{@code m44} (float)</li>
+     * </ol>
+     */
+    public static native int decalPassDraw(long pass, long decal, float[] decalWorldFloating, int width, int height);
+
+    /**
+     * cna_decal_pass_get_max_slope_angle (engine_layer.h).
+     */
+    public static native int decalPassGetMaxSlopeAngle(long pass, float[] outValue);
+
+    /**
+     * cna_decal_pass_get_opacity (engine_layer.h).
+     */
+    public static native int decalPassGetOpacity(long pass, float[] outValue);
+
+    /**
+     * cna_decal_pass_get_tint (engine_layer.h).
+     *
+     * <p>outValueFloating carries CNA_Vector3 in this order:
+     * <ol start="0">
+     *   <li>{@code x} (float)</li>
+     *   <li>{@code y} (float)</li>
+     *   <li>{@code z} (float)</li>
+     * </ol>
+     */
+    public static native int decalPassGetTint(long pass, float[] outValueFloating);
+
+    /**
+     * cna_decal_pass_is_inside_decal_box (engine_layer.h).
+     *
+     * <p>decalLocalPositionFloating carries CNA_Vector3 in this order:
+     * <ol start="0">
+     *   <li>{@code x} (float)</li>
+     *   <li>{@code y} (float)</li>
+     *   <li>{@code z} (float)</li>
+     * </ol>
+     */
+    public static native int decalPassIsInsideDecalBox(float[] decalLocalPositionFloating, boolean[] outInside);
+
+    /**
+     * cna_decal_pass_set_camera (engine_layer.h).
+     *
+     * <p>viewFloating carries CNA_Matrix in this order:
+     * <ol start="0">
+     *   <li>{@code m11} (float)</li>
+     *   <li>{@code m12} (float)</li>
+     *   <li>{@code m13} (float)</li>
+     *   <li>{@code m14} (float)</li>
+     *   <li>{@code m21} (float)</li>
+     *   <li>{@code m22} (float)</li>
+     *   <li>{@code m23} (float)</li>
+     *   <li>{@code m24} (float)</li>
+     *   <li>{@code m31} (float)</li>
+     *   <li>{@code m32} (float)</li>
+     *   <li>{@code m33} (float)</li>
+     *   <li>{@code m34} (float)</li>
+     *   <li>{@code m41} (float)</li>
+     *   <li>{@code m42} (float)</li>
+     *   <li>{@code m43} (float)</li>
+     *   <li>{@code m44} (float)</li>
+     * </ol>
+     *
+     * <p>projectionFloating carries CNA_Matrix in this order:
+     * <ol start="0">
+     *   <li>{@code m11} (float)</li>
+     *   <li>{@code m12} (float)</li>
+     *   <li>{@code m13} (float)</li>
+     *   <li>{@code m14} (float)</li>
+     *   <li>{@code m21} (float)</li>
+     *   <li>{@code m22} (float)</li>
+     *   <li>{@code m23} (float)</li>
+     *   <li>{@code m24} (float)</li>
+     *   <li>{@code m31} (float)</li>
+     *   <li>{@code m32} (float)</li>
+     *   <li>{@code m33} (float)</li>
+     *   <li>{@code m34} (float)</li>
+     *   <li>{@code m41} (float)</li>
+     *   <li>{@code m42} (float)</li>
+     *   <li>{@code m43} (float)</li>
+     *   <li>{@code m44} (float)</li>
+     * </ol>
+     */
+    public static native int decalPassSetCamera(long pass, float[] viewFloating, float[] projectionFloating, float farPlane);
+
+    /**
+     * cna_decal_pass_set_max_slope_angle (engine_layer.h).
+     */
+    public static native int decalPassSetMaxSlopeAngle(long pass, float value);
+
+    /**
+     * cna_decal_pass_set_opacity (engine_layer.h).
+     */
+    public static native int decalPassSetOpacity(long pass, float value);
+
+    /**
+     * cna_decal_pass_set_prepass_inputs (engine_layer.h).
+     */
+    public static native int decalPassSetPrepassInputs(long pass, long depth, long normals);
+
+    /**
+     * cna_decal_pass_set_tint (engine_layer.h).
+     *
+     * <p>valueFloating carries CNA_Vector3 in this order:
+     * <ol start="0">
+     *   <li>{@code x} (float)</li>
+     *   <li>{@code y} (float)</li>
+     *   <li>{@code z} (float)</li>
+     * </ol>
+     */
+    public static native int decalPassSetTint(long pass, float[] valueFloating);
+
+    /**
+     * cna_depth_of_field_pass_circle_of_confusion_millimetres (engine_layer.h).
+     */
+    public static native int depthOfFieldPassCircleOfConfusionMillimetres(float depth, float focusDistance, float focalLength, float fNumber, float[] outMillimetres);
+
+    /**
+     * cna_depth_of_field_pass_create (engine_layer.h).
+     */
+    public static native int depthOfFieldPassCreate(long graphicsDevice, long[] outPass);
+
+    /**
+     * cna_depth_of_field_pass_get_f_number (engine_layer.h).
+     */
+    public static native int depthOfFieldPassGetFNumber(long pass, float[] outValue);
+
+    /**
+     * cna_depth_of_field_pass_get_focal_length (engine_layer.h).
+     */
+    public static native int depthOfFieldPassGetFocalLength(long pass, float[] outValue);
+
+    /**
+     * cna_depth_of_field_pass_get_focus_distance (engine_layer.h).
+     */
+    public static native int depthOfFieldPassGetFocusDistance(long pass, float[] outValue);
+
+    /**
+     * cna_depth_of_field_pass_get_max_radius (engine_layer.h).
+     */
+    public static native int depthOfFieldPassGetMaxRadius(long pass, float[] outValue);
+
+    /**
+     * cna_depth_of_field_pass_set_f_number (engine_layer.h).
+     */
+    public static native int depthOfFieldPassSetFNumber(long pass, float value);
+
+    /**
+     * cna_depth_of_field_pass_set_focal_length (engine_layer.h).
+     */
+    public static native int depthOfFieldPassSetFocalLength(long pass, float value);
+
+    /**
+     * cna_depth_of_field_pass_set_focus_distance (engine_layer.h).
+     */
+    public static native int depthOfFieldPassSetFocusDistance(long pass, float value);
+
+    /**
+     * cna_depth_of_field_pass_set_max_radius (engine_layer.h).
+     */
+    public static native int depthOfFieldPassSetMaxRadius(long pass, float value);
+
+    /**
      * cna_directional_light_ext_init (engine_layer.h).
      *
      * <p>outLightBytes carries CNA_DirectionalLightEXT in this order:
@@ -1356,6 +1804,21 @@ public final class NativeEngineLayerRoutes {
      * cna_engine_layer_get_version (engine_layer.h).
      */
     public static native int engineLayerGetVersion(int[] outVersion);
+
+    /**
+     * cna_film_grain_pass_create (engine_layer.h).
+     */
+    public static native int filmGrainPassCreate(long graphicsDevice, long[] outPass);
+
+    /**
+     * cna_film_grain_pass_get_intensity (engine_layer.h).
+     */
+    public static native int filmGrainPassGetIntensity(long pass, float[] outValue);
+
+    /**
+     * cna_film_grain_pass_set_intensity (engine_layer.h).
+     */
+    public static native int filmGrainPassSetIntensity(long pass, float value);
 
     /**
      * cna_frustum_culler_ext_create (engine_layer.h).
@@ -1506,6 +1969,31 @@ public final class NativeEngineLayerRoutes {
     public static native int frustumCullerExtSetViewProjection(long culler, float[] viewProjectionFloating);
 
     /**
+     * cna_fxaa_pass_copy_fragment_glsl (engine_layer.h).
+     */
+    public static native int fxaaPassCopyFragmentGlsl(byte[] destination, long[] outBytes);
+
+    /**
+     * cna_fxaa_pass_create (engine_layer.h).
+     */
+    public static native int fxaaPassCreate(long graphicsDevice, long[] outPass);
+
+    /**
+     * cna_fxaa_pass_edge_threshold_for_quality (engine_layer.h).
+     */
+    public static native int fxaaPassEdgeThresholdForQuality(int quality, float[] outThreshold);
+
+    /**
+     * cna_fxaa_pass_get_edge_threshold (engine_layer.h).
+     */
+    public static native int fxaaPassGetEdgeThreshold(long pass, float[] outValue);
+
+    /**
+     * cna_fxaa_pass_set_edge_threshold (engine_layer.h).
+     */
+    public static native int fxaaPassSetEdgeThreshold(long pass, float value);
+
+    /**
      * cna_gpu_timer_begin (engine_layer.h).
      */
     public static native int gpuTimerBegin(long timer);
@@ -1559,6 +2047,70 @@ public final class NativeEngineLayerRoutes {
      * cna_gpu_timer_poll (engine_layer.h).
      */
     public static native int gpuTimerPoll(long timer, boolean[] outCollected);
+
+    /**
+     * cna_height_fog_pass_create (engine_layer.h).
+     */
+    public static native int heightFogPassCreate(long graphicsDevice, long[] outPass);
+
+    /**
+     * cna_height_fog_pass_get_base_height (engine_layer.h).
+     */
+    public static native int heightFogPassGetBaseHeight(long pass, float[] outValue);
+
+    /**
+     * cna_height_fog_pass_get_color (engine_layer.h).
+     *
+     * <p>outValueFloating carries CNA_Vector3 in this order:
+     * <ol start="0">
+     *   <li>{@code x} (float)</li>
+     *   <li>{@code y} (float)</li>
+     *   <li>{@code z} (float)</li>
+     * </ol>
+     */
+    public static native int heightFogPassGetColor(long pass, float[] outValueFloating);
+
+    /**
+     * cna_height_fog_pass_get_density (engine_layer.h).
+     */
+    public static native int heightFogPassGetDensity(long pass, float[] outValue);
+
+    /**
+     * cna_height_fog_pass_get_falloff (engine_layer.h).
+     */
+    public static native int heightFogPassGetFalloff(long pass, float[] outValue);
+
+    /**
+     * cna_height_fog_pass_optical_depth (engine_layer.h).
+     */
+    public static native int heightFogPassOpticalDepth(float cameraHeight, float rayHeightStep, float distance, float density, float falloff, float baseHeight, float[] outDepth);
+
+    /**
+     * cna_height_fog_pass_set_base_height (engine_layer.h).
+     */
+    public static native int heightFogPassSetBaseHeight(long pass, float value);
+
+    /**
+     * cna_height_fog_pass_set_color (engine_layer.h).
+     *
+     * <p>valueFloating carries CNA_Vector3 in this order:
+     * <ol start="0">
+     *   <li>{@code x} (float)</li>
+     *   <li>{@code y} (float)</li>
+     *   <li>{@code z} (float)</li>
+     * </ol>
+     */
+    public static native int heightFogPassSetColor(long pass, float[] valueFloating);
+
+    /**
+     * cna_height_fog_pass_set_density (engine_layer.h).
+     */
+    public static native int heightFogPassSetDensity(long pass, float value);
+
+    /**
+     * cna_height_fog_pass_set_falloff (engine_layer.h).
+     */
+    public static native int heightFogPassSetFalloff(long pass, float value);
 
     /**
      * cna_instanced_renderer_ext_copy_instance_elements (engine_layer.h).
@@ -1649,6 +2201,41 @@ public final class NativeEngineLayerRoutes {
      * cna_instanced_renderer_ext_set_tints_enabled (engine_layer.h).
      */
     public static native int instancedRendererExtSetTintsEnabled(long renderer, boolean enabled);
+
+    /**
+     * cna_lens_flare_pass_create (engine_layer.h).
+     */
+    public static native int lensFlarePassCreate(long graphicsDevice, long[] outPass);
+
+    /**
+     * cna_lens_flare_pass_get_dispersal (engine_layer.h).
+     */
+    public static native int lensFlarePassGetDispersal(long pass, float[] outValue);
+
+    /**
+     * cna_lens_flare_pass_get_intensity (engine_layer.h).
+     */
+    public static native int lensFlarePassGetIntensity(long pass, float[] outValue);
+
+    /**
+     * cna_lens_flare_pass_get_threshold (engine_layer.h).
+     */
+    public static native int lensFlarePassGetThreshold(long pass, float[] outValue);
+
+    /**
+     * cna_lens_flare_pass_set_dispersal (engine_layer.h).
+     */
+    public static native int lensFlarePassSetDispersal(long pass, float value);
+
+    /**
+     * cna_lens_flare_pass_set_intensity (engine_layer.h).
+     */
+    public static native int lensFlarePassSetIntensity(long pass, float value);
+
+    /**
+     * cna_lens_flare_pass_set_threshold (engine_layer.h).
+     */
+    public static native int lensFlarePassSetThreshold(long pass, float value);
 
     /**
      * cna_light_probe_ext_copy_coefficients (engine_layer.h).
@@ -1934,6 +2521,63 @@ public final class NativeEngineLayerRoutes {
     public static native int lightProbeVolumeExtSetProbe(long volume, int x, int y, int z, long probe);
 
     /**
+     * cna_light_shaft_pass_create (engine_layer.h).
+     */
+    public static native int lightShaftPassCreate(long graphicsDevice, long[] outPass);
+
+    /**
+     * cna_light_shaft_pass_get_decay (engine_layer.h).
+     */
+    public static native int lightShaftPassGetDecay(long pass, float[] outValue);
+
+    /**
+     * cna_light_shaft_pass_get_intensity (engine_layer.h).
+     */
+    public static native int lightShaftPassGetIntensity(long pass, float[] outValue);
+
+    /**
+     * cna_light_shaft_pass_get_light_screen_position (engine_layer.h).
+     *
+     * <p>outValueFloating carries CNA_Vector2 in this order:
+     * <ol start="0">
+     *   <li>{@code x} (float)</li>
+     *   <li>{@code y} (float)</li>
+     * </ol>
+     */
+    public static native int lightShaftPassGetLightScreenPosition(long pass, float[] outValueFloating);
+
+    /**
+     * cna_light_shaft_pass_get_threshold (engine_layer.h).
+     */
+    public static native int lightShaftPassGetThreshold(long pass, float[] outValue);
+
+    /**
+     * cna_light_shaft_pass_set_decay (engine_layer.h).
+     */
+    public static native int lightShaftPassSetDecay(long pass, float value);
+
+    /**
+     * cna_light_shaft_pass_set_intensity (engine_layer.h).
+     */
+    public static native int lightShaftPassSetIntensity(long pass, float value);
+
+    /**
+     * cna_light_shaft_pass_set_light_screen_position (engine_layer.h).
+     *
+     * <p>valueFloating carries CNA_Vector2 in this order:
+     * <ol start="0">
+     *   <li>{@code x} (float)</li>
+     *   <li>{@code y} (float)</li>
+     * </ol>
+     */
+    public static native int lightShaftPassSetLightScreenPosition(long pass, float[] valueFloating);
+
+    /**
+     * cna_light_shaft_pass_set_threshold (engine_layer.h).
+     */
+    public static native int lightShaftPassSetThreshold(long pass, float value);
+
+    /**
      * cna_lod_group_ext_add_level (engine_layer.h).
      */
     public static native int lodGroupExtAddLevel(long group, float maxDistance, long part);
@@ -1999,6 +2643,31 @@ public final class NativeEngineLayerRoutes {
     public static native int lodGroupExtSetSelectionMode(long group, int mode);
 
     /**
+     * cna_motion_blur_pass_create (engine_layer.h).
+     */
+    public static native int motionBlurPassCreate(long graphicsDevice, long[] outPass);
+
+    /**
+     * cna_motion_blur_pass_get_max_distance (engine_layer.h).
+     */
+    public static native int motionBlurPassGetMaxDistance(long pass, float[] outValue);
+
+    /**
+     * cna_motion_blur_pass_get_strength (engine_layer.h).
+     */
+    public static native int motionBlurPassGetStrength(long pass, float[] outValue);
+
+    /**
+     * cna_motion_blur_pass_set_max_distance (engine_layer.h).
+     */
+    public static native int motionBlurPassSetMaxDistance(long pass, float value);
+
+    /**
+     * cna_motion_blur_pass_set_strength (engine_layer.h).
+     */
+    public static native int motionBlurPassSetStrength(long pass, float value);
+
+    /**
      * cna_point_light_ext_init (engine_layer.h).
      *
      * <p>outLightBytes carries CNA_PointLightEXT in this order:
@@ -2026,6 +2695,403 @@ public final class NativeEngineLayerRoutes {
      * </ol>
      */
     public static native int pointLightExtInit(byte[] outLightBytes, long[] outLightIntegral, float[] outLightFloating);
+
+    /**
+     * cna_post_process_pass_copy_name (engine_layer.h).
+     */
+    public static native int postProcessPassCopyName(long pass, byte[] destination, long[] outBytes);
+
+    /**
+     * cna_post_process_pass_destroy (engine_layer.h).
+     */
+    public static native int postProcessPassDestroy(long pass);
+
+    /**
+     * cna_post_process_pass_is_supported (engine_layer.h).
+     */
+    public static native int postProcessPassIsSupported(long pass, long graphicsDevice, boolean[] outSupported);
+
+    /**
+     * cna_render_pipeline_add_user_pass (engine_layer.h).
+     */
+    public static native int renderPipelineAddUserPass(long pipeline, long pass);
+
+    /**
+     * cna_render_pipeline_begin (engine_layer.h).
+     *
+     * <p>clearColorIntegral carries CNA_Color in this order:
+     * <ol start="0">
+     *   <li>{@code r} (uint8_t)</li>
+     *   <li>{@code g} (uint8_t)</li>
+     *   <li>{@code b} (uint8_t)</li>
+     *   <li>{@code a} (uint8_t)</li>
+     * </ol>
+     */
+    public static native int renderPipelineBegin(long pipeline, long[] clearColorIntegral);
+
+    /**
+     * cna_render_pipeline_clear_user_passes (engine_layer.h).
+     */
+    public static native int renderPipelineClearUserPasses(long pipeline);
+
+    /**
+     * cna_render_pipeline_copy_pass_timing_name_ext (engine_layer.h).
+     */
+    public static native int renderPipelineCopyPassTimingNameExt(long pipeline, long index, byte[] destination, long[] outBytes);
+
+    /**
+     * cna_render_pipeline_copy_transparency_fallback_reason_ext (engine_layer.h).
+     */
+    public static native int renderPipelineCopyTransparencyFallbackReasonExt(long pipeline, byte[] destination, long[] outBytes);
+
+    /**
+     * cna_render_pipeline_create (engine_layer.h).
+     */
+    public static native int renderPipelineCreate(long graphicsDevice, long[] outPipeline);
+
+    /**
+     * cna_render_pipeline_destroy (engine_layer.h).
+     */
+    public static native int renderPipelineDestroy(long pipeline);
+
+    /**
+     * cna_render_pipeline_did_shadow_pass_run (engine_layer.h).
+     */
+    public static native int renderPipelineDidShadowPassRun(long pipeline, boolean[] outRan);
+
+    /**
+     * cna_render_pipeline_did_skybox_draw (engine_layer.h).
+     */
+    public static native int renderPipelineDidSkyboxDraw(long pipeline, boolean[] outDrew);
+
+    /**
+     * cna_render_pipeline_end (engine_layer.h).
+     */
+    public static native int renderPipelineEnd(long pipeline);
+
+    /**
+     * cna_render_pipeline_get_gpu_memory_estimate_bytes (engine_layer.h).
+     */
+    public static native int renderPipelineGetGpuMemoryEstimateBytes(long pipeline, long[] outBytes);
+
+    /**
+     * cna_render_pipeline_get_last_frame_pass_count (engine_layer.h).
+     */
+    public static native int renderPipelineGetLastFramePassCount(long pipeline, int[] outCount);
+
+    /**
+     * cna_render_pipeline_get_pass_timing_count_ext (engine_layer.h).
+     */
+    public static native int renderPipelineGetPassTimingCountExt(long pipeline, long[] outCount);
+
+    /**
+     * cna_render_pipeline_get_pass_timing_ext (engine_layer.h).
+     *
+     * <p>outTimingBytes carries CNA_PassTimingEXT in this order:
+     * <ol start="0">
+     *   <li>{@code reserved[0]} (uint8_t)</li>
+     *   <li>{@code reserved[1]} (uint8_t)</li>
+     *   <li>{@code reserved[2]} (uint8_t)</li>
+     *   <li>{@code reserved[3]} (uint8_t)</li>
+     * </ol>
+     *
+     * <p>outTimingIntegral carries CNA_PassTimingEXT in this order:
+     * <ol start="0">
+     *   <li>{@code sample_count} (int32_t)</li>
+     * </ol>
+     *
+     * <p>outTimingDoubles carries CNA_PassTimingEXT in this order:
+     * <ol start="0">
+     *   <li>{@code milliseconds} (double)</li>
+     * </ol>
+     */
+    public static native int renderPipelineGetPassTimingExt(long pipeline, long index, byte[] outTimingBytes, long[] outTimingIntegral, double[] outTimingDoubles);
+
+    /**
+     * cna_render_pipeline_get_scene_target_format (engine_layer.h).
+     */
+    public static native int renderPipelineGetSceneTargetFormat(long pipeline, int[] outFormat);
+
+    /**
+     * cna_render_pipeline_get_settings (engine_layer.h).
+     *
+     * <p>outSettingsBytes carries CNA_RenderPipelineSettingsEXT in this order:
+     * <ol start="0">
+     *   <li>{@code reserved[0]} (uint8_t)</li>
+     *   <li>{@code reserved[1]} (uint8_t)</li>
+     *   <li>{@code reserved[2]} (uint8_t)</li>
+     *   <li>{@code reserved[3]} (uint8_t)</li>
+     * </ol>
+     *
+     * <p>outSettingsIntegral carries CNA_RenderPipelineSettingsEXT in this order:
+     * <ol start="0">
+     *   <li>{@code hdr_enabled} (CNA_Bool)</li>
+     *   <li>{@code tonemapping_mode} (CNA_TonemappingMode)</li>
+     *   <li>{@code bloom_enabled} (CNA_Bool)</li>
+     *   <li>{@code bloom_iterations} (int32_t)</li>
+     *   <li>{@code ssao_enabled} (CNA_Bool)</li>
+     *   <li>{@code transparency_mode} (CNA_TransparencyMode)</li>
+     *   <li>{@code ssao_sample_count} (int32_t)</li>
+     *   <li>{@code ssr_enabled} (CNA_Bool)</li>
+     *   <li>{@code ssr_step_count} (int32_t)</li>
+     *   <li>{@code color_grade_enabled} (CNA_Bool)</li>
+     *   <li>{@code dof_enabled} (CNA_Bool)</li>
+     *   <li>{@code fxaa_enabled} (CNA_Bool)</li>
+     *   <li>{@code render_quality} (CNA_RenderQuality)</li>
+     *   <li>{@code shadow_quality} (CNA_ShadowQuality)</li>
+     *   <li>{@code shadows_enabled} (CNA_Bool)</li>
+     * </ol>
+     *
+     * <p>outSettingsFloating carries CNA_RenderPipelineSettingsEXT in this order:
+     * <ol start="0">
+     *   <li>{@code exposure} (float)</li>
+     *   <li>{@code gamma} (float)</li>
+     *   <li>{@code bloom_intensity} (float)</li>
+     *   <li>{@code bloom_threshold} (float)</li>
+     *   <li>{@code ssao_radius} (float)</li>
+     *   <li>{@code ssao_intensity} (float)</li>
+     *   <li>{@code ssr_max_distance} (float)</li>
+     *   <li>{@code ssr_thickness} (float)</li>
+     *   <li>{@code ssr_depth_bias} (float)</li>
+     *   <li>{@code ssr_edge_fade} (float)</li>
+     *   <li>{@code volumetric_fog_density} (float)</li>
+     *   <li>{@code light_shaft_threshold} (float)</li>
+     *   <li>{@code light_shaft_intensity} (float)</li>
+     *   <li>{@code light_shaft_decay} (float)</li>
+     *   <li>{@code height_fog_density} (float)</li>
+     *   <li>{@code height_fog_falloff} (float)</li>
+     *   <li>{@code height_fog_base_height} (float)</li>
+     *   <li>{@code motion_blur_strength} (float)</li>
+     *   <li>{@code motion_blur_max_distance} (float)</li>
+     *   <li>{@code chromatic_aberration_strength} (float)</li>
+     *   <li>{@code film_grain_intensity} (float)</li>
+     *   <li>{@code lens_flare_threshold} (float)</li>
+     *   <li>{@code lens_flare_intensity} (float)</li>
+     *   <li>{@code lens_flare_dispersal} (float)</li>
+     *   <li>{@code color_grade_strength} (float)</li>
+     *   <li>{@code dof_focus_distance} (float)</li>
+     *   <li>{@code dof_focal_length} (float)</li>
+     *   <li>{@code doff_number} (float)</li>
+     *   <li>{@code dof_max_radius} (float)</li>
+     *   <li>{@code ssr_roughness_blur} (float)</li>
+     *   <li>{@code ssr_intensity} (float)</li>
+     *   <li>{@code fxaa_edge_threshold_ext} (float)</li>
+     * </ol>
+     */
+    public static native int renderPipelineGetSettings(long pipeline, byte[] outSettingsBytes, long[] outSettingsIntegral, float[] outSettingsFloating);
+
+    /**
+     * cna_render_pipeline_get_statistics (engine_layer.h).
+     *
+     * <p>outStatisticsBytes carries CNA_RenderPipelineFrameStatisticsEXT in this order:
+     * <ol start="0">
+     *   <li>{@code reserved[0]} (uint8_t)</li>
+     *   <li>{@code reserved[1]} (uint8_t)</li>
+     * </ol>
+     *
+     * <p>outStatisticsIntegral carries CNA_RenderPipelineFrameStatisticsEXT in this order:
+     * <ol start="0">
+     *   <li>{@code passes_run} (int32_t)</li>
+     *   <li>{@code target_switches} (int32_t)</li>
+     *   <li>{@code used_scene_target} (CNA_Bool)</li>
+     *   <li>{@code drew_skybox} (CNA_Bool)</li>
+     *   <li>{@code gpu_memory_estimate_bytes} (uint64_t)</li>
+     * </ol>
+     */
+    public static native int renderPipelineGetStatistics(long pipeline, byte[] outStatisticsBytes, long[] outStatisticsIntegral);
+
+    /**
+     * cna_render_pipeline_is_gpu_timing_enabled_ext (engine_layer.h).
+     */
+    public static native int renderPipelineIsGpuTimingEnabledExt(long pipeline, boolean[] outEnabled);
+
+    /**
+     * cna_render_pipeline_is_using_scene_target (engine_layer.h).
+     */
+    public static native int renderPipelineIsUsingSceneTarget(long pipeline, boolean[] outUsing);
+
+    /**
+     * cna_render_pipeline_release_device_resources_ext (engine_layer.h).
+     */
+    public static native int renderPipelineReleaseDeviceResourcesExt(long pipeline);
+
+    /**
+     * cna_render_pipeline_resize (engine_layer.h).
+     */
+    public static native int renderPipelineResize(long pipeline, int width, int height);
+
+    /**
+     * cna_render_pipeline_set_camera (engine_layer.h).
+     *
+     * <p>viewFloating carries CNA_Matrix in this order:
+     * <ol start="0">
+     *   <li>{@code m11} (float)</li>
+     *   <li>{@code m12} (float)</li>
+     *   <li>{@code m13} (float)</li>
+     *   <li>{@code m14} (float)</li>
+     *   <li>{@code m21} (float)</li>
+     *   <li>{@code m22} (float)</li>
+     *   <li>{@code m23} (float)</li>
+     *   <li>{@code m24} (float)</li>
+     *   <li>{@code m31} (float)</li>
+     *   <li>{@code m32} (float)</li>
+     *   <li>{@code m33} (float)</li>
+     *   <li>{@code m34} (float)</li>
+     *   <li>{@code m41} (float)</li>
+     *   <li>{@code m42} (float)</li>
+     *   <li>{@code m43} (float)</li>
+     *   <li>{@code m44} (float)</li>
+     * </ol>
+     *
+     * <p>projectionFloating carries CNA_Matrix in this order:
+     * <ol start="0">
+     *   <li>{@code m11} (float)</li>
+     *   <li>{@code m12} (float)</li>
+     *   <li>{@code m13} (float)</li>
+     *   <li>{@code m14} (float)</li>
+     *   <li>{@code m21} (float)</li>
+     *   <li>{@code m22} (float)</li>
+     *   <li>{@code m23} (float)</li>
+     *   <li>{@code m24} (float)</li>
+     *   <li>{@code m31} (float)</li>
+     *   <li>{@code m32} (float)</li>
+     *   <li>{@code m33} (float)</li>
+     *   <li>{@code m34} (float)</li>
+     *   <li>{@code m41} (float)</li>
+     *   <li>{@code m42} (float)</li>
+     *   <li>{@code m43} (float)</li>
+     *   <li>{@code m44} (float)</li>
+     * </ol>
+     */
+    public static native int renderPipelineSetCamera(long pipeline, float[] viewFloating, float[] projectionFloating, float nearPlane, float farPlane);
+
+    /**
+     * cna_render_pipeline_set_depth_normal_inputs (engine_layer.h).
+     */
+    public static native int renderPipelineSetDepthNormalInputs(long pipeline, long depth, long normals);
+
+    /**
+     * cna_render_pipeline_set_gpu_timing_enabled_ext (engine_layer.h).
+     */
+    public static native int renderPipelineSetGpuTimingEnabledExt(long pipeline, boolean value);
+
+    /**
+     * cna_render_pipeline_set_settings (engine_layer.h).
+     *
+     * <p>settingsBytes carries CNA_RenderPipelineSettingsEXT in this order:
+     * <ol start="0">
+     *   <li>{@code reserved[0]} (uint8_t)</li>
+     *   <li>{@code reserved[1]} (uint8_t)</li>
+     *   <li>{@code reserved[2]} (uint8_t)</li>
+     *   <li>{@code reserved[3]} (uint8_t)</li>
+     * </ol>
+     *
+     * <p>settingsIntegral carries CNA_RenderPipelineSettingsEXT in this order:
+     * <ol start="0">
+     *   <li>{@code hdr_enabled} (CNA_Bool)</li>
+     *   <li>{@code tonemapping_mode} (CNA_TonemappingMode)</li>
+     *   <li>{@code bloom_enabled} (CNA_Bool)</li>
+     *   <li>{@code bloom_iterations} (int32_t)</li>
+     *   <li>{@code ssao_enabled} (CNA_Bool)</li>
+     *   <li>{@code transparency_mode} (CNA_TransparencyMode)</li>
+     *   <li>{@code ssao_sample_count} (int32_t)</li>
+     *   <li>{@code ssr_enabled} (CNA_Bool)</li>
+     *   <li>{@code ssr_step_count} (int32_t)</li>
+     *   <li>{@code color_grade_enabled} (CNA_Bool)</li>
+     *   <li>{@code dof_enabled} (CNA_Bool)</li>
+     *   <li>{@code fxaa_enabled} (CNA_Bool)</li>
+     *   <li>{@code render_quality} (CNA_RenderQuality)</li>
+     *   <li>{@code shadow_quality} (CNA_ShadowQuality)</li>
+     *   <li>{@code shadows_enabled} (CNA_Bool)</li>
+     * </ol>
+     *
+     * <p>settingsFloating carries CNA_RenderPipelineSettingsEXT in this order:
+     * <ol start="0">
+     *   <li>{@code exposure} (float)</li>
+     *   <li>{@code gamma} (float)</li>
+     *   <li>{@code bloom_intensity} (float)</li>
+     *   <li>{@code bloom_threshold} (float)</li>
+     *   <li>{@code ssao_radius} (float)</li>
+     *   <li>{@code ssao_intensity} (float)</li>
+     *   <li>{@code ssr_max_distance} (float)</li>
+     *   <li>{@code ssr_thickness} (float)</li>
+     *   <li>{@code ssr_depth_bias} (float)</li>
+     *   <li>{@code ssr_edge_fade} (float)</li>
+     *   <li>{@code volumetric_fog_density} (float)</li>
+     *   <li>{@code light_shaft_threshold} (float)</li>
+     *   <li>{@code light_shaft_intensity} (float)</li>
+     *   <li>{@code light_shaft_decay} (float)</li>
+     *   <li>{@code height_fog_density} (float)</li>
+     *   <li>{@code height_fog_falloff} (float)</li>
+     *   <li>{@code height_fog_base_height} (float)</li>
+     *   <li>{@code motion_blur_strength} (float)</li>
+     *   <li>{@code motion_blur_max_distance} (float)</li>
+     *   <li>{@code chromatic_aberration_strength} (float)</li>
+     *   <li>{@code film_grain_intensity} (float)</li>
+     *   <li>{@code lens_flare_threshold} (float)</li>
+     *   <li>{@code lens_flare_intensity} (float)</li>
+     *   <li>{@code lens_flare_dispersal} (float)</li>
+     *   <li>{@code color_grade_strength} (float)</li>
+     *   <li>{@code dof_focus_distance} (float)</li>
+     *   <li>{@code dof_focal_length} (float)</li>
+     *   <li>{@code doff_number} (float)</li>
+     *   <li>{@code dof_max_radius} (float)</li>
+     *   <li>{@code ssr_roughness_blur} (float)</li>
+     *   <li>{@code ssr_intensity} (float)</li>
+     *   <li>{@code fxaa_edge_threshold_ext} (float)</li>
+     * </ol>
+     */
+    public static native int renderPipelineSetSettings(long pipeline, byte[] settingsBytes, long[] settingsIntegral, float[] settingsFloating);
+
+    /**
+     * cna_render_pipeline_set_skybox_camera (engine_layer.h).
+     *
+     * <p>viewFloating carries CNA_Matrix in this order:
+     * <ol start="0">
+     *   <li>{@code m11} (float)</li>
+     *   <li>{@code m12} (float)</li>
+     *   <li>{@code m13} (float)</li>
+     *   <li>{@code m14} (float)</li>
+     *   <li>{@code m21} (float)</li>
+     *   <li>{@code m22} (float)</li>
+     *   <li>{@code m23} (float)</li>
+     *   <li>{@code m24} (float)</li>
+     *   <li>{@code m31} (float)</li>
+     *   <li>{@code m32} (float)</li>
+     *   <li>{@code m33} (float)</li>
+     *   <li>{@code m34} (float)</li>
+     *   <li>{@code m41} (float)</li>
+     *   <li>{@code m42} (float)</li>
+     *   <li>{@code m43} (float)</li>
+     *   <li>{@code m44} (float)</li>
+     * </ol>
+     *
+     * <p>projectionFloating carries CNA_Matrix in this order:
+     * <ol start="0">
+     *   <li>{@code m11} (float)</li>
+     *   <li>{@code m12} (float)</li>
+     *   <li>{@code m13} (float)</li>
+     *   <li>{@code m14} (float)</li>
+     *   <li>{@code m21} (float)</li>
+     *   <li>{@code m22} (float)</li>
+     *   <li>{@code m23} (float)</li>
+     *   <li>{@code m24} (float)</li>
+     *   <li>{@code m31} (float)</li>
+     *   <li>{@code m32} (float)</li>
+     *   <li>{@code m33} (float)</li>
+     *   <li>{@code m34} (float)</li>
+     *   <li>{@code m41} (float)</li>
+     *   <li>{@code m42} (float)</li>
+     *   <li>{@code m43} (float)</li>
+     *   <li>{@code m44} (float)</li>
+     * </ol>
+     */
+    public static native int renderPipelineSetSkyboxCamera(long pipeline, float[] viewFloating, float[] projectionFloating);
+
+    /**
+     * cna_render_pipeline_set_velocity_input_ext (engine_layer.h).
+     */
+    public static native int renderPipelineSetVelocityInputExt(long pipeline, long velocity);
 
     /**
      * cna_render_pipeline_settings_ext_apply_from_string (engine_layer.h).
@@ -2807,4 +3873,258 @@ public final class NativeEngineLayerRoutes {
      * cna_spot_shadow_map_set_depth_bias (engine_layer.h).
      */
     public static native int spotShadowMapSetDepthBias(long shadowMap, float bias);
+
+    /**
+     * cna_ssao_pass_copy_kernel (engine_layer.h).
+     */
+    public static native int ssaoPassCopyKernel(long pass, float[] destinationFloating, long[] outCount);
+
+    /**
+     * cna_ssao_pass_copy_occlusion_glsl (engine_layer.h).
+     */
+    public static native int ssaoPassCopyOcclusionGlsl(boolean packed, byte[] destination, long[] outBytes);
+
+    /**
+     * cna_ssao_pass_create (engine_layer.h).
+     */
+    public static native int ssaoPassCreate(long graphicsDevice, long[] outPass);
+
+    /**
+     * cna_ssao_pass_get_half_resolution (engine_layer.h).
+     */
+    public static native int ssaoPassGetHalfResolution(long pass, boolean[] outValue);
+
+    /**
+     * cna_ssao_pass_get_intensity (engine_layer.h).
+     */
+    public static native int ssaoPassGetIntensity(long pass, float[] outValue);
+
+    /**
+     * cna_ssao_pass_get_radius (engine_layer.h).
+     */
+    public static native int ssaoPassGetRadius(long pass, float[] outValue);
+
+    /**
+     * cna_ssao_pass_get_sample_count (engine_layer.h).
+     */
+    public static native int ssaoPassGetSampleCount(long pass, int[] outValue);
+
+    /**
+     * cna_ssao_pass_reset_targets (engine_layer.h).
+     */
+    public static native int ssaoPassResetTargets(long pass);
+
+    /**
+     * cna_ssao_pass_sample_count_for_quality (engine_layer.h).
+     */
+    public static native int ssaoPassSampleCountForQuality(int quality, int[] outCount);
+
+    /**
+     * cna_ssao_pass_set_half_resolution (engine_layer.h).
+     */
+    public static native int ssaoPassSetHalfResolution(long pass, boolean value);
+
+    /**
+     * cna_ssao_pass_set_intensity (engine_layer.h).
+     */
+    public static native int ssaoPassSetIntensity(long pass, float value);
+
+    /**
+     * cna_ssao_pass_set_radius (engine_layer.h).
+     */
+    public static native int ssaoPassSetRadius(long pass, float value);
+
+    /**
+     * cna_ssao_pass_set_sample_count (engine_layer.h).
+     */
+    public static native int ssaoPassSetSampleCount(long pass, int value);
+
+    /**
+     * cna_ssr_pass_create (engine_layer.h).
+     */
+    public static native int ssrPassCreate(long graphicsDevice, long[] outPass);
+
+    /**
+     * cna_ssr_pass_get_depth_bias (engine_layer.h).
+     */
+    public static native int ssrPassGetDepthBias(long pass, float[] outValue);
+
+    /**
+     * cna_ssr_pass_get_edge_fade (engine_layer.h).
+     */
+    public static native int ssrPassGetEdgeFade(long pass, float[] outValue);
+
+    /**
+     * cna_ssr_pass_get_intensity (engine_layer.h).
+     */
+    public static native int ssrPassGetIntensity(long pass, float[] outValue);
+
+    /**
+     * cna_ssr_pass_get_max_distance (engine_layer.h).
+     */
+    public static native int ssrPassGetMaxDistance(long pass, float[] outValue);
+
+    /**
+     * cna_ssr_pass_get_roughness_blur (engine_layer.h).
+     */
+    public static native int ssrPassGetRoughnessBlur(long pass, float[] outValue);
+
+    /**
+     * cna_ssr_pass_get_step_count (engine_layer.h).
+     */
+    public static native int ssrPassGetStepCount(long pass, int[] outValue);
+
+    /**
+     * cna_ssr_pass_get_thickness (engine_layer.h).
+     */
+    public static native int ssrPassGetThickness(long pass, float[] outValue);
+
+    /**
+     * cna_ssr_pass_set_depth_bias (engine_layer.h).
+     */
+    public static native int ssrPassSetDepthBias(long pass, float value);
+
+    /**
+     * cna_ssr_pass_set_edge_fade (engine_layer.h).
+     */
+    public static native int ssrPassSetEdgeFade(long pass, float value);
+
+    /**
+     * cna_ssr_pass_set_intensity (engine_layer.h).
+     */
+    public static native int ssrPassSetIntensity(long pass, float value);
+
+    /**
+     * cna_ssr_pass_set_max_distance (engine_layer.h).
+     */
+    public static native int ssrPassSetMaxDistance(long pass, float value);
+
+    /**
+     * cna_ssr_pass_set_roughness_blur (engine_layer.h).
+     */
+    public static native int ssrPassSetRoughnessBlur(long pass, float value);
+
+    /**
+     * cna_ssr_pass_set_step_count (engine_layer.h).
+     */
+    public static native int ssrPassSetStepCount(long pass, int value);
+
+    /**
+     * cna_ssr_pass_set_thickness (engine_layer.h).
+     */
+    public static native int ssrPassSetThickness(long pass, float value);
+
+    /**
+     * cna_tonemap_pass_create (engine_layer.h).
+     */
+    public static native int tonemapPassCreate(long graphicsDevice, long[] outPass);
+
+    /**
+     * cna_tonemap_pass_get_deband_strength (engine_layer.h).
+     */
+    public static native int tonemapPassGetDebandStrength(long pass, float[] outValue);
+
+    /**
+     * cna_tonemap_pass_get_exposure (engine_layer.h).
+     */
+    public static native int tonemapPassGetExposure(long pass, float[] outValue);
+
+    /**
+     * cna_tonemap_pass_get_gamma (engine_layer.h).
+     */
+    public static native int tonemapPassGetGamma(long pass, float[] outValue);
+
+    /**
+     * cna_tonemap_pass_get_mode (engine_layer.h).
+     */
+    public static native int tonemapPassGetMode(long pass, int[] outMode);
+
+    /**
+     * cna_tonemap_pass_is_deband_enabled (engine_layer.h).
+     */
+    public static native int tonemapPassIsDebandEnabled(long pass, boolean[] outEnabled);
+
+    /**
+     * cna_tonemap_pass_set_deband_enabled (engine_layer.h).
+     */
+    public static native int tonemapPassSetDebandEnabled(long pass, boolean value);
+
+    /**
+     * cna_tonemap_pass_set_deband_strength (engine_layer.h).
+     */
+    public static native int tonemapPassSetDebandStrength(long pass, float value);
+
+    /**
+     * cna_tonemap_pass_set_exposure (engine_layer.h).
+     */
+    public static native int tonemapPassSetExposure(long pass, float value);
+
+    /**
+     * cna_tonemap_pass_set_gamma (engine_layer.h).
+     */
+    public static native int tonemapPassSetGamma(long pass, float value);
+
+    /**
+     * cna_tonemap_pass_set_mode (engine_layer.h).
+     */
+    public static native int tonemapPassSetMode(long pass, int mode);
+
+    /**
+     * cna_tonemap_pass_tonemap_channel (engine_layer.h).
+     */
+    public static native int tonemapPassTonemapChannel(int mode, float value, float exposure, float gamma, float[] outValue);
+
+    /**
+     * cna_volumetric_fog_pass_create (engine_layer.h).
+     */
+    public static native int volumetricFogPassCreate(long graphicsDevice, long[] outPass);
+
+    /**
+     * cna_volumetric_fog_pass_get_anisotropy (engine_layer.h).
+     */
+    public static native int volumetricFogPassGetAnisotropy(long pass, float[] outValue);
+
+    /**
+     * cna_volumetric_fog_pass_get_density (engine_layer.h).
+     */
+    public static native int volumetricFogPassGetDensity(long pass, float[] outValue);
+
+    /**
+     * cna_volumetric_fog_pass_get_range (engine_layer.h).
+     */
+    public static native int volumetricFogPassGetRange(long pass, float[] outValue);
+
+    /**
+     * cna_volumetric_fog_pass_set_anisotropy (engine_layer.h).
+     */
+    public static native int volumetricFogPassSetAnisotropy(long pass, float value);
+
+    /**
+     * cna_volumetric_fog_pass_set_density (engine_layer.h).
+     */
+    public static native int volumetricFogPassSetDensity(long pass, float value);
+
+    /**
+     * cna_volumetric_fog_pass_set_light (engine_layer.h).
+     *
+     * <p>lightDirectionFloating carries CNA_Vector3 in this order:
+     * <ol start="0">
+     *   <li>{@code x} (float)</li>
+     *   <li>{@code y} (float)</li>
+     *   <li>{@code z} (float)</li>
+     * </ol>
+     *
+     * <p>lightColorFloating carries CNA_Vector3 in this order:
+     * <ol start="0">
+     *   <li>{@code x} (float)</li>
+     *   <li>{@code y} (float)</li>
+     *   <li>{@code z} (float)</li>
+     * </ol>
+     */
+    public static native int volumetricFogPassSetLight(long pass, long shadowMap, float[] lightDirectionFloating, float[] lightColorFloating);
+
+    /**
+     * cna_volumetric_fog_pass_set_range (engine_layer.h).
+     */
+    public static native int volumetricFogPassSetRange(long pass, float value);
 }

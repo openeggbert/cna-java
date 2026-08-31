@@ -3388,6 +3388,98 @@
     ],
     "NativeEngineLayerRoutes": [
       {
+        "java": "aerialPerspectivePassAirMassForDistance",
+        "symbol": "cna_aerial_perspective_pass_air_mass_for_distance"
+      },
+      {
+        "java": "aerialPerspectivePassCopyFallbackReason",
+        "symbol": "cna_aerial_perspective_pass_copy_fallback_reason"
+      },
+      {
+        "java": "aerialPerspectivePassCreate",
+        "symbol": "cna_aerial_perspective_pass_create"
+      },
+      {
+        "java": "aerialPerspectivePassGetIntensity",
+        "symbol": "cna_aerial_perspective_pass_get_intensity"
+      },
+      {
+        "java": "aerialPerspectivePassGetScaleHeight",
+        "symbol": "cna_aerial_perspective_pass_get_scale_height"
+      },
+      {
+        "java": "aerialPerspectivePassGetSunDirection",
+        "symbol": "cna_aerial_perspective_pass_get_sun_direction"
+      },
+      {
+        "java": "aerialPerspectivePassGetTurbidity",
+        "symbol": "cna_aerial_perspective_pass_get_turbidity"
+      },
+      {
+        "java": "aerialPerspectivePassSetIntensity",
+        "symbol": "cna_aerial_perspective_pass_set_intensity"
+      },
+      {
+        "java": "aerialPerspectivePassSetScaleHeight",
+        "symbol": "cna_aerial_perspective_pass_set_scale_height"
+      },
+      {
+        "java": "aerialPerspectivePassSetSunDirection",
+        "symbol": "cna_aerial_perspective_pass_set_sun_direction"
+      },
+      {
+        "java": "aerialPerspectivePassSetTurbidity",
+        "symbol": "cna_aerial_perspective_pass_set_turbidity"
+      },
+      {
+        "java": "aerialPerspectivePassTransmittance",
+        "symbol": "cna_aerial_perspective_pass_transmittance"
+      },
+      {
+        "java": "blitPassCreate",
+        "symbol": "cna_blit_pass_create"
+      },
+      {
+        "java": "bloomPassCreate",
+        "symbol": "cna_bloom_pass_create"
+      },
+      {
+        "java": "bloomPassExtractChannel",
+        "symbol": "cna_bloom_pass_extract_channel"
+      },
+      {
+        "java": "bloomPassGetIntensity",
+        "symbol": "cna_bloom_pass_get_intensity"
+      },
+      {
+        "java": "bloomPassGetIterations",
+        "symbol": "cna_bloom_pass_get_iterations"
+      },
+      {
+        "java": "bloomPassGetThreshold",
+        "symbol": "cna_bloom_pass_get_threshold"
+      },
+      {
+        "java": "bloomPassIterationsForQuality",
+        "symbol": "cna_bloom_pass_iterations_for_quality"
+      },
+      {
+        "java": "bloomPassResetTargets",
+        "symbol": "cna_bloom_pass_reset_targets"
+      },
+      {
+        "java": "bloomPassSetIntensity",
+        "symbol": "cna_bloom_pass_set_intensity"
+      },
+      {
+        "java": "bloomPassSetIterations",
+        "symbol": "cna_bloom_pass_set_iterations"
+      },
+      {
+        "java": "bloomPassSetThreshold",
+        "symbol": "cna_bloom_pass_set_threshold"
+      },
+      {
         "java": "cascadedShadowMapApplyToReceiver",
         "symbol": "cna_cascaded_shadow_map_apply_to_receiver"
       },
@@ -3488,6 +3580,18 @@
       {
         "java": "cascadedShadowMapUpdate",
         "symbol": "cna_cascaded_shadow_map_update"
+      },
+      {
+        "java": "chromaticAberrationPassCreate",
+        "symbol": "cna_chromatic_aberration_pass_create"
+      },
+      {
+        "java": "chromaticAberrationPassGetStrength",
+        "symbol": "cna_chromatic_aberration_pass_get_strength"
+      },
+      {
+        "java": "chromaticAberrationPassSetStrength",
+        "symbol": "cna_chromatic_aberration_pass_set_strength"
       },
       {
         "java": "clusteredLightAssignmentAdopt",
@@ -3730,6 +3834,74 @@
         "symbol": "cna_clustered_light_set_replace_at"
       },
       {
+        "java": "contactShadowPassCombineVisibility",
+        "symbol": "cna_contact_shadow_pass_combine_visibility"
+      },
+      {
+        "java": "contactShadowPassCopyFallbackReason",
+        "symbol": "cna_contact_shadow_pass_copy_fallback_reason"
+      },
+      {
+        "java": "contactShadowPassCopyOcclusionTestGlsl",
+        "symbol": "cna_contact_shadow_pass_copy_occlusion_test_glsl"
+      },
+      {
+        "java": "contactShadowPassCreate",
+        "symbol": "cna_contact_shadow_pass_create"
+      },
+      {
+        "java": "contactShadowPassGetBias",
+        "symbol": "cna_contact_shadow_pass_get_bias"
+      },
+      {
+        "java": "contactShadowPassGetIntensity",
+        "symbol": "cna_contact_shadow_pass_get_intensity"
+      },
+      {
+        "java": "contactShadowPassGetLightDirection",
+        "symbol": "cna_contact_shadow_pass_get_light_direction"
+      },
+      {
+        "java": "contactShadowPassGetMaxDistance",
+        "symbol": "cna_contact_shadow_pass_get_max_distance"
+      },
+      {
+        "java": "contactShadowPassGetStepCount",
+        "symbol": "cna_contact_shadow_pass_get_step_count"
+      },
+      {
+        "java": "contactShadowPassGetThickness",
+        "symbol": "cna_contact_shadow_pass_get_thickness"
+      },
+      {
+        "java": "contactShadowPassIsOccluded",
+        "symbol": "cna_contact_shadow_pass_is_occluded"
+      },
+      {
+        "java": "contactShadowPassSetBias",
+        "symbol": "cna_contact_shadow_pass_set_bias"
+      },
+      {
+        "java": "contactShadowPassSetIntensity",
+        "symbol": "cna_contact_shadow_pass_set_intensity"
+      },
+      {
+        "java": "contactShadowPassSetLightDirection",
+        "symbol": "cna_contact_shadow_pass_set_light_direction"
+      },
+      {
+        "java": "contactShadowPassSetMaxDistance",
+        "symbol": "cna_contact_shadow_pass_set_max_distance"
+      },
+      {
+        "java": "contactShadowPassSetStepCount",
+        "symbol": "cna_contact_shadow_pass_set_step_count"
+      },
+      {
+        "java": "contactShadowPassSetThickness",
+        "symbol": "cna_contact_shadow_pass_set_thickness"
+      },
+      {
         "java": "cubeShadowMapBegin",
         "symbol": "cna_cube_shadow_map_begin"
       },
@@ -3878,12 +4050,112 @@
         "symbol": "cna_debug_draw_set_depth_tested"
       },
       {
+        "java": "decalPassCreate",
+        "symbol": "cna_decal_pass_create"
+      },
+      {
+        "java": "decalPassDestroy",
+        "symbol": "cna_decal_pass_destroy"
+      },
+      {
+        "java": "decalPassDraw",
+        "symbol": "cna_decal_pass_draw"
+      },
+      {
+        "java": "decalPassGetMaxSlopeAngle",
+        "symbol": "cna_decal_pass_get_max_slope_angle"
+      },
+      {
+        "java": "decalPassGetOpacity",
+        "symbol": "cna_decal_pass_get_opacity"
+      },
+      {
+        "java": "decalPassGetTint",
+        "symbol": "cna_decal_pass_get_tint"
+      },
+      {
+        "java": "decalPassIsInsideDecalBox",
+        "symbol": "cna_decal_pass_is_inside_decal_box"
+      },
+      {
+        "java": "decalPassSetCamera",
+        "symbol": "cna_decal_pass_set_camera"
+      },
+      {
+        "java": "decalPassSetMaxSlopeAngle",
+        "symbol": "cna_decal_pass_set_max_slope_angle"
+      },
+      {
+        "java": "decalPassSetOpacity",
+        "symbol": "cna_decal_pass_set_opacity"
+      },
+      {
+        "java": "decalPassSetPrepassInputs",
+        "symbol": "cna_decal_pass_set_prepass_inputs"
+      },
+      {
+        "java": "decalPassSetTint",
+        "symbol": "cna_decal_pass_set_tint"
+      },
+      {
+        "java": "depthOfFieldPassCircleOfConfusionMillimetres",
+        "symbol": "cna_depth_of_field_pass_circle_of_confusion_millimetres"
+      },
+      {
+        "java": "depthOfFieldPassCreate",
+        "symbol": "cna_depth_of_field_pass_create"
+      },
+      {
+        "java": "depthOfFieldPassGetFNumber",
+        "symbol": "cna_depth_of_field_pass_get_f_number"
+      },
+      {
+        "java": "depthOfFieldPassGetFocalLength",
+        "symbol": "cna_depth_of_field_pass_get_focal_length"
+      },
+      {
+        "java": "depthOfFieldPassGetFocusDistance",
+        "symbol": "cna_depth_of_field_pass_get_focus_distance"
+      },
+      {
+        "java": "depthOfFieldPassGetMaxRadius",
+        "symbol": "cna_depth_of_field_pass_get_max_radius"
+      },
+      {
+        "java": "depthOfFieldPassSetFNumber",
+        "symbol": "cna_depth_of_field_pass_set_f_number"
+      },
+      {
+        "java": "depthOfFieldPassSetFocalLength",
+        "symbol": "cna_depth_of_field_pass_set_focal_length"
+      },
+      {
+        "java": "depthOfFieldPassSetFocusDistance",
+        "symbol": "cna_depth_of_field_pass_set_focus_distance"
+      },
+      {
+        "java": "depthOfFieldPassSetMaxRadius",
+        "symbol": "cna_depth_of_field_pass_set_max_radius"
+      },
+      {
         "java": "directionalLightExtInit",
         "symbol": "cna_directional_light_ext_init"
       },
       {
         "java": "engineLayerGetVersion",
         "symbol": "cna_engine_layer_get_version"
+      },
+      {
+        "java": "filmGrainPassCreate",
+        "symbol": "cna_film_grain_pass_create"
+      },
+      {
+        "java": "filmGrainPassGetIntensity",
+        "symbol": "cna_film_grain_pass_get_intensity"
+      },
+      {
+        "java": "filmGrainPassSetIntensity",
+        "symbol": "cna_film_grain_pass_set_intensity"
       },
       {
         "java": "frustumCullerExtCreate",
@@ -3924,6 +4196,26 @@
       {
         "java": "frustumCullerExtSetViewProjection",
         "symbol": "cna_frustum_culler_ext_set_view_projection"
+      },
+      {
+        "java": "fxaaPassCopyFragmentGlsl",
+        "symbol": "cna_fxaa_pass_copy_fragment_glsl"
+      },
+      {
+        "java": "fxaaPassCreate",
+        "symbol": "cna_fxaa_pass_create"
+      },
+      {
+        "java": "fxaaPassEdgeThresholdForQuality",
+        "symbol": "cna_fxaa_pass_edge_threshold_for_quality"
+      },
+      {
+        "java": "fxaaPassGetEdgeThreshold",
+        "symbol": "cna_fxaa_pass_get_edge_threshold"
+      },
+      {
+        "java": "fxaaPassSetEdgeThreshold",
+        "symbol": "cna_fxaa_pass_set_edge_threshold"
       },
       {
         "java": "gpuTimerBegin",
@@ -3968,6 +4260,46 @@
       {
         "java": "gpuTimerPoll",
         "symbol": "cna_gpu_timer_poll"
+      },
+      {
+        "java": "heightFogPassCreate",
+        "symbol": "cna_height_fog_pass_create"
+      },
+      {
+        "java": "heightFogPassGetBaseHeight",
+        "symbol": "cna_height_fog_pass_get_base_height"
+      },
+      {
+        "java": "heightFogPassGetColor",
+        "symbol": "cna_height_fog_pass_get_color"
+      },
+      {
+        "java": "heightFogPassGetDensity",
+        "symbol": "cna_height_fog_pass_get_density"
+      },
+      {
+        "java": "heightFogPassGetFalloff",
+        "symbol": "cna_height_fog_pass_get_falloff"
+      },
+      {
+        "java": "heightFogPassOpticalDepth",
+        "symbol": "cna_height_fog_pass_optical_depth"
+      },
+      {
+        "java": "heightFogPassSetBaseHeight",
+        "symbol": "cna_height_fog_pass_set_base_height"
+      },
+      {
+        "java": "heightFogPassSetColor",
+        "symbol": "cna_height_fog_pass_set_color"
+      },
+      {
+        "java": "heightFogPassSetDensity",
+        "symbol": "cna_height_fog_pass_set_density"
+      },
+      {
+        "java": "heightFogPassSetFalloff",
+        "symbol": "cna_height_fog_pass_set_falloff"
       },
       {
         "java": "instancedRendererExtCopyInstanceElements",
@@ -4040,6 +4372,34 @@
       {
         "java": "instancedRendererExtSetTintsEnabled",
         "symbol": "cna_instanced_renderer_ext_set_tints_enabled"
+      },
+      {
+        "java": "lensFlarePassCreate",
+        "symbol": "cna_lens_flare_pass_create"
+      },
+      {
+        "java": "lensFlarePassGetDispersal",
+        "symbol": "cna_lens_flare_pass_get_dispersal"
+      },
+      {
+        "java": "lensFlarePassGetIntensity",
+        "symbol": "cna_lens_flare_pass_get_intensity"
+      },
+      {
+        "java": "lensFlarePassGetThreshold",
+        "symbol": "cna_lens_flare_pass_get_threshold"
+      },
+      {
+        "java": "lensFlarePassSetDispersal",
+        "symbol": "cna_lens_flare_pass_set_dispersal"
+      },
+      {
+        "java": "lensFlarePassSetIntensity",
+        "symbol": "cna_lens_flare_pass_set_intensity"
+      },
+      {
+        "java": "lensFlarePassSetThreshold",
+        "symbol": "cna_lens_flare_pass_set_threshold"
       },
       {
         "java": "lightProbeExtCopyCoefficients",
@@ -4174,6 +4534,42 @@
         "symbol": "cna_light_probe_volume_ext_set_probe"
       },
       {
+        "java": "lightShaftPassCreate",
+        "symbol": "cna_light_shaft_pass_create"
+      },
+      {
+        "java": "lightShaftPassGetDecay",
+        "symbol": "cna_light_shaft_pass_get_decay"
+      },
+      {
+        "java": "lightShaftPassGetIntensity",
+        "symbol": "cna_light_shaft_pass_get_intensity"
+      },
+      {
+        "java": "lightShaftPassGetLightScreenPosition",
+        "symbol": "cna_light_shaft_pass_get_light_screen_position"
+      },
+      {
+        "java": "lightShaftPassGetThreshold",
+        "symbol": "cna_light_shaft_pass_get_threshold"
+      },
+      {
+        "java": "lightShaftPassSetDecay",
+        "symbol": "cna_light_shaft_pass_set_decay"
+      },
+      {
+        "java": "lightShaftPassSetIntensity",
+        "symbol": "cna_light_shaft_pass_set_intensity"
+      },
+      {
+        "java": "lightShaftPassSetLightScreenPosition",
+        "symbol": "cna_light_shaft_pass_set_light_screen_position"
+      },
+      {
+        "java": "lightShaftPassSetThreshold",
+        "symbol": "cna_light_shaft_pass_set_threshold"
+      },
+      {
         "java": "lodGroupExtAddLevel",
         "symbol": "cna_lod_group_ext_add_level"
       },
@@ -4226,8 +4622,148 @@
         "symbol": "cna_lod_group_ext_set_selection_mode"
       },
       {
+        "java": "motionBlurPassCreate",
+        "symbol": "cna_motion_blur_pass_create"
+      },
+      {
+        "java": "motionBlurPassGetMaxDistance",
+        "symbol": "cna_motion_blur_pass_get_max_distance"
+      },
+      {
+        "java": "motionBlurPassGetStrength",
+        "symbol": "cna_motion_blur_pass_get_strength"
+      },
+      {
+        "java": "motionBlurPassSetMaxDistance",
+        "symbol": "cna_motion_blur_pass_set_max_distance"
+      },
+      {
+        "java": "motionBlurPassSetStrength",
+        "symbol": "cna_motion_blur_pass_set_strength"
+      },
+      {
         "java": "pointLightExtInit",
         "symbol": "cna_point_light_ext_init"
+      },
+      {
+        "java": "postProcessPassCopyName",
+        "symbol": "cna_post_process_pass_copy_name"
+      },
+      {
+        "java": "postProcessPassDestroy",
+        "symbol": "cna_post_process_pass_destroy"
+      },
+      {
+        "java": "postProcessPassIsSupported",
+        "symbol": "cna_post_process_pass_is_supported"
+      },
+      {
+        "java": "renderPipelineAddUserPass",
+        "symbol": "cna_render_pipeline_add_user_pass"
+      },
+      {
+        "java": "renderPipelineBegin",
+        "symbol": "cna_render_pipeline_begin"
+      },
+      {
+        "java": "renderPipelineClearUserPasses",
+        "symbol": "cna_render_pipeline_clear_user_passes"
+      },
+      {
+        "java": "renderPipelineCopyPassTimingNameExt",
+        "symbol": "cna_render_pipeline_copy_pass_timing_name_ext"
+      },
+      {
+        "java": "renderPipelineCopyTransparencyFallbackReasonExt",
+        "symbol": "cna_render_pipeline_copy_transparency_fallback_reason_ext"
+      },
+      {
+        "java": "renderPipelineCreate",
+        "symbol": "cna_render_pipeline_create"
+      },
+      {
+        "java": "renderPipelineDestroy",
+        "symbol": "cna_render_pipeline_destroy"
+      },
+      {
+        "java": "renderPipelineDidShadowPassRun",
+        "symbol": "cna_render_pipeline_did_shadow_pass_run"
+      },
+      {
+        "java": "renderPipelineDidSkyboxDraw",
+        "symbol": "cna_render_pipeline_did_skybox_draw"
+      },
+      {
+        "java": "renderPipelineEnd",
+        "symbol": "cna_render_pipeline_end"
+      },
+      {
+        "java": "renderPipelineGetGpuMemoryEstimateBytes",
+        "symbol": "cna_render_pipeline_get_gpu_memory_estimate_bytes"
+      },
+      {
+        "java": "renderPipelineGetLastFramePassCount",
+        "symbol": "cna_render_pipeline_get_last_frame_pass_count"
+      },
+      {
+        "java": "renderPipelineGetPassTimingCountExt",
+        "symbol": "cna_render_pipeline_get_pass_timing_count_ext"
+      },
+      {
+        "java": "renderPipelineGetPassTimingExt",
+        "symbol": "cna_render_pipeline_get_pass_timing_ext"
+      },
+      {
+        "java": "renderPipelineGetSceneTargetFormat",
+        "symbol": "cna_render_pipeline_get_scene_target_format"
+      },
+      {
+        "java": "renderPipelineGetSettings",
+        "symbol": "cna_render_pipeline_get_settings"
+      },
+      {
+        "java": "renderPipelineGetStatistics",
+        "symbol": "cna_render_pipeline_get_statistics"
+      },
+      {
+        "java": "renderPipelineIsGpuTimingEnabledExt",
+        "symbol": "cna_render_pipeline_is_gpu_timing_enabled_ext"
+      },
+      {
+        "java": "renderPipelineIsUsingSceneTarget",
+        "symbol": "cna_render_pipeline_is_using_scene_target"
+      },
+      {
+        "java": "renderPipelineReleaseDeviceResourcesExt",
+        "symbol": "cna_render_pipeline_release_device_resources_ext"
+      },
+      {
+        "java": "renderPipelineResize",
+        "symbol": "cna_render_pipeline_resize"
+      },
+      {
+        "java": "renderPipelineSetCamera",
+        "symbol": "cna_render_pipeline_set_camera"
+      },
+      {
+        "java": "renderPipelineSetDepthNormalInputs",
+        "symbol": "cna_render_pipeline_set_depth_normal_inputs"
+      },
+      {
+        "java": "renderPipelineSetGpuTimingEnabledExt",
+        "symbol": "cna_render_pipeline_set_gpu_timing_enabled_ext"
+      },
+      {
+        "java": "renderPipelineSetSettings",
+        "symbol": "cna_render_pipeline_set_settings"
+      },
+      {
+        "java": "renderPipelineSetSkyboxCamera",
+        "symbol": "cna_render_pipeline_set_skybox_camera"
+      },
+      {
+        "java": "renderPipelineSetVelocityInputExt",
+        "symbol": "cna_render_pipeline_set_velocity_input_ext"
       },
       {
         "java": "renderPipelineSettingsExtApplyFromString",
@@ -4389,6 +4925,198 @@
       {
         "java": "spotShadowMapSetDepthBias",
         "symbol": "cna_spot_shadow_map_set_depth_bias"
+      },
+      {
+        "java": "ssaoPassCopyKernel",
+        "symbol": "cna_ssao_pass_copy_kernel"
+      },
+      {
+        "java": "ssaoPassCopyOcclusionGlsl",
+        "symbol": "cna_ssao_pass_copy_occlusion_glsl"
+      },
+      {
+        "java": "ssaoPassCreate",
+        "symbol": "cna_ssao_pass_create"
+      },
+      {
+        "java": "ssaoPassGetHalfResolution",
+        "symbol": "cna_ssao_pass_get_half_resolution"
+      },
+      {
+        "java": "ssaoPassGetIntensity",
+        "symbol": "cna_ssao_pass_get_intensity"
+      },
+      {
+        "java": "ssaoPassGetRadius",
+        "symbol": "cna_ssao_pass_get_radius"
+      },
+      {
+        "java": "ssaoPassGetSampleCount",
+        "symbol": "cna_ssao_pass_get_sample_count"
+      },
+      {
+        "java": "ssaoPassResetTargets",
+        "symbol": "cna_ssao_pass_reset_targets"
+      },
+      {
+        "java": "ssaoPassSampleCountForQuality",
+        "symbol": "cna_ssao_pass_sample_count_for_quality"
+      },
+      {
+        "java": "ssaoPassSetHalfResolution",
+        "symbol": "cna_ssao_pass_set_half_resolution"
+      },
+      {
+        "java": "ssaoPassSetIntensity",
+        "symbol": "cna_ssao_pass_set_intensity"
+      },
+      {
+        "java": "ssaoPassSetRadius",
+        "symbol": "cna_ssao_pass_set_radius"
+      },
+      {
+        "java": "ssaoPassSetSampleCount",
+        "symbol": "cna_ssao_pass_set_sample_count"
+      },
+      {
+        "java": "ssrPassCreate",
+        "symbol": "cna_ssr_pass_create"
+      },
+      {
+        "java": "ssrPassGetDepthBias",
+        "symbol": "cna_ssr_pass_get_depth_bias"
+      },
+      {
+        "java": "ssrPassGetEdgeFade",
+        "symbol": "cna_ssr_pass_get_edge_fade"
+      },
+      {
+        "java": "ssrPassGetIntensity",
+        "symbol": "cna_ssr_pass_get_intensity"
+      },
+      {
+        "java": "ssrPassGetMaxDistance",
+        "symbol": "cna_ssr_pass_get_max_distance"
+      },
+      {
+        "java": "ssrPassGetRoughnessBlur",
+        "symbol": "cna_ssr_pass_get_roughness_blur"
+      },
+      {
+        "java": "ssrPassGetStepCount",
+        "symbol": "cna_ssr_pass_get_step_count"
+      },
+      {
+        "java": "ssrPassGetThickness",
+        "symbol": "cna_ssr_pass_get_thickness"
+      },
+      {
+        "java": "ssrPassSetDepthBias",
+        "symbol": "cna_ssr_pass_set_depth_bias"
+      },
+      {
+        "java": "ssrPassSetEdgeFade",
+        "symbol": "cna_ssr_pass_set_edge_fade"
+      },
+      {
+        "java": "ssrPassSetIntensity",
+        "symbol": "cna_ssr_pass_set_intensity"
+      },
+      {
+        "java": "ssrPassSetMaxDistance",
+        "symbol": "cna_ssr_pass_set_max_distance"
+      },
+      {
+        "java": "ssrPassSetRoughnessBlur",
+        "symbol": "cna_ssr_pass_set_roughness_blur"
+      },
+      {
+        "java": "ssrPassSetStepCount",
+        "symbol": "cna_ssr_pass_set_step_count"
+      },
+      {
+        "java": "ssrPassSetThickness",
+        "symbol": "cna_ssr_pass_set_thickness"
+      },
+      {
+        "java": "tonemapPassCreate",
+        "symbol": "cna_tonemap_pass_create"
+      },
+      {
+        "java": "tonemapPassGetDebandStrength",
+        "symbol": "cna_tonemap_pass_get_deband_strength"
+      },
+      {
+        "java": "tonemapPassGetExposure",
+        "symbol": "cna_tonemap_pass_get_exposure"
+      },
+      {
+        "java": "tonemapPassGetGamma",
+        "symbol": "cna_tonemap_pass_get_gamma"
+      },
+      {
+        "java": "tonemapPassGetMode",
+        "symbol": "cna_tonemap_pass_get_mode"
+      },
+      {
+        "java": "tonemapPassIsDebandEnabled",
+        "symbol": "cna_tonemap_pass_is_deband_enabled"
+      },
+      {
+        "java": "tonemapPassSetDebandEnabled",
+        "symbol": "cna_tonemap_pass_set_deband_enabled"
+      },
+      {
+        "java": "tonemapPassSetDebandStrength",
+        "symbol": "cna_tonemap_pass_set_deband_strength"
+      },
+      {
+        "java": "tonemapPassSetExposure",
+        "symbol": "cna_tonemap_pass_set_exposure"
+      },
+      {
+        "java": "tonemapPassSetGamma",
+        "symbol": "cna_tonemap_pass_set_gamma"
+      },
+      {
+        "java": "tonemapPassSetMode",
+        "symbol": "cna_tonemap_pass_set_mode"
+      },
+      {
+        "java": "tonemapPassTonemapChannel",
+        "symbol": "cna_tonemap_pass_tonemap_channel"
+      },
+      {
+        "java": "volumetricFogPassCreate",
+        "symbol": "cna_volumetric_fog_pass_create"
+      },
+      {
+        "java": "volumetricFogPassGetAnisotropy",
+        "symbol": "cna_volumetric_fog_pass_get_anisotropy"
+      },
+      {
+        "java": "volumetricFogPassGetDensity",
+        "symbol": "cna_volumetric_fog_pass_get_density"
+      },
+      {
+        "java": "volumetricFogPassGetRange",
+        "symbol": "cna_volumetric_fog_pass_get_range"
+      },
+      {
+        "java": "volumetricFogPassSetAnisotropy",
+        "symbol": "cna_volumetric_fog_pass_set_anisotropy"
+      },
+      {
+        "java": "volumetricFogPassSetDensity",
+        "symbol": "cna_volumetric_fog_pass_set_density"
+      },
+      {
+        "java": "volumetricFogPassSetLight",
+        "symbol": "cna_volumetric_fog_pass_set_light"
+      },
+      {
+        "java": "volumetricFogPassSetRange",
+        "symbol": "cna_volumetric_fog_pass_set_range"
       }
     ]
   }

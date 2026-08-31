@@ -1079,7 +1079,7 @@ public final class RenderPipelineSettingsExt {
         return applied[0];
     }
 
-    private long[] integral() {
+    long[] integral() {
         return new long[] {
             hdrEnabled ? 1 : 0,
             tonemappingMode.ordinal(),
@@ -1099,7 +1099,7 @@ public final class RenderPipelineSettingsExt {
         };
     }
 
-    private float[] floating() {
+    float[] floating() {
         return new float[] {
             exposure,
             gamma,
@@ -1136,7 +1136,7 @@ public final class RenderPipelineSettingsExt {
         };
     }
 
-    private void read(long[] integral, float[] floating) {
+    void read(long[] integral, float[] floating) {
         hdrEnabled = integral[0] != 0L;
         tonemappingMode = TonemappingMode.fromValue(integral[1]);
         bloomEnabled = integral[2] != 0L;

@@ -287,6 +287,131 @@
       ]
     },
     {
+      "name": "cna_aerial_perspective_pass_air_mass_for_distance",
+      "header": "engine_layer.h",
+      "ownership": "no handle; a pure function of its arguments",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "const CNA_Vector3*",
+        "float",
+        "float",
+        "float*"
+      ]
+    },
+    {
+      "name": "cna_aerial_perspective_pass_copy_fallback_reason",
+      "header": "engine_layer.h",
+      "ownership": "borrows the pass; fills the caller's byte buffer",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_PostProcessPassHandle",
+        "char*",
+        "uint64_t",
+        "uint64_t*"
+      ]
+    },
+    {
+      "name": "cna_aerial_perspective_pass_create",
+      "header": "engine_layer.h",
+      "ownership": "borrows the graphics device; returns an owned pass handle",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_Handle",
+        "CNA_PostProcessPassHandle*"
+      ]
+    },
+    {
+      "name": "cna_aerial_perspective_pass_get_intensity",
+      "header": "engine_layer.h",
+      "ownership": "borrows the pass",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_PostProcessPassHandle",
+        "float*"
+      ]
+    },
+    {
+      "name": "cna_aerial_perspective_pass_get_scale_height",
+      "header": "engine_layer.h",
+      "ownership": "borrows the pass",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_PostProcessPassHandle",
+        "float*"
+      ]
+    },
+    {
+      "name": "cna_aerial_perspective_pass_get_sun_direction",
+      "header": "engine_layer.h",
+      "ownership": "borrows the pass",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_PostProcessPassHandle",
+        "CNA_Vector3*"
+      ]
+    },
+    {
+      "name": "cna_aerial_perspective_pass_get_turbidity",
+      "header": "engine_layer.h",
+      "ownership": "borrows the pass",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_PostProcessPassHandle",
+        "float*"
+      ]
+    },
+    {
+      "name": "cna_aerial_perspective_pass_set_intensity",
+      "header": "engine_layer.h",
+      "ownership": "borrows the pass; copies the value in",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_PostProcessPassHandle",
+        "const float"
+      ]
+    },
+    {
+      "name": "cna_aerial_perspective_pass_set_scale_height",
+      "header": "engine_layer.h",
+      "ownership": "borrows the pass; copies the value in",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_PostProcessPassHandle",
+        "const float"
+      ]
+    },
+    {
+      "name": "cna_aerial_perspective_pass_set_sun_direction",
+      "header": "engine_layer.h",
+      "ownership": "borrows the pass; copies the value in",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_PostProcessPassHandle",
+        "const CNA_Vector3*"
+      ]
+    },
+    {
+      "name": "cna_aerial_perspective_pass_set_turbidity",
+      "header": "engine_layer.h",
+      "ownership": "borrows the pass; copies the value in",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_PostProcessPassHandle",
+        "const float"
+      ]
+    },
+    {
+      "name": "cna_aerial_perspective_pass_transmittance",
+      "header": "engine_layer.h",
+      "ownership": "no handle; a pure function of its arguments",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "float",
+        "float",
+        "CNA_Vector3*"
+      ]
+    },
+    {
       "name": "cna_album_collection_destroy",
       "header": "media_library.h",
       "ownership": "consumes caller-owned handle on success",
@@ -1802,6 +1927,116 @@
       ]
     },
     {
+      "name": "cna_blit_pass_create",
+      "header": "engine_layer.h",
+      "ownership": "borrows the graphics device; returns an owned pass handle",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_Handle",
+        "CNA_PostProcessPassHandle*"
+      ]
+    },
+    {
+      "name": "cna_bloom_pass_create",
+      "header": "engine_layer.h",
+      "ownership": "borrows the graphics device; returns an owned pass handle",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_Handle",
+        "CNA_PostProcessPassHandle*"
+      ]
+    },
+    {
+      "name": "cna_bloom_pass_extract_channel",
+      "header": "engine_layer.h",
+      "ownership": "no handle; a pure function of its arguments",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "float",
+        "float",
+        "float*"
+      ]
+    },
+    {
+      "name": "cna_bloom_pass_get_intensity",
+      "header": "engine_layer.h",
+      "ownership": "borrows the pass",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_PostProcessPassHandle",
+        "float*"
+      ]
+    },
+    {
+      "name": "cna_bloom_pass_get_iterations",
+      "header": "engine_layer.h",
+      "ownership": "borrows the pass",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_PostProcessPassHandle",
+        "int32_t*"
+      ]
+    },
+    {
+      "name": "cna_bloom_pass_get_threshold",
+      "header": "engine_layer.h",
+      "ownership": "borrows the pass",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_PostProcessPassHandle",
+        "float*"
+      ]
+    },
+    {
+      "name": "cna_bloom_pass_iterations_for_quality",
+      "header": "engine_layer.h",
+      "ownership": "no handle; a pure function of its arguments",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_RenderQuality",
+        "int32_t*"
+      ]
+    },
+    {
+      "name": "cna_bloom_pass_reset_targets",
+      "header": "engine_layer.h",
+      "ownership": "no handle; a pure function of its arguments",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_PostProcessPassHandle"
+      ]
+    },
+    {
+      "name": "cna_bloom_pass_set_intensity",
+      "header": "engine_layer.h",
+      "ownership": "borrows the pass; copies the value in",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_PostProcessPassHandle",
+        "float"
+      ]
+    },
+    {
+      "name": "cna_bloom_pass_set_iterations",
+      "header": "engine_layer.h",
+      "ownership": "borrows the pass; copies the value in",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_PostProcessPassHandle",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "cna_bloom_pass_set_threshold",
+      "header": "engine_layer.h",
+      "ownership": "borrows the pass; copies the value in",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_PostProcessPassHandle",
+        "float"
+      ]
+    },
+    {
       "name": "cna_cascaded_shadow_map_apply_to_receiver",
       "header": "engine_layer.h",
       "ownership": "borrows the map and the caller's effect for the duration of the call",
@@ -2043,6 +2278,36 @@
         "const CNA_DirectionalLightEXT*",
         "const CNA_Matrix*",
         "const CNA_Matrix*"
+      ]
+    },
+    {
+      "name": "cna_chromatic_aberration_pass_create",
+      "header": "engine_layer.h",
+      "ownership": "borrows the graphics device; returns an owned pass handle",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_Handle",
+        "CNA_PostProcessPassHandle*"
+      ]
+    },
+    {
+      "name": "cna_chromatic_aberration_pass_get_strength",
+      "header": "engine_layer.h",
+      "ownership": "borrows the pass",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_PostProcessPassHandle",
+        "float*"
+      ]
+    },
+    {
+      "name": "cna_chromatic_aberration_pass_set_strength",
+      "header": "engine_layer.h",
+      "ownership": "borrows the pass; copies the value in",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_PostProcessPassHandle",
+        "float"
       ]
     },
     {
@@ -5425,6 +5690,183 @@
       ]
     },
     {
+      "name": "cna_contact_shadow_pass_combine_visibility",
+      "header": "engine_layer.h",
+      "ownership": "no handle; a pure function of its arguments",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "float",
+        "float",
+        "float*"
+      ]
+    },
+    {
+      "name": "cna_contact_shadow_pass_copy_fallback_reason",
+      "header": "engine_layer.h",
+      "ownership": "borrows the pass; fills the caller's byte buffer",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_PostProcessPassHandle",
+        "char*",
+        "uint64_t",
+        "uint64_t*"
+      ]
+    },
+    {
+      "name": "cna_contact_shadow_pass_copy_occlusion_test_glsl",
+      "header": "engine_layer.h",
+      "ownership": "no handle; fills the caller's buffer",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "char*",
+        "uint64_t",
+        "uint64_t*"
+      ]
+    },
+    {
+      "name": "cna_contact_shadow_pass_create",
+      "header": "engine_layer.h",
+      "ownership": "borrows the graphics device; returns an owned pass handle",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_Handle",
+        "CNA_PostProcessPassHandle*"
+      ]
+    },
+    {
+      "name": "cna_contact_shadow_pass_get_bias",
+      "header": "engine_layer.h",
+      "ownership": "borrows the pass",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_PostProcessPassHandle",
+        "float*"
+      ]
+    },
+    {
+      "name": "cna_contact_shadow_pass_get_intensity",
+      "header": "engine_layer.h",
+      "ownership": "borrows the pass",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_PostProcessPassHandle",
+        "float*"
+      ]
+    },
+    {
+      "name": "cna_contact_shadow_pass_get_light_direction",
+      "header": "engine_layer.h",
+      "ownership": "borrows the pass",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_PostProcessPassHandle",
+        "CNA_Vector3*"
+      ]
+    },
+    {
+      "name": "cna_contact_shadow_pass_get_max_distance",
+      "header": "engine_layer.h",
+      "ownership": "borrows the pass",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_PostProcessPassHandle",
+        "float*"
+      ]
+    },
+    {
+      "name": "cna_contact_shadow_pass_get_step_count",
+      "header": "engine_layer.h",
+      "ownership": "borrows the pass",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_PostProcessPassHandle",
+        "int32_t*"
+      ]
+    },
+    {
+      "name": "cna_contact_shadow_pass_get_thickness",
+      "header": "engine_layer.h",
+      "ownership": "borrows the pass",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_PostProcessPassHandle",
+        "float*"
+      ]
+    },
+    {
+      "name": "cna_contact_shadow_pass_is_occluded",
+      "header": "engine_layer.h",
+      "ownership": "borrows the pass",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "float",
+        "float",
+        "float",
+        "float",
+        "CNA_Bool*"
+      ]
+    },
+    {
+      "name": "cna_contact_shadow_pass_set_bias",
+      "header": "engine_layer.h",
+      "ownership": "borrows the pass; copies the value in",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_PostProcessPassHandle",
+        "float"
+      ]
+    },
+    {
+      "name": "cna_contact_shadow_pass_set_intensity",
+      "header": "engine_layer.h",
+      "ownership": "borrows the pass; copies the value in",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_PostProcessPassHandle",
+        "float"
+      ]
+    },
+    {
+      "name": "cna_contact_shadow_pass_set_light_direction",
+      "header": "engine_layer.h",
+      "ownership": "borrows the pass; copies the value in",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_PostProcessPassHandle",
+        "const CNA_Vector3*"
+      ]
+    },
+    {
+      "name": "cna_contact_shadow_pass_set_max_distance",
+      "header": "engine_layer.h",
+      "ownership": "borrows the pass; copies the value in",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_PostProcessPassHandle",
+        "float"
+      ]
+    },
+    {
+      "name": "cna_contact_shadow_pass_set_step_count",
+      "header": "engine_layer.h",
+      "ownership": "borrows the pass; copies the value in",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_PostProcessPassHandle",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "cna_contact_shadow_pass_set_thickness",
+      "header": "engine_layer.h",
+      "ownership": "borrows the pass; copies the value in",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_PostProcessPassHandle",
+        "float"
+      ]
+    },
+    {
       "name": "cna_content_manager_create",
       "header": "content.h",
       "ownership": "copies root directory; returns owned game-child manager",
@@ -6210,6 +6652,131 @@
       ]
     },
     {
+      "name": "cna_decal_pass_create",
+      "header": "engine_layer.h",
+      "ownership": "borrows the graphics device; returns an owned pass handle",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_Handle",
+        "CNA_DecalPassHandle*"
+      ]
+    },
+    {
+      "name": "cna_decal_pass_destroy",
+      "header": "engine_layer.h",
+      "ownership": "releases the owned pass handle",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_DecalPassHandle"
+      ]
+    },
+    {
+      "name": "cna_decal_pass_draw",
+      "header": "engine_layer.h",
+      "ownership": "borrows the pass and the caller's texture for the duration of the call",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_DecalPassHandle",
+        "CNA_Handle",
+        "const CNA_Matrix*",
+        "int32_t",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "cna_decal_pass_get_max_slope_angle",
+      "header": "engine_layer.h",
+      "ownership": "borrows the pass",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_DecalPassHandle",
+        "float*"
+      ]
+    },
+    {
+      "name": "cna_decal_pass_get_opacity",
+      "header": "engine_layer.h",
+      "ownership": "borrows the pass",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_DecalPassHandle",
+        "float*"
+      ]
+    },
+    {
+      "name": "cna_decal_pass_get_tint",
+      "header": "engine_layer.h",
+      "ownership": "borrows the pass",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_DecalPassHandle",
+        "CNA_Vector3*"
+      ]
+    },
+    {
+      "name": "cna_decal_pass_is_inside_decal_box",
+      "header": "engine_layer.h",
+      "ownership": "borrows the pass",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "const CNA_Vector3*",
+        "CNA_Bool*"
+      ]
+    },
+    {
+      "name": "cna_decal_pass_set_camera",
+      "header": "engine_layer.h",
+      "ownership": "borrows the pass; copies the value in",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_DecalPassHandle",
+        "const CNA_Matrix*",
+        "const CNA_Matrix*",
+        "float"
+      ]
+    },
+    {
+      "name": "cna_decal_pass_set_max_slope_angle",
+      "header": "engine_layer.h",
+      "ownership": "borrows the pass; copies the value in",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_DecalPassHandle",
+        "float"
+      ]
+    },
+    {
+      "name": "cna_decal_pass_set_opacity",
+      "header": "engine_layer.h",
+      "ownership": "borrows the pass; copies the value in",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_DecalPassHandle",
+        "float"
+      ]
+    },
+    {
+      "name": "cna_decal_pass_set_prepass_inputs",
+      "header": "engine_layer.h",
+      "ownership": "borrows the pass; copies the value in",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_DecalPassHandle",
+        "CNA_Handle",
+        "CNA_Handle"
+      ]
+    },
+    {
+      "name": "cna_decal_pass_set_tint",
+      "header": "engine_layer.h",
+      "ownership": "borrows the pass; copies the value in",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_DecalPassHandle",
+        "const CNA_Vector3*"
+      ]
+    },
+    {
       "name": "cna_depth_effect_create",
       "header": "graphics_ext.h",
       "ownership": "borrows its inputs; returns an owned handle",
@@ -6257,6 +6824,109 @@
       "parameters": [
         "CNA_EffectHandle",
         "CNA_DepthEffectMode"
+      ]
+    },
+    {
+      "name": "cna_depth_of_field_pass_circle_of_confusion_millimetres",
+      "header": "engine_layer.h",
+      "ownership": "no handle; a pure function of its arguments",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "float",
+        "float",
+        "float",
+        "float",
+        "float*"
+      ]
+    },
+    {
+      "name": "cna_depth_of_field_pass_create",
+      "header": "engine_layer.h",
+      "ownership": "borrows the graphics device; returns an owned pass handle",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_Handle",
+        "CNA_PostProcessPassHandle*"
+      ]
+    },
+    {
+      "name": "cna_depth_of_field_pass_get_f_number",
+      "header": "engine_layer.h",
+      "ownership": "borrows the pass",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_PostProcessPassHandle",
+        "float*"
+      ]
+    },
+    {
+      "name": "cna_depth_of_field_pass_get_focal_length",
+      "header": "engine_layer.h",
+      "ownership": "borrows the pass",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_PostProcessPassHandle",
+        "float*"
+      ]
+    },
+    {
+      "name": "cna_depth_of_field_pass_get_focus_distance",
+      "header": "engine_layer.h",
+      "ownership": "borrows the pass",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_PostProcessPassHandle",
+        "float*"
+      ]
+    },
+    {
+      "name": "cna_depth_of_field_pass_get_max_radius",
+      "header": "engine_layer.h",
+      "ownership": "borrows the pass",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_PostProcessPassHandle",
+        "float*"
+      ]
+    },
+    {
+      "name": "cna_depth_of_field_pass_set_f_number",
+      "header": "engine_layer.h",
+      "ownership": "borrows the pass; copies the value in",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_PostProcessPassHandle",
+        "float"
+      ]
+    },
+    {
+      "name": "cna_depth_of_field_pass_set_focal_length",
+      "header": "engine_layer.h",
+      "ownership": "borrows the pass; copies the value in",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_PostProcessPassHandle",
+        "float"
+      ]
+    },
+    {
+      "name": "cna_depth_of_field_pass_set_focus_distance",
+      "header": "engine_layer.h",
+      "ownership": "borrows the pass; copies the value in",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_PostProcessPassHandle",
+        "float"
+      ]
+    },
+    {
+      "name": "cna_depth_of_field_pass_set_max_radius",
+      "header": "engine_layer.h",
+      "ownership": "borrows the pass; copies the value in",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_PostProcessPassHandle",
+        "float"
       ]
     },
     {
@@ -7617,6 +8287,36 @@
       ]
     },
     {
+      "name": "cna_film_grain_pass_create",
+      "header": "engine_layer.h",
+      "ownership": "borrows the graphics device; returns an owned pass handle",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_Handle",
+        "CNA_PostProcessPassHandle*"
+      ]
+    },
+    {
+      "name": "cna_film_grain_pass_get_intensity",
+      "header": "engine_layer.h",
+      "ownership": "borrows the pass",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_PostProcessPassHandle",
+        "float*"
+      ]
+    },
+    {
+      "name": "cna_film_grain_pass_set_intensity",
+      "header": "engine_layer.h",
+      "ownership": "borrows the pass; copies the value in",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_PostProcessPassHandle",
+        "float"
+      ]
+    },
+    {
       "name": "cna_framework_dispatcher_update",
       "header": "runtime.h",
       "ownership": "borrows current game for thread affinity and pumps framework services",
@@ -7780,6 +8480,57 @@
       "parameters": [
         "CNA_FrustumCullerEXTHandle",
         "const CNA_Matrix*"
+      ]
+    },
+    {
+      "name": "cna_fxaa_pass_copy_fragment_glsl",
+      "header": "engine_layer.h",
+      "ownership": "no handle; fills the caller's buffer",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "char*",
+        "uint64_t",
+        "uint64_t*"
+      ]
+    },
+    {
+      "name": "cna_fxaa_pass_create",
+      "header": "engine_layer.h",
+      "ownership": "borrows the graphics device; returns an owned pass handle",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_Handle",
+        "CNA_PostProcessPassHandle*"
+      ]
+    },
+    {
+      "name": "cna_fxaa_pass_edge_threshold_for_quality",
+      "header": "engine_layer.h",
+      "ownership": "no handle; a pure function of its arguments",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_RenderQuality",
+        "float*"
+      ]
+    },
+    {
+      "name": "cna_fxaa_pass_get_edge_threshold",
+      "header": "engine_layer.h",
+      "ownership": "borrows the pass",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_PostProcessPassHandle",
+        "float*"
+      ]
+    },
+    {
+      "name": "cna_fxaa_pass_set_edge_threshold",
+      "header": "engine_layer.h",
+      "ownership": "borrows the pass; copies the value in",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_PostProcessPassHandle",
+        "float"
       ]
     },
     {
@@ -11011,6 +11762,111 @@
       ]
     },
     {
+      "name": "cna_height_fog_pass_create",
+      "header": "engine_layer.h",
+      "ownership": "borrows the graphics device; returns an owned pass handle",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_Handle",
+        "CNA_PostProcessPassHandle*"
+      ]
+    },
+    {
+      "name": "cna_height_fog_pass_get_base_height",
+      "header": "engine_layer.h",
+      "ownership": "borrows the pass",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_PostProcessPassHandle",
+        "float*"
+      ]
+    },
+    {
+      "name": "cna_height_fog_pass_get_color",
+      "header": "engine_layer.h",
+      "ownership": "borrows the pass",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_PostProcessPassHandle",
+        "CNA_Vector3*"
+      ]
+    },
+    {
+      "name": "cna_height_fog_pass_get_density",
+      "header": "engine_layer.h",
+      "ownership": "borrows the pass",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_PostProcessPassHandle",
+        "float*"
+      ]
+    },
+    {
+      "name": "cna_height_fog_pass_get_falloff",
+      "header": "engine_layer.h",
+      "ownership": "borrows the pass",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_PostProcessPassHandle",
+        "float*"
+      ]
+    },
+    {
+      "name": "cna_height_fog_pass_optical_depth",
+      "header": "engine_layer.h",
+      "ownership": "no handle; a pure function of its arguments",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "float",
+        "float",
+        "float",
+        "float",
+        "float",
+        "float",
+        "float*"
+      ]
+    },
+    {
+      "name": "cna_height_fog_pass_set_base_height",
+      "header": "engine_layer.h",
+      "ownership": "borrows the pass; copies the value in",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_PostProcessPassHandle",
+        "const float"
+      ]
+    },
+    {
+      "name": "cna_height_fog_pass_set_color",
+      "header": "engine_layer.h",
+      "ownership": "borrows the pass; copies the value in",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_PostProcessPassHandle",
+        "const CNA_Vector3*"
+      ]
+    },
+    {
+      "name": "cna_height_fog_pass_set_density",
+      "header": "engine_layer.h",
+      "ownership": "borrows the pass; copies the value in",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_PostProcessPassHandle",
+        "const float"
+      ]
+    },
+    {
+      "name": "cna_height_fog_pass_set_falloff",
+      "header": "engine_layer.h",
+      "ownership": "borrows the pass; copies the value in",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_PostProcessPassHandle",
+        "const float"
+      ]
+    },
+    {
       "name": "cna_index_buffer_create",
       "header": "index_resources.h",
       "ownership": "copies create descriptor; returns owned game-child index buffer",
@@ -12043,6 +12899,76 @@
       ]
     },
     {
+      "name": "cna_lens_flare_pass_create",
+      "header": "engine_layer.h",
+      "ownership": "borrows the graphics device; returns an owned pass handle",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_Handle",
+        "CNA_PostProcessPassHandle*"
+      ]
+    },
+    {
+      "name": "cna_lens_flare_pass_get_dispersal",
+      "header": "engine_layer.h",
+      "ownership": "borrows the pass",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_PostProcessPassHandle",
+        "float*"
+      ]
+    },
+    {
+      "name": "cna_lens_flare_pass_get_intensity",
+      "header": "engine_layer.h",
+      "ownership": "borrows the pass",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_PostProcessPassHandle",
+        "float*"
+      ]
+    },
+    {
+      "name": "cna_lens_flare_pass_get_threshold",
+      "header": "engine_layer.h",
+      "ownership": "borrows the pass",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_PostProcessPassHandle",
+        "float*"
+      ]
+    },
+    {
+      "name": "cna_lens_flare_pass_set_dispersal",
+      "header": "engine_layer.h",
+      "ownership": "borrows the pass; copies the value in",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_PostProcessPassHandle",
+        "float"
+      ]
+    },
+    {
+      "name": "cna_lens_flare_pass_set_intensity",
+      "header": "engine_layer.h",
+      "ownership": "borrows the pass; copies the value in",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_PostProcessPassHandle",
+        "float"
+      ]
+    },
+    {
+      "name": "cna_lens_flare_pass_set_threshold",
+      "header": "engine_layer.h",
+      "ownership": "borrows the pass; copies the value in",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_PostProcessPassHandle",
+        "float"
+      ]
+    },
+    {
       "name": "cna_light_probe_ext_copy_coefficients",
       "header": "engine_layer.h",
       "ownership": "borrows the probe; fills the caller's coefficient buffer",
@@ -12396,6 +13322,96 @@
         "int32_t",
         "int32_t",
         "CNA_LightProbeHandle"
+      ]
+    },
+    {
+      "name": "cna_light_shaft_pass_create",
+      "header": "engine_layer.h",
+      "ownership": "borrows the graphics device; returns an owned pass handle",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_Handle",
+        "CNA_PostProcessPassHandle*"
+      ]
+    },
+    {
+      "name": "cna_light_shaft_pass_get_decay",
+      "header": "engine_layer.h",
+      "ownership": "borrows the pass",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_PostProcessPassHandle",
+        "float*"
+      ]
+    },
+    {
+      "name": "cna_light_shaft_pass_get_intensity",
+      "header": "engine_layer.h",
+      "ownership": "borrows the pass",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_PostProcessPassHandle",
+        "float*"
+      ]
+    },
+    {
+      "name": "cna_light_shaft_pass_get_light_screen_position",
+      "header": "engine_layer.h",
+      "ownership": "borrows the pass",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_PostProcessPassHandle",
+        "CNA_Vector2*"
+      ]
+    },
+    {
+      "name": "cna_light_shaft_pass_get_threshold",
+      "header": "engine_layer.h",
+      "ownership": "borrows the pass",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_PostProcessPassHandle",
+        "float*"
+      ]
+    },
+    {
+      "name": "cna_light_shaft_pass_set_decay",
+      "header": "engine_layer.h",
+      "ownership": "borrows the pass; copies the value in",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_PostProcessPassHandle",
+        "const float"
+      ]
+    },
+    {
+      "name": "cna_light_shaft_pass_set_intensity",
+      "header": "engine_layer.h",
+      "ownership": "borrows the pass; copies the value in",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_PostProcessPassHandle",
+        "const float"
+      ]
+    },
+    {
+      "name": "cna_light_shaft_pass_set_light_screen_position",
+      "header": "engine_layer.h",
+      "ownership": "borrows the pass; copies the value in",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_PostProcessPassHandle",
+        "const CNA_Vector2*"
+      ]
+    },
+    {
+      "name": "cna_light_shaft_pass_set_threshold",
+      "header": "engine_layer.h",
+      "ownership": "borrows the pass; copies the value in",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_PostProcessPassHandle",
+        "const float"
       ]
     },
     {
@@ -14170,6 +15186,56 @@
       ]
     },
     {
+      "name": "cna_motion_blur_pass_create",
+      "header": "engine_layer.h",
+      "ownership": "borrows the graphics device; returns an owned pass handle",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_Handle",
+        "CNA_PostProcessPassHandle*"
+      ]
+    },
+    {
+      "name": "cna_motion_blur_pass_get_max_distance",
+      "header": "engine_layer.h",
+      "ownership": "borrows the pass",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_PostProcessPassHandle",
+        "float*"
+      ]
+    },
+    {
+      "name": "cna_motion_blur_pass_get_strength",
+      "header": "engine_layer.h",
+      "ownership": "borrows the pass",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_PostProcessPassHandle",
+        "float*"
+      ]
+    },
+    {
+      "name": "cna_motion_blur_pass_set_max_distance",
+      "header": "engine_layer.h",
+      "ownership": "borrows the pass; copies the value in",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_PostProcessPassHandle",
+        "float"
+      ]
+    },
+    {
+      "name": "cna_motion_blur_pass_set_strength",
+      "header": "engine_layer.h",
+      "ownership": "borrows the pass; copies the value in",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_PostProcessPassHandle",
+        "float"
+      ]
+    },
+    {
       "name": "cna_motion_create",
       "header": "sensors.h",
       "ownership": "borrows game; returns an owned sensor handle",
@@ -15919,6 +16985,38 @@
       ]
     },
     {
+      "name": "cna_post_process_pass_copy_name",
+      "header": "engine_layer.h",
+      "ownership": "borrows the pass; fills the caller's byte buffer",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_PostProcessPassHandle",
+        "char*",
+        "uint64_t",
+        "uint64_t*"
+      ]
+    },
+    {
+      "name": "cna_post_process_pass_destroy",
+      "header": "engine_layer.h",
+      "ownership": "releases the owned post-process-pass handle",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_PostProcessPassHandle"
+      ]
+    },
+    {
+      "name": "cna_post_process_pass_is_supported",
+      "header": "engine_layer.h",
+      "ownership": "borrows the pass and the graphics device",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_PostProcessPassHandle",
+        "CNA_Handle",
+        "CNA_Bool*"
+      ]
+    },
+    {
       "name": "cna_power_get_battery_percent_ext",
       "header": "devices.h",
       "ownership": "borrows its inputs; caller output",
@@ -16224,6 +17322,284 @@
         "CNA_StringView",
         "CNA_Bool*",
         "CNA_PropertyValueKind*"
+      ]
+    },
+    {
+      "name": "cna_render_pipeline_add_user_pass",
+      "header": "engine_layer.h",
+      "ownership": "borrows the pass; the pipeline records it and never owns it",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_RenderPipelineHandle",
+        "CNA_PostProcessPassHandle"
+      ]
+    },
+    {
+      "name": "cna_render_pipeline_begin",
+      "header": "engine_layer.h",
+      "ownership": "borrows the pipeline",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_RenderPipelineHandle",
+        "const CNA_Color*"
+      ]
+    },
+    {
+      "name": "cna_render_pipeline_clear_user_passes",
+      "header": "engine_layer.h",
+      "ownership": "borrows the pipeline",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_RenderPipelineHandle"
+      ]
+    },
+    {
+      "name": "cna_render_pipeline_copy_pass_timing_name_ext",
+      "header": "engine_layer.h",
+      "ownership": "borrows the pipeline",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_RenderPipelineHandle",
+        "uint64_t",
+        "char*",
+        "uint64_t",
+        "uint64_t*"
+      ]
+    },
+    {
+      "name": "cna_render_pipeline_copy_transparency_fallback_reason_ext",
+      "header": "engine_layer.h",
+      "ownership": "borrows the pipeline",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_RenderPipelineHandle",
+        "char*",
+        "uint64_t",
+        "uint64_t*"
+      ]
+    },
+    {
+      "name": "cna_render_pipeline_create",
+      "header": "engine_layer.h",
+      "ownership": "borrows the graphics device; returns an owned pipeline handle",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_Handle",
+        "CNA_RenderPipelineHandle*"
+      ]
+    },
+    {
+      "name": "cna_render_pipeline_destroy",
+      "header": "engine_layer.h",
+      "ownership": "releases the owned pipeline handle and the targets it owns",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_RenderPipelineHandle"
+      ]
+    },
+    {
+      "name": "cna_render_pipeline_did_shadow_pass_run",
+      "header": "engine_layer.h",
+      "ownership": "borrows the pipeline",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_RenderPipelineHandle",
+        "CNA_Bool*"
+      ]
+    },
+    {
+      "name": "cna_render_pipeline_did_skybox_draw",
+      "header": "engine_layer.h",
+      "ownership": "borrows the pipeline",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_RenderPipelineHandle",
+        "CNA_Bool*"
+      ]
+    },
+    {
+      "name": "cna_render_pipeline_end",
+      "header": "engine_layer.h",
+      "ownership": "borrows the pipeline",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_RenderPipelineHandle"
+      ]
+    },
+    {
+      "name": "cna_render_pipeline_get_gpu_memory_estimate_bytes",
+      "header": "engine_layer.h",
+      "ownership": "borrows the pipeline",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_RenderPipelineHandle",
+        "uint64_t*"
+      ]
+    },
+    {
+      "name": "cna_render_pipeline_get_last_frame_pass_count",
+      "header": "engine_layer.h",
+      "ownership": "borrows the pipeline",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_RenderPipelineHandle",
+        "int32_t*"
+      ]
+    },
+    {
+      "name": "cna_render_pipeline_get_pass_timing_count_ext",
+      "header": "engine_layer.h",
+      "ownership": "borrows the pipeline",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_RenderPipelineHandle",
+        "uint64_t*"
+      ]
+    },
+    {
+      "name": "cna_render_pipeline_get_pass_timing_ext",
+      "header": "engine_layer.h",
+      "ownership": "borrows the pipeline",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_RenderPipelineHandle",
+        "uint64_t",
+        "CNA_PassTimingEXT*"
+      ]
+    },
+    {
+      "name": "cna_render_pipeline_get_scene_target_format",
+      "header": "engine_layer.h",
+      "ownership": "borrows the pipeline",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_RenderPipelineHandle",
+        "CNA_SurfaceFormat*"
+      ]
+    },
+    {
+      "name": "cna_render_pipeline_get_settings",
+      "header": "engine_layer.h",
+      "ownership": "borrows the pipeline; fills the caller's settings",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_RenderPipelineHandle",
+        "CNA_RenderPipelineSettingsEXT*"
+      ]
+    },
+    {
+      "name": "cna_render_pipeline_get_statistics",
+      "header": "engine_layer.h",
+      "ownership": "borrows the pipeline",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_RenderPipelineHandle",
+        "CNA_RenderPipelineFrameStatisticsEXT*"
+      ]
+    },
+    {
+      "name": "cna_render_pipeline_is_gpu_timing_enabled_ext",
+      "header": "engine_layer.h",
+      "ownership": "borrows the pipeline",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_RenderPipelineHandle",
+        "CNA_Bool*"
+      ]
+    },
+    {
+      "name": "cna_render_pipeline_is_using_scene_target",
+      "header": "engine_layer.h",
+      "ownership": "borrows the pipeline",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_RenderPipelineHandle",
+        "CNA_Bool*"
+      ]
+    },
+    {
+      "name": "cna_render_pipeline_release_device_resources_ext",
+      "header": "engine_layer.h",
+      "ownership": "borrows the pipeline",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_RenderPipelineHandle"
+      ]
+    },
+    {
+      "name": "cna_render_pipeline_resize",
+      "header": "engine_layer.h",
+      "ownership": "borrows the pipeline",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_RenderPipelineHandle",
+        "int32_t",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "cna_render_pipeline_set_camera",
+      "header": "engine_layer.h",
+      "ownership": "borrows the pipeline",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_RenderPipelineHandle",
+        "const CNA_Matrix*",
+        "const CNA_Matrix*",
+        "float",
+        "float"
+      ]
+    },
+    {
+      "name": "cna_render_pipeline_set_depth_normal_inputs",
+      "header": "engine_layer.h",
+      "ownership": "borrows the caller's textures; never owns them",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_RenderPipelineHandle",
+        "CNA_Handle",
+        "CNA_Handle"
+      ]
+    },
+    {
+      "name": "cna_render_pipeline_set_gpu_timing_enabled_ext",
+      "header": "engine_layer.h",
+      "ownership": "borrows the pipeline",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_RenderPipelineHandle",
+        "CNA_Bool"
+      ]
+    },
+    {
+      "name": "cna_render_pipeline_set_settings",
+      "header": "engine_layer.h",
+      "ownership": "borrows the pipeline and the caller's settings; copies them",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_RenderPipelineHandle",
+        "const CNA_RenderPipelineSettingsEXT*"
+      ]
+    },
+    {
+      "name": "cna_render_pipeline_set_skybox_camera",
+      "header": "engine_layer.h",
+      "ownership": "borrows the pipeline",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_RenderPipelineHandle",
+        "const CNA_Matrix*",
+        "const CNA_Matrix*"
+      ]
+    },
+    {
+      "name": "cna_render_pipeline_set_velocity_input_ext",
+      "header": "engine_layer.h",
+      "ownership": "borrows the caller's textures; never owns them",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_RenderPipelineHandle",
+        "CNA_Handle"
       ]
     },
     {
@@ -17864,6 +19240,289 @@
       ]
     },
     {
+      "name": "cna_ssao_pass_copy_kernel",
+      "header": "engine_layer.h",
+      "ownership": "borrows the pass; fills the caller's offset buffer",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_PostProcessPassHandle",
+        "CNA_Vector3*",
+        "uint64_t",
+        "uint64_t*"
+      ]
+    },
+    {
+      "name": "cna_ssao_pass_copy_occlusion_glsl",
+      "header": "engine_layer.h",
+      "ownership": "no handle; fills the caller's buffer",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_Bool",
+        "char*",
+        "uint64_t",
+        "uint64_t*"
+      ]
+    },
+    {
+      "name": "cna_ssao_pass_create",
+      "header": "engine_layer.h",
+      "ownership": "borrows the graphics device; returns an owned pass handle",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_Handle",
+        "CNA_PostProcessPassHandle*"
+      ]
+    },
+    {
+      "name": "cna_ssao_pass_get_half_resolution",
+      "header": "engine_layer.h",
+      "ownership": "borrows the pass",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_PostProcessPassHandle",
+        "CNA_Bool*"
+      ]
+    },
+    {
+      "name": "cna_ssao_pass_get_intensity",
+      "header": "engine_layer.h",
+      "ownership": "borrows the pass",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_PostProcessPassHandle",
+        "float*"
+      ]
+    },
+    {
+      "name": "cna_ssao_pass_get_radius",
+      "header": "engine_layer.h",
+      "ownership": "borrows the pass",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_PostProcessPassHandle",
+        "float*"
+      ]
+    },
+    {
+      "name": "cna_ssao_pass_get_sample_count",
+      "header": "engine_layer.h",
+      "ownership": "borrows the pass",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_PostProcessPassHandle",
+        "int32_t*"
+      ]
+    },
+    {
+      "name": "cna_ssao_pass_reset_targets",
+      "header": "engine_layer.h",
+      "ownership": "no handle; a pure function of its arguments",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_PostProcessPassHandle"
+      ]
+    },
+    {
+      "name": "cna_ssao_pass_sample_count_for_quality",
+      "header": "engine_layer.h",
+      "ownership": "no handle; a pure function of its arguments",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_RenderQuality",
+        "int32_t*"
+      ]
+    },
+    {
+      "name": "cna_ssao_pass_set_half_resolution",
+      "header": "engine_layer.h",
+      "ownership": "borrows the pass; copies the value in",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_PostProcessPassHandle",
+        "CNA_Bool"
+      ]
+    },
+    {
+      "name": "cna_ssao_pass_set_intensity",
+      "header": "engine_layer.h",
+      "ownership": "borrows the pass; copies the value in",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_PostProcessPassHandle",
+        "float"
+      ]
+    },
+    {
+      "name": "cna_ssao_pass_set_radius",
+      "header": "engine_layer.h",
+      "ownership": "borrows the pass; copies the value in",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_PostProcessPassHandle",
+        "float"
+      ]
+    },
+    {
+      "name": "cna_ssao_pass_set_sample_count",
+      "header": "engine_layer.h",
+      "ownership": "borrows the pass; copies the value in",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_PostProcessPassHandle",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "cna_ssr_pass_create",
+      "header": "engine_layer.h",
+      "ownership": "borrows the graphics device; returns an owned pass handle",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_Handle",
+        "CNA_PostProcessPassHandle*"
+      ]
+    },
+    {
+      "name": "cna_ssr_pass_get_depth_bias",
+      "header": "engine_layer.h",
+      "ownership": "borrows the pass",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_PostProcessPassHandle",
+        "float*"
+      ]
+    },
+    {
+      "name": "cna_ssr_pass_get_edge_fade",
+      "header": "engine_layer.h",
+      "ownership": "borrows the pass",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_PostProcessPassHandle",
+        "float*"
+      ]
+    },
+    {
+      "name": "cna_ssr_pass_get_intensity",
+      "header": "engine_layer.h",
+      "ownership": "borrows the pass",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_PostProcessPassHandle",
+        "float*"
+      ]
+    },
+    {
+      "name": "cna_ssr_pass_get_max_distance",
+      "header": "engine_layer.h",
+      "ownership": "borrows the pass",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_PostProcessPassHandle",
+        "float*"
+      ]
+    },
+    {
+      "name": "cna_ssr_pass_get_roughness_blur",
+      "header": "engine_layer.h",
+      "ownership": "borrows the pass",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_PostProcessPassHandle",
+        "float*"
+      ]
+    },
+    {
+      "name": "cna_ssr_pass_get_step_count",
+      "header": "engine_layer.h",
+      "ownership": "borrows the pass",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_PostProcessPassHandle",
+        "int32_t*"
+      ]
+    },
+    {
+      "name": "cna_ssr_pass_get_thickness",
+      "header": "engine_layer.h",
+      "ownership": "borrows the pass",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_PostProcessPassHandle",
+        "float*"
+      ]
+    },
+    {
+      "name": "cna_ssr_pass_set_depth_bias",
+      "header": "engine_layer.h",
+      "ownership": "borrows the pass; copies the value in",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_PostProcessPassHandle",
+        "float"
+      ]
+    },
+    {
+      "name": "cna_ssr_pass_set_edge_fade",
+      "header": "engine_layer.h",
+      "ownership": "borrows the pass; copies the value in",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_PostProcessPassHandle",
+        "float"
+      ]
+    },
+    {
+      "name": "cna_ssr_pass_set_intensity",
+      "header": "engine_layer.h",
+      "ownership": "borrows the pass; copies the value in",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_PostProcessPassHandle",
+        "float"
+      ]
+    },
+    {
+      "name": "cna_ssr_pass_set_max_distance",
+      "header": "engine_layer.h",
+      "ownership": "borrows the pass; copies the value in",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_PostProcessPassHandle",
+        "float"
+      ]
+    },
+    {
+      "name": "cna_ssr_pass_set_roughness_blur",
+      "header": "engine_layer.h",
+      "ownership": "borrows the pass; copies the value in",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_PostProcessPassHandle",
+        "float"
+      ]
+    },
+    {
+      "name": "cna_ssr_pass_set_step_count",
+      "header": "engine_layer.h",
+      "ownership": "borrows the pass; copies the value in",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_PostProcessPassHandle",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "cna_ssr_pass_set_thickness",
+      "header": "engine_layer.h",
+      "ownership": "borrows the pass; copies the value in",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_PostProcessPassHandle",
+        "float"
+      ]
+    },
+    {
       "name": "cna_storage_container_copy_directory_name",
       "header": "storage.h",
       "ownership": "borrows container and copied pattern; caller buffer",
@@ -18699,6 +20358,129 @@
       ]
     },
     {
+      "name": "cna_tonemap_pass_create",
+      "header": "engine_layer.h",
+      "ownership": "borrows the graphics device; returns an owned pass handle",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_Handle",
+        "CNA_PostProcessPassHandle*"
+      ]
+    },
+    {
+      "name": "cna_tonemap_pass_get_deband_strength",
+      "header": "engine_layer.h",
+      "ownership": "borrows the pass",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_PostProcessPassHandle",
+        "float*"
+      ]
+    },
+    {
+      "name": "cna_tonemap_pass_get_exposure",
+      "header": "engine_layer.h",
+      "ownership": "borrows the pass",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_PostProcessPassHandle",
+        "float*"
+      ]
+    },
+    {
+      "name": "cna_tonemap_pass_get_gamma",
+      "header": "engine_layer.h",
+      "ownership": "borrows the pass",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_PostProcessPassHandle",
+        "float*"
+      ]
+    },
+    {
+      "name": "cna_tonemap_pass_get_mode",
+      "header": "engine_layer.h",
+      "ownership": "borrows the pass",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_PostProcessPassHandle",
+        "CNA_TonemappingMode*"
+      ]
+    },
+    {
+      "name": "cna_tonemap_pass_is_deband_enabled",
+      "header": "engine_layer.h",
+      "ownership": "borrows the pass",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_PostProcessPassHandle",
+        "CNA_Bool*"
+      ]
+    },
+    {
+      "name": "cna_tonemap_pass_set_deband_enabled",
+      "header": "engine_layer.h",
+      "ownership": "borrows the pass; copies the value in",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_PostProcessPassHandle",
+        "CNA_Bool"
+      ]
+    },
+    {
+      "name": "cna_tonemap_pass_set_deband_strength",
+      "header": "engine_layer.h",
+      "ownership": "borrows the pass; copies the value in",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_PostProcessPassHandle",
+        "float"
+      ]
+    },
+    {
+      "name": "cna_tonemap_pass_set_exposure",
+      "header": "engine_layer.h",
+      "ownership": "borrows the pass; copies the value in",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_PostProcessPassHandle",
+        "float"
+      ]
+    },
+    {
+      "name": "cna_tonemap_pass_set_gamma",
+      "header": "engine_layer.h",
+      "ownership": "borrows the pass; copies the value in",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_PostProcessPassHandle",
+        "float"
+      ]
+    },
+    {
+      "name": "cna_tonemap_pass_set_mode",
+      "header": "engine_layer.h",
+      "ownership": "borrows the pass; copies the value in",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_PostProcessPassHandle",
+        "CNA_TonemappingMode"
+      ]
+    },
+    {
+      "name": "cna_tonemap_pass_tonemap_channel",
+      "header": "engine_layer.h",
+      "ownership": "no handle; a pure function of its arguments",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_TonemappingMode",
+        "float",
+        "float",
+        "float",
+        "float*"
+      ]
+    },
+    {
       "name": "cna_touch_get_capabilities",
       "header": "input.h",
       "ownership": "borrows game; copies versioned touch capabilities",
@@ -19302,6 +21084,88 @@
       "returnType": "CNA_Result",
       "parameters": [
         "CNA_VideoPlayerHandle"
+      ]
+    },
+    {
+      "name": "cna_volumetric_fog_pass_create",
+      "header": "engine_layer.h",
+      "ownership": "borrows the graphics device; returns an owned pass handle",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_Handle",
+        "CNA_PostProcessPassHandle*"
+      ]
+    },
+    {
+      "name": "cna_volumetric_fog_pass_get_anisotropy",
+      "header": "engine_layer.h",
+      "ownership": "borrows the pass",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_PostProcessPassHandle",
+        "float*"
+      ]
+    },
+    {
+      "name": "cna_volumetric_fog_pass_get_density",
+      "header": "engine_layer.h",
+      "ownership": "borrows the pass",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_PostProcessPassHandle",
+        "float*"
+      ]
+    },
+    {
+      "name": "cna_volumetric_fog_pass_get_range",
+      "header": "engine_layer.h",
+      "ownership": "borrows the pass",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_PostProcessPassHandle",
+        "float*"
+      ]
+    },
+    {
+      "name": "cna_volumetric_fog_pass_set_anisotropy",
+      "header": "engine_layer.h",
+      "ownership": "borrows the pass; copies the value in",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_PostProcessPassHandle",
+        "const float"
+      ]
+    },
+    {
+      "name": "cna_volumetric_fog_pass_set_density",
+      "header": "engine_layer.h",
+      "ownership": "borrows the pass; copies the value in",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_PostProcessPassHandle",
+        "const float"
+      ]
+    },
+    {
+      "name": "cna_volumetric_fog_pass_set_light",
+      "header": "engine_layer.h",
+      "ownership": "borrows the pass; copies the value in",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_PostProcessPassHandle",
+        "CNA_ShadowMapHandle",
+        "const CNA_Vector3*",
+        "const CNA_Vector3*"
+      ]
+    },
+    {
+      "name": "cna_volumetric_fog_pass_set_range",
+      "header": "engine_layer.h",
+      "ownership": "borrows the pass; copies the value in",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_PostProcessPassHandle",
+        "const float"
       ]
     },
     {

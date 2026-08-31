@@ -153,9 +153,36 @@ static void device_families(const CNA_Handle device)
                   cna_particle_system_destroy(particles));
     }
     {
+        /* The header says to release a decal pass with cna_post_process_pass_destroy. Whether
+           that is true of a CNA_DecalPassHandle is a fact rather than a claim: JAVA-UPSTREAM-008. */
         CNA_DecalPassHandle pass = 0;
-        LIFECYCLE("decal_pass", cna_decal_pass_create(device, &pass), pass,
-                  cna_decal_pass_destroy(pass));
+        const CNA_Result created = cna_decal_pass_create(device, &pass);
+        if (created != CNA_RESULT_SUCCESS) {
+            printf("  %-42s %-17s (%d)\n", "decal_pass", name_of(created), (int)created);
+        } else {
+            CNA_Bool decal_supported = CNA_FALSE;
+            TRY("decal_pass via post_process_pass_is_supported",
+                cna_post_process_pass_is_supported(pass, device, &decal_supported));
+            {
+                char decal_name[64];
+                uint64_t decal_bytes = 0;
+                TRY("decal_pass via post_process_pass_copy_name",
+                    cna_post_process_pass_copy_name(pass, decal_name, sizeof decal_name,
+                                                    &decal_bytes));
+            }
+            TRY("decal_pass via post_process_pass_destroy",
+                cna_post_process_pass_destroy(pass));
+            TRY("decal_pass via decal_pass_destroy", cna_decal_pass_destroy(pass));
+        }
+    }
+    {
+        /* And the same question for a pass that really does share the common handle type. */
+        CNA_PostProcessPassHandle pass = 0;
+        const CNA_Result created = cna_bloom_pass_create(device, &pass);
+        if (created == CNA_RESULT_SUCCESS) {
+            TRY("bloom_pass via post_process_pass_destroy",
+                cna_post_process_pass_destroy(pass));
+        }
     }
     {
         CNA_AtmosphericSkyHandle sky = 0;

@@ -290,6 +290,11 @@ public final class ShadowMap implements AutoCloseable {
         }
     }
 
+    /** The native handle, for the engine-layer objects in this package that borrow a map. */
+    long handleForBorrow() {
+        return open();
+    }
+
     private long open() {
         synchronized (this) {
             if (closed) {
