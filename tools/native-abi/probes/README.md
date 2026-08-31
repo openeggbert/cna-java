@@ -41,9 +41,15 @@ cmake --build cmake-build-javagl --target cna_c_api -j$(nproc)
 ```
 
 `HEADLESS` is the default so the existing qualification behaves exactly as it did; the
-`CNA_GRAPHICS_RENDERER` **environment variable** picks another one for a single run. CNA refuses a
-name it was not built with rather than substituting quietly, so a probe that names a renderer
-either gets it or fails loudly.
+`CNA_GRAPHICS_RENDERER` **environment variable** picks another one for a single run.
+
+**Name one this build does not have and the process dies.** Not a refusal, a `SIGABRT`: the
+selection is resolved while `libcna_c_api.so` is loading and throws a C++ exception there, so
+nothing runs -- not `main`, not a constructor, and in a JVM not a line of Java, because
+`System.loadLibrary` never returns. `renderer_selection.c` reproduces it and JAVA-UPSTREAM-017
+records it. The list above is not decoration: check a renderer name against it before exporting
+one, or ask `cna_graphics_renderer_copy_available_ext` from a process that already loaded
+successfully.
 
 The platform is `SDL3` rather than `HEADLESS`, because a GPU renderer needs a native window and
 the headless platform has none. That means these probes open a window for the fraction of a second
@@ -876,7 +882,7 @@ Identical on OPENGLES3 and OPENGL33:
 | `clustered_forward` extensions | yes *(also on HEADLESS)* | fresh each call | SUCCESS | SUCCESS | retaining |
 | `weighted_blended` accumulation | yes | fresh each call | SUCCESS | SUCCESS | retaining |
 | `weighted_blended` revealage | yes | fresh each call | SUCCESS | SUCCESS | retaining |
-| `ascii_pass` effect | yes *(every renderer)* | fresh each call | **INVALID_HANDLE** | SUCCESS | non-owning view |
+| `ascii_pass` effect | yes *(every renderer)* | fresh each call | SUCCESS | SUCCESS | retaining |
 | `color_grade_pass` LUT / volume LUT | invalid with none bound | -- | -- | -- | -- |
 | `render_pipeline` shadow map | yes, and **not** the handle that was given | fresh each call | -- | -- | -- |
 | `render_pipeline` scene target | invalid even while `is_using_scene_target` is true | -- | -- | -- | -- |
@@ -895,9 +901,58 @@ the parent's `close()` fails; a retaining borrow may outlive its lender entirely
 handle. Recorded as `JAVA-UPSTREAM-013`. It is an inconsistency rather than a memory-safety fault
 -- see the next probe.
 
-**The ASCII pass's effect is a third shape.** `cna_effect_destroy` refuses it with
-`INVALID_HANDLE`, which matches the header's *"the caller does not release the pass, and the pass
-must outlive it"*, and the pass destroys happily while it is out.
+**The ASCII pass's effect was read wrong the first time, and the probe is what corrected it.**
+It released with `cna_effect_destroy` and got `INVALID_HANDLE`, which reads exactly like a lender
+refusing to take its borrow back, and the row above used to say "non-owning view" on that basis.
+The route was simply the wrong one: `graphics_ext.h` says in as many words that an ASCII effect
+"is not a shader `Effect` and is not accepted by the `cna_effect_*` routes", and
+`cna_ascii_post_process_effect_destroy` releases it with `SUCCESS`. A refusal that comes from
+asking the wrong question looks identical to one that comes from a real constraint, and the only
+defence is reading the declaration of the type you actually hold.
+
+### Five getters asked while the lender is holding something
+
+Every case above asks a lender that holds nothing, or holds something it made itself. Five getters
+lend a thing the *caller* gave the lender, and there the question that decides the Java facade is
+a different one: **is the handle that comes back the same name the caller handed in, or a fresh
+name for the same object?** Identical on OPENGLES3 and OPENGL33:
+
+| Lent handle | valid | same name the caller gave? | release | lender destroy while lent |
+|---|---|---|---|---|
+| `skybox` environment | yes | **no**, fresh each call | SUCCESS | SUCCESS |
+| `render_pipeline` skybox, one set | yes | **yes**, the same handle | -- | SUCCESS |
+| `color_grade_pass` strip LUT, one set | yes | no, fresh each call | SUCCESS | SUCCESS |
+| `color_grade_pass` volume LUT, one set | yes | no, fresh each call | SUCCESS | SUCCESS |
+| `post_process_effect_pass` effect | yes | no, fresh each call | SUCCESS | SUCCESS |
+| `clustered_forward` opaque frame | yes | no, fresh each call | SUCCESS | SUCCESS |
+
+**A fresh name is a game child, and forgetting one makes the game undestroyable.** The first
+version of this section leaked the second handle of each pair -- the one taken only to see whether
+the getter is stable -- and `cna_game_destroy` answered `INVALID_STATE` at the end of the run.
+Releasing every fresh name turns the same run's answer to `SUCCESS`. That is the whole argument
+against a Java facade over these six: a game that reads `getEnvironment()` in a frame loop
+allocates and must free a native handle per read, and the Java object already holds the thing it
+was given. `cna_render_pipeline_get_skybox` is the exception that proves it -- it hands back the
+identical handle, so there is nothing to release and nothing to gain.
+
+### The volume LUT is a Texture3D, not a TextureCube
+
+`cna_color_grade_pass_set_volume_lut` documents its argument as *"a cube with an edge between two
+and `CNA_COLOR_GRADE_MAX_LUT_SIZE_EXT`"*, which reads two ways. Measured, it means a **cubical
+`Texture3D`**:
+
+| Table | result |
+|---|---|
+| `TextureCube`, size 8 | `INVALID_HANDLE` |
+| `Texture3D` 8x8x8 | SUCCESS |
+| `Texture3D` 8x8x4 | `INVALID_ARGUMENT` |
+| `Texture3D` 1x1x1 | `INVALID_ARGUMENT` |
+| `Texture3D` 2x2x2 | SUCCESS |
+| `Texture3D` 64x64x64 | SUCCESS |
+
+CNA-Java's `ColorGradePass.setVolumeLut` took a `TextureCube`, which can never have worked. It
+survived because no test had ever bound a volume table -- the signature and its coverage were
+missing together, which is the only way a signature this wrong stays wrong.
 
 ## lent_handle_use_after_lender.c
 
@@ -1037,6 +1092,65 @@ the zero the scene-callback probe reported was a pipeline with nothing turned on
 
 **A shadow map lends its texture on every renderer**, and answers `is_supported` false only where
 it cannot cast into it.
+
+## renderer_selection.c
+
+Which renderers does this build have, and what happens when a caller asks for one it does not?
+
+The second half of that question was answered by accident: a qualification sweep named
+`OPENGLES2`, a renderer this library was configured without, and the JVM printed
+`terminate called after throwing an instance of 'System::InvalidOperationException'` and died with
+signal 6. The message was a good one. The delivery was a process abort across a C ABI whose whole
+contract is that failures come back as a `CNA_Result`.
+
+**The abort is at library load, not at first call.** Run this probe with
+`CNA_GRAPHICS_RENDERER=OPENGLES2` and nothing of it runs -- not `main`, not a
+`__attribute__((constructor))` of the program itself. A trivial program that links the library but
+references no symbol from it survives, because `--as-needed` drops the `DT_NEEDED` entry and the
+library is never loaded at all; add one reference and it dies. So there is no point at which a
+caller could guard it, and in a JVM `System.loadLibrary` never returns. Recorded as
+`JAVA-UPSTREAM-017`.
+
+**The API path is safe, and is the whole reason to bind this family.** Every setter refuses
+cleanly:
+
+| Call | result |
+|---|---|
+| `set_preferred_ext(OPENGLES2)` -- defined, not in this build | `INVALID_STATE` |
+| `set_preferred_by_name_ext("OPENGLES2")` | `INVALID_STATE` |
+| `set_preferred_by_name_ext("NOT_A_RENDERER")` | `INVALID_ARGUMENT` |
+| `set_preferred_ext(9999)` -- outside the table | `INVALID_ARGUMENT` |
+| `set_preferred_by_name_ext("HEADLESS")` | SUCCESS |
+| `set_fallback_chain_ext(chain, 1)` with an undefined identity | `INVALID_ARGUMENT` |
+| `set_fallback_chain_ext(NULL, 1)` | `INVALID_ARGUMENT` |
+| `set_fallback_chain_ext(NULL, 0)` | SUCCESS |
+| any setter once a renderer exists | `INVALID_STATE` |
+
+`try_parse_name_ext` is case-insensitive, treats an unrecognised name as an answer rather than a
+failure, and parses names for renderers this build does not have -- which is right: parsing a name
+and having the renderer are different questions.
+
+**Five query routes in the same family are write-only.** `JAVA-UPSTREAM-018`:
+
+| Route | says | should say |
+|---|---|---|
+| `get_available_count_ext` | SUCCESS, **0** | 5 -- `copy_available_ext(NULL, 0, &n)` answers 5 for the same build |
+| `get_is_latched_ext` | **`CNA_TRUE` before** anything is created, `CNA_FALSE` after | the exact opposite, per its own declaration |
+| `get_selected_ext` | SUCCESS, `UNKNOWN` | the identity a successful `set_preferred_by_name_ext("HEADLESS")` just set |
+| `get_active_ext` | SUCCESS, `UNKNOWN` once a device exists | `HEADLESS`, which CNA's own log line names |
+| `get_current_type` | `HEADLESS` before the selection latches, **`UNKNOWN` after** | `HEADLESS` throughout; its name-copying twin `copy_current_name` stays right |
+
+The enumeration itself is sound: `copy_available_ext` supports the zero-capacity probe, writes no
+partial result when the buffer is one element short, and lists `HEADLESS OPENGLES3 OPENGL33
+OPENGL4 SOFTWARE` -- which is what the `CNA_GRAPHICS_RENDERERS` cache entry says, read at runtime
+rather than out of `CMakeCache.txt`. `get_is_available_ext` agrees with it identity by identity
+and refuses `UNKNOWN` and out-of-range values. The four fallback reasons name themselves
+`NotCompiledIn`, `ProbeUnavailable`, `InitializationFailed` and `WindowKindConflict`.
+
+So CNA-Java binds the fifteen routes that work and none of the five that do not, and
+`GraphicsRenderer.available()` sizes its buffer with the zero-capacity probe rather than the count
+route. `RendererCapabilities.getRendererName` already answers "which renderer am I on" correctly,
+because it asks the device rather than the selection.
 
 ## shader_effect_uniform_binding.c
 

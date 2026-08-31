@@ -1,6 +1,8 @@
 package org.openeggbert.cna.extensions.graphics;
 
+import Microsoft.Xna.Framework.Graphics.SurfaceFormat;
 import Microsoft.Xna.Framework.Graphics.Texture2D;
+import Microsoft.Xna.Framework.Graphics.Texture3D;
 import Microsoft.Xna.Framework.Vector3;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.condition.EnabledIfEnvironmentVariable;
@@ -21,6 +23,10 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
  * read back entry by entry, which is the strongest thing that can be said about a parser. The
  * pass's strip validation is checked from both sides -- a size that describes a strip and one
  * that does not.
+ *
+ * <p>The volume slot is checked the same way, and needed to be: it took a {@code TextureCube}
+ * until a probe bound a real table to it, and CNA refuses a cube map there. Nothing here had ever
+ * bound one, so the wrong signature had nothing to fail against.
  */
 @EnabledIfEnvironmentVariable(named = "CNA_NATIVE_LIBRARY", matches = ".+")
 final class ColorGradeTests {
@@ -116,6 +122,64 @@ final class ColorGradeTests {
                 assertEquals(lut.getSize(),
                         ColorGradePass.lutSizeForStrip(strip.getWidth(), strip.getHeight()),
                         "the texture the table built is a strip the pass recognises");
+            }
+        });
+    }
+
+    @Test
+    void theVolumeSlotTakesACubicalVolumeAndRefusesEverythingElse() {
+        GameProbe.run(probe -> {
+            // A volume table is a Texture3D, and not every renderer has real 3D texture storage:
+            // HEADLESS refuses to allocate one at all. Both sides are qualified rather than one
+            // skipped -- where the storage exists the slot is exercised, and where it does not the
+            // refusal is checked to be the exact one CNA documents.
+            if (!RendererCapabilities.supports(probe.device(), GraphicsCapability.Texture3D)) {
+                RuntimeException refused = assertThrows(RuntimeException.class,
+                        () -> new Texture3D(probe.device(), 8, 8, 8, false, SurfaceFormat.Color));
+                assertTrue(refused.getMessage().contains("volume"),
+                        "the refusal says what is missing: " + refused.getMessage());
+                // And the bounds are still the pass's own, whatever the renderer can allocate.
+                assertEquals(2, ColorGradePass.MIN_VOLUME_LUT_EDGE);
+                assertEquals(64, ColorGradePass.MAX_VOLUME_LUT_EDGE);
+                return;
+            }
+            try (ColorGradePass pass = ColorGradePass.create(probe.device());
+                 Texture3D cubical = new Texture3D(probe.device(), 8, 8, 8, false,
+                         SurfaceFormat.Color);
+                 Texture3D slab = new Texture3D(probe.device(), 8, 8, 4, false,
+                         SurfaceFormat.Color);
+                 Texture3D single = new Texture3D(probe.device(), 1, 1, 1, false,
+                         SurfaceFormat.Color)) {
+                assertNull(pass.getVolumeLut(), "nothing is bound yet");
+
+                pass.setVolumeLut(cubical);
+                assertSame(cubical, pass.getVolumeLut(),
+                        "the pass hands back the table it was given");
+
+                // Not cubical, so there is no edge length to read a slice count from. The
+                // message matters as much as the type here: CNA refuses the same table with the
+                // same exception type, and what the Java check adds is a sentence that names the
+                // shape the caller actually passed. Asserting only the type passed with the
+                // check deleted, which is how this assertion came to read the message.
+                IllegalArgumentException notCubical = assertThrows(IllegalArgumentException.class,
+                        () -> pass.setVolumeLut(slab));
+                assertTrue(notCubical.getMessage().contains("8x8x4"),
+                        "the refusal names the shape it was given: " + notCubical.getMessage());
+                // One texel has no two entries to interpolate between, which is why CNA's floor
+                // is two rather than one.
+                IllegalArgumentException tooSmall = assertThrows(IllegalArgumentException.class,
+                        () -> pass.setVolumeLut(single));
+                assertTrue(tooSmall.getMessage().contains("between 2 and 64"),
+                        "the refusal states the bounds: " + tooSmall.getMessage());
+                assertSame(cubical, pass.getVolumeLut(),
+                        "a refused table does not displace the one that was working");
+
+                // The bounds are CNA's, so they are worth stating rather than assuming.
+                assertEquals(2, ColorGradePass.MIN_VOLUME_LUT_EDGE);
+                assertEquals(64, ColorGradePass.MAX_VOLUME_LUT_EDGE);
+
+                pass.setVolumeLut(null);
+                assertNull(pass.getVolumeLut(), "null unbinds");
             }
         });
     }

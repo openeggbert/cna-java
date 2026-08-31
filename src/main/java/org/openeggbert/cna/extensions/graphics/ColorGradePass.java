@@ -2,7 +2,7 @@ package org.openeggbert.cna.extensions.graphics;
 
 import Microsoft.Xna.Framework.Graphics.GraphicsDevice;
 import Microsoft.Xna.Framework.Graphics.Texture2D;
-import Microsoft.Xna.Framework.Graphics.TextureCube;
+import Microsoft.Xna.Framework.Graphics.Texture3D;
 import org.openeggbert.cna.internal.NativeBindings;
 import org.openeggbert.cna.internal.generated.NativeEngineLayerRoutes;
 
@@ -17,9 +17,16 @@ import java.util.Objects;
  *
  * <p><strong>Two shapes of table, and the pass refuses a malformed one.</strong>
  * {@link #setLut} takes a strip -- N slices of N by N, so its width must be the square of its
- * height -- and {@link #setVolumeLut} takes a cube. CNA checks the shape rather than sampling it,
- * because a strip read at the wrong slice count would grade the frame into colours nothing in the
- * table names.
+ * height -- and {@link #setVolumeLut} takes a cubical {@link Texture3D}: equal width, height and
+ * depth, with an edge between two and {@value #MAX_VOLUME_LUT_EDGE}. CNA checks the shape rather
+ * than sampling it, because a strip read at the wrong slice count would grade the frame into
+ * colours nothing in the table names.
+ *
+ * <p>The volume slot took a {@code TextureCube} until it was measured. CNA's declaration calls it
+ * "a cube", which reads both ways, and a cube <em>map</em> is a different object from a cubical
+ * volume: CNA refuses one with {@code INVALID_HANDLE} and accepts the other. Nothing caught it
+ * because nothing had ever bound a volume table -- the signature was wrong and untested at the
+ * same time, which is how a wrong signature survives.
  *
  * <p>Both slots are borrowed and retained here, so nothing collects a table while the pass names
  * it; closing the pass disposes neither.
@@ -30,8 +37,14 @@ import java.util.Objects;
  */
 public final class ColorGradePass extends PostProcessPass {
 
+    /** CNA's own ceiling on a volume table's edge, from CNA_COLOR_GRADE_MAX_LUT_SIZE_EXT. */
+    public static final int MAX_VOLUME_LUT_EDGE = 64;
+
+    /** CNA's own floor: a one-texel table has no two entries to interpolate between. */
+    public static final int MIN_VOLUME_LUT_EDGE = 2;
+
     private Texture2D strip;
-    private TextureCube volume;
+    private Texture3D volume;
 
     private ColorGradePass(long handle) {
         super(handle);
@@ -151,10 +164,25 @@ public final class ColorGradePass extends PostProcessPass {
     /**
      * Binds a volume table, or unbinds the current one.
      *
+     * <p>The table must be cubical -- equal width, height and depth -- with an edge between
+     * {@value #MIN_VOLUME_LUT_EDGE} and {@value #MAX_VOLUME_LUT_EDGE}. Those bounds are checked
+     * here as well as by CNA, so a wrong table is named rather than returned as a code.
+     *
      * @param lut the volume texture, or {@code null} to unbind
-     * @throws IllegalArgumentException when the texture is not a valid cube
+     * @throws IllegalArgumentException when the texture is not a cube of a size CNA grades with
      */
-    public void setVolumeLut(TextureCube lut) {
+    public void setVolumeLut(Texture3D lut) {
+        if (lut != null) {
+            int edge = lut.getWidth();
+            if (lut.getHeight() != edge || lut.getDepth() != edge) {
+                throw new IllegalArgumentException("a volume table must be cubical, not "
+                        + lut.getWidth() + "x" + lut.getHeight() + "x" + lut.getDepth());
+            }
+            if (edge < MIN_VOLUME_LUT_EDGE || edge > MAX_VOLUME_LUT_EDGE) {
+                throw new IllegalArgumentException("a volume table's edge must be between "
+                        + MIN_VOLUME_LUT_EDGE + " and " + MAX_VOLUME_LUT_EDGE + ", not " + edge);
+            }
+        }
         GraphicsExtension.check("ColorGradePass.setVolumeLut",
                 NativeEngineLayerRoutes.colorGradePassSetVolumeLut(handle(),
                         lut == null ? 0L : NativeBindings.nativeResourceHandle(lut)));
@@ -168,7 +196,7 @@ public final class ColorGradePass extends PostProcessPass {
      *
      * @return the texture, or {@code null} when none is bound
      */
-    public synchronized TextureCube getVolumeLut() {
+    public synchronized Texture3D getVolumeLut() {
         handle();
         return volume;
     }

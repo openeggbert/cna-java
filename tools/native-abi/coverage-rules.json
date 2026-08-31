@@ -96,6 +96,73 @@
     },
     {
       "match": {
+        "symbols": [
+          "cna_skybox_get_environment",
+          "cna_color_grade_pass_get_lut",
+          "cna_color_grade_pass_get_volume_lut",
+          "cna_post_process_effect_pass_get_effect",
+          "cna_clustered_forward_effect_get_opaque_frame",
+          "cna_ascii_pass_get_effect",
+          "cna_render_pipeline_get_shadow_map"
+        ]
+      },
+      "classification": "CNA_EXTENSION_CANDIDATE",
+      "reason": "Lends a fresh name for something the caller gave the lender, and a fresh name is a game child: measured in lent_effect_lifetime.c, taking one of these twice and releasing neither makes cna_game_destroy answer INVALID_STATE, and releasing both makes the same run answer SUCCESS. So a Java getter over one of these would allocate and free a native handle on every read, to hand back an object the Java facade already retains -- Skybox, ColorGradePass, PostProcessPass, ClusteredForwardEffect and RenderPipeline each keep what they were given and answer from that. The same reasoning as PbrMaterialExtensions' nine texture getters.",
+      "task": "JAVA-EXT-010"
+    },
+    {
+      "match": {
+        "symbols": [
+          "cna_render_pipeline_get_skybox"
+        ]
+      },
+      "classification": "CNA_EXTENSION_CANDIDATE",
+      "reason": "Lends back the identical handle the caller gave cna_render_pipeline_set_skybox -- measured, not assumed: unlike the six fresh-name getters beside it this one is the same name, so there is nothing to release and nothing a Java facade could add. RenderPipeline answers from the Skybox it was handed.",
+      "task": "JAVA-EXT-010"
+    },
+    {
+      "match": {
+        "symbols": [
+          "cna_gltf_material_textures_ext_init",
+          "cna_gltf_material_extension_textures_ext_init"
+        ]
+      },
+      "classification": "CNA_EXTENSION_CANDIDATE",
+      "reason": "Fills a caller-provided struct with invalid handles and its struct_size/struct_version. The generated JNI adapter already writes both fields for every route that consumes these structs, as sizeof against the live header and the header's own declared version -- a compile-time value that breaks the build when the header changes, where the runtime route would absorb the change silently. CNA_INVALID_HANDLE is zero, which a fresh Java array already is.",
+      "task": "JAVA-EXT-006"
+    },
+    {
+      "match": {
+        "symbols": [
+          "cna_graphics_memory_barrier_has"
+        ]
+      },
+      "classification": "CNA_EXTENSION_CANDIDATE",
+      "reason": "A pure bitmask containment test over two integers the caller supplies, which java.util.EnumSet answers without crossing JNI. CNA's own bit values are pinned in probe.c by compile-time assertion against the live header, which is stronger than any runtime route could be.",
+      "task": "JAVA-EXT-012"
+    },
+    {
+      "match": {
+        "symbols": [
+          "cna_lod_group_ext_select"
+        ]
+      },
+      "classification": "CNA_EXTENSION_CANDIDATE",
+      "reason": "Returns the CNA_ModelMeshPartHandle at the selected level. CNA-Java's LodGroup adds every level with CNA's own no-part sentinel, because the Java projection's ModelMeshPart is a managed object with no native handle -- so this route has nothing to return by construction, and selectIndex answers the level the game draws its own mesh at.",
+      "task": "JAVA-EXT-008"
+    },
+    {
+      "match": {
+        "symbols": [
+          "cna_post_process_chain_add_owned_pass"
+        ]
+      },
+      "classification": "CNA_EXTENSION_CANDIDATE",
+      "reason": "Consumes the pass handle exactly as documented, but does not decrement the game's owned-child count that the pass's own create incremented, so cna_game_destroy answers INVALID_STATE afterwards and the game cannot be closed. Binding it would give a game a route that makes it undestroyable.",
+      "task": "JAVA-UPSTREAM-011"
+    },
+    {
+      "match": {
         "header": "engine_layer.h"
       },
       "classification": "CNA_EXTENSION_CANDIDATE",
