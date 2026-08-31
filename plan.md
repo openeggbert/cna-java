@@ -1,8 +1,9 @@
 # CNA-Java measured engineering plan
 
-**Status:** the complete XNA 4.0 runtime superset is structurally at zero diagnostics
+**Status:** the complete XNA 4.0 runtime superset is structurally at zero diagnostics, and
+the CNA extension census is at `ACTIONABLE_LOCAL = 0`
 
-**Updated:** 2026-08-31
+**Updated:** 2026-09-01
 
 **Profiles:** the seven-assembly XNA 4.0 Windows runtime subset gate, and the ten-assembly full
 runtime superset that adds GamerServices, Net and Avatar
@@ -40,72 +41,113 @@ or put non-XNA API inside `Microsoft.Xna.Framework.*`.
 | Allowlist entries | 0 | 0 |
 | CNA C ABI | 0.21.0 | 0.21.0 |
 | Canonical C API functions | 4,054 | 4,054 |
-| Bound native routes | 2,410 | 2,528 |
-| Engine-layer routes bound | 778 of 857 | 844 of 857 |
-| Effects routes bound | 212 of 290 | 241 of 290 |
+| Bound native routes | 2,528 | 2,774 |
+| Unbound CNA-extension routes (the census) | 394 | 73 |
+| Locally actionable unbound routes | not measurable | **0** |
+| Routes with no binding answer at all | 4,054 | 0 |
 | Unexplained native routes | 0 | 0 |
 | Bound routes no JNI entry point reaches | 0 | 0 |
 | Bound routes no Java call site reaches | 0 | 0 |
-| Renderers qualified | 1 | 5 |
-| Compute-capable renderers | 0 | 2 |
-| Native tool tests | 125 | 146 |
-| Renderer-selection routes bound | 2 of 22 | 18 of 22 |
-| Tests | 455 | 516 |
+| Coverage rule problems | not checked | 0 |
+| Native tool tests | 146 | 179 |
+| Tests | 516 | 593 |
+| Renderers qualified | 5 | 5 |
+
+Bound routes by header, where the session moved them:
+
+| Header | Bound | Total |
+|---|---:|---:|
+| `engine_layer.h` | 845 | 857 |
+| `cnb.h` | 264 | 272 |
+| `effects.h` | 249 | 290 |
+| `models.h` | 177 | 216 |
+| `sensors.h` | 84 | 144 |
+| `devices.h` | 47 | 62 |
+| `core_ext.h` | 39 | 57 |
+| `content_readers.h` | 15 | 62 |
+
+## The one structural change: two questions, two fields
+
+A route's classification used to carry a single `reason`, and the census could not be trusted
+because of it. A hundred and forty-three routes carried text explaining *why the route is a CNA
+extension rather than XNA*, which reads like an explanation and answers a question nobody asked
+about binding.
+
+`coverage-rules.json` schema 2 splits them. `classification` and `purposeReason` answer **why the
+route exists for CNA-Java**. `bindingStatus`, `bindingReason` and `evidence` answer, separately,
+**why it is not bound**, from a closed set: `BOUND`, `ACTIONABLE_LOCAL`, `BLOCKED_UPSTREAM`,
+`BLOCKED_RENDERER`, `BLOCKED_HARDWARE`, `BLOCKED_PLATFORM`, `DEFERRED_TRACKED`,
+`DELIBERATE_NON_BINDING`. A rule that supplies only a purpose is a gate failure, not a silent
+pass, and `nativeCensusCheck` fails at any `ACTIONABLE_LOCAL` above zero.
+
+The value of the split is that it made a specific mistake visible: **a reason that was true when
+it was written and false when it was read**. Five were found this session. Three were about the
+generator or about Java's own surface -- "the generator refuses this shape", "the Java
+`ModelMeshPart` has no native handle" -- and each stopped being true when something else in the
+same session was built. One was wrong about direction: the glTF import report was recorded as
+belonging to a model CNA imports, when every one of its routes takes a model handle Java produces.
+One was simply attached to the wrong route.
+
+Two of the five shapes are now checked mechanically, with mutation tests behind both:
+`STALE_BLOCKER_RULE_DECIDES_NOTHING` for a blocker that is the first match for no unbound route,
+and `HALF_BOUND_PAIR`/`PAIR_CLASSIFIED_APART`/`PAIR_DECIDED_APART` for a two-call size-then-copy
+pair whose halves were decided differently. The third shape -- a stale `DELIBERATE_NON_BINDING` --
+reads exactly like a live decision and was found only by reading all fifty-six of them against
+today's Java surface.
 
 ## Milestones reached this session
 
-**G1, the renderer qualification.** Every engine-layer measurement this projection had was taken
-on the HEADLESS renderer, which compiles no shader and reads back no pixel, and three families
-were recorded as blocked on that fact rather than on CNA. A multi-renderer CNA build settles what
-was actually blocked: five renderers in one library, one chosen before the first `GraphicsDevice`
-through an environment variable.
+**H1, skinning and animation.** `JAVA-EXT-007` had eighty routes blocked on "a clip enters a
+skinned model only through a `CNA_SkinningDataDescriptor`, a pointer graph the generator refuses".
+That is true about the generator and says nothing about the lifetime: the graph is borrowed for
+exactly one call, which is a marshaller, not a barrier. `CnaSkeleton`, `CnaSkinningData`,
+`CnaAnimationPlayer`, `CnaSkinnedModel`, `CnaModelMeshPartHandle`, `CnaMorphTargetData` and
+`CnaMorphWeightTrack` are the result, over hand-written flatteners that sum every count in a
+`jlong` and check it before allocating.
 
-The answer was not the one the previous handoff predicted. It named desktop GL 4.3 as the
-high-value target; the compute-capable renderers here are `OPENGLES3`, which gets an OpenGL ES 3.2
-context, and `OPENGL33`, which asks Mesa for a 3.3 core profile and is handed 4.6 on the host's
-AMD GPU or 4.5 on llvmpipe. `OPENGL4` -- the renderer whose *name* suggested it -- has no compute
-at all: CNA's compute lives in the EasyGL family, which `OPENGL4` is not part of. And the shading
-dialect is GLSL ES rather than desktop GLSL, because every shader inside CNA's own engine layer
-is written in it.
+Two ownership readings were wrong and were corrected by measurement, not by re-reading:
+`add_part` **retains** a part rather than taking it, so the close order is model, then part, then
+buffers; and `get_part_at` lends an **owned** alias the caller must close, while the texture
+handle beside it is the model's own and releasing it is refused.
 
-**G2, compute and automatic exposure.** `JAVA-EXT-012` and `JAVA-EXT-011`, thirty-nine routes.
-`ComputeShader`, `StorageBuffer`, `MemoryBarrier`, `ImageAccess`, `IndirectDraw` and the two
-indirect-argument value types over the GPU's own wire format; `AutoExposure` and its whole control
-loop. Neither is qualified by a call succeeding: four known integers go to the GPU and come back
-doubled and offset, and the meter is handed greys of 8/255 and 240/255 and returns those
-luminances to within a thousandth.
+**H2, `.cnb` gained its writing half.** `CnbByteWriter`, `CnbAnimationClip`, `CnbBoneTrack`,
+`CnbClip` and `CnbKeyframes`. Measured, not assumed: the string prefix is a fixed 32-bit count
+rather than a 7-bit one, and the external-reference flags are reserved and must be zero.
 
-**G3, the borrowed handles.** `JAVA-EXT-010`, twenty-two routes, and the reason it took
-measurement rather than reading: one word covered two opposite contracts. A *counted* borrow
-blocks its lender's destruction until it is given back; a *retaining* one keeps its lender alive
-and may outlive it. Seven of each kind, measured in C before a facade was written, and nothing
-dangles.
+**H3, the host surface.** `MessageBox`, `FileDialog`, `SystemTray`, and the sensors, all
+qualified through CNA's own test backends on a machine that has none of the hardware. The
+file-dialog callback is one-shot and deletes its own global reference; the tray's is not.
 
-**G4, the callbacks.** The light-probe baker's three bake routes and the render pipeline's two
-scene callbacks, both hand-written because CNA takes a C function pointer, and treated as the
-opposite lifetimes they are: a bake callback lives only inside the call and pins nothing; a
-pipeline scene callback is registered once and runs in every later frame, so it is pinned by an
-explicit token the pipeline owns. The pipeline pair also corrected an earlier reading -- they were
-recorded as blocked on the renderer and are gated by the settings, and run on HEADLESS too.
+**H4, a model's provenance.** `GltfImportReport`, `GltfImportSourceCounts` and
+`GltfImportDiagnostic`. CNA stores twelve counts and derives five, and refuses a report carrying
+any of the five -- so the Java API takes the twelve alone, because one that accepted a whole
+report would be offering a call that cannot succeed.
 
-**G5, the shader effect.** Twenty-three routes, and the family that made two others useful:
-`ShaderEffectFactory` compiled and cached an effect and `FullscreenPass` drew through one, and
-nothing could give that effect a value to work with. Qualified by a pixel -- a fragment shader
-that writes nothing but a uniform -- which is also how `JAVA-UPSTREAM-016` was found.
+**H5, the log sink.** `CnaLogger.setSink`. CNA's default sink writes to stderr and never stdout,
+deliberately, because a terminal-hosted game draws its frame on stdout; a game that already logs
+somewhere can now put CNA's lines there too. The reference discipline is the whole risk, and
+clearing an atomic pointer is not enough: a thread already inside the callback is not recalled by
+it, so the adapter counts readers and waits for them to leave before deleting the reference.
 
-**G6, the pixels.** Two values crossed into CNA and never came back, and a planted swap of one of
-them passed every test this projection had. On a renderer that draws, a filter is a pixel: a
-two-by-two checkerboard magnified is hard blocks under point filtering and a gradient under
-linear, and the same planted swap now fails. The post-process context is verified in three of its
-fields and the limit is stated rather than glossed.
+**H6, two new upstream findings**, each reproduced in pure C first. `JAVA-UPSTREAM-022`: the
+shader dialect query answers `UNKNOWN` on all five renderers. `JAVA-UPSTREAM-023`:
+`copy_tangent_deltas` bounds-checks the wrong array.
 
-**G7, five upstream findings**, each reproduced in pure C before it was claimed: a compute shader
-that does not compile reported as an internal failure; one shadow map of four that does not count
-what it lends; a process that exits with a live vertex buffer aborting on EasyGL; a post-process
-pass that reports itself unsupported and runs anyway; and a shader uniform set before the effect
-is applied being silently discarded. A sixth, `JAVA-UPSTREAM-007`, was widened rather than closed.
+## What the generator learned, and what it still refuses
 
-## Mapping rules added this session
+Two shapes were added, both with tool tests including their refusals:
+
+- **`string_array`** -- `const CNA_StringView* xs, uint64_t n` becomes one `byte[][]`, the count
+  disappears because a Java array carries its own length, and the elements are copied to bound
+  local references rather than pinned.
+- **`parallelArrays`** -- `routes.json` declares which arrays one count governs; the count
+  disappears and a length mismatch is refused in the prologue.
+
+It still refuses, correctly, a C function pointer and a pointer to an array of string views inside
+a structure. Those are hand-written, and this session wrote five: the tray entry, the file dialog,
+the sensor leaves, the glTF diagnostic descriptor and the log sink.
+
+## Mapping rules (added 2026-08-31)
 
 Each is in `tools/api-compat/mapping-rules.json` with its reason, and each is a general rule or an
 explicitly reviewed full signature, never a suppression:
@@ -128,40 +170,20 @@ explicitly reviewed full signature, never a suppression:
 - A generic struct's copy constructor takes its own parameterization, the only form Java can write
   without a raw type.
 
-## What the engine layer cost, and what it did not
-
-The layer is 857 routes and the wrong way to spend them is mechanically. Every family here was
-chosen by measuring what this runtime can actually do before any Java was written -- fourteen C
-probes under `tools/native-abi/probes/`, each with its measured output recorded beside it -- and
-several of those measurements ended in *not binding* something. That is the point of taking them.
-
-The generator did most of the work and refused the rest. It grew five shapes this way: fixed
-arrays inside a structure, version stamping for every element of an array of versioned structures,
-a declared version prefix for a structure that grew a pointer field, a refusal for a null struct
-carrier, and an optional structure whose absence must reach CNA as a null pointer rather than an
-all-zero value. Each came with tool tests, and each left the refusals intact -- 70 tool tests
-became 125.
-
-Three findings went upstream, each reproduced in pure C first, and one correction came back the
-other way: a "borrowed" handle whose header says it keeps its lender alive really does, and the
-probe is what established that rather than the reading that led to it.
-
 ## Native boundary
 
 ```text
 HEADER_ABI=0.21.0
 CANONICAL_FUNCTIONS=4054
-BOUND_FUNCTIONS=2528
+BOUND_FUNCTIONS=2774
 MANIFEST_SIGNATURE_CHECK=PASS
 MANIFEST_JNI_BINDING_CHECK=PASS
 JNI_HEADER_DERIVED_SLOT_CHECK=PASS
 LAYOUT_SIGNATURE_PROBE=PASS
 LIBRARY_ABI=0.21.0
-LIBRARY_SYMBOL_CHECK=PASS (2528/2528)
+LIBRARY_SYMBOL_CHECK=PASS (2774/2774)
 ABI_POLICY_CHECK=PASS
-NATIVE_TOOL_TESTS=146 passed, 0 failed
-ENGINE_LAYER_BOUND=844 of 857
-EFFECTS_BOUND=241 of 290
+NATIVE_TOOL_TESTS=179 passed, 0 failed
 ```
 
 Every slot is declared `CNA_JNI_ROUTE(symbol)`, so a signature that moves upstream stops the
@@ -169,24 +191,25 @@ adapter compiling instead of crashing at runtime. `tools/native-abi/generate_jni
 mechanical half of the boundary from the headers and refuses a shape it does not understand rather
 than guessing; `generateJniCheck` fails the build when the committed output goes stale.
 
-Two routes are hand-written rather than generated, and both for the same reason: they take a C
-function pointer, which is a shape the generator has no way to derive and must not guess one for.
-They are the transparent draw list's `submit` and `draw_sorted`, and the trampoline between them
-takes no global references -- the callbacks only run inside one call, so they are passed in for
-its duration and the context is an index into them. The whole suite runs clean under
-`-Xcheck:jni`.
+Hand-written entry points exist only where the generator refuses and must: a C function pointer, a
+pointer to an array of string views inside a structure, and the descriptor pointer graphs the
+skinning and morph families are entered through. Every callback is classified by lifetime -- one
+call, one shot, or registered until an explicit token releases it -- and the whole suite runs
+clean under `-Xcheck:jni` on all five renderers.
 
 ## Coverage
 
 ```text
-XNA_BACKING              986
-JAVA_INTERNAL_ONLY         9
-CNA_EXTENSION_CANDIDATE 1927
-DEFERRED_RUNTIME         405
-NOT_USEFUL_IN_JAVA       727
-UNMAPPED_REQUIRES_REVIEW   0
-BOUND_BUT_UNREACHED        0
-BOUND_WITHOUT_JAVA_CALL_SITE 0
+PURPOSE                          BINDING
+XNA_BACKING              986     BOUND                    2774
+JAVA_INTERNAL_ONLY        11     DEFERRED_TRACKED          320
+CNA_EXTENSION_CANDIDATE 1850     DELIBERATE_NON_BINDING    938
+DEFERRED_RUNTIME         321     BLOCKED_UPSTREAM           22
+NOT_USEFUL_IN_JAVA       886     ACTIONABLE_LOCAL            0
+UNMAPPED_REQUIRES_REVIEW   0     UNREVIEWED                  0
+
+EXTENSION_CENSUS  73    RULE_PROBLEMS 0
+BOUND_BUT_UNREACHED 0   BOUND_WITHOUT_JAVA_CALL_SITE 0
 ```
 
 `NOT_USEFUL_IN_JAVA` is dominated by value math -- vectors, matrices, quaternions, geometry,
@@ -195,29 +218,24 @@ add cost and a native failure mode the original API cannot produce.
 
 ## Next
 
-`docs/backlog.json` is the machine-readable backlog, and what is left in it is external.
+`docs/backlog.json` is the machine-readable backlog, and **everything left in it is external**.
+`ACTIONABLE_LOCAL` is 0 and `nativeCensusCheck` holds it there.
 
-The engine layer is 844 of its 857 routes. The thirteen that remain are not waiting on a
-renderer: eight are getters whose answer Java already holds and would leak a facade per call, one
-is a pure value test `java.util.EnumSet` answers for nothing, one is a non-owning view
-`cna_effect_destroy` refuses and no Java facade can own, one mints a handle that must not be
-released, and one makes a game undestroyable -- `JAVA-UPSTREAM-011`, still reproduced on the live
-CNA.
+Twenty-two routes are `BLOCKED_UPSTREAM` across four findings, all four retaken on 2026-09-01
+against a `cnanext` rebuilt from `96b56b0e4` -- three commits past the build every earlier
+measurement here used -- and all four still reproduce: the content manager's model teardown
+segfaults (`JAVA-UPSTREAM-004`), one owned pass makes a game undestroyable (`-011`), four
+renderer-selection getters answer about something other than the running renderer (`-018`), and a
+camera destroyed after a longer session kills the process (`-019`).
 
-Eight upstream findings are open, six of them opened or widened here and every one reproduced in
-pure C before it was claimed. Three are the same shape and worth naming as one: a capability query
-that does not predict the behaviour, in the cube shadow map's face passes, the clustered lighting
-routes' documented parameter and a post-process pass's own support answer. Two more are exception
-barriers flattening a refusal a game could act on into the result code that also means a defect
-inside CNA.
+320 routes are `DEFERRED_TRACKED`: XNA-backing routes whose Java members are projected and behave,
+where what is deferred is moving the implementation onto the native route. Both profiles' zeros
+are what says those members behave.
 
-`JAVA-EXT-007` was rechecked against the live headers and has gained no new door: a clip still
-enters a skinned model only through a descriptor pointer graph. `JAVA-UPSTREAM-004` was retaken
-and the content manager's model teardown still segfaults, which is why `CnaModel.Load` does not
-exist. `cna_content_manager_load_effect` is `ASSET_PENDING` rather than blocked: no `.xnb` effect
-and no `.cnj` describing one exists in the checkout this qualifies against.
+938 are `DELIBERATE_NON_BINDING`, each with its exact reason in `coverage-rules.json`. Fifty-one
+of them are inside the census and deserve re-reading every session: two of this session's five
+stale reasons were hiding among them, and no gate can find that kind.
 
 What would genuinely unblock more is external. A GPU whose timer query answers with a duration
-rather than a sentinel would let the GPU timer be qualified as a measurement rather than as a
-protocol. A licensed authored XACT bank, a second machine for a real network session, and an
-authored `.xnb` effect are each an asset or a host this qualification does not have.
+rather than a sentinel; a licensed authored XACT bank; a second machine for a real network
+session; an authored `.xnb` effect. Each is an asset or a host this qualification does not have.

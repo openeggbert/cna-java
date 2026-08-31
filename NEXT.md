@@ -1,27 +1,33 @@
 # CNA-Java continuation handoff
 
-**Updated:** 2026-08-31
+**Updated:** 2026-09-01
 
-The **complete XNA 4.0 runtime superset** is structurally at zero diagnostics, and the native
-boundary is qualified against the live sibling dependencies **on five renderers**. Read `plan.md`,
-this file, `docs/backlog.json`, `docs/runtime-capabilities.json`,
+The **complete XNA 4.0 runtime superset** is structurally at zero diagnostics, the native boundary
+is qualified against the live sibling dependencies **on five renderers**, and the extension census
+is at **`ACTIONABLE_LOCAL = 0`**: every unbound CNA route now says why it exists *and*, separately,
+what stops it being bound -- and no remaining route is stopped by anything inside this repository.
+
+Read `plan.md`, this file, `docs/backlog.json`, `docs/runtime-capabilities.json`,
 `tools/native-abi/probes/README.md` and `docs/cna-c-api-coverage-summary.json` before new work.
 
 ## Repository and dependencies
 
 Writable: this repository and `../cna-java-template`. `../../cnanext` and `../../sharp-runtimenext`
-are dependencies and were not modified. The pre-existing untracked `out` entry is untouched.
+are dependencies and were **not** modified: both working trees are clean and neither has a commit
+from this session. The pre-existing untracked `out` entry in this repository's root -- an ILDASM
+dump from 2026-08-23, not this session's -- is untouched.
 
 ```text
-cnanext HEAD            0fd4d4e39e3adcd7531e04eff857defa9233518e (branch next)
+cnanext HEAD            96b56b0e4c281fe53db92264f7bedf665de59625 (branch next)
 sharp-runtimenext HEAD  4a49afb0cfe6a41e6e0af0bb62dc5175976731bb (branch next)
 ABI                     0.21.0
 C API inventory SHA-256 b485d17b1df9a86c6099700baedcd435c8a3f07487af8741b01d8c471956bfe7
 ```
 
-Neither dependency moved during this session, and the C contract is byte-identical to the one the
-previous qualification ran against: same ABI, same 4,054 declarations, same inventory hash. So
-nothing here is explained by CNA having changed.
+**`cnanext` moved during this session** -- three commits, all XNB content readers (`SAMPLE-077`,
+`SAMPLE-060`, `SAMPLE-073`) -- so `cmake-build-javagl` was rebuilt from that HEAD and everything
+below was re-measured against it. The C contract itself did not move: same ABI, same 4,054
+declarations, same inventory hash. So nothing here is explained by the headers having changed.
 
 ## The native library this qualifies against
 
@@ -42,16 +48,93 @@ cmake -S . -B cmake-build-javagl -G Ninja \
 cmake --build cmake-build-javagl --target cna_c_api -j$(nproc)
 ```
 
-`HEADLESS` is the default, so a run that names nothing behaves exactly as the previous
-qualification did. `CNA_GRAPHICS_RENDERER` picks another for one run, and the build forwards it,
-`DISPLAY`, `SDL_VIDEODRIVER` and `WAYLAND_DISPLAY` into the test JVM -- a test worker inherits the
-Gradle daemon's environment rather than the shell's, so without that a run redirected to a virtual
-display would still open real windows on someone's desktop.
+`HEADLESS` is the default, so a run that names nothing behaves as the earliest qualifications did.
+`CNA_GRAPHICS_RENDERER` picks another for one run, and the build forwards it, `DISPLAY`,
+`SDL_VIDEODRIVER` and `WAYLAND_DISPLAY` into the test JVM -- a test worker inherits the Gradle
+daemon's environment rather than the shell's, so without that a run redirected to a virtual display
+would still open real windows on someone's desktop.
 
 ```sh
 CNA_NATIVE_LIBRARY=../../cnanext/cmake-build-javagl/modules/c-api/libcna_c_api.so \
 CNA_GRAPHICS_RENDERER=OPENGL33 DISPLAY=:91 SDL_VIDEODRIVER=x11 ./gradlew check
 ```
+
+## Exact state
+
+```text
+SELECTED PROFILE   TOTAL_DIAGNOSTICS=0  ALLOWLIST_ENTRIES=0  REFERENCE 257 types / 2964 members
+FULL PROFILE       TOTAL_DIAGNOSTICS=0  ALLOWLIST_ENTRIES=0  REFERENCE 331 types / 3640 members
+                   TARGET_TYPES=340     TARGET_MEMBERS=4022
+
+NATIVE (purpose axis)
+CANONICAL_FUNCTIONS=4054   BOUND_FUNCTIONS=2774
+XNA_BACKING=986  JAVA_INTERNAL_ONLY=11  CNA_EXTENSION_CANDIDATE=1850
+DEFERRED_RUNTIME=321  NOT_USEFUL_IN_JAVA=886  UNMAPPED_REQUIRES_REVIEW=0
+
+NATIVE (binding axis)
+BOUND=2774  DEFERRED_TRACKED=320  DELIBERATE_NON_BINDING=938  BLOCKED_UPSTREAM=22
+ACTIONABLE_LOCAL=0  UNREVIEWED=0
+BOUND_BUT_UNREACHED=0  BOUND_WITHOUT_JAVA_CALL_SITE=0  RULE_PROBLEMS=0
+EXTENSION_CENSUS=73
+
+LIBRARY_SYMBOL_CHECK=PASS (2774/2774)   NATIVE_TOOL_TESTS=179
+
+TESTS=593 SUITES=106 FAILURES=0 ERRORS=0 SKIPPED=0
+  -- on each of HEADLESS, SOFTWARE, OPENGL4, OPENGLES3 and OPENGL33
+  -- and clean under -Xcheck:jni on all five (./gradlew test -PcheckJni)
+TEMPLATE  60-frame smoke, --extensions-smoke, 600-frame stability: all pass
+```
+
+## The census, and the mistake it exists to stop
+
+The census is `EXTENSION_CENSUS`: unbound routes whose **purpose** is a CNA capability outside XNA
+4.0. It went **394 -> 73** this session. `ACTIONABLE_LOCAL` -- routes nothing outside this
+repository blocks -- is **0**, and `nativeCensusCheck` fails the build at any other value.
+
+What made that number movable was splitting one field into two. Until this session a rule carried
+a single `reason`, and a hundred and forty-three routes carried text explaining *why the route is a
+CNA extension rather than XNA* -- which reads like an explanation and answers a question nobody
+asked about binding. `classification`/`purposeReason` now answer why a route exists;
+`bindingStatus`/`bindingReason`/`evidence` answer, separately, why it is not bound.
+
+**Five times this session a recorded reason turned out to be about something other than the route
+it was attached to, and each one had been true when it was written.** They are worth reading before
+the next census is trusted:
+
+1. `JAVA-EXT-007`'s eighty skinning routes: "a clip enters a skinned model only through a
+   descriptor pointer graph the generator refuses". True about the generator. A shape a generator
+   cannot derive is not a lifetime nobody knows -- the marshaller was written by hand.
+2. `JAVA-NATIVE-011`'s fourteen: the same shape one level up.
+3. `JAVA-UPSTREAM-004`'s twelve glTF import-report routes: "the diagnostics belong to a model CNA
+   imported, and the loader is blocked". Wrong about direction -- every one takes a
+   `CNA_ModelHandle`, which `CnaModel.From` produces, so writing a report on a Java-built model is
+   meaningful and reading it back then round-trips.
+4. `cna_lod_group_ext_select`: "nothing to return by construction, because the Java
+   `ModelMeshPart` is a managed object with no native handle". That stopped being true earlier in
+   this same session, when `CnaModelMeshPartHandle` was added.
+5. `cna_model_get_content_tag_dictionary_ext`: grouped with two routes that really do hand back a
+   `void*`, and it does not -- it lends an owned `CNA_ObjectDictionary`. Correcting it did not make
+   it bindable; it moved it from a decision to a block, and the census went **up**.
+
+Two of those are now mechanised, and both checks are in `tools/native-abi/coverage.py` with
+mutation tests behind them:
+
+- **`STALE_BLOCKER_RULE_DECIDES_NOTHING`** -- a `BLOCKED_*` rule that is the first match for no
+  unbound route decides nothing while still reading as a live reason. The pre-existing check only
+  looked at rules that name symbols; both glTF rules matched by prefix and by substring, which is
+  exactly why they survived.
+- **`HALF_BOUND_PAIR` / `PAIR_CLASSIFIED_APART` / `PAIR_DECIDED_APART`** -- CNA's two-call
+  size-then-copy protocol is one operation, so its halves are one decision. Eight
+  `_get_type_name_byte_count` routes had no rule at all (only the older `_size` spelling did) and
+  were classified by whatever header rule caught them; one inherited a lifted blocker. Exactly one
+  pair is honestly decided apart -- the renderer count route is broken upstream where its copy
+  route is not -- and that is written down in `coverage-rules.json` as a `pairExceptions` entry
+  rather than tolerated.
+
+**The third instance is not mechanised and probably cannot be.** A stale `DELIBERATE_NON_BINDING`
+reads exactly like a live decision; instances 4 and 5 were found only by reading all fifty-six of
+them against today's Java surface. Do that again next session: the question to ask each one is
+*"does this reason rest on something Java lacks, and does Java still lack it?"*
 
 ## What each renderer can do
 
@@ -69,154 +152,87 @@ Measured by `tools/native-abi/probes/gpu_renderer_qualification.c`, on Mesa 25.0
 | runs a custom fragment shader | no | no | **yes** | yes | yes |
 | automatic exposure | no | no | no | **yes** | **yes** |
 
-Three of those contradict what this projection assumed before. **`OPENGL4` is not the
-compute-capable renderer and `OPENGL33` is** -- CNA's compute lives in the EasyGL family, reached
-through the five profile names, and `OPENGL4` is a separate renderer that implements no compute at
-all. **The dialect is GLSL ES**, because every shader inside CNA's own engine layer is written in
-it. And **render-target readback is not a compute question**: only HEADLESS refuses it.
-
-## Exact state
-
-```text
-SELECTED PROFILE   TOTAL_DIAGNOSTICS=0  ALLOWLIST_ENTRIES=0
-FULL PROFILE       TOTAL_DIAGNOSTICS=0  ALLOWLIST_ENTRIES=0
-                   TARGET_TYPES=340     TARGET_MEMBERS=4022
-
-NATIVE
-CANONICAL_FUNCTIONS=4054   BOUND_FUNCTIONS=2528
-XNA_BACKING=986  JAVA_INTERNAL_ONLY=9  CNA_EXTENSION_CANDIDATE=1927
-DEFERRED_RUNTIME=405  NOT_USEFUL_IN_JAVA=727  UNEXPLAINED=0
-BOUND_BUT_UNREACHED=0  BOUND_WITHOUT_JAVA_CALL_SITE=0
-LIBRARY_SYMBOL_CHECK=PASS (2528/2528)   NATIVE_TOOL_TESTS=146
-ENGINE LAYER (engine_layer.h)   844 of 857 bound and reached
-EFFECTS (effects.h)             241 of 290 bound and reached
-
-TESTS=516 SUITES=94 FAILURES=0 ERRORS=0 SKIPPED=0
-  -- on each of HEADLESS, SOFTWARE, OPENGL4, OPENGLES3 and OPENGL33
-  -- and clean under -Xcheck:jni on all five (./gradlew test -PcheckJni)
-```
+**`OPENGL4` is not the compute-capable renderer and `OPENGL33` is** -- CNA's compute lives in the
+EasyGL family, reached through the five profile names, and `OPENGL4` is a separate renderer that
+implements no compute at all. The dialect CNA's own engine-layer shaders are written in is GLSL ES.
 
 ## What changed this session
 
-1. **The engine layer went from 778 to 844 of its 857 routes**, and none of the sixty-six was
-   waiting on Java. Compute and storage buffers, automatic exposure, the light-probe baker's bake
-   routes, the render pipeline's scene callbacks and twenty-two lent handles each needed a
-   renderer or a measurement.
-2. **Compute is qualified by arithmetic, not by a result code.** Four known integers into a
-   storage buffer, a dispatch that doubles and offsets them, a readback compared against the same
-   arithmetic in Java. Five of six planted mutations registered; the sixth is recorded.
-3. **Automatic exposure is qualified by luminance.** A grey of 8/255 measures 0.031373 and one of
-   240/255 measures 0.941176, and adaptation moves the exposure the way the header says.
-4. **The borrowed handles are sorted by measurement rather than by wording.** Seven counted
-   borrows whose lender refuses to die, seven retaining ones that outlive theirs, one non-owning
-   view. Nothing dangles.
-5. **The shader effect family exists**, which is what makes `ShaderEffectFactory` and
-   `FullscreenPass` useful: a custom shader can now be given a value. Qualified by a pixel.
-6. **Two write-only values became pixels.** A planted swap of the full-screen sampler's address
-   modes used to pass every test; it fails now.
-7. **Five upstream findings opened and one widened**, each reproduced in pure C first.
-8. **The generator learned two shapes** -- an opaque `void*` whose byte extent is declared, and a
-   counted array whose count is not its length -- each with tool tests including the refusals.
-   125 tool tests became 146.
-9. **The renderer selection family is projected**, which is what this session needed and did not
-   have: it was reading the renderer inventory out of `CMakeCache.txt` while
-   `cna_graphics_renderer_copy_available_ext` was sitting there unbound. `GraphicsRenderer`
-   answers what this build has, classifies any identity CNA defines, parses a name, prefers one,
-   and names the renderer actually running -- eighteen routes, and pointedly not the four that
-   answer about something else.
-10. **Two more upstream findings, one of them found by being hit and one corrected by being
-   tested.** A sweep named a renderer this library was configured without and the JVM died with
-   `SIGABRT` inside `System.loadLibrary` (`JAVA-UPSTREAM-017`). Measuring the family around it
-   first produced a wrong finding -- five write-only query routes -- because the probe asked them
-   after rearranging the state they report. Asked cleanly, three are correct until a
-   `GraphicsDevice` exists and are reset by creating one, and three more named `current` describe
-   the compile-time default rather than the running renderer (`JAVA-UPSTREAM-018`).
-11. **`ColorGradePass.setVolumeLut` took a `TextureCube` and could never have worked.** CNA wants a
-   cubical `Texture3D` and refuses a cube map with `INVALID_HANDLE`. Nothing caught it because no
-   test had ever bound a volume table; both are fixed together.
+1. **The census went 394 -> 73**, and the schema behind it was rebuilt so purpose and binding
+   status are two fields rather than one overloaded one. Schema version 2.
+2. **Skinning, morph targets and animation are projected** -- `CnaSkeleton`, `CnaSkinningData`,
+   `CnaAnimationPlayer`, `CnaSkinnedModel`, `CnaModelMeshPartHandle`, `CnaMorphTargetData`,
+   `CnaMorphWeightTrack`, `CnaModelAnimations` -- through hand-written descriptor-graph
+   marshallers, because the generator refuses a pointer graph and the lifetimes are one call long.
+3. **`.cnb` can now be written, not only read**: `CnbByteWriter`, `CnbAnimationClip`, `CnbClip`,
+   `CnbBoneTrack`, `CnbKeyframes`.
+4. **The three host dialogs and the tray** (`MessageBox`, `FileDialog`, `SystemTray`), measured
+   against CNA's own test backends first, with one-shot callbacks that delete their own global
+   reference.
+5. **Sensors are readable on a machine with none**, through CNA's injection backends
+   (`SensorSubscription`, `SensorTestBackends`).
+6. **A model carries its own provenance** -- `GltfImportReport`, `GltfImportSourceCounts`,
+   `GltfImportDiagnostic` -- and CNA's split between the twelve counts it stores and the five it
+   derives is kept rather than flattened, because CNA refuses a report that carries the derived
+   five.
+7. **`LodGroup` levels can carry the mesh part they draw**, and `select` hands back the caller's
+   own object rather than a second view of it.
+8. **CNA's log can be routed into a Java sink** (`CnaLogger.setSink`). Its global reference is not
+   merely cleared before deletion: clearing an atomic pointer does not recall a thread already
+   inside the callback, so the adapter counts readers and waits for them to leave.
+9. **Two new upstream findings** (`JAVA-UPSTREAM-022`, `-023`) and four existing ones retaken
+   against the rebuilt library.
+10. **146 -> 179 native tool tests**, including the two new census checks and their mutations.
 
 ## Honest boundaries
 
-- **The GPU timer's value is not a duration here.** It collects a sample and counts it, and on
-  this software GL implementation the number is 0xFFFFFFFF nanoseconds -- a sentinel. The test
-  asserts the protocol and says explicitly that it does not assert the duration.
-- **The post-process context is verified in three fields, not all of them.** A blit's output is
-  decided by its source and destination handles and film grain by the elapsed time, so those three
-  are pixels. Swapping the normals and velocity slots still passes, because nothing reachable here
-  reads them; that mutation is recorded rather than hidden, and those leaves stay pinned by the
-  layout gate alone.
-- **`SOFTWARE` accepts any shader source and runs none of it.** CNA documents that state, and
-  every shader claim here establishes first, with a literal-colour control, whether the renderer
-  draws at all -- rather than reading a black image as permission to skip.
+- **Survived mutations are recorded, not hidden.** Four stand: a filter's name/pattern swap and a
+  message box's label content (CNA's test backends record neither); the uniform-block offsets (no
+  SPIR-V renderer in this build); the post-process context's normals and velocity slots (nothing
+  reachable here reads them); and skipping `cna_logger_reset_sink_ext` entirely, because clearing
+  the sink reference already makes the trampoline return without calling Java, so the native
+  uninstall has no Java-visible effect.
+- **The GPU timer's value is not a duration here.** On this software GL implementation the number
+  is `0xFFFFFFFF` nanoseconds -- a sentinel. The test asserts the protocol and says so.
+- **`SOFTWARE` accepts any shader source and runs none of it.** Every shader claim establishes
+  first, with a literal-colour control, whether the renderer draws at all.
 - **No claim here is about the host's own GPU.** The qualification runs on a virtual display, so
-  the GL implementation is llvmpipe; the same probes were also run against the AMD Radeon 780M
-  through the host session and gave the same answers, bar the GL version.
+  the GL implementation is llvmpipe; the same probes were run against the AMD Radeon 780M through
+  the host session and gave the same answers, bar the GL version.
 - **A mistyped renderer name is fatal and nothing in Java can soften it.** `CNA_GRAPHICS_RENDERER`
   is read while `libcna_c_api.so` loads, and a name this build does not have aborts the process
-  there -- before `main`, before `System.loadLibrary` returns. `GraphicsRenderer.available()` is a
-  mitigation for the next run, not a guard for this one.
-- **Four renderer-selection getters are not projected because they answer about something else**,
-  not because they were missed. Three are reset by creating a `GraphicsDevice` -- correct before,
-  wrong after -- and `get_current_type` reports the renderer the build was configured with rather
-  than the one running. `GraphicsRenderer.getActive()` and
-  `RendererCapabilities.getRendererName` are the two that are right, and they are right for
-  different reasons: one asks the selection that happened, the other asks the device in hand.
-- **`CnaRuntime.getBackendCategory()` and `getBackendMaturity()` describe the compile-time
-  default**, not the running renderer, and now say so. On a single-renderer build those coincide;
-  this is a multi-renderer build and they do not.
+  before `System.loadLibrary` returns (`JAVA-UPSTREAM-017`).
+- **Four renderer-selection getters are not projected because they answer about something else.**
+  Three are reset by creating a `GraphicsDevice`; `get_current_type` reports the renderer the build
+  was configured with. `GraphicsRenderer.getActive()` is the one that is right.
 - Everything in `docs/runtime-capabilities.json` still holds for the previously measured families.
 
 ## Next work, in dependency order
 
-`docs/backlog.json` is the machine-readable source. Nothing in it is local work.
+`docs/backlog.json` is the machine-readable source. **Nothing in it is local work.**
 
-1. **Thirteen upstream findings**, `JAVA-UPSTREAM-004` through `-021`, each with a pure-C
-   reproducer in `tools/native-abi/probes/`. Four share one shape -- a capability query that does
-   not predict the behaviour -- two more are the exception barrier flattening a refusal a game
-   could act on, `-017` is that barrier missing entirely at library load, and `-019` is a
-   segfault: destroying a camera after a longer session kills the process, on every renderer.
-2. **`JAVA-EXT-007`**, blocked with evidence and rechecked against the live headers: a clip enters
-   a skinned model only through a descriptor pointer graph, and `cna_skinning_data_create` takes
-   one of its own. No route takes a clip handle.
-3. **Thirteen engine-layer routes and 405 deferred ones**, each with a written reason -- and the
-   thirteen now carry their own, in `tools/native-abi/coverage-rules.json`, rather than sharing
-   the header's. Seven lend a fresh name for something the caller already holds, and a fresh name
-   is a game child: taking two and releasing neither makes `cna_game_destroy` answer
-   `INVALID_STATE`, which is the measurement that decided it. One lends back the identical handle
-   it was given. Two are struct initialisers the generated adapter already writes at compile time,
-   one is a bitmask test, one has nothing to return by construction, and one makes a game
-   undestroyable.
+1. **Four upstream blockers, all retaken on 2026-09-01 against cnanext `96b56b0e4`** -- three
+   commits past the build every earlier measurement in this repository used. All four still
+   reproduce, and each has a pure-C reproducer in `tools/native-abi/probes/`:
+   - `JAVA-UPSTREAM-004` (2 routes): `cna_content_manager_load_model` returns SUCCESS and the
+     process then dies with SIGSEGV on the destroy. Blocks `CnaModel.Load` and, with it,
+     `cna_model_get_content_tag_dictionary_ext` -- no `cna_model_set_content_tag_*` declaration
+     exists at 0.21.0, so the loader is the only writer of a content tag.
+   - `JAVA-UPSTREAM-011` (1): one owned pass makes `cna_game_destroy` answer `INVALID_STATE`.
+   - `JAVA-UPSTREAM-018` (4): after one device the available count is 0 against
+     `copy_available_ext`'s 5, the selection is `UNKNOWN`, the latch stays false; and
+     `get_current_type` answers `HEADLESS` while `OPENGL33` runs.
+   - `JAVA-UPSTREAM-019` (15): `PROBE_CASE=0` exits 139, `PROBE_SKIP=camera` exits 0.
+2. **Nine further upstream findings** (`-012` through `-023`), each reproduced in C before it was
+   claimed. Four share one shape: a capability query that does not predict the behaviour.
+3. **320 deferred XNA-backing routes**, each owned by a named `JAVA-NATIVE-*` or `JAVA-XNA-*` task.
+   Their Java members are projected and behave; what is deferred is moving the implementation onto
+   the native route. Both profiles' zeros are what says the members behave.
 4. **`cna_content_manager_load_effect`** is `ASSET_PENDING`, not blocked: no `.xnb` effect and no
    `.cnj` describing one exists in the checkout this qualifies against.
-5. **143 extension routes are classified but not explained**, and this is the one piece of local
-   work this session leaves behind rather than finishing. The census is reproducible: of 394
-   unbound `CNA_EXTENSION_CANDIDATE` routes, 125 have a shape that speaks for itself (a callback
-   the generator refuses, a struct-field accessor whose struct already arrives flattened, half of
-   a count/copy pair, a test-injection route), and of the 269 that do not, 126 now carry a
-   measured reason or a blocking task. The remaining 143 carry a reason that explains why the
-   route is a CNA extension rather than XNA -- which is a different question from why it is not
-   bound:
-
-   ```text
-   35 cnb.h   20 devices.h   15 content_readers.h   10 sensors.h   10 effects.h
-    8 input_devices.h   7 input_haptics.h   7 core_ext.h   7 models.h
-    5 input_joystick.h   3 input_text.h   1 graphics_ext.h
-   ```
-
-   The camera family was the first of these taken apart, and it is worth reading before the next
-   one is. It looked like BLOCKED_HARDWARE and was not: CNA ships a test backend that makes every
-   route exercisable and its pixels checkable on a machine with no camera. Qualifying it found a
-   segfault (`JAVA-UPSTREAM-019`), so those fifteen routes are unbound for a measured reason now
-   instead of an assumed one. **The assumption about why a family is absent is usually wrong in a
-   more interesting way than expected**, in both directions.
-
-   Some will turn out to be blocked -- the model remainder almost certainly behind
-   `JAVA-UPSTREAM-004` and `JAVA-EXT-007`, as the rest of that family already is. Some will turn
-   out to be bindable. **Measure before writing the reason**: this session filed one upstream
-   finding from a probe that had rearranged the state it then measured and had to withdraw four
-   fifths of it, and twice reported behaviour that was only the probe reading back its own
-   initialiser. Poison every out-parameter before the call; "untouched" is a third answer and it
-   is sometimes the finding.
+5. **51 deliberate non-bindings inside the census**, every one with its exact reason in
+   `tools/native-abi/coverage-rules.json`. Re-read them against the Java surface each session; two
+   of this session's five stale reasons were hiding there.
 
 Do not weaken either profile's zero, do not add an allowlist, and do not put non-XNA API inside
 `Microsoft.Xna.Framework.*`.
