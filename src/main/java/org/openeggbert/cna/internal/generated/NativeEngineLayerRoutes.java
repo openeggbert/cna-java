@@ -6851,6 +6851,105 @@ public final class NativeEngineLayerRoutes {
     public static native int tonemapPassTonemapChannel(int mode, float value, float exposure, float gamma, float[] outValue);
 
     /**
+     * cna_transparent_draw_list_camera_position_of (engine_layer.h).
+     *
+     * <p>viewFloating carries CNA_Matrix in this order:
+     * <ol start="0">
+     *   <li>{@code m11} (float)</li>
+     *   <li>{@code m12} (float)</li>
+     *   <li>{@code m13} (float)</li>
+     *   <li>{@code m14} (float)</li>
+     *   <li>{@code m21} (float)</li>
+     *   <li>{@code m22} (float)</li>
+     *   <li>{@code m23} (float)</li>
+     *   <li>{@code m24} (float)</li>
+     *   <li>{@code m31} (float)</li>
+     *   <li>{@code m32} (float)</li>
+     *   <li>{@code m33} (float)</li>
+     *   <li>{@code m34} (float)</li>
+     *   <li>{@code m41} (float)</li>
+     *   <li>{@code m42} (float)</li>
+     *   <li>{@code m43} (float)</li>
+     *   <li>{@code m44} (float)</li>
+     * </ol>
+     *
+     * <p>outPositionFloating carries CNA_Vector3 in this order:
+     * <ol start="0">
+     *   <li>{@code x} (float)</li>
+     *   <li>{@code y} (float)</li>
+     *   <li>{@code z} (float)</li>
+     * </ol>
+     */
+    public static native int transparentDrawListCameraPositionOf(float[] viewFloating, float[] outPositionFloating);
+
+    /**
+     * cna_transparent_draw_list_clear (engine_layer.h).
+     */
+    public static native int transparentDrawListClear(long list);
+
+    /**
+     * cna_transparent_draw_list_copy_sorted_order_ext (engine_layer.h).
+     *
+     * <p>viewFloating carries CNA_Matrix in this order:
+     * <ol start="0">
+     *   <li>{@code m11} (float)</li>
+     *   <li>{@code m12} (float)</li>
+     *   <li>{@code m13} (float)</li>
+     *   <li>{@code m14} (float)</li>
+     *   <li>{@code m21} (float)</li>
+     *   <li>{@code m22} (float)</li>
+     *   <li>{@code m23} (float)</li>
+     *   <li>{@code m24} (float)</li>
+     *   <li>{@code m31} (float)</li>
+     *   <li>{@code m32} (float)</li>
+     *   <li>{@code m33} (float)</li>
+     *   <li>{@code m34} (float)</li>
+     *   <li>{@code m41} (float)</li>
+     *   <li>{@code m42} (float)</li>
+     *   <li>{@code m43} (float)</li>
+     *   <li>{@code m44} (float)</li>
+     * </ol>
+     */
+    public static native int transparentDrawListCopySortedOrderExt(long list, float[] viewFloating, int[] destination, long[] outCount);
+
+    /**
+     * cna_transparent_draw_list_create (engine_layer.h).
+     */
+    public static native int transparentDrawListCreate(long[] outList);
+
+    /**
+     * cna_transparent_draw_list_destroy (engine_layer.h).
+     */
+    public static native int transparentDrawListDestroy(long list);
+
+    /**
+     * cna_transparent_draw_list_get_count (engine_layer.h).
+     */
+    public static native int transparentDrawListGetCount(long list, long[] outCount);
+
+    /**
+     * cna_transparent_draw_list_sort_key (engine_layer.h).
+     *
+     * <p>boundsFloating carries CNA_BoundingBox in this order:
+     * <ol start="0">
+     *   <li>{@code min.x} (float)</li>
+     *   <li>{@code min.y} (float)</li>
+     *   <li>{@code min.z} (float)</li>
+     *   <li>{@code max.x} (float)</li>
+     *   <li>{@code max.y} (float)</li>
+     *   <li>{@code max.z} (float)</li>
+     * </ol>
+     *
+     * <p>cameraPositionFloating carries CNA_Vector3 in this order:
+     * <ol start="0">
+     *   <li>{@code x} (float)</li>
+     *   <li>{@code y} (float)</li>
+     *   <li>{@code z} (float)</li>
+     * </ol>
+     */
+    public static native int transparentDrawListSortKey(float[] boundsFloating, float[] cameraPositionFloating, float[] outKey);
+
+    /**
      * cna_volumetric_fog_pass_create (engine_layer.h).
      */
     public static native int volumetricFogPassCreate(long graphicsDevice, long[] outPass);

@@ -1521,6 +1521,13 @@
     CNA_JNI_ROUTE(cna_touch_panel_get_mouse_touch_emulation_enabled_ext) touch_panel_get_mouse_touch_emulation_enabled_ext;
     CNA_JNI_ROUTE(cna_touch_panel_get_touch_device_exists_ext) touch_panel_get_touch_device_exists_ext;
     CNA_JNI_ROUTE(cna_touch_panel_set_mouse_touch_emulation_enabled_ext) touch_panel_set_mouse_touch_emulation_enabled_ext;
+    CNA_JNI_ROUTE(cna_transparent_draw_list_camera_position_of) transparent_draw_list_camera_position_of;
+    CNA_JNI_ROUTE(cna_transparent_draw_list_clear) transparent_draw_list_clear;
+    CNA_JNI_ROUTE(cna_transparent_draw_list_copy_sorted_order_ext) transparent_draw_list_copy_sorted_order_ext;
+    CNA_JNI_ROUTE(cna_transparent_draw_list_create) transparent_draw_list_create;
+    CNA_JNI_ROUTE(cna_transparent_draw_list_destroy) transparent_draw_list_destroy;
+    CNA_JNI_ROUTE(cna_transparent_draw_list_get_count) transparent_draw_list_get_count;
+    CNA_JNI_ROUTE(cna_transparent_draw_list_sort_key) transparent_draw_list_sort_key;
     CNA_JNI_ROUTE(cna_url_launcher_open_ext) url_launcher_open_ext;
     CNA_JNI_ROUTE(cna_vibrate_controller_copy_device_name_ext) vibrate_controller_copy_device_name_ext;
     CNA_JNI_ROUTE(cna_vibrate_controller_get_device_name_size_ext) vibrate_controller_get_device_name_size_ext;

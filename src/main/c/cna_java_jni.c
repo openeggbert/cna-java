@@ -827,6 +827,12 @@ typedef struct CnaFunctions {
     CNA_JNI_ROUTE(cna_storage_stream_flush) storage_stream_flush;
     CNA_JNI_ROUTE(cna_storage_stream_close) storage_stream_close;
 
+    /* The transparent draw list's two callback routes. Every other route in that family is
+       generated; these two are here because CNA takes a C function pointer, which the generator
+       has no shape for and must not guess one. */
+    CNA_JNI_ROUTE(cna_transparent_draw_list_submit) transparent_draw_list_submit;
+    CNA_JNI_ROUTE(cna_transparent_draw_list_draw_sorted) transparent_draw_list_draw_sorted;
+
     /* Slots for the routes whose adapter is generated from the CNA headers. */
 #include "generated/routes_table.inc"
 } CnaFunctions;
@@ -2562,6 +2568,8 @@ JNIEXPORT jint JNICALL Java_org_openeggbert_cna_internal_NativeBindings_nativeLo
     LOAD(storage_stream_get_can_seek, "cna_storage_stream_get_can_seek");
     LOAD(storage_stream_flush, "cna_storage_stream_flush");
     LOAD(storage_stream_close, "cna_storage_stream_close");
+    LOAD(transparent_draw_list_submit, "cna_transparent_draw_list_submit");
+    LOAD(transparent_draw_list_draw_sorted, "cna_transparent_draw_list_draw_sorted");
 
     /* Loads for the routes whose adapter is generated from the CNA headers. */
 #include "generated/routes_load.inc"
@@ -12218,6 +12226,139 @@ Java_org_openeggbert_cna_internal_NativeGamerServices_nativeGuideShowMessageBox(
     (*environment)->ReleaseByteArrayElements(environment, text, text_bytes, JNI_ABORT);
     (*environment)->ReleaseByteArrayElements(environment, first_button, first_bytes, JNI_ABORT);
     (*environment)->ReleaseByteArrayElements(environment, second_button, second_bytes, JNI_ABORT);
+    return (jint)result;
+}
+
+/*
+ * The transparent draw list, whose entries are C function pointers.
+ *
+ * CNA holds a `(callback, context)` pair per entry from the moment it is submitted until the list
+ * is cleared or destroyed, and gives no hook for either -- so a global reference per entry would
+ * have no correct place to be deleted. It does not need one. The callbacks only ever run inside
+ * `cna_transparent_draw_list_draw_sorted`, which Java calls and waits for, so the array of Java
+ * callbacks is passed in for the duration of that one call and the context is nothing but an
+ * index into it. Nothing outlives the call, and there is no reference to leak.
+ *
+ * Thread-local rather than static: two threads drawing two lists is unusual but legal, and a
+ * plain static would have them overwrite each other's array.
+ */
+typedef struct TransparentDrawDispatch {
+    JNIEnv* environment;
+    jobjectArray callbacks;
+    jmethodID run;
+} TransparentDrawDispatch;
+
+static _Thread_local TransparentDrawDispatch* transparent_draw_active = NULL;
+
+static CNA_Result transparent_draw_entry(void* context)
+{
+    TransparentDrawDispatch* dispatch = transparent_draw_active;
+    if (dispatch == NULL) {
+        /* CNA ran a callback outside the draw that was asked for. It does not, and this is what
+           happens rather than a dereferenced null if it ever starts. */
+        return CNA_RESULT_INVALID_STATE;
+    }
+    JNIEnv* environment = dispatch->environment;
+    if ((*environment)->ExceptionCheck(environment) == JNI_TRUE) {
+        /* An earlier entry threw. CNA stops the draw on the first failure, so this is only
+           reached if that contract changes; failing again keeps the first exception. */
+        return CNA_RESULT_INTERNAL;
+    }
+    jsize index = (jsize)(intptr_t)context;
+    if (index < 0 || index >= (*environment)->GetArrayLength(environment, dispatch->callbacks)) {
+        return CNA_RESULT_INVALID_ARGUMENT;
+    }
+    jobject callback = (*environment)->GetObjectArrayElement(environment, dispatch->callbacks,
+        index);
+    if (callback == NULL) {
+        return CNA_RESULT_INVALID_ARGUMENT;
+    }
+    (*environment)->CallVoidMethod(environment, callback, dispatch->run);
+    (*environment)->DeleteLocalRef(environment, callback);
+    if ((*environment)->ExceptionCheck(environment) == JNI_TRUE) {
+        /* The exception stays pending. CNA stops the draw and returns this result, the entry
+           point below returns straight away, and the exception surfaces in Java at the call that
+           caused it -- which is where a game expects to catch it. */
+        return CNA_RESULT_INTERNAL;
+    }
+    return CNA_RESULT_SUCCESS;
+}
+
+JNIEXPORT jint JNICALL
+Java_org_openeggbert_cna_internal_NativeBindings_nativeTransparentDrawListSubmit(
+    JNIEnv* environment,
+    jclass type,
+    jlong list,
+    jfloatArray bounds,
+    jlong index)
+{
+    (void)type;
+    if ((*environment)->GetArrayLength(environment, bounds) != 6) {
+        return (jint)CNA_RESULT_INVALID_ARGUMENT;
+    }
+    jfloat leaves[6];
+    (*environment)->GetFloatArrayRegion(environment, bounds, 0, 6, leaves);
+    CNA_BoundingBox box;
+    box.min.x = (float)leaves[0];
+    box.min.y = (float)leaves[1];
+    box.min.z = (float)leaves[2];
+    box.max.x = (float)leaves[3];
+    box.max.y = (float)leaves[4];
+    box.max.z = (float)leaves[5];
+    return (jint)cna.transparent_draw_list_submit((CNA_TransparentDrawListHandle)list, &box,
+        transparent_draw_entry, (void*)(intptr_t)index);
+}
+
+JNIEXPORT jint JNICALL
+Java_org_openeggbert_cna_internal_NativeBindings_nativeTransparentDrawListDrawSorted(
+    JNIEnv* environment,
+    jclass type,
+    jlong list,
+    jfloatArray view,
+    jobjectArray callbacks)
+{
+    (void)type;
+    if ((*environment)->GetArrayLength(environment, view) != 16) {
+        return (jint)CNA_RESULT_INVALID_ARGUMENT;
+    }
+    jfloat leaves[16];
+    (*environment)->GetFloatArrayRegion(environment, view, 0, 16, leaves);
+    /* Written out rather than walked with a pointer: CNA_Matrix is sixteen named floats, and
+       stepping a float* across separate members would be undefined however it is laid out. */
+    CNA_Matrix matrix;
+    matrix.m11 = (float)leaves[0];
+    matrix.m12 = (float)leaves[1];
+    matrix.m13 = (float)leaves[2];
+    matrix.m14 = (float)leaves[3];
+    matrix.m21 = (float)leaves[4];
+    matrix.m22 = (float)leaves[5];
+    matrix.m23 = (float)leaves[6];
+    matrix.m24 = (float)leaves[7];
+    matrix.m31 = (float)leaves[8];
+    matrix.m32 = (float)leaves[9];
+    matrix.m33 = (float)leaves[10];
+    matrix.m34 = (float)leaves[11];
+    matrix.m41 = (float)leaves[12];
+    matrix.m42 = (float)leaves[13];
+    matrix.m43 = (float)leaves[14];
+    matrix.m44 = (float)leaves[15];
+
+    jclass runnable = (*environment)->FindClass(environment, "java/lang/Runnable");
+    if (runnable == NULL) {
+        return (jint)CNA_RESULT_INTERNAL;
+    }
+    jmethodID run = (*environment)->GetMethodID(environment, runnable, "run", "()V");
+    (*environment)->DeleteLocalRef(environment, runnable);
+    if (run == NULL) {
+        return (jint)CNA_RESULT_INTERNAL;
+    }
+
+    TransparentDrawDispatch dispatch = {environment, callbacks, run};
+    TransparentDrawDispatch* previous = transparent_draw_active;
+    transparent_draw_active = &dispatch;
+    CNA_Result result = cna.transparent_draw_list_draw_sorted(
+        (CNA_TransparentDrawListHandle)list, &matrix);
+    transparent_draw_active = previous;
     return (jint)result;
 }
 

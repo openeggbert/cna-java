@@ -130,3 +130,52 @@ header documents       INVALID_ARGUMENT (1)
 The consequence is worth spelling out: a typo in an artist's `.cube` file arrives at a game as
 "this renderer cannot do colour grading", so a game that catches the capability refusal in order
 to fall back will fall back for a file it could have rejected and told someone about.
+
+## transparent_draw_order.c
+
+What order the transparent draw list actually runs its callbacks in, and what its sort key
+measures. Asked before any Java existed because the answer decides the shape of the projection: the
+list's entries are C function pointers, so it needs a JNI trampoline, and building the hard part on
+top of a guess about the ordering would be the wrong way round.
+
+Needs no device -- the header calls it *"a pure CPU object"* and the probe confirms it -- and its
+output on ABI 0.21.0:
+
+```text
+create                 0
+camera position of     0  (-0.00 0.00 -0.00)
+count                  0  3
+submit null callback   1
+submit null bounds     1
+order probe            14  needs 3
+order                  0  [2 1 0]
+draw sorted            0  [2 1 0]
+key, camera inside     0  0.0000
+key, camera at origin  0  9.5000
+failing draw           3  [7 8]
+clear                  0  count 0
+destroy                0
+destroy again          2
+```
+
+Five answers came out of it, all of which the Java tests now assert:
+
+The three boxes are submitted **nearest first** on purpose, and come back `[2 1 0]` -- farthest
+first, as documented. Submitted the other way round the test would have passed against a list that
+ignored the camera entirely.
+
+The sort key is the distance to the **nearest point of the box**, not to its centre: a camera
+inside a box ten units away answers `0.0000`, and one at the origin answers `9.5000` for a box
+whose centre is at ten and whose half-width is a half.
+
+A failing callback stops the draw, **its own result is what `draw_sorted` returns** -- `3`, the
+`INVALID_STATE` the callback chose, not a generic failure -- and the entries after it do not run.
+That is what lets the Java trampoline leave a thrown exception pending and have it surface at the
+call that caused it.
+
+`submit` refuses a null callback and null bounds with `INVALID_ARGUMENT`, and nothing else: reading
+the implementation confirms there is no third refusal on this ABI, which is why the Java projection
+says its ordering guard is for a future CNA rather than claiming a test can make it fail.
+
+`destroy` twice answers `INVALID_HANDLE` rather than succeeding quietly, which is the behaviour the
+Java `close()` is built to be idempotent over.

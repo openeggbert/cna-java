@@ -15116,6 +15116,200 @@ Java_org_openeggbert_cna_internal_generated_NativeEngineLayerRoutes_tonemapPassT
 }
 
 JNIEXPORT jint JNICALL
+Java_org_openeggbert_cna_internal_generated_NativeEngineLayerRoutes_transparentDrawListCameraPositionOf(
+    JNIEnv* environment, jclass declaring_class, jfloatArray viewFloating, jfloatArray out_positionFloating)
+{
+    (void)environment;
+    (void)declaring_class;
+    CNA_Matrix view_value;
+    memset(&view_value, 0, sizeof view_value);
+    {
+        jfloat viewFloating_values[16];
+        (*environment)->GetFloatArrayRegion(environment, viewFloating, 0, 16, viewFloating_values);
+        view_value.m11 = (float)viewFloating_values[0];
+        view_value.m12 = (float)viewFloating_values[1];
+        view_value.m13 = (float)viewFloating_values[2];
+        view_value.m14 = (float)viewFloating_values[3];
+        view_value.m21 = (float)viewFloating_values[4];
+        view_value.m22 = (float)viewFloating_values[5];
+        view_value.m23 = (float)viewFloating_values[6];
+        view_value.m24 = (float)viewFloating_values[7];
+        view_value.m31 = (float)viewFloating_values[8];
+        view_value.m32 = (float)viewFloating_values[9];
+        view_value.m33 = (float)viewFloating_values[10];
+        view_value.m34 = (float)viewFloating_values[11];
+        view_value.m41 = (float)viewFloating_values[12];
+        view_value.m42 = (float)viewFloating_values[13];
+        view_value.m43 = (float)viewFloating_values[14];
+        view_value.m44 = (float)viewFloating_values[15];
+    }
+    CNA_Vector3 out_position_value;
+    memset(&out_position_value, 0, sizeof out_position_value);
+    CNA_Result call_result = cna.transparent_draw_list_camera_position_of(&view_value, &out_position_value);
+    if (call_result == CNA_RESULT_SUCCESS || call_result == CNA_RESULT_BUFFER_TOO_SMALL) {
+        jfloat out_positionFloating_values[] = {
+            (jfloat)out_position_value.x,
+            (jfloat)out_position_value.y,
+            (jfloat)out_position_value.z
+        };
+        (*environment)->SetFloatArrayRegion(environment, out_positionFloating, 0,
+            (jsize)(sizeof out_positionFloating_values / sizeof out_positionFloating_values[0]),
+            out_positionFloating_values);
+    }
+    return (jint)call_result;
+}
+
+JNIEXPORT jint JNICALL
+Java_org_openeggbert_cna_internal_generated_NativeEngineLayerRoutes_transparentDrawListClear(
+    JNIEnv* environment, jclass declaring_class, jlong list)
+{
+    (void)environment;
+    (void)declaring_class;
+    CNA_Result call_result = cna.transparent_draw_list_clear((CNA_TransparentDrawListHandle)list);
+    return (jint)call_result;
+}
+
+JNIEXPORT jint JNICALL
+Java_org_openeggbert_cna_internal_generated_NativeEngineLayerRoutes_transparentDrawListCopySortedOrderExt(
+    JNIEnv* environment, jclass declaring_class, jlong list, jfloatArray viewFloating, jintArray destination, jlongArray out_count)
+{
+    (void)environment;
+    (void)declaring_class;
+    CNA_Matrix view_value;
+    memset(&view_value, 0, sizeof view_value);
+    {
+        jfloat viewFloating_values[16];
+        (*environment)->GetFloatArrayRegion(environment, viewFloating, 0, 16, viewFloating_values);
+        view_value.m11 = (float)viewFloating_values[0];
+        view_value.m12 = (float)viewFloating_values[1];
+        view_value.m13 = (float)viewFloating_values[2];
+        view_value.m14 = (float)viewFloating_values[3];
+        view_value.m21 = (float)viewFloating_values[4];
+        view_value.m22 = (float)viewFloating_values[5];
+        view_value.m23 = (float)viewFloating_values[6];
+        view_value.m24 = (float)viewFloating_values[7];
+        view_value.m31 = (float)viewFloating_values[8];
+        view_value.m32 = (float)viewFloating_values[9];
+        view_value.m33 = (float)viewFloating_values[10];
+        view_value.m34 = (float)viewFloating_values[11];
+        view_value.m41 = (float)viewFloating_values[12];
+        view_value.m42 = (float)viewFloating_values[13];
+        view_value.m43 = (float)viewFloating_values[14];
+        view_value.m44 = (float)viewFloating_values[15];
+    }
+    jsize destination_size = (*environment)->GetArrayLength(environment, destination);
+    jint* destination_elements = (*environment)->GetIntArrayElements(environment, destination, NULL);
+    if (destination_elements == NULL) {
+        return (jint)CNA_RESULT_OUT_OF_MEMORY;
+    }
+    int32_t* destination_values = (int32_t*)malloc(
+        ((size_t)destination_size + 1U) * sizeof(*destination_values));
+    if (destination_values == NULL) {
+        (*environment)->ReleaseIntArrayElements(
+            environment, destination, destination_elements, JNI_ABORT);
+        return (jint)CNA_RESULT_OUT_OF_MEMORY;
+    }
+    for (jsize index = 0; index < destination_size; ++index) {
+        destination_values[index] = (int32_t)destination_elements[index];
+    }
+    uint64_t out_count_value = 0;
+    CNA_Result call_result = cna.transparent_draw_list_copy_sorted_order_ext((CNA_TransparentDrawListHandle)list, &view_value, destination_values, (uint64_t)destination_size, &out_count_value);
+    if (call_result == CNA_RESULT_SUCCESS) {
+        for (jsize index = 0; index < destination_size; ++index) {
+            destination_elements[index] = (jint)destination_values[index];
+        }
+    }
+    free(destination_values);
+    (*environment)->ReleaseIntArrayElements(
+        environment, destination, destination_elements, 0);
+    if (call_result == CNA_RESULT_SUCCESS || call_result == CNA_RESULT_BUFFER_TOO_SMALL) {
+        jlong out_count_element = (jlong)out_count_value;
+        (*environment)->SetLongArrayRegion(
+            environment, out_count, 0, 1, &out_count_element);
+    }
+    return (jint)call_result;
+}
+
+JNIEXPORT jint JNICALL
+Java_org_openeggbert_cna_internal_generated_NativeEngineLayerRoutes_transparentDrawListCreate(
+    JNIEnv* environment, jclass declaring_class, jlongArray out_list)
+{
+    (void)environment;
+    (void)declaring_class;
+    CNA_TransparentDrawListHandle out_list_value = 0;
+    CNA_Result call_result = cna.transparent_draw_list_create(&out_list_value);
+    if (call_result == CNA_RESULT_SUCCESS || call_result == CNA_RESULT_BUFFER_TOO_SMALL) {
+        jlong out_list_element = (jlong)out_list_value;
+        (*environment)->SetLongArrayRegion(
+            environment, out_list, 0, 1, &out_list_element);
+    }
+    return (jint)call_result;
+}
+
+JNIEXPORT jint JNICALL
+Java_org_openeggbert_cna_internal_generated_NativeEngineLayerRoutes_transparentDrawListDestroy(
+    JNIEnv* environment, jclass declaring_class, jlong list)
+{
+    (void)environment;
+    (void)declaring_class;
+    CNA_Result call_result = cna.transparent_draw_list_destroy((CNA_TransparentDrawListHandle)list);
+    return (jint)call_result;
+}
+
+JNIEXPORT jint JNICALL
+Java_org_openeggbert_cna_internal_generated_NativeEngineLayerRoutes_transparentDrawListGetCount(
+    JNIEnv* environment, jclass declaring_class, jlong list, jlongArray out_count)
+{
+    (void)environment;
+    (void)declaring_class;
+    uint64_t out_count_value = 0;
+    CNA_Result call_result = cna.transparent_draw_list_get_count((CNA_TransparentDrawListHandle)list, &out_count_value);
+    if (call_result == CNA_RESULT_SUCCESS || call_result == CNA_RESULT_BUFFER_TOO_SMALL) {
+        jlong out_count_element = (jlong)out_count_value;
+        (*environment)->SetLongArrayRegion(
+            environment, out_count, 0, 1, &out_count_element);
+    }
+    return (jint)call_result;
+}
+
+JNIEXPORT jint JNICALL
+Java_org_openeggbert_cna_internal_generated_NativeEngineLayerRoutes_transparentDrawListSortKey(
+    JNIEnv* environment, jclass declaring_class, jfloatArray boundsFloating, jfloatArray camera_positionFloating, jfloatArray out_key)
+{
+    (void)environment;
+    (void)declaring_class;
+    CNA_BoundingBox bounds_value;
+    memset(&bounds_value, 0, sizeof bounds_value);
+    {
+        jfloat boundsFloating_values[6];
+        (*environment)->GetFloatArrayRegion(environment, boundsFloating, 0, 6, boundsFloating_values);
+        bounds_value.min.x = (float)boundsFloating_values[0];
+        bounds_value.min.y = (float)boundsFloating_values[1];
+        bounds_value.min.z = (float)boundsFloating_values[2];
+        bounds_value.max.x = (float)boundsFloating_values[3];
+        bounds_value.max.y = (float)boundsFloating_values[4];
+        bounds_value.max.z = (float)boundsFloating_values[5];
+    }
+    CNA_Vector3 camera_position_value;
+    memset(&camera_position_value, 0, sizeof camera_position_value);
+    {
+        jfloat camera_positionFloating_values[3];
+        (*environment)->GetFloatArrayRegion(environment, camera_positionFloating, 0, 3, camera_positionFloating_values);
+        camera_position_value.x = (float)camera_positionFloating_values[0];
+        camera_position_value.y = (float)camera_positionFloating_values[1];
+        camera_position_value.z = (float)camera_positionFloating_values[2];
+    }
+    float out_key_value = 0;
+    CNA_Result call_result = cna.transparent_draw_list_sort_key(&bounds_value, &camera_position_value, &out_key_value);
+    if (call_result == CNA_RESULT_SUCCESS || call_result == CNA_RESULT_BUFFER_TOO_SMALL) {
+        jfloat out_key_element = (jfloat)out_key_value;
+        (*environment)->SetFloatArrayRegion(
+            environment, out_key, 0, 1, &out_key_element);
+    }
+    return (jint)call_result;
+}
+
+JNIEXPORT jint JNICALL
 Java_org_openeggbert_cna_internal_generated_NativeEngineLayerRoutes_volumetricFogPassCreate(
     JNIEnv* environment, jclass declaring_class, jlong graphics_device, jlongArray out_pass)
 {

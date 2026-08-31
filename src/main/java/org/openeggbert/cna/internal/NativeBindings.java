@@ -905,6 +905,50 @@ public final class NativeBindings {
     }
 
     /**
+     * Adds one entry to a transparent draw list, naming its callback by index.
+     *
+     * <p>Hand-written rather than generated, because CNA takes a C function pointer and the
+     * generator has no shape for one. The context CNA carries is nothing but {@code index}: the
+     * callbacks themselves are handed to
+     * {@link #transparentDrawListDrawSorted(long, float[], Runnable[])} for the duration of that
+     * one call, which is the only time CNA runs them, so no reference outlives a call and there is
+     * none to leak.
+     *
+     * @param list the native list handle
+     * @param bounds the entry's world-space bounds as six floats, min then max
+     * @param index the entry's index into the callback array the draw will be given
+     * @return CNA's result
+     */
+    public static int transparentDrawListSubmit(long list, float[] bounds, long index) {
+        requireAvailable();
+        return nativeTransparentDrawListSubmit(list, bounds, index);
+    }
+
+    /**
+     * Runs a transparent draw list's callbacks, farthest from the camera first.
+     *
+     * <p>An exception a callback throws is left pending: CNA stops the draw at the first failure
+     * and this returns, so the exception surfaces at the Java call that caused it rather than
+     * being flattened into a result code.
+     *
+     * @param list the native list handle
+     * @param view the camera's view matrix as sixteen floats
+     * @param callbacks the callbacks, indexed as they were submitted
+     * @return CNA's result
+     */
+    public static int transparentDrawListDrawSorted(long list, float[] view,
+            Runnable[] callbacks) {
+        requireAvailable();
+        return nativeTransparentDrawListDrawSorted(list, view, callbacks);
+    }
+
+    private static native int nativeTransparentDrawListSubmit(long list, float[] bounds,
+            long index);
+
+    private static native int nativeTransparentDrawListDrawSorted(long list, float[] view,
+            Runnable[] callbacks);
+
+    /**
      * Releases a texture handle that names a texture without keeping it alive.
      *
      * <p>The engine layer hands one of these back from routes such as

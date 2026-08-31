@@ -1521,6 +1521,13 @@
     LOAD(touch_panel_get_mouse_touch_emulation_enabled_ext, "cna_touch_panel_get_mouse_touch_emulation_enabled_ext");
     LOAD(touch_panel_get_touch_device_exists_ext, "cna_touch_panel_get_touch_device_exists_ext");
     LOAD(touch_panel_set_mouse_touch_emulation_enabled_ext, "cna_touch_panel_set_mouse_touch_emulation_enabled_ext");
+    LOAD(transparent_draw_list_camera_position_of, "cna_transparent_draw_list_camera_position_of");
+    LOAD(transparent_draw_list_clear, "cna_transparent_draw_list_clear");
+    LOAD(transparent_draw_list_copy_sorted_order_ext, "cna_transparent_draw_list_copy_sorted_order_ext");
+    LOAD(transparent_draw_list_create, "cna_transparent_draw_list_create");
+    LOAD(transparent_draw_list_destroy, "cna_transparent_draw_list_destroy");
+    LOAD(transparent_draw_list_get_count, "cna_transparent_draw_list_get_count");
+    LOAD(transparent_draw_list_sort_key, "cna_transparent_draw_list_sort_key");
     LOAD(url_launcher_open_ext, "cna_url_launcher_open_ext");
     LOAD(vibrate_controller_copy_device_name_ext, "cna_vibrate_controller_copy_device_name_ext");
     LOAD(vibrate_controller_get_device_name_size_ext, "cna_vibrate_controller_get_device_name_size_ext");

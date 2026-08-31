@@ -23605,6 +23605,99 @@
       ]
     },
     {
+      "name": "cna_transparent_draw_list_camera_position_of",
+      "header": "engine_layer.h",
+      "ownership": "owns nothing; a pure function of its argument",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "const CNA_Matrix*",
+        "CNA_Vector3*"
+      ]
+    },
+    {
+      "name": "cna_transparent_draw_list_clear",
+      "header": "engine_layer.h",
+      "ownership": "borrows the list; drops its entries, and with them the callback indices a draw would have used",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_TransparentDrawListHandle"
+      ]
+    },
+    {
+      "name": "cna_transparent_draw_list_copy_sorted_order_ext",
+      "header": "engine_layer.h",
+      "ownership": "borrows the list; copies into a caller-owned buffer",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_TransparentDrawListHandle",
+        "const CNA_Matrix*",
+        "int32_t*",
+        "uint64_t",
+        "uint64_t*"
+      ]
+    },
+    {
+      "name": "cna_transparent_draw_list_create",
+      "header": "engine_layer.h",
+      "ownership": "no handle; returns an owned list handle",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_TransparentDrawListHandle*"
+      ]
+    },
+    {
+      "name": "cna_transparent_draw_list_destroy",
+      "header": "engine_layer.h",
+      "ownership": "consumes the list handle",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_TransparentDrawListHandle"
+      ]
+    },
+    {
+      "name": "cna_transparent_draw_list_draw_sorted",
+      "header": "engine_layer.h",
+      "ownership": "borrows the list; the Java callbacks are borrowed for the duration of this one call and CNA runs them within it",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_TransparentDrawListHandle",
+        "const CNA_Matrix*"
+      ]
+    },
+    {
+      "name": "cna_transparent_draw_list_get_count",
+      "header": "engine_layer.h",
+      "ownership": "borrows the list; owns nothing",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_TransparentDrawListHandle",
+        "uint64_t*"
+      ]
+    },
+    {
+      "name": "cna_transparent_draw_list_sort_key",
+      "header": "engine_layer.h",
+      "ownership": "owns nothing; a pure function of its arguments",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "const CNA_BoundingBox*",
+        "const CNA_Vector3*",
+        "float*"
+      ]
+    },
+    {
+      "name": "cna_transparent_draw_list_submit",
+      "header": "engine_layer.h",
+      "ownership": "borrows the list; CNA keeps the callback pointer and its context until the list is cleared or destroyed, and the context here is an index rather than a reference, so nothing outlives the call",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_TransparentDrawListHandle",
+        "const CNA_BoundingBox*",
+        "CNA_TransparentDrawCallback",
+        "void*"
+      ]
+    },
+    {
       "name": "cna_url_launcher_open_ext",
       "header": "devices.h",
       "ownership": "borrows its inputs; caller output",

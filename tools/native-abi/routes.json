@@ -6235,6 +6235,34 @@
         "symbol": "cna_volumetric_fog_pass_set_range"
       },
       {
+        "java": "transparentDrawListCameraPositionOf",
+        "symbol": "cna_transparent_draw_list_camera_position_of"
+      },
+      {
+        "java": "transparentDrawListClear",
+        "symbol": "cna_transparent_draw_list_clear"
+      },
+      {
+        "java": "transparentDrawListCopySortedOrderExt",
+        "symbol": "cna_transparent_draw_list_copy_sorted_order_ext"
+      },
+      {
+        "java": "transparentDrawListCreate",
+        "symbol": "cna_transparent_draw_list_create"
+      },
+      {
+        "java": "transparentDrawListDestroy",
+        "symbol": "cna_transparent_draw_list_destroy"
+      },
+      {
+        "java": "transparentDrawListGetCount",
+        "symbol": "cna_transparent_draw_list_get_count"
+      },
+      {
+        "java": "transparentDrawListSortKey",
+        "symbol": "cna_transparent_draw_list_sort_key"
+      },
+      {
         "java": "weightedBlendedTransparencyBegin",
         "symbol": "cna_weighted_blended_transparency_begin"
       },
