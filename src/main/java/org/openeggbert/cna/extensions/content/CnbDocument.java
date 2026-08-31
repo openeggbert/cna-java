@@ -33,6 +33,11 @@ public final class CnbDocument implements AutoCloseable {
         this.handle = handle;
     }
 
+    /** The native document, for the decoders in this package that read one whole asset. */
+    long handle() {
+        return open();
+    }
+
     /**
      * Reports whether some bytes begin with the {@code .cnb} magic.
      *

@@ -429,12 +429,42 @@
     },
     {
       "match": {
+        "symbols": [
+          "cna_cnb_loader_registry_register",
+          "cna_cnb_loader_invoke",
+          "cna_cnb_loader_registry_find",
+          "cna_cnb_loader_registry_resolve_for_document",
+          "cna_cnb_loader_registry_clear",
+          "cna_cnb_loader_registry_remove",
+          "cna_cnb_loader_destroy"
+        ]
+      },
+      "classification": "CNA_EXTENSION_CANDIDATE",
+      "purposeReason": "CNA's process-wide table mapping a .cnb asset type identifier to the code that turns such a file into a runtime object. The .cnb container has no XNA 4.0 counterpart.",
+      "bindingStatus": "DELIBERATE_NON_BINDING",
+      "bindingReason": "Two of these decide it and cnb.h says both outright. register takes a CNA_CnbLoaderCallback and a context that \"must outlive the registration, which is process-wide\"; invoke returns the loaded object through a void** and the header states that \"only a loader registered from C produces something C can hold\". A Java loader returns a Java object: there is no pointer to give CNA and none to receive back, so the void** is not an obstacle to work around but the boundary saying this table is for C loaders. find calls itself \"the wrong entry point for loading a file\" and resolve produces a loader only C can call; clear and remove withdraw a registration Java never made, and destroy releases a loader handle nothing here obtains.",
+      "evidence": "docs/cnb-loader-registry-decision.md, JAVA-EXT-003. What is worth keeping from CNA's registry is its identity rule rather than its storage, and CnbLoaders implements all three parts of it in Java: a built-in type's number is authoritative, a custom one's is a 31-bit name hash and must be confirmed against the file's canonical name, and a second registration under one identifier with a different name is refused. isRegisteredWithCna and getCnaRegisteredTypeName do reach CNA's own table, because \"can the native side read this?\" is a real question Java cannot answer for itself."
+    },
+    {
+      "match": {
+        "symbols": [
+          "cna_cnb_texture_data_select_representation"
+        ]
+      },
+      "classification": "CNA_EXTENSION_CANDIDATE",
+      "purposeReason": "Picks the first stored texture representation a caller's own predicate accepts, so a game can choose between the compressed forms one .cnb texture carries.",
+      "bindingStatus": "DELIBERATE_NON_BINDING",
+      "bindingReason": "It takes a CNA_CnbTextureFormatSupportedFn, a C function pointer called once per representation inside the call -- and the loop it saves is three lines of Java over getRepresentationCount and getRepresentationFormat, which are bound. A trampoline that crossed into Java once per candidate format would add a callback barrier to a search a caller can run itself, over data it already has.",
+      "evidence": "CnbTextureData exposes the representation count and each one's format, which is every input the predicate would be given."
+    },
+    {
+      "match": {
         "header": "cnb.h"
       },
       "classification": "CNA_EXTENSION_CANDIDATE",
       "purposeReason": "The .cnb container, its schemas, its writers and its loader registry are a CNA content format with no XNA 4.0 counterpart.",
-      "bindingStatus": "ACTIONABLE_LOCAL",
-      "bindingReason": "placeholder"
+      "bindingStatus": "DELIBERATE_NON_BINDING",
+      "bindingReason": "Nothing is left unbound here beyond the loader registry and the format predicate above; this catch-all exists so a new cnb.h declaration is classified rather than unexplained."
     },
     {
       "match": {

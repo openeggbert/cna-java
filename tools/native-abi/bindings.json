@@ -3879,6 +3879,52 @@
       ]
     },
     {
+      "name": "cna_cnb_animation_clip_copy_keyframes",
+      "header": "cnb.h",
+      "ownership": "borrows clip; copies into the caller buffer, owning nothing",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_CnbAnimationClipHandle",
+        "uint64_t",
+        "CNA_KeyframeEXT*",
+        "uint64_t",
+        "uint64_t*"
+      ]
+    },
+    {
+      "name": "cna_cnb_animation_clip_destroy",
+      "header": "cnb.h",
+      "ownership": "destroys an owned clip handle",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_CnbAnimationClipHandle"
+      ]
+    },
+    {
+      "name": "cna_cnb_animation_clip_get",
+      "header": "cnb.h",
+      "ownership": "borrows clip; returns three values",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_CnbAnimationClipHandle",
+        "double*",
+        "uint64_t*",
+        "CNA_ClipTargetSpaceEXT*"
+      ]
+    },
+    {
+      "name": "cna_cnb_animation_clip_get_track",
+      "header": "cnb.h",
+      "ownership": "borrows clip; returns two values",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_CnbAnimationClipHandle",
+        "uint64_t",
+        "int32_t*",
+        "uint64_t*"
+      ]
+    },
+    {
       "name": "cna_cnb_asset_type_id_from_name",
       "header": "cnb.h",
       "ownership": "no handle; caller integer output",
@@ -3908,6 +3954,180 @@
         "CNA_StringView",
         "CNA_StringView",
         "CNA_CnbModelFromCnjHandle*"
+      ]
+    },
+    {
+      "name": "cna_cnb_byte_writer_copy_bytes",
+      "header": "cnb.h",
+      "ownership": "borrows writer; copies into the caller buffer, owning nothing",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_CnbByteWriterHandle",
+        "uint8_t*",
+        "uint64_t",
+        "uint64_t*"
+      ]
+    },
+    {
+      "name": "cna_cnb_byte_writer_create",
+      "header": "cnb.h",
+      "ownership": "no handle; returns an owned writer handle",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_CnbByteWriterHandle*"
+      ]
+    },
+    {
+      "name": "cna_cnb_byte_writer_create_from_bytes",
+      "header": "cnb.h",
+      "ownership": "copies the caller bytes; returns an owned writer handle",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "const uint8_t*",
+        "uint64_t",
+        "CNA_CnbByteWriterHandle*"
+      ]
+    },
+    {
+      "name": "cna_cnb_byte_writer_destroy",
+      "header": "cnb.h",
+      "ownership": "destroys an owned writer handle",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_CnbByteWriterHandle"
+      ]
+    },
+    {
+      "name": "cna_cnb_byte_writer_get_size",
+      "header": "cnb.h",
+      "ownership": "borrows writer; returns a value",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_CnbByteWriterHandle",
+        "uint64_t*"
+      ]
+    },
+    {
+      "name": "cna_cnb_byte_writer_take",
+      "header": "cnb.h",
+      "ownership": "borrows writer; moves its bytes into the caller buffer and empties it",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_CnbByteWriterHandle",
+        "uint8_t*",
+        "uint64_t",
+        "uint64_t*"
+      ]
+    },
+    {
+      "name": "cna_cnb_byte_writer_write_bytes",
+      "header": "cnb.h",
+      "ownership": "borrows writer and the bytes for the call",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_CnbByteWriterHandle",
+        "const uint8_t*",
+        "uint64_t"
+      ]
+    },
+    {
+      "name": "cna_cnb_byte_writer_write_f32",
+      "header": "cnb.h",
+      "ownership": "borrows writer",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_CnbByteWriterHandle",
+        "float"
+      ]
+    },
+    {
+      "name": "cna_cnb_byte_writer_write_f64",
+      "header": "cnb.h",
+      "ownership": "borrows writer",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_CnbByteWriterHandle",
+        "double"
+      ]
+    },
+    {
+      "name": "cna_cnb_byte_writer_write_i32",
+      "header": "cnb.h",
+      "ownership": "borrows writer",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_CnbByteWriterHandle",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "cna_cnb_byte_writer_write_keyframe",
+      "header": "cnb.h",
+      "ownership": "borrows writer and the keyframe for the call",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_CnbByteWriterHandle",
+        "const CNA_KeyframeEXT*"
+      ]
+    },
+    {
+      "name": "cna_cnb_byte_writer_write_string",
+      "header": "cnb.h",
+      "ownership": "borrows writer and the text for the call",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_CnbByteWriterHandle",
+        "CNA_StringView"
+      ]
+    },
+    {
+      "name": "cna_cnb_byte_writer_write_u16",
+      "header": "cnb.h",
+      "ownership": "borrows writer",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_CnbByteWriterHandle",
+        "uint16_t"
+      ]
+    },
+    {
+      "name": "cna_cnb_byte_writer_write_u32",
+      "header": "cnb.h",
+      "ownership": "borrows writer",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_CnbByteWriterHandle",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "cna_cnb_byte_writer_write_u64",
+      "header": "cnb.h",
+      "ownership": "borrows writer",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_CnbByteWriterHandle",
+        "uint64_t"
+      ]
+    },
+    {
+      "name": "cna_cnb_byte_writer_write_u8",
+      "header": "cnb.h",
+      "ownership": "borrows writer",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_CnbByteWriterHandle",
+        "uint8_t"
+      ]
+    },
+    {
+      "name": "cna_cnb_byte_writer_write_zeros",
+      "header": "cnb.h",
+      "ownership": "borrows writer",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_CnbByteWriterHandle",
+        "uint64_t"
       ]
     },
     {
@@ -4230,6 +4450,16 @@
       "returnType": "CNA_Result",
       "parameters": [
         "CNA_Bool*"
+      ]
+    },
+    {
+      "name": "cna_cnb_decode_animation_clip",
+      "header": "cnb.h",
+      "ownership": "borrows document; returns an owned clip handle",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_CnbDocumentHandle",
+        "CNA_CnbAnimationClipHandle*"
       ]
     },
     {
@@ -4732,6 +4962,20 @@
       ]
     },
     {
+      "name": "cna_cnb_encode_animation_clip",
+      "header": "cnb.h",
+      "ownership": "borrows the clip graph and the name for the call; writes into the caller buffer",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "const CNA_AnimationClipEXTDescriptor*",
+        "CNA_ClipTargetSpaceEXT",
+        "CNA_StringView",
+        "uint8_t*",
+        "uint64_t",
+        "uint64_t*"
+      ]
+    },
+    {
       "name": "cna_cnb_encode_curve",
       "header": "cnb.h",
       "ownership": "borrows curve; caller buffer",
@@ -5099,6 +5343,19 @@
         "uint8_t",
         "uint8_t",
         "CNA_CnbChunkId*"
+      ]
+    },
+    {
+      "name": "cna_cnb_model_add_animation",
+      "header": "cnb.h",
+      "ownership": "borrows model, the name and the clip graph for the call; the model deeply copies the clip",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_CnbModelDataHandle",
+        "CNA_StringView",
+        "const CNA_AnimationClipEXTDescriptor*",
+        "CNA_ClipTargetSpaceEXT",
+        "uint64_t*"
       ]
     },
     {
@@ -5955,6 +6212,16 @@
       ]
     },
     {
+      "name": "cna_cnb_reader_fail",
+      "header": "cnb.h",
+      "ownership": "borrows reader and the detail for the call",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_CnbReaderHandle",
+        "CNA_StringView"
+      ]
+    },
+    {
       "name": "cna_cnb_reader_get_context_size",
       "header": "cnb.h",
       "ownership": "borrows reader; caller integer output",
@@ -6047,6 +6314,27 @@
       "parameters": [
         "CNA_CnbReaderHandle",
         "int32_t*"
+      ]
+    },
+    {
+      "name": "cna_cnb_reader_read_keyframe",
+      "header": "cnb.h",
+      "ownership": "borrows reader; fills a caller-provided struct",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_CnbReaderHandle",
+        "CNA_KeyframeEXT*"
+      ]
+    },
+    {
+      "name": "cna_cnb_reader_read_seconds",
+      "header": "cnb.h",
+      "ownership": "borrows reader and the noun for the call; returns a value",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_CnbReaderHandle",
+        "CNA_StringView",
+        "double*"
       ]
     },
     {
@@ -6416,6 +6704,17 @@
       ]
     },
     {
+      "name": "cna_cnb_writer_add_external_reference",
+      "header": "cnb.h",
+      "ownership": "borrows writer, the reference and the name for the call",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_CnbWriterHandle",
+        "const CNA_CnbExternalReference*",
+        "CNA_StringView"
+      ]
+    },
+    {
       "name": "cna_cnb_writer_append_embedded_texture2d",
       "header": "cnb.h",
       "ownership": "borrows writer and texture data; copies both",
@@ -6436,6 +6735,15 @@
         "uint8_t*",
         "uint64_t",
         "uint64_t*"
+      ]
+    },
+    {
+      "name": "cna_cnb_writer_clear_external_references",
+      "header": "cnb.h",
+      "ownership": "borrows writer",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_CnbWriterHandle"
       ]
     },
     {

@@ -187,6 +187,56 @@ public final class CnbReader implements AutoCloseable {
         return destination;
     }
 
+    /**
+     * Reads a seconds value and refuses anything a {@code TimeSpan} could not hold.
+     *
+     * <p>Narrower than {@link #readDouble()} on purpose: the canonical {@code TimeSpan} factory
+     * throws for a NaN or an out-of-range value, and that exception is not what a content
+     * subsystem's callers catch. This checks the range before the value could reach one, so a
+     * malformed file surfaces as a content failure naming the file.
+     *
+     * @param what the noun the failure message uses, such as {@code "the clip duration"}
+     * @return the value, which a {@code TimeSpan} can hold
+     */
+    public double readSeconds(String what) {
+        Objects.requireNonNull(what, "what");
+        double[] value = new double[1];
+        CnbExtension.check("CnbReader.readSeconds", NativeCnbRoutes.cnbReaderReadSeconds(
+                open(), what.getBytes(StandardCharsets.UTF_8), value));
+        return value[0];
+    }
+
+    /**
+     * Reads one keyframe, in the form {@link CnbByteWriter#writeKeyframe} writes it.
+     *
+     * @return the pose
+     */
+    public CnbKeyframe readKeyframe() {
+        float[] floating = new float[CnbKeyframes.FLOATS];
+        double[] doubles = new double[CnbKeyframes.DOUBLES];
+        CnbExtension.check("CnbReader.readKeyframe",
+                NativeCnbRoutes.cnbReaderReadKeyframe(open(), floating, doubles));
+        return CnbKeyframes.read(floating, doubles, 0);
+    }
+
+    /**
+     * Fails with a diagnostic built from this cursor's context, its offset and a detail.
+     *
+     * <p>Always throws. It exists so a schema decoder written in Java refuses in exactly the words
+     * the cursor's own bounds checks use -- naming the chunk and saying how far in the trouble
+     * was -- rather than in a second vocabulary a reader of the message has to learn.
+     *
+     * @param detail what was wrong
+     * @throws CnbFormatException always
+     */
+    public void fail(String detail) {
+        Objects.requireNonNull(detail, "detail");
+        CnbExtension.check("CnbReader.fail", NativeCnbRoutes.cnbReaderFail(
+                open(), detail.getBytes(StandardCharsets.UTF_8)));
+        throw new IllegalStateException(
+                "cna_cnb_reader_fail answered success, which it documents it never does");
+    }
+
     /** Skips forward without reading. */
     public void skip(long byteCount) {
         CnbExtension.check("CnbReader.skip", NativeCnbRoutes.cnbReaderSkip(open(), byteCount));

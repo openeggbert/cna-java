@@ -1150,6 +1150,72 @@ public final class NativeBindings {
             boolean allowMultiple);
 
     /**
+     * Encodes one animation clip as a whole {@code .cnb} file.
+     *
+     * <p>Hand-written rather than generated because CNA takes the clip as a pointer graph -- a
+     * descriptor pointing at track descriptors, each pointing at keyframes -- and nothing in the
+     * C says which keyframes belong to which track. The generator refuses that, correctly. The
+     * lifetimes are not unknown though, only underivable: every array is borrowed for the call,
+     * so the graph is built for its duration and freed after it.
+     *
+     * <p>The flattening is the only one that loses nothing: one bone index and one keyframe count
+     * per track, then every keyframe's time and its ten floats end to end. The adapter checks
+     * that the counts sum to exactly the keyframes given before it allocates anything, because a
+     * sum that does not add up would make CNA read past an array's end from inside C.
+     *
+     * @param durationSeconds how long the clip runs
+     * @param boneIndices which bone each track drives, one per track
+     * @param keyframeCounts how many keyframes each track has, one per track
+     * @param times each keyframe's time, in track order
+     * @param values ten floats per keyframe: translation, rotation, scale
+     * @param targetSpace which index space the bone indices live in
+     * @param contentName the logical content name to record, as UTF-8 bytes
+     * @param destination receives the file; may be empty to ask only for the size
+     * @param outByteCount receives the size the file needs, written either way
+     * @return CNA's result
+     */
+    public static int cnbEncodeAnimationClip(double durationSeconds, int[] boneIndices,
+            int[] keyframeCounts, double[] times, float[] values, int targetSpace,
+            byte[] contentName, byte[] destination, long[] outByteCount) {
+        requireAvailable();
+        return nativeCnbEncodeAnimationClip(durationSeconds, boneIndices, keyframeCounts, times,
+                values, targetSpace, contentName, destination, outByteCount);
+    }
+
+    /**
+     * Adds one named animation clip to a {@code .cnb} model being built.
+     *
+     * <p>The same pointer graph, and the same reason it is hand-written. The model deeply copies
+     * the clip, so nothing here outlives the call.
+     *
+     * @param model the native model-data handle
+     * @param clipName the clip's name as UTF-8 bytes
+     * @param durationSeconds how long the clip runs
+     * @param boneIndices which bone each track drives, one per track
+     * @param keyframeCounts how many keyframes each track has, one per track
+     * @param times each keyframe's time, in track order
+     * @param values ten floats per keyframe
+     * @param targetSpace which index space the bone indices live in
+     * @param outIndex receives the clip's index in the model
+     * @return CNA's result
+     */
+    public static int cnbModelAddAnimation(long model, byte[] clipName, double durationSeconds,
+            int[] boneIndices, int[] keyframeCounts, double[] times, float[] values,
+            int targetSpace, long[] outIndex) {
+        requireAvailable();
+        return nativeCnbModelAddAnimation(model, clipName, durationSeconds, boneIndices,
+                keyframeCounts, times, values, targetSpace, outIndex);
+    }
+
+    private static native int nativeCnbEncodeAnimationClip(double durationSeconds,
+            int[] boneIndices, int[] keyframeCounts, double[] times, float[] values,
+            int targetSpace, byte[] contentName, byte[] destination, long[] outByteCount);
+
+    private static native int nativeCnbModelAddAnimation(long model, byte[] clipName,
+            double durationSeconds, int[] boneIndices, int[] keyframeCounts, double[] times,
+            float[] values, int targetSpace, long[] outIndex);
+
+    /**
      * Releases a texture handle that names a texture without keeping it alive.
      *
      * <p>The engine layer hands one of these back from routes such as

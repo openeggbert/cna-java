@@ -850,6 +850,13 @@ typedef struct CnaFunctions {
        them is how long the Java object behind it has to survive, and it is the whole design:
        the tray's is released when the tray closes, and the dialog's releases itself the moment
        it fires, because a file dialog answers exactly once. */
+    /* And the two routes that take an animation clip, whose descriptor is a pointer graph the
+       generator refuses -- correctly, because nothing in the C says which keyframes belong to
+       which track. The lifetimes are not unknown, only underivable: every array is borrowed for
+       the call and CNA deeply copies what it keeps. */
+    CNA_JNI_ROUTE(cna_cnb_encode_animation_clip) cnb_encode_animation_clip;
+    CNA_JNI_ROUTE(cna_cnb_model_add_animation) cnb_model_add_animation;
+
     CNA_JNI_ROUTE(cna_system_tray_add_entry) system_tray_add_entry;
     CNA_JNI_ROUTE(cna_file_dialog_show_open_file_ext) file_dialog_show_open_file_ext;
     CNA_JNI_ROUTE(cna_file_dialog_show_save_file_ext) file_dialog_show_save_file_ext;
@@ -1495,6 +1502,167 @@ static CNA_Result cna_jni_borrow_string_views(
         out_value->views[index].data = bytes;
         out_value->views[index].byte_length = (uint64_t)size;
     }
+    return CNA_RESULT_SUCCESS;
+}
+
+/* An animation clip, built from flat Java arrays.
+ *
+ * CNA takes a clip as a pointer graph -- a descriptor holding a pointer to an array of track
+ * descriptors, each holding a pointer to an array of keyframes -- and the JNI generator refuses
+ * a shape whose lifetimes it cannot read off the declaration. It is right to refuse: nothing in
+ * the C says how many tracks there are per clip, nor which keyframes belong to which track. But
+ * the lifetimes are not actually unknown, they are simply not derivable. cnb.h and models.h both
+ * say every array is "borrowed for the call" and that CNA copies what it keeps, so the whole
+ * graph lives exactly as long as one call and is built on the heap for its duration.
+ *
+ * What crosses from Java is the graph flattened the only way that cannot lose information:
+ *
+ *   bone_indices[t]        which bone track t drives          -- one per track
+ *   keyframe_counts[t]     how many keyframes track t has     -- one per track
+ *   times[k]               each keyframe's time               -- sum(keyframe_counts) of them
+ *   values[k * 10 .. ]     each keyframe's ten floats         -- ten per keyframe
+ *
+ * Every relationship between those four is checked before anything is allocated, because a
+ * keyframe count that does not add up would make CNA read past the end of an array from inside
+ * C, which no Java exception could describe afterwards.
+ */
+typedef struct CnaJniClipGraph {
+    CNA_AnimationClipEXTDescriptor clip;
+    CNA_BoneTrackEXTDescriptor* tracks;
+    CNA_KeyframeEXT* keyframes;
+    jint* bone_elements;
+    jint* count_elements;
+    jdouble* time_elements;
+    jfloat* value_elements;
+    jintArray bones;
+    jintArray counts;
+    jdoubleArray times;
+    jfloatArray values;
+} CnaJniClipGraph;
+
+/** How many floats one keyframe carries: a translation, a rotation and a scale. */
+#define CNA_JNI_KEYFRAME_FLOATS 10
+
+static void cna_jni_free_clip(JNIEnv* environment, CnaJniClipGraph* graph)
+{
+    if (graph->bone_elements != NULL) {
+        (*environment)->ReleaseIntArrayElements(
+            environment, graph->bones, graph->bone_elements, JNI_ABORT);
+        graph->bone_elements = NULL;
+    }
+    if (graph->count_elements != NULL) {
+        (*environment)->ReleaseIntArrayElements(
+            environment, graph->counts, graph->count_elements, JNI_ABORT);
+        graph->count_elements = NULL;
+    }
+    if (graph->time_elements != NULL) {
+        (*environment)->ReleaseDoubleArrayElements(
+            environment, graph->times, graph->time_elements, JNI_ABORT);
+        graph->time_elements = NULL;
+    }
+    if (graph->value_elements != NULL) {
+        (*environment)->ReleaseFloatArrayElements(
+            environment, graph->values, graph->value_elements, JNI_ABORT);
+        graph->value_elements = NULL;
+    }
+    free(graph->tracks);
+    graph->tracks = NULL;
+    free(graph->keyframes);
+    graph->keyframes = NULL;
+}
+
+static CNA_Result cna_jni_borrow_clip(
+    JNIEnv* environment,
+    jdouble duration_seconds,
+    jintArray bones,
+    jintArray counts,
+    jdoubleArray times,
+    jfloatArray values,
+    CnaJniClipGraph* out_graph)
+{
+    memset(out_graph, 0, sizeof(*out_graph));
+    if (bones == NULL || counts == NULL || times == NULL || values == NULL) {
+        return CNA_RESULT_INVALID_ARGUMENT;
+    }
+    out_graph->bones = bones;
+    out_graph->counts = counts;
+    out_graph->times = times;
+    out_graph->values = values;
+
+    const jsize track_count = (*environment)->GetArrayLength(environment, bones);
+    const jsize keyframe_count = (*environment)->GetArrayLength(environment, times);
+    if ((*environment)->GetArrayLength(environment, counts) != track_count) {
+        return CNA_RESULT_INVALID_ARGUMENT;
+    }
+    if ((*environment)->GetArrayLength(environment, values)
+            != keyframe_count * CNA_JNI_KEYFRAME_FLOATS) {
+        return CNA_RESULT_INVALID_ARGUMENT;
+    }
+
+    out_graph->bone_elements = (*environment)->GetIntArrayElements(environment, bones, NULL);
+    out_graph->count_elements = (*environment)->GetIntArrayElements(environment, counts, NULL);
+    out_graph->time_elements = (*environment)->GetDoubleArrayElements(environment, times, NULL);
+    out_graph->value_elements = (*environment)->GetFloatArrayElements(environment, values, NULL);
+    if (out_graph->bone_elements == NULL || out_graph->count_elements == NULL
+            || out_graph->time_elements == NULL || out_graph->value_elements == NULL) {
+        cna_jni_free_clip(environment, out_graph);
+        return CNA_RESULT_OUT_OF_MEMORY;
+    }
+
+    /* The counts must add up to exactly the keyframes supplied. Checked before anything is
+       allocated, and accumulated in a jlong so a caller cannot overflow the sum into agreeing. */
+    jlong total = 0;
+    for (jsize index = 0; index < track_count; ++index) {
+        if (out_graph->count_elements[index] < 0) {
+            cna_jni_free_clip(environment, out_graph);
+            return CNA_RESULT_INVALID_ARGUMENT;
+        }
+        total += (jlong)out_graph->count_elements[index];
+    }
+    if (total != (jlong)keyframe_count) {
+        cna_jni_free_clip(environment, out_graph);
+        return CNA_RESULT_INVALID_ARGUMENT;
+    }
+
+    /* One over, so a zero-track clip still has a non-null pointer to hand CNA. */
+    out_graph->tracks = (CNA_BoneTrackEXTDescriptor*)calloc(
+        (size_t)track_count + 1U, sizeof(*out_graph->tracks));
+    out_graph->keyframes = (CNA_KeyframeEXT*)calloc(
+        (size_t)keyframe_count + 1U, sizeof(*out_graph->keyframes));
+    if (out_graph->tracks == NULL || out_graph->keyframes == NULL) {
+        cna_jni_free_clip(environment, out_graph);
+        return CNA_RESULT_OUT_OF_MEMORY;
+    }
+
+    for (jsize index = 0; index < keyframe_count; ++index) {
+        const jfloat* leaves = out_graph->value_elements + (jlong)index * CNA_JNI_KEYFRAME_FLOATS;
+        CNA_KeyframeEXT* keyframe = &out_graph->keyframes[index];
+        keyframe->time_seconds = (double)out_graph->time_elements[index];
+        keyframe->translation.x = (float)leaves[0];
+        keyframe->translation.y = (float)leaves[1];
+        keyframe->translation.z = (float)leaves[2];
+        keyframe->rotation.x = (float)leaves[3];
+        keyframe->rotation.y = (float)leaves[4];
+        keyframe->rotation.z = (float)leaves[5];
+        keyframe->rotation.w = (float)leaves[6];
+        keyframe->scale.x = (float)leaves[7];
+        keyframe->scale.y = (float)leaves[8];
+        keyframe->scale.z = (float)leaves[9];
+    }
+
+    jlong consumed = 0;
+    for (jsize index = 0; index < track_count; ++index) {
+        CNA_BoneTrackEXTDescriptor* track = &out_graph->tracks[index];
+        track->bone_index = (int32_t)out_graph->bone_elements[index];
+        track->reserved = 0U;
+        track->keyframes = out_graph->keyframes + consumed;
+        track->keyframe_count = (uint64_t)out_graph->count_elements[index];
+        consumed += (jlong)out_graph->count_elements[index];
+    }
+
+    out_graph->clip.duration_seconds = (double)duration_seconds;
+    out_graph->clip.tracks = out_graph->tracks;
+    out_graph->clip.track_count = (uint64_t)track_count;
     return CNA_RESULT_SUCCESS;
 }
 
@@ -2679,6 +2847,8 @@ JNIEXPORT jint JNICALL Java_org_openeggbert_cna_internal_NativeBindings_nativeLo
     LOAD(light_probe_baker_bake_visibility, "cna_light_probe_baker_bake_visibility");
     LOAD(render_pipeline_set_transparent_scene, "cna_render_pipeline_set_transparent_scene");
     LOAD(render_pipeline_set_shadow_scene, "cna_render_pipeline_set_shadow_scene");
+    LOAD(cnb_encode_animation_clip, "cna_cnb_encode_animation_clip");
+    LOAD(cnb_model_add_animation, "cna_cnb_model_add_animation");
     LOAD(system_tray_add_entry, "cna_system_tray_add_entry");
     LOAD(file_dialog_show_open_file_ext, "cna_file_dialog_show_open_file_ext");
     LOAD(file_dialog_show_save_file_ext, "cna_file_dialog_show_save_file_ext");
@@ -13073,6 +13243,107 @@ Java_org_openeggbert_cna_internal_NativeBindings_nativeFileDialogShow(
            and answers SUCCESS whenever it has taken the request, including the unavailable case
            where it reports an empty result through the handler immediately. */
         (*environment)->DeleteGlobalRef(environment, (jobject)(intptr_t)token);
+    }
+    return (jint)call_result;
+}
+
+/*
+ * The two routes that take an animation clip.
+ *
+ * Both marshal the same pointer graph and neither keeps it: `cna_cnb_encode_animation_clip`
+ * writes bytes and `cna_cnb_model_add_animation` copies the clip into the model, so the graph is
+ * freed as soon as the call returns.
+ */
+JNIEXPORT jint JNICALL
+Java_org_openeggbert_cna_internal_NativeBindings_nativeCnbEncodeAnimationClip(
+    JNIEnv* environment,
+    jclass type,
+    jdouble duration_seconds,
+    jintArray bone_indices,
+    jintArray keyframe_counts,
+    jdoubleArray times,
+    jfloatArray values,
+    jint target_space,
+    jbyteArray content_name,
+    jbyteArray destination,
+    jlongArray out_byte_count)
+{
+    (void)type;
+    CnaJniClipGraph graph;
+    const CNA_Result borrowed = cna_jni_borrow_clip(
+        environment, duration_seconds, bone_indices, keyframe_counts, times, values, &graph);
+    if (borrowed != CNA_RESULT_SUCCESS) {
+        return (jint)borrowed;
+    }
+    jsize name_size = (*environment)->GetArrayLength(environment, content_name);
+    jbyte* name_bytes = (*environment)->GetByteArrayElements(environment, content_name, NULL);
+    if (name_bytes == NULL) {
+        cna_jni_free_clip(environment, &graph);
+        return (jint)CNA_RESULT_OUT_OF_MEMORY;
+    }
+    CNA_StringView name = {(const char*)name_bytes, (uint64_t)name_size};
+    jsize capacity = (*environment)->GetArrayLength(environment, destination);
+    jbyte* bytes = capacity == 0 ? NULL
+        : (*environment)->GetByteArrayElements(environment, destination, NULL);
+    if (capacity != 0 && bytes == NULL) {
+        (*environment)->ReleaseByteArrayElements(
+            environment, content_name, name_bytes, JNI_ABORT);
+        cna_jni_free_clip(environment, &graph);
+        return (jint)CNA_RESULT_OUT_OF_MEMORY;
+    }
+    uint64_t written = 0;
+    const CNA_Result call_result = cna.cnb_encode_animation_clip(
+        &graph.clip, (CNA_ClipTargetSpaceEXT)target_space, name, (uint8_t*)bytes,
+        (uint64_t)capacity, &written);
+    if (bytes != NULL) {
+        (*environment)->ReleaseByteArrayElements(environment, destination, bytes, 0);
+    }
+    (*environment)->ReleaseByteArrayElements(environment, content_name, name_bytes, JNI_ABORT);
+    cna_jni_free_clip(environment, &graph);
+    /* The size is reported whether or not the buffer was big enough, which is what makes the
+       zero-capacity probe the caller's first call. */
+    const jlong size = (jlong)written;
+    (*environment)->SetLongArrayRegion(environment, out_byte_count, 0, 1, &size);
+    return (jint)call_result;
+}
+
+JNIEXPORT jint JNICALL
+Java_org_openeggbert_cna_internal_NativeBindings_nativeCnbModelAddAnimation(
+    JNIEnv* environment,
+    jclass type,
+    jlong model,
+    jbyteArray clip_name,
+    jdouble duration_seconds,
+    jintArray bone_indices,
+    jintArray keyframe_counts,
+    jdoubleArray times,
+    jfloatArray values,
+    jint target_space,
+    jlongArray out_index)
+{
+    (void)type;
+    CnaJniClipGraph graph;
+    const CNA_Result borrowed = cna_jni_borrow_clip(
+        environment, duration_seconds, bone_indices, keyframe_counts, times, values, &graph);
+    if (borrowed != CNA_RESULT_SUCCESS) {
+        return (jint)borrowed;
+    }
+    jsize name_size = (*environment)->GetArrayLength(environment, clip_name);
+    jbyte* name_bytes = (*environment)->GetByteArrayElements(environment, clip_name, NULL);
+    if (name_bytes == NULL) {
+        cna_jni_free_clip(environment, &graph);
+        return (jint)CNA_RESULT_OUT_OF_MEMORY;
+    }
+    CNA_StringView name = {(const char*)name_bytes, (uint64_t)name_size};
+    uint64_t index = 0;
+    const CNA_Result call_result = cna.cnb_model_add_animation(
+        (CNA_CnbModelDataHandle)model, name, &graph.clip,
+        (CNA_ClipTargetSpaceEXT)target_space, &index);
+    (*environment)->ReleaseByteArrayElements(environment, clip_name, name_bytes, JNI_ABORT);
+    cna_jni_free_clip(environment, &graph);
+    if (call_result == CNA_RESULT_SUCCESS) {
+        const jlong written = (jlong)index;
+        (*environment)->SetLongArrayRegion(environment, out_index, 0, 1, &written);
     }
     return (jint)call_result;
 }

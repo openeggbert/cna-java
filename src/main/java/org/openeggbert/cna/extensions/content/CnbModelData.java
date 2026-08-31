@@ -5,6 +5,7 @@ import Microsoft.Xna.Framework.Quaternion;
 import Microsoft.Xna.Framework.Vector3;
 import Microsoft.Xna.Framework.Vector4;
 
+import org.openeggbert.cna.internal.NativeBindings;
 import org.openeggbert.cna.internal.generated.NativeCnbRoutes;
 
 import java.util.ArrayList;
@@ -774,6 +775,32 @@ public final class CnbModelData implements AutoCloseable {
                         (destination, bytes) -> NativeCnbRoutes
                                 .cnbModelCopyAnimationName(model, index, destination, bytes)),
                 duration[0], (int) tracks[0], CnbClipTargetSpace.fromValue(space[0]));
+    }
+
+    /**
+     * Adds one named animation clip to the model.
+     *
+     * <p>The write half of {@link #getAnimation(int)}, and it was the missing one: CNA takes a
+     * clip as a pointer graph the JNI generator refuses, so until now a model could be read for
+     * its animations and never given any. The graph is built in the adapter for the duration of
+     * one call and the model deeply copies it, so the clip stays the caller's value.
+     *
+     * @param name the clip's name, which {@link CnbAnimation#Name()} reports back
+     * @param clip the clip to copy in
+     * @param targetSpace which index space the tracks' bone indices live in
+     * @return the clip's zero-based index in the model
+     */
+    public int addAnimation(String name, CnbClip clip, CnbClipTargetSpace targetSpace) {
+        Objects.requireNonNull(name, "name");
+        Objects.requireNonNull(clip, "clip");
+        Objects.requireNonNull(targetSpace, "targetSpace");
+        CnbClip.Flattened flat = clip.flatten();
+        long[] index = new long[1];
+        CnbExtension.check("CnbModelData.addAnimation", NativeBindings.cnbModelAddAnimation(
+                handle(), CnbExtension.utf8(name), clip.DurationSeconds(), flat.boneIndices(),
+                flat.keyframeCounts(), flat.times(), flat.values(), targetSpace.ordinal(),
+                index));
+        return Math.toIntExact(index[0]);
     }
 
     /** Returns every animation clip in index order. */

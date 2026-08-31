@@ -2574,6 +2574,22 @@
     ],
     "NativeCnbRoutes": [
       {
+        "java": "cnbAnimationClipCopyKeyframes",
+        "symbol": "cna_cnb_animation_clip_copy_keyframes"
+      },
+      {
+        "java": "cnbAnimationClipDestroy",
+        "symbol": "cna_cnb_animation_clip_destroy"
+      },
+      {
+        "java": "cnbAnimationClipGet",
+        "symbol": "cna_cnb_animation_clip_get"
+      },
+      {
+        "java": "cnbAnimationClipGetTrack",
+        "symbol": "cna_cnb_animation_clip_get_track"
+      },
+      {
         "java": "cnbAssetTypeIdFromName",
         "symbol": "cna_cnb_asset_type_id_from_name"
       },
@@ -2584,6 +2600,74 @@
       {
         "java": "cnbBuildModelFromCnj",
         "symbol": "cna_cnb_build_model_from_cnj"
+      },
+      {
+        "java": "cnbByteWriterCopyBytes",
+        "symbol": "cna_cnb_byte_writer_copy_bytes"
+      },
+      {
+        "java": "cnbByteWriterCreate",
+        "symbol": "cna_cnb_byte_writer_create"
+      },
+      {
+        "java": "cnbByteWriterCreateFromBytes",
+        "symbol": "cna_cnb_byte_writer_create_from_bytes"
+      },
+      {
+        "java": "cnbByteWriterDestroy",
+        "symbol": "cna_cnb_byte_writer_destroy"
+      },
+      {
+        "java": "cnbByteWriterGetSize",
+        "symbol": "cna_cnb_byte_writer_get_size"
+      },
+      {
+        "java": "cnbByteWriterTake",
+        "symbol": "cna_cnb_byte_writer_take"
+      },
+      {
+        "java": "cnbByteWriterWriteBytes",
+        "symbol": "cna_cnb_byte_writer_write_bytes"
+      },
+      {
+        "java": "cnbByteWriterWriteF32",
+        "symbol": "cna_cnb_byte_writer_write_f32"
+      },
+      {
+        "java": "cnbByteWriterWriteF64",
+        "symbol": "cna_cnb_byte_writer_write_f64"
+      },
+      {
+        "java": "cnbByteWriterWriteI32",
+        "symbol": "cna_cnb_byte_writer_write_i32"
+      },
+      {
+        "java": "cnbByteWriterWriteKeyframe",
+        "symbol": "cna_cnb_byte_writer_write_keyframe"
+      },
+      {
+        "java": "cnbByteWriterWriteString",
+        "symbol": "cna_cnb_byte_writer_write_string"
+      },
+      {
+        "java": "cnbByteWriterWriteU16",
+        "symbol": "cna_cnb_byte_writer_write_u16"
+      },
+      {
+        "java": "cnbByteWriterWriteU32",
+        "symbol": "cna_cnb_byte_writer_write_u32"
+      },
+      {
+        "java": "cnbByteWriterWriteU64",
+        "symbol": "cna_cnb_byte_writer_write_u64"
+      },
+      {
+        "java": "cnbByteWriterWriteU8",
+        "symbol": "cna_cnb_byte_writer_write_u8"
+      },
+      {
+        "java": "cnbByteWriterWriteZeros",
+        "symbol": "cna_cnb_byte_writer_write_zeros"
       },
       {
         "java": "cnbCheckedAdd",
@@ -2696,6 +2780,10 @@
       {
         "java": "cnbCrc32cUsesHardware",
         "symbol": "cna_cnb_crc32c_uses_hardware"
+      },
+      {
+        "java": "cnbDecodeAnimationClip",
+        "symbol": "cna_cnb_decode_animation_clip"
       },
       {
         "java": "cnbDecodeCurve",
@@ -3322,6 +3410,10 @@
         "symbol": "cna_cnb_reader_destroy"
       },
       {
+        "java": "cnbReaderFail",
+        "symbol": "cna_cnb_reader_fail"
+      },
+      {
         "java": "cnbReaderGetContextSize",
         "symbol": "cna_cnb_reader_get_context_size"
       },
@@ -3356,6 +3448,14 @@
       {
         "java": "cnbReaderReadI32",
         "symbol": "cna_cnb_reader_read_i32"
+      },
+      {
+        "java": "cnbReaderReadKeyframe",
+        "symbol": "cna_cnb_reader_read_keyframe"
+      },
+      {
+        "java": "cnbReaderReadSeconds",
+        "symbol": "cna_cnb_reader_read_seconds"
       },
       {
         "java": "cnbReaderReadString",
@@ -3494,12 +3594,20 @@
         "symbol": "cna_cnb_writer_add_chunk"
       },
       {
+        "java": "cnbWriterAddExternalReference",
+        "symbol": "cna_cnb_writer_add_external_reference"
+      },
+      {
         "java": "cnbWriterAppendEmbeddedTexture2d",
         "symbol": "cna_cnb_writer_append_embedded_texture2d"
       },
       {
         "java": "cnbWriterBuild",
         "symbol": "cna_cnb_writer_build"
+      },
+      {
+        "java": "cnbWriterClearExternalReferences",
+        "symbol": "cna_cnb_writer_clear_external_references"
       },
       {
         "java": "cnbWriterCreate",

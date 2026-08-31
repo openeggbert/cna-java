@@ -3,6 +3,7 @@ package org.openeggbert.cna.extensions.content;
 import org.openeggbert.cna.internal.generated.NativeCnbRoutes;
 
 import java.nio.file.Path;
+import java.util.List;
 import java.util.Objects;
 
 /**
@@ -127,6 +128,35 @@ public final class CnbWriter implements AutoCloseable {
         CnbExtension.check("CnbWriter.getLimits",
                 NativeCnbRoutes.cnbWriterGetLimits(open(), values));
         return CnbReadLimits.decode(values);
+    }
+
+    /**
+     * Replaces the whole external-reference table.
+     *
+     * <p>The {@code XREF} table names the assets a file refers to by logical name rather than
+     * embedding, and the schema's own indices are positions in it -- so the order given here is
+     * the order the file records, and a reference's index is where it sits in this list.
+     *
+     * <p>CNA validates each name when the file is assembled, with the same function its reader
+     * applies. Sharing the rule is what stops a writer producing a file its own reader refuses.
+     *
+     * @param references the table; an empty list clears it
+     */
+    public void setExternalReferences(List<CnbExternalReference> references) {
+        Objects.requireNonNull(references, "references");
+        long handle = open();
+        // Clear then append in order, which is CNA's own whole-table setter: it takes one entry
+        // at a time because each carries a string, and C cannot express the table as one
+        // argument.
+        CnbExtension.check("CnbWriter.setExternalReferences",
+                NativeCnbRoutes.cnbWriterClearExternalReferences(handle));
+        for (CnbExternalReference reference : references) {
+            Objects.requireNonNull(reference, "reference");
+            CnbExtension.check("CnbWriter.setExternalReferences",
+                    NativeCnbRoutes.cnbWriterAddExternalReference(handle,
+                            new long[] {reference.Flags(), reference.ExpectedAssetType().Id()},
+                            CnbExtension.utf8(reference.LogicalName())));
+        }
     }
 
     /**

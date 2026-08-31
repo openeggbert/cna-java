@@ -13,6 +13,26 @@ public final class NativeCnbRoutes {
     }
 
     /**
+     * cna_cnb_animation_clip_copy_keyframes (cnb.h).
+     */
+    public static native int cnbAnimationClipCopyKeyframes(long clip, long track, float[] destinationFloating, double[] destinationDoubles, long[] outKeyframeCount);
+
+    /**
+     * cna_cnb_animation_clip_destroy (cnb.h).
+     */
+    public static native int cnbAnimationClipDestroy(long clip);
+
+    /**
+     * cna_cnb_animation_clip_get (cnb.h).
+     */
+    public static native int cnbAnimationClipGet(long clip, double[] outDurationSeconds, long[] outTrackCount, int[] outTargetSpace);
+
+    /**
+     * cna_cnb_animation_clip_get_track (cnb.h).
+     */
+    public static native int cnbAnimationClipGetTrack(long clip, long track, int[] outBoneIndex, long[] outKeyframeCount);
+
+    /**
      * cna_cnb_asset_type_id_from_name (cnb.h).
      */
     public static native int cnbAssetTypeIdFromName(byte[] name, int[] outAssetTypeId);
@@ -26,6 +46,110 @@ public final class NativeCnbRoutes {
      * cna_cnb_build_model_from_cnj (cnb.h).
      */
     public static native int cnbBuildModelFromCnj(byte[] cnjPath, byte[] contentRoot, long[] outResult);
+
+    /**
+     * cna_cnb_byte_writer_copy_bytes (cnb.h).
+     */
+    public static native int cnbByteWriterCopyBytes(long writer, byte[] destination, long[] outByteCount);
+
+    /**
+     * cna_cnb_byte_writer_create (cnb.h).
+     */
+    public static native int cnbByteWriterCreate(long[] outWriter);
+
+    /**
+     * cna_cnb_byte_writer_create_from_bytes (cnb.h).
+     */
+    public static native int cnbByteWriterCreateFromBytes(byte[] initial, long[] outWriter);
+
+    /**
+     * cna_cnb_byte_writer_destroy (cnb.h).
+     */
+    public static native int cnbByteWriterDestroy(long writer);
+
+    /**
+     * cna_cnb_byte_writer_get_size (cnb.h).
+     */
+    public static native int cnbByteWriterGetSize(long writer, long[] outSize);
+
+    /**
+     * cna_cnb_byte_writer_take (cnb.h).
+     */
+    public static native int cnbByteWriterTake(long writer, byte[] destination, long[] outByteCount);
+
+    /**
+     * cna_cnb_byte_writer_write_bytes (cnb.h).
+     */
+    public static native int cnbByteWriterWriteBytes(long writer, byte[] bytes);
+
+    /**
+     * cna_cnb_byte_writer_write_f32 (cnb.h).
+     */
+    public static native int cnbByteWriterWriteF32(long writer, float value);
+
+    /**
+     * cna_cnb_byte_writer_write_f64 (cnb.h).
+     */
+    public static native int cnbByteWriterWriteF64(long writer, double value);
+
+    /**
+     * cna_cnb_byte_writer_write_i32 (cnb.h).
+     */
+    public static native int cnbByteWriterWriteI32(long writer, int value);
+
+    /**
+     * cna_cnb_byte_writer_write_keyframe (cnb.h).
+     *
+     * <p>keyframeFloating carries CNA_KeyframeEXT in this order:
+     * <ol start="0">
+     *   <li>{@code translation.x} (float)</li>
+     *   <li>{@code translation.y} (float)</li>
+     *   <li>{@code translation.z} (float)</li>
+     *   <li>{@code rotation.x} (float)</li>
+     *   <li>{@code rotation.y} (float)</li>
+     *   <li>{@code rotation.z} (float)</li>
+     *   <li>{@code rotation.w} (float)</li>
+     *   <li>{@code scale.x} (float)</li>
+     *   <li>{@code scale.y} (float)</li>
+     *   <li>{@code scale.z} (float)</li>
+     * </ol>
+     *
+     * <p>keyframeDoubles carries CNA_KeyframeEXT in this order:
+     * <ol start="0">
+     *   <li>{@code time_seconds} (double)</li>
+     * </ol>
+     */
+    public static native int cnbByteWriterWriteKeyframe(long writer, float[] keyframeFloating, double[] keyframeDoubles);
+
+    /**
+     * cna_cnb_byte_writer_write_string (cnb.h).
+     */
+    public static native int cnbByteWriterWriteString(long writer, byte[] value);
+
+    /**
+     * cna_cnb_byte_writer_write_u16 (cnb.h).
+     */
+    public static native int cnbByteWriterWriteU16(long writer, int value);
+
+    /**
+     * cna_cnb_byte_writer_write_u32 (cnb.h).
+     */
+    public static native int cnbByteWriterWriteU32(long writer, int value);
+
+    /**
+     * cna_cnb_byte_writer_write_u64 (cnb.h).
+     */
+    public static native int cnbByteWriterWriteU64(long writer, long value);
+
+    /**
+     * cna_cnb_byte_writer_write_u8 (cnb.h).
+     */
+    public static native int cnbByteWriterWriteU8(long writer, byte value);
+
+    /**
+     * cna_cnb_byte_writer_write_zeros (cnb.h).
+     */
+    public static native int cnbByteWriterWriteZeros(long writer, long byteCount);
 
     /**
      * cna_cnb_checked_add (cnb.h).
@@ -179,6 +303,11 @@ public final class NativeCnbRoutes {
      * cna_cnb_crc32c_uses_hardware (cnb.h).
      */
     public static native int cnbCrc32cUsesHardware(boolean[] outUsesHardware);
+
+    /**
+     * cna_cnb_decode_animation_clip (cnb.h).
+     */
+    public static native int cnbDecodeAnimationClip(long document, long[] outClip);
 
     /**
      * cna_cnb_decode_curve (cnb.h).
@@ -1373,6 +1502,11 @@ public final class NativeCnbRoutes {
     public static native int cnbReaderDestroy(long reader);
 
     /**
+     * cna_cnb_reader_fail (cnb.h).
+     */
+    public static native int cnbReaderFail(long reader, byte[] detail);
+
+    /**
      * cna_cnb_reader_get_context_size (cnb.h).
      */
     public static native int cnbReaderGetContextSize(long reader, long[] outByteCount);
@@ -1416,6 +1550,35 @@ public final class NativeCnbRoutes {
      * cna_cnb_reader_read_i32 (cnb.h).
      */
     public static native int cnbReaderReadI32(long reader, int[] outValue);
+
+    /**
+     * cna_cnb_reader_read_keyframe (cnb.h).
+     *
+     * <p>outKeyframeFloating carries CNA_KeyframeEXT in this order:
+     * <ol start="0">
+     *   <li>{@code translation.x} (float)</li>
+     *   <li>{@code translation.y} (float)</li>
+     *   <li>{@code translation.z} (float)</li>
+     *   <li>{@code rotation.x} (float)</li>
+     *   <li>{@code rotation.y} (float)</li>
+     *   <li>{@code rotation.z} (float)</li>
+     *   <li>{@code rotation.w} (float)</li>
+     *   <li>{@code scale.x} (float)</li>
+     *   <li>{@code scale.y} (float)</li>
+     *   <li>{@code scale.z} (float)</li>
+     * </ol>
+     *
+     * <p>outKeyframeDoubles carries CNA_KeyframeEXT in this order:
+     * <ol start="0">
+     *   <li>{@code time_seconds} (double)</li>
+     * </ol>
+     */
+    public static native int cnbReaderReadKeyframe(long reader, float[] outKeyframeFloating, double[] outKeyframeDoubles);
+
+    /**
+     * cna_cnb_reader_read_seconds (cnb.h).
+     */
+    public static native int cnbReaderReadSeconds(long reader, byte[] what, double[] outSeconds);
 
     /**
      * cna_cnb_reader_read_string (cnb.h).
@@ -1725,6 +1888,17 @@ public final class NativeCnbRoutes {
     public static native int cnbWriterAddChunk(long writer, int type, byte[] data, int flags, int alignment);
 
     /**
+     * cna_cnb_writer_add_external_reference (cnb.h).
+     *
+     * <p>referenceIntegral carries CNA_CnbExternalReference in this order:
+     * <ol start="0">
+     *   <li>{@code flags} (uint32_t)</li>
+     *   <li>{@code expected_asset_type_id} (uint32_t)</li>
+     * </ol>
+     */
+    public static native int cnbWriterAddExternalReference(long writer, long[] referenceIntegral, byte[] logicalName);
+
+    /**
      * cna_cnb_writer_append_embedded_texture2d (cnb.h).
      */
     public static native int cnbWriterAppendEmbeddedTexture2d(long writer, long texture, byte[] label);
@@ -1733,6 +1907,11 @@ public final class NativeCnbRoutes {
      * cna_cnb_writer_build (cnb.h).
      */
     public static native int cnbWriterBuild(long writer, byte[] destination, long[] outByteCount);
+
+    /**
+     * cna_cnb_writer_clear_external_references (cnb.h).
+     */
+    public static native int cnbWriterClearExternalReferences(long writer);
 
     /**
      * cna_cnb_writer_create (cnb.h).
