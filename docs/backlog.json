@@ -161,10 +161,11 @@
       "title": "Inventory the Content Pipeline build-time profile",
       "family": "Microsoft.Xna.Framework.Content.Pipeline",
       "authority": "the seven Content Pipeline assemblies, SHA-256 pinned in xna40-content-pipeline.json",
-      "currentState": "The profile exists and is pinned; nothing is measured against it yet.",
-      "expectedState": "A measured gap report, and a decision recorded on whether a Java content pipeline belongs in this binding at all.",
+      "currentState": "Measured. 128 reference types and 743 members; 125 of the types are absent and 3 are already present from the runtime projection. By namespace: Graphics 47, the framework 32, Processors 28, Intermediate 7, Compiler 5, Audio 5, MSBuild Tasks 4.",
+      "expectedState": "A decision, recorded with its evidence in docs/content-pipeline-decision.md: partial/interop. CNA-Java consumes compiled content and does not reimplement Microsoft's build-time pipeline. Four measured reasons, none of them size: two namespaces need MSBuild and System.Xml types the pinned corpus does not contain; the ten importers wrap Windows-only native technology whose bytes cannot be reproduced; every ContentTypeWriter's one abstract member returns a CLR assembly-qualified reader name, so emitting .xnb from Java would produce files no XNA runtime reads; and CNA already ships its own compiler and format, which the binding now consumes through org.openeggbert.cna.extensions.content.",
       "priority": 9,
-      "status": "ready"
+      "status": "done",
+      "note": "The profile stays pinned and is deliberately not measured against the runtime target: a build-time contract is not a runtime regression gate."
     },
     {
       "id": "JAVA-EXT-001",
