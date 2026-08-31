@@ -30,4 +30,19 @@ public final class SystemInformation {
                         DeviceExtension.game("SystemInformation"), megabytes));
         return megabytes[0];
     }
+
+    /**
+     * Reports whether the game is running on real hardware or in an emulator.
+     *
+     * <p>The one device query CNA answers without a game: it reads the build's own target rather
+     * than the running platform, so there is nothing to reach through.
+     *
+     * @return what CNA says this build runs on
+     */
+    public static DeviceType getDeviceType() {
+        int[] kind = new int[1];
+        DeviceExtension.check("SystemInformation.getDeviceType",
+                NativeDeviceExtensionRoutes.environmentGetDeviceType(kind));
+        return DeviceType.of(kind[0]);
+    }
 }

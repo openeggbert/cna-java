@@ -331,8 +331,8 @@
       },
       "classification": "CNA_EXTENSION_CANDIDATE",
       "purposeReason": "Camera, clipboard, locale, power, message box, file dialog, system tray and vibration are CNA device extensions beyond XNA 4.0.",
-      "bindingStatus": "ACTIONABLE_LOCAL",
-      "bindingReason": "placeholder"
+      "bindingStatus": "DELIBERATE_NON_BINDING",
+      "bindingReason": "Nothing is left unbound here except the camera family above; this catch-all exists so a new devices.h declaration is classified rather than unexplained."
     },
     {
       "match": {
@@ -372,12 +372,48 @@
     },
     {
       "match": {
+        "symbols": [
+          "cna_input_device_info_init",
+          "cna_input_device_info_equals",
+          "cna_sensor_info_init",
+          "cna_sensor_info_equals"
+        ]
+      },
+      "classification": "NOT_USEFUL_IN_JAVA",
+      "purposeReason": "Constructing and comparing one enumerated device's descriptor, which CNA also fills in from cna_input_devices_get_*_info_at and cna_sensor_devices_get_info_at.",
+      "bindingStatus": "DELIBERATE_NON_BINDING",
+      "bindingReason": "InputDeviceInfo and SensorDeviceInfo are Java records, so their construction, equality and hashing are the language's and are exact. A native constructor would produce a second way to build a value the enumeration already hands over complete, and a native equality would be a second definition of the one the record generates."
+    },
+    {
+      "match": {
+        "symbols": [
+          "cna_clipboard_set_text"
+        ]
+      },
+      "classification": "CNA_EXTENSION_CANDIDATE",
+      "purposeReason": "Places text on the host clipboard, which XNA 4.0 has no counterpart for.",
+      "bindingStatus": "DELIBERATE_NON_BINDING",
+      "bindingReason": "cna_devices_clipboard_set_text_ext is the same operation with the platform's answer attached, and Clipboard.SetText returns it. This form deliberately reports nothing, reproducing a canonical method that returns void; binding both would give a game two ways to make the same request and one of them would silently discard whether the host took it."
+    },
+    {
+      "match": {
+        "symbols": [
+          "cna_input_devices_reset_for_tests_ext"
+        ]
+      },
+      "classification": "NOT_USEFUL_IN_JAVA",
+      "purposeReason": "A CNA test seam that clears the enumerated device tables.",
+      "bindingStatus": "DELIBERATE_NON_BINDING",
+      "bindingReason": "Exposing it would let a consumer change what the device-enumeration surface reports, which is the opposite of what that surface is for -- the same rule the mouse and gamer test seams already carry. The hot-plug raise routes beside it are bound because they add an event a game can observe rather than removing state it can read."
+    },
+    {
+      "match": {
         "header": "input_devices.h"
       },
       "classification": "CNA_EXTENSION_CANDIDATE",
       "purposeReason": "Device enumeration and hot-plug events are a CNA input extension; XNA 4.0 merges input state across devices and never enumerates them.",
-      "bindingStatus": "ACTIONABLE_LOCAL",
-      "bindingReason": "placeholder"
+      "bindingStatus": "DELIBERATE_NON_BINDING",
+      "bindingReason": "Nothing is left unbound here; this catch-all exists so a new input_devices.h declaration is classified rather than unexplained."
     },
     {
       "match": {

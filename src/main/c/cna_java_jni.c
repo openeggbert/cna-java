@@ -845,6 +845,16 @@ typedef struct CnaFunctions {
     CNA_JNI_ROUTE(cna_render_pipeline_set_transparent_scene) render_pipeline_set_transparent_scene;
     CNA_JNI_ROUTE(cna_render_pipeline_set_shadow_scene) render_pipeline_set_shadow_scene;
 
+    /* A tray entry's click handler, registered for as long as the tray lives, and the file
+       dialog's one-shot result handler. Both take a C function pointer; the difference between
+       them is how long the Java object behind it has to survive, and it is the whole design:
+       the tray's is released when the tray closes, and the dialog's releases itself the moment
+       it fires, because a file dialog answers exactly once. */
+    CNA_JNI_ROUTE(cna_system_tray_add_entry) system_tray_add_entry;
+    CNA_JNI_ROUTE(cna_file_dialog_show_open_file_ext) file_dialog_show_open_file_ext;
+    CNA_JNI_ROUTE(cna_file_dialog_show_save_file_ext) file_dialog_show_save_file_ext;
+    CNA_JNI_ROUTE(cna_file_dialog_show_open_folder_ext) file_dialog_show_open_folder_ext;
+
     /* Slots for the routes whose adapter is generated from the CNA headers. */
 #include "generated/routes_table.inc"
 } CnaFunctions;
@@ -1404,6 +1414,88 @@ static CNA_Result graphics_device_from_game(jlong game, CNA_Handle* out_device)
 static JavaGraphicsDeviceManager* java_graphics_device_manager(jlong value)
 {
     return (JavaGraphicsDeviceManager*)(uintptr_t)value;
+}
+
+/* An array of CNA_StringView inputs, built from a Java byte[][].
+ *
+ * Every other string this adapter passes is pinned in place with GetByteArrayElements. That does
+ * not work for an array of them: several arrays would be pinned at once, each needs a local
+ * reference held for as long as it is pinned, and JNI guarantees only sixteen local references
+ * without asking. Each element is therefore copied out with GetByteArrayRegion and its local
+ * reference dropped immediately, which bounds the local references at one and makes the whole
+ * marshalling free with a single call.
+ *
+ * The views borrow the copies, so both live until cna_jni_free_string_views runs -- after the
+ * CNA call, which borrows the labels only for its own duration.
+ */
+typedef struct CnaJniStringViews {
+    CNA_StringView* views;
+    char** storage;
+    jsize count;
+} CnaJniStringViews;
+
+static void cna_jni_free_string_views(CnaJniStringViews* value)
+{
+    if (value->storage != NULL) {
+        for (jsize index = 0; index < value->count; ++index) {
+            free(value->storage[index]);
+        }
+        free(value->storage);
+        value->storage = NULL;
+    }
+    free(value->views);
+    value->views = NULL;
+    value->count = 0;
+}
+
+/* Returns CNA_RESULT_SUCCESS, CNA_RESULT_OUT_OF_MEMORY, or CNA_RESULT_INVALID_ARGUMENT for a
+   null element -- which CNA cannot be handed as a view and which a Java caller can produce. */
+static CNA_Result cna_jni_borrow_string_views(
+    JNIEnv* environment, jobjectArray source, CnaJniStringViews* out_value)
+{
+    out_value->views = NULL;
+    out_value->storage = NULL;
+    out_value->count = 0;
+    if (source == NULL) {
+        return CNA_RESULT_SUCCESS;
+    }
+    const jsize count = (*environment)->GetArrayLength(environment, source);
+    if (count <= 0) {
+        return CNA_RESULT_SUCCESS;
+    }
+    out_value->views = (CNA_StringView*)calloc((size_t)count, sizeof(*out_value->views));
+    out_value->storage = (char**)calloc((size_t)count, sizeof(*out_value->storage));
+    if (out_value->views == NULL || out_value->storage == NULL) {
+        cna_jni_free_string_views(out_value);
+        return CNA_RESULT_OUT_OF_MEMORY;
+    }
+    out_value->count = count;
+    for (jsize index = 0; index < count; ++index) {
+        jbyteArray element = (jbyteArray)(*environment)->GetObjectArrayElement(
+            environment, source, index);
+        if (element == NULL) {
+            (*environment)->ExceptionClear(environment);
+            cna_jni_free_string_views(out_value);
+            return CNA_RESULT_INVALID_ARGUMENT;
+        }
+        const jsize size = (*environment)->GetArrayLength(environment, element);
+        /* One byte over, so an empty element still has a non-null pointer: CNA_StringView's
+           contract is a pointer and a length, and a null pointer with a zero length is a
+           different thing from an empty string in some of CNA's own validation. */
+        char* bytes = (char*)malloc((size_t)size + 1U);
+        if (bytes == NULL) {
+            (*environment)->DeleteLocalRef(environment, element);
+            cna_jni_free_string_views(out_value);
+            return CNA_RESULT_OUT_OF_MEMORY;
+        }
+        (*environment)->GetByteArrayRegion(environment, element, 0, size, (jbyte*)bytes);
+        (*environment)->DeleteLocalRef(environment, element);
+        bytes[size] = '\0';
+        out_value->storage[index] = bytes;
+        out_value->views[index].data = bytes;
+        out_value->views[index].byte_length = (uint64_t)size;
+    }
+    return CNA_RESULT_SUCCESS;
 }
 
 static CNA_Result set_handle_output(JNIEnv* environment, jlongArray output, CNA_Handle value)
@@ -2587,6 +2679,10 @@ JNIEXPORT jint JNICALL Java_org_openeggbert_cna_internal_NativeBindings_nativeLo
     LOAD(light_probe_baker_bake_visibility, "cna_light_probe_baker_bake_visibility");
     LOAD(render_pipeline_set_transparent_scene, "cna_render_pipeline_set_transparent_scene");
     LOAD(render_pipeline_set_shadow_scene, "cna_render_pipeline_set_shadow_scene");
+    LOAD(system_tray_add_entry, "cna_system_tray_add_entry");
+    LOAD(file_dialog_show_open_file_ext, "cna_file_dialog_show_open_file_ext");
+    LOAD(file_dialog_show_save_file_ext, "cna_file_dialog_show_save_file_ext");
+    LOAD(file_dialog_show_open_folder_ext, "cna_file_dialog_show_open_folder_ext");
 
     /* Loads for the routes whose adapter is generated from the CNA headers. */
 #include "generated/routes_load.inc"
@@ -12721,6 +12817,264 @@ Java_org_openeggbert_cna_internal_NativeBindings_nativeRenderPipelineSetShadowSc
     return (jint)cna.render_pipeline_set_shadow_scene((CNA_RenderPipelineHandle)pipeline,
         (CNA_ShadowMapHandle)shadow_map, &directional, &box, pipeline_scene_draw,
         (void*)(intptr_t)token);
+}
+
+/*
+ * The system tray's entry click handler and the file dialog's result handler.
+ *
+ * These are the third callback shape in this adapter, and they are two different lifetimes that
+ * the header states plainly:
+ *
+ *   - A tray entry's handler is registered once and runs whenever a person picks that entry,
+ *     which is for as long as the tray exists. It needs a global reference held by the tray and
+ *     released when the tray closes, which is the same shape the render pipeline's scene
+ *     callbacks already use -- so it uses the same token pair.
+ *
+ *   - A file dialog's handler runs EXACTLY ONCE and then never again. CNA's own dialog is
+ *     asynchronous: `SDL_ShowOpenFileDialog` returns immediately and answers through the event
+ *     loop, possibly many frames later. So a call-duration context would dangle, and a
+ *     tray-shaped token would need somewhere to be released that the Java side cannot know. The
+ *     trampoline therefore deletes its own global reference after it dispatches, which is
+ *     correct precisely because the handler is one-shot -- and the one leak that remains is a
+ *     process that exits with a dialog still open, which the header names as a real case and
+ *     which costs one reference in a JVM that is already going down.
+ *
+ * The tray handler runs on whatever thread the platform delivers the activation on, so the
+ * environment is fetched rather than assumed, exactly as the pipeline's is.
+ */
+static void tray_entry_clicked(void* context)
+{
+    if (context == NULL) {
+        return;
+    }
+    int attached = 0;
+    JNIEnv* environment = callback_environment(&attached);
+    if (environment == NULL) {
+        return;
+    }
+    if ((*environment)->ExceptionCheck(environment) == JNI_FALSE) {
+        jclass runnable = (*environment)->FindClass(environment, "java/lang/Runnable");
+        jmethodID run = runnable == NULL ? NULL
+            : (*environment)->GetMethodID(environment, runnable, "run", "()V");
+        if (runnable != NULL) {
+            (*environment)->DeleteLocalRef(environment, runnable);
+        }
+        if (run != NULL) {
+            (*environment)->CallVoidMethod(environment, (jobject)context, run);
+            /* CNA's tray callback returns void, so there is nowhere to carry a failure to. An
+               exception that unwound into C here would be undefined; it is described and
+               cleared instead, which is the only honest option this shape leaves. */
+            if ((*environment)->ExceptionCheck(environment) == JNI_TRUE) {
+                (*environment)->ExceptionDescribe(environment);
+                (*environment)->ExceptionClear(environment);
+            }
+        }
+    }
+    finish_callback_environment(attached);
+}
+
+JNIEXPORT jint JNICALL
+Java_org_openeggbert_cna_internal_NativeBindings_nativeSystemTrayAddEntry(
+    JNIEnv* environment,
+    jclass type,
+    jlong tray,
+    jbyteArray label,
+    jboolean checkable,
+    jboolean initially_checked,
+    jboolean initially_enabled,
+    jlong token,
+    jlongArray out_index)
+{
+    (void)type;
+    jsize label_size = (*environment)->GetArrayLength(environment, label);
+    jbyte* label_bytes = (*environment)->GetByteArrayElements(environment, label, NULL);
+    if (label_bytes == NULL) {
+        return (jint)CNA_RESULT_OUT_OF_MEMORY;
+    }
+    CNA_StringView label_view = {(const char*)label_bytes, (uint64_t)label_size};
+    uint64_t index_value = 0;
+    const CNA_Result call_result = cna.system_tray_add_entry(
+        (CNA_SystemTrayHandle)tray, label_view, (CNA_Bool)checkable,
+        (CNA_Bool)initially_checked, (CNA_Bool)initially_enabled,
+        token == 0 ? NULL : tray_entry_clicked, token == 0 ? NULL : (void*)(intptr_t)token,
+        &index_value);
+    (*environment)->ReleaseByteArrayElements(environment, label, label_bytes, JNI_ABORT);
+    if (call_result == CNA_RESULT_SUCCESS) {
+        const jlong index_element = (jlong)index_value;
+        (*environment)->SetLongArrayRegion(environment, out_index, 0, 1, &index_element);
+    }
+    return (jint)call_result;
+}
+
+/* Copies CNA's borrowed view array into a Java byte[][], which is the only form that survives
+   this call: the views point at memory the dialog owns for its duration only.
+ *
+ * Bytes rather than strings, deliberately. CNA hands over UTF-8 and NewStringUTF takes modified
+ * UTF-8, which is a different encoding for anything past the basic multilingual plane -- a path
+ * with an emoji in it would come out wrong, silently. The Java side decodes with the JDK's own
+ * UTF-8 decoder instead, where a malformed byte is a described failure rather than a mystery. */
+static jobjectArray dialog_paths(JNIEnv* environment, const CNA_StringView* files, uint64_t count)
+{
+    jclass byte_array_class = (*environment)->FindClass(environment, "[B");
+    if (byte_array_class == NULL) {
+        return NULL;
+    }
+    jobjectArray paths = (*environment)->NewObjectArray(
+        environment, (jsize)count, byte_array_class, NULL);
+    (*environment)->DeleteLocalRef(environment, byte_array_class);
+    if (paths == NULL) {
+        return NULL;
+    }
+    for (uint64_t index = 0; index < count; ++index) {
+        const jsize size = (jsize)files[index].byte_length;
+        jbyteArray bytes = (*environment)->NewByteArray(environment, size);
+        if (bytes == NULL) {
+            (*environment)->DeleteLocalRef(environment, paths);
+            return NULL;
+        }
+        if (size > 0) {
+            (*environment)->SetByteArrayRegion(
+                environment, bytes, 0, size, (const jbyte*)files[index].data);
+        }
+        (*environment)->SetObjectArrayElement(environment, paths, (jsize)index, bytes);
+        (*environment)->DeleteLocalRef(environment, bytes);
+    }
+    return paths;
+}
+
+static void file_dialog_result(const CNA_StringView* files, uint64_t count, void* context)
+{
+    if (context == NULL) {
+        return;
+    }
+    int attached = 0;
+    JNIEnv* environment = callback_environment(&attached);
+    if (environment == NULL) {
+        return;
+    }
+    jobject handler = (jobject)context;
+    if ((*environment)->ExceptionCheck(environment) == JNI_FALSE) {
+        jclass consumer = (*environment)->FindClass(environment, "java/util/function/Consumer");
+        jmethodID accept = consumer == NULL ? NULL
+            : (*environment)->GetMethodID(environment, consumer, "accept",
+                                          "(Ljava/lang/Object;)V");
+        if (consumer != NULL) {
+            (*environment)->DeleteLocalRef(environment, consumer);
+        }
+        jobjectArray paths = accept == NULL ? NULL : dialog_paths(environment, files, count);
+        if (paths != NULL) {
+            (*environment)->CallVoidMethod(environment, handler, accept, paths);
+            (*environment)->DeleteLocalRef(environment, paths);
+            if ((*environment)->ExceptionCheck(environment) == JNI_TRUE) {
+                /* CNA's dialog callback returns void and is called from the platform's event
+                   pump, so there is no Java frame to carry this to. Described and cleared. */
+                (*environment)->ExceptionDescribe(environment);
+                (*environment)->ExceptionClear(environment);
+            }
+        } else if ((*environment)->ExceptionCheck(environment) == JNI_TRUE) {
+            (*environment)->ExceptionClear(environment);
+        }
+    }
+    /* One-shot: the dialog answers exactly once, so this is the reference's own release point
+       and the Java side never has to remember it. */
+    (*environment)->DeleteGlobalRef(environment, handler);
+    finish_callback_environment(attached);
+}
+
+/* Builds the filter array from two parallel byte[][], because CNA_FileDialogFilter carries two
+   CNA_StringView fields and an array of those is the one struct shape the generator refuses --
+   its views would have to outlive one element's marshalling. Here they do, deliberately: both
+   view arrays live until after the CNA call returns. */
+JNIEXPORT jint JNICALL
+Java_org_openeggbert_cna_internal_NativeBindings_nativeFileDialogShow(
+    JNIEnv* environment,
+    jclass type,
+    jlong game,
+    jint kind,
+    jlong token,
+    jobjectArray filter_names,
+    jobjectArray filter_patterns,
+    jbyteArray default_location,
+    jboolean allow_multiple)
+{
+    (void)type;
+    CnaJniStringViews names;
+    CnaJniStringViews patterns;
+    CNA_Result borrowed = cna_jni_borrow_string_views(environment, filter_names, &names);
+    if (borrowed != CNA_RESULT_SUCCESS) {
+        return (jint)borrowed;
+    }
+    borrowed = cna_jni_borrow_string_views(environment, filter_patterns, &patterns);
+    if (borrowed != CNA_RESULT_SUCCESS) {
+        cna_jni_free_string_views(&names);
+        return (jint)borrowed;
+    }
+    if (names.count != patterns.count) {
+        cna_jni_free_string_views(&patterns);
+        cna_jni_free_string_views(&names);
+        return (jint)CNA_RESULT_INVALID_ARGUMENT;
+    }
+    CNA_FileDialogFilter* filters = NULL;
+    if (names.count > 0) {
+        filters = (CNA_FileDialogFilter*)calloc((size_t)names.count, sizeof(*filters));
+        if (filters == NULL) {
+            cna_jni_free_string_views(&patterns);
+            cna_jni_free_string_views(&names);
+            return (jint)CNA_RESULT_OUT_OF_MEMORY;
+        }
+        for (jsize index = 0; index < names.count; ++index) {
+            filters[index].struct_size = (uint32_t)sizeof(CNA_FileDialogFilter);
+            filters[index].struct_version = UINT32_C(1);
+            filters[index].name = names.views[index];
+            filters[index].pattern = patterns.views[index];
+        }
+    }
+    jsize location_size = (*environment)->GetArrayLength(environment, default_location);
+    jbyte* location_bytes =
+        (*environment)->GetByteArrayElements(environment, default_location, NULL);
+    if (location_bytes == NULL) {
+        free(filters);
+        cna_jni_free_string_views(&patterns);
+        cna_jni_free_string_views(&names);
+        return (jint)CNA_RESULT_OUT_OF_MEMORY;
+    }
+    CNA_StringView location = {(const char*)location_bytes, (uint64_t)location_size};
+
+    /* The reference is handed to CNA and released by the trampoline, so it must exist before
+       the call and must not be released here on the success path -- the dialog may already
+       have answered by the time this returns, or may answer many frames later. */
+    void* context = (void*)(intptr_t)token;
+    CNA_FileDialogResultCallback handler = token == 0 ? NULL : file_dialog_result;
+    CNA_Result call_result;
+    switch (kind) {
+        case 0:
+            call_result = cna.file_dialog_show_open_file_ext(
+                (CNA_Handle)game, handler, context, filters, (uint64_t)names.count, location,
+                (CNA_Bool)allow_multiple);
+            break;
+        case 1:
+            call_result = cna.file_dialog_show_save_file_ext(
+                (CNA_Handle)game, handler, context, filters, (uint64_t)names.count, location);
+            break;
+        default:
+            call_result = cna.file_dialog_show_open_folder_ext(
+                (CNA_Handle)game, handler, context, location, (CNA_Bool)allow_multiple);
+            break;
+    }
+    (*environment)->ReleaseByteArrayElements(
+        environment, default_location, location_bytes, JNI_ABORT);
+    free(filters);
+    cna_jni_free_string_views(&patterns);
+    cna_jni_free_string_views(&names);
+    if (call_result != CNA_RESULT_SUCCESS && token != 0) {
+        /* A refused request never reaches the handler, so this is the one path where the
+           trampoline will not run and the reference has to be released here instead. CNA
+           refuses before it dispatches -- a null handler, an invalid filter, no device layer --
+           and answers SUCCESS whenever it has taken the request, including the unavailable case
+           where it reports an empty result through the handler immediately. */
+        (*environment)->DeleteGlobalRef(environment, (jobject)(intptr_t)token);
+    }
+    return (jint)call_result;
 }
 
 /*

@@ -47,10 +47,6 @@
     "cna_avatar_renderer_enable_real_rendering_ext",
     "cna_calibration_event_info_copy_type_name",
     "cna_calibration_event_info_get_type_name_size",
-    "cna_clipboard_copy_text",
-    "cna_clipboard_get_has_text",
-    "cna_clipboard_get_text_size",
-    "cna_clipboard_set_text",
     "cna_cnb_animation_clip_copy_keyframes",
     "cna_cnb_animation_clip_destroy",
     "cna_cnb_animation_clip_get",
@@ -111,12 +107,6 @@
     "cna_compass_set_test_backend_ext",
     "cna_compass_subscribe_calibrate",
     "cna_compass_subscribe_current_value_changed",
-    "cna_environment_get_device_type",
-    "cna_file_dialog_get_is_supported_ext",
-    "cna_file_dialog_set_test_backend_ext",
-    "cna_file_dialog_show_open_file_ext",
-    "cna_file_dialog_show_open_folder_ext",
-    "cna_file_dialog_show_save_file_ext",
     "cna_gyroscope_copy_last_dispatch_exception_message_for_tests_ext",
     "cna_gyroscope_copy_type_name",
     "cna_gyroscope_dispatch_to_instances_for_tests_ext",
@@ -149,20 +139,12 @@
     "cna_haptic_direction_init",
     "cna_haptic_effect_equals",
     "cna_haptic_effect_init",
-    "cna_input_device_info_equals",
-    "cna_input_device_info_init",
-    "cna_input_devices_reset_for_tests_ext",
     "cna_joystick_capabilities_equals",
     "cna_joystick_capabilities_init",
     "cna_joystick_info_equals",
     "cna_joystick_info_init",
     "cna_joystick_state_equals",
     "cna_joysticks_reset_for_tests_ext",
-    "cna_message_box_get_is_supported_ext",
-    "cna_message_box_get_test_log_ext",
-    "cna_message_box_set_test_backend_ext",
-    "cna_message_box_show_ext",
-    "cna_message_box_show_simple_ext",
     "cna_model_animations_ext_copy_clip_name_at",
     "cna_model_animations_ext_copy_type_name",
     "cna_model_animations_ext_create",
@@ -204,7 +186,6 @@
     "cna_object_dictionary_ext_get_string_size",
     "cna_object_dictionary_ext_get_type_name_size",
     "cna_pbr_material_ext_init",
-    "cna_power_get_info",
     "cna_reflective_type_reader_builder_add_custom",
     "cna_reflective_type_reader_builder_add_enum_field",
     "cna_reflective_type_reader_builder_add_field",
@@ -214,41 +195,25 @@
     "cna_reflective_type_reader_builder_register_shared",
     "cna_reflective_type_reader_copy_canonical_name",
     "cna_reflective_type_reader_get_canonical_name_size",
-    "cna_sensor_info_equals",
-    "cna_sensor_info_init",
     "cna_sensor_unsubscribe_ext",
     "cna_shader_effect_declare_uniform_block_ext",
     "cna_signed_in_gamer_set_presence_mode_string_ext",
-    "cna_system_tray_add_entry",
-    "cna_system_tray_click_entry_for_tests_ext",
-    "cna_system_tray_create",
-    "cna_system_tray_create_with_test_backend_ext",
-    "cna_system_tray_destroy",
-    "cna_system_tray_get_entry_checked",
-    "cna_system_tray_get_entry_enabled",
-    "cna_system_tray_get_is_supported_ext",
-    "cna_system_tray_set_entry_checked",
-    "cna_system_tray_set_entry_enabled",
-    "cna_system_tray_set_entry_label",
-    "cna_system_tray_set_tooltip",
     "cna_text_input_get_window_handle_ext",
     "cna_text_input_is_screen_keyboard_shown_for_window_ext",
     "cna_text_input_reset_for_tests_ext",
     "cna_text_input_set_window_handle_ext",
     "cna_texture_transform_ext_equals",
-    "cna_texture_transform_ext_init",
-    "cna_vibrate_controller_get_test_log_ext",
-    "cna_vibrate_controller_set_test_backend_ext"
+    "cna_texture_transform_ext_init"
   ],
   "bindingStatusCounts": {
-    "ACTIONABLE_LOCAL": 238,
+    "ACTIONABLE_LOCAL": 203,
     "BLOCKED_UPSTREAM": 129,
-    "BOUND": 2528,
+    "BOUND": 2557,
     "DEFERRED_TRACKED": 404,
-    "DELIBERATE_NON_BINDING": 755
+    "DELIBERATE_NON_BINDING": 761
   },
   "boundButUnreached": [],
-  "boundFunctions": 2528,
+  "boundFunctions": 2557,
   "boundWithoutJavaCallSite": [],
   "byHeader": {
     "abi.h": {
@@ -363,7 +328,8 @@
       "total": 6
     },
     "input_devices.h": {
-      "CNA_EXTENSION_CANDIDATE": 37,
+      "CNA_EXTENSION_CANDIDATE": 32,
+      "NOT_USEFUL_IN_JAVA": 5,
       "total": 37
     },
     "input_gamepad.h": {
@@ -533,10 +499,10 @@
   },
   "canonicalFunctions": 4054,
   "classificationCounts": {
-    "CNA_EXTENSION_CANDIDATE": 1927,
+    "CNA_EXTENSION_CANDIDATE": 1922,
     "DEFERRED_RUNTIME": 405,
     "JAVA_INTERNAL_ONLY": 9,
-    "NOT_USEFUL_IN_JAVA": 727,
+    "NOT_USEFUL_IN_JAVA": 732,
     "XNA_BACKING": 986
   },
   "cnaInventorySha256": "b485d17b1df9a86c6099700baedcd435c8a3f07487af8741b01d8c471956bfe7",
@@ -581,9 +547,8 @@
       "total": 20
     },
     "devices.h": {
-      "ACTIONABLE_LOCAL": 25,
       "BLOCKED_UPSTREAM": 15,
-      "total": 40
+      "total": 15
     },
     "effects.h": {
       "ACTIONABLE_LOCAL": 10,
@@ -603,8 +568,8 @@
       "total": 1
     },
     "input_devices.h": {
-      "ACTIONABLE_LOCAL": 10,
-      "total": 10
+      "DELIBERATE_NON_BINDING": 1,
+      "total": 1
     },
     "input_haptics.h": {
       "ACTIONABLE_LOCAL": 7,

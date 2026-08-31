@@ -13,6 +13,21 @@ public final class NativeDeviceExtensionRoutes {
     }
 
     /**
+     * cna_clipboard_copy_text (input_devices.h).
+     */
+    public static native int clipboardCopyText(long game, byte[] destination, long[] outBytes);
+
+    /**
+     * cna_clipboard_get_has_text (input_devices.h).
+     */
+    public static native int clipboardGetHasText(long game, boolean[] outHasText);
+
+    /**
+     * cna_clipboard_get_text_size (input_devices.h).
+     */
+    public static native int clipboardGetTextSize(long game, long[] outBytes);
+
+    /**
      * cna_devices_clipboard_set_text_ext (devices.h).
      */
     public static native int devicesClipboardSetTextExt(long game, byte[] text, boolean[] outAccepted);
@@ -39,6 +54,21 @@ public final class NativeDeviceExtensionRoutes {
      * </ol>
      */
     public static native int displayInfoGetSafeAreaExt(long game, long[] outAreaIntegral);
+
+    /**
+     * cna_environment_get_device_type (devices.h).
+     */
+    public static native int environmentGetDeviceType(int[] outDeviceType);
+
+    /**
+     * cna_file_dialog_get_is_supported_ext (devices.h).
+     */
+    public static native int fileDialogGetIsSupportedExt(long game, boolean[] outSupported);
+
+    /**
+     * cna_file_dialog_set_test_backend_ext (devices.h).
+     */
+    public static native int fileDialogSetTestBackendExt(long game, boolean installed, byte[][] results);
 
     /**
      * cna_input_devices_copy_keyboard_name_at (input_devices.h).
@@ -161,9 +191,47 @@ public final class NativeDeviceExtensionRoutes {
     public static native int localeGetPreferredCountExt(long game, long[] outCount);
 
     /**
+     * cna_message_box_get_is_supported_ext (devices.h).
+     */
+    public static native int messageBoxGetIsSupportedExt(long game, boolean[] outSupported);
+
+    /**
+     * cna_message_box_get_test_log_ext (devices.h).
+     *
+     * <p>outLogIntegral carries CNA_MessageBoxTestLog in this order:
+     * <ol start="0">
+     *   <li>{@code simple_calls} (uint32_t)</li>
+     *   <li>{@code choice_calls} (uint32_t)</li>
+     *   <li>{@code last_type} (CNA_MessageBoxType)</li>
+     *   <li>{@code last_button_count} (uint32_t)</li>
+     * </ol>
+     */
+    public static native int messageBoxGetTestLogExt(long game, long[] outLogIntegral);
+
+    /**
+     * cna_message_box_set_test_backend_ext (devices.h).
+     */
+    public static native int messageBoxSetTestBackendExt(long game, boolean installed, int chosenButton);
+
+    /**
+     * cna_message_box_show_ext (devices.h).
+     */
+    public static native int messageBoxShowExt(long game, int type, byte[] title, byte[] message, byte[][] buttonLabels, int[] outChosen);
+
+    /**
+     * cna_message_box_show_simple_ext (devices.h).
+     */
+    public static native int messageBoxShowSimpleExt(long game, int type, byte[] title, byte[] message);
+
+    /**
      * cna_power_get_battery_percent_ext (devices.h).
      */
     public static native int powerGetBatteryPercentExt(long game, int[] outPercent);
+
+    /**
+     * cna_power_get_info (input_devices.h).
+     */
+    public static native int powerGetInfo(long game, int[] outState, int[] outSecondsLeft, int[] outPercent);
 
     /**
      * cna_power_get_seconds_remaining_ext (devices.h).
@@ -186,6 +254,61 @@ public final class NativeDeviceExtensionRoutes {
     public static native int systemInfoGetSystemRamMegabytesExt(long game, int[] outMegabytes);
 
     /**
+     * cna_system_tray_click_entry_for_tests_ext (devices.h).
+     */
+    public static native int systemTrayClickEntryForTestsExt(long tray, long index);
+
+    /**
+     * cna_system_tray_create (devices.h).
+     */
+    public static native int systemTrayCreate(long game, byte[] tooltip, long[] outTray);
+
+    /**
+     * cna_system_tray_create_with_test_backend_ext (devices.h).
+     */
+    public static native int systemTrayCreateWithTestBackendExt(long game, byte[] tooltip, long[] outTray);
+
+    /**
+     * cna_system_tray_destroy (devices.h).
+     */
+    public static native int systemTrayDestroy(long tray);
+
+    /**
+     * cna_system_tray_get_entry_checked (devices.h).
+     */
+    public static native int systemTrayGetEntryChecked(long tray, long index, boolean[] outChecked);
+
+    /**
+     * cna_system_tray_get_entry_enabled (devices.h).
+     */
+    public static native int systemTrayGetEntryEnabled(long tray, long index, boolean[] outEnabled);
+
+    /**
+     * cna_system_tray_get_is_supported_ext (devices.h).
+     */
+    public static native int systemTrayGetIsSupportedExt(long game, boolean[] outSupported);
+
+    /**
+     * cna_system_tray_set_entry_checked (devices.h).
+     */
+    public static native int systemTraySetEntryChecked(long tray, long index, boolean checked);
+
+    /**
+     * cna_system_tray_set_entry_enabled (devices.h).
+     */
+    public static native int systemTraySetEntryEnabled(long tray, long index, boolean enabled);
+
+    /**
+     * cna_system_tray_set_entry_label (devices.h).
+     */
+    public static native int systemTraySetEntryLabel(long tray, long index, byte[] label);
+
+    /**
+     * cna_system_tray_set_tooltip (devices.h).
+     */
+    public static native int systemTraySetTooltip(long tray, byte[] tooltip);
+
+    /**
      * cna_url_launcher_open_ext (devices.h).
      */
     public static native int urlLauncherOpenExt(long game, byte[] url, boolean[] outOpened);
@@ -204,6 +327,33 @@ public final class NativeDeviceExtensionRoutes {
      * cna_vibrate_controller_get_is_supported_ext (devices.h).
      */
     public static native int vibrateControllerGetIsSupportedExt(long game, boolean[] outSupported);
+
+    /**
+     * cna_vibrate_controller_get_test_log_ext (devices.h).
+     *
+     * <p>outLogIntegral carries CNA_VibrationTestLog in this order:
+     * <ol start="0">
+     *   <li>{@code start_calls} (uint32_t)</li>
+     *   <li>{@code stop_calls} (uint32_t)</li>
+     *   <li>{@code left_right_calls} (uint32_t)</li>
+     *   <li>{@code reserved} (uint32_t)</li>
+     *   <li>{@code last_duration_ticks} (int64_t)</li>
+     * </ol>
+     *
+     * <p>outLogFloating carries CNA_VibrationTestLog in this order:
+     * <ol start="0">
+     *   <li>{@code last_intensity} (float)</li>
+     *   <li>{@code last_large_motor} (float)</li>
+     *   <li>{@code last_small_motor} (float)</li>
+     *   <li>{@code reserved_float} (float)</li>
+     * </ol>
+     */
+    public static native int vibrateControllerGetTestLogExt(long game, long[] outLogIntegral, float[] outLogFloating);
+
+    /**
+     * cna_vibrate_controller_set_test_backend_ext (devices.h).
+     */
+    public static native int vibrateControllerSetTestBackendExt(long game, boolean installed, boolean supported, byte[] deviceName);
 
     /**
      * cna_vibrate_controller_start (devices.h).

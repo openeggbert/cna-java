@@ -2765,6 +2765,38 @@
       ]
     },
     {
+      "name": "cna_clipboard_copy_text",
+      "header": "input_devices.h",
+      "ownership": "borrows game; copies into the caller buffer, owning nothing",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_Handle",
+        "char*",
+        "uint64_t",
+        "uint64_t*"
+      ]
+    },
+    {
+      "name": "cna_clipboard_get_has_text",
+      "header": "input_devices.h",
+      "ownership": "borrows game; returns a value",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_Handle",
+        "CNA_Bool*"
+      ]
+    },
+    {
+      "name": "cna_clipboard_get_text_size",
+      "header": "input_devices.h",
+      "ownership": "borrows game; returns a value",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_Handle",
+        "uint64_t*"
+      ]
+    },
+    {
       "name": "cna_clustered_forward_effect_begin",
       "header": "engine_layer.h",
       "ownership": "borrows the effect, the caller's matrices and the light buffer for the duration of the call",
@@ -9884,6 +9916,15 @@
       ]
     },
     {
+      "name": "cna_environment_get_device_type",
+      "header": "devices.h",
+      "ownership": "no handle; returns a value",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_DeviceType*"
+      ]
+    },
+    {
       "name": "cna_environment_map_effect_create",
       "header": "effects.h",
       "ownership": "borrows device; returns owned executable EnvironmentMapEffect",
@@ -10203,6 +10244,70 @@
       "returnType": "CNA_Result",
       "parameters": [
         "uint64_t*"
+      ]
+    },
+    {
+      "name": "cna_file_dialog_get_is_supported_ext",
+      "header": "devices.h",
+      "ownership": "borrows game; returns a value",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_Handle",
+        "CNA_Bool*"
+      ]
+    },
+    {
+      "name": "cna_file_dialog_set_test_backend_ext",
+      "header": "devices.h",
+      "ownership": "borrows game; copies the answer paths, owning nothing after the call",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_Handle",
+        "CNA_Bool",
+        "const CNA_StringView*",
+        "uint64_t"
+      ]
+    },
+    {
+      "name": "cna_file_dialog_show_open_file_ext",
+      "header": "devices.h",
+      "ownership": "borrows game; CNA keeps the caller context until it answers exactly once",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_Handle",
+        "CNA_FileDialogResultCallback",
+        "void*",
+        "const CNA_FileDialogFilter*",
+        "uint64_t",
+        "CNA_StringView",
+        "CNA_Bool"
+      ]
+    },
+    {
+      "name": "cna_file_dialog_show_open_folder_ext",
+      "header": "devices.h",
+      "ownership": "borrows game; CNA keeps the caller context until it answers exactly once",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_Handle",
+        "CNA_FileDialogResultCallback",
+        "void*",
+        "CNA_StringView",
+        "CNA_Bool"
+      ]
+    },
+    {
+      "name": "cna_file_dialog_show_save_file_ext",
+      "header": "devices.h",
+      "ownership": "borrows game; CNA keeps the caller context until it answers exactly once",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_Handle",
+        "CNA_FileDialogResultCallback",
+        "void*",
+        "const CNA_FileDialogFilter*",
+        "uint64_t",
+        "CNA_StringView"
       ]
     },
     {
@@ -17044,6 +17149,64 @@
       ]
     },
     {
+      "name": "cna_message_box_get_is_supported_ext",
+      "header": "devices.h",
+      "ownership": "borrows game; returns a value",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_Handle",
+        "CNA_Bool*"
+      ]
+    },
+    {
+      "name": "cna_message_box_get_test_log_ext",
+      "header": "devices.h",
+      "ownership": "borrows game; fills a caller-provided struct",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_Handle",
+        "CNA_MessageBoxTestLog*"
+      ]
+    },
+    {
+      "name": "cna_message_box_set_test_backend_ext",
+      "header": "devices.h",
+      "ownership": "borrows game; installs a process-wide backend, owning nothing",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_Handle",
+        "CNA_Bool",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "cna_message_box_show_ext",
+      "header": "devices.h",
+      "ownership": "borrows game and the labels for the call",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_Handle",
+        "CNA_MessageBoxType",
+        "CNA_StringView",
+        "CNA_StringView",
+        "const CNA_StringView*",
+        "uint64_t",
+        "int32_t*"
+      ]
+    },
+    {
+      "name": "cna_message_box_show_simple_ext",
+      "header": "devices.h",
+      "ownership": "borrows game and the text for the call",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_Handle",
+        "CNA_MessageBoxType",
+        "CNA_StringView",
+        "CNA_StringView"
+      ]
+    },
+    {
       "name": "cna_microphone_copy_name_at",
       "header": "audio.h",
       "ownership": "borrows runtime microphone by index; caller UTF-8 buffer",
@@ -21232,6 +21395,18 @@
       ]
     },
     {
+      "name": "cna_power_get_info",
+      "header": "input_devices.h",
+      "ownership": "borrows game; returns three values",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_Handle",
+        "CNA_PowerState*",
+        "int32_t*",
+        "int32_t*"
+      ]
+    },
+    {
       "name": "cna_power_get_seconds_remaining_ext",
       "header": "devices.h",
       "ownership": "borrows its inputs; caller output",
@@ -25101,6 +25276,138 @@
       ]
     },
     {
+      "name": "cna_system_tray_add_entry",
+      "header": "devices.h",
+      "ownership": "borrows tray and the label for the call; CNA keeps the caller context for the tray lifetime",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_SystemTrayHandle",
+        "CNA_StringView",
+        "CNA_Bool",
+        "CNA_Bool",
+        "CNA_Bool",
+        "CNA_TrayEntryClickCallback",
+        "void*",
+        "uint64_t*"
+      ]
+    },
+    {
+      "name": "cna_system_tray_click_entry_for_tests_ext",
+      "header": "devices.h",
+      "ownership": "borrows tray",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_SystemTrayHandle",
+        "uint64_t"
+      ]
+    },
+    {
+      "name": "cna_system_tray_create",
+      "header": "devices.h",
+      "ownership": "borrows game; returns an owned tray handle",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_Handle",
+        "CNA_StringView",
+        "CNA_SystemTrayHandle*"
+      ]
+    },
+    {
+      "name": "cna_system_tray_create_with_test_backend_ext",
+      "header": "devices.h",
+      "ownership": "borrows game; returns an owned tray handle",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_Handle",
+        "CNA_StringView",
+        "CNA_SystemTrayHandle*"
+      ]
+    },
+    {
+      "name": "cna_system_tray_destroy",
+      "header": "devices.h",
+      "ownership": "destroys an owned tray handle",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_SystemTrayHandle"
+      ]
+    },
+    {
+      "name": "cna_system_tray_get_entry_checked",
+      "header": "devices.h",
+      "ownership": "borrows tray; returns a value",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_SystemTrayHandle",
+        "uint64_t",
+        "CNA_Bool*"
+      ]
+    },
+    {
+      "name": "cna_system_tray_get_entry_enabled",
+      "header": "devices.h",
+      "ownership": "borrows tray; returns a value",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_SystemTrayHandle",
+        "uint64_t",
+        "CNA_Bool*"
+      ]
+    },
+    {
+      "name": "cna_system_tray_get_is_supported_ext",
+      "header": "devices.h",
+      "ownership": "borrows game; returns a value",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_Handle",
+        "CNA_Bool*"
+      ]
+    },
+    {
+      "name": "cna_system_tray_set_entry_checked",
+      "header": "devices.h",
+      "ownership": "borrows tray",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_SystemTrayHandle",
+        "uint64_t",
+        "CNA_Bool"
+      ]
+    },
+    {
+      "name": "cna_system_tray_set_entry_enabled",
+      "header": "devices.h",
+      "ownership": "borrows tray",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_SystemTrayHandle",
+        "uint64_t",
+        "CNA_Bool"
+      ]
+    },
+    {
+      "name": "cna_system_tray_set_entry_label",
+      "header": "devices.h",
+      "ownership": "borrows tray and the label for the call",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_SystemTrayHandle",
+        "uint64_t",
+        "CNA_StringView"
+      ]
+    },
+    {
+      "name": "cna_system_tray_set_tooltip",
+      "header": "devices.h",
+      "ownership": "borrows tray and the tooltip for the call",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_SystemTrayHandle",
+        "CNA_StringView"
+      ]
+    },
+    {
       "name": "cna_text_input_is_active_ext",
       "header": "input_text.h",
       "ownership": "borrows its inputs; caller output",
@@ -26108,6 +26415,28 @@
       "parameters": [
         "CNA_Handle",
         "CNA_Bool*"
+      ]
+    },
+    {
+      "name": "cna_vibrate_controller_get_test_log_ext",
+      "header": "devices.h",
+      "ownership": "borrows game; fills a caller-provided struct",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_Handle",
+        "CNA_VibrationTestLog*"
+      ]
+    },
+    {
+      "name": "cna_vibrate_controller_set_test_backend_ext",
+      "header": "devices.h",
+      "ownership": "borrows game and the device name for the call",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_Handle",
+        "CNA_Bool",
+        "CNA_Bool",
+        "CNA_StringView"
       ]
     },
     {

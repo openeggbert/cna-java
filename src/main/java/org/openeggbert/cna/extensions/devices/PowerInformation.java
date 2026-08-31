@@ -48,4 +48,38 @@ public final class PowerInformation {
                         DeviceExtension.game("PowerInformation"), seconds));
         return seconds[0] == UNKNOWN ? null : Duration.ofSeconds(seconds[0]);
     }
+
+    /**
+     * Reads the state, the remaining runtime and the charge in one call.
+     *
+     * <p>Not a convenience over the three getters above: it is the only way to get three values
+     * that describe the same instant. Asked one at a time, a machine unplugged between the first
+     * and the third answers {@code Charging} with no remaining runtime, which is a state no
+     * machine is ever in.
+     *
+     * @return the three values, as one reading
+     */
+    public static PowerSnapshot getSnapshot() {
+        int[] state = new int[1];
+        int[] seconds = new int[1];
+        int[] percent = new int[1];
+        DeviceExtension.check("PowerInformation.getSnapshot",
+                NativeDeviceExtensionRoutes.powerGetInfo(
+                        DeviceExtension.game("PowerInformation"), state, seconds, percent));
+        return new PowerSnapshot(PowerState.values()[state[0]],
+                seconds[0] == UNKNOWN ? null : Duration.ofSeconds(seconds[0]),
+                percent[0] == UNKNOWN ? null : percent[0]);
+    }
+
+    /**
+     * The host's power state, remaining runtime and charge, all describing one instant.
+     *
+     * @param state the power state, which CNA always reports
+     * @param remainingRuntime the runtime left, or {@code null} when the host will not say
+     * @param batteryPercent the charge from 0 through 100, or {@code null} when the host will
+     *        not say
+     */
+    public record PowerSnapshot(PowerState state, Duration remainingRuntime,
+            Integer batteryPercent) {
+    }
 }

@@ -178,6 +178,9 @@
     LOAD(chromatic_aberration_pass_create, "cna_chromatic_aberration_pass_create");
     LOAD(chromatic_aberration_pass_get_strength, "cna_chromatic_aberration_pass_get_strength");
     LOAD(chromatic_aberration_pass_set_strength, "cna_chromatic_aberration_pass_set_strength");
+    LOAD(clipboard_copy_text, "cna_clipboard_copy_text");
+    LOAD(clipboard_get_has_text, "cna_clipboard_get_has_text");
+    LOAD(clipboard_get_text_size, "cna_clipboard_get_text_size");
     LOAD(clustered_forward_effect_begin, "cna_clustered_forward_effect_begin");
     LOAD(clustered_forward_effect_clear_area_light, "cna_clustered_forward_effect_clear_area_light");
     LOAD(clustered_forward_effect_clear_light_probe, "cna_clustered_forward_effect_clear_light_probe");
@@ -720,6 +723,7 @@
     LOAD(effect_set_shadows_enabled_ext, "cna_effect_set_shadows_enabled_ext");
     LOAD(engine_layer_copy_version_string, "cna_engine_layer_copy_version_string");
     LOAD(engine_layer_get_version, "cna_engine_layer_get_version");
+    LOAD(environment_get_device_type, "cna_environment_get_device_type");
     LOAD(environment_processor_convert_equirectangular, "cna_environment_processor_convert_equirectangular");
     LOAD(environment_processor_create, "cna_environment_processor_create");
     LOAD(environment_processor_destroy, "cna_environment_processor_destroy");
@@ -733,6 +737,8 @@
     LOAD(environment_processor_importance_sample_ggx, "cna_environment_processor_importance_sample_ggx");
     LOAD(environment_processor_mip_for_roughness, "cna_environment_processor_mip_for_roughness");
     LOAD(environment_processor_roughness_for_mip, "cna_environment_processor_roughness_for_mip");
+    LOAD(file_dialog_get_is_supported_ext, "cna_file_dialog_get_is_supported_ext");
+    LOAD(file_dialog_set_test_backend_ext, "cna_file_dialog_set_test_backend_ext");
     LOAD(film_grain_pass_create, "cna_film_grain_pass_create");
     LOAD(film_grain_pass_get_intensity, "cna_film_grain_pass_get_intensity");
     LOAD(film_grain_pass_set_intensity, "cna_film_grain_pass_set_intensity");
@@ -1157,6 +1163,11 @@
     LOAD(logger_get_minimum_level, "cna_logger_get_minimum_level");
     LOAD(logger_log, "cna_logger_log");
     LOAD(logger_set_minimum_level, "cna_logger_set_minimum_level");
+    LOAD(message_box_get_is_supported_ext, "cna_message_box_get_is_supported_ext");
+    LOAD(message_box_get_test_log_ext, "cna_message_box_get_test_log_ext");
+    LOAD(message_box_set_test_backend_ext, "cna_message_box_set_test_backend_ext");
+    LOAD(message_box_show_ext, "cna_message_box_show_ext");
+    LOAD(message_box_show_simple_ext, "cna_message_box_show_simple_ext");
     LOAD(model_bone_add_child, "cna_model_bone_add_child");
     LOAD(model_bone_collection_destroy, "cna_model_bone_collection_destroy");
     LOAD(model_bone_collection_get_at, "cna_model_bone_collection_get_at");
@@ -1479,6 +1490,7 @@
     LOAD(post_process_pass_destroy, "cna_post_process_pass_destroy");
     LOAD(post_process_pass_is_supported, "cna_post_process_pass_is_supported");
     LOAD(power_get_battery_percent_ext, "cna_power_get_battery_percent_ext");
+    LOAD(power_get_info, "cna_power_get_info");
     LOAD(power_get_seconds_remaining_ext, "cna_power_get_seconds_remaining_ext");
     LOAD(power_get_state_ext, "cna_power_get_state_ext");
     LOAD(property_dictionary_clear, "cna_property_dictionary_clear");
@@ -1706,6 +1718,17 @@
     LOAD(storage_buffer_set_elements, "cna_storage_buffer_set_elements");
     LOAD(system_info_get_logical_cpu_core_count_ext, "cna_system_info_get_logical_cpu_core_count_ext");
     LOAD(system_info_get_system_ram_megabytes_ext, "cna_system_info_get_system_ram_megabytes_ext");
+    LOAD(system_tray_click_entry_for_tests_ext, "cna_system_tray_click_entry_for_tests_ext");
+    LOAD(system_tray_create, "cna_system_tray_create");
+    LOAD(system_tray_create_with_test_backend_ext, "cna_system_tray_create_with_test_backend_ext");
+    LOAD(system_tray_destroy, "cna_system_tray_destroy");
+    LOAD(system_tray_get_entry_checked, "cna_system_tray_get_entry_checked");
+    LOAD(system_tray_get_entry_enabled, "cna_system_tray_get_entry_enabled");
+    LOAD(system_tray_get_is_supported_ext, "cna_system_tray_get_is_supported_ext");
+    LOAD(system_tray_set_entry_checked, "cna_system_tray_set_entry_checked");
+    LOAD(system_tray_set_entry_enabled, "cna_system_tray_set_entry_enabled");
+    LOAD(system_tray_set_entry_label, "cna_system_tray_set_entry_label");
+    LOAD(system_tray_set_tooltip, "cna_system_tray_set_tooltip");
     LOAD(text_input_is_active_ext, "cna_text_input_is_active_ext");
     LOAD(text_input_is_screen_keyboard_shown_ext, "cna_text_input_is_screen_keyboard_shown_ext");
     LOAD(text_input_raise_text_editing_ext, "cna_text_input_raise_text_editing_ext");
@@ -1742,6 +1765,8 @@
     LOAD(vibrate_controller_copy_device_name_ext, "cna_vibrate_controller_copy_device_name_ext");
     LOAD(vibrate_controller_get_device_name_size_ext, "cna_vibrate_controller_get_device_name_size_ext");
     LOAD(vibrate_controller_get_is_supported_ext, "cna_vibrate_controller_get_is_supported_ext");
+    LOAD(vibrate_controller_get_test_log_ext, "cna_vibrate_controller_get_test_log_ext");
+    LOAD(vibrate_controller_set_test_backend_ext, "cna_vibrate_controller_set_test_backend_ext");
     LOAD(vibrate_controller_start, "cna_vibrate_controller_start");
     LOAD(vibrate_controller_start_left_right_ext, "cna_vibrate_controller_start_left_right_ext");
     LOAD(vibrate_controller_start_with_intensity_ext, "cna_vibrate_controller_start_with_intensity_ext");

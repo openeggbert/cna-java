@@ -7,6 +7,60 @@
  */
 
 JNIEXPORT jint JNICALL
+Java_org_openeggbert_cna_internal_generated_NativeDeviceExtensionRoutes_clipboardCopyText(
+    JNIEnv* environment, jclass declaring_class, jlong game, jbyteArray destination, jlongArray out_bytes)
+{
+    (void)environment;
+    (void)declaring_class;
+    jsize destination_size = (*environment)->GetArrayLength(environment, destination);
+    jbyte* destination_bytes = (*environment)->GetByteArrayElements(environment, destination, NULL);
+    if (destination_bytes == NULL) {
+        return (jint)CNA_RESULT_OUT_OF_MEMORY;
+    }
+    uint64_t destination_written = 0;
+    CNA_Result call_result = cna.clipboard_copy_text((CNA_Handle)game, (char*)destination_bytes, (uint64_t)destination_size, &destination_written);
+    (*environment)->ReleaseByteArrayElements(environment, destination, destination_bytes, 0);
+    if (call_result == CNA_RESULT_SUCCESS || call_result == CNA_RESULT_BUFFER_TOO_SMALL) {
+        jlong destination_element = (jlong)destination_written;
+        (*environment)->SetLongArrayRegion(
+            environment, out_bytes, 0, 1, &destination_element);
+    }
+    return (jint)call_result;
+}
+
+JNIEXPORT jint JNICALL
+Java_org_openeggbert_cna_internal_generated_NativeDeviceExtensionRoutes_clipboardGetHasText(
+    JNIEnv* environment, jclass declaring_class, jlong game, jbooleanArray out_has_text)
+{
+    (void)environment;
+    (void)declaring_class;
+    CNA_Bool out_has_text_value = 0;
+    CNA_Result call_result = cna.clipboard_get_has_text((CNA_Handle)game, &out_has_text_value);
+    if (call_result == CNA_RESULT_SUCCESS || call_result == CNA_RESULT_BUFFER_TOO_SMALL) {
+        jboolean out_has_text_element = (jboolean)out_has_text_value;
+        (*environment)->SetBooleanArrayRegion(
+            environment, out_has_text, 0, 1, &out_has_text_element);
+    }
+    return (jint)call_result;
+}
+
+JNIEXPORT jint JNICALL
+Java_org_openeggbert_cna_internal_generated_NativeDeviceExtensionRoutes_clipboardGetTextSize(
+    JNIEnv* environment, jclass declaring_class, jlong game, jlongArray out_bytes)
+{
+    (void)environment;
+    (void)declaring_class;
+    uint64_t out_bytes_value = 0;
+    CNA_Result call_result = cna.clipboard_get_text_size((CNA_Handle)game, &out_bytes_value);
+    if (call_result == CNA_RESULT_SUCCESS || call_result == CNA_RESULT_BUFFER_TOO_SMALL) {
+        jlong out_bytes_element = (jlong)out_bytes_value;
+        (*environment)->SetLongArrayRegion(
+            environment, out_bytes, 0, 1, &out_bytes_element);
+    }
+    return (jint)call_result;
+}
+
+JNIEXPORT jint JNICALL
 Java_org_openeggbert_cna_internal_generated_NativeDeviceExtensionRoutes_devicesClipboardSetTextExt(
     JNIEnv* environment, jclass declaring_class, jlong game, jbyteArray text, jbooleanArray out_accepted)
 {
@@ -84,6 +138,55 @@ Java_org_openeggbert_cna_internal_generated_NativeDeviceExtensionRoutes_displayI
             (jsize)(sizeof out_areaIntegral_values / sizeof out_areaIntegral_values[0]),
             out_areaIntegral_values);
     }
+    return (jint)call_result;
+}
+
+JNIEXPORT jint JNICALL
+Java_org_openeggbert_cna_internal_generated_NativeDeviceExtensionRoutes_environmentGetDeviceType(
+    JNIEnv* environment, jclass declaring_class, jintArray out_device_type)
+{
+    (void)environment;
+    (void)declaring_class;
+    CNA_DeviceType out_device_type_value = 0;
+    CNA_Result call_result = cna.environment_get_device_type(&out_device_type_value);
+    if (call_result == CNA_RESULT_SUCCESS || call_result == CNA_RESULT_BUFFER_TOO_SMALL) {
+        jint out_device_type_element = (jint)out_device_type_value;
+        (*environment)->SetIntArrayRegion(
+            environment, out_device_type, 0, 1, &out_device_type_element);
+    }
+    return (jint)call_result;
+}
+
+JNIEXPORT jint JNICALL
+Java_org_openeggbert_cna_internal_generated_NativeDeviceExtensionRoutes_fileDialogGetIsSupportedExt(
+    JNIEnv* environment, jclass declaring_class, jlong game, jbooleanArray out_supported)
+{
+    (void)environment;
+    (void)declaring_class;
+    CNA_Bool out_supported_value = 0;
+    CNA_Result call_result = cna.file_dialog_get_is_supported_ext((CNA_Handle)game, &out_supported_value);
+    if (call_result == CNA_RESULT_SUCCESS || call_result == CNA_RESULT_BUFFER_TOO_SMALL) {
+        jboolean out_supported_element = (jboolean)out_supported_value;
+        (*environment)->SetBooleanArrayRegion(
+            environment, out_supported, 0, 1, &out_supported_element);
+    }
+    return (jint)call_result;
+}
+
+JNIEXPORT jint JNICALL
+Java_org_openeggbert_cna_internal_generated_NativeDeviceExtensionRoutes_fileDialogSetTestBackendExt(
+    JNIEnv* environment, jclass declaring_class, jlong game, jboolean installed, jobjectArray results)
+{
+    (void)environment;
+    (void)declaring_class;
+    CnaJniStringViews results_views;
+    const CNA_Result results_borrowed = cna_jni_borrow_string_views(
+        environment, results, &results_views);
+    if (results_borrowed != CNA_RESULT_SUCCESS) {
+        return (jint)results_borrowed;
+    }
+    CNA_Result call_result = cna.file_dialog_set_test_backend_ext((CNA_Handle)game, (CNA_Bool)installed, (const CNA_StringView*)results_views.views, (uint64_t)results_views.count);
+    cna_jni_free_string_views(&results_views);
     return (jint)call_result;
 }
 
@@ -457,6 +560,125 @@ Java_org_openeggbert_cna_internal_generated_NativeDeviceExtensionRoutes_localeGe
 }
 
 JNIEXPORT jint JNICALL
+Java_org_openeggbert_cna_internal_generated_NativeDeviceExtensionRoutes_messageBoxGetIsSupportedExt(
+    JNIEnv* environment, jclass declaring_class, jlong game, jbooleanArray out_supported)
+{
+    (void)environment;
+    (void)declaring_class;
+    CNA_Bool out_supported_value = 0;
+    CNA_Result call_result = cna.message_box_get_is_supported_ext((CNA_Handle)game, &out_supported_value);
+    if (call_result == CNA_RESULT_SUCCESS || call_result == CNA_RESULT_BUFFER_TOO_SMALL) {
+        jboolean out_supported_element = (jboolean)out_supported_value;
+        (*environment)->SetBooleanArrayRegion(
+            environment, out_supported, 0, 1, &out_supported_element);
+    }
+    return (jint)call_result;
+}
+
+JNIEXPORT jint JNICALL
+Java_org_openeggbert_cna_internal_generated_NativeDeviceExtensionRoutes_messageBoxGetTestLogExt(
+    JNIEnv* environment, jclass declaring_class, jlong game, jlongArray out_logIntegral)
+{
+    (void)environment;
+    (void)declaring_class;
+    if (out_logIntegral == NULL) {
+        return (jint)CNA_RESULT_INVALID_ARGUMENT;
+    }
+    CNA_MessageBoxTestLog out_log_value;
+    memset(&out_log_value, 0, sizeof out_log_value);
+    out_log_value.struct_size = (uint32_t)(sizeof out_log_value);
+    out_log_value.struct_version = UINT32_C(1);
+    CNA_Result call_result = cna.message_box_get_test_log_ext((CNA_Handle)game, &out_log_value);
+    if (call_result == CNA_RESULT_SUCCESS || call_result == CNA_RESULT_BUFFER_TOO_SMALL) {
+        jlong out_logIntegral_values[] = {
+            (jlong)out_log_value.simple_calls,
+            (jlong)out_log_value.choice_calls,
+            (jlong)out_log_value.last_type,
+            (jlong)out_log_value.last_button_count
+        };
+        (*environment)->SetLongArrayRegion(environment, out_logIntegral, 0,
+            (jsize)(sizeof out_logIntegral_values / sizeof out_logIntegral_values[0]),
+            out_logIntegral_values);
+    }
+    return (jint)call_result;
+}
+
+JNIEXPORT jint JNICALL
+Java_org_openeggbert_cna_internal_generated_NativeDeviceExtensionRoutes_messageBoxSetTestBackendExt(
+    JNIEnv* environment, jclass declaring_class, jlong game, jboolean installed, jint chosen_button)
+{
+    (void)environment;
+    (void)declaring_class;
+    CNA_Result call_result = cna.message_box_set_test_backend_ext((CNA_Handle)game, (CNA_Bool)installed, (int32_t)chosen_button);
+    return (jint)call_result;
+}
+
+JNIEXPORT jint JNICALL
+Java_org_openeggbert_cna_internal_generated_NativeDeviceExtensionRoutes_messageBoxShowExt(
+    JNIEnv* environment, jclass declaring_class, jlong game, jint type, jbyteArray title, jbyteArray message, jobjectArray button_labels, jintArray out_chosen)
+{
+    (void)environment;
+    (void)declaring_class;
+    jsize title_size = (*environment)->GetArrayLength(environment, title);
+    jbyte* title_bytes = (*environment)->GetByteArrayElements(environment, title, NULL);
+    if (title_bytes == NULL) {
+        return (jint)CNA_RESULT_OUT_OF_MEMORY;
+    }
+    CNA_StringView title_view = {(const char*)title_bytes, (uint64_t)title_size};
+    jsize message_size = (*environment)->GetArrayLength(environment, message);
+    jbyte* message_bytes = (*environment)->GetByteArrayElements(environment, message, NULL);
+    if (message_bytes == NULL) {
+        (*environment)->ReleaseByteArrayElements(environment, title, title_bytes, JNI_ABORT);
+        return (jint)CNA_RESULT_OUT_OF_MEMORY;
+    }
+    CNA_StringView message_view = {(const char*)message_bytes, (uint64_t)message_size};
+    CnaJniStringViews button_labels_views;
+    const CNA_Result button_labels_borrowed = cna_jni_borrow_string_views(
+        environment, button_labels, &button_labels_views);
+    if (button_labels_borrowed != CNA_RESULT_SUCCESS) {
+    (*environment)->ReleaseByteArrayElements(environment, message, message_bytes, JNI_ABORT);
+    (*environment)->ReleaseByteArrayElements(environment, title, title_bytes, JNI_ABORT);
+        return (jint)button_labels_borrowed;
+    }
+    int32_t out_chosen_value = 0;
+    CNA_Result call_result = cna.message_box_show_ext((CNA_Handle)game, (CNA_MessageBoxType)type, title_view, message_view, (const CNA_StringView*)button_labels_views.views, (uint64_t)button_labels_views.count, &out_chosen_value);
+    (*environment)->ReleaseByteArrayElements(environment, title, title_bytes, JNI_ABORT);
+    (*environment)->ReleaseByteArrayElements(environment, message, message_bytes, JNI_ABORT);
+    cna_jni_free_string_views(&button_labels_views);
+    if (call_result == CNA_RESULT_SUCCESS || call_result == CNA_RESULT_BUFFER_TOO_SMALL) {
+        jint out_chosen_element = (jint)out_chosen_value;
+        (*environment)->SetIntArrayRegion(
+            environment, out_chosen, 0, 1, &out_chosen_element);
+    }
+    return (jint)call_result;
+}
+
+JNIEXPORT jint JNICALL
+Java_org_openeggbert_cna_internal_generated_NativeDeviceExtensionRoutes_messageBoxShowSimpleExt(
+    JNIEnv* environment, jclass declaring_class, jlong game, jint type, jbyteArray title, jbyteArray message)
+{
+    (void)environment;
+    (void)declaring_class;
+    jsize title_size = (*environment)->GetArrayLength(environment, title);
+    jbyte* title_bytes = (*environment)->GetByteArrayElements(environment, title, NULL);
+    if (title_bytes == NULL) {
+        return (jint)CNA_RESULT_OUT_OF_MEMORY;
+    }
+    CNA_StringView title_view = {(const char*)title_bytes, (uint64_t)title_size};
+    jsize message_size = (*environment)->GetArrayLength(environment, message);
+    jbyte* message_bytes = (*environment)->GetByteArrayElements(environment, message, NULL);
+    if (message_bytes == NULL) {
+        (*environment)->ReleaseByteArrayElements(environment, title, title_bytes, JNI_ABORT);
+        return (jint)CNA_RESULT_OUT_OF_MEMORY;
+    }
+    CNA_StringView message_view = {(const char*)message_bytes, (uint64_t)message_size};
+    CNA_Result call_result = cna.message_box_show_simple_ext((CNA_Handle)game, (CNA_MessageBoxType)type, title_view, message_view);
+    (*environment)->ReleaseByteArrayElements(environment, title, title_bytes, JNI_ABORT);
+    (*environment)->ReleaseByteArrayElements(environment, message, message_bytes, JNI_ABORT);
+    return (jint)call_result;
+}
+
+JNIEXPORT jint JNICALL
 Java_org_openeggbert_cna_internal_generated_NativeDeviceExtensionRoutes_powerGetBatteryPercentExt(
     JNIEnv* environment, jclass declaring_class, jlong game, jintArray out_percent)
 {
@@ -465,6 +687,30 @@ Java_org_openeggbert_cna_internal_generated_NativeDeviceExtensionRoutes_powerGet
     int32_t out_percent_value = 0;
     CNA_Result call_result = cna.power_get_battery_percent_ext((CNA_Handle)game, &out_percent_value);
     if (call_result == CNA_RESULT_SUCCESS || call_result == CNA_RESULT_BUFFER_TOO_SMALL) {
+        jint out_percent_element = (jint)out_percent_value;
+        (*environment)->SetIntArrayRegion(
+            environment, out_percent, 0, 1, &out_percent_element);
+    }
+    return (jint)call_result;
+}
+
+JNIEXPORT jint JNICALL
+Java_org_openeggbert_cna_internal_generated_NativeDeviceExtensionRoutes_powerGetInfo(
+    JNIEnv* environment, jclass declaring_class, jlong game, jintArray out_state, jintArray out_seconds_left, jintArray out_percent)
+{
+    (void)environment;
+    (void)declaring_class;
+    CNA_PowerState out_state_value = 0;
+    int32_t out_seconds_left_value = 0;
+    int32_t out_percent_value = 0;
+    CNA_Result call_result = cna.power_get_info((CNA_Handle)game, &out_state_value, &out_seconds_left_value, &out_percent_value);
+    if (call_result == CNA_RESULT_SUCCESS || call_result == CNA_RESULT_BUFFER_TOO_SMALL) {
+        jint out_state_element = (jint)out_state_value;
+        (*environment)->SetIntArrayRegion(
+            environment, out_state, 0, 1, &out_state_element);
+        jint out_seconds_left_element = (jint)out_seconds_left_value;
+        (*environment)->SetIntArrayRegion(
+            environment, out_seconds_left, 0, 1, &out_seconds_left_element);
         jint out_percent_element = (jint)out_percent_value;
         (*environment)->SetIntArrayRegion(
             environment, out_percent, 0, 1, &out_percent_element);
@@ -533,6 +779,174 @@ Java_org_openeggbert_cna_internal_generated_NativeDeviceExtensionRoutes_systemIn
         (*environment)->SetIntArrayRegion(
             environment, out_megabytes, 0, 1, &out_megabytes_element);
     }
+    return (jint)call_result;
+}
+
+JNIEXPORT jint JNICALL
+Java_org_openeggbert_cna_internal_generated_NativeDeviceExtensionRoutes_systemTrayClickEntryForTestsExt(
+    JNIEnv* environment, jclass declaring_class, jlong tray, jlong index)
+{
+    (void)environment;
+    (void)declaring_class;
+    CNA_Result call_result = cna.system_tray_click_entry_for_tests_ext((CNA_SystemTrayHandle)tray, (uint64_t)index);
+    return (jint)call_result;
+}
+
+JNIEXPORT jint JNICALL
+Java_org_openeggbert_cna_internal_generated_NativeDeviceExtensionRoutes_systemTrayCreate(
+    JNIEnv* environment, jclass declaring_class, jlong game, jbyteArray tooltip, jlongArray out_tray)
+{
+    (void)environment;
+    (void)declaring_class;
+    jsize tooltip_size = (*environment)->GetArrayLength(environment, tooltip);
+    jbyte* tooltip_bytes = (*environment)->GetByteArrayElements(environment, tooltip, NULL);
+    if (tooltip_bytes == NULL) {
+        return (jint)CNA_RESULT_OUT_OF_MEMORY;
+    }
+    CNA_StringView tooltip_view = {(const char*)tooltip_bytes, (uint64_t)tooltip_size};
+    CNA_SystemTrayHandle out_tray_value = 0;
+    CNA_Result call_result = cna.system_tray_create((CNA_Handle)game, tooltip_view, &out_tray_value);
+    (*environment)->ReleaseByteArrayElements(environment, tooltip, tooltip_bytes, JNI_ABORT);
+    if (call_result == CNA_RESULT_SUCCESS || call_result == CNA_RESULT_BUFFER_TOO_SMALL) {
+        jlong out_tray_element = (jlong)out_tray_value;
+        (*environment)->SetLongArrayRegion(
+            environment, out_tray, 0, 1, &out_tray_element);
+    }
+    return (jint)call_result;
+}
+
+JNIEXPORT jint JNICALL
+Java_org_openeggbert_cna_internal_generated_NativeDeviceExtensionRoutes_systemTrayCreateWithTestBackendExt(
+    JNIEnv* environment, jclass declaring_class, jlong game, jbyteArray tooltip, jlongArray out_tray)
+{
+    (void)environment;
+    (void)declaring_class;
+    jsize tooltip_size = (*environment)->GetArrayLength(environment, tooltip);
+    jbyte* tooltip_bytes = (*environment)->GetByteArrayElements(environment, tooltip, NULL);
+    if (tooltip_bytes == NULL) {
+        return (jint)CNA_RESULT_OUT_OF_MEMORY;
+    }
+    CNA_StringView tooltip_view = {(const char*)tooltip_bytes, (uint64_t)tooltip_size};
+    CNA_SystemTrayHandle out_tray_value = 0;
+    CNA_Result call_result = cna.system_tray_create_with_test_backend_ext((CNA_Handle)game, tooltip_view, &out_tray_value);
+    (*environment)->ReleaseByteArrayElements(environment, tooltip, tooltip_bytes, JNI_ABORT);
+    if (call_result == CNA_RESULT_SUCCESS || call_result == CNA_RESULT_BUFFER_TOO_SMALL) {
+        jlong out_tray_element = (jlong)out_tray_value;
+        (*environment)->SetLongArrayRegion(
+            environment, out_tray, 0, 1, &out_tray_element);
+    }
+    return (jint)call_result;
+}
+
+JNIEXPORT jint JNICALL
+Java_org_openeggbert_cna_internal_generated_NativeDeviceExtensionRoutes_systemTrayDestroy(
+    JNIEnv* environment, jclass declaring_class, jlong tray)
+{
+    (void)environment;
+    (void)declaring_class;
+    CNA_Result call_result = cna.system_tray_destroy((CNA_SystemTrayHandle)tray);
+    return (jint)call_result;
+}
+
+JNIEXPORT jint JNICALL
+Java_org_openeggbert_cna_internal_generated_NativeDeviceExtensionRoutes_systemTrayGetEntryChecked(
+    JNIEnv* environment, jclass declaring_class, jlong tray, jlong index, jbooleanArray out_checked)
+{
+    (void)environment;
+    (void)declaring_class;
+    CNA_Bool out_checked_value = 0;
+    CNA_Result call_result = cna.system_tray_get_entry_checked((CNA_SystemTrayHandle)tray, (uint64_t)index, &out_checked_value);
+    if (call_result == CNA_RESULT_SUCCESS || call_result == CNA_RESULT_BUFFER_TOO_SMALL) {
+        jboolean out_checked_element = (jboolean)out_checked_value;
+        (*environment)->SetBooleanArrayRegion(
+            environment, out_checked, 0, 1, &out_checked_element);
+    }
+    return (jint)call_result;
+}
+
+JNIEXPORT jint JNICALL
+Java_org_openeggbert_cna_internal_generated_NativeDeviceExtensionRoutes_systemTrayGetEntryEnabled(
+    JNIEnv* environment, jclass declaring_class, jlong tray, jlong index, jbooleanArray out_enabled)
+{
+    (void)environment;
+    (void)declaring_class;
+    CNA_Bool out_enabled_value = 0;
+    CNA_Result call_result = cna.system_tray_get_entry_enabled((CNA_SystemTrayHandle)tray, (uint64_t)index, &out_enabled_value);
+    if (call_result == CNA_RESULT_SUCCESS || call_result == CNA_RESULT_BUFFER_TOO_SMALL) {
+        jboolean out_enabled_element = (jboolean)out_enabled_value;
+        (*environment)->SetBooleanArrayRegion(
+            environment, out_enabled, 0, 1, &out_enabled_element);
+    }
+    return (jint)call_result;
+}
+
+JNIEXPORT jint JNICALL
+Java_org_openeggbert_cna_internal_generated_NativeDeviceExtensionRoutes_systemTrayGetIsSupportedExt(
+    JNIEnv* environment, jclass declaring_class, jlong game, jbooleanArray out_supported)
+{
+    (void)environment;
+    (void)declaring_class;
+    CNA_Bool out_supported_value = 0;
+    CNA_Result call_result = cna.system_tray_get_is_supported_ext((CNA_Handle)game, &out_supported_value);
+    if (call_result == CNA_RESULT_SUCCESS || call_result == CNA_RESULT_BUFFER_TOO_SMALL) {
+        jboolean out_supported_element = (jboolean)out_supported_value;
+        (*environment)->SetBooleanArrayRegion(
+            environment, out_supported, 0, 1, &out_supported_element);
+    }
+    return (jint)call_result;
+}
+
+JNIEXPORT jint JNICALL
+Java_org_openeggbert_cna_internal_generated_NativeDeviceExtensionRoutes_systemTraySetEntryChecked(
+    JNIEnv* environment, jclass declaring_class, jlong tray, jlong index, jboolean checked)
+{
+    (void)environment;
+    (void)declaring_class;
+    CNA_Result call_result = cna.system_tray_set_entry_checked((CNA_SystemTrayHandle)tray, (uint64_t)index, (CNA_Bool)checked);
+    return (jint)call_result;
+}
+
+JNIEXPORT jint JNICALL
+Java_org_openeggbert_cna_internal_generated_NativeDeviceExtensionRoutes_systemTraySetEntryEnabled(
+    JNIEnv* environment, jclass declaring_class, jlong tray, jlong index, jboolean enabled)
+{
+    (void)environment;
+    (void)declaring_class;
+    CNA_Result call_result = cna.system_tray_set_entry_enabled((CNA_SystemTrayHandle)tray, (uint64_t)index, (CNA_Bool)enabled);
+    return (jint)call_result;
+}
+
+JNIEXPORT jint JNICALL
+Java_org_openeggbert_cna_internal_generated_NativeDeviceExtensionRoutes_systemTraySetEntryLabel(
+    JNIEnv* environment, jclass declaring_class, jlong tray, jlong index, jbyteArray label)
+{
+    (void)environment;
+    (void)declaring_class;
+    jsize label_size = (*environment)->GetArrayLength(environment, label);
+    jbyte* label_bytes = (*environment)->GetByteArrayElements(environment, label, NULL);
+    if (label_bytes == NULL) {
+        return (jint)CNA_RESULT_OUT_OF_MEMORY;
+    }
+    CNA_StringView label_view = {(const char*)label_bytes, (uint64_t)label_size};
+    CNA_Result call_result = cna.system_tray_set_entry_label((CNA_SystemTrayHandle)tray, (uint64_t)index, label_view);
+    (*environment)->ReleaseByteArrayElements(environment, label, label_bytes, JNI_ABORT);
+    return (jint)call_result;
+}
+
+JNIEXPORT jint JNICALL
+Java_org_openeggbert_cna_internal_generated_NativeDeviceExtensionRoutes_systemTraySetTooltip(
+    JNIEnv* environment, jclass declaring_class, jlong tray, jbyteArray tooltip)
+{
+    (void)environment;
+    (void)declaring_class;
+    jsize tooltip_size = (*environment)->GetArrayLength(environment, tooltip);
+    jbyte* tooltip_bytes = (*environment)->GetByteArrayElements(environment, tooltip, NULL);
+    if (tooltip_bytes == NULL) {
+        return (jint)CNA_RESULT_OUT_OF_MEMORY;
+    }
+    CNA_StringView tooltip_view = {(const char*)tooltip_bytes, (uint64_t)tooltip_size};
+    CNA_Result call_result = cna.system_tray_set_tooltip((CNA_SystemTrayHandle)tray, tooltip_view);
+    (*environment)->ReleaseByteArrayElements(environment, tooltip, tooltip_bytes, JNI_ABORT);
     return (jint)call_result;
 }
 
@@ -610,6 +1024,61 @@ Java_org_openeggbert_cna_internal_generated_NativeDeviceExtensionRoutes_vibrateC
         (*environment)->SetBooleanArrayRegion(
             environment, out_supported, 0, 1, &out_supported_element);
     }
+    return (jint)call_result;
+}
+
+JNIEXPORT jint JNICALL
+Java_org_openeggbert_cna_internal_generated_NativeDeviceExtensionRoutes_vibrateControllerGetTestLogExt(
+    JNIEnv* environment, jclass declaring_class, jlong game, jlongArray out_logIntegral, jfloatArray out_logFloating)
+{
+    (void)environment;
+    (void)declaring_class;
+    if (out_logIntegral == NULL || out_logFloating == NULL) {
+        return (jint)CNA_RESULT_INVALID_ARGUMENT;
+    }
+    CNA_VibrationTestLog out_log_value;
+    memset(&out_log_value, 0, sizeof out_log_value);
+    out_log_value.struct_size = (uint32_t)(sizeof out_log_value);
+    out_log_value.struct_version = UINT32_C(1);
+    CNA_Result call_result = cna.vibrate_controller_get_test_log_ext((CNA_Handle)game, &out_log_value);
+    if (call_result == CNA_RESULT_SUCCESS || call_result == CNA_RESULT_BUFFER_TOO_SMALL) {
+        jlong out_logIntegral_values[] = {
+            (jlong)out_log_value.start_calls,
+            (jlong)out_log_value.stop_calls,
+            (jlong)out_log_value.left_right_calls,
+            (jlong)out_log_value.reserved,
+            (jlong)out_log_value.last_duration_ticks
+        };
+        (*environment)->SetLongArrayRegion(environment, out_logIntegral, 0,
+            (jsize)(sizeof out_logIntegral_values / sizeof out_logIntegral_values[0]),
+            out_logIntegral_values);
+        jfloat out_logFloating_values[] = {
+            (jfloat)out_log_value.last_intensity,
+            (jfloat)out_log_value.last_large_motor,
+            (jfloat)out_log_value.last_small_motor,
+            (jfloat)out_log_value.reserved_float
+        };
+        (*environment)->SetFloatArrayRegion(environment, out_logFloating, 0,
+            (jsize)(sizeof out_logFloating_values / sizeof out_logFloating_values[0]),
+            out_logFloating_values);
+    }
+    return (jint)call_result;
+}
+
+JNIEXPORT jint JNICALL
+Java_org_openeggbert_cna_internal_generated_NativeDeviceExtensionRoutes_vibrateControllerSetTestBackendExt(
+    JNIEnv* environment, jclass declaring_class, jlong game, jboolean installed, jboolean supported, jbyteArray device_name)
+{
+    (void)environment;
+    (void)declaring_class;
+    jsize device_name_size = (*environment)->GetArrayLength(environment, device_name);
+    jbyte* device_name_bytes = (*environment)->GetByteArrayElements(environment, device_name, NULL);
+    if (device_name_bytes == NULL) {
+        return (jint)CNA_RESULT_OUT_OF_MEMORY;
+    }
+    CNA_StringView device_name_view = {(const char*)device_name_bytes, (uint64_t)device_name_size};
+    CNA_Result call_result = cna.vibrate_controller_set_test_backend_ext((CNA_Handle)game, (CNA_Bool)installed, (CNA_Bool)supported, device_name_view);
+    (*environment)->ReleaseByteArrayElements(environment, device_name, device_name_bytes, JNI_ABORT);
     return (jint)call_result;
 }
 

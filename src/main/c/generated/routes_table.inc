@@ -178,6 +178,9 @@
     CNA_JNI_ROUTE(cna_chromatic_aberration_pass_create) chromatic_aberration_pass_create;
     CNA_JNI_ROUTE(cna_chromatic_aberration_pass_get_strength) chromatic_aberration_pass_get_strength;
     CNA_JNI_ROUTE(cna_chromatic_aberration_pass_set_strength) chromatic_aberration_pass_set_strength;
+    CNA_JNI_ROUTE(cna_clipboard_copy_text) clipboard_copy_text;
+    CNA_JNI_ROUTE(cna_clipboard_get_has_text) clipboard_get_has_text;
+    CNA_JNI_ROUTE(cna_clipboard_get_text_size) clipboard_get_text_size;
     CNA_JNI_ROUTE(cna_clustered_forward_effect_begin) clustered_forward_effect_begin;
     CNA_JNI_ROUTE(cna_clustered_forward_effect_clear_area_light) clustered_forward_effect_clear_area_light;
     CNA_JNI_ROUTE(cna_clustered_forward_effect_clear_light_probe) clustered_forward_effect_clear_light_probe;
@@ -720,6 +723,7 @@
     CNA_JNI_ROUTE(cna_effect_set_shadows_enabled_ext) effect_set_shadows_enabled_ext;
     CNA_JNI_ROUTE(cna_engine_layer_copy_version_string) engine_layer_copy_version_string;
     CNA_JNI_ROUTE(cna_engine_layer_get_version) engine_layer_get_version;
+    CNA_JNI_ROUTE(cna_environment_get_device_type) environment_get_device_type;
     CNA_JNI_ROUTE(cna_environment_processor_convert_equirectangular) environment_processor_convert_equirectangular;
     CNA_JNI_ROUTE(cna_environment_processor_create) environment_processor_create;
     CNA_JNI_ROUTE(cna_environment_processor_destroy) environment_processor_destroy;
@@ -733,6 +737,8 @@
     CNA_JNI_ROUTE(cna_environment_processor_importance_sample_ggx) environment_processor_importance_sample_ggx;
     CNA_JNI_ROUTE(cna_environment_processor_mip_for_roughness) environment_processor_mip_for_roughness;
     CNA_JNI_ROUTE(cna_environment_processor_roughness_for_mip) environment_processor_roughness_for_mip;
+    CNA_JNI_ROUTE(cna_file_dialog_get_is_supported_ext) file_dialog_get_is_supported_ext;
+    CNA_JNI_ROUTE(cna_file_dialog_set_test_backend_ext) file_dialog_set_test_backend_ext;
     CNA_JNI_ROUTE(cna_film_grain_pass_create) film_grain_pass_create;
     CNA_JNI_ROUTE(cna_film_grain_pass_get_intensity) film_grain_pass_get_intensity;
     CNA_JNI_ROUTE(cna_film_grain_pass_set_intensity) film_grain_pass_set_intensity;
@@ -1157,6 +1163,11 @@
     CNA_JNI_ROUTE(cna_logger_get_minimum_level) logger_get_minimum_level;
     CNA_JNI_ROUTE(cna_logger_log) logger_log;
     CNA_JNI_ROUTE(cna_logger_set_minimum_level) logger_set_minimum_level;
+    CNA_JNI_ROUTE(cna_message_box_get_is_supported_ext) message_box_get_is_supported_ext;
+    CNA_JNI_ROUTE(cna_message_box_get_test_log_ext) message_box_get_test_log_ext;
+    CNA_JNI_ROUTE(cna_message_box_set_test_backend_ext) message_box_set_test_backend_ext;
+    CNA_JNI_ROUTE(cna_message_box_show_ext) message_box_show_ext;
+    CNA_JNI_ROUTE(cna_message_box_show_simple_ext) message_box_show_simple_ext;
     CNA_JNI_ROUTE(cna_model_bone_add_child) model_bone_add_child;
     CNA_JNI_ROUTE(cna_model_bone_collection_destroy) model_bone_collection_destroy;
     CNA_JNI_ROUTE(cna_model_bone_collection_get_at) model_bone_collection_get_at;
@@ -1479,6 +1490,7 @@
     CNA_JNI_ROUTE(cna_post_process_pass_destroy) post_process_pass_destroy;
     CNA_JNI_ROUTE(cna_post_process_pass_is_supported) post_process_pass_is_supported;
     CNA_JNI_ROUTE(cna_power_get_battery_percent_ext) power_get_battery_percent_ext;
+    CNA_JNI_ROUTE(cna_power_get_info) power_get_info;
     CNA_JNI_ROUTE(cna_power_get_seconds_remaining_ext) power_get_seconds_remaining_ext;
     CNA_JNI_ROUTE(cna_power_get_state_ext) power_get_state_ext;
     CNA_JNI_ROUTE(cna_property_dictionary_clear) property_dictionary_clear;
@@ -1706,6 +1718,17 @@
     CNA_JNI_ROUTE(cna_storage_buffer_set_elements) storage_buffer_set_elements;
     CNA_JNI_ROUTE(cna_system_info_get_logical_cpu_core_count_ext) system_info_get_logical_cpu_core_count_ext;
     CNA_JNI_ROUTE(cna_system_info_get_system_ram_megabytes_ext) system_info_get_system_ram_megabytes_ext;
+    CNA_JNI_ROUTE(cna_system_tray_click_entry_for_tests_ext) system_tray_click_entry_for_tests_ext;
+    CNA_JNI_ROUTE(cna_system_tray_create) system_tray_create;
+    CNA_JNI_ROUTE(cna_system_tray_create_with_test_backend_ext) system_tray_create_with_test_backend_ext;
+    CNA_JNI_ROUTE(cna_system_tray_destroy) system_tray_destroy;
+    CNA_JNI_ROUTE(cna_system_tray_get_entry_checked) system_tray_get_entry_checked;
+    CNA_JNI_ROUTE(cna_system_tray_get_entry_enabled) system_tray_get_entry_enabled;
+    CNA_JNI_ROUTE(cna_system_tray_get_is_supported_ext) system_tray_get_is_supported_ext;
+    CNA_JNI_ROUTE(cna_system_tray_set_entry_checked) system_tray_set_entry_checked;
+    CNA_JNI_ROUTE(cna_system_tray_set_entry_enabled) system_tray_set_entry_enabled;
+    CNA_JNI_ROUTE(cna_system_tray_set_entry_label) system_tray_set_entry_label;
+    CNA_JNI_ROUTE(cna_system_tray_set_tooltip) system_tray_set_tooltip;
     CNA_JNI_ROUTE(cna_text_input_is_active_ext) text_input_is_active_ext;
     CNA_JNI_ROUTE(cna_text_input_is_screen_keyboard_shown_ext) text_input_is_screen_keyboard_shown_ext;
     CNA_JNI_ROUTE(cna_text_input_raise_text_editing_ext) text_input_raise_text_editing_ext;
@@ -1742,6 +1765,8 @@
     CNA_JNI_ROUTE(cna_vibrate_controller_copy_device_name_ext) vibrate_controller_copy_device_name_ext;
     CNA_JNI_ROUTE(cna_vibrate_controller_get_device_name_size_ext) vibrate_controller_get_device_name_size_ext;
     CNA_JNI_ROUTE(cna_vibrate_controller_get_is_supported_ext) vibrate_controller_get_is_supported_ext;
+    CNA_JNI_ROUTE(cna_vibrate_controller_get_test_log_ext) vibrate_controller_get_test_log_ext;
+    CNA_JNI_ROUTE(cna_vibrate_controller_set_test_backend_ext) vibrate_controller_set_test_backend_ext;
     CNA_JNI_ROUTE(cna_vibrate_controller_start) vibrate_controller_start;
     CNA_JNI_ROUTE(cna_vibrate_controller_start_left_right_ext) vibrate_controller_start_left_right_ext;
     CNA_JNI_ROUTE(cna_vibrate_controller_start_with_intensity_ext) vibrate_controller_start_with_intensity_ext;

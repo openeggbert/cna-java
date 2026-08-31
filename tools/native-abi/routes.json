@@ -1430,6 +1430,18 @@
     ],
     "NativeDeviceExtensionRoutes": [
       {
+        "java": "clipboardCopyText",
+        "symbol": "cna_clipboard_copy_text"
+      },
+      {
+        "java": "clipboardGetHasText",
+        "symbol": "cna_clipboard_get_has_text"
+      },
+      {
+        "java": "clipboardGetTextSize",
+        "symbol": "cna_clipboard_get_text_size"
+      },
+      {
         "java": "devicesClipboardSetTextExt",
         "symbol": "cna_devices_clipboard_set_text_ext"
       },
@@ -1444,6 +1456,18 @@
       {
         "java": "displayInfoGetSafeAreaExt",
         "symbol": "cna_display_info_get_safe_area_ext"
+      },
+      {
+        "java": "environmentGetDeviceType",
+        "symbol": "cna_environment_get_device_type"
+      },
+      {
+        "java": "fileDialogGetIsSupportedExt",
+        "symbol": "cna_file_dialog_get_is_supported_ext"
+      },
+      {
+        "java": "fileDialogSetTestBackendExt",
+        "symbol": "cna_file_dialog_set_test_backend_ext"
       },
       {
         "java": "inputDevicesCopyKeyboardNameAt",
@@ -1530,8 +1554,32 @@
         "symbol": "cna_locale_get_preferred_count_ext"
       },
       {
+        "java": "messageBoxGetIsSupportedExt",
+        "symbol": "cna_message_box_get_is_supported_ext"
+      },
+      {
+        "java": "messageBoxGetTestLogExt",
+        "symbol": "cna_message_box_get_test_log_ext"
+      },
+      {
+        "java": "messageBoxSetTestBackendExt",
+        "symbol": "cna_message_box_set_test_backend_ext"
+      },
+      {
+        "java": "messageBoxShowExt",
+        "symbol": "cna_message_box_show_ext"
+      },
+      {
+        "java": "messageBoxShowSimpleExt",
+        "symbol": "cna_message_box_show_simple_ext"
+      },
+      {
         "java": "powerGetBatteryPercentExt",
         "symbol": "cna_power_get_battery_percent_ext"
+      },
+      {
+        "java": "powerGetInfo",
+        "symbol": "cna_power_get_info"
       },
       {
         "java": "powerGetSecondsRemainingExt",
@@ -1550,6 +1598,50 @@
         "symbol": "cna_system_info_get_system_ram_megabytes_ext"
       },
       {
+        "java": "systemTrayClickEntryForTestsExt",
+        "symbol": "cna_system_tray_click_entry_for_tests_ext"
+      },
+      {
+        "java": "systemTrayCreate",
+        "symbol": "cna_system_tray_create"
+      },
+      {
+        "java": "systemTrayCreateWithTestBackendExt",
+        "symbol": "cna_system_tray_create_with_test_backend_ext"
+      },
+      {
+        "java": "systemTrayDestroy",
+        "symbol": "cna_system_tray_destroy"
+      },
+      {
+        "java": "systemTrayGetEntryChecked",
+        "symbol": "cna_system_tray_get_entry_checked"
+      },
+      {
+        "java": "systemTrayGetEntryEnabled",
+        "symbol": "cna_system_tray_get_entry_enabled"
+      },
+      {
+        "java": "systemTrayGetIsSupportedExt",
+        "symbol": "cna_system_tray_get_is_supported_ext"
+      },
+      {
+        "java": "systemTraySetEntryChecked",
+        "symbol": "cna_system_tray_set_entry_checked"
+      },
+      {
+        "java": "systemTraySetEntryEnabled",
+        "symbol": "cna_system_tray_set_entry_enabled"
+      },
+      {
+        "java": "systemTraySetEntryLabel",
+        "symbol": "cna_system_tray_set_entry_label"
+      },
+      {
+        "java": "systemTraySetTooltip",
+        "symbol": "cna_system_tray_set_tooltip"
+      },
+      {
         "java": "urlLauncherOpenExt",
         "symbol": "cna_url_launcher_open_ext"
       },
@@ -1564,6 +1656,14 @@
       {
         "java": "vibrateControllerGetIsSupportedExt",
         "symbol": "cna_vibrate_controller_get_is_supported_ext"
+      },
+      {
+        "java": "vibrateControllerGetTestLogExt",
+        "symbol": "cna_vibrate_controller_get_test_log_ext"
+      },
+      {
+        "java": "vibrateControllerSetTestBackendExt",
+        "symbol": "cna_vibrate_controller_set_test_backend_ext"
       },
       {
         "java": "vibrateControllerStart",

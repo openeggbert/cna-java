@@ -1087,6 +1087,69 @@ public final class NativeBindings {
             long[] lightIntegral, float[] lightFloating, float[] sceneBounds, long token);
 
     /**
+     * Adds a menu entry to a system tray icon, with an optional click handler.
+     *
+     * <p>Hand-written rather than generated because CNA takes a C function pointer for the
+     * handler. The handler's lifetime is the tray's: a person may pick the entry at any time
+     * until the tray is closed, so the token is held by the tray and released when it closes,
+     * the same shape the render pipeline's scene callbacks use.
+     *
+     * @param tray the native tray handle
+     * @param label the entry's label as UTF-8 bytes
+     * @param checkable whether the entry carries a check mark
+     * @param initiallyChecked whether a checkable entry starts checked
+     * @param initiallyEnabled whether the entry starts enabled
+     * @param token a token from {@link #newCallbackToken(Object)} over a {@link Runnable}, or
+     *        zero for an entry with no handler
+     * @param outIndex receives the entry's zero-based index
+     * @return CNA's result
+     */
+    public static int systemTrayAddEntry(long tray, byte[] label, boolean checkable,
+            boolean initiallyChecked, boolean initiallyEnabled, long token, long[] outIndex) {
+        requireAvailable();
+        return nativeSystemTrayAddEntry(tray, label, checkable, initiallyChecked,
+                initiallyEnabled, token, outIndex);
+    }
+
+    /**
+     * Shows a file dialog and reports the chosen paths to a one-shot handler.
+     *
+     * <p>Hand-written for the function pointer, and one-shot for a reason the header states:
+     * CNA's dialog is asynchronous, so the handler may run long after this returns, or never if
+     * the process exits first. The native trampoline therefore owns the token and deletes it the
+     * moment it dispatches -- there is nothing for Java to release, and nothing it could
+     * sensibly release it at. A refused request is the one case the handler never runs, and the
+     * adapter releases the token itself when CNA answers anything but success.
+     *
+     * <p>The handler receives {@code byte[][]}: CNA hands over UTF-8 and the JVM's own
+     * {@code NewStringUTF} takes modified UTF-8, so a path outside the basic multilingual plane
+     * would be corrupted silently by the shorter route.
+     *
+     * @param game the native game handle
+     * @param kind 0 to open files, 1 to save a file, 2 to open folders
+     * @param token a token from {@link #newCallbackToken(Object)} over a
+     *        {@code Consumer<byte[][]>}; zero passes no handler, which CNA refuses
+     * @param filterNames each filter's display name as UTF-8 bytes, or null for none
+     * @param filterPatterns each filter's pattern, one per name
+     * @param defaultLocation the starting directory as UTF-8 bytes, empty for the default
+     * @param allowMultiple whether more than one path may be chosen; ignored when saving
+     * @return CNA's result
+     */
+    public static int fileDialogShow(long game, int kind, long token, byte[][] filterNames,
+            byte[][] filterPatterns, byte[] defaultLocation, boolean allowMultiple) {
+        requireAvailable();
+        return nativeFileDialogShow(game, kind, token, filterNames, filterPatterns,
+                defaultLocation, allowMultiple);
+    }
+
+    private static native int nativeSystemTrayAddEntry(long tray, byte[] label, boolean checkable,
+            boolean initiallyChecked, boolean initiallyEnabled, long token, long[] outIndex);
+
+    private static native int nativeFileDialogShow(long game, int kind, long token,
+            byte[][] filterNames, byte[][] filterPatterns, byte[] defaultLocation,
+            boolean allowMultiple);
+
+    /**
      * Releases a texture handle that names a texture without keeping it alive.
      *
      * <p>The engine layer hands one of these back from routes such as

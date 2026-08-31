@@ -834,6 +834,44 @@ def test_generator(live: dict) -> None:
         == "array",
         "a uint64_t capacity beside a copy-out buffer is still read as its length")
 
+    # An array of CNA_StringView inputs: a message box's button labels. It is the one string
+    # shape that cannot be pinned in place -- several pinned arrays at once would each need a
+    # local reference held for as long as they are pinned, and JNI promises only sixteen -- so
+    # the elements are copied. What the plan has to get right is that the count parameter
+    # disappears into the Java array, exactly as it does for a scalar array.
+    labels = generator_tool.plan(
+        {"java": "probe", "symbol": "cna_message_box_show_ext"}, live)
+    check([step["shape"] for step in labels["steps"]]
+          == ["value", "value", "string", "string", "string_array", "out"],
+          "a CNA_StringView array followed by its count is one string_array step")
+    check("button_count" not in [step["name"] for step in labels["steps"]],
+          "and the count parameter disappears, because a Java array carries its own length")
+    check(generator_tool.java_signature(labels)[1][4] == "byte[][] buttonLabels",
+          "the Java declaration takes one byte[][] rather than a string and a count")
+    rendered = generator_tool.render_c("Probe", [labels])
+    borrow = rendered.index("cna_jni_borrow_string_views(")
+    call = rendered.index("cna.message_box_show_ext(")
+    release = rendered.index("cna_jni_free_string_views(&button_labels_views)")
+    check(borrow < call < release,
+          "the adapter borrows the views before the call and frees them after it")
+    # A borrow that fails part way through must not leak what the earlier steps pinned. Both
+    # strings before it are released on that path, in reverse acquisition order.
+    refusal = rendered[borrow:call]
+    check(refusal.index("message, message_bytes") < refusal.index("title, title_bytes"),
+          "a failed borrow releases the strings pinned before it, newest first")
+
+    # An OUTPUT array of views would be CNA's own memory on terms the declaration does not
+    # state, which is the same thing an output structure carrying a view is refused for.
+    outputs = copy.deepcopy(live)
+    for parameter in outputs["functions"]["cna_message_box_show_ext"]["parameters"]:
+        if parameter["type"] == "const CNA_StringView*":
+            parameter["type"] = "CNA_StringView*"
+    try:
+        generator_tool.plan({"java": "probe", "symbol": "cna_message_box_show_ext"}, outputs)
+        check(False, "a non-const CNA_StringView array is refused")
+    except generator_tool.Unsupported:
+        check(True, "a non-const CNA_StringView array is refused")
+
     # The generator refuses a shape it cannot prove rather than guessing at it.
     try:
         plan("cna_text_input_subscribe_text_input_ext")
