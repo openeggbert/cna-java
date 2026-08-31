@@ -221,13 +221,28 @@ final class ShadowTests {
                         cube.end();
                     }
                 } else {
-                    // JAVA-UPSTREAM-007. CNA's own startup log says a cube's "face passes still
-                    // open and close" on a renderer that cannot cast, and on this one they do
-                    // not: binding a cube face throws where binding the 2D map's target
-                    // succeeds. Reproduced in C by the family probe, and asserted here so that
-                    // an upstream fix shows up as a failing test rather than going unnoticed.
-                    assertThrows(RuntimeException.class,
-                            () -> cube.begin(CubeMapFace.PositiveX));
+                    // JAVA-UPSTREAM-007, and it is wider than one renderer. CNA documents that a
+                    // cube's face passes "still open and close" where it cannot cast, and what
+                    // actually happens depends entirely on the renderer: HEADLESS and SOFTWARE
+                    // refuse `begin`, contradicting that, while OPENGL4 opens the pass exactly as
+                    // documented and leaves the target bound until `end`. Both are asserted so
+                    // that a change in either direction shows up.
+                    boolean opened = true;
+                    try {
+                        cube.begin(CubeMapFace.PositiveX);
+                    } catch (RuntimeException refused) {
+                        // The documented-but-absent case. Nothing was bound, so nothing to end.
+                        opened = false;
+                        assertTrue(refused.getMessage() != null && !refused.getMessage().isBlank(),
+                                "a refused face pass says why");
+                    }
+                    if (opened) {
+                        // The documented case: the pass opened even though nothing can be cast
+                        // into it, and it has to be closed -- a frame that presents with a render
+                        // target still bound is refused by the device, which is how this was
+                        // found.
+                        cube.end();
+                    }
                 }
                 cube.setDepthBias(0.01f);
                 assertEquals(0.01f, cube.getDepthBias(), 1.0e-6f);

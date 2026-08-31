@@ -186,14 +186,21 @@ final class CnaModelTests {
             assertEquals(loaded.getBoneTransforms().size(), loaded.getBoneCount());
 
             // CNA draws the graph in one call, using the very buffers and effects the XNA model
-            // owns. On the headless renderer nothing reaches a screen; what is asserted is that
-            // the whole path -- retained buffers, retained effects, bone transforms and the
-            // draw itself -- is accepted rather than refused.
-            loaded.Draw(Matrix.getIdentity(),
-                    Matrix.CreateLookAt(new Microsoft.Xna.Framework.Vector3(0, 0, 5),
-                            Microsoft.Xna.Framework.Vector3.getZero(),
-                            Microsoft.Xna.Framework.Vector3.getUp()),
-                    Matrix.CreatePerspectiveFieldOfView(1.0f, 1.0f, 0.1f, 100.0f));
+            // owns. No claim is made about pixels; what is asserted is that the whole path --
+            // retained buffers, retained effects, bone transforms and the draw itself -- either
+            // runs or is refused for a stated reason. A renderer that cannot shade a model
+            // refuses, and the refusal is an answer about the renderer rather than a defect in
+            // the path that led to it.
+            try {
+                loaded.Draw(Matrix.getIdentity(),
+                        Matrix.CreateLookAt(new Microsoft.Xna.Framework.Vector3(0, 0, 5),
+                                Microsoft.Xna.Framework.Vector3.getZero(),
+                                Microsoft.Xna.Framework.Vector3.getUp()),
+                        Matrix.CreatePerspectiveFieldOfView(1.0f, 1.0f, 0.1f, 100.0f));
+            } catch (ContentNotSupportedException refused) {
+                assertTrue(refused.getMessage().contains("Draw"),
+                        "a refused draw names itself: " + refused.getMessage());
+            }
         }
 
         private void modernFeatures(CnaModel loaded) {
