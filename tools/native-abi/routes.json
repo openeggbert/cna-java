@@ -3388,6 +3388,108 @@
     ],
     "NativeEngineLayerRoutes": [
       {
+        "java": "cascadedShadowMapApplyToReceiver",
+        "symbol": "cna_cascaded_shadow_map_apply_to_receiver"
+      },
+      {
+        "java": "cascadedShadowMapBegin",
+        "symbol": "cna_cascaded_shadow_map_begin"
+      },
+      {
+        "java": "cascadedShadowMapComputeBoundingSphere",
+        "symbol": "cna_cascaded_shadow_map_compute_bounding_sphere",
+        "arrayLengths": {
+          "corners": {
+            "length": 8
+          }
+        }
+      },
+      {
+        "java": "cascadedShadowMapComputeFrustumCorners",
+        "symbol": "cna_cascaded_shadow_map_compute_frustum_corners",
+        "arrayLengths": {
+          "out_corners": {
+            "length": 8
+          }
+        }
+      },
+      {
+        "java": "cascadedShadowMapComputeSplitDistances",
+        "symbol": "cna_cascaded_shadow_map_compute_split_distances"
+      },
+      {
+        "java": "cascadedShadowMapCreate",
+        "symbol": "cna_cascaded_shadow_map_create"
+      },
+      {
+        "java": "cascadedShadowMapDestroy",
+        "symbol": "cna_cascaded_shadow_map_destroy"
+      },
+      {
+        "java": "cascadedShadowMapEnd",
+        "symbol": "cna_cascaded_shadow_map_end"
+      },
+      {
+        "java": "cascadedShadowMapGetBlendBand",
+        "symbol": "cna_cascaded_shadow_map_get_blend_band"
+      },
+      {
+        "java": "cascadedShadowMapGetCascadeCount",
+        "symbol": "cna_cascaded_shadow_map_get_cascade_count"
+      },
+      {
+        "java": "cascadedShadowMapGetCascadeMatrix",
+        "symbol": "cna_cascaded_shadow_map_get_cascade_matrix"
+      },
+      {
+        "java": "cascadedShadowMapGetCascadeSize",
+        "symbol": "cna_cascaded_shadow_map_get_cascade_size"
+      },
+      {
+        "java": "cascadedShadowMapGetShadowTexture",
+        "symbol": "cna_cascaded_shadow_map_get_shadow_texture"
+      },
+      {
+        "java": "cascadedShadowMapGetSplitDistance",
+        "symbol": "cna_cascaded_shadow_map_get_split_distance"
+      },
+      {
+        "java": "cascadedShadowMapGetSplitLambda",
+        "symbol": "cna_cascaded_shadow_map_get_split_lambda"
+      },
+      {
+        "java": "cascadedShadowMapIsDebugTintEnabled",
+        "symbol": "cna_cascaded_shadow_map_is_debug_tint_enabled"
+      },
+      {
+        "java": "cascadedShadowMapIsSupported",
+        "symbol": "cna_cascaded_shadow_map_is_supported"
+      },
+      {
+        "java": "cascadedShadowMapSelectCascade",
+        "symbol": "cna_cascaded_shadow_map_select_cascade"
+      },
+      {
+        "java": "cascadedShadowMapSetBlendBand",
+        "symbol": "cna_cascaded_shadow_map_set_blend_band"
+      },
+      {
+        "java": "cascadedShadowMapSetDebugTintEnabled",
+        "symbol": "cna_cascaded_shadow_map_set_debug_tint_enabled"
+      },
+      {
+        "java": "cascadedShadowMapSetSplitLambda",
+        "symbol": "cna_cascaded_shadow_map_set_split_lambda"
+      },
+      {
+        "java": "cascadedShadowMapSnapToTexelGrid",
+        "symbol": "cna_cascaded_shadow_map_snap_to_texel_grid"
+      },
+      {
+        "java": "cascadedShadowMapUpdate",
+        "symbol": "cna_cascaded_shadow_map_update"
+      },
+      {
         "java": "clusteredLightAssignmentAdopt",
         "symbol": "cna_clustered_light_assignment_adopt"
       },
@@ -3698,6 +3800,14 @@
       {
         "java": "debugDrawAddBox",
         "symbol": "cna_debug_draw_add_box"
+      },
+      {
+        "java": "debugDrawAddCascadeGizmo",
+        "symbol": "cna_debug_draw_add_cascade_gizmo"
+      },
+      {
+        "java": "debugDrawAddClusterSliceGizmo",
+        "symbol": "cna_debug_draw_add_cluster_slice_gizmo"
       },
       {
         "java": "debugDrawAddCross",

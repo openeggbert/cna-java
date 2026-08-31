@@ -133,6 +133,34 @@ def identity_prefix(name: str) -> str:
     return "CNA_" + snake.upper() + "_"
 
 
+# `@param <name> <text>` inside a Doxygen block, up to the next tag or the block's end.
+PARAMETER_DOC = re.compile(r"@param\s+(?:\[[^\]]*\]\s*)?(\w+)\s+(.*?)(?=\n\s*\*\s*@|\Z)",
+                           re.S)
+
+
+def document_parameters(raw: str) -> dict[str, dict[str, str]]:
+    """Maps each declared symbol to its ``@param`` text, keyed by parameter name.
+
+    The declarations themselves are parsed from comment-stripped text, because a
+    comment can contain anything.  What a parameter's *documentation* says is a
+    separate question, and one worth asking: CNA states some contracts only in
+    prose -- "destination for eight corners" -- and a generator that cannot see
+    that prose has no way to know a bare ``T*`` is an array rather than one
+    struct.  It cannot read the contract either, but it can notice that there is
+    one and refuse instead of guessing.
+    """
+    documented: dict[str, dict[str, str]] = {}
+    for block in re.finditer(r"/\*\*(.*?)\*/\s*CNA_C_API[^;]*?(cna_\w+)\s*\(", raw, re.S):
+        body, symbol = block.group(1), block.group(2)
+        entries: dict[str, str] = {}
+        for parameter in PARAMETER_DOC.finditer(body):
+            entries[parameter.group(1)] = normalize(
+                re.sub(r"^\s*\*", "", parameter.group(2), flags=re.M))
+        if entries:
+            documented[symbol] = entries
+    return documented
+
+
 def inventory(include: Path, *, strict: bool = False) -> dict[str, Any]:
     headers = sorted(p for p in (include / "CNA/C").glob("*.h"))
     if not headers:
@@ -151,17 +179,23 @@ def inventory(include: Path, *, strict: bool = False) -> dict[str, Any]:
         name = header.name
         raw = header.read_text(encoding="utf-8")
         text = strip_comments(raw)
+        parameter_docs = document_parameters(raw)
 
         for match in FUNCTION.finditer(text):
             symbol = match.group("name")
             if symbol in functions:
                 problems.append(f"DUPLICATE_FUNCTION={symbol}")
                 continue
+            parameters = split_parameters(match.group("parameters"))
+            for parameter in parameters:
+                documented = parameter_docs.get(symbol, {}).get(parameter["name"])
+                if documented:
+                    parameter["doc"] = documented
             functions[symbol] = {
                 "name": symbol,
                 "header": name,
                 "returnType": normalize(match.group("return")),
-                "parameters": split_parameters(match.group("parameters")),
+                "parameters": parameters,
             }
 
         for match in HANDLE.finditer(text):

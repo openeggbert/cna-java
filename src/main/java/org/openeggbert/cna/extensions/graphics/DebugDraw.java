@@ -205,6 +205,45 @@ public final class DebugDraw implements AutoCloseable {
     }
 
     /**
+     * Queues the outline of each of a light grid's depth slices, in world space.
+     *
+     * <p>What clustered lighting is doing, made visible: one box per <em>slice</em> rather than
+     * per cluster -- twenty-seven clusters in a three-slice grid are still three boxes -- which
+     * is how a game sees whether its logarithmic slice spacing covers the frustum it thought it
+     * did.
+     *
+     * <p><strong>An unshaped grid draws nothing and succeeds.</strong> CNA's own rule: there is
+     * nothing to place the slices with until the grid has a projection, and an overlay that
+     * refused would be harder to use than one that stays empty until the grid is ready.
+     *
+     * @param grid the grid to outline
+     * @param inverseView the inverse of the camera view the grid was built with, which is what
+     *        takes a slice's view-space bounds back into world space
+     * @param color the colour to draw it in
+     */
+    public void addClusterSliceGizmo(ClusteredLightGrid grid, Matrix inverseView, Color color) {
+        Objects.requireNonNull(grid, "grid");
+        GraphicsExtension.check("DebugDraw.addClusterSliceGizmo", NativeEngineLayerRoutes
+                .debugDrawAddClusterSliceGizmo(open(), grid.handle(),
+                        floats(inverseView, "inverseView"), channels(color)));
+    }
+
+    /**
+     * Queues each of a cascaded shadow map's cascades as its frustum.
+     *
+     * <p>The other half of {@link CascadedShadowMap#setDebugTintEnabled}: the tint says which
+     * cascade shaded a pixel, and this says where each cascade reaches.
+     *
+     * @param cascades the map to outline
+     * @param color the colour to draw it in
+     */
+    public void addCascadeGizmo(CascadedShadowMap cascades, Color color) {
+        Objects.requireNonNull(cascades, "cascades");
+        GraphicsExtension.check("DebugDraw.addCascadeGizmo", NativeEngineLayerRoutes
+                .debugDrawAddCascadeGizmo(open(), cascades.handle(), channels(color)));
+    }
+
+    /**
      * Queues three axis-aligned segments crossing at a point.
      *
      * @param position where the cross sits
@@ -300,6 +339,10 @@ public final class DebugDraw implements AutoCloseable {
 
     private static float[] floats(Matrix matrix) {
         return EngineValues.floats(matrix, "matrix");
+    }
+
+    private static float[] floats(Matrix matrix, String name) {
+        return EngineValues.floats(matrix, name);
     }
 
     private long open() {

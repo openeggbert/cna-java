@@ -13,6 +13,265 @@ public final class NativeEngineLayerRoutes {
     }
 
     /**
+     * cna_cascaded_shadow_map_apply_to_receiver (engine_layer.h).
+     */
+    public static native int cascadedShadowMapApplyToReceiver(long shadowMap, long effect);
+
+    /**
+     * cna_cascaded_shadow_map_begin (engine_layer.h).
+     */
+    public static native int cascadedShadowMapBegin(long shadowMap, int cascadeIndex);
+
+    /**
+     * cna_cascaded_shadow_map_compute_bounding_sphere (engine_layer.h).
+     *
+     * <p>outCentreFloating carries CNA_Vector3 in this order:
+     * <ol start="0">
+     *   <li>{@code x} (float)</li>
+     *   <li>{@code y} (float)</li>
+     *   <li>{@code z} (float)</li>
+     * </ol>
+     */
+    public static native int cascadedShadowMapComputeBoundingSphere(float[] cornersFloating, float[] outCentreFloating, float[] outRadius);
+
+    /**
+     * cna_cascaded_shadow_map_compute_frustum_corners (engine_layer.h).
+     *
+     * <p>viewFloating carries CNA_Matrix in this order:
+     * <ol start="0">
+     *   <li>{@code m11} (float)</li>
+     *   <li>{@code m12} (float)</li>
+     *   <li>{@code m13} (float)</li>
+     *   <li>{@code m14} (float)</li>
+     *   <li>{@code m21} (float)</li>
+     *   <li>{@code m22} (float)</li>
+     *   <li>{@code m23} (float)</li>
+     *   <li>{@code m24} (float)</li>
+     *   <li>{@code m31} (float)</li>
+     *   <li>{@code m32} (float)</li>
+     *   <li>{@code m33} (float)</li>
+     *   <li>{@code m34} (float)</li>
+     *   <li>{@code m41} (float)</li>
+     *   <li>{@code m42} (float)</li>
+     *   <li>{@code m43} (float)</li>
+     *   <li>{@code m44} (float)</li>
+     * </ol>
+     *
+     * <p>projectionFloating carries CNA_Matrix in this order:
+     * <ol start="0">
+     *   <li>{@code m11} (float)</li>
+     *   <li>{@code m12} (float)</li>
+     *   <li>{@code m13} (float)</li>
+     *   <li>{@code m14} (float)</li>
+     *   <li>{@code m21} (float)</li>
+     *   <li>{@code m22} (float)</li>
+     *   <li>{@code m23} (float)</li>
+     *   <li>{@code m24} (float)</li>
+     *   <li>{@code m31} (float)</li>
+     *   <li>{@code m32} (float)</li>
+     *   <li>{@code m33} (float)</li>
+     *   <li>{@code m34} (float)</li>
+     *   <li>{@code m41} (float)</li>
+     *   <li>{@code m42} (float)</li>
+     *   <li>{@code m43} (float)</li>
+     *   <li>{@code m44} (float)</li>
+     * </ol>
+     */
+    public static native int cascadedShadowMapComputeFrustumCorners(float[] viewFloating, float[] projectionFloating, float[] outCornersFloating);
+
+    /**
+     * cna_cascaded_shadow_map_compute_split_distances (engine_layer.h).
+     */
+    public static native int cascadedShadowMapComputeSplitDistances(float nearPlane, float farPlane, int cascadeCount, float lambda, float[] destination, long[] outCount);
+
+    /**
+     * cna_cascaded_shadow_map_create (engine_layer.h).
+     */
+    public static native int cascadedShadowMapCreate(long graphicsDevice, int quality, int cascadeCount, long[] outShadowMap);
+
+    /**
+     * cna_cascaded_shadow_map_destroy (engine_layer.h).
+     */
+    public static native int cascadedShadowMapDestroy(long shadowMap);
+
+    /**
+     * cna_cascaded_shadow_map_end (engine_layer.h).
+     */
+    public static native int cascadedShadowMapEnd(long shadowMap);
+
+    /**
+     * cna_cascaded_shadow_map_get_blend_band (engine_layer.h).
+     */
+    public static native int cascadedShadowMapGetBlendBand(long shadowMap, float[] outBand);
+
+    /**
+     * cna_cascaded_shadow_map_get_cascade_count (engine_layer.h).
+     */
+    public static native int cascadedShadowMapGetCascadeCount(long shadowMap, int[] outCount);
+
+    /**
+     * cna_cascaded_shadow_map_get_cascade_matrix (engine_layer.h).
+     *
+     * <p>outMatrixFloating carries CNA_Matrix in this order:
+     * <ol start="0">
+     *   <li>{@code m11} (float)</li>
+     *   <li>{@code m12} (float)</li>
+     *   <li>{@code m13} (float)</li>
+     *   <li>{@code m14} (float)</li>
+     *   <li>{@code m21} (float)</li>
+     *   <li>{@code m22} (float)</li>
+     *   <li>{@code m23} (float)</li>
+     *   <li>{@code m24} (float)</li>
+     *   <li>{@code m31} (float)</li>
+     *   <li>{@code m32} (float)</li>
+     *   <li>{@code m33} (float)</li>
+     *   <li>{@code m34} (float)</li>
+     *   <li>{@code m41} (float)</li>
+     *   <li>{@code m42} (float)</li>
+     *   <li>{@code m43} (float)</li>
+     *   <li>{@code m44} (float)</li>
+     * </ol>
+     */
+    public static native int cascadedShadowMapGetCascadeMatrix(long shadowMap, int cascadeIndex, float[] outMatrixFloating);
+
+    /**
+     * cna_cascaded_shadow_map_get_cascade_size (engine_layer.h).
+     */
+    public static native int cascadedShadowMapGetCascadeSize(long shadowMap, int[] outSize);
+
+    /**
+     * cna_cascaded_shadow_map_get_shadow_texture (engine_layer.h).
+     */
+    public static native int cascadedShadowMapGetShadowTexture(long shadowMap, long[] outTexture);
+
+    /**
+     * cna_cascaded_shadow_map_get_split_distance (engine_layer.h).
+     */
+    public static native int cascadedShadowMapGetSplitDistance(long shadowMap, int cascadeIndex, float[] outDistance);
+
+    /**
+     * cna_cascaded_shadow_map_get_split_lambda (engine_layer.h).
+     */
+    public static native int cascadedShadowMapGetSplitLambda(long shadowMap, float[] outLambda);
+
+    /**
+     * cna_cascaded_shadow_map_is_debug_tint_enabled (engine_layer.h).
+     */
+    public static native int cascadedShadowMapIsDebugTintEnabled(long shadowMap, boolean[] outEnabled);
+
+    /**
+     * cna_cascaded_shadow_map_is_supported (engine_layer.h).
+     */
+    public static native int cascadedShadowMapIsSupported(long shadowMap, boolean[] outSupported);
+
+    /**
+     * cna_cascaded_shadow_map_select_cascade (engine_layer.h).
+     */
+    public static native int cascadedShadowMapSelectCascade(long shadowMap, float viewDepth, int[] outIndex);
+
+    /**
+     * cna_cascaded_shadow_map_set_blend_band (engine_layer.h).
+     */
+    public static native int cascadedShadowMapSetBlendBand(long shadowMap, float band);
+
+    /**
+     * cna_cascaded_shadow_map_set_debug_tint_enabled (engine_layer.h).
+     */
+    public static native int cascadedShadowMapSetDebugTintEnabled(long shadowMap, boolean enabled);
+
+    /**
+     * cna_cascaded_shadow_map_set_split_lambda (engine_layer.h).
+     */
+    public static native int cascadedShadowMapSetSplitLambda(long shadowMap, float lambda);
+
+    /**
+     * cna_cascaded_shadow_map_snap_to_texel_grid (engine_layer.h).
+     *
+     * <p>centreFloating carries CNA_Vector3 in this order:
+     * <ol start="0">
+     *   <li>{@code x} (float)</li>
+     *   <li>{@code y} (float)</li>
+     *   <li>{@code z} (float)</li>
+     * </ol>
+     *
+     * <p>outCentreFloating carries CNA_Vector3 in this order:
+     * <ol start="0">
+     *   <li>{@code x} (float)</li>
+     *   <li>{@code y} (float)</li>
+     *   <li>{@code z} (float)</li>
+     * </ol>
+     */
+    public static native int cascadedShadowMapSnapToTexelGrid(float[] centreFloating, float radius, int cascadeSize, float[] outCentreFloating);
+
+    /**
+     * cna_cascaded_shadow_map_update (engine_layer.h).
+     *
+     * <p>lightBytes carries CNA_DirectionalLightEXT in this order:
+     * <ol start="0">
+     *   <li>{@code reserved[0]} (uint8_t)</li>
+     *   <li>{@code reserved[1]} (uint8_t)</li>
+     *   <li>{@code reserved[2]} (uint8_t)</li>
+     * </ol>
+     *
+     * <p>lightIntegral carries CNA_DirectionalLightEXT in this order:
+     * <ol start="0">
+     *   <li>{@code casts_shadows} (CNA_Bool)</li>
+     * </ol>
+     *
+     * <p>lightFloating carries CNA_DirectionalLightEXT in this order:
+     * <ol start="0">
+     *   <li>{@code direction.x} (float)</li>
+     *   <li>{@code direction.y} (float)</li>
+     *   <li>{@code direction.z} (float)</li>
+     *   <li>{@code color.x} (float)</li>
+     *   <li>{@code color.y} (float)</li>
+     *   <li>{@code color.z} (float)</li>
+     *   <li>{@code intensity} (float)</li>
+     * </ol>
+     *
+     * <p>cameraViewFloating carries CNA_Matrix in this order:
+     * <ol start="0">
+     *   <li>{@code m11} (float)</li>
+     *   <li>{@code m12} (float)</li>
+     *   <li>{@code m13} (float)</li>
+     *   <li>{@code m14} (float)</li>
+     *   <li>{@code m21} (float)</li>
+     *   <li>{@code m22} (float)</li>
+     *   <li>{@code m23} (float)</li>
+     *   <li>{@code m24} (float)</li>
+     *   <li>{@code m31} (float)</li>
+     *   <li>{@code m32} (float)</li>
+     *   <li>{@code m33} (float)</li>
+     *   <li>{@code m34} (float)</li>
+     *   <li>{@code m41} (float)</li>
+     *   <li>{@code m42} (float)</li>
+     *   <li>{@code m43} (float)</li>
+     *   <li>{@code m44} (float)</li>
+     * </ol>
+     *
+     * <p>cameraProjectionFloating carries CNA_Matrix in this order:
+     * <ol start="0">
+     *   <li>{@code m11} (float)</li>
+     *   <li>{@code m12} (float)</li>
+     *   <li>{@code m13} (float)</li>
+     *   <li>{@code m14} (float)</li>
+     *   <li>{@code m21} (float)</li>
+     *   <li>{@code m22} (float)</li>
+     *   <li>{@code m23} (float)</li>
+     *   <li>{@code m24} (float)</li>
+     *   <li>{@code m31} (float)</li>
+     *   <li>{@code m32} (float)</li>
+     *   <li>{@code m33} (float)</li>
+     *   <li>{@code m34} (float)</li>
+     *   <li>{@code m41} (float)</li>
+     *   <li>{@code m42} (float)</li>
+     *   <li>{@code m43} (float)</li>
+     *   <li>{@code m44} (float)</li>
+     * </ol>
+     */
+    public static native int cascadedShadowMapUpdate(long shadowMap, byte[] lightBytes, long[] lightIntegral, float[] lightFloating, float[] cameraViewFloating, float[] cameraProjectionFloating);
+
+    /**
      * cna_clustered_light_assignment_adopt (engine_layer.h).
      */
     public static native int clusteredLightAssignmentAdopt(long assignment, int lightCount, int[] offsets, int[] indices);
@@ -798,6 +1057,36 @@ public final class NativeEngineLayerRoutes {
      * </ol>
      */
     public static native int debugDrawAddBox(long debug, float[] boundsFloating, long[] colourIntegral);
+
+    /**
+     * cna_debug_draw_add_cascade_gizmo (engine_layer.h).
+     */
+    public static native int debugDrawAddCascadeGizmo(long debug, long cascades, long[] colourIntegral);
+
+    /**
+     * cna_debug_draw_add_cluster_slice_gizmo (engine_layer.h).
+     *
+     * <p>inverseViewFloating carries CNA_Matrix in this order:
+     * <ol start="0">
+     *   <li>{@code m11} (float)</li>
+     *   <li>{@code m12} (float)</li>
+     *   <li>{@code m13} (float)</li>
+     *   <li>{@code m14} (float)</li>
+     *   <li>{@code m21} (float)</li>
+     *   <li>{@code m22} (float)</li>
+     *   <li>{@code m23} (float)</li>
+     *   <li>{@code m24} (float)</li>
+     *   <li>{@code m31} (float)</li>
+     *   <li>{@code m32} (float)</li>
+     *   <li>{@code m33} (float)</li>
+     *   <li>{@code m34} (float)</li>
+     *   <li>{@code m41} (float)</li>
+     *   <li>{@code m42} (float)</li>
+     *   <li>{@code m43} (float)</li>
+     *   <li>{@code m44} (float)</li>
+     * </ol>
+     */
+    public static native int debugDrawAddClusterSliceGizmo(long debug, long grid, float[] inverseViewFloating, long[] colourIntegral);
 
     /**
      * cna_debug_draw_add_cross (engine_layer.h).

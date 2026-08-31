@@ -59,6 +59,19 @@ class Unsupported(Exception):
     pass
 
 
+# A number word, or a reference to one of CNA's own count constants. Either one in a parameter's
+# documentation means the parameter is more than one of whatever it points at.
+COUNT_IN_PROSE = re.compile(
+    r"\b(two|three|four|five|six|seven|eight|nine|ten|eleven|twelve|sixteen|"
+    r"twenty|thirty-two|sixty-four)\b|CNA_[A-Z0-9_]*COUNT[A-Z0-9_]*",
+    re.IGNORECASE)
+
+
+def counts_more_than_one(documentation: str) -> bool:
+    """Reports whether a parameter's own documentation says it holds several elements."""
+    return bool(documentation) and bool(COUNT_IN_PROSE.search(documentation))
+
+
 def bare(type_name: str) -> tuple[str, int]:
     value = type_name.replace("const ", "").strip()
     pointers = value.count("*")
@@ -281,6 +294,34 @@ def plan(route: dict, live: dict) -> dict:
         if pointers == 1 and type_name in live["structures"]:
             raw_leaves = flatten_struct(type_name, live)
             groups = group_leaves(raw_leaves)
+            declared_extent = route.get("arrayLengths", {}).get(name)
+            if declared_extent is not None:
+                # A struct pointer whose element count CNA states in prose rather than in a
+                # count parameter -- "destination for eight corners". Marshalled exactly like a
+                # counted array of structs, with the extent taken from the declaration and the
+                # Java array required to match it.
+                if groups["views"]:
+                    raise Unsupported(
+                        f"{route['symbol']}: {type_name}[] carries a CNA_StringView, whose "
+                        "pointer would have to outlive one element's marshalling")
+                steps.append({"shape": "struct_array", "name": name, "ctype": type_name,
+                              "input": constant, "versions": version_paths(type_name, live),
+                              "count": None,
+                              "extent": int(declared_extent["length"]), **groups})
+                index += 1
+                continue
+            if counts_more_than_one(parameter.get("doc", "")):
+                # CNA's own documentation for this parameter names a count, so it is an array
+                # rather than one structure -- and nothing in the C declaration says so. This is
+                # the shape that would otherwise be marshalled as a single element and then
+                # handed to a function that reads or writes several: a stack overflow on the way
+                # out and a heap overread on the way in, both silent. Refused until routes.json
+                # states the extent.
+                raise Unsupported(
+                    f"{route['symbol']}: '{name}' is a {type_name}* whose documentation names a "
+                    f"count -- \"{parameter['doc']}\" -- so whether it is one structure or an "
+                    "array cannot be read off the declaration; declare its length in "
+                    "arrayLengths")
             in_out = name in route.get("inOut", ())
             if not constant and not in_out and not (
                     name.startswith("out") or name == "destination"):
@@ -592,9 +633,14 @@ def render_c(class_name: str, entries: list[dict]) -> str:
                 primary = groups[0]
                 for group, jni, java in groups:
                     parameters.append(f"{jni}Array {name}{group.capitalize()}")
-                body.append(f"    jsize {name}_count = (*environment)->GetArrayLength("
-                            f"environment, {name}{primary[0].capitalize()}) / "
-                            f"{len(step[primary[0]])};")
+                if "extent" in step:
+                    # CNA reads or writes exactly this many, so a Java array of any other size
+                    # is a buffer overrun waiting to happen rather than a smaller request.
+                    body.append(f"    const jsize {name}_count = {step['extent']};")
+                else:
+                    body.append(f"    jsize {name}_count = (*environment)->GetArrayLength("
+                                f"environment, {name}{primary[0].capitalize()}) / "
+                                f"{len(step[primary[0]])};")
                 # One struct is split across up to four parallel Java arrays, and the element
                 # count comes from only one of them. A caller whose other arrays are shorter
                 # would have every element past their end read out of bounds in C -- a heap
@@ -644,7 +690,10 @@ def render_c(class_name: str, entries: list[dict]) -> str:
                         f"{name}_values[element]", step["versions"]))
                     body.append("    }")
                 arguments.append(f"{name}_values")
-                arguments.append(f"(uint64_t){name}_count")
+                if step.get("count") is not None or "extent" not in step:
+                    # A counted array passes its count; a fixed-extent one does not, because
+                    # CNA already knows how many elements it reads or writes.
+                    arguments.append(f"(uint64_t){name}_count")
                 if not step["input"]:
                     # An output array of structs has to be copied back before the C
                     # buffer is freed, so the write-back belongs in the cleanup

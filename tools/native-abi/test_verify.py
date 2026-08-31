@@ -373,6 +373,41 @@ def test_generator(live: dict) -> None:
     check(guard < emitted.index("GetByteArrayRegion"),
           "and before any carrier is read")
 
+    # A bare `T*` is one structure or an array of them, and the C declaration does not say
+    # which. CNA states the difference in prose -- "destination for eight corners" -- so the
+    # generator reads the parameter's own documentation and refuses rather than marshalling one
+    # element and handing it to a function that writes eight. This was a real defect: both
+    # cascade helpers were generated as single Vector3 parameters, which is a stack overflow on
+    # the way out and a heap overread on the way in.
+    corners = generator_tool.plan(
+        {"java": "probe", "symbol": "cna_cascaded_shadow_map_compute_frustum_corners",
+         "arrayLengths": {"out_corners": {"length": 8}}}, live)
+    step = next(entry for entry in corners["steps"] if entry["name"] == "out_corners")
+    check(step["shape"] == "struct_array" and step["extent"] == 8,
+          "a declared eight-element destination is marshalled as eight, not one")
+    emitted = generator_tool.render_c("Probe", [corners])
+    check("const jsize out_corners_count = 8;" in emitted,
+          "the extent is the declaration's, not the Java array's length")
+    check("!= out_corners_count * 3" in emitted,
+          "a Java array of the wrong length is refused rather than overrun")
+    check("(uint64_t)out_corners_count" not in emitted,
+          "a fixed-extent array passes no count, because CNA already knows it")
+
+    try:
+        generator_tool.plan({"java": "probe",
+                             "symbol": "cna_cascaded_shadow_map_compute_frustum_corners"}, live)
+        check(False, "an undeclared counted destination is refused rather than guessed at")
+    except generator_tool.Unsupported as refusal:
+        check("arrayLengths" in str(refusal),
+              "an undeclared counted destination is refused rather than guessed at")
+
+    # And the detector must not fire on an ordinary single structure, or every route taking a
+    # box or a matrix would need a declaration it does not want.
+    single = plan("cna_shadow_map_begin")
+    check(any(entry["shape"] == "struct" and entry["name"] == "scene_bounds"
+              for entry in single["steps"]),
+          "a single structure whose documentation names no count stays a single structure")
+
     # An input struct must not be written back over the caller's data.
     haptic = plan("cna_haptic_device_get_is_effect_supported")
     effect = next(step for step in haptic["steps"] if step["shape"] == "struct")

@@ -1802,6 +1802,250 @@
       ]
     },
     {
+      "name": "cna_cascaded_shadow_map_apply_to_receiver",
+      "header": "engine_layer.h",
+      "ownership": "borrows the map and the caller's effect for the duration of the call",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_CascadedShadowMapHandle",
+        "CNA_EffectHandle"
+      ]
+    },
+    {
+      "name": "cna_cascaded_shadow_map_begin",
+      "header": "engine_layer.h",
+      "ownership": "borrows the map",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_CascadedShadowMapHandle",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "cna_cascaded_shadow_map_compute_bounding_sphere",
+      "header": "engine_layer.h",
+      "ownership": "no handle; a pure function of its arguments",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "const CNA_Vector3*",
+        "CNA_Vector3*",
+        "float*"
+      ]
+    },
+    {
+      "name": "cna_cascaded_shadow_map_compute_frustum_corners",
+      "header": "engine_layer.h",
+      "ownership": "no handle; a pure function of its arguments",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "const CNA_Matrix*",
+        "const CNA_Matrix*",
+        "CNA_Vector3*"
+      ]
+    },
+    {
+      "name": "cna_cascaded_shadow_map_compute_split_distances",
+      "header": "engine_layer.h",
+      "ownership": "no handle; a pure function of its arguments",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "float",
+        "float",
+        "int32_t",
+        "float",
+        "float*",
+        "uint64_t",
+        "uint64_t*"
+      ]
+    },
+    {
+      "name": "cna_cascaded_shadow_map_create",
+      "header": "engine_layer.h",
+      "ownership": "borrows the graphics device; returns an owned cascaded-shadow-map handle",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_Handle",
+        "CNA_ShadowQuality",
+        "int32_t",
+        "CNA_CascadedShadowMapHandle*"
+      ]
+    },
+    {
+      "name": "cna_cascaded_shadow_map_destroy",
+      "header": "engine_layer.h",
+      "ownership": "releases the owned cascaded-shadow-map handle and the atlas it owns; refused while a texture borrow is outstanding",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_CascadedShadowMapHandle"
+      ]
+    },
+    {
+      "name": "cna_cascaded_shadow_map_end",
+      "header": "engine_layer.h",
+      "ownership": "borrows the map",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_CascadedShadowMapHandle"
+      ]
+    },
+    {
+      "name": "cna_cascaded_shadow_map_get_blend_band",
+      "header": "engine_layer.h",
+      "ownership": "borrows the map",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_CascadedShadowMapHandle",
+        "float*"
+      ]
+    },
+    {
+      "name": "cna_cascaded_shadow_map_get_cascade_count",
+      "header": "engine_layer.h",
+      "ownership": "borrows the map",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_CascadedShadowMapHandle",
+        "int32_t*"
+      ]
+    },
+    {
+      "name": "cna_cascaded_shadow_map_get_cascade_matrix",
+      "header": "engine_layer.h",
+      "ownership": "borrows the map",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_CascadedShadowMapHandle",
+        "int32_t",
+        "CNA_Matrix*"
+      ]
+    },
+    {
+      "name": "cna_cascaded_shadow_map_get_cascade_size",
+      "header": "engine_layer.h",
+      "ownership": "borrows the map",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_CascadedShadowMapHandle",
+        "int32_t*"
+      ]
+    },
+    {
+      "name": "cna_cascaded_shadow_map_get_shadow_texture",
+      "header": "engine_layer.h",
+      "ownership": "borrows the map; returns a counted borrow of its atlas that the caller releases with cna_render_target_destroy",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_CascadedShadowMapHandle",
+        "CNA_Handle*"
+      ]
+    },
+    {
+      "name": "cna_cascaded_shadow_map_get_split_distance",
+      "header": "engine_layer.h",
+      "ownership": "borrows the map",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_CascadedShadowMapHandle",
+        "int32_t",
+        "float*"
+      ]
+    },
+    {
+      "name": "cna_cascaded_shadow_map_get_split_lambda",
+      "header": "engine_layer.h",
+      "ownership": "borrows the map",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_CascadedShadowMapHandle",
+        "float*"
+      ]
+    },
+    {
+      "name": "cna_cascaded_shadow_map_is_debug_tint_enabled",
+      "header": "engine_layer.h",
+      "ownership": "borrows the map",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_CascadedShadowMapHandle",
+        "CNA_Bool*"
+      ]
+    },
+    {
+      "name": "cna_cascaded_shadow_map_is_supported",
+      "header": "engine_layer.h",
+      "ownership": "borrows the map",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_CascadedShadowMapHandle",
+        "CNA_Bool*"
+      ]
+    },
+    {
+      "name": "cna_cascaded_shadow_map_select_cascade",
+      "header": "engine_layer.h",
+      "ownership": "borrows the map",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_CascadedShadowMapHandle",
+        "float",
+        "int32_t*"
+      ]
+    },
+    {
+      "name": "cna_cascaded_shadow_map_set_blend_band",
+      "header": "engine_layer.h",
+      "ownership": "borrows the map",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_CascadedShadowMapHandle",
+        "float"
+      ]
+    },
+    {
+      "name": "cna_cascaded_shadow_map_set_debug_tint_enabled",
+      "header": "engine_layer.h",
+      "ownership": "borrows the map",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_CascadedShadowMapHandle",
+        "CNA_Bool"
+      ]
+    },
+    {
+      "name": "cna_cascaded_shadow_map_set_split_lambda",
+      "header": "engine_layer.h",
+      "ownership": "borrows the map",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_CascadedShadowMapHandle",
+        "float"
+      ]
+    },
+    {
+      "name": "cna_cascaded_shadow_map_snap_to_texel_grid",
+      "header": "engine_layer.h",
+      "ownership": "no handle; a pure function of its arguments",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "const CNA_Vector3*",
+        "float",
+        "int32_t",
+        "CNA_Vector3*"
+      ]
+    },
+    {
+      "name": "cna_cascaded_shadow_map_update",
+      "header": "engine_layer.h",
+      "ownership": "borrows the map and the caller's light and camera matrices; copies what it needs",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_CascadedShadowMapHandle",
+        "const CNA_DirectionalLightEXT*",
+        "const CNA_Matrix*",
+        "const CNA_Matrix*"
+      ]
+    },
+    {
       "name": "cna_clustered_light_assignment_adopt",
       "header": "engine_layer.h",
       "ownership": "borrows the assignment and the caller's arrays; copies them",
@@ -5752,6 +5996,29 @@
       "parameters": [
         "CNA_DebugDrawHandle",
         "const CNA_BoundingBox*",
+        "CNA_Color"
+      ]
+    },
+    {
+      "name": "cna_debug_draw_add_cascade_gizmo",
+      "header": "engine_layer.h",
+      "ownership": "borrows the renderer and the map; copies the geometry into the renderer's queue",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_DebugDrawHandle",
+        "CNA_CascadedShadowMapHandle",
+        "CNA_Color"
+      ]
+    },
+    {
+      "name": "cna_debug_draw_add_cluster_slice_gizmo",
+      "header": "engine_layer.h",
+      "ownership": "borrows the renderer, the grid and the caller's matrix; copies the geometry into the renderer's queue",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_DebugDrawHandle",
+        "CNA_ClusteredLightGridHandle",
+        "const CNA_Matrix*",
         "CNA_Color"
       ]
     },
