@@ -98,11 +98,18 @@ public final class LocalNetworkGamer extends NetworkGamer {
         return result;
     }
 
+    /**
+     * Takes the next queued packet from CNA.
+     *
+     * <p>A read into the whole buffer takes CNA's whole-buffer route, as the send does.
+     */
     private ReceiveResult receive(byte[] destination, int offset) {
         long[] senderHandle = new long[1];
         long[] received = new long[1];
-        NativeGamerServices.check("LocalNetworkGamer.ReceiveData",
-                NativeNetworkRoutes.localNetworkGamerReceiveDataAt(
+        NativeGamerServices.check("LocalNetworkGamer.ReceiveData", offset == 0
+                ? NativeNetworkRoutes.localNetworkGamerReceiveData(
+                        handle(), destination, senderHandle, received)
+                : NativeNetworkRoutes.localNetworkGamerReceiveDataAt(
                         handle(), destination, offset, senderHandle, received));
         boolean succeeded = received[0] != 0L || senderHandle[0] != 0L;
         return new ReceiveResult(succeeded, Math.toIntExact(received[0]),
@@ -156,14 +163,33 @@ public final class LocalNetworkGamer extends NetworkGamer {
     /** The largest packet XNA lets a title send, and therefore the receive buffer's size. */
     private static final int MAXIMUM_PACKET_BYTES = 1024;
 
+    /**
+     * Hands one packet to CNA.
+     *
+     * <p>A send of the whole array takes CNA's whole-buffer route and a windowed one takes the
+     * windowed route, which is the same rule {@code VertexBuffer.SetData} follows: the narrower
+     * route exists, and taking the wide one for every send would make CNA re-derive a window the
+     * caller did not ask for.
+     */
     private void send(byte[] data, int offset, int count, SendDataOptions options,
             NetworkGamer recipient) {
         Objects.requireNonNull(options, "options");
-        int result = recipient == null
-                ? NativeNetworkRoutes.localNetworkGamerSendDataRange(
-                        handle(), data, offset, count, options.getValue())
-                : NativeNetworkRoutes.localNetworkGamerSendDataRangeTo(
-                        handle(), data, offset, count, options.getValue(), recipient.handle());
+        boolean whole = offset == 0 && count == data.length;
+        int result;
+        if (recipient == null) {
+            result = whole
+                    ? NativeNetworkRoutes.localNetworkGamerSendData(
+                            handle(), data, options.getValue())
+                    : NativeNetworkRoutes.localNetworkGamerSendDataRange(
+                            handle(), data, offset, count, options.getValue());
+        } else {
+            result = whole
+                    ? NativeNetworkRoutes.localNetworkGamerSendDataTo(
+                            handle(), data, options.getValue(), recipient.handle())
+                    : NativeNetworkRoutes.localNetworkGamerSendDataRangeTo(
+                            handle(), data, offset, count, options.getValue(),
+                            recipient.handle());
+        }
         NativeGamerServices.check("LocalNetworkGamer.SendData", result);
     }
 

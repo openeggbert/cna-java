@@ -343,15 +343,16 @@
       "title": "Reach or unbind the 162 routes no Java call site touches",
       "family": "native boundary",
       "authority": "tools/native-abi/coverage.py boundWithoutJavaCallSite",
-      "currentState": "162 of the 1,225 bound routes have a generated JNI entry point that no Java source calls. The gate could not see them: a `native` declaration names its own method, so the call scan counted every generated declaration as its own call site. With that fixed, boundButUnreached is still 0 but boundWithoutJavaCallSite is 162, concentrated in gamer_services.h (81), net.h (41), net_sessions.h (24) and net_gamers.h (15).",
-      "expectedState": "Every bound route either reaches a Java surface or is unbound with a coverage rule that says why. PacketReader and PacketWriter are the largest slice: 28 routes CNA implements that the Java projection currently does managed. Read-only collection mutators (AchievementCollection.add/clear/insert/remove, GamerCollection.add/remove) are the opposite case and should be unbound, because the Java member throws as XNA's does.",
+      "currentState": "162 bound routes had a generated JNI entry point that no Java source called. All of them are resolved: seven were reached and 155 unbound with a rule saying why. boundWithoutJavaCallSite is 0 and nativeCoverageCheck now fails on it, so it cannot regrow. Bound routes went 1,570 to 1,418 and XNA_BACKING 976 to 985.",
+      "expectedState": "Every bound route reaches a Java call site, or is unbound with a stated reason. The reasons are families rather than one-offs: PacketReader and PacketWriter stay managed BinaryReader and BinaryWriter so Position and Length keep XNA's meaning over one cursor; a Begin/End pair is projected over CNA's synchronous route because its asynchronous form completes before its own begin returns; value construction and equality are Java's as they are for the vector families; a read-only collection's mutators can have no call site because the Java member throws as XNA's does; a factory for an object the projection receives has nothing to make; and CNA's application-rendered Guide, its avatar rendering and a discovered session's address are extensions XNA has no member for.",
       "blocker": "None. It is measurement plus per-family judgement, not an upstream change.",
       "tests": [
         "nativeCoverageCheck",
-        "tools/native-abi/test_verify.py"
+        "NetworkSessionNativeIntegrationTests"
       ],
       "priority": 6,
-      "status": "ready"
+      "status": "done",
+      "note": "Three reaches were real gaps rather than tidying: a failed join now raises XNA's NetworkSessionJoinException carrying the error CNA recorded instead of a generic failure with a Java default, and a whole-array send or receive takes CNA's whole-buffer route as VertexBuffer.SetData already did. A fourth was refused by the full-profile gate: asking CNA for a gamer collection's membership would have declared contains and indexOf on GamerCollection, which CLR's does not declare."
     },
     {
       "id": "JAVA-UPSTREAM-004",

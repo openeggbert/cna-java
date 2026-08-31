@@ -94,9 +94,23 @@ public final class AchievementCollection implements List<Achievement>, AutoClose
         return size() == 0;
     }
 
+    /**
+     * Reports whether the collection holds one achievement.
+     *
+     * <p>CNA answers this in one call, so it is asked rather than derived from
+     * {@link #indexOf(Object)}: the collection is native, and walking it to find out would
+     * cross the boundary once per element for a question it already knows.
+     */
     @Override
     public boolean contains(Object item) {
-        return indexOf(item) >= 0;
+        if (!(item instanceof Achievement achievement)) {
+            return false;
+        }
+        boolean[] contains = new boolean[1];
+        NativeGamerServices.check("AchievementCollection.contains",
+                NativeGamerServicesRoutes.achievementCollectionContains(
+                        handle, achievement.handle(), contains));
+        return contains[0];
     }
 
     @Override

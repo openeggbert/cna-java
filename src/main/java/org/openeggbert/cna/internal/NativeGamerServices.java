@@ -38,6 +38,17 @@ public final class NativeGamerServices {
      * guessing a more specific XNA exception from a result CNA cannot distinguish would be a
      * fabrication.
      */
+    /**
+     * Returns the diagnostic CNA recorded for a failed call, without throwing.
+     *
+     * <p>For the one caller that has to raise a different exception type than {@link #check} would
+     * -- a failed join, which XNA reports as {@code NetworkSessionJoinException} -- and still
+     * wants CNA's own message rather than a restatement of it.
+     */
+    public static String failureMessage(String operation, int result) {
+        return NativeBindings.failure(operation, result).getMessage();
+    }
+
     public static void check(String operation, int result) {
         if (result == RESULT_SUCCESS) {
             return;

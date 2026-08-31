@@ -181,6 +181,259 @@
     },
     {
       "match": {
+        "symbols": [
+          "cna_local_network_gamer_receive_data_into_packet_reader",
+          "cna_local_network_gamer_send_packet_writer",
+          "cna_local_network_gamer_send_packet_writer_to",
+          "cna_packet_reader_create",
+          "cna_packet_reader_destroy",
+          "cna_packet_reader_get_length",
+          "cna_packet_reader_get_position",
+          "cna_packet_reader_read_color",
+          "cna_packet_reader_read_double",
+          "cna_packet_reader_read_matrix",
+          "cna_packet_reader_read_quaternion",
+          "cna_packet_reader_read_single",
+          "cna_packet_reader_read_vector2",
+          "cna_packet_reader_read_vector3",
+          "cna_packet_reader_read_vector4",
+          "cna_packet_reader_set_data_ext",
+          "cna_packet_reader_set_position",
+          "cna_packet_writer_copy_data_ext",
+          "cna_packet_writer_create",
+          "cna_packet_writer_destroy",
+          "cna_packet_writer_get_length",
+          "cna_packet_writer_get_position",
+          "cna_packet_writer_set_position",
+          "cna_packet_writer_write_color",
+          "cna_packet_writer_write_double",
+          "cna_packet_writer_write_matrix",
+          "cna_packet_writer_write_quaternion",
+          "cna_packet_writer_write_single",
+          "cna_packet_writer_write_vector2",
+          "cna_packet_writer_write_vector3",
+          "cna_packet_writer_write_vector4"
+        ]
+      },
+      "classification": "NOT_USEFUL_IN_JAVA",
+      "reason": "XNA's PacketWriter is a BinaryWriter over a growable buffer and its PacketReader is a BinaryReader over the received bytes, and the Java projection is the same. Keeping the buffer managed is what gives Position and Length exactly XNA's meaning over one cursor; a native cursor beside the Java one would be two positions to keep in step, and the packet already crosses the boundary once, at Send and Receive."
+    },
+    {
+      "match": {
+        "symbols": [
+          "cna_gamer_begin_get_from_gamertag",
+          "cna_gamer_begin_get_partner_token",
+          "cna_gamer_begin_get_profile",
+          "cna_gamer_services_dispatcher_update_async",
+          "cna_leaderboard_reader_begin_page_down",
+          "cna_leaderboard_reader_begin_page_up",
+          "cna_leaderboard_reader_begin_read",
+          "cna_leaderboard_reader_begin_read_from_gamers",
+          "cna_leaderboard_reader_begin_read_from_pivot",
+          "cna_signed_in_gamer_begin_award_achievement",
+          "cna_signed_in_gamer_begin_get_achievements"
+        ]
+      },
+      "classification": "NOT_USEFUL_IN_JAVA",
+      "reason": "The asynchronous half of an operation the projection takes synchronously. XNA's Begin/End pair is projected over CNA's synchronous route plus CompletedAsyncResult, because CNA's asynchronous form completes before its own begin route returns; binding both would be two spellings of one operation and two places for its behaviour to drift."
+    },
+    {
+      "match": {
+        "symbols": [
+          "cna_achievement_equals",
+          "cna_available_network_session_equals",
+          "cna_available_network_session_not_equals",
+          "cna_avatar_appearance_init_ext",
+          "cna_avatar_expression_init",
+          "cna_game_defaults_init",
+          "cna_game_ended_event_info_init",
+          "cna_game_started_event_info_init",
+          "cna_gamer_joined_event_info_init",
+          "cna_gamer_left_event_info_init",
+          "cna_gamer_presence_init",
+          "cna_host_changed_event_info_init",
+          "cna_invite_accepted_event_info_init",
+          "cna_leaderboard_entry_equals",
+          "cna_leaderboard_identity_init",
+          "cna_network_session_ended_event_info_init",
+          "cna_quality_of_service_init",
+          "cna_quality_of_service_init_measured",
+          "cna_write_leaderboards_event_info_init"
+        ]
+      },
+      "classification": "NOT_USEFUL_IN_JAVA",
+      "reason": "Constructing or comparing a value the Java projection owns: an EventArgs built from the drained event record, a presence or quality-of-service value, a leaderboard identity, an avatar expression. These are managed values in XNA and managed values here, so their construction and equality are Java's, exactly as the vector and input value families are."
+    },
+    {
+      "match": {
+        "symbols": [
+          "cna_guide_copy_pending_keyboard_input_description_ext",
+          "cna_guide_copy_pending_keyboard_input_display_text_ext",
+          "cna_guide_copy_pending_keyboard_input_title_ext",
+          "cna_guide_get_has_pending_keyboard_input_ext",
+          "cna_guide_get_has_pending_message_box_ext",
+          "cna_guide_get_pending_keyboard_input_description_size_ext",
+          "cna_guide_get_pending_keyboard_input_display_text_size_ext",
+          "cna_guide_get_pending_keyboard_input_title_size_ext",
+          "cna_guide_get_pending_message_box_focus_button_ext",
+          "cna_guide_render_pending_keyboard_input_ext",
+          "cna_guide_render_pending_message_box_ext",
+          "cna_guide_reset_pending_keyboard_input_ext",
+          "cna_guide_reset_pending_message_box_ext",
+          "cna_guide_show_achievements_ext",
+          "cna_guide_simulate_keyboard_input_cancel_ext",
+          "cna_guide_simulate_message_box_click_ext"
+        ]
+      },
+      "classification": "CNA_EXTENSION_CANDIDATE",
+      "reason": "CNA's Guide asks the application to draw the on-screen keyboard and the message box, handing it the pending request and a render route. XNA's Guide draws itself and has no member for any of it, so a projection belongs under org.openeggbert.cna.extensions rather than in Microsoft.Xna.Framework.GamerServices. The two simulate routes are CNA's own test seam for that surface.",
+      "task": "JAVA-EXT-006"
+    },
+    {
+      "match": {
+        "symbols": [
+          "cna_avatar_animation_copy_real_clip_name_ext",
+          "cna_avatar_animation_get_real_clip_name_size_ext",
+          "cna_avatar_animation_preset_copy_clip_name_ext",
+          "cna_avatar_animation_preset_get_clip_name_size_ext",
+          "cna_avatar_animation_set_real_clip_name_ext",
+          "cna_avatar_appearance_init_ext",
+          "cna_avatar_body_type_copy_content_name_ext",
+          "cna_avatar_body_type_get_content_name_size_ext",
+          "cna_avatar_expression_init",
+          "cna_avatar_renderer_draw_real_ext",
+          "cna_avatar_renderer_enable_real_rendering_ext",
+          "cna_avatar_renderer_set_appearance_ext"
+        ]
+      },
+      "classification": "CNA_EXTENSION_CANDIDATE",
+      "reason": "CNA's own avatar rendering and the real clip and content names behind the canonical presets. XNA's AvatarRenderer draws through the Xbox runtime and names none of this, so it is an extension rather than a member the reference API has.",
+      "task": "JAVA-EXT-006"
+    },
+    {
+      "match": {
+        "symbols": [
+          "cna_achievement_collection_add",
+          "cna_achievement_collection_clear",
+          "cna_achievement_collection_copy_to",
+          "cna_achievement_collection_get_is_read_only",
+          "cna_achievement_collection_insert",
+          "cna_achievement_collection_remove",
+          "cna_achievement_collection_remove_at",
+          "cna_gamer_collection_add",
+          "cna_gamer_collection_clear",
+          "cna_gamer_collection_copy_to",
+          "cna_gamer_collection_remove",
+          "cna_network_session_properties_add",
+          "cna_network_session_properties_get_is_read_only",
+          "cna_network_session_properties_remove",
+          "cna_property_dictionary_get_is_read_only"
+        ]
+      },
+      "classification": "NOT_USEFUL_IN_JAVA",
+      "reason": "Mutating a collection XNA declares read-only, or asking whether it is. The Java collection throws from every one of those members exactly as XNA's does, so no call site can exist for the native route; and a copy-out is answered from the same snapshot get and size already read."
+    },
+    {
+      "match": {
+        "symbols": [
+          "cna_gamer_enumerator_reset",
+          "cna_network_session_properties_create_enumerator",
+          "cna_network_session_property_enumerator_destroy",
+          "cna_network_session_property_enumerator_get_current",
+          "cna_network_session_property_enumerator_move_next",
+          "cna_network_session_property_enumerator_reset"
+        ]
+      },
+      "classification": "NOT_USEFUL_IN_JAVA",
+      "reason": "A CLR enumerator's own lifecycle. Java's Iterator has no reset and its collections iterate by index over the same elements, so projecting a second cursor would add a handle to own and a state to keep in step for no behaviour a Java caller can reach."
+    },
+    {
+      "match": {
+        "symbols": [
+          "cna_achievement_collection_create_ext",
+          "cna_achievement_create_ext",
+          "cna_achievement_destroy",
+          "cna_available_network_session_collection_create_ext",
+          "cna_available_network_session_collection_destroy",
+          "cna_available_network_session_destroy",
+          "cna_friend_collection_create_ext",
+          "cna_friend_gamer_create_ext",
+          "cna_gamer_destroy",
+          "cna_gamer_services_component_create",
+          "cna_local_network_gamer_create_ext",
+          "cna_network_gamer_create",
+          "cna_network_gamer_destroy",
+          "cna_network_machine_create",
+          "cna_network_machine_destroy",
+          "cna_property_dictionary_create_ext",
+          "cna_property_dictionary_destroy",
+          "cna_signed_in_gamer_create_ext",
+          "cna_signed_in_gamer_destroy"
+        ]
+      },
+      "classification": "NOT_USEFUL_IN_JAVA",
+      "reason": "A factory for an object the projection receives rather than makes, and the matching release. A gamer, a machine, a friend, an achievement and a session listing all arrive from the roster or the session that owns them, so Java never owns one to free -- and a second owner freeing a borrowed handle is the failure this classification prevents. The handles Java does own are released: JAVA-NATIVE-024 records the three that were not."
+    },
+    {
+      "match": {
+        "symbols": [
+          "cna_gamer_services_dispatcher_get_freed_gamer_count_ext",
+          "cna_gamer_set_signed_in_gamers_ext",
+          "cna_local_network_gamer_clear_packet_queue_ext",
+          "cna_network_gamer_set_has_left_session_ext",
+          "cna_network_gamer_set_id_ext",
+          "cna_network_gamer_set_is_host_ext",
+          "cna_network_gamer_set_roundtrip_ticks_ext",
+          "cna_network_session_add_remote_gamer_ext",
+          "cna_network_session_get_active_action_count_ext",
+          "cna_network_session_get_instance_count_ext",
+          "cna_network_session_get_owned_gamer_count_ext",
+          "cna_network_session_remove_gamer_ext"
+        ]
+      },
+      "classification": "NOT_USEFUL_IN_JAVA",
+      "reason": "A CNA test seam: planting a roster, stamping a gamer's identity or round trip, adding a remote gamer that never connected, or counting live instances. Exposing any of it would let a consumer change what the gamer and session surface reports, which is the opposite of what that surface is for."
+    },
+    {
+      "match": {
+        "symbols": [
+          "cna_network_session_copy_type_name",
+          "cna_network_session_get_type_name_size",
+          "cna_signed_in_gamer_copy_gamertag",
+          "cna_signed_in_gamer_get_gamertag_size"
+        ]
+      },
+      "classification": "NOT_USEFUL_IN_JAVA",
+      "reason": "A second spelling of something already answered. The session's runtime type name is a C++ diagnostic string XNA's ToString does not promise, and a signed-in gamer's gamertag is the Gamer.Gamertag the base route already reads."
+    },
+    {
+      "match": {
+        "symbols": [
+          "cna_available_network_session_copy_connect_address_ext",
+          "cna_available_network_session_get_connect_address_size_ext",
+          "cna_available_network_session_get_connect_port_ext",
+          "cna_available_network_session_get_session_type_ext",
+          "cna_signed_in_gamer_set_presence_mode_string_ext"
+        ]
+      },
+      "classification": "CNA_EXTENSION_CANDIDATE",
+      "reason": "The host and port a discovered session was found at, and a presence line of the title's own words. XNA's AvailableNetworkSession names no address and its PresenceMode is a closed enumeration, so both belong under org.openeggbert.cna.extensions.",
+      "task": "JAVA-EXT-006"
+    },
+    {
+      "match": {
+        "symbols": [
+          "cna_gamer_collection_contains",
+          "cna_gamer_collection_index_of",
+          "cna_gamer_signed_in_contains",
+          "cna_gamer_signed_in_index_of"
+        ]
+      },
+      "classification": "NOT_USEFUL_IN_JAVA",
+      "reason": "CNA answers membership and position for a gamer collection in one call, and Java would rather ask than walk -- but asking means declaring contains and indexOf on GamerCollection, and CLR's GamerCollection declares neither: it inherits them through IList<T>. Declaring them would put two members in the strict contract that the reference API has no counterpart for, which the full-profile gate refused. The inherited AbstractList walk stays, and it is correct."
+    },
+    {
+      "match": {
         "header": "gamer_services.h"
       },
       "classification": "DEFERRED_RUNTIME",

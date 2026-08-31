@@ -356,7 +356,7 @@ public final class NetworkSession implements AutoCloseable {
 
     public static NetworkSession Join(AvailableNetworkSession availableSession) {
         long[] session = new long[1];
-        NativeGamerServices.check("NetworkSession.Join",
+        checkJoin("NetworkSession.Join",
                 NativeNetworkRoutes.networkSessionJoin(
                         Objects.requireNonNull(availableSession, "availableSession").handle(),
                         session));
@@ -365,7 +365,7 @@ public final class NetworkSession implements AutoCloseable {
 
     public static NetworkSession JoinInvited(Iterable<SignedInGamer> localGamers) {
         long[] session = new long[1];
-        NativeGamerServices.check("NetworkSession.JoinInvited",
+        checkJoin("NetworkSession.JoinInvited",
                 NativeNetworkRoutes.networkSessionJoinInvitedWithLocalGamers(
                         handles(localGamers), session));
         return new NetworkSession(session[0], true);
@@ -373,9 +373,36 @@ public final class NetworkSession implements AutoCloseable {
 
     public static NetworkSession JoinInvited(int maxLocalGamers) {
         long[] session = new long[1];
-        NativeGamerServices.check("NetworkSession.JoinInvited",
+        checkJoin("NetworkSession.JoinInvited",
                 NativeNetworkRoutes.networkSessionJoinInvited(maxLocalGamers, session));
         return new NetworkSession(session[0], true);
+    }
+
+    /**
+     * Turns a failed join into the exception XNA raises, carrying the reason CNA recorded.
+     *
+     * <p>XNA throws {@link NetworkSessionJoinException} from a join and a game reads
+     * {@link NetworkSessionJoinException#getJoinError()} to tell a full session from one that is
+     * gone. CNA's join error never crosses as a return value -- the canonical exception carries
+     * it on the object -- so the C firewall records it per thread and this reads it back on the
+     * thread that just failed. When CNA recorded no join error the failure was not a join
+     * failure, and it is reported as whatever it was rather than dressed up as one.
+     */
+    private static void checkJoin(String operation, int result) {
+        if (result == 0) {
+            return;
+        }
+        int[] joinError = new int[1];
+        boolean[] present = new boolean[1];
+        if (NativeNetworkRoutes.netGetLastJoinError(joinError, present) == 0 && present[0]) {
+            NetworkSessionJoinError[] errors = NetworkSessionJoinError.values();
+            NetworkSessionJoinError error = joinError[0] >= 0 && joinError[0] < errors.length
+                    ? errors[joinError[0]]
+                    : NetworkSessionJoinError.SessionNotFound;
+            throw new NetworkSessionJoinException(
+                    NativeGamerServices.failureMessage(operation, result), error);
+        }
+        NativeGamerServices.check(operation, result);
     }
 
     public void ResetReady() {

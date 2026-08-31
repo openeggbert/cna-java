@@ -4,24 +4,8 @@
   "classes": {
     "NativeGamerServicesRoutes": [
       {
-        "java": "achievementCollectionAdd",
-        "symbol": "cna_achievement_collection_add"
-      },
-      {
-        "java": "achievementCollectionClear",
-        "symbol": "cna_achievement_collection_clear"
-      },
-      {
         "java": "achievementCollectionContains",
         "symbol": "cna_achievement_collection_contains"
-      },
-      {
-        "java": "achievementCollectionCopyTo",
-        "symbol": "cna_achievement_collection_copy_to"
-      },
-      {
-        "java": "achievementCollectionCreateExt",
-        "symbol": "cna_achievement_collection_create_ext"
       },
       {
         "java": "achievementCollectionDestroy",
@@ -44,24 +28,8 @@
         "symbol": "cna_achievement_collection_get_is_disposed"
       },
       {
-        "java": "achievementCollectionGetIsReadOnly",
-        "symbol": "cna_achievement_collection_get_is_read_only"
-      },
-      {
         "java": "achievementCollectionIndexOf",
         "symbol": "cna_achievement_collection_index_of"
-      },
-      {
-        "java": "achievementCollectionInsert",
-        "symbol": "cna_achievement_collection_insert"
-      },
-      {
-        "java": "achievementCollectionRemove",
-        "symbol": "cna_achievement_collection_remove"
-      },
-      {
-        "java": "achievementCollectionRemoveAt",
-        "symbol": "cna_achievement_collection_remove_at"
       },
       {
         "java": "achievementCopyDescription",
@@ -78,18 +46,6 @@
       {
         "java": "achievementCopyName",
         "symbol": "cna_achievement_copy_name"
-      },
-      {
-        "java": "achievementCreateExt",
-        "symbol": "cna_achievement_create_ext"
-      },
-      {
-        "java": "achievementDestroy",
-        "symbol": "cna_achievement_destroy"
-      },
-      {
-        "java": "achievementEquals",
-        "symbol": "cna_achievement_equals"
       },
       {
         "java": "achievementGetDescriptionSize",
@@ -116,10 +72,6 @@
         "symbol": "cna_achievement_get_picture_size"
       },
       {
-        "java": "avatarAnimationCopyRealClipNameExt",
-        "symbol": "cna_avatar_animation_copy_real_clip_name_ext"
-      },
-      {
         "java": "avatarAnimationCreate",
         "symbol": "cna_avatar_animation_create"
       },
@@ -140,40 +92,12 @@
         "symbol": "cna_avatar_animation_get_info"
       },
       {
-        "java": "avatarAnimationGetRealClipNameSizeExt",
-        "symbol": "cna_avatar_animation_get_real_clip_name_size_ext"
-      },
-      {
-        "java": "avatarAnimationPresetCopyClipNameExt",
-        "symbol": "cna_avatar_animation_preset_copy_clip_name_ext"
-      },
-      {
-        "java": "avatarAnimationPresetGetClipNameSizeExt",
-        "symbol": "cna_avatar_animation_preset_get_clip_name_size_ext"
-      },
-      {
         "java": "avatarAnimationSetCurrentPosition",
         "symbol": "cna_avatar_animation_set_current_position"
       },
       {
-        "java": "avatarAnimationSetRealClipNameExt",
-        "symbol": "cna_avatar_animation_set_real_clip_name_ext"
-      },
-      {
         "java": "avatarAnimationUpdate",
         "symbol": "cna_avatar_animation_update"
-      },
-      {
-        "java": "avatarAppearanceInitExt",
-        "symbol": "cna_avatar_appearance_init_ext"
-      },
-      {
-        "java": "avatarBodyTypeCopyContentNameExt",
-        "symbol": "cna_avatar_body_type_copy_content_name_ext"
-      },
-      {
-        "java": "avatarBodyTypeGetContentNameSizeExt",
-        "symbol": "cna_avatar_body_type_get_content_name_size_ext"
       },
       {
         "java": "avatarDescriptionCopyDescription",
@@ -205,10 +129,6 @@
         "symbol": "cna_avatar_description_get_info"
       },
       {
-        "java": "avatarExpressionInit",
-        "symbol": "cna_avatar_expression_init"
-      },
-      {
         "java": "avatarRendererCreate",
         "symbol": "cna_avatar_renderer_create"
       },
@@ -223,14 +143,6 @@
       {
         "java": "avatarRendererDrawBones",
         "symbol": "cna_avatar_renderer_draw_bones"
-      },
-      {
-        "java": "avatarRendererDrawRealExt",
-        "symbol": "cna_avatar_renderer_draw_real_ext"
-      },
-      {
-        "java": "avatarRendererEnableRealRenderingExt",
-        "symbol": "cna_avatar_renderer_enable_real_rendering_ext"
       },
       {
         "java": "avatarRendererGetBindPoseAt",
@@ -253,20 +165,12 @@
         "symbol": "cna_avatar_renderer_get_transforms"
       },
       {
-        "java": "avatarRendererSetAppearanceExt",
-        "symbol": "cna_avatar_renderer_set_appearance_ext"
-      },
-      {
         "java": "avatarRendererSetLighting",
         "symbol": "cna_avatar_renderer_set_lighting"
       },
       {
         "java": "avatarRendererSetTransforms",
         "symbol": "cna_avatar_renderer_set_transforms"
-      },
-      {
-        "java": "friendCollectionCreateExt",
-        "symbol": "cna_friend_collection_create_ext"
       },
       {
         "java": "friendCollectionGetIsDisposed",
@@ -277,51 +181,12 @@
         "symbol": "cna_friend_gamer_copy_presence"
       },
       {
-        "java": "friendGamerCreateExt",
-        "symbol": "cna_friend_gamer_create_ext"
-      },
-      {
         "java": "friendGamerGetInfo",
         "symbol": "cna_friend_gamer_get_info"
       },
       {
         "java": "friendGamerGetPresenceSize",
         "symbol": "cna_friend_gamer_get_presence_size"
-      },
-      {
-        "java": "gameDefaultsInit",
-        "symbol": "cna_game_defaults_init"
-      },
-      {
-        "java": "gamerBeginGetFromGamertag",
-        "symbol": "cna_gamer_begin_get_from_gamertag",
-        "nullCallback": true
-      },
-      {
-        "java": "gamerBeginGetPartnerToken",
-        "symbol": "cna_gamer_begin_get_partner_token",
-        "nullCallback": true
-      },
-      {
-        "java": "gamerBeginGetProfile",
-        "symbol": "cna_gamer_begin_get_profile",
-        "nullCallback": true
-      },
-      {
-        "java": "gamerCollectionAdd",
-        "symbol": "cna_gamer_collection_add"
-      },
-      {
-        "java": "gamerCollectionClear",
-        "symbol": "cna_gamer_collection_clear"
-      },
-      {
-        "java": "gamerCollectionContains",
-        "symbol": "cna_gamer_collection_contains"
-      },
-      {
-        "java": "gamerCollectionCopyTo",
-        "symbol": "cna_gamer_collection_copy_to"
       },
       {
         "java": "gamerCollectionCreateEnumerator",
@@ -340,14 +205,6 @@
         "symbol": "cna_gamer_collection_get_count"
       },
       {
-        "java": "gamerCollectionIndexOf",
-        "symbol": "cna_gamer_collection_index_of"
-      },
-      {
-        "java": "gamerCollectionRemove",
-        "symbol": "cna_gamer_collection_remove"
-      },
-      {
         "java": "gamerCopyDisplayName",
         "symbol": "cna_gamer_copy_display_name"
       },
@@ -364,10 +221,6 @@
         "symbol": "cna_gamer_copy_text"
       },
       {
-        "java": "gamerDestroy",
-        "symbol": "cna_gamer_destroy"
-      },
-      {
         "java": "gamerEnumeratorDestroy",
         "symbol": "cna_gamer_enumerator_destroy"
       },
@@ -378,10 +231,6 @@
       {
         "java": "gamerEnumeratorMoveNext",
         "symbol": "cna_gamer_enumerator_move_next"
-      },
-      {
-        "java": "gamerEnumeratorReset",
-        "symbol": "cna_gamer_enumerator_reset"
       },
       {
         "java": "gamerGetDisplayNameSize",
@@ -428,10 +277,6 @@
         "symbol": "cna_gamer_get_text_size"
       },
       {
-        "java": "gamerPresenceInit",
-        "symbol": "cna_gamer_presence_init"
-      },
-      {
         "java": "gamerProfileCopyMotto",
         "symbol": "cna_gamer_profile_copy_motto"
       },
@@ -460,14 +305,6 @@
         "symbol": "cna_gamer_profile_get_region_name_size"
       },
       {
-        "java": "gamerServicesComponentCreate",
-        "symbol": "cna_gamer_services_component_create"
-      },
-      {
-        "java": "gamerServicesDispatcherGetFreedGamerCountExt",
-        "symbol": "cna_gamer_services_dispatcher_get_freed_gamer_count_ext"
-      },
-      {
         "java": "gamerServicesDispatcherGetIsInitialized",
         "symbol": "cna_gamer_services_dispatcher_get_is_initialized"
       },
@@ -476,28 +313,12 @@
         "symbol": "cna_gamer_services_dispatcher_get_window_handle"
       },
       {
-        "java": "gamerServicesDispatcherUpdateAsync",
-        "symbol": "cna_gamer_services_dispatcher_update_async"
-      },
-      {
         "java": "gamerSetDisplayName",
         "symbol": "cna_gamer_set_display_name"
       },
       {
-        "java": "gamerSetSignedInGamersExt",
-        "symbol": "cna_gamer_set_signed_in_gamers_ext"
-      },
-      {
         "java": "gamerSetTag",
         "symbol": "cna_gamer_set_tag"
-      },
-      {
-        "java": "gamerSignedInContains",
-        "symbol": "cna_gamer_signed_in_contains"
-      },
-      {
-        "java": "gamerSignedInIndexOf",
-        "symbol": "cna_gamer_signed_in_index_of"
       },
       {
         "java": "gamerUnsubscribeExt",
@@ -507,18 +328,6 @@
         "java": "guideBeginShowKeyboardInput",
         "symbol": "cna_guide_begin_show_keyboard_input",
         "nullCallback": true
-      },
-      {
-        "java": "guideCopyPendingKeyboardInputDescriptionExt",
-        "symbol": "cna_guide_copy_pending_keyboard_input_description_ext"
-      },
-      {
-        "java": "guideCopyPendingKeyboardInputDisplayTextExt",
-        "symbol": "cna_guide_copy_pending_keyboard_input_display_text_ext"
-      },
-      {
-        "java": "guideCopyPendingKeyboardInputTitleExt",
-        "symbol": "cna_guide_copy_pending_keyboard_input_title_ext"
       },
       {
         "java": "guideDelayNotifications",
@@ -537,14 +346,6 @@
         "symbol": "cna_guide_end_show_message_box"
       },
       {
-        "java": "guideGetHasPendingKeyboardInputExt",
-        "symbol": "cna_guide_get_has_pending_keyboard_input_ext"
-      },
-      {
-        "java": "guideGetHasPendingMessageBoxExt",
-        "symbol": "cna_guide_get_has_pending_message_box_ext"
-      },
-      {
         "java": "guideGetIsScreenSaverEnabled",
         "symbol": "cna_guide_get_is_screen_saver_enabled"
       },
@@ -561,40 +362,8 @@
         "symbol": "cna_guide_get_notification_position"
       },
       {
-        "java": "guideGetPendingKeyboardInputDescriptionSizeExt",
-        "symbol": "cna_guide_get_pending_keyboard_input_description_size_ext"
-      },
-      {
-        "java": "guideGetPendingKeyboardInputDisplayTextSizeExt",
-        "symbol": "cna_guide_get_pending_keyboard_input_display_text_size_ext"
-      },
-      {
-        "java": "guideGetPendingKeyboardInputTitleSizeExt",
-        "symbol": "cna_guide_get_pending_keyboard_input_title_size_ext"
-      },
-      {
-        "java": "guideGetPendingMessageBoxFocusButtonExt",
-        "symbol": "cna_guide_get_pending_message_box_focus_button_ext"
-      },
-      {
         "java": "guideGetSimulateTrialMode",
         "symbol": "cna_guide_get_simulate_trial_mode"
-      },
-      {
-        "java": "guideRenderPendingKeyboardInputExt",
-        "symbol": "cna_guide_render_pending_keyboard_input_ext"
-      },
-      {
-        "java": "guideRenderPendingMessageBoxExt",
-        "symbol": "cna_guide_render_pending_message_box_ext"
-      },
-      {
-        "java": "guideResetPendingKeyboardInputExt",
-        "symbol": "cna_guide_reset_pending_keyboard_input_ext"
-      },
-      {
-        "java": "guideResetPendingMessageBoxExt",
-        "symbol": "cna_guide_reset_pending_message_box_ext"
       },
       {
         "java": "guideSetIsScreenSaverEnabled",
@@ -615,10 +384,6 @@
       {
         "java": "guideSetSimulateTrialMode",
         "symbol": "cna_guide_set_simulate_trial_mode"
-      },
-      {
-        "java": "guideShowAchievementsExt",
-        "symbol": "cna_guide_show_achievements_ext"
       },
       {
         "java": "guideShowComposeMessage",
@@ -673,20 +438,8 @@
         "symbol": "cna_guide_show_sign_in"
       },
       {
-        "java": "guideSimulateKeyboardInputCancelExt",
-        "symbol": "cna_guide_simulate_keyboard_input_cancel_ext"
-      },
-      {
-        "java": "guideSimulateMessageBoxClickExt",
-        "symbol": "cna_guide_simulate_message_box_click_ext"
-      },
-      {
         "java": "guideWasKeyboardInputCanceledExt",
         "symbol": "cna_guide_was_keyboard_input_canceled_ext"
-      },
-      {
-        "java": "inviteAcceptedEventInfoInit",
-        "symbol": "cna_invite_accepted_event_info_init"
       },
       {
         "java": "leaderboardEntryCreateExt",
@@ -695,10 +448,6 @@
       {
         "java": "leaderboardEntryDestroy",
         "symbol": "cna_leaderboard_entry_destroy"
-      },
-      {
-        "java": "leaderboardEntryEquals",
-        "symbol": "cna_leaderboard_entry_equals"
       },
       {
         "java": "leaderboardEntryGetColumns",
@@ -715,35 +464,6 @@
       {
         "java": "leaderboardEntrySetRating",
         "symbol": "cna_leaderboard_entry_set_rating"
-      },
-      {
-        "java": "leaderboardIdentityInit",
-        "symbol": "cna_leaderboard_identity_init"
-      },
-      {
-        "java": "leaderboardReaderBeginPageDown",
-        "symbol": "cna_leaderboard_reader_begin_page_down",
-        "nullCallback": true
-      },
-      {
-        "java": "leaderboardReaderBeginPageUp",
-        "symbol": "cna_leaderboard_reader_begin_page_up",
-        "nullCallback": true
-      },
-      {
-        "java": "leaderboardReaderBeginRead",
-        "symbol": "cna_leaderboard_reader_begin_read",
-        "nullCallback": true
-      },
-      {
-        "java": "leaderboardReaderBeginReadFromGamers",
-        "symbol": "cna_leaderboard_reader_begin_read_from_gamers",
-        "nullCallback": true
-      },
-      {
-        "java": "leaderboardReaderBeginReadFromPivot",
-        "symbol": "cna_leaderboard_reader_begin_read_from_pivot",
-        "nullCallback": true
       },
       {
         "java": "leaderboardReaderDestroy",
@@ -798,14 +518,6 @@
         "symbol": "cna_property_dictionary_copy_string"
       },
       {
-        "java": "propertyDictionaryCreateExt",
-        "symbol": "cna_property_dictionary_create_ext"
-      },
-      {
-        "java": "propertyDictionaryDestroy",
-        "symbol": "cna_property_dictionary_destroy"
-      },
-      {
         "java": "propertyDictionaryGetCount",
         "symbol": "cna_property_dictionary_get_count"
       },
@@ -824,10 +536,6 @@
       {
         "java": "propertyDictionaryGetInt64",
         "symbol": "cna_property_dictionary_get_int64"
-      },
-      {
-        "java": "propertyDictionaryGetIsReadOnly",
-        "symbol": "cna_property_dictionary_get_is_read_only"
       },
       {
         "java": "propertyDictionaryGetKeySizeAt",
@@ -898,28 +606,6 @@
         "symbol": "cna_signed_in_gamer_award_achievement"
       },
       {
-        "java": "signedInGamerBeginAwardAchievement",
-        "symbol": "cna_signed_in_gamer_begin_award_achievement",
-        "nullCallback": true
-      },
-      {
-        "java": "signedInGamerBeginGetAchievements",
-        "symbol": "cna_signed_in_gamer_begin_get_achievements",
-        "nullCallback": true
-      },
-      {
-        "java": "signedInGamerCopyGamertag",
-        "symbol": "cna_signed_in_gamer_copy_gamertag"
-      },
-      {
-        "java": "signedInGamerCreateExt",
-        "symbol": "cna_signed_in_gamer_create_ext"
-      },
-      {
-        "java": "signedInGamerDestroy",
-        "symbol": "cna_signed_in_gamer_destroy"
-      },
-      {
         "java": "signedInGamerGetAchievements",
         "symbol": "cna_signed_in_gamer_get_achievements"
       },
@@ -930,10 +616,6 @@
       {
         "java": "signedInGamerGetGameDefaults",
         "symbol": "cna_signed_in_gamer_get_game_defaults"
-      },
-      {
-        "java": "signedInGamerGetGamertagSize",
-        "symbol": "cna_signed_in_gamer_get_gamertag_size"
       },
       {
         "java": "signedInGamerGetIsGuest",
@@ -974,24 +656,12 @@
       {
         "java": "signedInGamerSetPresence",
         "symbol": "cna_signed_in_gamer_set_presence"
-      },
-      {
-        "java": "signedInGamerSetPresenceModeStringExt",
-        "symbol": "cna_signed_in_gamer_set_presence_mode_string_ext"
       }
     ],
     "NativeNetworkRoutes": [
       {
         "java": "availableNetworkSessionCollectionCopySession",
         "symbol": "cna_available_network_session_collection_copy_session"
-      },
-      {
-        "java": "availableNetworkSessionCollectionCreateExt",
-        "symbol": "cna_available_network_session_collection_create_ext"
-      },
-      {
-        "java": "availableNetworkSessionCollectionDestroy",
-        "symbol": "cna_available_network_session_collection_destroy"
       },
       {
         "java": "availableNetworkSessionCollectionDispose",
@@ -1006,32 +676,12 @@
         "symbol": "cna_available_network_session_collection_get_is_disposed"
       },
       {
-        "java": "availableNetworkSessionCopyConnectAddressExt",
-        "symbol": "cna_available_network_session_copy_connect_address_ext"
-      },
-      {
         "java": "availableNetworkSessionCopyHostGamertag",
         "symbol": "cna_available_network_session_copy_host_gamertag"
       },
       {
         "java": "availableNetworkSessionCopySessionProperties",
         "symbol": "cna_available_network_session_copy_session_properties"
-      },
-      {
-        "java": "availableNetworkSessionDestroy",
-        "symbol": "cna_available_network_session_destroy"
-      },
-      {
-        "java": "availableNetworkSessionEquals",
-        "symbol": "cna_available_network_session_equals"
-      },
-      {
-        "java": "availableNetworkSessionGetConnectAddressSizeExt",
-        "symbol": "cna_available_network_session_get_connect_address_size_ext"
-      },
-      {
-        "java": "availableNetworkSessionGetConnectPortExt",
-        "symbol": "cna_available_network_session_get_connect_port_ext"
       },
       {
         "java": "availableNetworkSessionGetCurrentGamerCount",
@@ -1054,42 +704,6 @@
         "symbol": "cna_available_network_session_get_quality_of_service"
       },
       {
-        "java": "availableNetworkSessionGetSessionTypeExt",
-        "symbol": "cna_available_network_session_get_session_type_ext"
-      },
-      {
-        "java": "availableNetworkSessionNotEquals",
-        "symbol": "cna_available_network_session_not_equals"
-      },
-      {
-        "java": "gameEndedEventInfoInit",
-        "symbol": "cna_game_ended_event_info_init"
-      },
-      {
-        "java": "gameStartedEventInfoInit",
-        "symbol": "cna_game_started_event_info_init"
-      },
-      {
-        "java": "gamerJoinedEventInfoInit",
-        "symbol": "cna_gamer_joined_event_info_init"
-      },
-      {
-        "java": "gamerLeftEventInfoInit",
-        "symbol": "cna_gamer_left_event_info_init"
-      },
-      {
-        "java": "hostChangedEventInfoInit",
-        "symbol": "cna_host_changed_event_info_init"
-      },
-      {
-        "java": "localNetworkGamerClearPacketQueueExt",
-        "symbol": "cna_local_network_gamer_clear_packet_queue_ext"
-      },
-      {
-        "java": "localNetworkGamerCreateExt",
-        "symbol": "cna_local_network_gamer_create_ext"
-      },
-      {
         "java": "localNetworkGamerEnableSendVoice",
         "symbol": "cna_local_network_gamer_enable_send_voice"
       },
@@ -1110,10 +724,6 @@
         "symbol": "cna_local_network_gamer_receive_data_at"
       },
       {
-        "java": "localNetworkGamerReceiveDataIntoPacketReader",
-        "symbol": "cna_local_network_gamer_receive_data_into_packet_reader"
-      },
-      {
         "java": "localNetworkGamerSendData",
         "symbol": "cna_local_network_gamer_send_data"
       },
@@ -1130,14 +740,6 @@
         "symbol": "cna_local_network_gamer_send_data_to"
       },
       {
-        "java": "localNetworkGamerSendPacketWriter",
-        "symbol": "cna_local_network_gamer_send_packet_writer"
-      },
-      {
-        "java": "localNetworkGamerSendPacketWriterTo",
-        "symbol": "cna_local_network_gamer_send_packet_writer_to"
-      },
-      {
         "java": "localNetworkGamerSendPartyInvites",
         "symbol": "cna_local_network_gamer_send_party_invites"
       },
@@ -1148,14 +750,6 @@
       {
         "java": "networkGamerCopyMachine",
         "symbol": "cna_network_gamer_copy_machine"
-      },
-      {
-        "java": "networkGamerCreate",
-        "symbol": "cna_network_gamer_create"
-      },
-      {
-        "java": "networkGamerDestroy",
-        "symbol": "cna_network_gamer_destroy"
       },
       {
         "java": "networkGamerGetHasLeftSession",
@@ -1206,36 +800,12 @@
         "symbol": "cna_network_gamer_get_session"
       },
       {
-        "java": "networkGamerSetHasLeftSessionExt",
-        "symbol": "cna_network_gamer_set_has_left_session_ext"
-      },
-      {
-        "java": "networkGamerSetIdExt",
-        "symbol": "cna_network_gamer_set_id_ext"
-      },
-      {
-        "java": "networkGamerSetIsHostExt",
-        "symbol": "cna_network_gamer_set_is_host_ext"
-      },
-      {
         "java": "networkGamerSetIsReady",
         "symbol": "cna_network_gamer_set_is_ready"
       },
       {
         "java": "networkGamerSetMachine",
         "symbol": "cna_network_gamer_set_machine"
-      },
-      {
-        "java": "networkGamerSetRoundtripTicksExt",
-        "symbol": "cna_network_gamer_set_roundtrip_ticks_ext"
-      },
-      {
-        "java": "networkMachineCreate",
-        "symbol": "cna_network_machine_create"
-      },
-      {
-        "java": "networkMachineDestroy",
-        "symbol": "cna_network_machine_destroy"
       },
       {
         "java": "networkMachineGetGamer",
@@ -1254,16 +824,8 @@
         "symbol": "cna_network_session_add_local_gamer"
       },
       {
-        "java": "networkSessionAddRemoteGamerExt",
-        "symbol": "cna_network_session_add_remote_gamer_ext"
-      },
-      {
         "java": "networkSessionCopySessionProperties",
         "symbol": "cna_network_session_copy_session_properties"
-      },
-      {
-        "java": "networkSessionCopyTypeName",
-        "symbol": "cna_network_session_copy_type_name"
       },
       {
         "java": "networkSessionCreate",
@@ -1290,10 +852,6 @@
         "symbol": "cna_network_session_end_game"
       },
       {
-        "java": "networkSessionEndedEventInfoInit",
-        "symbol": "cna_network_session_ended_event_info_init"
-      },
-      {
         "java": "networkSessionFind",
         "symbol": "cna_network_session_find"
       },
@@ -1304,10 +862,6 @@
       {
         "java": "networkSessionFindWithLocalGamers",
         "symbol": "cna_network_session_find_with_local_gamers"
-      },
-      {
-        "java": "networkSessionGetActiveActionCountExt",
-        "symbol": "cna_network_session_get_active_action_count_ext"
       },
       {
         "java": "networkSessionGetAllowHostMigration",
@@ -1338,10 +892,6 @@
         "symbol": "cna_network_session_get_host"
       },
       {
-        "java": "networkSessionGetInstanceCountExt",
-        "symbol": "cna_network_session_get_instance_count_ext"
-      },
-      {
         "java": "networkSessionGetIsDisposed",
         "symbol": "cna_network_session_get_is_disposed"
       },
@@ -1356,10 +906,6 @@
       {
         "java": "networkSessionGetMaxGamers",
         "symbol": "cna_network_session_get_max_gamers"
-      },
-      {
-        "java": "networkSessionGetOwnedGamerCountExt",
-        "symbol": "cna_network_session_get_owned_gamer_count_ext"
       },
       {
         "java": "networkSessionGetPrivateGamerSlots",
@@ -1382,10 +928,6 @@
         "symbol": "cna_network_session_get_simulated_packet_loss"
       },
       {
-        "java": "networkSessionGetTypeNameSize",
-        "symbol": "cna_network_session_get_type_name_size"
-      },
-      {
         "java": "networkSessionJoin",
         "symbol": "cna_network_session_join"
       },
@@ -1396,10 +938,6 @@
       {
         "java": "networkSessionJoinInvitedWithLocalGamers",
         "symbol": "cna_network_session_join_invited_with_local_gamers"
-      },
-      {
-        "java": "networkSessionPropertiesAdd",
-        "symbol": "cna_network_session_properties_add"
       },
       {
         "java": "networkSessionPropertiesClear",
@@ -1418,20 +956,12 @@
         "symbol": "cna_network_session_properties_create"
       },
       {
-        "java": "networkSessionPropertiesCreateEnumerator",
-        "symbol": "cna_network_session_properties_create_enumerator"
-      },
-      {
         "java": "networkSessionPropertiesDestroy",
         "symbol": "cna_network_session_properties_destroy"
       },
       {
         "java": "networkSessionPropertiesGetCount",
         "symbol": "cna_network_session_properties_get_count"
-      },
-      {
-        "java": "networkSessionPropertiesGetIsReadOnly",
-        "symbol": "cna_network_session_properties_get_is_read_only"
       },
       {
         "java": "networkSessionPropertiesGetItem",
@@ -1446,36 +976,12 @@
         "symbol": "cna_network_session_properties_insert"
       },
       {
-        "java": "networkSessionPropertiesRemove",
-        "symbol": "cna_network_session_properties_remove"
-      },
-      {
         "java": "networkSessionPropertiesRemoveAt",
         "symbol": "cna_network_session_properties_remove_at"
       },
       {
         "java": "networkSessionPropertiesSetItem",
         "symbol": "cna_network_session_properties_set_item"
-      },
-      {
-        "java": "networkSessionPropertyEnumeratorDestroy",
-        "symbol": "cna_network_session_property_enumerator_destroy"
-      },
-      {
-        "java": "networkSessionPropertyEnumeratorGetCurrent",
-        "symbol": "cna_network_session_property_enumerator_get_current"
-      },
-      {
-        "java": "networkSessionPropertyEnumeratorMoveNext",
-        "symbol": "cna_network_session_property_enumerator_move_next"
-      },
-      {
-        "java": "networkSessionPropertyEnumeratorReset",
-        "symbol": "cna_network_session_property_enumerator_reset"
-      },
-      {
-        "java": "networkSessionRemoveGamerExt",
-        "symbol": "cna_network_session_remove_gamer_ext"
       },
       {
         "java": "networkSessionResetReady",
@@ -1516,130 +1022,6 @@
       {
         "java": "networkSessionUpdate",
         "symbol": "cna_network_session_update"
-      },
-      {
-        "java": "packetReaderCreate",
-        "symbol": "cna_packet_reader_create"
-      },
-      {
-        "java": "packetReaderDestroy",
-        "symbol": "cna_packet_reader_destroy"
-      },
-      {
-        "java": "packetReaderGetLength",
-        "symbol": "cna_packet_reader_get_length"
-      },
-      {
-        "java": "packetReaderGetPosition",
-        "symbol": "cna_packet_reader_get_position"
-      },
-      {
-        "java": "packetReaderReadColor",
-        "symbol": "cna_packet_reader_read_color"
-      },
-      {
-        "java": "packetReaderReadDouble",
-        "symbol": "cna_packet_reader_read_double"
-      },
-      {
-        "java": "packetReaderReadMatrix",
-        "symbol": "cna_packet_reader_read_matrix"
-      },
-      {
-        "java": "packetReaderReadQuaternion",
-        "symbol": "cna_packet_reader_read_quaternion"
-      },
-      {
-        "java": "packetReaderReadSingle",
-        "symbol": "cna_packet_reader_read_single"
-      },
-      {
-        "java": "packetReaderReadVector2",
-        "symbol": "cna_packet_reader_read_vector2"
-      },
-      {
-        "java": "packetReaderReadVector3",
-        "symbol": "cna_packet_reader_read_vector3"
-      },
-      {
-        "java": "packetReaderReadVector4",
-        "symbol": "cna_packet_reader_read_vector4"
-      },
-      {
-        "java": "packetReaderSetDataExt",
-        "symbol": "cna_packet_reader_set_data_ext"
-      },
-      {
-        "java": "packetReaderSetPosition",
-        "symbol": "cna_packet_reader_set_position"
-      },
-      {
-        "java": "packetWriterCopyDataExt",
-        "symbol": "cna_packet_writer_copy_data_ext"
-      },
-      {
-        "java": "packetWriterCreate",
-        "symbol": "cna_packet_writer_create"
-      },
-      {
-        "java": "packetWriterDestroy",
-        "symbol": "cna_packet_writer_destroy"
-      },
-      {
-        "java": "packetWriterGetLength",
-        "symbol": "cna_packet_writer_get_length"
-      },
-      {
-        "java": "packetWriterGetPosition",
-        "symbol": "cna_packet_writer_get_position"
-      },
-      {
-        "java": "packetWriterSetPosition",
-        "symbol": "cna_packet_writer_set_position"
-      },
-      {
-        "java": "packetWriterWriteColor",
-        "symbol": "cna_packet_writer_write_color"
-      },
-      {
-        "java": "packetWriterWriteDouble",
-        "symbol": "cna_packet_writer_write_double"
-      },
-      {
-        "java": "packetWriterWriteMatrix",
-        "symbol": "cna_packet_writer_write_matrix"
-      },
-      {
-        "java": "packetWriterWriteQuaternion",
-        "symbol": "cna_packet_writer_write_quaternion"
-      },
-      {
-        "java": "packetWriterWriteSingle",
-        "symbol": "cna_packet_writer_write_single"
-      },
-      {
-        "java": "packetWriterWriteVector2",
-        "symbol": "cna_packet_writer_write_vector2"
-      },
-      {
-        "java": "packetWriterWriteVector3",
-        "symbol": "cna_packet_writer_write_vector3"
-      },
-      {
-        "java": "packetWriterWriteVector4",
-        "symbol": "cna_packet_writer_write_vector4"
-      },
-      {
-        "java": "qualityOfServiceInit",
-        "symbol": "cna_quality_of_service_init"
-      },
-      {
-        "java": "qualityOfServiceInitMeasured",
-        "symbol": "cna_quality_of_service_init_measured"
-      },
-      {
-        "java": "writeLeaderboardsEventInfoInit",
-        "symbol": "cna_write_leaderboards_event_info_init"
       }
     ],
     "NativeGraphicsExtensionRoutes": [

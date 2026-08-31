@@ -111,9 +111,23 @@ public class NetworkSessionProperties implements List<Integer> {
         return view.isEmpty();
     }
 
+    /**
+     * Reports whether one value is in the list.
+     *
+     * <p>Asked of CNA in one call rather than walked slot by slot, and {@code null} is a real
+     * question here: an unset slot is what {@code int?} means, so asking whether the list has one
+     * is asking whether anything is still unset.
+     */
     @Override
     public final boolean contains(Object item) {
-        return view.contains(item);
+        if (item != null && !(item instanceof Integer)) {
+            return false;
+        }
+        boolean[] contains = new boolean[1];
+        NativeGamerServices.check("NetworkSessionProperties.contains",
+                NativeNetworkRoutes.networkSessionPropertiesContains(
+                        handle, new byte[3], optional((Integer) item), contains));
+        return contains[0];
     }
 
     @Override

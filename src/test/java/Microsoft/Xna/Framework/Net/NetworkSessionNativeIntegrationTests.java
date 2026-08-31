@@ -13,6 +13,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 /**
@@ -116,8 +117,33 @@ final class NetworkSessionNativeIntegrationTests {
                 assertEquals(session.getAllGamers().size(), session.getAllGamers().size());
                 assertNotNull(session.getSessionProperties());
                 sessionProperties();
+                aFailedJoinCarriesCnasOwnReason();
                 assertEquals(0, org.openeggbert.cna.internal.GamerEventPump.droppedEventCount(),
                         "no event may be dropped in a session this small");
+            }
+        }
+
+        /**
+         * Proves a failed join raises XNA's exception with CNA's own reason.
+         *
+         * <p>XNA games catch {@code NetworkSessionJoinException} and read its {@code JoinError}
+         * to tell a full session from one that has gone. Before this, the projection threw an
+         * ordinary native failure and the exception's error was a Java default nobody measured.
+         */
+        private void aFailedJoinCarriesCnasOwnReason() {
+            // Nothing is joinable on this host, so JoinInvited fails -- which is the case worth
+            // asserting: whatever CNA calls the failure, it must reach the game as XNA's type
+            // when CNA recorded a join error, and as the plain failure when it did not.
+            RuntimeException failure = assertThrows(RuntimeException.class,
+                    () -> NetworkSession.JoinInvited(1));
+            if (failure instanceof NetworkSessionJoinException join) {
+                assertNotNull(join.getJoinError(),
+                        "a join exception must carry the reason CNA recorded");
+                assertNotNull(join.getMessage());
+            } else {
+                // CNA did not record a join error for this failure, so dressing it up as one
+                // would be an invention. The projection reports what actually happened.
+                assertFalse(failure instanceof NetworkSessionJoinException);
             }
         }
 

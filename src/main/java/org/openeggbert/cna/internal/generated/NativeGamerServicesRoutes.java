@@ -13,29 +13,9 @@ public final class NativeGamerServicesRoutes {
     }
 
     /**
-     * cna_achievement_collection_add (gamer_services.h).
-     */
-    public static native int achievementCollectionAdd(long collection, long achievement);
-
-    /**
-     * cna_achievement_collection_clear (gamer_services.h).
-     */
-    public static native int achievementCollectionClear(long collection);
-
-    /**
      * cna_achievement_collection_contains (gamer_services.h).
      */
     public static native int achievementCollectionContains(long collection, long achievement, boolean[] outContains);
-
-    /**
-     * cna_achievement_collection_copy_to (gamer_services.h).
-     */
-    public static native int achievementCollectionCopyTo(long collection, long[] destination, int index, long[] outCount);
-
-    /**
-     * cna_achievement_collection_create_ext (gamer_services.h).
-     */
-    public static native int achievementCollectionCreateExt(long[] achievements, long[] outCollection);
 
     /**
      * cna_achievement_collection_destroy (gamer_services.h).
@@ -63,29 +43,9 @@ public final class NativeGamerServicesRoutes {
     public static native int achievementCollectionGetIsDisposed(long collection, boolean[] outIsDisposed);
 
     /**
-     * cna_achievement_collection_get_is_read_only (gamer_services.h).
-     */
-    public static native int achievementCollectionGetIsReadOnly(long collection, boolean[] outIsReadOnly);
-
-    /**
      * cna_achievement_collection_index_of (gamer_services.h).
      */
     public static native int achievementCollectionIndexOf(long collection, long achievement, int[] outIndex);
-
-    /**
-     * cna_achievement_collection_insert (gamer_services.h).
-     */
-    public static native int achievementCollectionInsert(long collection, int index, long achievement);
-
-    /**
-     * cna_achievement_collection_remove (gamer_services.h).
-     */
-    public static native int achievementCollectionRemove(long collection, long achievement, boolean[] outRemoved);
-
-    /**
-     * cna_achievement_collection_remove_at (gamer_services.h).
-     */
-    public static native int achievementCollectionRemoveAt(long collection, int index);
 
     /**
      * cna_achievement_copy_description (gamer_services.h).
@@ -106,21 +66,6 @@ public final class NativeGamerServicesRoutes {
      * cna_achievement_copy_name (gamer_services.h).
      */
     public static native int achievementCopyName(long achievement, byte[] destination, long[] outBytes);
-
-    /**
-     * cna_achievement_create_ext (gamer_services.h).
-     */
-    public static native int achievementCreateExt(byte[] key, byte[] name, byte[] description, boolean displayBeforeEarned, boolean isEarned, long earnedDateTimeTicks, long[] outAchievement);
-
-    /**
-     * cna_achievement_destroy (gamer_services.h).
-     */
-    public static native int achievementDestroy(long achievement);
-
-    /**
-     * cna_achievement_equals (gamer_services.h).
-     */
-    public static native int achievementEquals(long achievement, long other, boolean[] outEquals);
 
     /**
      * cna_achievement_get_description_size (gamer_services.h).
@@ -161,11 +106,6 @@ public final class NativeGamerServicesRoutes {
      * cna_achievement_get_picture_size (gamer_services.h).
      */
     public static native int achievementGetPictureSize(long achievement, long[] outBytes);
-
-    /**
-     * cna_avatar_animation_copy_real_clip_name_ext (gamer_services.h).
-     */
-    public static native int avatarAnimationCopyRealClipNameExt(long animation, byte[] destination, long[] outBytes);
 
     /**
      * cna_avatar_animation_create (gamer_services.h).
@@ -237,73 +177,14 @@ public final class NativeGamerServicesRoutes {
     public static native int avatarAnimationGetInfo(long animation, byte[] outInfoBytes, long[] outInfoIntegral);
 
     /**
-     * cna_avatar_animation_get_real_clip_name_size_ext (gamer_services.h).
-     */
-    public static native int avatarAnimationGetRealClipNameSizeExt(long animation, long[] outBytes);
-
-    /**
-     * cna_avatar_animation_preset_copy_clip_name_ext (gamer_services.h).
-     */
-    public static native int avatarAnimationPresetCopyClipNameExt(int preset, byte[] destination, long[] outBytes);
-
-    /**
-     * cna_avatar_animation_preset_get_clip_name_size_ext (gamer_services.h).
-     */
-    public static native int avatarAnimationPresetGetClipNameSizeExt(int preset, long[] outBytes);
-
-    /**
      * cna_avatar_animation_set_current_position (gamer_services.h).
      */
     public static native int avatarAnimationSetCurrentPosition(long animation, long positionTicks);
 
     /**
-     * cna_avatar_animation_set_real_clip_name_ext (gamer_services.h).
-     */
-    public static native int avatarAnimationSetRealClipNameExt(long animation, byte[] clipName);
-
-    /**
      * cna_avatar_animation_update (gamer_services.h).
      */
     public static native int avatarAnimationUpdate(long animation, long elapsedTicks, boolean loop);
-
-    /**
-     * cna_avatar_appearance_init_ext (gamer_services.h).
-     *
-     * <p>outAppearanceIntegral carries CNA_AvatarAppearanceEXT in this order:
-     * <ol start="0">
-     *   <li>{@code skin_color.r} (uint8_t)</li>
-     *   <li>{@code skin_color.g} (uint8_t)</li>
-     *   <li>{@code skin_color.b} (uint8_t)</li>
-     *   <li>{@code skin_color.a} (uint8_t)</li>
-     *   <li>{@code hair_color.r} (uint8_t)</li>
-     *   <li>{@code hair_color.g} (uint8_t)</li>
-     *   <li>{@code hair_color.b} (uint8_t)</li>
-     *   <li>{@code hair_color.a} (uint8_t)</li>
-     *   <li>{@code shirt_color.r} (uint8_t)</li>
-     *   <li>{@code shirt_color.g} (uint8_t)</li>
-     *   <li>{@code shirt_color.b} (uint8_t)</li>
-     *   <li>{@code shirt_color.a} (uint8_t)</li>
-     *   <li>{@code pants_color.r} (uint8_t)</li>
-     *   <li>{@code pants_color.g} (uint8_t)</li>
-     *   <li>{@code pants_color.b} (uint8_t)</li>
-     *   <li>{@code pants_color.a} (uint8_t)</li>
-     *   <li>{@code shoes_color.r} (uint8_t)</li>
-     *   <li>{@code shoes_color.g} (uint8_t)</li>
-     *   <li>{@code shoes_color.b} (uint8_t)</li>
-     *   <li>{@code shoes_color.a} (uint8_t)</li>
-     * </ol>
-     */
-    public static native int avatarAppearanceInitExt(long[] outAppearanceIntegral);
-
-    /**
-     * cna_avatar_body_type_copy_content_name_ext (gamer_services.h).
-     */
-    public static native int avatarBodyTypeCopyContentNameExt(int bodyType, byte[] destination, long[] outBytes);
-
-    /**
-     * cna_avatar_body_type_get_content_name_size_ext (gamer_services.h).
-     */
-    public static native int avatarBodyTypeGetContentNameSizeExt(int bodyType, long[] outBytes);
 
     /**
      * cna_avatar_description_copy_description (gamer_services.h).
@@ -364,20 +245,6 @@ public final class NativeGamerServicesRoutes {
     public static native int avatarDescriptionGetInfo(long description, byte[] outInfoBytes, long[] outInfoIntegral, float[] outInfoFloating);
 
     /**
-     * cna_avatar_expression_init (gamer_services.h).
-     *
-     * <p>outExpressionIntegral carries CNA_AvatarExpression in this order:
-     * <ol start="0">
-     *   <li>{@code mouth} (CNA_AvatarMouth)</li>
-     *   <li>{@code left_eye} (CNA_AvatarEye)</li>
-     *   <li>{@code right_eye} (CNA_AvatarEye)</li>
-     *   <li>{@code left_eyebrow} (CNA_AvatarEyebrow)</li>
-     *   <li>{@code right_eyebrow} (CNA_AvatarEyebrow)</li>
-     * </ol>
-     */
-    public static native int avatarExpressionInit(long[] outExpressionIntegral);
-
-    /**
      * cna_avatar_renderer_create (gamer_services.h).
      */
     public static native int avatarRendererCreate(long description, boolean useLoadingEffect, long[] outRenderer);
@@ -405,16 +272,6 @@ public final class NativeGamerServicesRoutes {
      * </ol>
      */
     public static native int avatarRendererDrawBones(long renderer, float[] bonesFloating, long[] expressionIntegral);
-
-    /**
-     * cna_avatar_renderer_draw_real_ext (gamer_services.h).
-     */
-    public static native int avatarRendererDrawRealExt(long renderer, byte[] animationClipName, long positionTicks, boolean loop);
-
-    /**
-     * cna_avatar_renderer_enable_real_rendering_ext (gamer_services.h).
-     */
-    public static native int avatarRendererEnableRealRenderingExt(long renderer, long device, long model);
 
     /**
      * cna_avatar_renderer_get_bind_pose_at (gamer_services.h).
@@ -556,35 +413,6 @@ public final class NativeGamerServicesRoutes {
     public static native int avatarRendererGetTransforms(long renderer, float[] outWorldFloating, float[] outViewFloating, float[] outProjectionFloating);
 
     /**
-     * cna_avatar_renderer_set_appearance_ext (gamer_services.h).
-     *
-     * <p>appearanceIntegral carries CNA_AvatarAppearanceEXT in this order:
-     * <ol start="0">
-     *   <li>{@code skin_color.r} (uint8_t)</li>
-     *   <li>{@code skin_color.g} (uint8_t)</li>
-     *   <li>{@code skin_color.b} (uint8_t)</li>
-     *   <li>{@code skin_color.a} (uint8_t)</li>
-     *   <li>{@code hair_color.r} (uint8_t)</li>
-     *   <li>{@code hair_color.g} (uint8_t)</li>
-     *   <li>{@code hair_color.b} (uint8_t)</li>
-     *   <li>{@code hair_color.a} (uint8_t)</li>
-     *   <li>{@code shirt_color.r} (uint8_t)</li>
-     *   <li>{@code shirt_color.g} (uint8_t)</li>
-     *   <li>{@code shirt_color.b} (uint8_t)</li>
-     *   <li>{@code shirt_color.a} (uint8_t)</li>
-     *   <li>{@code pants_color.r} (uint8_t)</li>
-     *   <li>{@code pants_color.g} (uint8_t)</li>
-     *   <li>{@code pants_color.b} (uint8_t)</li>
-     *   <li>{@code pants_color.a} (uint8_t)</li>
-     *   <li>{@code shoes_color.r} (uint8_t)</li>
-     *   <li>{@code shoes_color.g} (uint8_t)</li>
-     *   <li>{@code shoes_color.b} (uint8_t)</li>
-     *   <li>{@code shoes_color.a} (uint8_t)</li>
-     * </ol>
-     */
-    public static native int avatarRendererSetAppearanceExt(long renderer, long[] appearanceIntegral);
-
-    /**
      * cna_avatar_renderer_set_lighting (gamer_services.h).
      *
      * <p>lightColorFloating carries CNA_Vector3 in this order:
@@ -676,11 +504,6 @@ public final class NativeGamerServicesRoutes {
     public static native int avatarRendererSetTransforms(long renderer, float[] worldFloating, float[] viewFloating, float[] projectionFloating);
 
     /**
-     * cna_friend_collection_create_ext (gamer_services.h).
-     */
-    public static native int friendCollectionCreateExt(long[] friends, long[] outCollection);
-
-    /**
      * cna_friend_collection_get_is_disposed (gamer_services.h).
      */
     public static native int friendCollectionGetIsDisposed(long collection, boolean[] outIsDisposed);
@@ -689,11 +512,6 @@ public final class NativeGamerServicesRoutes {
      * cna_friend_gamer_copy_presence (gamer_services.h).
      */
     public static native int friendGamerCopyPresence(long gamer, byte[] destination, long[] outBytes);
-
-    /**
-     * cna_friend_gamer_create_ext (gamer_services.h).
-     */
-    public static native int friendGamerCreateExt(byte[] gamertag, byte[] displayName, boolean isOnline, boolean isPlaying, boolean isAway, boolean isBusy, boolean friendRequestSentTo, boolean friendRequestReceivedFrom, long[] outGamer);
 
     /**
      * cna_friend_gamer_get_info (gamer_services.h).
@@ -730,77 +548,6 @@ public final class NativeGamerServicesRoutes {
     public static native int friendGamerGetPresenceSize(long gamer, long[] outBytes);
 
     /**
-     * cna_game_defaults_init (gamer_services.h).
-     *
-     * <p>outDefaultsBytes carries CNA_GameDefaults in this order:
-     * <ol start="0">
-     *   <li>{@code reserved[0]} (uint8_t)</li>
-     *   <li>{@code reserved[1]} (uint8_t)</li>
-     *   <li>{@code reserved[2]} (uint8_t)</li>
-     * </ol>
-     *
-     * <p>outDefaultsIntegral carries CNA_GameDefaults in this order:
-     * <ol start="0">
-     *   <li>{@code game_difficulty} (CNA_GameDifficulty)</li>
-     *   <li>{@code controller_sensitivity} (CNA_ControllerSensitivity)</li>
-     *   <li>{@code racing_camera_angle} (CNA_RacingCameraAngle)</li>
-     *   <li>{@code has_primary_color} (CNA_Bool)</li>
-     *   <li>{@code has_secondary_color} (CNA_Bool)</li>
-     *   <li>{@code auto_aim} (CNA_Bool)</li>
-     *   <li>{@code auto_center} (CNA_Bool)</li>
-     *   <li>{@code move_with_right_thumb_stick} (CNA_Bool)</li>
-     *   <li>{@code invert_y_axis} (CNA_Bool)</li>
-     *   <li>{@code manual_transmission} (CNA_Bool)</li>
-     *   <li>{@code accelerate_with_buttons} (CNA_Bool)</li>
-     *   <li>{@code brake_with_buttons} (CNA_Bool)</li>
-     *   <li>{@code primary_color.r} (uint8_t)</li>
-     *   <li>{@code primary_color.g} (uint8_t)</li>
-     *   <li>{@code primary_color.b} (uint8_t)</li>
-     *   <li>{@code primary_color.a} (uint8_t)</li>
-     *   <li>{@code secondary_color.r} (uint8_t)</li>
-     *   <li>{@code secondary_color.g} (uint8_t)</li>
-     *   <li>{@code secondary_color.b} (uint8_t)</li>
-     *   <li>{@code secondary_color.a} (uint8_t)</li>
-     * </ol>
-     */
-    public static native int gameDefaultsInit(byte[] outDefaultsBytes, long[] outDefaultsIntegral);
-
-    /**
-     * cna_gamer_begin_get_from_gamertag (gamer_services.h).
-     */
-    public static native int gamerBeginGetFromGamertag(byte[] gamertag, long[] outGamer);
-
-    /**
-     * cna_gamer_begin_get_partner_token (gamer_services.h).
-     */
-    public static native int gamerBeginGetPartnerToken(byte[] audienceUri, byte[] destination, long[] outBytes);
-
-    /**
-     * cna_gamer_begin_get_profile (gamer_services.h).
-     */
-    public static native int gamerBeginGetProfile(long gamer, long[] outProfile);
-
-    /**
-     * cna_gamer_collection_add (gamer_services.h).
-     */
-    public static native int gamerCollectionAdd(long collection, long gamer);
-
-    /**
-     * cna_gamer_collection_clear (gamer_services.h).
-     */
-    public static native int gamerCollectionClear(long collection);
-
-    /**
-     * cna_gamer_collection_contains (gamer_services.h).
-     */
-    public static native int gamerCollectionContains(long collection, long gamer, boolean[] outContains);
-
-    /**
-     * cna_gamer_collection_copy_to (gamer_services.h).
-     */
-    public static native int gamerCollectionCopyTo(long collection, long[] destination, int index, long[] outCount);
-
-    /**
      * cna_gamer_collection_create_enumerator (gamer_services.h).
      */
     public static native int gamerCollectionCreateEnumerator(long collection, long[] outEnumerator);
@@ -819,16 +566,6 @@ public final class NativeGamerServicesRoutes {
      * cna_gamer_collection_get_count (gamer_services.h).
      */
     public static native int gamerCollectionGetCount(long collection, int[] outCount);
-
-    /**
-     * cna_gamer_collection_index_of (gamer_services.h).
-     */
-    public static native int gamerCollectionIndexOf(long collection, long gamer, int[] outIndex);
-
-    /**
-     * cna_gamer_collection_remove (gamer_services.h).
-     */
-    public static native int gamerCollectionRemove(long collection, long gamer);
 
     /**
      * cna_gamer_copy_display_name (gamer_services.h).
@@ -851,11 +588,6 @@ public final class NativeGamerServicesRoutes {
     public static native int gamerCopyText(long gamer, byte[] destination, long[] outBytes);
 
     /**
-     * cna_gamer_destroy (gamer_services.h).
-     */
-    public static native int gamerDestroy(long gamer);
-
-    /**
      * cna_gamer_enumerator_destroy (gamer_services.h).
      */
     public static native int gamerEnumeratorDestroy(long enumerator);
@@ -869,11 +601,6 @@ public final class NativeGamerServicesRoutes {
      * cna_gamer_enumerator_move_next (gamer_services.h).
      */
     public static native int gamerEnumeratorMoveNext(long enumerator, boolean[] outHasCurrent);
-
-    /**
-     * cna_gamer_enumerator_reset (gamer_services.h).
-     */
-    public static native int gamerEnumeratorReset(long enumerator);
 
     /**
      * cna_gamer_get_display_name_size (gamer_services.h).
@@ -929,17 +656,6 @@ public final class NativeGamerServicesRoutes {
      * cna_gamer_get_text_size (gamer_services.h).
      */
     public static native int gamerGetTextSize(long gamer, long[] outBytes);
-
-    /**
-     * cna_gamer_presence_init (gamer_services.h).
-     *
-     * <p>outPresenceIntegral carries CNA_GamerPresence in this order:
-     * <ol start="0">
-     *   <li>{@code presence_mode} (CNA_GamerPresenceMode)</li>
-     *   <li>{@code presence_value} (int32_t)</li>
-     * </ol>
-     */
-    public static native int gamerPresenceInit(long[] outPresenceIntegral);
 
     /**
      * cna_gamer_profile_copy_motto (gamer_services.h).
@@ -998,16 +714,6 @@ public final class NativeGamerServicesRoutes {
     public static native int gamerProfileGetRegionNameSize(long profile, long[] outBytes);
 
     /**
-     * cna_gamer_services_component_create (gamer_services.h).
-     */
-    public static native int gamerServicesComponentCreate(long game, long[] outComponent);
-
-    /**
-     * cna_gamer_services_dispatcher_get_freed_gamer_count_ext (gamer_services.h).
-     */
-    public static native int gamerServicesDispatcherGetFreedGamerCountExt(long[] outCount);
-
-    /**
      * cna_gamer_services_dispatcher_get_is_initialized (gamer_services.h).
      */
     public static native int gamerServicesDispatcherGetIsInitialized(boolean[] outIsInitialized);
@@ -1018,34 +724,14 @@ public final class NativeGamerServicesRoutes {
     public static native int gamerServicesDispatcherGetWindowHandle(long[] outWindowHandle);
 
     /**
-     * cna_gamer_services_dispatcher_update_async (gamer_services.h).
-     */
-    public static native int gamerServicesDispatcherUpdateAsync(boolean[] outDidWork);
-
-    /**
      * cna_gamer_set_display_name (gamer_services.h).
      */
     public static native int gamerSetDisplayName(long gamer, byte[] displayName);
 
     /**
-     * cna_gamer_set_signed_in_gamers_ext (gamer_services.h).
-     */
-    public static native int gamerSetSignedInGamersExt(long[] gamers);
-
-    /**
      * cna_gamer_set_tag (gamer_services.h).
      */
     public static native int gamerSetTag(long gamer, long tag);
-
-    /**
-     * cna_gamer_signed_in_contains (gamer_services.h).
-     */
-    public static native int gamerSignedInContains(long gamer, boolean[] outContains);
-
-    /**
-     * cna_gamer_signed_in_index_of (gamer_services.h).
-     */
-    public static native int gamerSignedInIndexOf(long gamer, int[] outIndex);
 
     /**
      * cna_gamer_unsubscribe_ext (gamer_services.h).
@@ -1056,21 +742,6 @@ public final class NativeGamerServicesRoutes {
      * cna_guide_begin_show_keyboard_input (gamer_services.h).
      */
     public static native int guideBeginShowKeyboardInput(int player, byte[] title, byte[] description, byte[] defaultText, boolean usePasswordMode);
-
-    /**
-     * cna_guide_copy_pending_keyboard_input_description_ext (gamer_services.h).
-     */
-    public static native int guideCopyPendingKeyboardInputDescriptionExt(byte[] destination, long[] outBytes);
-
-    /**
-     * cna_guide_copy_pending_keyboard_input_display_text_ext (gamer_services.h).
-     */
-    public static native int guideCopyPendingKeyboardInputDisplayTextExt(byte[] destination, long[] outBytes);
-
-    /**
-     * cna_guide_copy_pending_keyboard_input_title_ext (gamer_services.h).
-     */
-    public static native int guideCopyPendingKeyboardInputTitleExt(byte[] destination, long[] outBytes);
 
     /**
      * cna_guide_delay_notifications (gamer_services.h).
@@ -1093,16 +764,6 @@ public final class NativeGamerServicesRoutes {
     public static native int guideEndShowMessageBox(boolean[] outHasChoice, int[] outButtonIndex);
 
     /**
-     * cna_guide_get_has_pending_keyboard_input_ext (gamer_services.h).
-     */
-    public static native int guideGetHasPendingKeyboardInputExt(boolean[] outHasPending);
-
-    /**
-     * cna_guide_get_has_pending_message_box_ext (gamer_services.h).
-     */
-    public static native int guideGetHasPendingMessageBoxExt(boolean[] outHasPending);
-
-    /**
      * cna_guide_get_is_screen_saver_enabled (gamer_services.h).
      */
     public static native int guideGetIsScreenSaverEnabled(boolean[] outIsEnabled);
@@ -1123,49 +784,9 @@ public final class NativeGamerServicesRoutes {
     public static native int guideGetNotificationPosition(int[] outPosition);
 
     /**
-     * cna_guide_get_pending_keyboard_input_description_size_ext (gamer_services.h).
-     */
-    public static native int guideGetPendingKeyboardInputDescriptionSizeExt(long[] outBytes);
-
-    /**
-     * cna_guide_get_pending_keyboard_input_display_text_size_ext (gamer_services.h).
-     */
-    public static native int guideGetPendingKeyboardInputDisplayTextSizeExt(long[] outBytes);
-
-    /**
-     * cna_guide_get_pending_keyboard_input_title_size_ext (gamer_services.h).
-     */
-    public static native int guideGetPendingKeyboardInputTitleSizeExt(long[] outBytes);
-
-    /**
-     * cna_guide_get_pending_message_box_focus_button_ext (gamer_services.h).
-     */
-    public static native int guideGetPendingMessageBoxFocusButtonExt(int[] outFocusButton);
-
-    /**
      * cna_guide_get_simulate_trial_mode (gamer_services.h).
      */
     public static native int guideGetSimulateTrialMode(boolean[] outSimulate);
-
-    /**
-     * cna_guide_render_pending_keyboard_input_ext (gamer_services.h).
-     */
-    public static native int guideRenderPendingKeyboardInputExt(long device, long spriteBatch, long font, long whitePixel);
-
-    /**
-     * cna_guide_render_pending_message_box_ext (gamer_services.h).
-     */
-    public static native int guideRenderPendingMessageBoxExt(long device, long spriteBatch, long font, long whitePixel);
-
-    /**
-     * cna_guide_reset_pending_keyboard_input_ext (gamer_services.h).
-     */
-    public static native int guideResetPendingKeyboardInputExt();
-
-    /**
-     * cna_guide_reset_pending_message_box_ext (gamer_services.h).
-     */
-    public static native int guideResetPendingMessageBoxExt();
 
     /**
      * cna_guide_set_is_screen_saver_enabled (gamer_services.h).
@@ -1191,11 +812,6 @@ public final class NativeGamerServicesRoutes {
      * cna_guide_set_simulate_trial_mode (gamer_services.h).
      */
     public static native int guideSetSimulateTrialMode(boolean simulate);
-
-    /**
-     * cna_guide_show_achievements_ext (gamer_services.h).
-     */
-    public static native int guideShowAchievementsExt(int player);
 
     /**
      * cna_guide_show_compose_message (gamer_services.h).
@@ -1263,41 +879,9 @@ public final class NativeGamerServicesRoutes {
     public static native int guideShowSignIn(int paneCount, boolean onlineOnly);
 
     /**
-     * cna_guide_simulate_keyboard_input_cancel_ext (gamer_services.h).
-     */
-    public static native int guideSimulateKeyboardInputCancelExt();
-
-    /**
-     * cna_guide_simulate_message_box_click_ext (gamer_services.h).
-     */
-    public static native int guideSimulateMessageBoxClickExt(int buttonIndex);
-
-    /**
      * cna_guide_was_keyboard_input_canceled_ext (gamer_services.h).
      */
     public static native int guideWasKeyboardInputCanceledExt(boolean[] outWasCanceled);
-
-    /**
-     * cna_invite_accepted_event_info_init (gamer_services.h).
-     *
-     * <p>outInfoBytes carries CNA_InviteAcceptedEventInfo in this order:
-     * <ol start="0">
-     *   <li>{@code reserved[0]} (uint8_t)</li>
-     *   <li>{@code reserved[1]} (uint8_t)</li>
-     *   <li>{@code reserved[2]} (uint8_t)</li>
-     *   <li>{@code reserved[3]} (uint8_t)</li>
-     *   <li>{@code reserved[4]} (uint8_t)</li>
-     *   <li>{@code reserved[5]} (uint8_t)</li>
-     *   <li>{@code reserved[6]} (uint8_t)</li>
-     * </ol>
-     *
-     * <p>outInfoIntegral carries CNA_InviteAcceptedEventInfo in this order:
-     * <ol start="0">
-     *   <li>{@code gamer} (CNA_SignedInGamerHandle)</li>
-     *   <li>{@code is_current_session} (CNA_Bool)</li>
-     * </ol>
-     */
-    public static native int inviteAcceptedEventInfoInit(long gamer, boolean isCurrentSession, byte[] outInfoBytes, long[] outInfoIntegral);
 
     /**
      * cna_leaderboard_entry_create_ext (gamer_services.h).
@@ -1308,11 +892,6 @@ public final class NativeGamerServicesRoutes {
      * cna_leaderboard_entry_destroy (gamer_services.h).
      */
     public static native int leaderboardEntryDestroy(long entry);
-
-    /**
-     * cna_leaderboard_entry_equals (gamer_services.h).
-     */
-    public static native int leaderboardEntryEquals(long entry, long other, boolean[] outEquals);
 
     /**
      * cna_leaderboard_entry_get_columns (gamer_services.h).
@@ -1347,328 +926,6 @@ public final class NativeGamerServicesRoutes {
      * cna_leaderboard_entry_set_rating (gamer_services.h).
      */
     public static native int leaderboardEntrySetRating(long entry, long rating);
-
-    /**
-     * cna_leaderboard_identity_init (gamer_services.h).
-     *
-     * <p>outIdentityBytes carries CNA_LeaderboardIdentity in this order:
-     * <ol start="0">
-     *   <li>{@code key[0]} (char)</li>
-     *   <li>{@code key[1]} (char)</li>
-     *   <li>{@code key[2]} (char)</li>
-     *   <li>{@code key[3]} (char)</li>
-     *   <li>{@code key[4]} (char)</li>
-     *   <li>{@code key[5]} (char)</li>
-     *   <li>{@code key[6]} (char)</li>
-     *   <li>{@code key[7]} (char)</li>
-     *   <li>{@code key[8]} (char)</li>
-     *   <li>{@code key[9]} (char)</li>
-     *   <li>{@code key[10]} (char)</li>
-     *   <li>{@code key[11]} (char)</li>
-     *   <li>{@code key[12]} (char)</li>
-     *   <li>{@code key[13]} (char)</li>
-     *   <li>{@code key[14]} (char)</li>
-     *   <li>{@code key[15]} (char)</li>
-     *   <li>{@code key[16]} (char)</li>
-     *   <li>{@code key[17]} (char)</li>
-     *   <li>{@code key[18]} (char)</li>
-     *   <li>{@code key[19]} (char)</li>
-     *   <li>{@code key[20]} (char)</li>
-     *   <li>{@code key[21]} (char)</li>
-     *   <li>{@code key[22]} (char)</li>
-     *   <li>{@code key[23]} (char)</li>
-     *   <li>{@code key[24]} (char)</li>
-     *   <li>{@code key[25]} (char)</li>
-     *   <li>{@code key[26]} (char)</li>
-     *   <li>{@code key[27]} (char)</li>
-     *   <li>{@code key[28]} (char)</li>
-     *   <li>{@code key[29]} (char)</li>
-     *   <li>{@code key[30]} (char)</li>
-     *   <li>{@code key[31]} (char)</li>
-     *   <li>{@code key[32]} (char)</li>
-     *   <li>{@code key[33]} (char)</li>
-     *   <li>{@code key[34]} (char)</li>
-     *   <li>{@code key[35]} (char)</li>
-     *   <li>{@code key[36]} (char)</li>
-     *   <li>{@code key[37]} (char)</li>
-     *   <li>{@code key[38]} (char)</li>
-     *   <li>{@code key[39]} (char)</li>
-     *   <li>{@code key[40]} (char)</li>
-     *   <li>{@code key[41]} (char)</li>
-     *   <li>{@code key[42]} (char)</li>
-     *   <li>{@code key[43]} (char)</li>
-     *   <li>{@code key[44]} (char)</li>
-     *   <li>{@code key[45]} (char)</li>
-     *   <li>{@code key[46]} (char)</li>
-     *   <li>{@code key[47]} (char)</li>
-     *   <li>{@code key[48]} (char)</li>
-     *   <li>{@code key[49]} (char)</li>
-     *   <li>{@code key[50]} (char)</li>
-     *   <li>{@code key[51]} (char)</li>
-     *   <li>{@code key[52]} (char)</li>
-     *   <li>{@code key[53]} (char)</li>
-     *   <li>{@code key[54]} (char)</li>
-     *   <li>{@code key[55]} (char)</li>
-     *   <li>{@code key[56]} (char)</li>
-     *   <li>{@code key[57]} (char)</li>
-     *   <li>{@code key[58]} (char)</li>
-     *   <li>{@code key[59]} (char)</li>
-     *   <li>{@code key[60]} (char)</li>
-     *   <li>{@code key[61]} (char)</li>
-     *   <li>{@code key[62]} (char)</li>
-     *   <li>{@code key[63]} (char)</li>
-     * </ol>
-     *
-     * <p>outIdentityIntegral carries CNA_LeaderboardIdentity in this order:
-     * <ol start="0">
-     *   <li>{@code game_mode} (int32_t)</li>
-     * </ol>
-     */
-    public static native int leaderboardIdentityInit(int key, int gameMode, byte[] outIdentityBytes, long[] outIdentityIntegral);
-
-    /**
-     * cna_leaderboard_reader_begin_page_down (gamer_services.h).
-     */
-    public static native int leaderboardReaderBeginPageDown(long reader);
-
-    /**
-     * cna_leaderboard_reader_begin_page_up (gamer_services.h).
-     */
-    public static native int leaderboardReaderBeginPageUp(long reader);
-
-    /**
-     * cna_leaderboard_reader_begin_read (gamer_services.h).
-     *
-     * <p>identityBytes carries CNA_LeaderboardIdentity in this order:
-     * <ol start="0">
-     *   <li>{@code key[0]} (char)</li>
-     *   <li>{@code key[1]} (char)</li>
-     *   <li>{@code key[2]} (char)</li>
-     *   <li>{@code key[3]} (char)</li>
-     *   <li>{@code key[4]} (char)</li>
-     *   <li>{@code key[5]} (char)</li>
-     *   <li>{@code key[6]} (char)</li>
-     *   <li>{@code key[7]} (char)</li>
-     *   <li>{@code key[8]} (char)</li>
-     *   <li>{@code key[9]} (char)</li>
-     *   <li>{@code key[10]} (char)</li>
-     *   <li>{@code key[11]} (char)</li>
-     *   <li>{@code key[12]} (char)</li>
-     *   <li>{@code key[13]} (char)</li>
-     *   <li>{@code key[14]} (char)</li>
-     *   <li>{@code key[15]} (char)</li>
-     *   <li>{@code key[16]} (char)</li>
-     *   <li>{@code key[17]} (char)</li>
-     *   <li>{@code key[18]} (char)</li>
-     *   <li>{@code key[19]} (char)</li>
-     *   <li>{@code key[20]} (char)</li>
-     *   <li>{@code key[21]} (char)</li>
-     *   <li>{@code key[22]} (char)</li>
-     *   <li>{@code key[23]} (char)</li>
-     *   <li>{@code key[24]} (char)</li>
-     *   <li>{@code key[25]} (char)</li>
-     *   <li>{@code key[26]} (char)</li>
-     *   <li>{@code key[27]} (char)</li>
-     *   <li>{@code key[28]} (char)</li>
-     *   <li>{@code key[29]} (char)</li>
-     *   <li>{@code key[30]} (char)</li>
-     *   <li>{@code key[31]} (char)</li>
-     *   <li>{@code key[32]} (char)</li>
-     *   <li>{@code key[33]} (char)</li>
-     *   <li>{@code key[34]} (char)</li>
-     *   <li>{@code key[35]} (char)</li>
-     *   <li>{@code key[36]} (char)</li>
-     *   <li>{@code key[37]} (char)</li>
-     *   <li>{@code key[38]} (char)</li>
-     *   <li>{@code key[39]} (char)</li>
-     *   <li>{@code key[40]} (char)</li>
-     *   <li>{@code key[41]} (char)</li>
-     *   <li>{@code key[42]} (char)</li>
-     *   <li>{@code key[43]} (char)</li>
-     *   <li>{@code key[44]} (char)</li>
-     *   <li>{@code key[45]} (char)</li>
-     *   <li>{@code key[46]} (char)</li>
-     *   <li>{@code key[47]} (char)</li>
-     *   <li>{@code key[48]} (char)</li>
-     *   <li>{@code key[49]} (char)</li>
-     *   <li>{@code key[50]} (char)</li>
-     *   <li>{@code key[51]} (char)</li>
-     *   <li>{@code key[52]} (char)</li>
-     *   <li>{@code key[53]} (char)</li>
-     *   <li>{@code key[54]} (char)</li>
-     *   <li>{@code key[55]} (char)</li>
-     *   <li>{@code key[56]} (char)</li>
-     *   <li>{@code key[57]} (char)</li>
-     *   <li>{@code key[58]} (char)</li>
-     *   <li>{@code key[59]} (char)</li>
-     *   <li>{@code key[60]} (char)</li>
-     *   <li>{@code key[61]} (char)</li>
-     *   <li>{@code key[62]} (char)</li>
-     *   <li>{@code key[63]} (char)</li>
-     * </ol>
-     *
-     * <p>identityIntegral carries CNA_LeaderboardIdentity in this order:
-     * <ol start="0">
-     *   <li>{@code game_mode} (int32_t)</li>
-     * </ol>
-     */
-    public static native int leaderboardReaderBeginRead(byte[] identityBytes, long[] identityIntegral, int pageStart, int pageSize, long[] outReader);
-
-    /**
-     * cna_leaderboard_reader_begin_read_from_gamers (gamer_services.h).
-     *
-     * <p>identityBytes carries CNA_LeaderboardIdentity in this order:
-     * <ol start="0">
-     *   <li>{@code key[0]} (char)</li>
-     *   <li>{@code key[1]} (char)</li>
-     *   <li>{@code key[2]} (char)</li>
-     *   <li>{@code key[3]} (char)</li>
-     *   <li>{@code key[4]} (char)</li>
-     *   <li>{@code key[5]} (char)</li>
-     *   <li>{@code key[6]} (char)</li>
-     *   <li>{@code key[7]} (char)</li>
-     *   <li>{@code key[8]} (char)</li>
-     *   <li>{@code key[9]} (char)</li>
-     *   <li>{@code key[10]} (char)</li>
-     *   <li>{@code key[11]} (char)</li>
-     *   <li>{@code key[12]} (char)</li>
-     *   <li>{@code key[13]} (char)</li>
-     *   <li>{@code key[14]} (char)</li>
-     *   <li>{@code key[15]} (char)</li>
-     *   <li>{@code key[16]} (char)</li>
-     *   <li>{@code key[17]} (char)</li>
-     *   <li>{@code key[18]} (char)</li>
-     *   <li>{@code key[19]} (char)</li>
-     *   <li>{@code key[20]} (char)</li>
-     *   <li>{@code key[21]} (char)</li>
-     *   <li>{@code key[22]} (char)</li>
-     *   <li>{@code key[23]} (char)</li>
-     *   <li>{@code key[24]} (char)</li>
-     *   <li>{@code key[25]} (char)</li>
-     *   <li>{@code key[26]} (char)</li>
-     *   <li>{@code key[27]} (char)</li>
-     *   <li>{@code key[28]} (char)</li>
-     *   <li>{@code key[29]} (char)</li>
-     *   <li>{@code key[30]} (char)</li>
-     *   <li>{@code key[31]} (char)</li>
-     *   <li>{@code key[32]} (char)</li>
-     *   <li>{@code key[33]} (char)</li>
-     *   <li>{@code key[34]} (char)</li>
-     *   <li>{@code key[35]} (char)</li>
-     *   <li>{@code key[36]} (char)</li>
-     *   <li>{@code key[37]} (char)</li>
-     *   <li>{@code key[38]} (char)</li>
-     *   <li>{@code key[39]} (char)</li>
-     *   <li>{@code key[40]} (char)</li>
-     *   <li>{@code key[41]} (char)</li>
-     *   <li>{@code key[42]} (char)</li>
-     *   <li>{@code key[43]} (char)</li>
-     *   <li>{@code key[44]} (char)</li>
-     *   <li>{@code key[45]} (char)</li>
-     *   <li>{@code key[46]} (char)</li>
-     *   <li>{@code key[47]} (char)</li>
-     *   <li>{@code key[48]} (char)</li>
-     *   <li>{@code key[49]} (char)</li>
-     *   <li>{@code key[50]} (char)</li>
-     *   <li>{@code key[51]} (char)</li>
-     *   <li>{@code key[52]} (char)</li>
-     *   <li>{@code key[53]} (char)</li>
-     *   <li>{@code key[54]} (char)</li>
-     *   <li>{@code key[55]} (char)</li>
-     *   <li>{@code key[56]} (char)</li>
-     *   <li>{@code key[57]} (char)</li>
-     *   <li>{@code key[58]} (char)</li>
-     *   <li>{@code key[59]} (char)</li>
-     *   <li>{@code key[60]} (char)</li>
-     *   <li>{@code key[61]} (char)</li>
-     *   <li>{@code key[62]} (char)</li>
-     *   <li>{@code key[63]} (char)</li>
-     * </ol>
-     *
-     * <p>identityIntegral carries CNA_LeaderboardIdentity in this order:
-     * <ol start="0">
-     *   <li>{@code game_mode} (int32_t)</li>
-     * </ol>
-     */
-    public static native int leaderboardReaderBeginReadFromGamers(byte[] identityBytes, long[] identityIntegral, long[] gamers, long pivotGamer, int pageSize, long[] outReader);
-
-    /**
-     * cna_leaderboard_reader_begin_read_from_pivot (gamer_services.h).
-     *
-     * <p>identityBytes carries CNA_LeaderboardIdentity in this order:
-     * <ol start="0">
-     *   <li>{@code key[0]} (char)</li>
-     *   <li>{@code key[1]} (char)</li>
-     *   <li>{@code key[2]} (char)</li>
-     *   <li>{@code key[3]} (char)</li>
-     *   <li>{@code key[4]} (char)</li>
-     *   <li>{@code key[5]} (char)</li>
-     *   <li>{@code key[6]} (char)</li>
-     *   <li>{@code key[7]} (char)</li>
-     *   <li>{@code key[8]} (char)</li>
-     *   <li>{@code key[9]} (char)</li>
-     *   <li>{@code key[10]} (char)</li>
-     *   <li>{@code key[11]} (char)</li>
-     *   <li>{@code key[12]} (char)</li>
-     *   <li>{@code key[13]} (char)</li>
-     *   <li>{@code key[14]} (char)</li>
-     *   <li>{@code key[15]} (char)</li>
-     *   <li>{@code key[16]} (char)</li>
-     *   <li>{@code key[17]} (char)</li>
-     *   <li>{@code key[18]} (char)</li>
-     *   <li>{@code key[19]} (char)</li>
-     *   <li>{@code key[20]} (char)</li>
-     *   <li>{@code key[21]} (char)</li>
-     *   <li>{@code key[22]} (char)</li>
-     *   <li>{@code key[23]} (char)</li>
-     *   <li>{@code key[24]} (char)</li>
-     *   <li>{@code key[25]} (char)</li>
-     *   <li>{@code key[26]} (char)</li>
-     *   <li>{@code key[27]} (char)</li>
-     *   <li>{@code key[28]} (char)</li>
-     *   <li>{@code key[29]} (char)</li>
-     *   <li>{@code key[30]} (char)</li>
-     *   <li>{@code key[31]} (char)</li>
-     *   <li>{@code key[32]} (char)</li>
-     *   <li>{@code key[33]} (char)</li>
-     *   <li>{@code key[34]} (char)</li>
-     *   <li>{@code key[35]} (char)</li>
-     *   <li>{@code key[36]} (char)</li>
-     *   <li>{@code key[37]} (char)</li>
-     *   <li>{@code key[38]} (char)</li>
-     *   <li>{@code key[39]} (char)</li>
-     *   <li>{@code key[40]} (char)</li>
-     *   <li>{@code key[41]} (char)</li>
-     *   <li>{@code key[42]} (char)</li>
-     *   <li>{@code key[43]} (char)</li>
-     *   <li>{@code key[44]} (char)</li>
-     *   <li>{@code key[45]} (char)</li>
-     *   <li>{@code key[46]} (char)</li>
-     *   <li>{@code key[47]} (char)</li>
-     *   <li>{@code key[48]} (char)</li>
-     *   <li>{@code key[49]} (char)</li>
-     *   <li>{@code key[50]} (char)</li>
-     *   <li>{@code key[51]} (char)</li>
-     *   <li>{@code key[52]} (char)</li>
-     *   <li>{@code key[53]} (char)</li>
-     *   <li>{@code key[54]} (char)</li>
-     *   <li>{@code key[55]} (char)</li>
-     *   <li>{@code key[56]} (char)</li>
-     *   <li>{@code key[57]} (char)</li>
-     *   <li>{@code key[58]} (char)</li>
-     *   <li>{@code key[59]} (char)</li>
-     *   <li>{@code key[60]} (char)</li>
-     *   <li>{@code key[61]} (char)</li>
-     *   <li>{@code key[62]} (char)</li>
-     *   <li>{@code key[63]} (char)</li>
-     * </ol>
-     *
-     * <p>identityIntegral carries CNA_LeaderboardIdentity in this order:
-     * <ol start="0">
-     *   <li>{@code game_mode} (int32_t)</li>
-     * </ol>
-     */
-    public static native int leaderboardReaderBeginReadFromPivot(byte[] identityBytes, long[] identityIntegral, long pivotGamer, int pageSize, long[] outReader);
 
     /**
      * cna_leaderboard_reader_destroy (gamer_services.h).
@@ -2039,16 +1296,6 @@ public final class NativeGamerServicesRoutes {
     public static native int propertyDictionaryCopyString(long dictionary, byte[] key, byte[] destination, long[] outBytes);
 
     /**
-     * cna_property_dictionary_create_ext (gamer_services.h).
-     */
-    public static native int propertyDictionaryCreateExt(long[] outDictionary);
-
-    /**
-     * cna_property_dictionary_destroy (gamer_services.h).
-     */
-    public static native int propertyDictionaryDestroy(long dictionary);
-
-    /**
      * cna_property_dictionary_get_count (gamer_services.h).
      */
     public static native int propertyDictionaryGetCount(long dictionary, int[] outCount);
@@ -2072,11 +1319,6 @@ public final class NativeGamerServicesRoutes {
      * cna_property_dictionary_get_int64 (gamer_services.h).
      */
     public static native int propertyDictionaryGetInt64(long dictionary, byte[] key, long[] outValue);
-
-    /**
-     * cna_property_dictionary_get_is_read_only (gamer_services.h).
-     */
-    public static native int propertyDictionaryGetIsReadOnly(long dictionary, boolean[] outIsReadOnly);
 
     /**
      * cna_property_dictionary_get_key_size_at (gamer_services.h).
@@ -2164,31 +1406,6 @@ public final class NativeGamerServicesRoutes {
     public static native int signedInGamerAwardAchievement(long gamer, byte[] achievementKey);
 
     /**
-     * cna_signed_in_gamer_begin_award_achievement (gamer_services.h).
-     */
-    public static native int signedInGamerBeginAwardAchievement(long gamer, byte[] achievementKey);
-
-    /**
-     * cna_signed_in_gamer_begin_get_achievements (gamer_services.h).
-     */
-    public static native int signedInGamerBeginGetAchievements(long gamer, long[] outAchievements);
-
-    /**
-     * cna_signed_in_gamer_copy_gamertag (gamer_services.h).
-     */
-    public static native int signedInGamerCopyGamertag(long gamer, byte[] destination, long[] outBytes);
-
-    /**
-     * cna_signed_in_gamer_create_ext (gamer_services.h).
-     */
-    public static native int signedInGamerCreateExt(byte[] gamertag, boolean isSignedInToLive, boolean isGuest, int playerIndex, long[] outGamer);
-
-    /**
-     * cna_signed_in_gamer_destroy (gamer_services.h).
-     */
-    public static native int signedInGamerDestroy(long gamer);
-
-    /**
      * cna_signed_in_gamer_get_achievements (gamer_services.h).
      */
     public static native int signedInGamerGetAchievements(long gamer, long[] outAchievements);
@@ -2233,11 +1450,6 @@ public final class NativeGamerServicesRoutes {
      * </ol>
      */
     public static native int signedInGamerGetGameDefaults(long gamer, byte[] outDefaultsBytes, long[] outDefaultsIntegral);
-
-    /**
-     * cna_signed_in_gamer_get_gamertag_size (gamer_services.h).
-     */
-    public static native int signedInGamerGetGamertagSize(long gamer, long[] outBytes);
 
     /**
      * cna_signed_in_gamer_get_is_guest (gamer_services.h).
@@ -2319,9 +1531,4 @@ public final class NativeGamerServicesRoutes {
      * </ol>
      */
     public static native int signedInGamerSetPresence(long gamer, long[] presenceIntegral);
-
-    /**
-     * cna_signed_in_gamer_set_presence_mode_string_ext (gamer_services.h).
-     */
-    public static native int signedInGamerSetPresenceModeStringExt(long gamer, byte[] mode);
 }

@@ -488,6 +488,13 @@ def main() -> int:
         for name in summary["boundButUnreached"]:
             print(f"BOUND_BUT_UNREACHED={name}")
         return 1
+    if arguments.check and summary["boundWithoutJavaCallSite"]:
+        # A route the library must export that no Java code can call. Either reach it or
+        # unbind it with a rule saying why -- there is no third answer, and leaving one here
+        # makes the binding demand a symbol from libcna_c_api for nothing.
+        for name in summary["boundWithoutJavaCallSite"]:
+            print(f"BOUND_WITHOUT_JAVA_CALL_SITE={name}")
+        return 1
     if arguments.check and unmapped:
         for record in report["functions"]:
             if record["classification"] == "UNMAPPED_REQUIRES_REVIEW":
