@@ -117,6 +117,28 @@ Java_org_openeggbert_cna_internal_generated_NativeCnbRoutes_cnbCopyAssetTypeName
 }
 
 JNIEXPORT jint JNICALL
+Java_org_openeggbert_cna_internal_generated_NativeCnbRoutes_cnbCopyAudioFormatName(
+    JNIEnv* environment, jclass declaring_class, jint format, jbyteArray destination, jlongArray out_byte_count)
+{
+    (void)environment;
+    (void)declaring_class;
+    jsize destination_size = (*environment)->GetArrayLength(environment, destination);
+    jbyte* destination_bytes = (*environment)->GetByteArrayElements(environment, destination, NULL);
+    if (destination_bytes == NULL) {
+        return (jint)CNA_RESULT_OUT_OF_MEMORY;
+    }
+    uint64_t destination_written = 0;
+    CNA_Result result = cna.cnb_copy_audio_format_name((CNA_CnbAudioFormat)format, (char*)destination_bytes, (uint64_t)destination_size, &destination_written);
+    (*environment)->ReleaseByteArrayElements(environment, destination, destination_bytes, 0);
+    if (result == CNA_RESULT_SUCCESS || result == CNA_RESULT_BUFFER_TOO_SMALL) {
+        jlong destination_element = (jlong)destination_written;
+        (*environment)->SetLongArrayRegion(
+            environment, out_byte_count, 0, 1, &destination_element);
+    }
+    return (jint)result;
+}
+
+JNIEXPORT jint JNICALL
 Java_org_openeggbert_cna_internal_generated_NativeCnbRoutes_cnbCopyChunkIdString(
     JNIEnv* environment, jclass declaring_class, jint id, jbyteArray destination, jlongArray out_byte_count)
 {
@@ -478,6 +500,22 @@ Java_org_openeggbert_cna_internal_generated_NativeCnbRoutes_cnbCrc32cUsesHardwar
         jboolean out_uses_hardware_element = (jboolean)out_uses_hardware_value;
         (*environment)->SetBooleanArrayRegion(
             environment, out_uses_hardware, 0, 1, &out_uses_hardware_element);
+    }
+    return (jint)result;
+}
+
+JNIEXPORT jint JNICALL
+Java_org_openeggbert_cna_internal_generated_NativeCnbRoutes_cnbDecodeSoundEffect(
+    JNIEnv* environment, jclass declaring_class, jlong document, jlongArray out_sound)
+{
+    (void)environment;
+    (void)declaring_class;
+    CNA_CnbSoundEffectDataHandle out_sound_value = 0;
+    CNA_Result result = cna.cnb_decode_sound_effect((CNA_CnbDocumentHandle)document, &out_sound_value);
+    if (result == CNA_RESULT_SUCCESS || result == CNA_RESULT_BUFFER_TOO_SMALL) {
+        jlong out_sound_element = (jlong)out_sound_value;
+        (*environment)->SetLongArrayRegion(
+            environment, out_sound, 0, 1, &out_sound_element);
     }
     return (jint)result;
 }
@@ -1161,6 +1199,52 @@ Java_org_openeggbert_cna_internal_generated_NativeCnbRoutes_cnbDocumentRequireSi
 }
 
 JNIEXPORT jint JNICALL
+Java_org_openeggbert_cna_internal_generated_NativeCnbRoutes_cnbEncodeSoundEffect(
+    JNIEnv* environment, jclass declaring_class, jlong sound, jbyteArray content_name, jbyteArray destination, jlongArray out_byte_count)
+{
+    (void)environment;
+    (void)declaring_class;
+    jsize content_name_size = (*environment)->GetArrayLength(environment, content_name);
+    jbyte* content_name_bytes = (*environment)->GetByteArrayElements(environment, content_name, NULL);
+    if (content_name_bytes == NULL) {
+        return (jint)CNA_RESULT_OUT_OF_MEMORY;
+    }
+    CNA_StringView content_name_view = {(const char*)content_name_bytes, (uint64_t)content_name_size};
+    jsize destination_size = (*environment)->GetArrayLength(environment, destination);
+    jbyte* destination_elements = (*environment)->GetByteArrayElements(environment, destination, NULL);
+    if (destination_elements == NULL) {
+        return (jint)CNA_RESULT_OUT_OF_MEMORY;
+    }
+    uint8_t* destination_values = (uint8_t*)malloc(
+        ((size_t)destination_size + 1U) * sizeof(*destination_values));
+    if (destination_values == NULL) {
+        (*environment)->ReleaseByteArrayElements(
+            environment, destination, destination_elements, JNI_ABORT);
+        return (jint)CNA_RESULT_OUT_OF_MEMORY;
+    }
+    for (jsize index = 0; index < destination_size; ++index) {
+        destination_values[index] = (uint8_t)destination_elements[index];
+    }
+    uint64_t out_byte_count_value = 0;
+    CNA_Result result = cna.cnb_encode_sound_effect((CNA_CnbSoundEffectDataHandle)sound, content_name_view, destination_values, (uint64_t)destination_size, &out_byte_count_value);
+    (*environment)->ReleaseByteArrayElements(environment, content_name, content_name_bytes, JNI_ABORT);
+    if (result == CNA_RESULT_SUCCESS) {
+        for (jsize index = 0; index < destination_size; ++index) {
+            destination_elements[index] = (jbyte)destination_values[index];
+        }
+    }
+    free(destination_values);
+    (*environment)->ReleaseByteArrayElements(
+        environment, destination, destination_elements, 0);
+    if (result == CNA_RESULT_SUCCESS || result == CNA_RESULT_BUFFER_TOO_SMALL) {
+        jlong out_byte_count_element = (jlong)out_byte_count_value;
+        (*environment)->SetLongArrayRegion(
+            environment, out_byte_count, 0, 1, &out_byte_count_element);
+    }
+    return (jint)result;
+}
+
+JNIEXPORT jint JNICALL
 Java_org_openeggbert_cna_internal_generated_NativeCnbRoutes_cnbEncodeTexture2d(
     JNIEnv* environment, jclass declaring_class, jlong texture, jbyteArray content_name, jbyteArray destination, jlongArray out_byte_count)
 {
@@ -1214,6 +1298,22 @@ Java_org_openeggbert_cna_internal_generated_NativeCnbRoutes_cnbGetAssetTypeNameS
     (void)declaring_class;
     uint64_t out_byte_count_value = 0;
     CNA_Result result = cna.cnb_get_asset_type_name_size((uint32_t)asset_type_id, &out_byte_count_value);
+    if (result == CNA_RESULT_SUCCESS || result == CNA_RESULT_BUFFER_TOO_SMALL) {
+        jlong out_byte_count_element = (jlong)out_byte_count_value;
+        (*environment)->SetLongArrayRegion(
+            environment, out_byte_count, 0, 1, &out_byte_count_element);
+    }
+    return (jint)result;
+}
+
+JNIEXPORT jint JNICALL
+Java_org_openeggbert_cna_internal_generated_NativeCnbRoutes_cnbGetAudioFormatNameSize(
+    JNIEnv* environment, jclass declaring_class, jint format, jlongArray out_byte_count)
+{
+    (void)environment;
+    (void)declaring_class;
+    uint64_t out_byte_count_value = 0;
+    CNA_Result result = cna.cnb_get_audio_format_name_size((CNA_CnbAudioFormat)format, &out_byte_count_value);
     if (result == CNA_RESULT_SUCCESS || result == CNA_RESULT_BUFFER_TOO_SMALL) {
         jlong out_byte_count_element = (jlong)out_byte_count_value;
         (*environment)->SetLongArrayRegion(
@@ -1921,6 +2021,130 @@ Java_org_openeggbert_cna_internal_generated_NativeCnbRoutes_cnbReaderSkip(
     (void)environment;
     (void)declaring_class;
     CNA_Result result = cna.cnb_reader_skip((CNA_CnbReaderHandle)reader, (uint64_t)byte_count);
+    return (jint)result;
+}
+
+JNIEXPORT jint JNICALL
+Java_org_openeggbert_cna_internal_generated_NativeCnbRoutes_cnbSoundEffectDataCopySamples(
+    JNIEnv* environment, jclass declaring_class, jlong sound, jbyteArray destination, jlongArray out_byte_count)
+{
+    (void)environment;
+    (void)declaring_class;
+    jsize destination_size = (*environment)->GetArrayLength(environment, destination);
+    jbyte* destination_elements = (*environment)->GetByteArrayElements(environment, destination, NULL);
+    if (destination_elements == NULL) {
+        return (jint)CNA_RESULT_OUT_OF_MEMORY;
+    }
+    uint8_t* destination_values = (uint8_t*)malloc(
+        ((size_t)destination_size + 1U) * sizeof(*destination_values));
+    if (destination_values == NULL) {
+        (*environment)->ReleaseByteArrayElements(
+            environment, destination, destination_elements, JNI_ABORT);
+        return (jint)CNA_RESULT_OUT_OF_MEMORY;
+    }
+    for (jsize index = 0; index < destination_size; ++index) {
+        destination_values[index] = (uint8_t)destination_elements[index];
+    }
+    uint64_t out_byte_count_value = 0;
+    CNA_Result result = cna.cnb_sound_effect_data_copy_samples((CNA_CnbSoundEffectDataHandle)sound, destination_values, (uint64_t)destination_size, &out_byte_count_value);
+    if (result == CNA_RESULT_SUCCESS) {
+        for (jsize index = 0; index < destination_size; ++index) {
+            destination_elements[index] = (jbyte)destination_values[index];
+        }
+    }
+    free(destination_values);
+    (*environment)->ReleaseByteArrayElements(
+        environment, destination, destination_elements, 0);
+    if (result == CNA_RESULT_SUCCESS || result == CNA_RESULT_BUFFER_TOO_SMALL) {
+        jlong out_byte_count_element = (jlong)out_byte_count_value;
+        (*environment)->SetLongArrayRegion(
+            environment, out_byte_count, 0, 1, &out_byte_count_element);
+    }
+    return (jint)result;
+}
+
+JNIEXPORT jint JNICALL
+Java_org_openeggbert_cna_internal_generated_NativeCnbRoutes_cnbSoundEffectDataCreate(
+    JNIEnv* environment, jclass declaring_class, jlongArray infoIntegral, jbyteArray samples, jlongArray out_sound)
+{
+    (void)environment;
+    (void)declaring_class;
+    CNA_CnbSoundEffectInfo info_value;
+    memset(&info_value, 0, sizeof info_value);
+    info_value.struct_size = (uint32_t)(sizeof info_value);
+    info_value.struct_version = CNA_CNB_SOUND_EFFECT_INFO_STRUCT_VERSION;
+    {
+        jlong infoIntegral_values[6];
+        (*environment)->GetLongArrayRegion(environment, infoIntegral, 0, 6, infoIntegral_values);
+        info_value.format = (CNA_CnbAudioFormat)infoIntegral_values[0];
+        info_value.sample_rate = (uint32_t)infoIntegral_values[1];
+        info_value.channels = (uint32_t)infoIntegral_values[2];
+        info_value.frame_count = (uint32_t)infoIntegral_values[3];
+        info_value.loop_start = (uint32_t)infoIntegral_values[4];
+        info_value.loop_length = (uint32_t)infoIntegral_values[5];
+    }
+    jsize samples_size = (*environment)->GetArrayLength(environment, samples);
+    jbyte* samples_elements = (*environment)->GetByteArrayElements(environment, samples, NULL);
+    if (samples_elements == NULL) {
+        return (jint)CNA_RESULT_OUT_OF_MEMORY;
+    }
+    uint8_t* samples_values = (uint8_t*)malloc(
+        ((size_t)samples_size + 1U) * sizeof(*samples_values));
+    if (samples_values == NULL) {
+        (*environment)->ReleaseByteArrayElements(
+            environment, samples, samples_elements, JNI_ABORT);
+        return (jint)CNA_RESULT_OUT_OF_MEMORY;
+    }
+    for (jsize index = 0; index < samples_size; ++index) {
+        samples_values[index] = (uint8_t)samples_elements[index];
+    }
+    CNA_CnbSoundEffectDataHandle out_sound_value = 0;
+    CNA_Result result = cna.cnb_sound_effect_data_create(&info_value, samples_values, (uint64_t)samples_size, &out_sound_value);
+    free(samples_values);
+    (*environment)->ReleaseByteArrayElements(
+        environment, samples, samples_elements, JNI_ABORT);
+    if (result == CNA_RESULT_SUCCESS || result == CNA_RESULT_BUFFER_TOO_SMALL) {
+        jlong out_sound_element = (jlong)out_sound_value;
+        (*environment)->SetLongArrayRegion(
+            environment, out_sound, 0, 1, &out_sound_element);
+    }
+    return (jint)result;
+}
+
+JNIEXPORT jint JNICALL
+Java_org_openeggbert_cna_internal_generated_NativeCnbRoutes_cnbSoundEffectDataDestroy(
+    JNIEnv* environment, jclass declaring_class, jlong sound)
+{
+    (void)environment;
+    (void)declaring_class;
+    CNA_Result result = cna.cnb_sound_effect_data_destroy((CNA_CnbSoundEffectDataHandle)sound);
+    return (jint)result;
+}
+
+JNIEXPORT jint JNICALL
+Java_org_openeggbert_cna_internal_generated_NativeCnbRoutes_cnbSoundEffectDataGetInfo(
+    JNIEnv* environment, jclass declaring_class, jlong sound, jlongArray out_infoIntegral)
+{
+    (void)environment;
+    (void)declaring_class;
+    CNA_CnbSoundEffectInfo out_info_value;
+    memset(&out_info_value, 0, sizeof out_info_value);
+    out_info_value.struct_size = (uint32_t)(sizeof out_info_value);
+    out_info_value.struct_version = CNA_CNB_SOUND_EFFECT_INFO_STRUCT_VERSION;
+    CNA_Result result = cna.cnb_sound_effect_data_get_info((CNA_CnbSoundEffectDataHandle)sound, &out_info_value);
+    if (result == CNA_RESULT_SUCCESS || result == CNA_RESULT_BUFFER_TOO_SMALL) {
+        jlong out_infoIntegral_values[] = {
+            (jlong)out_info_value.format,
+            (jlong)out_info_value.sample_rate,
+            (jlong)out_info_value.channels,
+            (jlong)out_info_value.frame_count,
+            (jlong)out_info_value.loop_start,
+            (jlong)out_info_value.loop_length
+        };
+        (*environment)->SetLongArrayRegion(environment, out_infoIntegral, 0,
+            (jsize)(sizeof out_infoIntegral_values / sizeof out_infoIntegral_values[0]),
+            out_infoIntegral_values);
+    }
     return (jint)result;
 }
 

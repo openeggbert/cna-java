@@ -4,6 +4,10 @@ import Microsoft.Xna.Framework.Game;
 import Microsoft.Xna.Framework.GameTime;
 import Microsoft.Xna.Framework.GraphicsDeviceManager;
 import Microsoft.Xna.Framework.Color;
+import Microsoft.Xna.Framework.Audio.AudioChannels;
+import Microsoft.Xna.Framework.Audio.SoundEffect;
+import Microsoft.Xna.Framework.Audio.SoundEffectInstance;
+import Microsoft.Xna.Framework.Audio.SoundState;
 import Microsoft.Xna.Framework.Graphics.SurfaceFormat;
 import Microsoft.Xna.Framework.Graphics.Texture2D;
 import org.junit.jupiter.api.Test;
@@ -11,6 +15,7 @@ import org.junit.jupiter.api.condition.EnabledIfEnvironmentVariable;
 
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.time.Duration;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertArrayEquals;
@@ -318,6 +323,173 @@ final class CnbTests {
                 throw new IllegalStateException(probe.failure);
             }
             assertTrue(probe.ran, "the probe must have run");
+        }
+    }
+
+
+    /**
+     * Sixteen signed 16-bit stereo frames, every one distinct, so a channel swap, a frame-size
+     * mistake or a truncation at either end changes the bytes that come back.
+     */
+    private static byte[] stereoFrames() {
+        byte[] samples = new byte[16 * 4];
+        for (int frame = 0; frame < 16; frame++) {
+            short left = (short) (frame * 1000 - 8000);
+            short right = (short) (-left / 2);
+            samples[frame * 4] = (byte) (left & 0xFF);
+            samples[frame * 4 + 1] = (byte) ((left >> 8) & 0xFF);
+            samples[frame * 4 + 2] = (byte) (right & 0xFF);
+            samples[frame * 4 + 3] = (byte) ((right >> 8) & 0xFF);
+        }
+        return samples;
+    }
+
+    @Test
+    void aCompiledSoundRoundTripsThroughItsOwnContainer() {
+        byte[] samples = stereoFrames();
+        byte[] file;
+        try (CnbSoundEffectData source = CnbSoundEffectData.ofPcm16(44100, 2, samples)) {
+            CnbSoundEffectInfo info = source.getInfo();
+            assertEquals(CnbAudioFormat.Pcm16, info.Format());
+            assertEquals(44100, info.SampleRate());
+            assertEquals(2, info.Channels());
+            assertEquals(16, info.FrameCount(), "sixty-four bytes is sixteen stereo frames");
+            assertEquals(0, info.LoopLength());
+            assertEquals(samples.length, info.getByteCount());
+            assertArrayEquals(samples, source.readSamples());
+            file = Cnb.encodeSoundEffect(source, "audio/sixteen-frames");
+        }
+
+        try (CnbDocument document = CnbDocument.parse(
+                     file, "sixteen-frames.cnb", CnbReadLimits.standard())) {
+            assertEquals(CnbAssetType.SOUND_EFFECT, document.getAssetType());
+            try (CnbSoundEffectData decoded = document.decodeSoundEffect()) {
+                assertEquals(new CnbSoundEffectInfo(CnbAudioFormat.Pcm16, 44100, 2, 16, 0, 0),
+                        decoded.getInfo());
+                // The bytes, not the shape: an encoder that dropped or reordered a frame would
+                // still report sixteen of them.
+                assertArrayEquals(samples, decoded.readSamples());
+            }
+        }
+    }
+
+    @Test
+    void aLoopRegionSurvivesTheContainer() {
+        byte[] samples = stereoFrames();
+        byte[] file;
+        try (CnbSoundEffectData source = CnbSoundEffectData.create(
+                     new CnbSoundEffectInfo(CnbAudioFormat.Pcm16, 22050, 2, 16, 4, 8), samples)) {
+            file = Cnb.encodeSoundEffect(source, "audio/looped");
+        }
+        try (CnbDocument document = CnbDocument.parse(
+                     file, "looped.cnb", CnbReadLimits.standard());
+             CnbSoundEffectData decoded = document.decodeSoundEffect()) {
+            CnbSoundEffectInfo info = decoded.getInfo();
+            assertEquals(4, info.LoopStart());
+            assertEquals(8, info.LoopLength());
+        }
+    }
+
+    @Test
+    void anImpossibleSoundIsRefusedByTheEncoderRatherThanWritten() {
+        byte[] samples = stereoFrames();
+        // The description says the sound is twice as long as its samples. The handle takes it --
+        // it stores a description -- and the encoder is where it has to fail, because that is the
+        // point at which a file someone else would read gets written.
+        try (CnbSoundEffectData wrong = CnbSoundEffectData.create(
+                     new CnbSoundEffectInfo(CnbAudioFormat.Pcm16, 44100, 2, 32, 0, 0), samples)) {
+            assertThrows(CnbFormatException.class,
+                    () -> Cnb.encodeSoundEffect(wrong, "audio/too-short"));
+        }
+        try (CnbSoundEffectData outside = CnbSoundEffectData.create(
+                     new CnbSoundEffectInfo(CnbAudioFormat.Pcm16, 44100, 2, 16, 12, 8), samples)) {
+            assertThrows(CnbFormatException.class,
+                    () -> Cnb.encodeSoundEffect(outside, "audio/loop-past-the-end"));
+        }
+    }
+
+    @Test
+    void theReservedAudioFormatsAreNamedButHaveNoCodec() {
+        assertTrue(CnbAudioFormat.Pcm16.hasCodec());
+        assertEquals(4, CnbAudioFormat.Pcm16.getFrameByteSize(2));
+        for (CnbAudioFormat format : CnbAudioFormat.values()) {
+            // CNA names every one of them, which is what makes a diagnostic about an unreadable
+            // file useful; naming is not implementing.
+            assertFalse(format.getName().isEmpty(), format + " has no name");
+            if (format != CnbAudioFormat.Pcm16) {
+                assertFalse(format.hasCodec(), format + " claims a v1 codec");
+                assertEquals(0, format.getFrameByteSize(1));
+            }
+        }
+        assertThrows(CnbFormatException.class,
+                () -> CnbAudioFormat.fromValue(CnbAudioFormat.values().length));
+    }
+
+    @Test
+    void aDecodedSoundBecomesAnXnaSoundEffect() {
+        try (SoundProbe probe = new SoundProbe()) {
+            probe.RunOneFrame();
+            if (probe.failure != null) {
+                if (probe.failure instanceof RuntimeException runtime) {
+                    throw runtime;
+                }
+                throw new IllegalStateException(probe.failure);
+            }
+            assertTrue(probe.ran, "the probe must have run");
+        }
+    }
+
+    /**
+     * The audio half of the slice, run inside a game because that is where XNA's audio lives.
+     *
+     * <p>A {@code SoundEffect} needs a live CNA game on this process -- the same lifetime rule
+     * XNA has -- so this cannot be an ordinary test the way the container half can. It also does
+     * not need audio <em>hardware</em>: the NULL backend this suite runs against still creates
+     * the resource and still reports its duration, which is what is asserted.
+     */
+    private static final class SoundProbe extends Game {
+
+        private boolean ran;
+        private Throwable failure;
+
+        @Override
+        protected void Update(GameTime gameTime) {
+            super.Update(gameTime);
+            if (ran) {
+                return;
+            }
+            ran = true;
+            try {
+                byte[] samples = stereoFrames();
+                byte[] file;
+                try (CnbSoundEffectData source = CnbSoundEffectData.create(
+                             new CnbSoundEffectInfo(CnbAudioFormat.Pcm16, 8000, 2, 16, 4, 8),
+                             samples)) {
+                    file = Cnb.encodeSoundEffect(source, "audio/probe");
+                }
+                try (CnbDocument document = CnbDocument.parse(
+                             file, "probe.cnb", CnbReadLimits.standard());
+                     CnbSoundEffectData decoded = document.decodeSoundEffect();
+                     SoundEffect effect = decoded.toSoundEffect()) {
+                    // Sixteen frames at 8 kHz is two milliseconds, computed by XNA's own duration
+                    // rule from the buffer this file carried.
+                    assertEquals(Duration.ofMillis(2), effect.getDuration());
+                    try (SoundEffectInstance instance = effect.CreateInstance()) {
+                        assertEquals(SoundState.Stopped, instance.getState());
+                    }
+                }
+
+                // A format XNA cannot play must say so rather than produce silence. The v1
+                // container has no Vorbis codec, so the refusal is checked on the description
+                // itself, which is the object a caller would hold.
+                try (CnbSoundEffectData vorbis = CnbSoundEffectData.create(
+                             new CnbSoundEffectInfo(CnbAudioFormat.Vorbis, 44100, 2, 16, 0, 0),
+                             samples)) {
+                    assertThrows(ContentNotSupportedException.class, vorbis::toSoundEffect);
+                }
+            } catch (Throwable exception) {
+                failure = exception;
+            }
         }
     }
 

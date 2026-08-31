@@ -76,6 +76,7 @@
     LOAD(cnb_checked_multiply, "cna_cnb_checked_multiply");
     LOAD(cnb_chunk_entry_is_mandatory, "cna_cnb_chunk_entry_is_mandatory");
     LOAD(cnb_copy_asset_type_name, "cna_cnb_copy_asset_type_name");
+    LOAD(cnb_copy_audio_format_name, "cna_cnb_copy_audio_format_name");
     LOAD(cnb_copy_chunk_id_string, "cna_cnb_copy_chunk_id_string");
     LOAD(cnb_copy_compressed, "cna_cnb_copy_compressed");
     LOAD(cnb_copy_compression_name, "cna_cnb_copy_compression_name");
@@ -87,6 +88,7 @@
     LOAD(cnb_crc32c_continue, "cna_cnb_crc32c_continue");
     LOAD(cnb_crc32c_portable, "cna_cnb_crc32c_portable");
     LOAD(cnb_crc32c_uses_hardware, "cna_cnb_crc32c_uses_hardware");
+    LOAD(cnb_decode_sound_effect, "cna_cnb_decode_sound_effect");
     LOAD(cnb_decode_texture2d, "cna_cnb_decode_texture2d");
     LOAD(cnb_document_copy_chunk_data, "cna_cnb_document_copy_chunk_data");
     LOAD(cnb_document_copy_external_reference_name, "cna_cnb_document_copy_external_reference_name");
@@ -117,8 +119,10 @@
     LOAD(cnb_document_require_asset, "cna_cnb_document_require_asset");
     LOAD(cnb_document_require_mandatory_chunks_understood, "cna_cnb_document_require_mandatory_chunks_understood");
     LOAD(cnb_document_require_single, "cna_cnb_document_require_single");
+    LOAD(cnb_encode_sound_effect, "cna_cnb_encode_sound_effect");
     LOAD(cnb_encode_texture2d, "cna_cnb_encode_texture2d");
     LOAD(cnb_get_asset_type_name_size, "cna_cnb_get_asset_type_name_size");
+    LOAD(cnb_get_audio_format_name_size, "cna_cnb_get_audio_format_name_size");
     LOAD(cnb_get_chunk_id_string_size, "cna_cnb_get_chunk_id_string_size");
     LOAD(cnb_get_compressed_byte_count, "cna_cnb_get_compressed_byte_count");
     LOAD(cnb_get_compression_name_size, "cna_cnb_get_compression_name_size");
@@ -155,6 +159,10 @@
     LOAD(cnb_reader_read_u8, "cna_cnb_reader_read_u8");
     LOAD(cnb_reader_require_exhausted, "cna_cnb_reader_require_exhausted");
     LOAD(cnb_reader_skip, "cna_cnb_reader_skip");
+    LOAD(cnb_sound_effect_data_copy_samples, "cna_cnb_sound_effect_data_copy_samples");
+    LOAD(cnb_sound_effect_data_create, "cna_cnb_sound_effect_data_create");
+    LOAD(cnb_sound_effect_data_destroy, "cna_cnb_sound_effect_data_destroy");
+    LOAD(cnb_sound_effect_data_get_info, "cna_cnb_sound_effect_data_get_info");
     LOAD(cnb_texture_data_add_representation, "cna_cnb_texture_data_add_representation");
     LOAD(cnb_texture_data_copy_level, "cna_cnb_texture_data_copy_level");
     LOAD(cnb_texture_data_create, "cna_cnb_texture_data_create");

@@ -51,6 +51,11 @@ public final class NativeCnbRoutes {
     public static native int cnbCopyAssetTypeName(int assetTypeId, byte[] destination, long[] outByteCount);
 
     /**
+     * cna_cnb_copy_audio_format_name (cnb.h).
+     */
+    public static native int cnbCopyAudioFormatName(int format, byte[] destination, long[] outByteCount);
+
+    /**
      * cna_cnb_copy_chunk_id_string (cnb.h).
      */
     public static native int cnbCopyChunkIdString(int id, byte[] destination, long[] outByteCount);
@@ -104,6 +109,11 @@ public final class NativeCnbRoutes {
      * cna_cnb_crc32c_uses_hardware (cnb.h).
      */
     public static native int cnbCrc32cUsesHardware(boolean[] outUsesHardware);
+
+    /**
+     * cna_cnb_decode_sound_effect (cnb.h).
+     */
+    public static native int cnbDecodeSoundEffect(long document, long[] outSound);
 
     /**
      * cna_cnb_decode_texture2d (cnb.h).
@@ -321,6 +331,11 @@ public final class NativeCnbRoutes {
     public static native int cnbDocumentRequireSingle(long document, int type, long[] outIndex);
 
     /**
+     * cna_cnb_encode_sound_effect (cnb.h).
+     */
+    public static native int cnbEncodeSoundEffect(long sound, byte[] contentName, byte[] destination, long[] outByteCount);
+
+    /**
      * cna_cnb_encode_texture2d (cnb.h).
      */
     public static native int cnbEncodeTexture2d(long texture, byte[] contentName, byte[] destination, long[] outByteCount);
@@ -329,6 +344,11 @@ public final class NativeCnbRoutes {
      * cna_cnb_get_asset_type_name_size (cnb.h).
      */
     public static native int cnbGetAssetTypeNameSize(int assetTypeId, long[] outByteCount);
+
+    /**
+     * cna_cnb_get_audio_format_name_size (cnb.h).
+     */
+    public static native int cnbGetAudioFormatNameSize(int format, long[] outByteCount);
 
     /**
      * cna_cnb_get_chunk_id_string_size (cnb.h).
@@ -531,6 +551,46 @@ public final class NativeCnbRoutes {
      * cna_cnb_reader_skip (cnb.h).
      */
     public static native int cnbReaderSkip(long reader, long byteCount);
+
+    /**
+     * cna_cnb_sound_effect_data_copy_samples (cnb.h).
+     */
+    public static native int cnbSoundEffectDataCopySamples(long sound, byte[] destination, long[] outByteCount);
+
+    /**
+     * cna_cnb_sound_effect_data_create (cnb.h).
+     *
+     * <p>infoIntegral carries CNA_CnbSoundEffectInfo in this order:
+     * <ol start="0">
+     *   <li>{@code format} (CNA_CnbAudioFormat)</li>
+     *   <li>{@code sample_rate} (uint32_t)</li>
+     *   <li>{@code channels} (uint32_t)</li>
+     *   <li>{@code frame_count} (uint32_t)</li>
+     *   <li>{@code loop_start} (uint32_t)</li>
+     *   <li>{@code loop_length} (uint32_t)</li>
+     * </ol>
+     */
+    public static native int cnbSoundEffectDataCreate(long[] infoIntegral, byte[] samples, long[] outSound);
+
+    /**
+     * cna_cnb_sound_effect_data_destroy (cnb.h).
+     */
+    public static native int cnbSoundEffectDataDestroy(long sound);
+
+    /**
+     * cna_cnb_sound_effect_data_get_info (cnb.h).
+     *
+     * <p>outInfoIntegral carries CNA_CnbSoundEffectInfo in this order:
+     * <ol start="0">
+     *   <li>{@code format} (CNA_CnbAudioFormat)</li>
+     *   <li>{@code sample_rate} (uint32_t)</li>
+     *   <li>{@code channels} (uint32_t)</li>
+     *   <li>{@code frame_count} (uint32_t)</li>
+     *   <li>{@code loop_start} (uint32_t)</li>
+     *   <li>{@code loop_length} (uint32_t)</li>
+     * </ol>
+     */
+    public static native int cnbSoundEffectDataGetInfo(long sound, long[] outInfoIntegral);
 
     /**
      * cna_cnb_texture_data_add_representation (cnb.h).

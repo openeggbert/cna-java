@@ -370,6 +370,20 @@ public final class CnbDocument implements AutoCloseable {
         return new CnbTextureData(texture[0]);
     }
 
+    /**
+     * Decodes the whole file as a compiled sound.
+     *
+     * @return the sound data, which the caller closes
+     * @throws CnbFormatException when the file is not a SoundEffect asset, or its declared counts
+     *         disagree with its payload
+     */
+    public CnbSoundEffectData decodeSoundEffect() {
+        long[] sound = new long[1];
+        CnbExtension.check("CnbDocument.decodeSoundEffect",
+                NativeCnbRoutes.cnbDecodeSoundEffect(open(), sound));
+        return new CnbSoundEffectData(sound[0]);
+    }
+
     /** Releases the document. Closing twice is a no-op. */
     @Override
     public void close() {

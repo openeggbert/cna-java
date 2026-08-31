@@ -14,7 +14,7 @@ final class CnbExtension {
     private static final int RESULT_NOT_SUPPORTED = 6;
     private static final int RESULT_OVERFLOW = 10;
     private static final int RESULT_ENCODING = 11;
-    private static final int RESULT_BUFFER_TOO_SMALL = 14;
+    static final int RESULT_BUFFER_TOO_SMALL = 14;
 
     private CnbExtension() {
     }

@@ -2338,6 +2338,10 @@
         "symbol": "cna_cnb_copy_asset_type_name"
       },
       {
+        "java": "cnbCopyAudioFormatName",
+        "symbol": "cna_cnb_copy_audio_format_name"
+      },
+      {
         "java": "cnbCopyChunkIdString",
         "symbol": "cna_cnb_copy_chunk_id_string"
       },
@@ -2380,6 +2384,10 @@
       {
         "java": "cnbCrc32cUsesHardware",
         "symbol": "cna_cnb_crc32c_uses_hardware"
+      },
+      {
+        "java": "cnbDecodeSoundEffect",
+        "symbol": "cna_cnb_decode_sound_effect"
       },
       {
         "java": "cnbDecodeTexture2d",
@@ -2502,12 +2510,20 @@
         "symbol": "cna_cnb_document_require_single"
       },
       {
+        "java": "cnbEncodeSoundEffect",
+        "symbol": "cna_cnb_encode_sound_effect"
+      },
+      {
         "java": "cnbEncodeTexture2d",
         "symbol": "cna_cnb_encode_texture2d"
       },
       {
         "java": "cnbGetAssetTypeNameSize",
         "symbol": "cna_cnb_get_asset_type_name_size"
+      },
+      {
+        "java": "cnbGetAudioFormatNameSize",
+        "symbol": "cna_cnb_get_audio_format_name_size"
       },
       {
         "java": "cnbGetChunkIdStringSize",
@@ -2652,6 +2668,22 @@
       {
         "java": "cnbReaderSkip",
         "symbol": "cna_cnb_reader_skip"
+      },
+      {
+        "java": "cnbSoundEffectDataCopySamples",
+        "symbol": "cna_cnb_sound_effect_data_copy_samples"
+      },
+      {
+        "java": "cnbSoundEffectDataCreate",
+        "symbol": "cna_cnb_sound_effect_data_create"
+      },
+      {
+        "java": "cnbSoundEffectDataDestroy",
+        "symbol": "cna_cnb_sound_effect_data_destroy"
+      },
+      {
+        "java": "cnbSoundEffectDataGetInfo",
+        "symbol": "cna_cnb_sound_effect_data_get_info"
       },
       {
         "java": "cnbTextureDataAddRepresentation",

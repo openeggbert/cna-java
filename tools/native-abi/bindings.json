@@ -1699,6 +1699,18 @@
       ]
     },
     {
+      "name": "cna_cnb_copy_audio_format_name",
+      "header": "cnb.h",
+      "ownership": "no handle; caller buffer",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_CnbAudioFormat",
+        "char*",
+        "uint64_t",
+        "uint64_t*"
+      ]
+    },
+    {
       "name": "cna_cnb_copy_chunk_id_string",
       "header": "cnb.h",
       "ownership": "no handle; caller buffer",
@@ -1829,6 +1841,16 @@
       "returnType": "CNA_Result",
       "parameters": [
         "CNA_Bool*"
+      ]
+    },
+    {
+      "name": "cna_cnb_decode_sound_effect",
+      "header": "cnb.h",
+      "ownership": "borrows document; returns an owned sound-data handle",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_CnbDocumentHandle",
+        "CNA_CnbSoundEffectDataHandle*"
       ]
     },
     {
@@ -2161,6 +2183,19 @@
       ]
     },
     {
+      "name": "cna_cnb_encode_sound_effect",
+      "header": "cnb.h",
+      "ownership": "borrows sound data; caller buffer",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_CnbSoundEffectDataHandle",
+        "CNA_StringView",
+        "uint8_t*",
+        "uint64_t",
+        "uint64_t*"
+      ]
+    },
+    {
       "name": "cna_cnb_encode_texture2d",
       "header": "cnb.h",
       "ownership": "borrows texture data; caller buffer",
@@ -2180,6 +2215,16 @@
       "returnType": "CNA_Result",
       "parameters": [
         "uint32_t",
+        "uint64_t*"
+      ]
+    },
+    {
+      "name": "cna_cnb_get_audio_format_name_size",
+      "header": "cnb.h",
+      "ownership": "no handle; caller integer output",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_CnbAudioFormat",
         "uint64_t*"
       ]
     },
@@ -2560,6 +2605,49 @@
       "parameters": [
         "CNA_CnbReaderHandle",
         "uint64_t"
+      ]
+    },
+    {
+      "name": "cna_cnb_sound_effect_data_copy_samples",
+      "header": "cnb.h",
+      "ownership": "borrows sound data; caller buffer",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_CnbSoundEffectDataHandle",
+        "uint8_t*",
+        "uint64_t",
+        "uint64_t*"
+      ]
+    },
+    {
+      "name": "cna_cnb_sound_effect_data_create",
+      "header": "cnb.h",
+      "ownership": "no handle; returns an owned sound-data handle over copied bytes",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "const CNA_CnbSoundEffectInfo*",
+        "const uint8_t*",
+        "uint64_t",
+        "CNA_CnbSoundEffectDataHandle*"
+      ]
+    },
+    {
+      "name": "cna_cnb_sound_effect_data_destroy",
+      "header": "cnb.h",
+      "ownership": "releases the owned sound-data handle",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_CnbSoundEffectDataHandle"
+      ]
+    },
+    {
+      "name": "cna_cnb_sound_effect_data_get_info",
+      "header": "cnb.h",
+      "ownership": "borrows sound data; caller structure output",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_CnbSoundEffectDataHandle",
+        "CNA_CnbSoundEffectInfo*"
       ]
     },
     {

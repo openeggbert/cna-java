@@ -76,6 +76,7 @@
     CNA_JNI_ROUTE(cna_cnb_checked_multiply) cnb_checked_multiply;
     CNA_JNI_ROUTE(cna_cnb_chunk_entry_is_mandatory) cnb_chunk_entry_is_mandatory;
     CNA_JNI_ROUTE(cna_cnb_copy_asset_type_name) cnb_copy_asset_type_name;
+    CNA_JNI_ROUTE(cna_cnb_copy_audio_format_name) cnb_copy_audio_format_name;
     CNA_JNI_ROUTE(cna_cnb_copy_chunk_id_string) cnb_copy_chunk_id_string;
     CNA_JNI_ROUTE(cna_cnb_copy_compressed) cnb_copy_compressed;
     CNA_JNI_ROUTE(cna_cnb_copy_compression_name) cnb_copy_compression_name;
@@ -87,6 +88,7 @@
     CNA_JNI_ROUTE(cna_cnb_crc32c_continue) cnb_crc32c_continue;
     CNA_JNI_ROUTE(cna_cnb_crc32c_portable) cnb_crc32c_portable;
     CNA_JNI_ROUTE(cna_cnb_crc32c_uses_hardware) cnb_crc32c_uses_hardware;
+    CNA_JNI_ROUTE(cna_cnb_decode_sound_effect) cnb_decode_sound_effect;
     CNA_JNI_ROUTE(cna_cnb_decode_texture2d) cnb_decode_texture2d;
     CNA_JNI_ROUTE(cna_cnb_document_copy_chunk_data) cnb_document_copy_chunk_data;
     CNA_JNI_ROUTE(cna_cnb_document_copy_external_reference_name) cnb_document_copy_external_reference_name;
@@ -117,8 +119,10 @@
     CNA_JNI_ROUTE(cna_cnb_document_require_asset) cnb_document_require_asset;
     CNA_JNI_ROUTE(cna_cnb_document_require_mandatory_chunks_understood) cnb_document_require_mandatory_chunks_understood;
     CNA_JNI_ROUTE(cna_cnb_document_require_single) cnb_document_require_single;
+    CNA_JNI_ROUTE(cna_cnb_encode_sound_effect) cnb_encode_sound_effect;
     CNA_JNI_ROUTE(cna_cnb_encode_texture2d) cnb_encode_texture2d;
     CNA_JNI_ROUTE(cna_cnb_get_asset_type_name_size) cnb_get_asset_type_name_size;
+    CNA_JNI_ROUTE(cna_cnb_get_audio_format_name_size) cnb_get_audio_format_name_size;
     CNA_JNI_ROUTE(cna_cnb_get_chunk_id_string_size) cnb_get_chunk_id_string_size;
     CNA_JNI_ROUTE(cna_cnb_get_compressed_byte_count) cnb_get_compressed_byte_count;
     CNA_JNI_ROUTE(cna_cnb_get_compression_name_size) cnb_get_compression_name_size;
@@ -155,6 +159,10 @@
     CNA_JNI_ROUTE(cna_cnb_reader_read_u8) cnb_reader_read_u8;
     CNA_JNI_ROUTE(cna_cnb_reader_require_exhausted) cnb_reader_require_exhausted;
     CNA_JNI_ROUTE(cna_cnb_reader_skip) cnb_reader_skip;
+    CNA_JNI_ROUTE(cna_cnb_sound_effect_data_copy_samples) cnb_sound_effect_data_copy_samples;
+    CNA_JNI_ROUTE(cna_cnb_sound_effect_data_create) cnb_sound_effect_data_create;
+    CNA_JNI_ROUTE(cna_cnb_sound_effect_data_destroy) cnb_sound_effect_data_destroy;
+    CNA_JNI_ROUTE(cna_cnb_sound_effect_data_get_info) cnb_sound_effect_data_get_info;
     CNA_JNI_ROUTE(cna_cnb_texture_data_add_representation) cnb_texture_data_add_representation;
     CNA_JNI_ROUTE(cna_cnb_texture_data_copy_level) cnb_texture_data_copy_level;
     CNA_JNI_ROUTE(cna_cnb_texture_data_create) cnb_texture_data_create;
