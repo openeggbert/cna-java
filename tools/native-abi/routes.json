@@ -3471,6 +3471,10 @@
         "symbol": "cna_area_light_brdf_table_get_size"
       },
       {
+        "java": "areaLightBrdfTableGetTexture",
+        "symbol": "cna_area_light_brdf_table_get_texture"
+      },
+      {
         "java": "areaLightExtInit",
         "symbol": "cna_area_light_ext_init"
       },

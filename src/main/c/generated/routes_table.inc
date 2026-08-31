@@ -45,6 +45,7 @@
     CNA_JNI_ROUTE(cna_area_light_brdf_table_get_generation_milliseconds) area_light_brdf_table_get_generation_milliseconds;
     CNA_JNI_ROUTE(cna_area_light_brdf_table_get_sample_count) area_light_brdf_table_get_sample_count;
     CNA_JNI_ROUTE(cna_area_light_brdf_table_get_size) area_light_brdf_table_get_size;
+    CNA_JNI_ROUTE(cna_area_light_brdf_table_get_texture) area_light_brdf_table_get_texture;
     CNA_JNI_ROUTE(cna_area_light_ext_init) area_light_ext_init;
     CNA_JNI_ROUTE(cna_area_light_ext_is_valid) area_light_ext_is_valid;
     CNA_JNI_ROUTE(cna_area_light_shading_contribution) area_light_shading_contribution;

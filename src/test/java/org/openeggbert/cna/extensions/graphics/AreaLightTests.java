@@ -7,6 +7,7 @@ import org.junit.jupiter.api.condition.EnabledIfEnvironmentVariable;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotSame;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotEquals;
 import static org.junit.jupiter.api.Assertions.assertNull;
@@ -246,7 +247,39 @@ final class AreaLightTests {
             table.close();
             assertThrows(IllegalStateException.class, effect::getMetallic);
             assertThrows(IllegalStateException.class, table::getSize);
+            assertThrows(IllegalStateException.class, table::getTexture);
             assertThrows(NullPointerException.class, () -> ClusteredForwardEffect.create(null));
+        });
+    }
+
+    @Test
+    void theTableHandsOutTheTextureItsShaderSamples() {
+        GameProbe.run(probe -> {
+            try (AreaLightBrdfTable table = AreaLightBrdfTable.create(probe.device(), 16, 8)) {
+                Microsoft.Xna.Framework.Graphics.Texture2D texture = table.getTexture();
+                if (texture == null) {
+                    // The header allows it: a renderer that cannot store the table answers with
+                    // nothing. Stated rather than asserted around, because a game must branch on
+                    // it before it spends a shader variant on area lights.
+                    return;
+                }
+                // The texture is the table: its edges are the size the table was built at, which
+                // is what the shader's lookup code indexes by.
+                assertEquals(table.getSize(), texture.getWidth(), "the table's own edge length");
+                assertEquals(table.getSize(), texture.getHeight());
+
+                // A fresh handle each call, each keeping the table alive, each to be disposed --
+                // so two asks are two objects over one texture, and disposing one leaves the
+                // other usable. A facade that released the table's texture would fail here.
+                Microsoft.Xna.Framework.Graphics.Texture2D second = table.getTexture();
+                assertNotSame(texture, second, "each ask is its own handle");
+                texture.Dispose();
+                assertEquals(table.getSize(), second.getWidth(),
+                        "disposing one handle left the texture alone");
+                assertEquals(table.getSize(), table.getSize(),
+                        "and left the table alone too");
+                second.Dispose();
+            }
         });
     }
 }

@@ -436,3 +436,40 @@ without it -- `add_pass` borrows, and the caller closing its own passes is an or
 ask -- so binding a method that quietly makes shutdown impossible would be worse than the absence.
 The Java suite could only ever have seen this as a teardown failure three tests later, which is why
 it was worth asking in C.
+
+## lent_handles.c
+
+On what terms does the engine layer lend the handles it calls "borrowed"?
+
+A dozen routes hand back an effect or a texture that belongs to something else, and their
+documentation divides into two shapes. Some say exactly what the borrow is worth -- *"it keeps the
+table alive while it exists, and releasing it releases only the handle"* -- and some say only
+"borrowed from the map", with no release route and nothing about the lender's lifetime. Three
+questions decide whether the second shape can be projected at all, and none can be read off the
+declaration. Its output on ABI 0.21.0:
+
+```text
+caster effect              0  invalid, stable across calls
+prepass effect             0  invalid, stable across calls
+brdf texture               0  valid, fresh each call
+destroy table while lent   0
+release brdf texture       0
+destroy table              2
+skybox environment         0  valid, fresh each call
+destroy skybox while lent  0
+release environment        0
+game destroy               0
+```
+
+Two answers, and the first corrected a reading of the header rather than the header itself. "It
+keeps the table alive while it exists" is a **retaining** borrow, not a blocking one: destroying
+the table while a texture handle is out succeeds, the handle stays valid because it retains the
+table, and releasing it afterwards succeeds too. That is safe to project, and
+`AreaLightBrdfTable.getTexture` does -- a fresh facade per call, each disposed by its caller. The
+skybox's environment behaves identically, and is *not* projected only because `Skybox` already
+answers that question from the reference a game gave it, for nothing.
+
+The caster and prepass effects come back **invalid** here. The header allows it -- *"or
+`CNA_INVALID_HANDLE` when unsupported"* -- and this renderer compiles no shaders, so there is no
+effect to lend. There is nothing to project and nothing a test could say beyond the absence, so the
+group stays unbound with that measurement as the reason.

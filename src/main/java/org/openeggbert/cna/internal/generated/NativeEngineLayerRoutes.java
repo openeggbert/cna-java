@@ -149,6 +149,11 @@ public final class NativeEngineLayerRoutes {
     public static native int areaLightBrdfTableGetSize(long table, int[] outSize);
 
     /**
+     * cna_area_light_brdf_table_get_texture (engine_layer.h).
+     */
+    public static native int areaLightBrdfTableGetTexture(long table, long[] outTexture);
+
+    /**
      * cna_area_light_ext_init (engine_layer.h).
      *
      * <p>outLightBytes carries CNA_AreaLightEXT in this order:

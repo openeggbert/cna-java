@@ -1,6 +1,7 @@
 package org.openeggbert.cna.extensions.graphics;
 
 import Microsoft.Xna.Framework.Graphics.GraphicsDevice;
+import Microsoft.Xna.Framework.Graphics.Texture2D;
 import org.openeggbert.cna.internal.NativeBindings;
 import org.openeggbert.cna.internal.generated.NativeEngineLayerRoutes;
 
@@ -33,7 +34,12 @@ public final class AreaLightBrdfTable implements AutoCloseable {
     private final long handle;
     private boolean closed;
 
-    private AreaLightBrdfTable(long handle) {
+    // Kept because the table's texture is adopted onto it: a facade over a native texture needs
+    // the device it belongs to, and the table's own creator is the only thing that knows it.
+    private final GraphicsDevice graphicsDevice;
+
+    private AreaLightBrdfTable(long handle, GraphicsDevice device) {
+        this.graphicsDevice = device;
         this.handle = handle;
     }
 
@@ -51,7 +57,7 @@ public final class AreaLightBrdfTable implements AutoCloseable {
         GraphicsExtension.check("AreaLightBrdfTable.create",
                 NativeEngineLayerRoutes.areaLightBrdfTableCreate(
                         NativeBindings.nativeGraphicsDeviceValue(graphicsDevice), table));
-        return new AreaLightBrdfTable(table[0]);
+        return new AreaLightBrdfTable(table[0], graphicsDevice);
     }
 
     /**
@@ -76,7 +82,7 @@ public final class AreaLightBrdfTable implements AutoCloseable {
                 NativeEngineLayerRoutes.areaLightBrdfTableCreateWithSize(
                         NativeBindings.nativeGraphicsDeviceValue(graphicsDevice), size,
                         sampleCount, table));
-        return new AreaLightBrdfTable(table[0]);
+        return new AreaLightBrdfTable(table[0], graphicsDevice);
     }
 
     /**
@@ -118,6 +124,28 @@ public final class AreaLightBrdfTable implements AutoCloseable {
         GraphicsExtension.check("AreaLightBrdfTable.getLookupGlsl",
                 NativeEngineLayerRoutes.areaLightBrdfTableCopyLookupGlsl(destination, bytes));
         return new String(destination, 0, Math.toIntExact(bytes[0]), StandardCharsets.UTF_8);
+    }
+
+    /**
+     * Returns the table a shader samples.
+     *
+     * <p>The whole reason the table exists: {@link #getLookupGlsl()} is the shader code and this
+     * is the texture that code reads. Without it the table computes something no draw can reach.
+     *
+     * <p><strong>A fresh facade on every call, and each one must be disposed.</strong> CNA hands
+     * back a new handle each time -- measured, in {@code tools/native-abi/probes/lent_handles.c}
+     * -- and each one keeps the table alive while it exists. Disposing the returned texture
+     * releases the handle and not the table's texture, so a game that asks twice has two objects
+     * to dispose and one texture underneath.
+     *
+     * @return the texture, or {@code null} when the renderer could not store one
+     */
+    public Texture2D getTexture() {
+        long[] texture = new long[1];
+        GraphicsExtension.check("AreaLightBrdfTable.getTexture",
+                NativeEngineLayerRoutes.areaLightBrdfTableGetTexture(open(), texture));
+        return texture[0] == 0L ? null
+                : NativeBindings.adoptTexture2D(graphicsDevice, texture[0]);
     }
 
     /** @return the table's edge length in texels */

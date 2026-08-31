@@ -45,6 +45,7 @@
     LOAD(area_light_brdf_table_get_generation_milliseconds, "cna_area_light_brdf_table_get_generation_milliseconds");
     LOAD(area_light_brdf_table_get_sample_count, "cna_area_light_brdf_table_get_sample_count");
     LOAD(area_light_brdf_table_get_size, "cna_area_light_brdf_table_get_size");
+    LOAD(area_light_brdf_table_get_texture, "cna_area_light_brdf_table_get_texture");
     LOAD(area_light_ext_init, "cna_area_light_ext_init");
     LOAD(area_light_ext_is_valid, "cna_area_light_ext_is_valid");
     LOAD(area_light_shading_contribution, "cna_area_light_shading_contribution");

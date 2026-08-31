@@ -363,6 +363,22 @@ Java_org_openeggbert_cna_internal_generated_NativeEngineLayerRoutes_areaLightBrd
 }
 
 JNIEXPORT jint JNICALL
+Java_org_openeggbert_cna_internal_generated_NativeEngineLayerRoutes_areaLightBrdfTableGetTexture(
+    JNIEnv* environment, jclass declaring_class, jlong table, jlongArray out_texture)
+{
+    (void)environment;
+    (void)declaring_class;
+    CNA_Handle out_texture_value = 0;
+    CNA_Result call_result = cna.area_light_brdf_table_get_texture((CNA_AreaLightBrdfTableHandle)table, &out_texture_value);
+    if (call_result == CNA_RESULT_SUCCESS || call_result == CNA_RESULT_BUFFER_TOO_SMALL) {
+        jlong out_texture_element = (jlong)out_texture_value;
+        (*environment)->SetLongArrayRegion(
+            environment, out_texture, 0, 1, &out_texture_element);
+    }
+    return (jint)call_result;
+}
+
+JNIEXPORT jint JNICALL
 Java_org_openeggbert_cna_internal_generated_NativeEngineLayerRoutes_areaLightExtInit(
     JNIEnv* environment, jclass declaring_class, jbyteArray out_lightBytes, jlongArray out_lightIntegral, jfloatArray out_lightFloating)
 {

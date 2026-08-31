@@ -832,6 +832,16 @@
       ]
     },
     {
+      "name": "cna_area_light_brdf_table_get_texture",
+      "header": "engine_layer.h",
+      "ownership": "borrows the table; the returned texture handle is fresh on every call and RETAINS the table while it exists, so releasing it with cna_texture2d_destroy releases only the handle",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_AreaLightBrdfTableHandle",
+        "CNA_Handle*"
+      ]
+    },
+    {
       "name": "cna_area_light_ext_init",
       "header": "engine_layer.h",
       "ownership": "no handle; the caller's light value",
