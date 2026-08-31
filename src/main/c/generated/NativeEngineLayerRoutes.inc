@@ -7353,6 +7353,701 @@ Java_org_openeggbert_cna_internal_generated_NativeEngineLayerRoutes_particleSyst
 }
 
 JNIEXPORT jint JNICALL
+Java_org_openeggbert_cna_internal_generated_NativeEngineLayerRoutes_pbrMaterialExtensionsCopyFrom(
+    JNIEnv* environment, jclass declaring_class, jlong destination, jlong source)
+{
+    (void)environment;
+    (void)declaring_class;
+    CNA_Result call_result = cna.pbr_material_extensions_copy_from((CNA_PbrMaterialExtensionsHandle)destination, (CNA_PbrMaterialExtensionsHandle)source);
+    return (jint)call_result;
+}
+
+JNIEXPORT jint JNICALL
+Java_org_openeggbert_cna_internal_generated_NativeEngineLayerRoutes_pbrMaterialExtensionsCopyToString(
+    JNIEnv* environment, jclass declaring_class, jlong extensions, jbyteArray destination, jlongArray out_bytes)
+{
+    (void)environment;
+    (void)declaring_class;
+    jsize destination_size = (*environment)->GetArrayLength(environment, destination);
+    jbyte* destination_bytes = (*environment)->GetByteArrayElements(environment, destination, NULL);
+    if (destination_bytes == NULL) {
+        return (jint)CNA_RESULT_OUT_OF_MEMORY;
+    }
+    uint64_t destination_written = 0;
+    CNA_Result call_result = cna.pbr_material_extensions_copy_to_string((CNA_PbrMaterialExtensionsHandle)extensions, (char*)destination_bytes, (uint64_t)destination_size, &destination_written);
+    (*environment)->ReleaseByteArrayElements(environment, destination, destination_bytes, 0);
+    if (call_result == CNA_RESULT_SUCCESS || call_result == CNA_RESULT_BUFFER_TOO_SMALL) {
+        jlong destination_element = (jlong)destination_written;
+        (*environment)->SetLongArrayRegion(
+            environment, out_bytes, 0, 1, &destination_element);
+    }
+    return (jint)call_result;
+}
+
+JNIEXPORT jint JNICALL
+Java_org_openeggbert_cna_internal_generated_NativeEngineLayerRoutes_pbrMaterialExtensionsCreate(
+    JNIEnv* environment, jclass declaring_class, jlongArray out_extensions)
+{
+    (void)environment;
+    (void)declaring_class;
+    CNA_PbrMaterialExtensionsHandle out_extensions_value = 0;
+    CNA_Result call_result = cna.pbr_material_extensions_create(&out_extensions_value);
+    if (call_result == CNA_RESULT_SUCCESS || call_result == CNA_RESULT_BUFFER_TOO_SMALL) {
+        jlong out_extensions_element = (jlong)out_extensions_value;
+        (*environment)->SetLongArrayRegion(
+            environment, out_extensions, 0, 1, &out_extensions_element);
+    }
+    return (jint)call_result;
+}
+
+JNIEXPORT jint JNICALL
+Java_org_openeggbert_cna_internal_generated_NativeEngineLayerRoutes_pbrMaterialExtensionsDestroy(
+    JNIEnv* environment, jclass declaring_class, jlong extensions)
+{
+    (void)environment;
+    (void)declaring_class;
+    CNA_Result call_result = cna.pbr_material_extensions_destroy((CNA_PbrMaterialExtensionsHandle)extensions);
+    return (jint)call_result;
+}
+
+JNIEXPORT jint JNICALL
+Java_org_openeggbert_cna_internal_generated_NativeEngineLayerRoutes_pbrMaterialExtensionsEquals(
+    JNIEnv* environment, jclass declaring_class, jlong first, jlong second, jbooleanArray out_equal)
+{
+    (void)environment;
+    (void)declaring_class;
+    CNA_Bool out_equal_value = 0;
+    CNA_Result call_result = cna.pbr_material_extensions_equals((CNA_PbrMaterialExtensionsHandle)first, (CNA_PbrMaterialExtensionsHandle)second, &out_equal_value);
+    if (call_result == CNA_RESULT_SUCCESS || call_result == CNA_RESULT_BUFFER_TOO_SMALL) {
+        jboolean out_equal_element = (jboolean)out_equal_value;
+        (*environment)->SetBooleanArrayRegion(
+            environment, out_equal, 0, 1, &out_equal_element);
+    }
+    return (jint)call_result;
+}
+
+JNIEXPORT jint JNICALL
+Java_org_openeggbert_cna_internal_generated_NativeEngineLayerRoutes_pbrMaterialExtensionsGetAttenuationColor(
+    JNIEnv* environment, jclass declaring_class, jlong extensions, jfloatArray out_valueFloating)
+{
+    (void)environment;
+    (void)declaring_class;
+    CNA_Vector3 out_value_value;
+    memset(&out_value_value, 0, sizeof out_value_value);
+    CNA_Result call_result = cna.pbr_material_extensions_get_attenuation_color((CNA_PbrMaterialExtensionsHandle)extensions, &out_value_value);
+    if (call_result == CNA_RESULT_SUCCESS || call_result == CNA_RESULT_BUFFER_TOO_SMALL) {
+        jfloat out_valueFloating_values[] = {
+            (jfloat)out_value_value.x,
+            (jfloat)out_value_value.y,
+            (jfloat)out_value_value.z
+        };
+        (*environment)->SetFloatArrayRegion(environment, out_valueFloating, 0,
+            (jsize)(sizeof out_valueFloating_values / sizeof out_valueFloating_values[0]),
+            out_valueFloating_values);
+    }
+    return (jint)call_result;
+}
+
+JNIEXPORT jint JNICALL
+Java_org_openeggbert_cna_internal_generated_NativeEngineLayerRoutes_pbrMaterialExtensionsGetAttenuationDistance(
+    JNIEnv* environment, jclass declaring_class, jlong extensions, jfloatArray out_value)
+{
+    (void)environment;
+    (void)declaring_class;
+    float out_value_value = 0;
+    CNA_Result call_result = cna.pbr_material_extensions_get_attenuation_distance((CNA_PbrMaterialExtensionsHandle)extensions, &out_value_value);
+    if (call_result == CNA_RESULT_SUCCESS || call_result == CNA_RESULT_BUFFER_TOO_SMALL) {
+        jfloat out_value_element = (jfloat)out_value_value;
+        (*environment)->SetFloatArrayRegion(
+            environment, out_value, 0, 1, &out_value_element);
+    }
+    return (jint)call_result;
+}
+
+JNIEXPORT jint JNICALL
+Java_org_openeggbert_cna_internal_generated_NativeEngineLayerRoutes_pbrMaterialExtensionsGetClearcoatFactor(
+    JNIEnv* environment, jclass declaring_class, jlong extensions, jfloatArray out_value)
+{
+    (void)environment;
+    (void)declaring_class;
+    float out_value_value = 0;
+    CNA_Result call_result = cna.pbr_material_extensions_get_clearcoat_factor((CNA_PbrMaterialExtensionsHandle)extensions, &out_value_value);
+    if (call_result == CNA_RESULT_SUCCESS || call_result == CNA_RESULT_BUFFER_TOO_SMALL) {
+        jfloat out_value_element = (jfloat)out_value_value;
+        (*environment)->SetFloatArrayRegion(
+            environment, out_value, 0, 1, &out_value_element);
+    }
+    return (jint)call_result;
+}
+
+JNIEXPORT jint JNICALL
+Java_org_openeggbert_cna_internal_generated_NativeEngineLayerRoutes_pbrMaterialExtensionsGetClearcoatNormalScale(
+    JNIEnv* environment, jclass declaring_class, jlong extensions, jfloatArray out_value)
+{
+    (void)environment;
+    (void)declaring_class;
+    float out_value_value = 0;
+    CNA_Result call_result = cna.pbr_material_extensions_get_clearcoat_normal_scale((CNA_PbrMaterialExtensionsHandle)extensions, &out_value_value);
+    if (call_result == CNA_RESULT_SUCCESS || call_result == CNA_RESULT_BUFFER_TOO_SMALL) {
+        jfloat out_value_element = (jfloat)out_value_value;
+        (*environment)->SetFloatArrayRegion(
+            environment, out_value, 0, 1, &out_value_element);
+    }
+    return (jint)call_result;
+}
+
+JNIEXPORT jint JNICALL
+Java_org_openeggbert_cna_internal_generated_NativeEngineLayerRoutes_pbrMaterialExtensionsGetClearcoatRoughness(
+    JNIEnv* environment, jclass declaring_class, jlong extensions, jfloatArray out_value)
+{
+    (void)environment;
+    (void)declaring_class;
+    float out_value_value = 0;
+    CNA_Result call_result = cna.pbr_material_extensions_get_clearcoat_roughness((CNA_PbrMaterialExtensionsHandle)extensions, &out_value_value);
+    if (call_result == CNA_RESULT_SUCCESS || call_result == CNA_RESULT_BUFFER_TOO_SMALL) {
+        jfloat out_value_element = (jfloat)out_value_value;
+        (*environment)->SetFloatArrayRegion(
+            environment, out_value, 0, 1, &out_value_element);
+    }
+    return (jint)call_result;
+}
+
+JNIEXPORT jint JNICALL
+Java_org_openeggbert_cna_internal_generated_NativeEngineLayerRoutes_pbrMaterialExtensionsGetHashCode(
+    JNIEnv* environment, jclass declaring_class, jlong extensions, jlongArray out_hash)
+{
+    (void)environment;
+    (void)declaring_class;
+    uint64_t out_hash_value = 0;
+    CNA_Result call_result = cna.pbr_material_extensions_get_hash_code((CNA_PbrMaterialExtensionsHandle)extensions, &out_hash_value);
+    if (call_result == CNA_RESULT_SUCCESS || call_result == CNA_RESULT_BUFFER_TOO_SMALL) {
+        jlong out_hash_element = (jlong)out_hash_value;
+        (*environment)->SetLongArrayRegion(
+            environment, out_hash, 0, 1, &out_hash_element);
+    }
+    return (jint)call_result;
+}
+
+JNIEXPORT jint JNICALL
+Java_org_openeggbert_cna_internal_generated_NativeEngineLayerRoutes_pbrMaterialExtensionsGetIridescenceFactor(
+    JNIEnv* environment, jclass declaring_class, jlong extensions, jfloatArray out_value)
+{
+    (void)environment;
+    (void)declaring_class;
+    float out_value_value = 0;
+    CNA_Result call_result = cna.pbr_material_extensions_get_iridescence_factor((CNA_PbrMaterialExtensionsHandle)extensions, &out_value_value);
+    if (call_result == CNA_RESULT_SUCCESS || call_result == CNA_RESULT_BUFFER_TOO_SMALL) {
+        jfloat out_value_element = (jfloat)out_value_value;
+        (*environment)->SetFloatArrayRegion(
+            environment, out_value, 0, 1, &out_value_element);
+    }
+    return (jint)call_result;
+}
+
+JNIEXPORT jint JNICALL
+Java_org_openeggbert_cna_internal_generated_NativeEngineLayerRoutes_pbrMaterialExtensionsGetIridescenceIor(
+    JNIEnv* environment, jclass declaring_class, jlong extensions, jfloatArray out_value)
+{
+    (void)environment;
+    (void)declaring_class;
+    float out_value_value = 0;
+    CNA_Result call_result = cna.pbr_material_extensions_get_iridescence_ior((CNA_PbrMaterialExtensionsHandle)extensions, &out_value_value);
+    if (call_result == CNA_RESULT_SUCCESS || call_result == CNA_RESULT_BUFFER_TOO_SMALL) {
+        jfloat out_value_element = (jfloat)out_value_value;
+        (*environment)->SetFloatArrayRegion(
+            environment, out_value, 0, 1, &out_value_element);
+    }
+    return (jint)call_result;
+}
+
+JNIEXPORT jint JNICALL
+Java_org_openeggbert_cna_internal_generated_NativeEngineLayerRoutes_pbrMaterialExtensionsGetIridescenceThicknessMaximum(
+    JNIEnv* environment, jclass declaring_class, jlong extensions, jfloatArray out_value)
+{
+    (void)environment;
+    (void)declaring_class;
+    float out_value_value = 0;
+    CNA_Result call_result = cna.pbr_material_extensions_get_iridescence_thickness_maximum((CNA_PbrMaterialExtensionsHandle)extensions, &out_value_value);
+    if (call_result == CNA_RESULT_SUCCESS || call_result == CNA_RESULT_BUFFER_TOO_SMALL) {
+        jfloat out_value_element = (jfloat)out_value_value;
+        (*environment)->SetFloatArrayRegion(
+            environment, out_value, 0, 1, &out_value_element);
+    }
+    return (jint)call_result;
+}
+
+JNIEXPORT jint JNICALL
+Java_org_openeggbert_cna_internal_generated_NativeEngineLayerRoutes_pbrMaterialExtensionsGetIridescenceThicknessMinimum(
+    JNIEnv* environment, jclass declaring_class, jlong extensions, jfloatArray out_value)
+{
+    (void)environment;
+    (void)declaring_class;
+    float out_value_value = 0;
+    CNA_Result call_result = cna.pbr_material_extensions_get_iridescence_thickness_minimum((CNA_PbrMaterialExtensionsHandle)extensions, &out_value_value);
+    if (call_result == CNA_RESULT_SUCCESS || call_result == CNA_RESULT_BUFFER_TOO_SMALL) {
+        jfloat out_value_element = (jfloat)out_value_value;
+        (*environment)->SetFloatArrayRegion(
+            environment, out_value, 0, 1, &out_value_element);
+    }
+    return (jint)call_result;
+}
+
+JNIEXPORT jint JNICALL
+Java_org_openeggbert_cna_internal_generated_NativeEngineLayerRoutes_pbrMaterialExtensionsGetSheenColorFactor(
+    JNIEnv* environment, jclass declaring_class, jlong extensions, jfloatArray out_valueFloating)
+{
+    (void)environment;
+    (void)declaring_class;
+    CNA_Vector3 out_value_value;
+    memset(&out_value_value, 0, sizeof out_value_value);
+    CNA_Result call_result = cna.pbr_material_extensions_get_sheen_color_factor((CNA_PbrMaterialExtensionsHandle)extensions, &out_value_value);
+    if (call_result == CNA_RESULT_SUCCESS || call_result == CNA_RESULT_BUFFER_TOO_SMALL) {
+        jfloat out_valueFloating_values[] = {
+            (jfloat)out_value_value.x,
+            (jfloat)out_value_value.y,
+            (jfloat)out_value_value.z
+        };
+        (*environment)->SetFloatArrayRegion(environment, out_valueFloating, 0,
+            (jsize)(sizeof out_valueFloating_values / sizeof out_valueFloating_values[0]),
+            out_valueFloating_values);
+    }
+    return (jint)call_result;
+}
+
+JNIEXPORT jint JNICALL
+Java_org_openeggbert_cna_internal_generated_NativeEngineLayerRoutes_pbrMaterialExtensionsGetSheenRoughness(
+    JNIEnv* environment, jclass declaring_class, jlong extensions, jfloatArray out_value)
+{
+    (void)environment;
+    (void)declaring_class;
+    float out_value_value = 0;
+    CNA_Result call_result = cna.pbr_material_extensions_get_sheen_roughness((CNA_PbrMaterialExtensionsHandle)extensions, &out_value_value);
+    if (call_result == CNA_RESULT_SUCCESS || call_result == CNA_RESULT_BUFFER_TOO_SMALL) {
+        jfloat out_value_element = (jfloat)out_value_value;
+        (*environment)->SetFloatArrayRegion(
+            environment, out_value, 0, 1, &out_value_element);
+    }
+    return (jint)call_result;
+}
+
+JNIEXPORT jint JNICALL
+Java_org_openeggbert_cna_internal_generated_NativeEngineLayerRoutes_pbrMaterialExtensionsGetSubsurfaceColor(
+    JNIEnv* environment, jclass declaring_class, jlong extensions, jfloatArray out_valueFloating)
+{
+    (void)environment;
+    (void)declaring_class;
+    CNA_Vector3 out_value_value;
+    memset(&out_value_value, 0, sizeof out_value_value);
+    CNA_Result call_result = cna.pbr_material_extensions_get_subsurface_color((CNA_PbrMaterialExtensionsHandle)extensions, &out_value_value);
+    if (call_result == CNA_RESULT_SUCCESS || call_result == CNA_RESULT_BUFFER_TOO_SMALL) {
+        jfloat out_valueFloating_values[] = {
+            (jfloat)out_value_value.x,
+            (jfloat)out_value_value.y,
+            (jfloat)out_value_value.z
+        };
+        (*environment)->SetFloatArrayRegion(environment, out_valueFloating, 0,
+            (jsize)(sizeof out_valueFloating_values / sizeof out_valueFloating_values[0]),
+            out_valueFloating_values);
+    }
+    return (jint)call_result;
+}
+
+JNIEXPORT jint JNICALL
+Java_org_openeggbert_cna_internal_generated_NativeEngineLayerRoutes_pbrMaterialExtensionsGetSubsurfaceWrap(
+    JNIEnv* environment, jclass declaring_class, jlong extensions, jfloatArray out_value)
+{
+    (void)environment;
+    (void)declaring_class;
+    float out_value_value = 0;
+    CNA_Result call_result = cna.pbr_material_extensions_get_subsurface_wrap((CNA_PbrMaterialExtensionsHandle)extensions, &out_value_value);
+    if (call_result == CNA_RESULT_SUCCESS || call_result == CNA_RESULT_BUFFER_TOO_SMALL) {
+        jfloat out_value_element = (jfloat)out_value_value;
+        (*environment)->SetFloatArrayRegion(
+            environment, out_value, 0, 1, &out_value_element);
+    }
+    return (jint)call_result;
+}
+
+JNIEXPORT jint JNICALL
+Java_org_openeggbert_cna_internal_generated_NativeEngineLayerRoutes_pbrMaterialExtensionsGetThicknessFactor(
+    JNIEnv* environment, jclass declaring_class, jlong extensions, jfloatArray out_value)
+{
+    (void)environment;
+    (void)declaring_class;
+    float out_value_value = 0;
+    CNA_Result call_result = cna.pbr_material_extensions_get_thickness_factor((CNA_PbrMaterialExtensionsHandle)extensions, &out_value_value);
+    if (call_result == CNA_RESULT_SUCCESS || call_result == CNA_RESULT_BUFFER_TOO_SMALL) {
+        jfloat out_value_element = (jfloat)out_value_value;
+        (*environment)->SetFloatArrayRegion(
+            environment, out_value, 0, 1, &out_value_element);
+    }
+    return (jint)call_result;
+}
+
+JNIEXPORT jint JNICALL
+Java_org_openeggbert_cna_internal_generated_NativeEngineLayerRoutes_pbrMaterialExtensionsGetTransmissionFactor(
+    JNIEnv* environment, jclass declaring_class, jlong extensions, jfloatArray out_value)
+{
+    (void)environment;
+    (void)declaring_class;
+    float out_value_value = 0;
+    CNA_Result call_result = cna.pbr_material_extensions_get_transmission_factor((CNA_PbrMaterialExtensionsHandle)extensions, &out_value_value);
+    if (call_result == CNA_RESULT_SUCCESS || call_result == CNA_RESULT_BUFFER_TOO_SMALL) {
+        jfloat out_value_element = (jfloat)out_value_value;
+        (*environment)->SetFloatArrayRegion(
+            environment, out_value, 0, 1, &out_value_element);
+    }
+    return (jint)call_result;
+}
+
+JNIEXPORT jint JNICALL
+Java_org_openeggbert_cna_internal_generated_NativeEngineLayerRoutes_pbrMaterialExtensionsIsIridescenceEnabled(
+    JNIEnv* environment, jclass declaring_class, jlong extensions, jbooleanArray out_value)
+{
+    (void)environment;
+    (void)declaring_class;
+    CNA_Bool out_value_value = 0;
+    CNA_Result call_result = cna.pbr_material_extensions_is_iridescence_enabled((CNA_PbrMaterialExtensionsHandle)extensions, &out_value_value);
+    if (call_result == CNA_RESULT_SUCCESS || call_result == CNA_RESULT_BUFFER_TOO_SMALL) {
+        jboolean out_value_element = (jboolean)out_value_value;
+        (*environment)->SetBooleanArrayRegion(
+            environment, out_value, 0, 1, &out_value_element);
+    }
+    return (jint)call_result;
+}
+
+JNIEXPORT jint JNICALL
+Java_org_openeggbert_cna_internal_generated_NativeEngineLayerRoutes_pbrMaterialExtensionsIsNeutral(
+    JNIEnv* environment, jclass declaring_class, jlong extensions, jbooleanArray out_value)
+{
+    (void)environment;
+    (void)declaring_class;
+    CNA_Bool out_value_value = 0;
+    CNA_Result call_result = cna.pbr_material_extensions_is_neutral((CNA_PbrMaterialExtensionsHandle)extensions, &out_value_value);
+    if (call_result == CNA_RESULT_SUCCESS || call_result == CNA_RESULT_BUFFER_TOO_SMALL) {
+        jboolean out_value_element = (jboolean)out_value_value;
+        (*environment)->SetBooleanArrayRegion(
+            environment, out_value, 0, 1, &out_value_element);
+    }
+    return (jint)call_result;
+}
+
+JNIEXPORT jint JNICALL
+Java_org_openeggbert_cna_internal_generated_NativeEngineLayerRoutes_pbrMaterialExtensionsIsSheenEnabled(
+    JNIEnv* environment, jclass declaring_class, jlong extensions, jbooleanArray out_value)
+{
+    (void)environment;
+    (void)declaring_class;
+    CNA_Bool out_value_value = 0;
+    CNA_Result call_result = cna.pbr_material_extensions_is_sheen_enabled((CNA_PbrMaterialExtensionsHandle)extensions, &out_value_value);
+    if (call_result == CNA_RESULT_SUCCESS || call_result == CNA_RESULT_BUFFER_TOO_SMALL) {
+        jboolean out_value_element = (jboolean)out_value_value;
+        (*environment)->SetBooleanArrayRegion(
+            environment, out_value, 0, 1, &out_value_element);
+    }
+    return (jint)call_result;
+}
+
+JNIEXPORT jint JNICALL
+Java_org_openeggbert_cna_internal_generated_NativeEngineLayerRoutes_pbrMaterialExtensionsIsSubsurfaceEnabled(
+    JNIEnv* environment, jclass declaring_class, jlong extensions, jbooleanArray out_value)
+{
+    (void)environment;
+    (void)declaring_class;
+    CNA_Bool out_value_value = 0;
+    CNA_Result call_result = cna.pbr_material_extensions_is_subsurface_enabled((CNA_PbrMaterialExtensionsHandle)extensions, &out_value_value);
+    if (call_result == CNA_RESULT_SUCCESS || call_result == CNA_RESULT_BUFFER_TOO_SMALL) {
+        jboolean out_value_element = (jboolean)out_value_value;
+        (*environment)->SetBooleanArrayRegion(
+            environment, out_value, 0, 1, &out_value_element);
+    }
+    return (jint)call_result;
+}
+
+JNIEXPORT jint JNICALL
+Java_org_openeggbert_cna_internal_generated_NativeEngineLayerRoutes_pbrMaterialExtensionsIsTransmissionEnabled(
+    JNIEnv* environment, jclass declaring_class, jlong extensions, jbooleanArray out_value)
+{
+    (void)environment;
+    (void)declaring_class;
+    CNA_Bool out_value_value = 0;
+    CNA_Result call_result = cna.pbr_material_extensions_is_transmission_enabled((CNA_PbrMaterialExtensionsHandle)extensions, &out_value_value);
+    if (call_result == CNA_RESULT_SUCCESS || call_result == CNA_RESULT_BUFFER_TOO_SMALL) {
+        jboolean out_value_element = (jboolean)out_value_value;
+        (*environment)->SetBooleanArrayRegion(
+            environment, out_value, 0, 1, &out_value_element);
+    }
+    return (jint)call_result;
+}
+
+JNIEXPORT jint JNICALL
+Java_org_openeggbert_cna_internal_generated_NativeEngineLayerRoutes_pbrMaterialExtensionsSetAttenuationColor(
+    JNIEnv* environment, jclass declaring_class, jlong extensions, jfloatArray valueFloating)
+{
+    (void)environment;
+    (void)declaring_class;
+    CNA_Vector3 value_value;
+    memset(&value_value, 0, sizeof value_value);
+    {
+        jfloat valueFloating_values[3];
+        (*environment)->GetFloatArrayRegion(environment, valueFloating, 0, 3, valueFloating_values);
+        value_value.x = (float)valueFloating_values[0];
+        value_value.y = (float)valueFloating_values[1];
+        value_value.z = (float)valueFloating_values[2];
+    }
+    CNA_Result call_result = cna.pbr_material_extensions_set_attenuation_color((CNA_PbrMaterialExtensionsHandle)extensions, &value_value);
+    return (jint)call_result;
+}
+
+JNIEXPORT jint JNICALL
+Java_org_openeggbert_cna_internal_generated_NativeEngineLayerRoutes_pbrMaterialExtensionsSetAttenuationDistance(
+    JNIEnv* environment, jclass declaring_class, jlong extensions, jfloat value)
+{
+    (void)environment;
+    (void)declaring_class;
+    CNA_Result call_result = cna.pbr_material_extensions_set_attenuation_distance((CNA_PbrMaterialExtensionsHandle)extensions, (float)value);
+    return (jint)call_result;
+}
+
+JNIEXPORT jint JNICALL
+Java_org_openeggbert_cna_internal_generated_NativeEngineLayerRoutes_pbrMaterialExtensionsSetClearcoatFactor(
+    JNIEnv* environment, jclass declaring_class, jlong extensions, jfloat value)
+{
+    (void)environment;
+    (void)declaring_class;
+    CNA_Result call_result = cna.pbr_material_extensions_set_clearcoat_factor((CNA_PbrMaterialExtensionsHandle)extensions, (float)value);
+    return (jint)call_result;
+}
+
+JNIEXPORT jint JNICALL
+Java_org_openeggbert_cna_internal_generated_NativeEngineLayerRoutes_pbrMaterialExtensionsSetClearcoatNormalScale(
+    JNIEnv* environment, jclass declaring_class, jlong extensions, jfloat value)
+{
+    (void)environment;
+    (void)declaring_class;
+    CNA_Result call_result = cna.pbr_material_extensions_set_clearcoat_normal_scale((CNA_PbrMaterialExtensionsHandle)extensions, (float)value);
+    return (jint)call_result;
+}
+
+JNIEXPORT jint JNICALL
+Java_org_openeggbert_cna_internal_generated_NativeEngineLayerRoutes_pbrMaterialExtensionsSetClearcoatNormalTexture(
+    JNIEnv* environment, jclass declaring_class, jlong extensions, jlong texture)
+{
+    (void)environment;
+    (void)declaring_class;
+    CNA_Result call_result = cna.pbr_material_extensions_set_clearcoat_normal_texture((CNA_PbrMaterialExtensionsHandle)extensions, (CNA_Handle)texture);
+    return (jint)call_result;
+}
+
+JNIEXPORT jint JNICALL
+Java_org_openeggbert_cna_internal_generated_NativeEngineLayerRoutes_pbrMaterialExtensionsSetClearcoatRoughness(
+    JNIEnv* environment, jclass declaring_class, jlong extensions, jfloat value)
+{
+    (void)environment;
+    (void)declaring_class;
+    CNA_Result call_result = cna.pbr_material_extensions_set_clearcoat_roughness((CNA_PbrMaterialExtensionsHandle)extensions, (float)value);
+    return (jint)call_result;
+}
+
+JNIEXPORT jint JNICALL
+Java_org_openeggbert_cna_internal_generated_NativeEngineLayerRoutes_pbrMaterialExtensionsSetClearcoatRoughnessTexture(
+    JNIEnv* environment, jclass declaring_class, jlong extensions, jlong texture)
+{
+    (void)environment;
+    (void)declaring_class;
+    CNA_Result call_result = cna.pbr_material_extensions_set_clearcoat_roughness_texture((CNA_PbrMaterialExtensionsHandle)extensions, (CNA_Handle)texture);
+    return (jint)call_result;
+}
+
+JNIEXPORT jint JNICALL
+Java_org_openeggbert_cna_internal_generated_NativeEngineLayerRoutes_pbrMaterialExtensionsSetClearcoatTexture(
+    JNIEnv* environment, jclass declaring_class, jlong extensions, jlong texture)
+{
+    (void)environment;
+    (void)declaring_class;
+    CNA_Result call_result = cna.pbr_material_extensions_set_clearcoat_texture((CNA_PbrMaterialExtensionsHandle)extensions, (CNA_Handle)texture);
+    return (jint)call_result;
+}
+
+JNIEXPORT jint JNICALL
+Java_org_openeggbert_cna_internal_generated_NativeEngineLayerRoutes_pbrMaterialExtensionsSetIridescenceFactor(
+    JNIEnv* environment, jclass declaring_class, jlong extensions, jfloat value)
+{
+    (void)environment;
+    (void)declaring_class;
+    CNA_Result call_result = cna.pbr_material_extensions_set_iridescence_factor((CNA_PbrMaterialExtensionsHandle)extensions, (float)value);
+    return (jint)call_result;
+}
+
+JNIEXPORT jint JNICALL
+Java_org_openeggbert_cna_internal_generated_NativeEngineLayerRoutes_pbrMaterialExtensionsSetIridescenceIor(
+    JNIEnv* environment, jclass declaring_class, jlong extensions, jfloat value)
+{
+    (void)environment;
+    (void)declaring_class;
+    CNA_Result call_result = cna.pbr_material_extensions_set_iridescence_ior((CNA_PbrMaterialExtensionsHandle)extensions, (float)value);
+    return (jint)call_result;
+}
+
+JNIEXPORT jint JNICALL
+Java_org_openeggbert_cna_internal_generated_NativeEngineLayerRoutes_pbrMaterialExtensionsSetIridescenceTexture(
+    JNIEnv* environment, jclass declaring_class, jlong extensions, jlong texture)
+{
+    (void)environment;
+    (void)declaring_class;
+    CNA_Result call_result = cna.pbr_material_extensions_set_iridescence_texture((CNA_PbrMaterialExtensionsHandle)extensions, (CNA_Handle)texture);
+    return (jint)call_result;
+}
+
+JNIEXPORT jint JNICALL
+Java_org_openeggbert_cna_internal_generated_NativeEngineLayerRoutes_pbrMaterialExtensionsSetIridescenceThicknessMaximum(
+    JNIEnv* environment, jclass declaring_class, jlong extensions, jfloat value)
+{
+    (void)environment;
+    (void)declaring_class;
+    CNA_Result call_result = cna.pbr_material_extensions_set_iridescence_thickness_maximum((CNA_PbrMaterialExtensionsHandle)extensions, (float)value);
+    return (jint)call_result;
+}
+
+JNIEXPORT jint JNICALL
+Java_org_openeggbert_cna_internal_generated_NativeEngineLayerRoutes_pbrMaterialExtensionsSetIridescenceThicknessMinimum(
+    JNIEnv* environment, jclass declaring_class, jlong extensions, jfloat value)
+{
+    (void)environment;
+    (void)declaring_class;
+    CNA_Result call_result = cna.pbr_material_extensions_set_iridescence_thickness_minimum((CNA_PbrMaterialExtensionsHandle)extensions, (float)value);
+    return (jint)call_result;
+}
+
+JNIEXPORT jint JNICALL
+Java_org_openeggbert_cna_internal_generated_NativeEngineLayerRoutes_pbrMaterialExtensionsSetIridescenceThicknessTexture(
+    JNIEnv* environment, jclass declaring_class, jlong extensions, jlong texture)
+{
+    (void)environment;
+    (void)declaring_class;
+    CNA_Result call_result = cna.pbr_material_extensions_set_iridescence_thickness_texture((CNA_PbrMaterialExtensionsHandle)extensions, (CNA_Handle)texture);
+    return (jint)call_result;
+}
+
+JNIEXPORT jint JNICALL
+Java_org_openeggbert_cna_internal_generated_NativeEngineLayerRoutes_pbrMaterialExtensionsSetSheenColorFactor(
+    JNIEnv* environment, jclass declaring_class, jlong extensions, jfloatArray valueFloating)
+{
+    (void)environment;
+    (void)declaring_class;
+    CNA_Vector3 value_value;
+    memset(&value_value, 0, sizeof value_value);
+    {
+        jfloat valueFloating_values[3];
+        (*environment)->GetFloatArrayRegion(environment, valueFloating, 0, 3, valueFloating_values);
+        value_value.x = (float)valueFloating_values[0];
+        value_value.y = (float)valueFloating_values[1];
+        value_value.z = (float)valueFloating_values[2];
+    }
+    CNA_Result call_result = cna.pbr_material_extensions_set_sheen_color_factor((CNA_PbrMaterialExtensionsHandle)extensions, &value_value);
+    return (jint)call_result;
+}
+
+JNIEXPORT jint JNICALL
+Java_org_openeggbert_cna_internal_generated_NativeEngineLayerRoutes_pbrMaterialExtensionsSetSheenColorTexture(
+    JNIEnv* environment, jclass declaring_class, jlong extensions, jlong texture)
+{
+    (void)environment;
+    (void)declaring_class;
+    CNA_Result call_result = cna.pbr_material_extensions_set_sheen_color_texture((CNA_PbrMaterialExtensionsHandle)extensions, (CNA_Handle)texture);
+    return (jint)call_result;
+}
+
+JNIEXPORT jint JNICALL
+Java_org_openeggbert_cna_internal_generated_NativeEngineLayerRoutes_pbrMaterialExtensionsSetSheenRoughness(
+    JNIEnv* environment, jclass declaring_class, jlong extensions, jfloat value)
+{
+    (void)environment;
+    (void)declaring_class;
+    CNA_Result call_result = cna.pbr_material_extensions_set_sheen_roughness((CNA_PbrMaterialExtensionsHandle)extensions, (float)value);
+    return (jint)call_result;
+}
+
+JNIEXPORT jint JNICALL
+Java_org_openeggbert_cna_internal_generated_NativeEngineLayerRoutes_pbrMaterialExtensionsSetSheenRoughnessTexture(
+    JNIEnv* environment, jclass declaring_class, jlong extensions, jlong texture)
+{
+    (void)environment;
+    (void)declaring_class;
+    CNA_Result call_result = cna.pbr_material_extensions_set_sheen_roughness_texture((CNA_PbrMaterialExtensionsHandle)extensions, (CNA_Handle)texture);
+    return (jint)call_result;
+}
+
+JNIEXPORT jint JNICALL
+Java_org_openeggbert_cna_internal_generated_NativeEngineLayerRoutes_pbrMaterialExtensionsSetSubsurfaceColor(
+    JNIEnv* environment, jclass declaring_class, jlong extensions, jfloatArray valueFloating)
+{
+    (void)environment;
+    (void)declaring_class;
+    CNA_Vector3 value_value;
+    memset(&value_value, 0, sizeof value_value);
+    {
+        jfloat valueFloating_values[3];
+        (*environment)->GetFloatArrayRegion(environment, valueFloating, 0, 3, valueFloating_values);
+        value_value.x = (float)valueFloating_values[0];
+        value_value.y = (float)valueFloating_values[1];
+        value_value.z = (float)valueFloating_values[2];
+    }
+    CNA_Result call_result = cna.pbr_material_extensions_set_subsurface_color((CNA_PbrMaterialExtensionsHandle)extensions, &value_value);
+    return (jint)call_result;
+}
+
+JNIEXPORT jint JNICALL
+Java_org_openeggbert_cna_internal_generated_NativeEngineLayerRoutes_pbrMaterialExtensionsSetSubsurfaceWrap(
+    JNIEnv* environment, jclass declaring_class, jlong extensions, jfloat value)
+{
+    (void)environment;
+    (void)declaring_class;
+    CNA_Result call_result = cna.pbr_material_extensions_set_subsurface_wrap((CNA_PbrMaterialExtensionsHandle)extensions, (float)value);
+    return (jint)call_result;
+}
+
+JNIEXPORT jint JNICALL
+Java_org_openeggbert_cna_internal_generated_NativeEngineLayerRoutes_pbrMaterialExtensionsSetThicknessFactor(
+    JNIEnv* environment, jclass declaring_class, jlong extensions, jfloat value)
+{
+    (void)environment;
+    (void)declaring_class;
+    CNA_Result call_result = cna.pbr_material_extensions_set_thickness_factor((CNA_PbrMaterialExtensionsHandle)extensions, (float)value);
+    return (jint)call_result;
+}
+
+JNIEXPORT jint JNICALL
+Java_org_openeggbert_cna_internal_generated_NativeEngineLayerRoutes_pbrMaterialExtensionsSetThicknessTexture(
+    JNIEnv* environment, jclass declaring_class, jlong extensions, jlong texture)
+{
+    (void)environment;
+    (void)declaring_class;
+    CNA_Result call_result = cna.pbr_material_extensions_set_thickness_texture((CNA_PbrMaterialExtensionsHandle)extensions, (CNA_Handle)texture);
+    return (jint)call_result;
+}
+
+JNIEXPORT jint JNICALL
+Java_org_openeggbert_cna_internal_generated_NativeEngineLayerRoutes_pbrMaterialExtensionsSetTransmissionFactor(
+    JNIEnv* environment, jclass declaring_class, jlong extensions, jfloat value)
+{
+    (void)environment;
+    (void)declaring_class;
+    CNA_Result call_result = cna.pbr_material_extensions_set_transmission_factor((CNA_PbrMaterialExtensionsHandle)extensions, (float)value);
+    return (jint)call_result;
+}
+
+JNIEXPORT jint JNICALL
+Java_org_openeggbert_cna_internal_generated_NativeEngineLayerRoutes_pbrMaterialExtensionsSetTransmissionTexture(
+    JNIEnv* environment, jclass declaring_class, jlong extensions, jlong texture)
+{
+    (void)environment;
+    (void)declaring_class;
+    CNA_Result call_result = cna.pbr_material_extensions_set_transmission_texture((CNA_PbrMaterialExtensionsHandle)extensions, (CNA_Handle)texture);
+    return (jint)call_result;
+}
+
+JNIEXPORT jint JNICALL
 Java_org_openeggbert_cna_internal_generated_NativeEngineLayerRoutes_pointLightExtInit(
     JNIEnv* environment, jclass declaring_class, jbyteArray out_lightBytes, jlongArray out_lightIntegral, jfloatArray out_lightFloating)
 {

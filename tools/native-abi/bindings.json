@@ -16671,6 +16671,507 @@
       ]
     },
     {
+      "name": "cna_pbr_material_extensions_copy_from",
+      "header": "engine_layer.h",
+      "ownership": "borrows both materials; copies the source's value, texture pointers included",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_PbrMaterialExtensionsHandle",
+        "CNA_PbrMaterialExtensionsHandle"
+      ]
+    },
+    {
+      "name": "cna_pbr_material_extensions_copy_to_string",
+      "header": "engine_layer.h",
+      "ownership": "borrows the material; fills the caller's byte buffer",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_PbrMaterialExtensionsHandle",
+        "char*",
+        "uint64_t",
+        "uint64_t*"
+      ]
+    },
+    {
+      "name": "cna_pbr_material_extensions_create",
+      "header": "engine_layer.h",
+      "ownership": "no handle; returns an owned material-extensions handle",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_PbrMaterialExtensionsHandle*"
+      ]
+    },
+    {
+      "name": "cna_pbr_material_extensions_destroy",
+      "header": "engine_layer.h",
+      "ownership": "releases the owned material-extensions handle; the textures its slots named are borrowed and untouched",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_PbrMaterialExtensionsHandle"
+      ]
+    },
+    {
+      "name": "cna_pbr_material_extensions_equals",
+      "header": "engine_layer.h",
+      "ownership": "borrows both materials",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_PbrMaterialExtensionsHandle",
+        "CNA_PbrMaterialExtensionsHandle",
+        "CNA_Bool*"
+      ]
+    },
+    {
+      "name": "cna_pbr_material_extensions_get_attenuation_color",
+      "header": "engine_layer.h",
+      "ownership": "borrows the material",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_PbrMaterialExtensionsHandle",
+        "CNA_Vector3*"
+      ]
+    },
+    {
+      "name": "cna_pbr_material_extensions_get_attenuation_distance",
+      "header": "engine_layer.h",
+      "ownership": "borrows the material",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_PbrMaterialExtensionsHandle",
+        "float*"
+      ]
+    },
+    {
+      "name": "cna_pbr_material_extensions_get_clearcoat_factor",
+      "header": "engine_layer.h",
+      "ownership": "borrows the material",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_PbrMaterialExtensionsHandle",
+        "float*"
+      ]
+    },
+    {
+      "name": "cna_pbr_material_extensions_get_clearcoat_normal_scale",
+      "header": "engine_layer.h",
+      "ownership": "borrows the material",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_PbrMaterialExtensionsHandle",
+        "float*"
+      ]
+    },
+    {
+      "name": "cna_pbr_material_extensions_get_clearcoat_roughness",
+      "header": "engine_layer.h",
+      "ownership": "borrows the material",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_PbrMaterialExtensionsHandle",
+        "float*"
+      ]
+    },
+    {
+      "name": "cna_pbr_material_extensions_get_hash_code",
+      "header": "engine_layer.h",
+      "ownership": "borrows the material",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_PbrMaterialExtensionsHandle",
+        "uint64_t*"
+      ]
+    },
+    {
+      "name": "cna_pbr_material_extensions_get_iridescence_factor",
+      "header": "engine_layer.h",
+      "ownership": "borrows the material",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_PbrMaterialExtensionsHandle",
+        "float*"
+      ]
+    },
+    {
+      "name": "cna_pbr_material_extensions_get_iridescence_ior",
+      "header": "engine_layer.h",
+      "ownership": "borrows the material",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_PbrMaterialExtensionsHandle",
+        "float*"
+      ]
+    },
+    {
+      "name": "cna_pbr_material_extensions_get_iridescence_thickness_maximum",
+      "header": "engine_layer.h",
+      "ownership": "borrows the material",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_PbrMaterialExtensionsHandle",
+        "float*"
+      ]
+    },
+    {
+      "name": "cna_pbr_material_extensions_get_iridescence_thickness_minimum",
+      "header": "engine_layer.h",
+      "ownership": "borrows the material",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_PbrMaterialExtensionsHandle",
+        "float*"
+      ]
+    },
+    {
+      "name": "cna_pbr_material_extensions_get_sheen_color_factor",
+      "header": "engine_layer.h",
+      "ownership": "borrows the material",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_PbrMaterialExtensionsHandle",
+        "CNA_Vector3*"
+      ]
+    },
+    {
+      "name": "cna_pbr_material_extensions_get_sheen_roughness",
+      "header": "engine_layer.h",
+      "ownership": "borrows the material",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_PbrMaterialExtensionsHandle",
+        "float*"
+      ]
+    },
+    {
+      "name": "cna_pbr_material_extensions_get_subsurface_color",
+      "header": "engine_layer.h",
+      "ownership": "borrows the material",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_PbrMaterialExtensionsHandle",
+        "CNA_Vector3*"
+      ]
+    },
+    {
+      "name": "cna_pbr_material_extensions_get_subsurface_wrap",
+      "header": "engine_layer.h",
+      "ownership": "borrows the material",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_PbrMaterialExtensionsHandle",
+        "float*"
+      ]
+    },
+    {
+      "name": "cna_pbr_material_extensions_get_thickness_factor",
+      "header": "engine_layer.h",
+      "ownership": "borrows the material",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_PbrMaterialExtensionsHandle",
+        "float*"
+      ]
+    },
+    {
+      "name": "cna_pbr_material_extensions_get_transmission_factor",
+      "header": "engine_layer.h",
+      "ownership": "borrows the material",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_PbrMaterialExtensionsHandle",
+        "float*"
+      ]
+    },
+    {
+      "name": "cna_pbr_material_extensions_is_iridescence_enabled",
+      "header": "engine_layer.h",
+      "ownership": "borrows the material",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_PbrMaterialExtensionsHandle",
+        "CNA_Bool*"
+      ]
+    },
+    {
+      "name": "cna_pbr_material_extensions_is_neutral",
+      "header": "engine_layer.h",
+      "ownership": "borrows the material",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_PbrMaterialExtensionsHandle",
+        "CNA_Bool*"
+      ]
+    },
+    {
+      "name": "cna_pbr_material_extensions_is_sheen_enabled",
+      "header": "engine_layer.h",
+      "ownership": "borrows the material",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_PbrMaterialExtensionsHandle",
+        "CNA_Bool*"
+      ]
+    },
+    {
+      "name": "cna_pbr_material_extensions_is_subsurface_enabled",
+      "header": "engine_layer.h",
+      "ownership": "borrows the material",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_PbrMaterialExtensionsHandle",
+        "CNA_Bool*"
+      ]
+    },
+    {
+      "name": "cna_pbr_material_extensions_is_transmission_enabled",
+      "header": "engine_layer.h",
+      "ownership": "borrows the material",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_PbrMaterialExtensionsHandle",
+        "CNA_Bool*"
+      ]
+    },
+    {
+      "name": "cna_pbr_material_extensions_set_attenuation_color",
+      "header": "engine_layer.h",
+      "ownership": "borrows the material",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_PbrMaterialExtensionsHandle",
+        "const CNA_Vector3*"
+      ]
+    },
+    {
+      "name": "cna_pbr_material_extensions_set_attenuation_distance",
+      "header": "engine_layer.h",
+      "ownership": "borrows the material",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_PbrMaterialExtensionsHandle",
+        "float"
+      ]
+    },
+    {
+      "name": "cna_pbr_material_extensions_set_clearcoat_factor",
+      "header": "engine_layer.h",
+      "ownership": "borrows the material",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_PbrMaterialExtensionsHandle",
+        "float"
+      ]
+    },
+    {
+      "name": "cna_pbr_material_extensions_set_clearcoat_normal_scale",
+      "header": "engine_layer.h",
+      "ownership": "borrows the material",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_PbrMaterialExtensionsHandle",
+        "float"
+      ]
+    },
+    {
+      "name": "cna_pbr_material_extensions_set_clearcoat_normal_texture",
+      "header": "engine_layer.h",
+      "ownership": "borrows the material and the caller's texture; the slot is non-owning",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_PbrMaterialExtensionsHandle",
+        "CNA_Handle"
+      ]
+    },
+    {
+      "name": "cna_pbr_material_extensions_set_clearcoat_roughness",
+      "header": "engine_layer.h",
+      "ownership": "borrows the material",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_PbrMaterialExtensionsHandle",
+        "float"
+      ]
+    },
+    {
+      "name": "cna_pbr_material_extensions_set_clearcoat_roughness_texture",
+      "header": "engine_layer.h",
+      "ownership": "borrows the material and the caller's texture; the slot is non-owning",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_PbrMaterialExtensionsHandle",
+        "CNA_Handle"
+      ]
+    },
+    {
+      "name": "cna_pbr_material_extensions_set_clearcoat_texture",
+      "header": "engine_layer.h",
+      "ownership": "borrows the material and the caller's texture; the slot is non-owning",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_PbrMaterialExtensionsHandle",
+        "CNA_Handle"
+      ]
+    },
+    {
+      "name": "cna_pbr_material_extensions_set_iridescence_factor",
+      "header": "engine_layer.h",
+      "ownership": "borrows the material",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_PbrMaterialExtensionsHandle",
+        "float"
+      ]
+    },
+    {
+      "name": "cna_pbr_material_extensions_set_iridescence_ior",
+      "header": "engine_layer.h",
+      "ownership": "borrows the material",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_PbrMaterialExtensionsHandle",
+        "float"
+      ]
+    },
+    {
+      "name": "cna_pbr_material_extensions_set_iridescence_texture",
+      "header": "engine_layer.h",
+      "ownership": "borrows the material and the caller's texture; the slot is non-owning",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_PbrMaterialExtensionsHandle",
+        "CNA_Handle"
+      ]
+    },
+    {
+      "name": "cna_pbr_material_extensions_set_iridescence_thickness_maximum",
+      "header": "engine_layer.h",
+      "ownership": "borrows the material",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_PbrMaterialExtensionsHandle",
+        "float"
+      ]
+    },
+    {
+      "name": "cna_pbr_material_extensions_set_iridescence_thickness_minimum",
+      "header": "engine_layer.h",
+      "ownership": "borrows the material",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_PbrMaterialExtensionsHandle",
+        "float"
+      ]
+    },
+    {
+      "name": "cna_pbr_material_extensions_set_iridescence_thickness_texture",
+      "header": "engine_layer.h",
+      "ownership": "borrows the material and the caller's texture; the slot is non-owning",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_PbrMaterialExtensionsHandle",
+        "CNA_Handle"
+      ]
+    },
+    {
+      "name": "cna_pbr_material_extensions_set_sheen_color_factor",
+      "header": "engine_layer.h",
+      "ownership": "borrows the material",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_PbrMaterialExtensionsHandle",
+        "const CNA_Vector3*"
+      ]
+    },
+    {
+      "name": "cna_pbr_material_extensions_set_sheen_color_texture",
+      "header": "engine_layer.h",
+      "ownership": "borrows the material and the caller's texture; the slot is non-owning",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_PbrMaterialExtensionsHandle",
+        "CNA_Handle"
+      ]
+    },
+    {
+      "name": "cna_pbr_material_extensions_set_sheen_roughness",
+      "header": "engine_layer.h",
+      "ownership": "borrows the material",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_PbrMaterialExtensionsHandle",
+        "float"
+      ]
+    },
+    {
+      "name": "cna_pbr_material_extensions_set_sheen_roughness_texture",
+      "header": "engine_layer.h",
+      "ownership": "borrows the material and the caller's texture; the slot is non-owning",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_PbrMaterialExtensionsHandle",
+        "CNA_Handle"
+      ]
+    },
+    {
+      "name": "cna_pbr_material_extensions_set_subsurface_color",
+      "header": "engine_layer.h",
+      "ownership": "borrows the material",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_PbrMaterialExtensionsHandle",
+        "const CNA_Vector3*"
+      ]
+    },
+    {
+      "name": "cna_pbr_material_extensions_set_subsurface_wrap",
+      "header": "engine_layer.h",
+      "ownership": "borrows the material",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_PbrMaterialExtensionsHandle",
+        "float"
+      ]
+    },
+    {
+      "name": "cna_pbr_material_extensions_set_thickness_factor",
+      "header": "engine_layer.h",
+      "ownership": "borrows the material",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_PbrMaterialExtensionsHandle",
+        "float"
+      ]
+    },
+    {
+      "name": "cna_pbr_material_extensions_set_thickness_texture",
+      "header": "engine_layer.h",
+      "ownership": "borrows the material and the caller's texture; the slot is non-owning",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_PbrMaterialExtensionsHandle",
+        "CNA_Handle"
+      ]
+    },
+    {
+      "name": "cna_pbr_material_extensions_set_transmission_factor",
+      "header": "engine_layer.h",
+      "ownership": "borrows the material",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_PbrMaterialExtensionsHandle",
+        "float"
+      ]
+    },
+    {
+      "name": "cna_pbr_material_extensions_set_transmission_texture",
+      "header": "engine_layer.h",
+      "ownership": "borrows the material and the caller's texture; the slot is non-owning",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_PbrMaterialExtensionsHandle",
+        "CNA_Handle"
+      ]
+    },
+    {
       "name": "cna_pbr_material_init",
       "header": "graphics_ext.h",
       "ownership": "caller output only; initializes a value structure",

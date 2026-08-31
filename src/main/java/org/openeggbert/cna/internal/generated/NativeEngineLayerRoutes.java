@@ -2980,6 +2980,298 @@ public final class NativeEngineLayerRoutes {
     public static native int particleSystemUsesCompute(long system, boolean[] outUsesCompute);
 
     /**
+     * cna_pbr_material_extensions_copy_from (engine_layer.h).
+     */
+    public static native int pbrMaterialExtensionsCopyFrom(long destination, long source);
+
+    /**
+     * cna_pbr_material_extensions_copy_to_string (engine_layer.h).
+     */
+    public static native int pbrMaterialExtensionsCopyToString(long extensions, byte[] destination, long[] outBytes);
+
+    /**
+     * cna_pbr_material_extensions_create (engine_layer.h).
+     */
+    public static native int pbrMaterialExtensionsCreate(long[] outExtensions);
+
+    /**
+     * cna_pbr_material_extensions_destroy (engine_layer.h).
+     */
+    public static native int pbrMaterialExtensionsDestroy(long extensions);
+
+    /**
+     * cna_pbr_material_extensions_equals (engine_layer.h).
+     */
+    public static native int pbrMaterialExtensionsEquals(long first, long second, boolean[] outEqual);
+
+    /**
+     * cna_pbr_material_extensions_get_attenuation_color (engine_layer.h).
+     *
+     * <p>outValueFloating carries CNA_Vector3 in this order:
+     * <ol start="0">
+     *   <li>{@code x} (float)</li>
+     *   <li>{@code y} (float)</li>
+     *   <li>{@code z} (float)</li>
+     * </ol>
+     */
+    public static native int pbrMaterialExtensionsGetAttenuationColor(long extensions, float[] outValueFloating);
+
+    /**
+     * cna_pbr_material_extensions_get_attenuation_distance (engine_layer.h).
+     */
+    public static native int pbrMaterialExtensionsGetAttenuationDistance(long extensions, float[] outValue);
+
+    /**
+     * cna_pbr_material_extensions_get_clearcoat_factor (engine_layer.h).
+     */
+    public static native int pbrMaterialExtensionsGetClearcoatFactor(long extensions, float[] outValue);
+
+    /**
+     * cna_pbr_material_extensions_get_clearcoat_normal_scale (engine_layer.h).
+     */
+    public static native int pbrMaterialExtensionsGetClearcoatNormalScale(long extensions, float[] outValue);
+
+    /**
+     * cna_pbr_material_extensions_get_clearcoat_roughness (engine_layer.h).
+     */
+    public static native int pbrMaterialExtensionsGetClearcoatRoughness(long extensions, float[] outValue);
+
+    /**
+     * cna_pbr_material_extensions_get_hash_code (engine_layer.h).
+     */
+    public static native int pbrMaterialExtensionsGetHashCode(long extensions, long[] outHash);
+
+    /**
+     * cna_pbr_material_extensions_get_iridescence_factor (engine_layer.h).
+     */
+    public static native int pbrMaterialExtensionsGetIridescenceFactor(long extensions, float[] outValue);
+
+    /**
+     * cna_pbr_material_extensions_get_iridescence_ior (engine_layer.h).
+     */
+    public static native int pbrMaterialExtensionsGetIridescenceIor(long extensions, float[] outValue);
+
+    /**
+     * cna_pbr_material_extensions_get_iridescence_thickness_maximum (engine_layer.h).
+     */
+    public static native int pbrMaterialExtensionsGetIridescenceThicknessMaximum(long extensions, float[] outValue);
+
+    /**
+     * cna_pbr_material_extensions_get_iridescence_thickness_minimum (engine_layer.h).
+     */
+    public static native int pbrMaterialExtensionsGetIridescenceThicknessMinimum(long extensions, float[] outValue);
+
+    /**
+     * cna_pbr_material_extensions_get_sheen_color_factor (engine_layer.h).
+     *
+     * <p>outValueFloating carries CNA_Vector3 in this order:
+     * <ol start="0">
+     *   <li>{@code x} (float)</li>
+     *   <li>{@code y} (float)</li>
+     *   <li>{@code z} (float)</li>
+     * </ol>
+     */
+    public static native int pbrMaterialExtensionsGetSheenColorFactor(long extensions, float[] outValueFloating);
+
+    /**
+     * cna_pbr_material_extensions_get_sheen_roughness (engine_layer.h).
+     */
+    public static native int pbrMaterialExtensionsGetSheenRoughness(long extensions, float[] outValue);
+
+    /**
+     * cna_pbr_material_extensions_get_subsurface_color (engine_layer.h).
+     *
+     * <p>outValueFloating carries CNA_Vector3 in this order:
+     * <ol start="0">
+     *   <li>{@code x} (float)</li>
+     *   <li>{@code y} (float)</li>
+     *   <li>{@code z} (float)</li>
+     * </ol>
+     */
+    public static native int pbrMaterialExtensionsGetSubsurfaceColor(long extensions, float[] outValueFloating);
+
+    /**
+     * cna_pbr_material_extensions_get_subsurface_wrap (engine_layer.h).
+     */
+    public static native int pbrMaterialExtensionsGetSubsurfaceWrap(long extensions, float[] outValue);
+
+    /**
+     * cna_pbr_material_extensions_get_thickness_factor (engine_layer.h).
+     */
+    public static native int pbrMaterialExtensionsGetThicknessFactor(long extensions, float[] outValue);
+
+    /**
+     * cna_pbr_material_extensions_get_transmission_factor (engine_layer.h).
+     */
+    public static native int pbrMaterialExtensionsGetTransmissionFactor(long extensions, float[] outValue);
+
+    /**
+     * cna_pbr_material_extensions_is_iridescence_enabled (engine_layer.h).
+     */
+    public static native int pbrMaterialExtensionsIsIridescenceEnabled(long extensions, boolean[] outValue);
+
+    /**
+     * cna_pbr_material_extensions_is_neutral (engine_layer.h).
+     */
+    public static native int pbrMaterialExtensionsIsNeutral(long extensions, boolean[] outValue);
+
+    /**
+     * cna_pbr_material_extensions_is_sheen_enabled (engine_layer.h).
+     */
+    public static native int pbrMaterialExtensionsIsSheenEnabled(long extensions, boolean[] outValue);
+
+    /**
+     * cna_pbr_material_extensions_is_subsurface_enabled (engine_layer.h).
+     */
+    public static native int pbrMaterialExtensionsIsSubsurfaceEnabled(long extensions, boolean[] outValue);
+
+    /**
+     * cna_pbr_material_extensions_is_transmission_enabled (engine_layer.h).
+     */
+    public static native int pbrMaterialExtensionsIsTransmissionEnabled(long extensions, boolean[] outValue);
+
+    /**
+     * cna_pbr_material_extensions_set_attenuation_color (engine_layer.h).
+     *
+     * <p>valueFloating carries CNA_Vector3 in this order:
+     * <ol start="0">
+     *   <li>{@code x} (float)</li>
+     *   <li>{@code y} (float)</li>
+     *   <li>{@code z} (float)</li>
+     * </ol>
+     */
+    public static native int pbrMaterialExtensionsSetAttenuationColor(long extensions, float[] valueFloating);
+
+    /**
+     * cna_pbr_material_extensions_set_attenuation_distance (engine_layer.h).
+     */
+    public static native int pbrMaterialExtensionsSetAttenuationDistance(long extensions, float value);
+
+    /**
+     * cna_pbr_material_extensions_set_clearcoat_factor (engine_layer.h).
+     */
+    public static native int pbrMaterialExtensionsSetClearcoatFactor(long extensions, float value);
+
+    /**
+     * cna_pbr_material_extensions_set_clearcoat_normal_scale (engine_layer.h).
+     */
+    public static native int pbrMaterialExtensionsSetClearcoatNormalScale(long extensions, float value);
+
+    /**
+     * cna_pbr_material_extensions_set_clearcoat_normal_texture (engine_layer.h).
+     */
+    public static native int pbrMaterialExtensionsSetClearcoatNormalTexture(long extensions, long texture);
+
+    /**
+     * cna_pbr_material_extensions_set_clearcoat_roughness (engine_layer.h).
+     */
+    public static native int pbrMaterialExtensionsSetClearcoatRoughness(long extensions, float value);
+
+    /**
+     * cna_pbr_material_extensions_set_clearcoat_roughness_texture (engine_layer.h).
+     */
+    public static native int pbrMaterialExtensionsSetClearcoatRoughnessTexture(long extensions, long texture);
+
+    /**
+     * cna_pbr_material_extensions_set_clearcoat_texture (engine_layer.h).
+     */
+    public static native int pbrMaterialExtensionsSetClearcoatTexture(long extensions, long texture);
+
+    /**
+     * cna_pbr_material_extensions_set_iridescence_factor (engine_layer.h).
+     */
+    public static native int pbrMaterialExtensionsSetIridescenceFactor(long extensions, float value);
+
+    /**
+     * cna_pbr_material_extensions_set_iridescence_ior (engine_layer.h).
+     */
+    public static native int pbrMaterialExtensionsSetIridescenceIor(long extensions, float value);
+
+    /**
+     * cna_pbr_material_extensions_set_iridescence_texture (engine_layer.h).
+     */
+    public static native int pbrMaterialExtensionsSetIridescenceTexture(long extensions, long texture);
+
+    /**
+     * cna_pbr_material_extensions_set_iridescence_thickness_maximum (engine_layer.h).
+     */
+    public static native int pbrMaterialExtensionsSetIridescenceThicknessMaximum(long extensions, float value);
+
+    /**
+     * cna_pbr_material_extensions_set_iridescence_thickness_minimum (engine_layer.h).
+     */
+    public static native int pbrMaterialExtensionsSetIridescenceThicknessMinimum(long extensions, float value);
+
+    /**
+     * cna_pbr_material_extensions_set_iridescence_thickness_texture (engine_layer.h).
+     */
+    public static native int pbrMaterialExtensionsSetIridescenceThicknessTexture(long extensions, long texture);
+
+    /**
+     * cna_pbr_material_extensions_set_sheen_color_factor (engine_layer.h).
+     *
+     * <p>valueFloating carries CNA_Vector3 in this order:
+     * <ol start="0">
+     *   <li>{@code x} (float)</li>
+     *   <li>{@code y} (float)</li>
+     *   <li>{@code z} (float)</li>
+     * </ol>
+     */
+    public static native int pbrMaterialExtensionsSetSheenColorFactor(long extensions, float[] valueFloating);
+
+    /**
+     * cna_pbr_material_extensions_set_sheen_color_texture (engine_layer.h).
+     */
+    public static native int pbrMaterialExtensionsSetSheenColorTexture(long extensions, long texture);
+
+    /**
+     * cna_pbr_material_extensions_set_sheen_roughness (engine_layer.h).
+     */
+    public static native int pbrMaterialExtensionsSetSheenRoughness(long extensions, float value);
+
+    /**
+     * cna_pbr_material_extensions_set_sheen_roughness_texture (engine_layer.h).
+     */
+    public static native int pbrMaterialExtensionsSetSheenRoughnessTexture(long extensions, long texture);
+
+    /**
+     * cna_pbr_material_extensions_set_subsurface_color (engine_layer.h).
+     *
+     * <p>valueFloating carries CNA_Vector3 in this order:
+     * <ol start="0">
+     *   <li>{@code x} (float)</li>
+     *   <li>{@code y} (float)</li>
+     *   <li>{@code z} (float)</li>
+     * </ol>
+     */
+    public static native int pbrMaterialExtensionsSetSubsurfaceColor(long extensions, float[] valueFloating);
+
+    /**
+     * cna_pbr_material_extensions_set_subsurface_wrap (engine_layer.h).
+     */
+    public static native int pbrMaterialExtensionsSetSubsurfaceWrap(long extensions, float value);
+
+    /**
+     * cna_pbr_material_extensions_set_thickness_factor (engine_layer.h).
+     */
+    public static native int pbrMaterialExtensionsSetThicknessFactor(long extensions, float value);
+
+    /**
+     * cna_pbr_material_extensions_set_thickness_texture (engine_layer.h).
+     */
+    public static native int pbrMaterialExtensionsSetThicknessTexture(long extensions, long texture);
+
+    /**
+     * cna_pbr_material_extensions_set_transmission_factor (engine_layer.h).
+     */
+    public static native int pbrMaterialExtensionsSetTransmissionFactor(long extensions, float value);
+
+    /**
+     * cna_pbr_material_extensions_set_transmission_texture (engine_layer.h).
+     */
+    public static native int pbrMaterialExtensionsSetTransmissionTexture(long extensions, long texture);
+
+    /**
      * cna_point_light_ext_init (engine_layer.h).
      *
      * <p>outLightBytes carries CNA_PointLightEXT in this order:

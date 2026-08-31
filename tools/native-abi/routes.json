@@ -4741,6 +4741,206 @@
         "symbol": "cna_particle_system_uses_compute"
       },
       {
+        "java": "pbrMaterialExtensionsCopyFrom",
+        "symbol": "cna_pbr_material_extensions_copy_from"
+      },
+      {
+        "java": "pbrMaterialExtensionsCopyToString",
+        "symbol": "cna_pbr_material_extensions_copy_to_string"
+      },
+      {
+        "java": "pbrMaterialExtensionsCreate",
+        "symbol": "cna_pbr_material_extensions_create"
+      },
+      {
+        "java": "pbrMaterialExtensionsDestroy",
+        "symbol": "cna_pbr_material_extensions_destroy"
+      },
+      {
+        "java": "pbrMaterialExtensionsEquals",
+        "symbol": "cna_pbr_material_extensions_equals"
+      },
+      {
+        "java": "pbrMaterialExtensionsGetAttenuationColor",
+        "symbol": "cna_pbr_material_extensions_get_attenuation_color"
+      },
+      {
+        "java": "pbrMaterialExtensionsGetAttenuationDistance",
+        "symbol": "cna_pbr_material_extensions_get_attenuation_distance"
+      },
+      {
+        "java": "pbrMaterialExtensionsGetClearcoatFactor",
+        "symbol": "cna_pbr_material_extensions_get_clearcoat_factor"
+      },
+      {
+        "java": "pbrMaterialExtensionsGetClearcoatNormalScale",
+        "symbol": "cna_pbr_material_extensions_get_clearcoat_normal_scale"
+      },
+      {
+        "java": "pbrMaterialExtensionsGetClearcoatRoughness",
+        "symbol": "cna_pbr_material_extensions_get_clearcoat_roughness"
+      },
+      {
+        "java": "pbrMaterialExtensionsGetHashCode",
+        "symbol": "cna_pbr_material_extensions_get_hash_code"
+      },
+      {
+        "java": "pbrMaterialExtensionsGetIridescenceFactor",
+        "symbol": "cna_pbr_material_extensions_get_iridescence_factor"
+      },
+      {
+        "java": "pbrMaterialExtensionsGetIridescenceIor",
+        "symbol": "cna_pbr_material_extensions_get_iridescence_ior"
+      },
+      {
+        "java": "pbrMaterialExtensionsGetIridescenceThicknessMaximum",
+        "symbol": "cna_pbr_material_extensions_get_iridescence_thickness_maximum"
+      },
+      {
+        "java": "pbrMaterialExtensionsGetIridescenceThicknessMinimum",
+        "symbol": "cna_pbr_material_extensions_get_iridescence_thickness_minimum"
+      },
+      {
+        "java": "pbrMaterialExtensionsGetSheenColorFactor",
+        "symbol": "cna_pbr_material_extensions_get_sheen_color_factor"
+      },
+      {
+        "java": "pbrMaterialExtensionsGetSheenRoughness",
+        "symbol": "cna_pbr_material_extensions_get_sheen_roughness"
+      },
+      {
+        "java": "pbrMaterialExtensionsGetSubsurfaceColor",
+        "symbol": "cna_pbr_material_extensions_get_subsurface_color"
+      },
+      {
+        "java": "pbrMaterialExtensionsGetSubsurfaceWrap",
+        "symbol": "cna_pbr_material_extensions_get_subsurface_wrap"
+      },
+      {
+        "java": "pbrMaterialExtensionsGetThicknessFactor",
+        "symbol": "cna_pbr_material_extensions_get_thickness_factor"
+      },
+      {
+        "java": "pbrMaterialExtensionsGetTransmissionFactor",
+        "symbol": "cna_pbr_material_extensions_get_transmission_factor"
+      },
+      {
+        "java": "pbrMaterialExtensionsIsIridescenceEnabled",
+        "symbol": "cna_pbr_material_extensions_is_iridescence_enabled"
+      },
+      {
+        "java": "pbrMaterialExtensionsIsNeutral",
+        "symbol": "cna_pbr_material_extensions_is_neutral"
+      },
+      {
+        "java": "pbrMaterialExtensionsIsSheenEnabled",
+        "symbol": "cna_pbr_material_extensions_is_sheen_enabled"
+      },
+      {
+        "java": "pbrMaterialExtensionsIsSubsurfaceEnabled",
+        "symbol": "cna_pbr_material_extensions_is_subsurface_enabled"
+      },
+      {
+        "java": "pbrMaterialExtensionsIsTransmissionEnabled",
+        "symbol": "cna_pbr_material_extensions_is_transmission_enabled"
+      },
+      {
+        "java": "pbrMaterialExtensionsSetAttenuationColor",
+        "symbol": "cna_pbr_material_extensions_set_attenuation_color"
+      },
+      {
+        "java": "pbrMaterialExtensionsSetAttenuationDistance",
+        "symbol": "cna_pbr_material_extensions_set_attenuation_distance"
+      },
+      {
+        "java": "pbrMaterialExtensionsSetClearcoatFactor",
+        "symbol": "cna_pbr_material_extensions_set_clearcoat_factor"
+      },
+      {
+        "java": "pbrMaterialExtensionsSetClearcoatNormalScale",
+        "symbol": "cna_pbr_material_extensions_set_clearcoat_normal_scale"
+      },
+      {
+        "java": "pbrMaterialExtensionsSetClearcoatNormalTexture",
+        "symbol": "cna_pbr_material_extensions_set_clearcoat_normal_texture"
+      },
+      {
+        "java": "pbrMaterialExtensionsSetClearcoatRoughness",
+        "symbol": "cna_pbr_material_extensions_set_clearcoat_roughness"
+      },
+      {
+        "java": "pbrMaterialExtensionsSetClearcoatRoughnessTexture",
+        "symbol": "cna_pbr_material_extensions_set_clearcoat_roughness_texture"
+      },
+      {
+        "java": "pbrMaterialExtensionsSetClearcoatTexture",
+        "symbol": "cna_pbr_material_extensions_set_clearcoat_texture"
+      },
+      {
+        "java": "pbrMaterialExtensionsSetIridescenceFactor",
+        "symbol": "cna_pbr_material_extensions_set_iridescence_factor"
+      },
+      {
+        "java": "pbrMaterialExtensionsSetIridescenceIor",
+        "symbol": "cna_pbr_material_extensions_set_iridescence_ior"
+      },
+      {
+        "java": "pbrMaterialExtensionsSetIridescenceTexture",
+        "symbol": "cna_pbr_material_extensions_set_iridescence_texture"
+      },
+      {
+        "java": "pbrMaterialExtensionsSetIridescenceThicknessMaximum",
+        "symbol": "cna_pbr_material_extensions_set_iridescence_thickness_maximum"
+      },
+      {
+        "java": "pbrMaterialExtensionsSetIridescenceThicknessMinimum",
+        "symbol": "cna_pbr_material_extensions_set_iridescence_thickness_minimum"
+      },
+      {
+        "java": "pbrMaterialExtensionsSetIridescenceThicknessTexture",
+        "symbol": "cna_pbr_material_extensions_set_iridescence_thickness_texture"
+      },
+      {
+        "java": "pbrMaterialExtensionsSetSheenColorFactor",
+        "symbol": "cna_pbr_material_extensions_set_sheen_color_factor"
+      },
+      {
+        "java": "pbrMaterialExtensionsSetSheenColorTexture",
+        "symbol": "cna_pbr_material_extensions_set_sheen_color_texture"
+      },
+      {
+        "java": "pbrMaterialExtensionsSetSheenRoughness",
+        "symbol": "cna_pbr_material_extensions_set_sheen_roughness"
+      },
+      {
+        "java": "pbrMaterialExtensionsSetSheenRoughnessTexture",
+        "symbol": "cna_pbr_material_extensions_set_sheen_roughness_texture"
+      },
+      {
+        "java": "pbrMaterialExtensionsSetSubsurfaceColor",
+        "symbol": "cna_pbr_material_extensions_set_subsurface_color"
+      },
+      {
+        "java": "pbrMaterialExtensionsSetSubsurfaceWrap",
+        "symbol": "cna_pbr_material_extensions_set_subsurface_wrap"
+      },
+      {
+        "java": "pbrMaterialExtensionsSetThicknessFactor",
+        "symbol": "cna_pbr_material_extensions_set_thickness_factor"
+      },
+      {
+        "java": "pbrMaterialExtensionsSetThicknessTexture",
+        "symbol": "cna_pbr_material_extensions_set_thickness_texture"
+      },
+      {
+        "java": "pbrMaterialExtensionsSetTransmissionFactor",
+        "symbol": "cna_pbr_material_extensions_set_transmission_factor"
+      },
+      {
+        "java": "pbrMaterialExtensionsSetTransmissionTexture",
+        "symbol": "cna_pbr_material_extensions_set_transmission_texture"
+      },
+      {
         "java": "pointLightExtInit",
         "symbol": "cna_point_light_ext_init"
       },
