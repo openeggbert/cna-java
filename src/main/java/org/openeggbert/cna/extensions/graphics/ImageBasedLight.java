@@ -10,7 +10,7 @@ import org.openeggbert.cna.internal.generated.NativeEngineLayerRoutes;
  *
  * <p>A CNA extension, and what {@link EnvironmentProcessor} exists to produce: an irradiance cube
  * for the diffuse half, a prefiltered specular cube whose mip levels are roughness levels, and
- * the BRDF lookup that combines them. {@link #getIntensity()} scales the lot.
+ * the BRDF lookup that combines them. {@link #intensity()} scales the lot.
  *
  * <p><strong>The textures are borrowed and retained here.</strong> CNA's structure records them
  * and never owns them, so this holds Java references to keep them alive and disposes none of
