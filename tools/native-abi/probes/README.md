@@ -12,10 +12,87 @@ CNA=../../cnanext
 ccache cc -std=c11 -Wall -Wextra -g -O0 \
   -I"$CNA/modules/c-api/include" \
   -o build-probe/cnb_model_roundtrip tools/native-abi/probes/cnb_model_roundtrip.c \
-  -L"$CNA/cmake-build-javanext/modules/c-api" -lcna_c_api \
-  -Wl,-rpath,"$CNA/cmake-build-javanext/modules/c-api"
-CNA_PLATFORM=HEADLESS CNA_RENDERER=HEADLESS CNA_AUDIO=NULL ./build-probe/cnb_model_roundtrip
+  -L"$CNA/cmake-build-javagl/modules/c-api" -lcna_c_api \
+  -Wl,-rpath,"$CNA/cmake-build-javagl/modules/c-api"
+CNA_GRAPHICS_RENDERER=HEADLESS ./build-probe/cnb_model_roundtrip
 ```
+
+## Which library, and which renderer
+
+There are two CNA builds under `../../cnanext` that this repository uses, and they answer
+different questions.
+
+`cmake-build-javanext` is the pinned single-renderer HEADLESS build every measurement before this
+session was taken on. `cmake-build-javagl` is a **multi-renderer** build of the same sources --
+CNA compiles several renderers in and one is chosen at runtime -- configured as:
+
+```sh
+cmake -S . -B cmake-build-javagl -G Ninja \
+  -DCMAKE_BUILD_TYPE=Debug \
+  -DCNA_GRAPHICS_RENDERER=HEADLESS \
+  -DCNA_GRAPHICS_RENDERERS="HEADLESS;OPENGLES3;OPENGL33;OPENGL4;SOFTWARE" \
+  -DCNA_PLATFORM=SDL3 -DCNA_AUDIO_PLATFORM=NULL \
+  -DCNA_BUILD_C_API=ON -DCNA_CNAEXT=ON -DCNA_DEVICES=ON \
+  -DCNA_ENABLE_NET=ON -DCNA_ENABLE_VIDEO=AUTO \
+  -DCNA_BUILD_TESTS=OFF -DCNA_BUILD_EXAMPLES=OFF \
+  -DCNA_SHARP_RUNTIME_ROOT=../sharp-runtimenext \
+  -DCMAKE_C_COMPILER_LAUNCHER=ccache -DCMAKE_CXX_COMPILER_LAUNCHER=ccache
+cmake --build cmake-build-javagl --target cna_c_api -j$(nproc)
+```
+
+`HEADLESS` is the default so the existing qualification behaves exactly as it did; the
+`CNA_GRAPHICS_RENDERER` **environment variable** picks another one for a single run. CNA refuses a
+name it was not built with rather than substituting quietly, so a probe that names a renderer
+either gets it or fails loudly.
+
+The platform is `SDL3` rather than `HEADLESS`, because a GPU renderer needs a native window and
+the headless platform has none. That means these probes open a window for the fraction of a second
+they run.
+
+**Every renderer-sensitive probe below now carries two answers**: the HEADLESS one it was written
+against, and the one the GPU renderers give. Where they differ, the difference is the measurement.
+
+## What the five renderers can do
+
+Taken by `gpu_renderer_qualification.c` on this host -- Linux x86-64, Mesa 25.0.7, AMD Radeon 780M
+(radeonsi) reached through SDL3 on Wayland.
+
+| | HEADLESS | SOFTWARE | OPENGL4 | OPENGLES3 | OPENGL33 |
+|---|---|---|---|---|---|
+| GL context | none | none | desktop GL 4.x | **OpenGL ES 3.2** | **OpenGL 4.6 core** |
+| compute shaders | no | no | no | **yes** | **yes** |
+| indirect draw | no | no | no | yes | yes |
+| storage buffers | no | no | no | yes | yes |
+| compute image binding | -- | -- | -- | no | **yes** |
+| GPU timer | no | no | no | yes | yes |
+| GPU instance culler | no | no | no | yes | yes |
+| float render targets | no | no | no | yes | yes |
+| texture readback | yes | yes | yes | yes | yes |
+| **render-target readback** | **no** | yes | yes | yes | yes |
+| automatic exposure | no | no | no | **yes** | **yes** |
+| lent caster/prepass effects | invalid | -- | -- | **valid** | **valid** |
+
+Three things in that table are worth stating outright, because each of them contradicts an
+assumption the previous qualification was written under.
+
+**`OPENGL4` is not the compute-capable renderer, and `OPENGL33` is.** The name is the opposite of
+the answer. CNA's compute, storage-buffer and indirect-draw support lives in one implementation
+family, EasyGL, which is reached through the five profile names `OPENGLES2`, `OPENGLES3`,
+`OPENGL33`, `WEBGL1` and `WEBGL2`; `OPENGL4` is a separate hand-rolled desktop renderer that
+implements no `IComputeShaderRenderer` at all. `OPENGL33` asks SDL for a 3.3 core profile and Mesa
+hands back **4.6 core**, and EasyGL asks the *runtime* context rather than the compile-time
+profile, so compute is available on it.
+
+**The dialect is GLSL ES, not desktop GLSL.** Every shader inside CNA's own engine layer opens
+with `#version 300 es` or `#version 310 es`, including the compute programs behind automatic
+exposure, GPU instance culling and clustered lighting. `#version 310 es` compiles on both capable
+renderers; `#version 430 core` compiles only on `OPENGL33`, whose context really is desktop GL.
+A projection that generated desktop GLSL would work on one of the two renderers CNA supports here
+and fail on the other.
+
+**Render-target readback is not a compute question.** `SOFTWARE` and `OPENGL4` read a cleared
+render target back correctly with no compute at all, so pixel-level qualification is available
+much more widely than the compute family is. Only HEADLESS refuses it.
 
 ## cnb_model_roundtrip.c
 
@@ -65,6 +142,32 @@ they construct, they answer `is_supported` with `false`, and each carries a huma
 desktop GL needs 3.3 or ARB_timer_query)"* and *"this renderer has no compute shaders"*. That is a
 family to project with its refusal intact, not one to leave out: a profiling overlay that can say
 why it has no numbers is more useful than one that vanishes.
+
+### The same census on OPENGLES3 and OPENGL33
+
+Re-run against the multi-renderer library, both capable renderers answer **identically**, and six
+lines of the HEADLESS table change:
+
+```text
+gpu_timer supported?          no  -> yes
+storage_buffer                NOT_SUPPORTED -> SUCCESS
+compute_shader                NOT_SUPPORTED -> INTERNAL   (see compute_compile_contract.c)
+auto_exposure_ext             NOT_SUPPORTED -> SUCCESS
+cube_shadow_map supported?    no  -> yes
+cube_shadow_map_begin(face 0) INTERNAL -> SUCCESS
+gpu_instance_culler supported? no -> yes
+```
+
+Nothing else in the census moves at all: every family that worked on HEADLESS still works, and no
+family that worked stops. That the two capable renderers agree line for line is worth as much as
+the deltas -- it is what makes "this is CNA's answer" a fairer reading than "this is one driver's
+answer".
+
+`cube_shadow_map` is the one that closes an upstream finding rather than a hardware one.
+`JAVA-UPSTREAM-007` recorded that its face passes refuse to open while `is_supported` answered
+true; here `is_supported` answers **true** and `begin`/`end` both **succeed**, so the pair is
+consistent and the finding was a renderer boundary reported through the wrong result code rather
+than a contradiction in CNA.
 
 The four clustered create routes -- `clustered_light_set`, `clustered_light_grid`,
 `clustered_light_assignment` and `clustered_shadow_policy` -- name their first parameter `game`
@@ -213,6 +316,27 @@ so a JNI trampoline for it would be code no test here could execute. `LightProbe
 projects the other ten routes and says why the three are missing, rather than shipping a
 trampoline nobody can exercise -- while `cna_transparent_draw_list_draw_sorted`, whose callback
 *does* run here, gets one.
+
+### The same probe on OPENGLES3 and OPENGL33
+
+Both capable renderers answer identically, and the four lines that mattered all move:
+
+```text
+is supported            0  1        (was 0)
+bake probe              0  faces drawn 6   probe valid    (was INVALID_STATE, 0 faces, invalid)
+bake light              0  faces drawn 48  (was INVALID_STATE, 0 faces)
+bake visibility         0  faces drawn 48  (was INVALID_STATE, 0 faces)
+```
+
+**The callback is entered.** Six faces for one probe, and forty-eight for the eight probes of a
+2x2x2 volume -- six per probe, which is the arithmetic a cube capture should produce and is
+stronger evidence than a success code, because a baker that returned SUCCESS without capturing
+would have drawn zero. The three bake routes and the scene callback they take are therefore
+reachable and testable here, which is what `JAVA-EXT-008` left them unbound for.
+
+Every refusal in the HEADLESS list survives unchanged: a reversed or negative near/far pair, a
+seventh face, a zero face size and a null callback are all still refused, and `set_planes` still
+leaves the previously accepted pair intact.
 
 The rest is what the Java tests now assert. `set_planes` refuses a reversed and a negative pair
 with `INVALID_ARGUMENT` and **leaves the previously accepted pair intact** -- a setter that wrote
@@ -395,13 +519,40 @@ answer `NOT_SUPPORTED` outright, so there is no object to ask anything of and th
 route is unreachable here. The sentence in the header describes a renderer that *has* compute and
 rejects the source; this one refuses before that.
 
-The three routes that do work -- the memory-barrier bitmask test and the two indirect-draw
-argument initialisers -- are pure and answer correctly, but they are parts of a family whose other
-twenty-two routes cannot be reached: indirect drawing needs a storage buffer to draw from. Binding
-three helpers with nothing to help would be shipping fragments of an API, so the family is recorded
-as `HARDWARE_PENDING` in `docs/backlog.json` under `JAVA-EXT-012` rather than half-projected. It is worth revisiting the
-moment this repository can qualify against a desktop GL 4.3 renderer, where all twenty-five become
-reachable at once.
+### The same probe on OPENGLES3 and OPENGL33
+
+```text
+storage buffer create   0            (was NOT_SUPPORTED)
+storage buffer size     256
+storage buffer typed    0            (was NOT_SUPPORTED)
+compute shader create   0            (was NOT_SUPPORTED)
+is valid                0  1
+compile error           0  0 bytes
+dispatch                0
+set uniform int         0
+set uniform float       0
+image binding supported 0  0         OPENGLES3   |   0  1  OPENGL33
+barrier                 0
+destroy                 0
+```
+
+Every route in the family is reachable, and the one difference between the two renderers is image
+binding: GL ES 3.1 requires an immutable texture allocation this renderer does not make, and the
+desktop 4.6 core context does. That is exactly the distinction the header draws when it says
+having compute and being able to bind an image are different questions, and it is why the Java
+projection asks rather than assumes.
+
+This probe also earned its keep by being **wrong first**, in a way HEADLESS could never have
+exposed. It read `is_valid`'s output parameter inside the same `printf` that filled it:
+
+```c
+printf("is valid %d  %d\n", (int)cna_compute_shader_is_valid(shader, &valid), (int)valid);
+```
+
+C leaves the order of a call's arguments unspecified, and this compiler evaluates them
+right-to-left, so `valid` was read *before* the call that wrote it and the probe reported a
+compiled shader as invalid. On HEADLESS the answer was `NOT_SUPPORTED` and the line never ran, so
+the defect sat undetected for a whole qualification. Both such lines are sequenced explicitly now.
 
 ## chain_owned_pass.c
 
@@ -471,8 +622,36 @@ answers that question from the reference a game gave it, for nothing.
 
 The caster and prepass effects come back **invalid** here. The header allows it -- *"or
 `CNA_INVALID_HANDLE` when unsupported"* -- and this renderer compiles no shaders, so there is no
-effect to lend. There is nothing to project and nothing a test could say beyond the absence, so the
-group stays unbound with that measurement as the reason.
+effect to lend. There is nothing to project and nothing a test could say beyond the absence.
+
+### The same probe on OPENGLES3 and OPENGL33
+
+Both capable renderers answer identically, and the absent half of the measurement is now present:
+
+```text
+caster effect              0  valid, fresh each call     (was invalid)
+release caster             0
+destroy map while lent     3                              <- INVALID_STATE
+prepass effect             0  valid, fresh each call     (was invalid)
+release prepass effect     0
+destroy prepass            3                              <- INVALID_STATE
+brdf texture               0  valid, fresh each call     (unchanged)
+destroy table while lent   0                              <- SUCCESS, unchanged
+```
+
+The two shapes are now measured side by side, and **they are opposites**. The BRDF table's texture
+is a *retaining* borrow: the table can be destroyed while a handle is out, the handle keeps it
+alive, and releasing the handle afterwards succeeds. A shadow map's caster effect is a *blocking*
+borrow: while any lent handle is outstanding the lender's `destroy` is refused with
+`INVALID_STATE`. Both lines above come from a probe that minted the handle **twice** -- once to
+report it and once to ask whether it was stable -- and released only one, so the refusal is the
+lender counting what it has lent rather than a one-shot flag.
+
+That difference is the whole reason this group could not be projected from the declaration. Two
+routes both documented as "borrowed" require opposite Java facades: one may outlive its lender and
+one must not, and nothing but the measurement distinguishes them. `lent_effect_lifetime.c` takes
+the rest of the questions -- release order, use after the lender goes, and how many handles one
+lender will lend.
 
 ## pipeline_scene_callbacks.c
 
@@ -495,8 +674,258 @@ clear transparent      0
 clear shadow           0
 ```
 
-Both register, both clear, and **neither is entered** by a whole frame. That is consistent with
-everything else here: the pipeline reports zero passes run because this renderer compiles no
-shaders, so there is no transparent pass and no shadow pass to call anyone from. A trampoline for
-either would be code no test in this qualification could execute, which is the same reason the
-light-probe baker's three bake routes are unbound.
+Both register, both clear, and **neither is entered** by a whole frame. The reading at the time was
+that this followed from the renderer: no compiled shaders, so no transparent pass and no shadow
+pass to call anyone from.
+
+### The same probe on OPENGLES3 and OPENGL33
+
+That reading was wrong, and the GPU renderers are what say so:
+
+```text
+begin                  0
+end                    0
+transparent callback   0 call(s)
+shadow callback        0 call(s)
+```
+
+**Identical.** A renderer that compiles shaders, runs the light-probe baker's six face captures and
+reads pixels back still enters neither callback across a whole `begin`/`end`. So the blocker is not
+the renderer, and "a stronger renderer will reach it" is no longer an available explanation. What
+the probe drives is an empty pipeline: no geometry is submitted, no light casts, and the passes
+whose bodies would call out have nothing to call about. Whether a populated scene enters them is a
+different question, and one this probe does not answer -- which is why the two routes stay unbound
+with a *measured* reason rather than an assumed one. See `pipeline_scene_callback_scene.c`, which
+asks the populated question.
+
+## gpu_renderer_qualification.c
+
+What can a renderer actually do, asked of every renderer this build compiles in?
+
+Every engine-layer measurement before this session was taken on HEADLESS, which compiles no shader
+and reads back no pixel, and three families were recorded as blocked on that fact rather than on
+CNA. This probe is what re-opens them: it asks the questions in the order they depend on each
+other -- which renderer is really active by its own name, what it claims through
+`cna_graphics_device_supports_capability`, whether a compute shader compiles and in which dialect,
+whether a dispatch over a storage buffer produces the arithmetic it was asked for, whether a frame
+can be rendered into a target and read back as pixels, and whether automatic exposure constructs
+and measures.
+
+Its structured lines carry a `GPUQ ` prefix and are also written to a file named on the command
+line, because a real renderer prints banners on stdout and a machine-readable probe must not have
+to be told apart from them.
+
+The capability table it produces is at the top of this file. The line that matters most is not a
+capability at all:
+
+```text
+compute.result   in [3 5 11 19] out [13 17 29 45] expected [13 17 29 45]
+compute.semantic PASS
+```
+
+Four known integers uploaded to a storage buffer, doubled and offset by a uniform inside a compute
+shader, read back and compared against the same arithmetic done in C. **Nothing short of the GPU
+having run the program produces that.** A dispatch that returned `SUCCESS` without executing would
+leave the output buffer at its uninitialised contents, and every earlier `SUCCESS` in the sequence
+-- create, upload, bind, dispatch, barrier, read -- is individually satisfiable by a renderer that
+does nothing.
+
+The same discipline is applied to the other two families. A render target is cleared to a specific
+colour and read back as pixels (`first=[12 34 56 255]`), and automatic exposure is asked to measure
+a deliberately dark texture and a deliberately bright one:
+
+```text
+auto_exposure.measure         dark=SUCCESS 0.031373 bright=SUCCESS 0.941176
+auto_exposure.adapt           bright=SUCCESS 0.191250 dark=SUCCESS 5.737502
+```
+
+8/255 is 0.031373 and 240/255 is 0.941176, so the meter is reporting the luminance of the frame it
+was handed rather than a constant, and the adaptation moves the exposure **down** for the brighter
+scene and **up** for the darker one, which is the direction the header documents. Both renderers
+produce those four numbers bit for bit.
+
+## compute_compile_contract.c
+
+`JAVA-UPSTREAM-012`, and a question no renderer without a shader compiler could have been asked.
+
+`cna_compute_shader_create` documents this exactly: *"Creation succeeds even when the source does
+not compile: ask `cna_compute_shader_is_valid` and read `cna_compute_shader_copy_compile_error`.
+That mirrors the canonical class, which records the failure rather than throwing."* That sentence
+is the entire basis on which a Java `ComputeShader` would be built: a constructor that always
+produces an object, and a compile log a caller reads off it.
+
+It is not what happens. Five sources, on both capable renderers, three runs each, identical every
+time:
+
+```text
+compiles               create SUCCESS   valid yes  error 0 bytes
+not glsl at all        create INTERNAL  handle invalid
+no version directive   create INTERNAL  handle invalid
+compiles, cannot link  create INTERNAL  handle invalid
+empty source           create INTERNAL  handle invalid
+```
+
+The canonical `ComputeShader` constructor (`modules/graphics-ext/src/ComputeShader.cpp`) **throws
+`std::runtime_error`** when the program does not compile or does not link. `CallWithExceptionBarrier`
+has no arm for it, so the throw reaches `catch (const std::exception&)` and the caller is told
+`CNA_RESULT_INTERNAL` -- which a game cannot tell from a defect inside CNA, and which is the one
+refusal here a game can actually act on. It is the same barrier shape as `JAVA-UPSTREAM-006` and
+`JAVA-UPSTREAM-009`, on a third route.
+
+Two consequences follow, and the second is the reason this probe was worth writing before any Java
+existed.
+
+**`cna_compute_shader_is_valid` and `cna_compute_shader_copy_compile_error` cannot answer the
+question they exist for.** A shader that failed to compile has no handle, so there is nothing to
+ask; a shader that has a handle always answers `valid yes` and `0 bytes`.
+
+**The compiler's diagnostics are still reachable, through the barrier's own last message.** That is
+what makes a Java projection possible at all:
+
+```text
+not glsl at all       CNA::Graphics::ComputeShader: the program did not compile:
+                      CS: 0:2(1): error: illegal use of reserved word `this' ...
+no version directive  ... CS: 0:0(0): error: Compute shaders require GLSL 4.30 or GLSL ES 3.10
+compiles, cannot link ... Link: error: unresolved reference to function `missing'
+```
+
+So `ComputeShader.compile` surfaces the GLSL log in the exception it throws, and **still** asks
+`isValid()` and reads the compile error on the success path -- not because either can fail today,
+but because the day CNA makes its implementation match its header, a Java layer that trusted only
+the result code would hand a game a shader that never compiled.
+
+## pipeline_scene_callback_scene.c
+
+Does a render pipeline enter its scene callbacks when there is actually a scene?
+
+`pipeline_scene_callbacks.c` showed that an empty pipeline enters neither, on HEADLESS and on both
+capable renderers alike, which removed the renderer explanation without supplying another one.
+This probe supplies the other half: the same two callbacks, with the pipeline given the things a
+transparent pass and a shadow pass need before either could have anything to do.
+
+The answer is that the earlier probe was measuring a pipeline with both passes **switched off**,
+and it is the same on all three renderers:
+
+```text
+default settings   shadows=off transparency=NONE
+
+defaults                       shadow=0(at 0) transparent=0(at 0) shadow_pass_ran=no
+shadows on                     shadow=1(at 1) transparent=0(at 0) shadow_pass_ran=yes
+shadows on, sorted             shadow=1(at 1) transparent=1(at 2) shadow_pass_ran=yes
+shadows on, order independent  shadow=1(at 1) transparent=1(at 2) shadow_pass_ran=yes
+transparent callback fails     begin=SUCCESS  end=INVALID_STATE
+second frame                   shadow=1(at 1) transparent=1(at 2)
+transparent cleared            shadow=1(at 1) transparent=0(at 0)
+both cleared                   shadow=0(at 0) transparent=0(at 0)
+no shadow map                  shadow=0(at 0) transparent=0(at 0)
+```
+
+`RenderPipeline::begin` runs the shadow pass only `if (settings_.isShadowsEnabled() && shadowMap_
+!= nullptr && drawCasters_)`, and `drawTransparentPhase` returns immediately unless the
+transparency mode is something other than `None`. The default settings have shadows off and
+transparency `None`, so the earlier probe's frame had nothing to call from -- **on any renderer**.
+The renderer was never the gate, and "a shader-capable renderer will reach it" would have been the
+wrong prediction as well as the wrong reason.
+
+Six answers, and together they are the contract a JNI trampoline needs:
+
+The **shadow callback runs first**, inside `begin`, and the **transparent callback second**, inside
+`end`. The sequence numbers say so rather than the ordering of the source: each callback stamps a
+shared counter, and it reads 1 and 2 every time.
+
+**Once per frame each**, over two consecutive frames, so that is a rate rather than a coincidence.
+
+**A failing callback's result reaches the caller.** The transparent callback returning
+`INVALID_STATE` leaves `begin` at `SUCCESS` and makes **`end`** return `INVALID_STATE` -- the
+callback's own code, not a generic failure -- which is exactly the shape
+`cna_transparent_draw_list_draw_sorted` already has and which lets a Java trampoline leave a thrown
+exception pending and surface it at the call that caused it.
+
+**Both clear**, independently, and clearing the shadow *map* (passing `CNA_INVALID_HANDLE`) also
+stops the shadow callback even with a callback still registered.
+
+**Order-independent transparency really runs on the capable renderers.** On HEADLESS it falls back
+and names the reason -- *"this renderer has no half-float render target, and the accumulation sums
+values far outside 0..1"* -- and on both GL renderers the fallback reason is empty.
+
+`get_last_frame_pass_count` answers **0** in every configuration, on every renderer, because no
+post-process pass is enabled; it is a count of chain passes rather than of scene passes.
+
+## lent_effect_lifetime.c
+
+On a renderer that compiles shaders, what exactly is each of the engine layer's borrowed handles
+worth?
+
+`lent_handles.c` could only half-answer this: the caster and prepass effects came back
+`CNA_INVALID_HANDLE` on HEADLESS, so there was no lifetime to measure. This probe asks four
+questions of every lender, and the fourth is the one that decides the Java facade -- **is the
+lender's own `destroy` refused while a lent handle is outstanding?**
+
+Identical on OPENGLES3 and OPENGL33:
+
+| Lent handle | valid | stable | release | lender destroy while lent | borrow |
+|---|---|---|---|---|---|
+| `shadow_map` caster | yes | fresh each call | SUCCESS | INVALID_STATE | blocking |
+| `shadow_map` skinned caster | yes | fresh each call | SUCCESS | INVALID_STATE | blocking |
+| `cascaded_shadow_map` caster | yes | fresh each call | SUCCESS | INVALID_STATE | blocking |
+| `cube_shadow_map` caster | yes | fresh each call | SUCCESS | INVALID_STATE | blocking |
+| `spot_shadow_map` caster | yes | fresh each call | SUCCESS | **SUCCESS** | retaining |
+| `depth_normal_prepass` effect | yes | fresh each call | SUCCESS | INVALID_STATE | blocking |
+| `depth_normal_prepass` skinned | yes | fresh each call | SUCCESS | INVALID_STATE | blocking |
+| `clustered_forward` shader effect | yes *(also on HEADLESS)* | fresh each call | SUCCESS | INVALID_STATE | blocking |
+| `clustered_forward` extensions | yes *(also on HEADLESS)* | fresh each call | SUCCESS | SUCCESS | retaining |
+| `weighted_blended` accumulation | yes | fresh each call | SUCCESS | SUCCESS | retaining |
+| `weighted_blended` revealage | yes | fresh each call | SUCCESS | SUCCESS | retaining |
+| `ascii_pass` effect | yes *(every renderer)* | fresh each call | **INVALID_HANDLE** | SUCCESS | non-owning view |
+| `color_grade_pass` LUT / volume LUT | invalid with none bound | -- | -- | -- | -- |
+| `render_pipeline` shadow map | yes, and **not** the handle that was given | fresh each call | -- | -- | -- |
+| `render_pipeline` scene target | invalid even while `is_using_scene_target` is true | -- | -- | -- | -- |
+| `render_pipeline` skybox, none set | invalid | -- | -- | -- | -- |
+
+Three things follow, and none of them could have been read off a declaration that says only
+"borrowed".
+
+**Two routes with the same one-line documentation need opposite Java facades.** A blocking borrow
+must be given back before its lender can be closed, so its Java object has to be closed first or
+the parent's `close()` fails; a retaining borrow may outlive its lender entirely.
+
+**The four shadow maps do not agree with each other.** `cna_shadow_map_destroy`,
+`cna_cascaded_shadow_map_destroy` and `cna_cube_shadow_map_destroy` all check an
+`activeBorrowCount` and refuse; `cna_spot_shadow_map_destroy` has no such check and releases the
+handle. Recorded as `JAVA-UPSTREAM-013`. It is an inconsistency rather than a memory-safety fault
+-- see the next probe.
+
+**The ASCII pass's effect is a third shape.** `cna_effect_destroy` refuses it with
+`INVALID_HANDLE`, which matches the header's *"the caller does not release the pass, and the pass
+must outlive it"*, and the pass destroys happily while it is out.
+
+## lent_handle_use_after_lender.c
+
+A lender that lets go could be *retaining* -- the handle keeps the object alive -- or simply
+*dangling*. Only using the handle afterwards tells the two apart, and one of those answers is a
+crash, so this probe does exactly **one case per process**, named on the command line, and a
+non-zero exit is part of the measurement.
+
+`brdf_texture` is the control: its header states the retaining contract outright and an earlier
+probe already measured it holding, so a run where the control crashes means the probe is wrong
+rather than CNA. Identical on OPENGLES3 and OPENGL33:
+
+```text
+brdf_texture          destroy table while lent SUCCESS  use after SUCCESS  release SUCCESS
+spot_caster           destroy map   while lent SUCCESS  use after SUCCESS  release SUCCESS
+clustered_extensions  destroy       while lent SUCCESS  use after SUCCESS  release SUCCESS
+oit_accumulation      destroy       while lent SUCCESS  use after SUCCESS  release SUCCESS
+ascii_effect          destroy pass  while lent SUCCESS  use after INVALID_HANDLE
+```
+
+**Nothing dangles.** Every lender that permits its own destruction really is retained by the
+handle it lent, and the one that is not -- the ASCII pass's effect, which is a non-owning view --
+answers `INVALID_HANDLE` afterwards rather than dereferencing freed memory. So `JAVA-UPSTREAM-013`
+is a *consistency* finding: the spot shadow map is as safe as its three siblings, it simply does
+not enforce the same discipline, and a caller who relies on the refusal to catch a bug will not be
+caught out by that one.
+
+That result is what makes the whole group projectable. A Java facade over a blocking borrow keeps
+its parent alive and gives the handle back on `close()`; a facade over a retaining borrow may be
+closed in any order. Both are safe, and the measurement says which is which per route rather than
+one guess applied to twenty.

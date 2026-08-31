@@ -86,9 +86,13 @@ static CNA_Result on_update(CNA_Handle game, const CNA_GameTime* game_time, void
     result = cna_compute_shader_create(device, view_of(source), &shader);
     printf("compute shader create   %d\n", (int)result);
     if (result == CNA_RESULT_SUCCESS) {
+        /* Sequenced deliberately. C leaves the order of a call's arguments unspecified, so
+           reading `valid` in the same printf that fills it prints whatever it held before the
+           call -- which on a renderer with no compute is indistinguishable from the answer and
+           on one with compute is simply wrong. */
         CNA_Bool valid = CNA_FALSE;
-        printf("is valid                %d  %d\n",
-            (int)cna_compute_shader_is_valid(shader, &valid), (int)valid);
+        const CNA_Result asked_valid = cna_compute_shader_is_valid(shader, &valid);
+        printf("is valid                %d  %d\n", (int)asked_valid, (int)valid);
         uint64_t bytes = 0;
         CNA_Result text = cna_compute_shader_copy_compile_error(shader, NULL, 0, &bytes);
         char message[512];
@@ -107,8 +111,9 @@ static CNA_Result on_update(CNA_Handle game, const CNA_GameTime* game_time, void
         printf("set uniform float       %d\n",
             (int)cna_compute_shader_set_uniform_float(shader, view_of("value"), 0.5f));
         CNA_Bool images = CNA_FALSE;
-        printf("image binding supported %d  %d\n",
-            (int)cna_compute_shader_is_image_binding_supported(shader, &images), (int)images);
+        const CNA_Result asked_images =
+            cna_compute_shader_is_image_binding_supported(shader, &images);
+        printf("image binding supported %d  %d\n", (int)asked_images, (int)images);
         printf("barrier                 %d\n", (int)cna_compute_shader_barrier(
             shader, CNA_GRAPHICS_MEMORY_BARRIER_SHADER_STORAGE));
         printf("destroy                 %d\n", (int)cna_compute_shader_destroy(shader));
