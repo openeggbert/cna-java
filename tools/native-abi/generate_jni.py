@@ -281,6 +281,18 @@ def plan(route: dict, live: dict) -> dict:
         if pointers == 1 and type_name in live["structures"]:
             raw_leaves = flatten_struct(type_name, live)
             groups = group_leaves(raw_leaves)
+            in_out = name in route.get("inOut", ())
+            if not constant and not in_out and not (
+                    name.startswith("out") or name == "destination"):
+                # A non-const struct pointer is an output, or it is read and written. The
+                # declaration does not say which, and guessing wrong is silent: an in/out
+                # structure treated as an output starts zeroed, so the caller's values are
+                # discarded and the route answers about a structure nobody asked about. CNA
+                # names a pure output `out_*` or `destination`; anything else has to be declared.
+                raise Unsupported(
+                    f"{route['symbol']}: '{name}' is a non-const {type_name}* that is neither "
+                    "named as an output nor declared in inOut, so whether it is read as well as "
+                    "written cannot be read off the declaration")
             if groups["views"] and not constant:
                 # An output structure's string view points at memory CNA owns, on terms this
                 # generator cannot read off the declaration. Reading it here would be a guess
@@ -289,8 +301,8 @@ def plan(route: dict, live: dict) -> dict:
                     f"{route['symbol']}: output {type_name} carries a CNA_StringView, whose "
                     "lifetime the declaration does not state")
             steps.append({"shape": "struct", "name": name, "ctype": type_name,
-                          "input": constant, "versions": version_paths(type_name, live),
-                          **groups})
+                          "input": constant, "inOut": in_out,
+                          "versions": version_paths(type_name, live), **groups})
             index += 1
             continue
         if pointers == 1 and following is not None and bare(following["type"]) == ("uint64_t", 0):
@@ -687,7 +699,7 @@ def render_c(class_name: str, entries: list[dict]) -> str:
                         continue
                     field = f"{name}{group.capitalize()}"
                     parameters.append(f"{jni}Array {field}")
-                    if step["input"]:
+                    if step["input"] or step.get("inOut"):
                         body.append(f"    {{")
                         body.append(f"        {jni} {field}_values["
                                     f"{len(step[group])}];")
@@ -697,7 +709,7 @@ def render_c(class_name: str, entries: list[dict]) -> str:
                             body.append(f"        {name}_value.{path} = "
                                         f"({leaf}){field}_values[{position}];")
                         body.append("    }")
-                    else:
+                    if not step["input"]:
                         values = ",\n            ".join(
                             f"({jni}){name}_value.{path}" for path, _ in step[group])
                         epilogue.append(

@@ -3502,6 +3502,31 @@
       {
         "java": "lodGroupExtSetSelectionMode",
         "symbol": "cna_lod_group_ext_set_selection_mode"
+      },
+      {
+        "java": "renderPipelineSettingsExtApplyFromString",
+        "symbol": "cna_render_pipeline_settings_ext_apply_from_string",
+        "inOut": [
+          "settings"
+        ]
+      },
+      {
+        "java": "renderPipelineSettingsExtApplyRenderQualityPreset",
+        "symbol": "cna_render_pipeline_settings_ext_apply_render_quality_preset",
+        "inOut": [
+          "settings"
+        ]
+      },
+      {
+        "java": "renderPipelineSettingsExtInit",
+        "symbol": "cna_render_pipeline_settings_ext_init"
+      },
+      {
+        "java": "renderPipelineSettingsExtNormalize",
+        "symbol": "cna_render_pipeline_settings_ext_normalize",
+        "inOut": [
+          "settings"
+        ]
       }
     ]
   }

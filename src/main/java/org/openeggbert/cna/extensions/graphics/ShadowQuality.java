@@ -11,4 +11,13 @@ public enum ShadowQuality {
     Medium,
     High,
     Ultra;
+
+    static ShadowQuality fromValue(long value) {
+        ShadowQuality[] values = values();
+        if (value < 0 || value >= values.length) {
+            throw new IllegalStateException("CNA reported ShadowQuality " + value
+                    + ", which this build has no constant for");
+        }
+        return values[(int) value];
+    }
 }

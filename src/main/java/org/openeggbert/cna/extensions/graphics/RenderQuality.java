@@ -10,4 +10,13 @@ public enum RenderQuality {
     Medium,
     High,
     Ultra;
+
+    static RenderQuality fromValue(long value) {
+        RenderQuality[] values = values();
+        if (value < 0 || value >= values.length) {
+            throw new IllegalStateException("CNA reported RenderQuality " + value
+                    + ", which this build has no constant for");
+        }
+        return values[(int) value];
+    }
 }

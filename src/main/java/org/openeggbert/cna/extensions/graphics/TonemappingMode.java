@@ -11,4 +11,13 @@ public enum TonemappingMode {
     Filmic,
     Aces,
     Uncharted2;
+
+    static TonemappingMode fromValue(long value) {
+        TonemappingMode[] values = values();
+        if (value < 0 || value >= values.length) {
+            throw new IllegalStateException("CNA reported TonemappingMode " + value
+                    + ", which this build has no constant for");
+        }
+        return values[(int) value];
+    }
 }

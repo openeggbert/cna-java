@@ -820,6 +820,10 @@
     LOAD(property_dictionary_set_string, "cna_property_dictionary_set_string");
     LOAD(property_dictionary_set_time_span_ticks, "cna_property_dictionary_set_time_span_ticks");
     LOAD(property_dictionary_try_get_value_kind_ext, "cna_property_dictionary_try_get_value_kind_ext");
+    LOAD(render_pipeline_settings_ext_apply_from_string, "cna_render_pipeline_settings_ext_apply_from_string");
+    LOAD(render_pipeline_settings_ext_apply_render_quality_preset, "cna_render_pipeline_settings_ext_apply_render_quality_preset");
+    LOAD(render_pipeline_settings_ext_init, "cna_render_pipeline_settings_ext_init");
+    LOAD(render_pipeline_settings_ext_normalize, "cna_render_pipeline_settings_ext_normalize");
     LOAD(render_pipeline_settings_init, "cna_render_pipeline_settings_init");
     LOAD(sensors_copy_name_at, "cna_sensors_copy_name_at");
     LOAD(sensors_get_accelerometer, "cna_sensors_get_accelerometer");

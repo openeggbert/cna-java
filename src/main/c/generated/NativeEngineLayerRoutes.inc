@@ -683,3 +683,531 @@ Java_org_openeggbert_cna_internal_generated_NativeEngineLayerRoutes_lodGroupExtS
     CNA_Result call_result = cna.lod_group_ext_set_selection_mode((CNA_LodGroupEXTHandle)group, (CNA_LodSelectionMode)mode);
     return (jint)call_result;
 }
+
+JNIEXPORT jint JNICALL
+Java_org_openeggbert_cna_internal_generated_NativeEngineLayerRoutes_renderPipelineSettingsExtApplyFromString(
+    JNIEnv* environment, jclass declaring_class, jbyteArray settingsBytes, jlongArray settingsIntegral, jfloatArray settingsFloating, jbyteArray text, jintArray out_applied)
+{
+    (void)environment;
+    (void)declaring_class;
+    CNA_RenderPipelineSettingsEXT settings_value;
+    memset(&settings_value, 0, sizeof settings_value);
+    settings_value.struct_size = (uint32_t)(sizeof settings_value);
+    settings_value.struct_version = UINT32_C(1);
+    {
+        jbyte settingsBytes_values[4];
+        (*environment)->GetByteArrayRegion(environment, settingsBytes, 0, 4, settingsBytes_values);
+        settings_value.reserved[0] = (uint8_t)settingsBytes_values[0];
+        settings_value.reserved[1] = (uint8_t)settingsBytes_values[1];
+        settings_value.reserved[2] = (uint8_t)settingsBytes_values[2];
+        settings_value.reserved[3] = (uint8_t)settingsBytes_values[3];
+    }
+    {
+        jlong settingsIntegral_values[15];
+        (*environment)->GetLongArrayRegion(environment, settingsIntegral, 0, 15, settingsIntegral_values);
+        settings_value.hdr_enabled = (CNA_Bool)settingsIntegral_values[0];
+        settings_value.tonemapping_mode = (CNA_TonemappingMode)settingsIntegral_values[1];
+        settings_value.bloom_enabled = (CNA_Bool)settingsIntegral_values[2];
+        settings_value.bloom_iterations = (int32_t)settingsIntegral_values[3];
+        settings_value.ssao_enabled = (CNA_Bool)settingsIntegral_values[4];
+        settings_value.transparency_mode = (CNA_TransparencyMode)settingsIntegral_values[5];
+        settings_value.ssao_sample_count = (int32_t)settingsIntegral_values[6];
+        settings_value.ssr_enabled = (CNA_Bool)settingsIntegral_values[7];
+        settings_value.ssr_step_count = (int32_t)settingsIntegral_values[8];
+        settings_value.color_grade_enabled = (CNA_Bool)settingsIntegral_values[9];
+        settings_value.dof_enabled = (CNA_Bool)settingsIntegral_values[10];
+        settings_value.fxaa_enabled = (CNA_Bool)settingsIntegral_values[11];
+        settings_value.render_quality = (CNA_RenderQuality)settingsIntegral_values[12];
+        settings_value.shadow_quality = (CNA_ShadowQuality)settingsIntegral_values[13];
+        settings_value.shadows_enabled = (CNA_Bool)settingsIntegral_values[14];
+    }
+    {
+        jfloat settingsFloating_values[32];
+        (*environment)->GetFloatArrayRegion(environment, settingsFloating, 0, 32, settingsFloating_values);
+        settings_value.exposure = (float)settingsFloating_values[0];
+        settings_value.gamma = (float)settingsFloating_values[1];
+        settings_value.bloom_intensity = (float)settingsFloating_values[2];
+        settings_value.bloom_threshold = (float)settingsFloating_values[3];
+        settings_value.ssao_radius = (float)settingsFloating_values[4];
+        settings_value.ssao_intensity = (float)settingsFloating_values[5];
+        settings_value.ssr_max_distance = (float)settingsFloating_values[6];
+        settings_value.ssr_thickness = (float)settingsFloating_values[7];
+        settings_value.ssr_depth_bias = (float)settingsFloating_values[8];
+        settings_value.ssr_edge_fade = (float)settingsFloating_values[9];
+        settings_value.volumetric_fog_density = (float)settingsFloating_values[10];
+        settings_value.light_shaft_threshold = (float)settingsFloating_values[11];
+        settings_value.light_shaft_intensity = (float)settingsFloating_values[12];
+        settings_value.light_shaft_decay = (float)settingsFloating_values[13];
+        settings_value.height_fog_density = (float)settingsFloating_values[14];
+        settings_value.height_fog_falloff = (float)settingsFloating_values[15];
+        settings_value.height_fog_base_height = (float)settingsFloating_values[16];
+        settings_value.motion_blur_strength = (float)settingsFloating_values[17];
+        settings_value.motion_blur_max_distance = (float)settingsFloating_values[18];
+        settings_value.chromatic_aberration_strength = (float)settingsFloating_values[19];
+        settings_value.film_grain_intensity = (float)settingsFloating_values[20];
+        settings_value.lens_flare_threshold = (float)settingsFloating_values[21];
+        settings_value.lens_flare_intensity = (float)settingsFloating_values[22];
+        settings_value.lens_flare_dispersal = (float)settingsFloating_values[23];
+        settings_value.color_grade_strength = (float)settingsFloating_values[24];
+        settings_value.dof_focus_distance = (float)settingsFloating_values[25];
+        settings_value.dof_focal_length = (float)settingsFloating_values[26];
+        settings_value.doff_number = (float)settingsFloating_values[27];
+        settings_value.dof_max_radius = (float)settingsFloating_values[28];
+        settings_value.ssr_roughness_blur = (float)settingsFloating_values[29];
+        settings_value.ssr_intensity = (float)settingsFloating_values[30];
+        settings_value.fxaa_edge_threshold_ext = (float)settingsFloating_values[31];
+    }
+    jsize text_size = (*environment)->GetArrayLength(environment, text);
+    jbyte* text_bytes = (*environment)->GetByteArrayElements(environment, text, NULL);
+    if (text_bytes == NULL) {
+        return (jint)CNA_RESULT_OUT_OF_MEMORY;
+    }
+    CNA_StringView text_view = {(const char*)text_bytes, (uint64_t)text_size};
+    int32_t out_applied_value = 0;
+    CNA_Result call_result = cna.render_pipeline_settings_ext_apply_from_string(&settings_value, text_view, &out_applied_value);
+    (*environment)->ReleaseByteArrayElements(environment, text, text_bytes, JNI_ABORT);
+    if (call_result == CNA_RESULT_SUCCESS || call_result == CNA_RESULT_BUFFER_TOO_SMALL) {
+        jbyte settingsBytes_values[] = {
+            (jbyte)settings_value.reserved[0],
+            (jbyte)settings_value.reserved[1],
+            (jbyte)settings_value.reserved[2],
+            (jbyte)settings_value.reserved[3]
+        };
+        (*environment)->SetByteArrayRegion(environment, settingsBytes, 0,
+            (jsize)(sizeof settingsBytes_values / sizeof settingsBytes_values[0]),
+            settingsBytes_values);
+        jlong settingsIntegral_values[] = {
+            (jlong)settings_value.hdr_enabled,
+            (jlong)settings_value.tonemapping_mode,
+            (jlong)settings_value.bloom_enabled,
+            (jlong)settings_value.bloom_iterations,
+            (jlong)settings_value.ssao_enabled,
+            (jlong)settings_value.transparency_mode,
+            (jlong)settings_value.ssao_sample_count,
+            (jlong)settings_value.ssr_enabled,
+            (jlong)settings_value.ssr_step_count,
+            (jlong)settings_value.color_grade_enabled,
+            (jlong)settings_value.dof_enabled,
+            (jlong)settings_value.fxaa_enabled,
+            (jlong)settings_value.render_quality,
+            (jlong)settings_value.shadow_quality,
+            (jlong)settings_value.shadows_enabled
+        };
+        (*environment)->SetLongArrayRegion(environment, settingsIntegral, 0,
+            (jsize)(sizeof settingsIntegral_values / sizeof settingsIntegral_values[0]),
+            settingsIntegral_values);
+        jfloat settingsFloating_values[] = {
+            (jfloat)settings_value.exposure,
+            (jfloat)settings_value.gamma,
+            (jfloat)settings_value.bloom_intensity,
+            (jfloat)settings_value.bloom_threshold,
+            (jfloat)settings_value.ssao_radius,
+            (jfloat)settings_value.ssao_intensity,
+            (jfloat)settings_value.ssr_max_distance,
+            (jfloat)settings_value.ssr_thickness,
+            (jfloat)settings_value.ssr_depth_bias,
+            (jfloat)settings_value.ssr_edge_fade,
+            (jfloat)settings_value.volumetric_fog_density,
+            (jfloat)settings_value.light_shaft_threshold,
+            (jfloat)settings_value.light_shaft_intensity,
+            (jfloat)settings_value.light_shaft_decay,
+            (jfloat)settings_value.height_fog_density,
+            (jfloat)settings_value.height_fog_falloff,
+            (jfloat)settings_value.height_fog_base_height,
+            (jfloat)settings_value.motion_blur_strength,
+            (jfloat)settings_value.motion_blur_max_distance,
+            (jfloat)settings_value.chromatic_aberration_strength,
+            (jfloat)settings_value.film_grain_intensity,
+            (jfloat)settings_value.lens_flare_threshold,
+            (jfloat)settings_value.lens_flare_intensity,
+            (jfloat)settings_value.lens_flare_dispersal,
+            (jfloat)settings_value.color_grade_strength,
+            (jfloat)settings_value.dof_focus_distance,
+            (jfloat)settings_value.dof_focal_length,
+            (jfloat)settings_value.doff_number,
+            (jfloat)settings_value.dof_max_radius,
+            (jfloat)settings_value.ssr_roughness_blur,
+            (jfloat)settings_value.ssr_intensity,
+            (jfloat)settings_value.fxaa_edge_threshold_ext
+        };
+        (*environment)->SetFloatArrayRegion(environment, settingsFloating, 0,
+            (jsize)(sizeof settingsFloating_values / sizeof settingsFloating_values[0]),
+            settingsFloating_values);
+        jint out_applied_element = (jint)out_applied_value;
+        (*environment)->SetIntArrayRegion(
+            environment, out_applied, 0, 1, &out_applied_element);
+    }
+    return (jint)call_result;
+}
+
+JNIEXPORT jint JNICALL
+Java_org_openeggbert_cna_internal_generated_NativeEngineLayerRoutes_renderPipelineSettingsExtApplyRenderQualityPreset(
+    JNIEnv* environment, jclass declaring_class, jbyteArray settingsBytes, jlongArray settingsIntegral, jfloatArray settingsFloating)
+{
+    (void)environment;
+    (void)declaring_class;
+    CNA_RenderPipelineSettingsEXT settings_value;
+    memset(&settings_value, 0, sizeof settings_value);
+    settings_value.struct_size = (uint32_t)(sizeof settings_value);
+    settings_value.struct_version = UINT32_C(1);
+    {
+        jbyte settingsBytes_values[4];
+        (*environment)->GetByteArrayRegion(environment, settingsBytes, 0, 4, settingsBytes_values);
+        settings_value.reserved[0] = (uint8_t)settingsBytes_values[0];
+        settings_value.reserved[1] = (uint8_t)settingsBytes_values[1];
+        settings_value.reserved[2] = (uint8_t)settingsBytes_values[2];
+        settings_value.reserved[3] = (uint8_t)settingsBytes_values[3];
+    }
+    {
+        jlong settingsIntegral_values[15];
+        (*environment)->GetLongArrayRegion(environment, settingsIntegral, 0, 15, settingsIntegral_values);
+        settings_value.hdr_enabled = (CNA_Bool)settingsIntegral_values[0];
+        settings_value.tonemapping_mode = (CNA_TonemappingMode)settingsIntegral_values[1];
+        settings_value.bloom_enabled = (CNA_Bool)settingsIntegral_values[2];
+        settings_value.bloom_iterations = (int32_t)settingsIntegral_values[3];
+        settings_value.ssao_enabled = (CNA_Bool)settingsIntegral_values[4];
+        settings_value.transparency_mode = (CNA_TransparencyMode)settingsIntegral_values[5];
+        settings_value.ssao_sample_count = (int32_t)settingsIntegral_values[6];
+        settings_value.ssr_enabled = (CNA_Bool)settingsIntegral_values[7];
+        settings_value.ssr_step_count = (int32_t)settingsIntegral_values[8];
+        settings_value.color_grade_enabled = (CNA_Bool)settingsIntegral_values[9];
+        settings_value.dof_enabled = (CNA_Bool)settingsIntegral_values[10];
+        settings_value.fxaa_enabled = (CNA_Bool)settingsIntegral_values[11];
+        settings_value.render_quality = (CNA_RenderQuality)settingsIntegral_values[12];
+        settings_value.shadow_quality = (CNA_ShadowQuality)settingsIntegral_values[13];
+        settings_value.shadows_enabled = (CNA_Bool)settingsIntegral_values[14];
+    }
+    {
+        jfloat settingsFloating_values[32];
+        (*environment)->GetFloatArrayRegion(environment, settingsFloating, 0, 32, settingsFloating_values);
+        settings_value.exposure = (float)settingsFloating_values[0];
+        settings_value.gamma = (float)settingsFloating_values[1];
+        settings_value.bloom_intensity = (float)settingsFloating_values[2];
+        settings_value.bloom_threshold = (float)settingsFloating_values[3];
+        settings_value.ssao_radius = (float)settingsFloating_values[4];
+        settings_value.ssao_intensity = (float)settingsFloating_values[5];
+        settings_value.ssr_max_distance = (float)settingsFloating_values[6];
+        settings_value.ssr_thickness = (float)settingsFloating_values[7];
+        settings_value.ssr_depth_bias = (float)settingsFloating_values[8];
+        settings_value.ssr_edge_fade = (float)settingsFloating_values[9];
+        settings_value.volumetric_fog_density = (float)settingsFloating_values[10];
+        settings_value.light_shaft_threshold = (float)settingsFloating_values[11];
+        settings_value.light_shaft_intensity = (float)settingsFloating_values[12];
+        settings_value.light_shaft_decay = (float)settingsFloating_values[13];
+        settings_value.height_fog_density = (float)settingsFloating_values[14];
+        settings_value.height_fog_falloff = (float)settingsFloating_values[15];
+        settings_value.height_fog_base_height = (float)settingsFloating_values[16];
+        settings_value.motion_blur_strength = (float)settingsFloating_values[17];
+        settings_value.motion_blur_max_distance = (float)settingsFloating_values[18];
+        settings_value.chromatic_aberration_strength = (float)settingsFloating_values[19];
+        settings_value.film_grain_intensity = (float)settingsFloating_values[20];
+        settings_value.lens_flare_threshold = (float)settingsFloating_values[21];
+        settings_value.lens_flare_intensity = (float)settingsFloating_values[22];
+        settings_value.lens_flare_dispersal = (float)settingsFloating_values[23];
+        settings_value.color_grade_strength = (float)settingsFloating_values[24];
+        settings_value.dof_focus_distance = (float)settingsFloating_values[25];
+        settings_value.dof_focal_length = (float)settingsFloating_values[26];
+        settings_value.doff_number = (float)settingsFloating_values[27];
+        settings_value.dof_max_radius = (float)settingsFloating_values[28];
+        settings_value.ssr_roughness_blur = (float)settingsFloating_values[29];
+        settings_value.ssr_intensity = (float)settingsFloating_values[30];
+        settings_value.fxaa_edge_threshold_ext = (float)settingsFloating_values[31];
+    }
+    CNA_Result call_result = cna.render_pipeline_settings_ext_apply_render_quality_preset(&settings_value);
+    if (call_result == CNA_RESULT_SUCCESS || call_result == CNA_RESULT_BUFFER_TOO_SMALL) {
+        jbyte settingsBytes_values[] = {
+            (jbyte)settings_value.reserved[0],
+            (jbyte)settings_value.reserved[1],
+            (jbyte)settings_value.reserved[2],
+            (jbyte)settings_value.reserved[3]
+        };
+        (*environment)->SetByteArrayRegion(environment, settingsBytes, 0,
+            (jsize)(sizeof settingsBytes_values / sizeof settingsBytes_values[0]),
+            settingsBytes_values);
+        jlong settingsIntegral_values[] = {
+            (jlong)settings_value.hdr_enabled,
+            (jlong)settings_value.tonemapping_mode,
+            (jlong)settings_value.bloom_enabled,
+            (jlong)settings_value.bloom_iterations,
+            (jlong)settings_value.ssao_enabled,
+            (jlong)settings_value.transparency_mode,
+            (jlong)settings_value.ssao_sample_count,
+            (jlong)settings_value.ssr_enabled,
+            (jlong)settings_value.ssr_step_count,
+            (jlong)settings_value.color_grade_enabled,
+            (jlong)settings_value.dof_enabled,
+            (jlong)settings_value.fxaa_enabled,
+            (jlong)settings_value.render_quality,
+            (jlong)settings_value.shadow_quality,
+            (jlong)settings_value.shadows_enabled
+        };
+        (*environment)->SetLongArrayRegion(environment, settingsIntegral, 0,
+            (jsize)(sizeof settingsIntegral_values / sizeof settingsIntegral_values[0]),
+            settingsIntegral_values);
+        jfloat settingsFloating_values[] = {
+            (jfloat)settings_value.exposure,
+            (jfloat)settings_value.gamma,
+            (jfloat)settings_value.bloom_intensity,
+            (jfloat)settings_value.bloom_threshold,
+            (jfloat)settings_value.ssao_radius,
+            (jfloat)settings_value.ssao_intensity,
+            (jfloat)settings_value.ssr_max_distance,
+            (jfloat)settings_value.ssr_thickness,
+            (jfloat)settings_value.ssr_depth_bias,
+            (jfloat)settings_value.ssr_edge_fade,
+            (jfloat)settings_value.volumetric_fog_density,
+            (jfloat)settings_value.light_shaft_threshold,
+            (jfloat)settings_value.light_shaft_intensity,
+            (jfloat)settings_value.light_shaft_decay,
+            (jfloat)settings_value.height_fog_density,
+            (jfloat)settings_value.height_fog_falloff,
+            (jfloat)settings_value.height_fog_base_height,
+            (jfloat)settings_value.motion_blur_strength,
+            (jfloat)settings_value.motion_blur_max_distance,
+            (jfloat)settings_value.chromatic_aberration_strength,
+            (jfloat)settings_value.film_grain_intensity,
+            (jfloat)settings_value.lens_flare_threshold,
+            (jfloat)settings_value.lens_flare_intensity,
+            (jfloat)settings_value.lens_flare_dispersal,
+            (jfloat)settings_value.color_grade_strength,
+            (jfloat)settings_value.dof_focus_distance,
+            (jfloat)settings_value.dof_focal_length,
+            (jfloat)settings_value.doff_number,
+            (jfloat)settings_value.dof_max_radius,
+            (jfloat)settings_value.ssr_roughness_blur,
+            (jfloat)settings_value.ssr_intensity,
+            (jfloat)settings_value.fxaa_edge_threshold_ext
+        };
+        (*environment)->SetFloatArrayRegion(environment, settingsFloating, 0,
+            (jsize)(sizeof settingsFloating_values / sizeof settingsFloating_values[0]),
+            settingsFloating_values);
+    }
+    return (jint)call_result;
+}
+
+JNIEXPORT jint JNICALL
+Java_org_openeggbert_cna_internal_generated_NativeEngineLayerRoutes_renderPipelineSettingsExtInit(
+    JNIEnv* environment, jclass declaring_class, jbyteArray out_settingsBytes, jlongArray out_settingsIntegral, jfloatArray out_settingsFloating)
+{
+    (void)environment;
+    (void)declaring_class;
+    CNA_RenderPipelineSettingsEXT out_settings_value;
+    memset(&out_settings_value, 0, sizeof out_settings_value);
+    out_settings_value.struct_size = (uint32_t)(sizeof out_settings_value);
+    out_settings_value.struct_version = UINT32_C(1);
+    CNA_Result call_result = cna.render_pipeline_settings_ext_init(&out_settings_value);
+    if (call_result == CNA_RESULT_SUCCESS || call_result == CNA_RESULT_BUFFER_TOO_SMALL) {
+        jbyte out_settingsBytes_values[] = {
+            (jbyte)out_settings_value.reserved[0],
+            (jbyte)out_settings_value.reserved[1],
+            (jbyte)out_settings_value.reserved[2],
+            (jbyte)out_settings_value.reserved[3]
+        };
+        (*environment)->SetByteArrayRegion(environment, out_settingsBytes, 0,
+            (jsize)(sizeof out_settingsBytes_values / sizeof out_settingsBytes_values[0]),
+            out_settingsBytes_values);
+        jlong out_settingsIntegral_values[] = {
+            (jlong)out_settings_value.hdr_enabled,
+            (jlong)out_settings_value.tonemapping_mode,
+            (jlong)out_settings_value.bloom_enabled,
+            (jlong)out_settings_value.bloom_iterations,
+            (jlong)out_settings_value.ssao_enabled,
+            (jlong)out_settings_value.transparency_mode,
+            (jlong)out_settings_value.ssao_sample_count,
+            (jlong)out_settings_value.ssr_enabled,
+            (jlong)out_settings_value.ssr_step_count,
+            (jlong)out_settings_value.color_grade_enabled,
+            (jlong)out_settings_value.dof_enabled,
+            (jlong)out_settings_value.fxaa_enabled,
+            (jlong)out_settings_value.render_quality,
+            (jlong)out_settings_value.shadow_quality,
+            (jlong)out_settings_value.shadows_enabled
+        };
+        (*environment)->SetLongArrayRegion(environment, out_settingsIntegral, 0,
+            (jsize)(sizeof out_settingsIntegral_values / sizeof out_settingsIntegral_values[0]),
+            out_settingsIntegral_values);
+        jfloat out_settingsFloating_values[] = {
+            (jfloat)out_settings_value.exposure,
+            (jfloat)out_settings_value.gamma,
+            (jfloat)out_settings_value.bloom_intensity,
+            (jfloat)out_settings_value.bloom_threshold,
+            (jfloat)out_settings_value.ssao_radius,
+            (jfloat)out_settings_value.ssao_intensity,
+            (jfloat)out_settings_value.ssr_max_distance,
+            (jfloat)out_settings_value.ssr_thickness,
+            (jfloat)out_settings_value.ssr_depth_bias,
+            (jfloat)out_settings_value.ssr_edge_fade,
+            (jfloat)out_settings_value.volumetric_fog_density,
+            (jfloat)out_settings_value.light_shaft_threshold,
+            (jfloat)out_settings_value.light_shaft_intensity,
+            (jfloat)out_settings_value.light_shaft_decay,
+            (jfloat)out_settings_value.height_fog_density,
+            (jfloat)out_settings_value.height_fog_falloff,
+            (jfloat)out_settings_value.height_fog_base_height,
+            (jfloat)out_settings_value.motion_blur_strength,
+            (jfloat)out_settings_value.motion_blur_max_distance,
+            (jfloat)out_settings_value.chromatic_aberration_strength,
+            (jfloat)out_settings_value.film_grain_intensity,
+            (jfloat)out_settings_value.lens_flare_threshold,
+            (jfloat)out_settings_value.lens_flare_intensity,
+            (jfloat)out_settings_value.lens_flare_dispersal,
+            (jfloat)out_settings_value.color_grade_strength,
+            (jfloat)out_settings_value.dof_focus_distance,
+            (jfloat)out_settings_value.dof_focal_length,
+            (jfloat)out_settings_value.doff_number,
+            (jfloat)out_settings_value.dof_max_radius,
+            (jfloat)out_settings_value.ssr_roughness_blur,
+            (jfloat)out_settings_value.ssr_intensity,
+            (jfloat)out_settings_value.fxaa_edge_threshold_ext
+        };
+        (*environment)->SetFloatArrayRegion(environment, out_settingsFloating, 0,
+            (jsize)(sizeof out_settingsFloating_values / sizeof out_settingsFloating_values[0]),
+            out_settingsFloating_values);
+    }
+    return (jint)call_result;
+}
+
+JNIEXPORT jint JNICALL
+Java_org_openeggbert_cna_internal_generated_NativeEngineLayerRoutes_renderPipelineSettingsExtNormalize(
+    JNIEnv* environment, jclass declaring_class, jbyteArray settingsBytes, jlongArray settingsIntegral, jfloatArray settingsFloating)
+{
+    (void)environment;
+    (void)declaring_class;
+    CNA_RenderPipelineSettingsEXT settings_value;
+    memset(&settings_value, 0, sizeof settings_value);
+    settings_value.struct_size = (uint32_t)(sizeof settings_value);
+    settings_value.struct_version = UINT32_C(1);
+    {
+        jbyte settingsBytes_values[4];
+        (*environment)->GetByteArrayRegion(environment, settingsBytes, 0, 4, settingsBytes_values);
+        settings_value.reserved[0] = (uint8_t)settingsBytes_values[0];
+        settings_value.reserved[1] = (uint8_t)settingsBytes_values[1];
+        settings_value.reserved[2] = (uint8_t)settingsBytes_values[2];
+        settings_value.reserved[3] = (uint8_t)settingsBytes_values[3];
+    }
+    {
+        jlong settingsIntegral_values[15];
+        (*environment)->GetLongArrayRegion(environment, settingsIntegral, 0, 15, settingsIntegral_values);
+        settings_value.hdr_enabled = (CNA_Bool)settingsIntegral_values[0];
+        settings_value.tonemapping_mode = (CNA_TonemappingMode)settingsIntegral_values[1];
+        settings_value.bloom_enabled = (CNA_Bool)settingsIntegral_values[2];
+        settings_value.bloom_iterations = (int32_t)settingsIntegral_values[3];
+        settings_value.ssao_enabled = (CNA_Bool)settingsIntegral_values[4];
+        settings_value.transparency_mode = (CNA_TransparencyMode)settingsIntegral_values[5];
+        settings_value.ssao_sample_count = (int32_t)settingsIntegral_values[6];
+        settings_value.ssr_enabled = (CNA_Bool)settingsIntegral_values[7];
+        settings_value.ssr_step_count = (int32_t)settingsIntegral_values[8];
+        settings_value.color_grade_enabled = (CNA_Bool)settingsIntegral_values[9];
+        settings_value.dof_enabled = (CNA_Bool)settingsIntegral_values[10];
+        settings_value.fxaa_enabled = (CNA_Bool)settingsIntegral_values[11];
+        settings_value.render_quality = (CNA_RenderQuality)settingsIntegral_values[12];
+        settings_value.shadow_quality = (CNA_ShadowQuality)settingsIntegral_values[13];
+        settings_value.shadows_enabled = (CNA_Bool)settingsIntegral_values[14];
+    }
+    {
+        jfloat settingsFloating_values[32];
+        (*environment)->GetFloatArrayRegion(environment, settingsFloating, 0, 32, settingsFloating_values);
+        settings_value.exposure = (float)settingsFloating_values[0];
+        settings_value.gamma = (float)settingsFloating_values[1];
+        settings_value.bloom_intensity = (float)settingsFloating_values[2];
+        settings_value.bloom_threshold = (float)settingsFloating_values[3];
+        settings_value.ssao_radius = (float)settingsFloating_values[4];
+        settings_value.ssao_intensity = (float)settingsFloating_values[5];
+        settings_value.ssr_max_distance = (float)settingsFloating_values[6];
+        settings_value.ssr_thickness = (float)settingsFloating_values[7];
+        settings_value.ssr_depth_bias = (float)settingsFloating_values[8];
+        settings_value.ssr_edge_fade = (float)settingsFloating_values[9];
+        settings_value.volumetric_fog_density = (float)settingsFloating_values[10];
+        settings_value.light_shaft_threshold = (float)settingsFloating_values[11];
+        settings_value.light_shaft_intensity = (float)settingsFloating_values[12];
+        settings_value.light_shaft_decay = (float)settingsFloating_values[13];
+        settings_value.height_fog_density = (float)settingsFloating_values[14];
+        settings_value.height_fog_falloff = (float)settingsFloating_values[15];
+        settings_value.height_fog_base_height = (float)settingsFloating_values[16];
+        settings_value.motion_blur_strength = (float)settingsFloating_values[17];
+        settings_value.motion_blur_max_distance = (float)settingsFloating_values[18];
+        settings_value.chromatic_aberration_strength = (float)settingsFloating_values[19];
+        settings_value.film_grain_intensity = (float)settingsFloating_values[20];
+        settings_value.lens_flare_threshold = (float)settingsFloating_values[21];
+        settings_value.lens_flare_intensity = (float)settingsFloating_values[22];
+        settings_value.lens_flare_dispersal = (float)settingsFloating_values[23];
+        settings_value.color_grade_strength = (float)settingsFloating_values[24];
+        settings_value.dof_focus_distance = (float)settingsFloating_values[25];
+        settings_value.dof_focal_length = (float)settingsFloating_values[26];
+        settings_value.doff_number = (float)settingsFloating_values[27];
+        settings_value.dof_max_radius = (float)settingsFloating_values[28];
+        settings_value.ssr_roughness_blur = (float)settingsFloating_values[29];
+        settings_value.ssr_intensity = (float)settingsFloating_values[30];
+        settings_value.fxaa_edge_threshold_ext = (float)settingsFloating_values[31];
+    }
+    CNA_Result call_result = cna.render_pipeline_settings_ext_normalize(&settings_value);
+    if (call_result == CNA_RESULT_SUCCESS || call_result == CNA_RESULT_BUFFER_TOO_SMALL) {
+        jbyte settingsBytes_values[] = {
+            (jbyte)settings_value.reserved[0],
+            (jbyte)settings_value.reserved[1],
+            (jbyte)settings_value.reserved[2],
+            (jbyte)settings_value.reserved[3]
+        };
+        (*environment)->SetByteArrayRegion(environment, settingsBytes, 0,
+            (jsize)(sizeof settingsBytes_values / sizeof settingsBytes_values[0]),
+            settingsBytes_values);
+        jlong settingsIntegral_values[] = {
+            (jlong)settings_value.hdr_enabled,
+            (jlong)settings_value.tonemapping_mode,
+            (jlong)settings_value.bloom_enabled,
+            (jlong)settings_value.bloom_iterations,
+            (jlong)settings_value.ssao_enabled,
+            (jlong)settings_value.transparency_mode,
+            (jlong)settings_value.ssao_sample_count,
+            (jlong)settings_value.ssr_enabled,
+            (jlong)settings_value.ssr_step_count,
+            (jlong)settings_value.color_grade_enabled,
+            (jlong)settings_value.dof_enabled,
+            (jlong)settings_value.fxaa_enabled,
+            (jlong)settings_value.render_quality,
+            (jlong)settings_value.shadow_quality,
+            (jlong)settings_value.shadows_enabled
+        };
+        (*environment)->SetLongArrayRegion(environment, settingsIntegral, 0,
+            (jsize)(sizeof settingsIntegral_values / sizeof settingsIntegral_values[0]),
+            settingsIntegral_values);
+        jfloat settingsFloating_values[] = {
+            (jfloat)settings_value.exposure,
+            (jfloat)settings_value.gamma,
+            (jfloat)settings_value.bloom_intensity,
+            (jfloat)settings_value.bloom_threshold,
+            (jfloat)settings_value.ssao_radius,
+            (jfloat)settings_value.ssao_intensity,
+            (jfloat)settings_value.ssr_max_distance,
+            (jfloat)settings_value.ssr_thickness,
+            (jfloat)settings_value.ssr_depth_bias,
+            (jfloat)settings_value.ssr_edge_fade,
+            (jfloat)settings_value.volumetric_fog_density,
+            (jfloat)settings_value.light_shaft_threshold,
+            (jfloat)settings_value.light_shaft_intensity,
+            (jfloat)settings_value.light_shaft_decay,
+            (jfloat)settings_value.height_fog_density,
+            (jfloat)settings_value.height_fog_falloff,
+            (jfloat)settings_value.height_fog_base_height,
+            (jfloat)settings_value.motion_blur_strength,
+            (jfloat)settings_value.motion_blur_max_distance,
+            (jfloat)settings_value.chromatic_aberration_strength,
+            (jfloat)settings_value.film_grain_intensity,
+            (jfloat)settings_value.lens_flare_threshold,
+            (jfloat)settings_value.lens_flare_intensity,
+            (jfloat)settings_value.lens_flare_dispersal,
+            (jfloat)settings_value.color_grade_strength,
+            (jfloat)settings_value.dof_focus_distance,
+            (jfloat)settings_value.dof_focal_length,
+            (jfloat)settings_value.doff_number,
+            (jfloat)settings_value.dof_max_radius,
+            (jfloat)settings_value.ssr_roughness_blur,
+            (jfloat)settings_value.ssr_intensity,
+            (jfloat)settings_value.fxaa_edge_threshold_ext
+        };
+        (*environment)->SetFloatArrayRegion(environment, settingsFloating, 0,
+            (jsize)(sizeof settingsFloating_values / sizeof settingsFloating_values[0]),
+            settingsFloating_values);
+    }
+    return (jint)call_result;
+}

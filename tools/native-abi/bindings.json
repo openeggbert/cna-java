@@ -14332,6 +14332,44 @@
       ]
     },
     {
+      "name": "cna_render_pipeline_settings_ext_apply_from_string",
+      "header": "engine_layer.h",
+      "ownership": "no handle; updates the caller's structure in place, caller integer output",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_RenderPipelineSettingsEXT*",
+        "CNA_StringView",
+        "int32_t*"
+      ]
+    },
+    {
+      "name": "cna_render_pipeline_settings_ext_apply_render_quality_preset",
+      "header": "engine_layer.h",
+      "ownership": "no handle; rewrites the caller's structure in place",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_RenderPipelineSettingsEXT*"
+      ]
+    },
+    {
+      "name": "cna_render_pipeline_settings_ext_init",
+      "header": "engine_layer.h",
+      "ownership": "no handle; caller structure output",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_RenderPipelineSettingsEXT*"
+      ]
+    },
+    {
+      "name": "cna_render_pipeline_settings_ext_normalize",
+      "header": "engine_layer.h",
+      "ownership": "no handle; corrects the caller's structure in place",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_RenderPipelineSettingsEXT*"
+      ]
+    },
+    {
       "name": "cna_render_pipeline_settings_init",
       "header": "graphics_ext.h",
       "ownership": "caller output only; initializes a value structure",

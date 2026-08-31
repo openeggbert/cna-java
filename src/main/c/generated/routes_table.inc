@@ -820,6 +820,10 @@
     CNA_JNI_ROUTE(cna_property_dictionary_set_string) property_dictionary_set_string;
     CNA_JNI_ROUTE(cna_property_dictionary_set_time_span_ticks) property_dictionary_set_time_span_ticks;
     CNA_JNI_ROUTE(cna_property_dictionary_try_get_value_kind_ext) property_dictionary_try_get_value_kind_ext;
+    CNA_JNI_ROUTE(cna_render_pipeline_settings_ext_apply_from_string) render_pipeline_settings_ext_apply_from_string;
+    CNA_JNI_ROUTE(cna_render_pipeline_settings_ext_apply_render_quality_preset) render_pipeline_settings_ext_apply_render_quality_preset;
+    CNA_JNI_ROUTE(cna_render_pipeline_settings_ext_init) render_pipeline_settings_ext_init;
+    CNA_JNI_ROUTE(cna_render_pipeline_settings_ext_normalize) render_pipeline_settings_ext_normalize;
     CNA_JNI_ROUTE(cna_render_pipeline_settings_init) render_pipeline_settings_init;
     CNA_JNI_ROUTE(cna_sensors_copy_name_at) sensors_copy_name_at;
     CNA_JNI_ROUTE(cna_sensors_get_accelerometer) sensors_get_accelerometer;

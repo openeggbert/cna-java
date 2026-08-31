@@ -235,6 +235,30 @@ def test_generator(live: dict) -> None:
     check(adapter.count("ReleaseByteArrayElements(environment, createInfoHostAddress") == 1,
           "the pinned bytes are released exactly once")
 
+    # A non-const struct pointer is an output, or it is read and written, and the declaration
+    # does not say which. Guessing wrong is silent: an in/out structure treated as an output
+    # starts zeroed, so the caller's values are discarded and the route answers about a structure
+    # nobody asked about. That is exactly what happened to the render-pipeline settings.
+    try:
+        plan("cna_render_pipeline_settings_ext_normalize")
+        check(False, "an undeclared non-const struct pointer is refused rather than guessed at")
+    except generator_tool.Unsupported:
+        check(True, "an undeclared non-const struct pointer is refused rather than guessed at")
+
+    declared = generator_tool.plan(
+        {"java": "probe", "symbol": "cna_render_pipeline_settings_ext_normalize",
+         "inOut": ["settings"]}, live)
+    adapter = generator_tool.render_c("Probe", [declared])
+    check("GetLongArrayRegion" in adapter,
+          "a declared in/out structure reads the caller's values in")
+    check("SetLongArrayRegion" in adapter,
+          "and writes the corrected values back out")
+
+    # CNA's own names for a pure output still pass without a declaration, which is what keeps
+    # every copy-out route working: `out_*` and `destination` are its two spellings.
+    check(struct_step(plan("cna_model_copy_bone_transforms"))["shape"] == "struct_array",
+          "a parameter named destination is still read as an output")
+
     # A route that acquires more than one thing must release what it holds when a later
     # acquisition fails. Before this, the second failed pin of a four-array route returned
     # straight out and stranded the first -- on an out-of-memory path, which is when leaking is
