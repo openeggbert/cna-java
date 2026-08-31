@@ -3394,6 +3394,16 @@ public final class NativeBindings {
         return created.requireValue();
     }
 
+    /**
+     * Returns the CNA handle behind one {@link SpriteFont}.
+     *
+     * <p>Reached from {@code org.openeggbert.cna.extensions.gamerservices}, which hands CNA the
+     * surfaces it draws its own on-screen keyboard and message box with.
+     */
+    public static long nativeSpriteFontHandle(SpriteFont font) {
+        return spriteFontValue(font);
+    }
+
     private static long spriteFontValue(SpriteFont font) {
         NativeResourceHandle handle;
         synchronized (GAMES) {

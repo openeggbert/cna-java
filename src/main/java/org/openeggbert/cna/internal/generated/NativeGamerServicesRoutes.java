@@ -744,6 +744,21 @@ public final class NativeGamerServicesRoutes {
     public static native int guideBeginShowKeyboardInput(int player, byte[] title, byte[] description, byte[] defaultText, boolean usePasswordMode);
 
     /**
+     * cna_guide_copy_pending_keyboard_input_description_ext (gamer_services.h).
+     */
+    public static native int guideCopyPendingKeyboardInputDescriptionExt(byte[] destination, long[] outBytes);
+
+    /**
+     * cna_guide_copy_pending_keyboard_input_display_text_ext (gamer_services.h).
+     */
+    public static native int guideCopyPendingKeyboardInputDisplayTextExt(byte[] destination, long[] outBytes);
+
+    /**
+     * cna_guide_copy_pending_keyboard_input_title_ext (gamer_services.h).
+     */
+    public static native int guideCopyPendingKeyboardInputTitleExt(byte[] destination, long[] outBytes);
+
+    /**
      * cna_guide_delay_notifications (gamer_services.h).
      */
     public static native int guideDelayNotifications(long delayTicks);
@@ -762,6 +777,16 @@ public final class NativeGamerServicesRoutes {
      * cna_guide_end_show_message_box (gamer_services.h).
      */
     public static native int guideEndShowMessageBox(boolean[] outHasChoice, int[] outButtonIndex);
+
+    /**
+     * cna_guide_get_has_pending_keyboard_input_ext (gamer_services.h).
+     */
+    public static native int guideGetHasPendingKeyboardInputExt(boolean[] outHasPending);
+
+    /**
+     * cna_guide_get_has_pending_message_box_ext (gamer_services.h).
+     */
+    public static native int guideGetHasPendingMessageBoxExt(boolean[] outHasPending);
 
     /**
      * cna_guide_get_is_screen_saver_enabled (gamer_services.h).
@@ -784,9 +809,49 @@ public final class NativeGamerServicesRoutes {
     public static native int guideGetNotificationPosition(int[] outPosition);
 
     /**
+     * cna_guide_get_pending_keyboard_input_description_size_ext (gamer_services.h).
+     */
+    public static native int guideGetPendingKeyboardInputDescriptionSizeExt(long[] outBytes);
+
+    /**
+     * cna_guide_get_pending_keyboard_input_display_text_size_ext (gamer_services.h).
+     */
+    public static native int guideGetPendingKeyboardInputDisplayTextSizeExt(long[] outBytes);
+
+    /**
+     * cna_guide_get_pending_keyboard_input_title_size_ext (gamer_services.h).
+     */
+    public static native int guideGetPendingKeyboardInputTitleSizeExt(long[] outBytes);
+
+    /**
+     * cna_guide_get_pending_message_box_focus_button_ext (gamer_services.h).
+     */
+    public static native int guideGetPendingMessageBoxFocusButtonExt(int[] outFocusButton);
+
+    /**
      * cna_guide_get_simulate_trial_mode (gamer_services.h).
      */
     public static native int guideGetSimulateTrialMode(boolean[] outSimulate);
+
+    /**
+     * cna_guide_render_pending_keyboard_input_ext (gamer_services.h).
+     */
+    public static native int guideRenderPendingKeyboardInputExt(long device, long spriteBatch, long font, long whitePixel);
+
+    /**
+     * cna_guide_render_pending_message_box_ext (gamer_services.h).
+     */
+    public static native int guideRenderPendingMessageBoxExt(long device, long spriteBatch, long font, long whitePixel);
+
+    /**
+     * cna_guide_reset_pending_keyboard_input_ext (gamer_services.h).
+     */
+    public static native int guideResetPendingKeyboardInputExt();
+
+    /**
+     * cna_guide_reset_pending_message_box_ext (gamer_services.h).
+     */
+    public static native int guideResetPendingMessageBoxExt();
 
     /**
      * cna_guide_set_is_screen_saver_enabled (gamer_services.h).
@@ -812,6 +877,11 @@ public final class NativeGamerServicesRoutes {
      * cna_guide_set_simulate_trial_mode (gamer_services.h).
      */
     public static native int guideSetSimulateTrialMode(boolean simulate);
+
+    /**
+     * cna_guide_show_achievements_ext (gamer_services.h).
+     */
+    public static native int guideShowAchievementsExt(int player);
 
     /**
      * cna_guide_show_compose_message (gamer_services.h).
@@ -877,6 +947,16 @@ public final class NativeGamerServicesRoutes {
      * cna_guide_show_sign_in (gamer_services.h).
      */
     public static native int guideShowSignIn(int paneCount, boolean onlineOnly);
+
+    /**
+     * cna_guide_simulate_keyboard_input_cancel_ext (gamer_services.h).
+     */
+    public static native int guideSimulateKeyboardInputCancelExt();
+
+    /**
+     * cna_guide_simulate_message_box_click_ext (gamer_services.h).
+     */
+    public static native int guideSimulateMessageBoxClickExt(int buttonIndex);
 
     /**
      * cna_guide_was_keyboard_input_canceled_ext (gamer_services.h).

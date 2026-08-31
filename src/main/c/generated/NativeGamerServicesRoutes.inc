@@ -1772,6 +1772,72 @@ Java_org_openeggbert_cna_internal_generated_NativeGamerServicesRoutes_guideBegin
 }
 
 JNIEXPORT jint JNICALL
+Java_org_openeggbert_cna_internal_generated_NativeGamerServicesRoutes_guideCopyPendingKeyboardInputDescriptionExt(
+    JNIEnv* environment, jclass declaring_class, jbyteArray destination, jlongArray out_bytes)
+{
+    (void)environment;
+    (void)declaring_class;
+    jsize destination_size = (*environment)->GetArrayLength(environment, destination);
+    jbyte* destination_bytes = (*environment)->GetByteArrayElements(environment, destination, NULL);
+    if (destination_bytes == NULL) {
+        return (jint)CNA_RESULT_OUT_OF_MEMORY;
+    }
+    uint64_t destination_written = 0;
+    CNA_Result result = cna.guide_copy_pending_keyboard_input_description_ext((char*)destination_bytes, (uint64_t)destination_size, &destination_written);
+    (*environment)->ReleaseByteArrayElements(environment, destination, destination_bytes, 0);
+    if (result == CNA_RESULT_SUCCESS || result == CNA_RESULT_BUFFER_TOO_SMALL) {
+        jlong destination_element = (jlong)destination_written;
+        (*environment)->SetLongArrayRegion(
+            environment, out_bytes, 0, 1, &destination_element);
+    }
+    return (jint)result;
+}
+
+JNIEXPORT jint JNICALL
+Java_org_openeggbert_cna_internal_generated_NativeGamerServicesRoutes_guideCopyPendingKeyboardInputDisplayTextExt(
+    JNIEnv* environment, jclass declaring_class, jbyteArray destination, jlongArray out_bytes)
+{
+    (void)environment;
+    (void)declaring_class;
+    jsize destination_size = (*environment)->GetArrayLength(environment, destination);
+    jbyte* destination_bytes = (*environment)->GetByteArrayElements(environment, destination, NULL);
+    if (destination_bytes == NULL) {
+        return (jint)CNA_RESULT_OUT_OF_MEMORY;
+    }
+    uint64_t destination_written = 0;
+    CNA_Result result = cna.guide_copy_pending_keyboard_input_display_text_ext((char*)destination_bytes, (uint64_t)destination_size, &destination_written);
+    (*environment)->ReleaseByteArrayElements(environment, destination, destination_bytes, 0);
+    if (result == CNA_RESULT_SUCCESS || result == CNA_RESULT_BUFFER_TOO_SMALL) {
+        jlong destination_element = (jlong)destination_written;
+        (*environment)->SetLongArrayRegion(
+            environment, out_bytes, 0, 1, &destination_element);
+    }
+    return (jint)result;
+}
+
+JNIEXPORT jint JNICALL
+Java_org_openeggbert_cna_internal_generated_NativeGamerServicesRoutes_guideCopyPendingKeyboardInputTitleExt(
+    JNIEnv* environment, jclass declaring_class, jbyteArray destination, jlongArray out_bytes)
+{
+    (void)environment;
+    (void)declaring_class;
+    jsize destination_size = (*environment)->GetArrayLength(environment, destination);
+    jbyte* destination_bytes = (*environment)->GetByteArrayElements(environment, destination, NULL);
+    if (destination_bytes == NULL) {
+        return (jint)CNA_RESULT_OUT_OF_MEMORY;
+    }
+    uint64_t destination_written = 0;
+    CNA_Result result = cna.guide_copy_pending_keyboard_input_title_ext((char*)destination_bytes, (uint64_t)destination_size, &destination_written);
+    (*environment)->ReleaseByteArrayElements(environment, destination, destination_bytes, 0);
+    if (result == CNA_RESULT_SUCCESS || result == CNA_RESULT_BUFFER_TOO_SMALL) {
+        jlong destination_element = (jlong)destination_written;
+        (*environment)->SetLongArrayRegion(
+            environment, out_bytes, 0, 1, &destination_element);
+    }
+    return (jint)result;
+}
+
+JNIEXPORT jint JNICALL
 Java_org_openeggbert_cna_internal_generated_NativeGamerServicesRoutes_guideDelayNotifications(
     JNIEnv* environment, jclass declaring_class, jlong delay_ticks)
 {
@@ -1835,6 +1901,38 @@ Java_org_openeggbert_cna_internal_generated_NativeGamerServicesRoutes_guideEndSh
         jint out_button_index_element = (jint)out_button_index_value;
         (*environment)->SetIntArrayRegion(
             environment, out_button_index, 0, 1, &out_button_index_element);
+    }
+    return (jint)result;
+}
+
+JNIEXPORT jint JNICALL
+Java_org_openeggbert_cna_internal_generated_NativeGamerServicesRoutes_guideGetHasPendingKeyboardInputExt(
+    JNIEnv* environment, jclass declaring_class, jbooleanArray out_has_pending)
+{
+    (void)environment;
+    (void)declaring_class;
+    CNA_Bool out_has_pending_value = 0;
+    CNA_Result result = cna.guide_get_has_pending_keyboard_input_ext(&out_has_pending_value);
+    if (result == CNA_RESULT_SUCCESS || result == CNA_RESULT_BUFFER_TOO_SMALL) {
+        jboolean out_has_pending_element = (jboolean)out_has_pending_value;
+        (*environment)->SetBooleanArrayRegion(
+            environment, out_has_pending, 0, 1, &out_has_pending_element);
+    }
+    return (jint)result;
+}
+
+JNIEXPORT jint JNICALL
+Java_org_openeggbert_cna_internal_generated_NativeGamerServicesRoutes_guideGetHasPendingMessageBoxExt(
+    JNIEnv* environment, jclass declaring_class, jbooleanArray out_has_pending)
+{
+    (void)environment;
+    (void)declaring_class;
+    CNA_Bool out_has_pending_value = 0;
+    CNA_Result result = cna.guide_get_has_pending_message_box_ext(&out_has_pending_value);
+    if (result == CNA_RESULT_SUCCESS || result == CNA_RESULT_BUFFER_TOO_SMALL) {
+        jboolean out_has_pending_element = (jboolean)out_has_pending_value;
+        (*environment)->SetBooleanArrayRegion(
+            environment, out_has_pending, 0, 1, &out_has_pending_element);
     }
     return (jint)result;
 }
@@ -1904,6 +2002,70 @@ Java_org_openeggbert_cna_internal_generated_NativeGamerServicesRoutes_guideGetNo
 }
 
 JNIEXPORT jint JNICALL
+Java_org_openeggbert_cna_internal_generated_NativeGamerServicesRoutes_guideGetPendingKeyboardInputDescriptionSizeExt(
+    JNIEnv* environment, jclass declaring_class, jlongArray out_bytes)
+{
+    (void)environment;
+    (void)declaring_class;
+    uint64_t out_bytes_value = 0;
+    CNA_Result result = cna.guide_get_pending_keyboard_input_description_size_ext(&out_bytes_value);
+    if (result == CNA_RESULT_SUCCESS || result == CNA_RESULT_BUFFER_TOO_SMALL) {
+        jlong out_bytes_element = (jlong)out_bytes_value;
+        (*environment)->SetLongArrayRegion(
+            environment, out_bytes, 0, 1, &out_bytes_element);
+    }
+    return (jint)result;
+}
+
+JNIEXPORT jint JNICALL
+Java_org_openeggbert_cna_internal_generated_NativeGamerServicesRoutes_guideGetPendingKeyboardInputDisplayTextSizeExt(
+    JNIEnv* environment, jclass declaring_class, jlongArray out_bytes)
+{
+    (void)environment;
+    (void)declaring_class;
+    uint64_t out_bytes_value = 0;
+    CNA_Result result = cna.guide_get_pending_keyboard_input_display_text_size_ext(&out_bytes_value);
+    if (result == CNA_RESULT_SUCCESS || result == CNA_RESULT_BUFFER_TOO_SMALL) {
+        jlong out_bytes_element = (jlong)out_bytes_value;
+        (*environment)->SetLongArrayRegion(
+            environment, out_bytes, 0, 1, &out_bytes_element);
+    }
+    return (jint)result;
+}
+
+JNIEXPORT jint JNICALL
+Java_org_openeggbert_cna_internal_generated_NativeGamerServicesRoutes_guideGetPendingKeyboardInputTitleSizeExt(
+    JNIEnv* environment, jclass declaring_class, jlongArray out_bytes)
+{
+    (void)environment;
+    (void)declaring_class;
+    uint64_t out_bytes_value = 0;
+    CNA_Result result = cna.guide_get_pending_keyboard_input_title_size_ext(&out_bytes_value);
+    if (result == CNA_RESULT_SUCCESS || result == CNA_RESULT_BUFFER_TOO_SMALL) {
+        jlong out_bytes_element = (jlong)out_bytes_value;
+        (*environment)->SetLongArrayRegion(
+            environment, out_bytes, 0, 1, &out_bytes_element);
+    }
+    return (jint)result;
+}
+
+JNIEXPORT jint JNICALL
+Java_org_openeggbert_cna_internal_generated_NativeGamerServicesRoutes_guideGetPendingMessageBoxFocusButtonExt(
+    JNIEnv* environment, jclass declaring_class, jintArray out_focus_button)
+{
+    (void)environment;
+    (void)declaring_class;
+    int32_t out_focus_button_value = 0;
+    CNA_Result result = cna.guide_get_pending_message_box_focus_button_ext(&out_focus_button_value);
+    if (result == CNA_RESULT_SUCCESS || result == CNA_RESULT_BUFFER_TOO_SMALL) {
+        jint out_focus_button_element = (jint)out_focus_button_value;
+        (*environment)->SetIntArrayRegion(
+            environment, out_focus_button, 0, 1, &out_focus_button_element);
+    }
+    return (jint)result;
+}
+
+JNIEXPORT jint JNICALL
 Java_org_openeggbert_cna_internal_generated_NativeGamerServicesRoutes_guideGetSimulateTrialMode(
     JNIEnv* environment, jclass declaring_class, jbooleanArray out_simulate)
 {
@@ -1916,6 +2078,46 @@ Java_org_openeggbert_cna_internal_generated_NativeGamerServicesRoutes_guideGetSi
         (*environment)->SetBooleanArrayRegion(
             environment, out_simulate, 0, 1, &out_simulate_element);
     }
+    return (jint)result;
+}
+
+JNIEXPORT jint JNICALL
+Java_org_openeggbert_cna_internal_generated_NativeGamerServicesRoutes_guideRenderPendingKeyboardInputExt(
+    JNIEnv* environment, jclass declaring_class, jlong device, jlong sprite_batch, jlong font, jlong white_pixel)
+{
+    (void)environment;
+    (void)declaring_class;
+    CNA_Result result = cna.guide_render_pending_keyboard_input_ext((CNA_Handle)device, (CNA_Handle)sprite_batch, (CNA_Handle)font, (CNA_Handle)white_pixel);
+    return (jint)result;
+}
+
+JNIEXPORT jint JNICALL
+Java_org_openeggbert_cna_internal_generated_NativeGamerServicesRoutes_guideRenderPendingMessageBoxExt(
+    JNIEnv* environment, jclass declaring_class, jlong device, jlong sprite_batch, jlong font, jlong white_pixel)
+{
+    (void)environment;
+    (void)declaring_class;
+    CNA_Result result = cna.guide_render_pending_message_box_ext((CNA_Handle)device, (CNA_Handle)sprite_batch, (CNA_Handle)font, (CNA_Handle)white_pixel);
+    return (jint)result;
+}
+
+JNIEXPORT jint JNICALL
+Java_org_openeggbert_cna_internal_generated_NativeGamerServicesRoutes_guideResetPendingKeyboardInputExt(
+    JNIEnv* environment, jclass declaring_class)
+{
+    (void)environment;
+    (void)declaring_class;
+    CNA_Result result = cna.guide_reset_pending_keyboard_input_ext();
+    return (jint)result;
+}
+
+JNIEXPORT jint JNICALL
+Java_org_openeggbert_cna_internal_generated_NativeGamerServicesRoutes_guideResetPendingMessageBoxExt(
+    JNIEnv* environment, jclass declaring_class)
+{
+    (void)environment;
+    (void)declaring_class;
+    CNA_Result result = cna.guide_reset_pending_message_box_ext();
     return (jint)result;
 }
 
@@ -1966,6 +2168,16 @@ Java_org_openeggbert_cna_internal_generated_NativeGamerServicesRoutes_guideSetSi
     (void)environment;
     (void)declaring_class;
     CNA_Result result = cna.guide_set_simulate_trial_mode((CNA_Bool)simulate);
+    return (jint)result;
+}
+
+JNIEXPORT jint JNICALL
+Java_org_openeggbert_cna_internal_generated_NativeGamerServicesRoutes_guideShowAchievementsExt(
+    JNIEnv* environment, jclass declaring_class, jint player)
+{
+    (void)environment;
+    (void)declaring_class;
+    CNA_Result result = cna.guide_show_achievements_ext((CNA_PlayerIndex)player);
     return (jint)result;
 }
 
@@ -2146,6 +2358,26 @@ Java_org_openeggbert_cna_internal_generated_NativeGamerServicesRoutes_guideShowS
     (void)environment;
     (void)declaring_class;
     CNA_Result result = cna.guide_show_sign_in((int32_t)pane_count, (CNA_Bool)online_only);
+    return (jint)result;
+}
+
+JNIEXPORT jint JNICALL
+Java_org_openeggbert_cna_internal_generated_NativeGamerServicesRoutes_guideSimulateKeyboardInputCancelExt(
+    JNIEnv* environment, jclass declaring_class)
+{
+    (void)environment;
+    (void)declaring_class;
+    CNA_Result result = cna.guide_simulate_keyboard_input_cancel_ext();
+    return (jint)result;
+}
+
+JNIEXPORT jint JNICALL
+Java_org_openeggbert_cna_internal_generated_NativeGamerServicesRoutes_guideSimulateMessageBoxClickExt(
+    JNIEnv* environment, jclass declaring_class, jint button_index)
+{
+    (void)environment;
+    (void)declaring_class;
+    CNA_Result result = cna.guide_simulate_message_box_click_ext((int32_t)button_index);
     return (jint)result;
 }
 

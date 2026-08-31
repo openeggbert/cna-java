@@ -267,31 +267,6 @@
     {
       "match": {
         "symbols": [
-          "cna_guide_copy_pending_keyboard_input_description_ext",
-          "cna_guide_copy_pending_keyboard_input_display_text_ext",
-          "cna_guide_copy_pending_keyboard_input_title_ext",
-          "cna_guide_get_has_pending_keyboard_input_ext",
-          "cna_guide_get_has_pending_message_box_ext",
-          "cna_guide_get_pending_keyboard_input_description_size_ext",
-          "cna_guide_get_pending_keyboard_input_display_text_size_ext",
-          "cna_guide_get_pending_keyboard_input_title_size_ext",
-          "cna_guide_get_pending_message_box_focus_button_ext",
-          "cna_guide_render_pending_keyboard_input_ext",
-          "cna_guide_render_pending_message_box_ext",
-          "cna_guide_reset_pending_keyboard_input_ext",
-          "cna_guide_reset_pending_message_box_ext",
-          "cna_guide_show_achievements_ext",
-          "cna_guide_simulate_keyboard_input_cancel_ext",
-          "cna_guide_simulate_message_box_click_ext"
-        ]
-      },
-      "classification": "CNA_EXTENSION_CANDIDATE",
-      "reason": "CNA's Guide asks the application to draw the on-screen keyboard and the message box, handing it the pending request and a render route. XNA's Guide draws itself and has no member for any of it, so a projection belongs under org.openeggbert.cna.extensions rather than in Microsoft.Xna.Framework.GamerServices. The two simulate routes are CNA's own test seam for that surface.",
-      "task": "JAVA-EXT-006"
-    },
-    {
-      "match": {
-        "symbols": [
           "cna_avatar_animation_copy_real_clip_name_ext",
           "cna_avatar_animation_get_real_clip_name_size_ext",
           "cna_avatar_animation_preset_copy_clip_name_ext",

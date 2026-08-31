@@ -269,6 +269,15 @@
         "NATIVE_VERIFIED"
       ],
       "detail": "CNA's own compiled content format, beside XNB rather than instead of it. Verified end to end against the live runtime: a texture built from four distinct pixels is encoded by CNA's own encoder, parsed back from memory and from a file, its metadata content name and asset type read back as written, every uncompressed chunk's CRC-32C recomputed and matched against the table of contents, and the decoded pixels compared byte for byte with the ones that went in and again after upload as an XNA Texture2D. A file written by CnbWriter with a game's own custom asset type and a mandatory chunk reads back with the same type, the same schema version, the same metadata and the same chunk bytes. The checked reader refuses a read past the end without moving its cursor and refuses an element count the remaining bytes cannot hold. CRC-32C is CNA's, not java.util.zip's CRC-32, and the hardware and portable paths are asserted to agree."
+    },
+    {
+      "id": "extension-guide-pending-requests",
+      "surface": "org.openeggbert.cna.extensions.gamerservices.GuideExtensions",
+      "statuses": [
+        "EXTENSION_VERIFIED",
+        "NATIVE_VERIFIED"
+      ],
+      "detail": "XNA's Guide draws its own on-screen keyboard and message box because an Xbox has a system overlay; CNA has none, so the request becomes the game's to show and that question has no XNA member. Verified end to end against the live runtime: Guide.BeginShowKeyboardInput makes a request the game finds pending with exactly the title, description and current text it asked for; discarding drops it unanswered; cancelling answers it and it stops being pending. Guide.BeginShowMessageBox reports the focused button the game does not otherwise know, and a click answers it. CNA's own plain renderer is reachable through Draw over a SpriteBatch, SpriteFont and white pixel the game supplies; drawing was not exercised on the headless renderer."
     }
   ]
 }

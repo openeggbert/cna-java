@@ -6929,6 +6929,39 @@
       ]
     },
     {
+      "name": "cna_guide_copy_pending_keyboard_input_description_ext",
+      "header": "gamer_services.h",
+      "ownership": "no handle; caller buffer",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "char*",
+        "uint64_t",
+        "uint64_t*"
+      ]
+    },
+    {
+      "name": "cna_guide_copy_pending_keyboard_input_display_text_ext",
+      "header": "gamer_services.h",
+      "ownership": "no handle; caller buffer",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "char*",
+        "uint64_t",
+        "uint64_t*"
+      ]
+    },
+    {
+      "name": "cna_guide_copy_pending_keyboard_input_title_ext",
+      "header": "gamer_services.h",
+      "ownership": "no handle; caller buffer",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "char*",
+        "uint64_t",
+        "uint64_t*"
+      ]
+    },
+    {
       "name": "cna_guide_delay_notifications",
       "header": "gamer_services.h",
       "ownership": "borrows its inputs",
@@ -6968,6 +7001,24 @@
       ]
     },
     {
+      "name": "cna_guide_get_has_pending_keyboard_input_ext",
+      "header": "gamer_services.h",
+      "ownership": "no handle; caller bool output",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_Bool*"
+      ]
+    },
+    {
+      "name": "cna_guide_get_has_pending_message_box_ext",
+      "header": "gamer_services.h",
+      "ownership": "no handle; caller bool output",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_Bool*"
+      ]
+    },
+    {
       "name": "cna_guide_get_is_screen_saver_enabled",
       "header": "gamer_services.h",
       "ownership": "borrows its inputs; caller output",
@@ -7004,6 +7055,42 @@
       ]
     },
     {
+      "name": "cna_guide_get_pending_keyboard_input_description_size_ext",
+      "header": "gamer_services.h",
+      "ownership": "no handle; caller integer output",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "uint64_t*"
+      ]
+    },
+    {
+      "name": "cna_guide_get_pending_keyboard_input_display_text_size_ext",
+      "header": "gamer_services.h",
+      "ownership": "no handle; caller integer output",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "uint64_t*"
+      ]
+    },
+    {
+      "name": "cna_guide_get_pending_keyboard_input_title_size_ext",
+      "header": "gamer_services.h",
+      "ownership": "no handle; caller integer output",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "uint64_t*"
+      ]
+    },
+    {
+      "name": "cna_guide_get_pending_message_box_focus_button_ext",
+      "header": "gamer_services.h",
+      "ownership": "no handle; caller integer output",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "int32_t*"
+      ]
+    },
+    {
       "name": "cna_guide_get_simulate_trial_mode",
       "header": "gamer_services.h",
       "ownership": "borrows its inputs; caller output",
@@ -7011,6 +7098,44 @@
       "parameters": [
         "CNA_Bool*"
       ]
+    },
+    {
+      "name": "cna_guide_render_pending_keyboard_input_ext",
+      "header": "gamer_services.h",
+      "ownership": "borrows the device, batch, font and texture for the draw",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_Handle",
+        "CNA_Handle",
+        "CNA_Handle",
+        "CNA_Handle"
+      ]
+    },
+    {
+      "name": "cna_guide_render_pending_message_box_ext",
+      "header": "gamer_services.h",
+      "ownership": "borrows the device, batch, font and texture for the draw",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_Handle",
+        "CNA_Handle",
+        "CNA_Handle",
+        "CNA_Handle"
+      ]
+    },
+    {
+      "name": "cna_guide_reset_pending_keyboard_input_ext",
+      "header": "gamer_services.h",
+      "ownership": "no handle; discards the pending input",
+      "returnType": "CNA_Result",
+      "parameters": []
+    },
+    {
+      "name": "cna_guide_reset_pending_message_box_ext",
+      "header": "gamer_services.h",
+      "ownership": "no handle; discards the pending box",
+      "returnType": "CNA_Result",
+      "parameters": []
     },
     {
       "name": "cna_guide_set_is_screen_saver_enabled",
@@ -7055,6 +7180,15 @@
       "returnType": "CNA_Result",
       "parameters": [
         "CNA_Bool"
+      ]
+    },
+    {
+      "name": "cna_guide_show_achievements_ext",
+      "header": "gamer_services.h",
+      "ownership": "no handle; asks the host to show the achievements pane",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_PlayerIndex"
       ]
     },
     {
@@ -7181,6 +7315,22 @@
       "parameters": [
         "int32_t",
         "CNA_Bool"
+      ]
+    },
+    {
+      "name": "cna_guide_simulate_keyboard_input_cancel_ext",
+      "header": "gamer_services.h",
+      "ownership": "no handle; completes the pending input as cancelled",
+      "returnType": "CNA_Result",
+      "parameters": []
+    },
+    {
+      "name": "cna_guide_simulate_message_box_click_ext",
+      "header": "gamer_services.h",
+      "ownership": "no handle; completes the pending box with a choice",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "int32_t"
       ]
     },
     {

@@ -330,6 +330,18 @@
         "nullCallback": true
       },
       {
+        "java": "guideCopyPendingKeyboardInputDescriptionExt",
+        "symbol": "cna_guide_copy_pending_keyboard_input_description_ext"
+      },
+      {
+        "java": "guideCopyPendingKeyboardInputDisplayTextExt",
+        "symbol": "cna_guide_copy_pending_keyboard_input_display_text_ext"
+      },
+      {
+        "java": "guideCopyPendingKeyboardInputTitleExt",
+        "symbol": "cna_guide_copy_pending_keyboard_input_title_ext"
+      },
+      {
         "java": "guideDelayNotifications",
         "symbol": "cna_guide_delay_notifications"
       },
@@ -344,6 +356,14 @@
       {
         "java": "guideEndShowMessageBox",
         "symbol": "cna_guide_end_show_message_box"
+      },
+      {
+        "java": "guideGetHasPendingKeyboardInputExt",
+        "symbol": "cna_guide_get_has_pending_keyboard_input_ext"
+      },
+      {
+        "java": "guideGetHasPendingMessageBoxExt",
+        "symbol": "cna_guide_get_has_pending_message_box_ext"
       },
       {
         "java": "guideGetIsScreenSaverEnabled",
@@ -362,8 +382,40 @@
         "symbol": "cna_guide_get_notification_position"
       },
       {
+        "java": "guideGetPendingKeyboardInputDescriptionSizeExt",
+        "symbol": "cna_guide_get_pending_keyboard_input_description_size_ext"
+      },
+      {
+        "java": "guideGetPendingKeyboardInputDisplayTextSizeExt",
+        "symbol": "cna_guide_get_pending_keyboard_input_display_text_size_ext"
+      },
+      {
+        "java": "guideGetPendingKeyboardInputTitleSizeExt",
+        "symbol": "cna_guide_get_pending_keyboard_input_title_size_ext"
+      },
+      {
+        "java": "guideGetPendingMessageBoxFocusButtonExt",
+        "symbol": "cna_guide_get_pending_message_box_focus_button_ext"
+      },
+      {
         "java": "guideGetSimulateTrialMode",
         "symbol": "cna_guide_get_simulate_trial_mode"
+      },
+      {
+        "java": "guideRenderPendingKeyboardInputExt",
+        "symbol": "cna_guide_render_pending_keyboard_input_ext"
+      },
+      {
+        "java": "guideRenderPendingMessageBoxExt",
+        "symbol": "cna_guide_render_pending_message_box_ext"
+      },
+      {
+        "java": "guideResetPendingKeyboardInputExt",
+        "symbol": "cna_guide_reset_pending_keyboard_input_ext"
+      },
+      {
+        "java": "guideResetPendingMessageBoxExt",
+        "symbol": "cna_guide_reset_pending_message_box_ext"
       },
       {
         "java": "guideSetIsScreenSaverEnabled",
@@ -384,6 +436,10 @@
       {
         "java": "guideSetSimulateTrialMode",
         "symbol": "cna_guide_set_simulate_trial_mode"
+      },
+      {
+        "java": "guideShowAchievementsExt",
+        "symbol": "cna_guide_show_achievements_ext"
       },
       {
         "java": "guideShowComposeMessage",
@@ -436,6 +492,14 @@
       {
         "java": "guideShowSignIn",
         "symbol": "cna_guide_show_sign_in"
+      },
+      {
+        "java": "guideSimulateKeyboardInputCancelExt",
+        "symbol": "cna_guide_simulate_keyboard_input_cancel_ext"
+      },
+      {
+        "java": "guideSimulateMessageBoxClickExt",
+        "symbol": "cna_guide_simulate_message_box_click_ext"
       },
       {
         "java": "guideWasKeyboardInputCanceledExt",
