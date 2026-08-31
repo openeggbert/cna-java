@@ -452,6 +452,17 @@
     LOAD(gamer_set_display_name, "cna_gamer_set_display_name");
     LOAD(gamer_set_tag, "cna_gamer_set_tag");
     LOAD(gamer_unsubscribe_ext, "cna_gamer_unsubscribe_ext");
+    LOAD(gpu_timer_begin, "cna_gpu_timer_begin");
+    LOAD(gpu_timer_copy_unsupported_reason, "cna_gpu_timer_copy_unsupported_reason");
+    LOAD(gpu_timer_create, "cna_gpu_timer_create");
+    LOAD(gpu_timer_destroy, "cna_gpu_timer_destroy");
+    LOAD(gpu_timer_end, "cna_gpu_timer_end");
+    LOAD(gpu_timer_get_last_milliseconds, "cna_gpu_timer_get_last_milliseconds");
+    LOAD(gpu_timer_get_sample_count, "cna_gpu_timer_get_sample_count");
+    LOAD(gpu_timer_is_open, "cna_gpu_timer_is_open");
+    LOAD(gpu_timer_is_result_available, "cna_gpu_timer_is_result_available");
+    LOAD(gpu_timer_is_supported, "cna_gpu_timer_is_supported");
+    LOAD(gpu_timer_poll, "cna_gpu_timer_poll");
     LOAD(graphics_backend_category_copy_name, "cna_graphics_backend_category_copy_name");
     LOAD(graphics_backend_category_get_name_size, "cna_graphics_backend_category_get_name_size");
     LOAD(graphics_backend_get_current_category, "cna_graphics_backend_get_current_category");

@@ -327,6 +327,61 @@ public final class NativeEngineLayerRoutes {
     public static native int frustumCullerExtSetViewProjection(long culler, float[] viewProjectionFloating);
 
     /**
+     * cna_gpu_timer_begin (engine_layer.h).
+     */
+    public static native int gpuTimerBegin(long timer);
+
+    /**
+     * cna_gpu_timer_copy_unsupported_reason (engine_layer.h).
+     */
+    public static native int gpuTimerCopyUnsupportedReason(long timer, byte[] destination, long[] outBytes);
+
+    /**
+     * cna_gpu_timer_create (engine_layer.h).
+     */
+    public static native int gpuTimerCreate(long graphicsDevice, long[] outTimer);
+
+    /**
+     * cna_gpu_timer_destroy (engine_layer.h).
+     */
+    public static native int gpuTimerDestroy(long timer);
+
+    /**
+     * cna_gpu_timer_end (engine_layer.h).
+     */
+    public static native int gpuTimerEnd(long timer);
+
+    /**
+     * cna_gpu_timer_get_last_milliseconds (engine_layer.h).
+     */
+    public static native int gpuTimerGetLastMilliseconds(long timer, double[] outMilliseconds);
+
+    /**
+     * cna_gpu_timer_get_sample_count (engine_layer.h).
+     */
+    public static native int gpuTimerGetSampleCount(long timer, int[] outSampleCount);
+
+    /**
+     * cna_gpu_timer_is_open (engine_layer.h).
+     */
+    public static native int gpuTimerIsOpen(long timer, boolean[] outOpen);
+
+    /**
+     * cna_gpu_timer_is_result_available (engine_layer.h).
+     */
+    public static native int gpuTimerIsResultAvailable(long timer, boolean[] outAvailable);
+
+    /**
+     * cna_gpu_timer_is_supported (engine_layer.h).
+     */
+    public static native int gpuTimerIsSupported(long timer, boolean[] outSupported);
+
+    /**
+     * cna_gpu_timer_poll (engine_layer.h).
+     */
+    public static native int gpuTimerPoll(long timer, boolean[] outCollected);
+
+    /**
      * cna_instanced_renderer_ext_copy_instance_elements (engine_layer.h).
      */
     public static native int instancedRendererExtCopyInstanceElements(long[] destinationIntegral, long[] outElementCount);

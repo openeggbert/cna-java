@@ -1,9 +1,6 @@
 package org.openeggbert.cna.extensions.graphics;
 
 import Microsoft.Xna.Framework.Color;
-import Microsoft.Xna.Framework.Game;
-import Microsoft.Xna.Framework.GameTime;
-import Microsoft.Xna.Framework.GraphicsDeviceManager;
 import Microsoft.Xna.Framework.Graphics.BasicEffect;
 import Microsoft.Xna.Framework.Graphics.BufferUsage;
 import Microsoft.Xna.Framework.Graphics.GraphicsDevice;
@@ -49,7 +46,7 @@ final class InstancedRendererTests {
 
     @Test
     void theDeclarationsAreCnasOwnAndNotWrittenDownHere() {
-        run(probe -> {
+        GameProbe.run(probe -> {
             VertexDeclaration instances = InstancedRenderer.getInstanceDeclaration();
             // CNA's header states the shape: four Vector4 elements at TextureCoordinate usage
             // indices one through four, sixty-four bytes. A game building its own instance
@@ -80,8 +77,8 @@ final class InstancedRendererTests {
 
     @Test
     void theBufferGrowsAndNeverShrinks() {
-        run(probe -> {
-            try (Geometry geometry = new Geometry(probe.getGraphicsDevice());
+        GameProbe.run(probe -> {
+            try (Geometry geometry = new Geometry(probe.device());
                  InstancedRenderer renderer = geometry.renderer()) {
                 assertEquals(0, renderer.getInstanceCount(), "nothing is uploaded yet");
 
@@ -112,8 +109,8 @@ final class InstancedRendererTests {
 
     @Test
     void theTintStreamIsBoundSeparatelyFromBeingUploaded() {
-        run(probe -> {
-            try (Geometry geometry = new Geometry(probe.getGraphicsDevice());
+        GameProbe.run(probe -> {
+            try (Geometry geometry = new Geometry(probe.device());
                  InstancedRenderer renderer = geometry.renderer()) {
                 assertFalse(renderer.isTintsEnabled(), "the stream starts unbound");
 
@@ -135,10 +132,10 @@ final class InstancedRendererTests {
 
     @Test
     void aDrawSaysAfterwardsWhetherItInstancedOrFellBack() {
-        run(probe -> {
-            try (Geometry geometry = new Geometry(probe.getGraphicsDevice());
+        GameProbe.run(probe -> {
+            try (Geometry geometry = new Geometry(probe.device());
                  InstancedRenderer renderer = geometry.renderer();
-                 BasicEffect effect = new BasicEffect(probe.getGraphicsDevice())) {
+                 BasicEffect effect = new BasicEffect(probe.device())) {
                 // CNA's own default, asked rather than written down here: it is off, which
                 // means a renderer that cannot instance refuses the draw until a game says it
                 // would rather have the calls than nothing.
@@ -191,8 +188,8 @@ final class InstancedRendererTests {
 
     @Test
     void theBuffersAreRetainedAndNotOwned() {
-        run(probe -> {
-            GraphicsDevice device = probe.getGraphicsDevice();
+        GameProbe.run(probe -> {
+            GraphicsDevice device = probe.device();
             Geometry geometry = new Geometry(device);
             InstancedRenderer renderer = geometry.renderer();
             assertSame(geometry.vertices, renderer.getVertexBuffer());
@@ -213,8 +210,8 @@ final class InstancedRendererTests {
 
     @Test
     void geometryThatCannotBeInstancedIsRefused() {
-        run(probe -> {
-            GraphicsDevice device = probe.getGraphicsDevice();
+        GameProbe.run(probe -> {
+            GraphicsDevice device = probe.device();
             try (Geometry geometry = new Geometry(device)) {
                 // CNA documents a part that draws no primitives as invalid, and refusing it at
                 // creation is better than a renderer that can never draw.
@@ -270,43 +267,4 @@ final class InstancedRendererTests {
         return List.copyOf(transforms);
     }
 
-    private static void run(java.util.function.Consumer<Probe> body) {
-        try (Probe probe = new Probe(body)) {
-            probe.RunOneFrame();
-            if (probe.failure != null) {
-                if (probe.failure instanceof RuntimeException runtime) {
-                    throw runtime;
-                }
-                throw new IllegalStateException(probe.failure);
-            }
-            assertTrue(probe.ran, "the probe must have run");
-        }
-    }
-
-    /** Runs one body inside a frame, because the renderer needs a real graphics device. */
-    private static final class Probe extends Game {
-
-        private final java.util.function.Consumer<Probe> body;
-        private boolean ran;
-        private Throwable failure;
-
-        private Probe(java.util.function.Consumer<Probe> body) {
-            this.body = body;
-            new GraphicsDeviceManager(this);
-        }
-
-        @Override
-        protected void Update(GameTime gameTime) {
-            super.Update(gameTime);
-            if (ran) {
-                return;
-            }
-            ran = true;
-            try {
-                body.accept(this);
-            } catch (Throwable exception) {
-                failure = exception;
-            }
-        }
-    }
 }

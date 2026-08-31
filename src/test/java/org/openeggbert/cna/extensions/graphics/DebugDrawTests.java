@@ -4,9 +4,6 @@ import Microsoft.Xna.Framework.BoundingBox;
 import Microsoft.Xna.Framework.BoundingFrustum;
 import Microsoft.Xna.Framework.BoundingSphere;
 import Microsoft.Xna.Framework.Color;
-import Microsoft.Xna.Framework.Game;
-import Microsoft.Xna.Framework.GameTime;
-import Microsoft.Xna.Framework.GraphicsDeviceManager;
 import Microsoft.Xna.Framework.Matrix;
 import Microsoft.Xna.Framework.Vector3;
 import org.junit.jupiter.api.Test;
@@ -35,8 +32,8 @@ final class DebugDrawTests {
 
     @Test
     void theQueueHoldsTheEdgesEachShapeIsMadeOf() {
-        run(probe -> {
-            try (DebugDraw debug = DebugDraw.create(probe.getGraphicsDevice())) {
+        GameProbe.run(probe -> {
+            try (DebugDraw debug = DebugDraw.create(probe.device())) {
                 debug.begin(Matrix.getIdentity(), Matrix.getIdentity());
                 assertEquals(0, debug.getLineCount(), "begin clears both lists");
                 assertTrue(debug.isDepthTested(), "begin restores depth testing");
@@ -94,8 +91,8 @@ final class DebugDrawTests {
 
     @Test
     void theTwoListsAreSeparate() {
-        run(probe -> {
-            try (DebugDraw debug = DebugDraw.create(probe.getGraphicsDevice())) {
+        GameProbe.run(probe -> {
+            try (DebugDraw debug = DebugDraw.create(probe.device())) {
                 debug.begin(Matrix.getIdentity(), Matrix.getIdentity());
 
                 // A collision volume you want hidden behind geometry, and a marker you must not
@@ -120,8 +117,8 @@ final class DebugDrawTests {
 
     @Test
     void aClosedRendererRefusesEveryOperation() {
-        run(probe -> {
-            DebugDraw debug = DebugDraw.create(probe.getGraphicsDevice());
+        GameProbe.run(probe -> {
+            DebugDraw debug = DebugDraw.create(probe.device());
             debug.close();
             debug.close();
             assertThrows(IllegalStateException.class, debug::getLineCount);
@@ -129,43 +126,4 @@ final class DebugDrawTests {
         });
     }
 
-    private static void run(java.util.function.Consumer<Probe> body) {
-        try (Probe probe = new Probe(body)) {
-            probe.RunOneFrame();
-            if (probe.failure != null) {
-                if (probe.failure instanceof RuntimeException runtime) {
-                    throw runtime;
-                }
-                throw new IllegalStateException(probe.failure);
-            }
-            assertTrue(probe.ran, "the probe must have run");
-        }
-    }
-
-    /** Runs one body inside a frame, because the renderer needs a real graphics device. */
-    private static final class Probe extends Game {
-
-        private final java.util.function.Consumer<Probe> body;
-        private boolean ran;
-        private Throwable failure;
-
-        private Probe(java.util.function.Consumer<Probe> body) {
-            this.body = body;
-            new GraphicsDeviceManager(this);
-        }
-
-        @Override
-        protected void Update(GameTime gameTime) {
-            super.Update(gameTime);
-            if (ran) {
-                return;
-            }
-            ran = true;
-            try {
-                body.accept(this);
-            } catch (Throwable exception) {
-                failure = exception;
-            }
-        }
-    }
 }

@@ -452,6 +452,17 @@
     CNA_JNI_ROUTE(cna_gamer_set_display_name) gamer_set_display_name;
     CNA_JNI_ROUTE(cna_gamer_set_tag) gamer_set_tag;
     CNA_JNI_ROUTE(cna_gamer_unsubscribe_ext) gamer_unsubscribe_ext;
+    CNA_JNI_ROUTE(cna_gpu_timer_begin) gpu_timer_begin;
+    CNA_JNI_ROUTE(cna_gpu_timer_copy_unsupported_reason) gpu_timer_copy_unsupported_reason;
+    CNA_JNI_ROUTE(cna_gpu_timer_create) gpu_timer_create;
+    CNA_JNI_ROUTE(cna_gpu_timer_destroy) gpu_timer_destroy;
+    CNA_JNI_ROUTE(cna_gpu_timer_end) gpu_timer_end;
+    CNA_JNI_ROUTE(cna_gpu_timer_get_last_milliseconds) gpu_timer_get_last_milliseconds;
+    CNA_JNI_ROUTE(cna_gpu_timer_get_sample_count) gpu_timer_get_sample_count;
+    CNA_JNI_ROUTE(cna_gpu_timer_is_open) gpu_timer_is_open;
+    CNA_JNI_ROUTE(cna_gpu_timer_is_result_available) gpu_timer_is_result_available;
+    CNA_JNI_ROUTE(cna_gpu_timer_is_supported) gpu_timer_is_supported;
+    CNA_JNI_ROUTE(cna_gpu_timer_poll) gpu_timer_poll;
     CNA_JNI_ROUTE(cna_graphics_backend_category_copy_name) graphics_backend_category_copy_name;
     CNA_JNI_ROUTE(cna_graphics_backend_category_get_name_size) graphics_backend_category_get_name_size;
     CNA_JNI_ROUTE(cna_graphics_backend_get_current_category) graphics_backend_get_current_category;

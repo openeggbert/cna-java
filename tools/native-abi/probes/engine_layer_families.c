@@ -117,6 +117,12 @@ static void device_families(const CNA_Handle device)
             CNA_Bool supported = CNA_FALSE;
             TRY("gpu_timer_is_supported", cna_gpu_timer_is_supported(timer, &supported));
             printf("  %-42s %s\n", "gpu_timer supported?", supported ? "yes" : "no");
+            char reason[256];
+            uint64_t bytes = 0;
+            if (cna_gpu_timer_copy_unsupported_reason(timer, reason, sizeof reason, &bytes)
+                == CNA_RESULT_SUCCESS && bytes > 0) {
+                printf("  %-42s \"%.*s\"\n", "gpu_timer reason", (int)bytes, reason);
+            }
             TRY("gpu_timer_begin", cna_gpu_timer_begin(timer));
             TRY("gpu_timer_end", cna_gpu_timer_end(timer));
             TRY("gpu_timer_destroy", cna_gpu_timer_destroy(timer));

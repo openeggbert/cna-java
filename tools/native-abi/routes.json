@@ -3492,6 +3492,50 @@
         "symbol": "cna_frustum_culler_ext_set_view_projection"
       },
       {
+        "java": "gpuTimerBegin",
+        "symbol": "cna_gpu_timer_begin"
+      },
+      {
+        "java": "gpuTimerCopyUnsupportedReason",
+        "symbol": "cna_gpu_timer_copy_unsupported_reason"
+      },
+      {
+        "java": "gpuTimerCreate",
+        "symbol": "cna_gpu_timer_create"
+      },
+      {
+        "java": "gpuTimerDestroy",
+        "symbol": "cna_gpu_timer_destroy"
+      },
+      {
+        "java": "gpuTimerEnd",
+        "symbol": "cna_gpu_timer_end"
+      },
+      {
+        "java": "gpuTimerGetLastMilliseconds",
+        "symbol": "cna_gpu_timer_get_last_milliseconds"
+      },
+      {
+        "java": "gpuTimerGetSampleCount",
+        "symbol": "cna_gpu_timer_get_sample_count"
+      },
+      {
+        "java": "gpuTimerIsOpen",
+        "symbol": "cna_gpu_timer_is_open"
+      },
+      {
+        "java": "gpuTimerIsResultAvailable",
+        "symbol": "cna_gpu_timer_is_result_available"
+      },
+      {
+        "java": "gpuTimerIsSupported",
+        "symbol": "cna_gpu_timer_is_supported"
+      },
+      {
+        "java": "gpuTimerPoll",
+        "symbol": "cna_gpu_timer_poll"
+      },
+      {
         "java": "instancedRendererExtCopyInstanceElements",
         "symbol": "cna_instanced_renderer_ext_copy_instance_elements"
       },

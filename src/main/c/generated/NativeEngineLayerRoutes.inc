@@ -937,6 +937,170 @@ Java_org_openeggbert_cna_internal_generated_NativeEngineLayerRoutes_frustumCulle
 }
 
 JNIEXPORT jint JNICALL
+Java_org_openeggbert_cna_internal_generated_NativeEngineLayerRoutes_gpuTimerBegin(
+    JNIEnv* environment, jclass declaring_class, jlong timer)
+{
+    (void)environment;
+    (void)declaring_class;
+    CNA_Result call_result = cna.gpu_timer_begin((CNA_GpuTimerHandle)timer);
+    return (jint)call_result;
+}
+
+JNIEXPORT jint JNICALL
+Java_org_openeggbert_cna_internal_generated_NativeEngineLayerRoutes_gpuTimerCopyUnsupportedReason(
+    JNIEnv* environment, jclass declaring_class, jlong timer, jbyteArray destination, jlongArray out_bytes)
+{
+    (void)environment;
+    (void)declaring_class;
+    jsize destination_size = (*environment)->GetArrayLength(environment, destination);
+    jbyte* destination_bytes = (*environment)->GetByteArrayElements(environment, destination, NULL);
+    if (destination_bytes == NULL) {
+        return (jint)CNA_RESULT_OUT_OF_MEMORY;
+    }
+    uint64_t destination_written = 0;
+    CNA_Result call_result = cna.gpu_timer_copy_unsupported_reason((CNA_GpuTimerHandle)timer, (char*)destination_bytes, (uint64_t)destination_size, &destination_written);
+    (*environment)->ReleaseByteArrayElements(environment, destination, destination_bytes, 0);
+    if (call_result == CNA_RESULT_SUCCESS || call_result == CNA_RESULT_BUFFER_TOO_SMALL) {
+        jlong destination_element = (jlong)destination_written;
+        (*environment)->SetLongArrayRegion(
+            environment, out_bytes, 0, 1, &destination_element);
+    }
+    return (jint)call_result;
+}
+
+JNIEXPORT jint JNICALL
+Java_org_openeggbert_cna_internal_generated_NativeEngineLayerRoutes_gpuTimerCreate(
+    JNIEnv* environment, jclass declaring_class, jlong graphics_device, jlongArray out_timer)
+{
+    (void)environment;
+    (void)declaring_class;
+    CNA_GpuTimerHandle out_timer_value = 0;
+    CNA_Result call_result = cna.gpu_timer_create((CNA_Handle)graphics_device, &out_timer_value);
+    if (call_result == CNA_RESULT_SUCCESS || call_result == CNA_RESULT_BUFFER_TOO_SMALL) {
+        jlong out_timer_element = (jlong)out_timer_value;
+        (*environment)->SetLongArrayRegion(
+            environment, out_timer, 0, 1, &out_timer_element);
+    }
+    return (jint)call_result;
+}
+
+JNIEXPORT jint JNICALL
+Java_org_openeggbert_cna_internal_generated_NativeEngineLayerRoutes_gpuTimerDestroy(
+    JNIEnv* environment, jclass declaring_class, jlong timer)
+{
+    (void)environment;
+    (void)declaring_class;
+    CNA_Result call_result = cna.gpu_timer_destroy((CNA_GpuTimerHandle)timer);
+    return (jint)call_result;
+}
+
+JNIEXPORT jint JNICALL
+Java_org_openeggbert_cna_internal_generated_NativeEngineLayerRoutes_gpuTimerEnd(
+    JNIEnv* environment, jclass declaring_class, jlong timer)
+{
+    (void)environment;
+    (void)declaring_class;
+    CNA_Result call_result = cna.gpu_timer_end((CNA_GpuTimerHandle)timer);
+    return (jint)call_result;
+}
+
+JNIEXPORT jint JNICALL
+Java_org_openeggbert_cna_internal_generated_NativeEngineLayerRoutes_gpuTimerGetLastMilliseconds(
+    JNIEnv* environment, jclass declaring_class, jlong timer, jdoubleArray out_milliseconds)
+{
+    (void)environment;
+    (void)declaring_class;
+    double out_milliseconds_value = 0;
+    CNA_Result call_result = cna.gpu_timer_get_last_milliseconds((CNA_GpuTimerHandle)timer, &out_milliseconds_value);
+    if (call_result == CNA_RESULT_SUCCESS || call_result == CNA_RESULT_BUFFER_TOO_SMALL) {
+        jdouble out_milliseconds_element = (jdouble)out_milliseconds_value;
+        (*environment)->SetDoubleArrayRegion(
+            environment, out_milliseconds, 0, 1, &out_milliseconds_element);
+    }
+    return (jint)call_result;
+}
+
+JNIEXPORT jint JNICALL
+Java_org_openeggbert_cna_internal_generated_NativeEngineLayerRoutes_gpuTimerGetSampleCount(
+    JNIEnv* environment, jclass declaring_class, jlong timer, jintArray out_sample_count)
+{
+    (void)environment;
+    (void)declaring_class;
+    int32_t out_sample_count_value = 0;
+    CNA_Result call_result = cna.gpu_timer_get_sample_count((CNA_GpuTimerHandle)timer, &out_sample_count_value);
+    if (call_result == CNA_RESULT_SUCCESS || call_result == CNA_RESULT_BUFFER_TOO_SMALL) {
+        jint out_sample_count_element = (jint)out_sample_count_value;
+        (*environment)->SetIntArrayRegion(
+            environment, out_sample_count, 0, 1, &out_sample_count_element);
+    }
+    return (jint)call_result;
+}
+
+JNIEXPORT jint JNICALL
+Java_org_openeggbert_cna_internal_generated_NativeEngineLayerRoutes_gpuTimerIsOpen(
+    JNIEnv* environment, jclass declaring_class, jlong timer, jbooleanArray out_open)
+{
+    (void)environment;
+    (void)declaring_class;
+    CNA_Bool out_open_value = 0;
+    CNA_Result call_result = cna.gpu_timer_is_open((CNA_GpuTimerHandle)timer, &out_open_value);
+    if (call_result == CNA_RESULT_SUCCESS || call_result == CNA_RESULT_BUFFER_TOO_SMALL) {
+        jboolean out_open_element = (jboolean)out_open_value;
+        (*environment)->SetBooleanArrayRegion(
+            environment, out_open, 0, 1, &out_open_element);
+    }
+    return (jint)call_result;
+}
+
+JNIEXPORT jint JNICALL
+Java_org_openeggbert_cna_internal_generated_NativeEngineLayerRoutes_gpuTimerIsResultAvailable(
+    JNIEnv* environment, jclass declaring_class, jlong timer, jbooleanArray out_available)
+{
+    (void)environment;
+    (void)declaring_class;
+    CNA_Bool out_available_value = 0;
+    CNA_Result call_result = cna.gpu_timer_is_result_available((CNA_GpuTimerHandle)timer, &out_available_value);
+    if (call_result == CNA_RESULT_SUCCESS || call_result == CNA_RESULT_BUFFER_TOO_SMALL) {
+        jboolean out_available_element = (jboolean)out_available_value;
+        (*environment)->SetBooleanArrayRegion(
+            environment, out_available, 0, 1, &out_available_element);
+    }
+    return (jint)call_result;
+}
+
+JNIEXPORT jint JNICALL
+Java_org_openeggbert_cna_internal_generated_NativeEngineLayerRoutes_gpuTimerIsSupported(
+    JNIEnv* environment, jclass declaring_class, jlong timer, jbooleanArray out_supported)
+{
+    (void)environment;
+    (void)declaring_class;
+    CNA_Bool out_supported_value = 0;
+    CNA_Result call_result = cna.gpu_timer_is_supported((CNA_GpuTimerHandle)timer, &out_supported_value);
+    if (call_result == CNA_RESULT_SUCCESS || call_result == CNA_RESULT_BUFFER_TOO_SMALL) {
+        jboolean out_supported_element = (jboolean)out_supported_value;
+        (*environment)->SetBooleanArrayRegion(
+            environment, out_supported, 0, 1, &out_supported_element);
+    }
+    return (jint)call_result;
+}
+
+JNIEXPORT jint JNICALL
+Java_org_openeggbert_cna_internal_generated_NativeEngineLayerRoutes_gpuTimerPoll(
+    JNIEnv* environment, jclass declaring_class, jlong timer, jbooleanArray out_collected)
+{
+    (void)environment;
+    (void)declaring_class;
+    CNA_Bool out_collected_value = 0;
+    CNA_Result call_result = cna.gpu_timer_poll((CNA_GpuTimerHandle)timer, &out_collected_value);
+    if (call_result == CNA_RESULT_SUCCESS || call_result == CNA_RESULT_BUFFER_TOO_SMALL) {
+        jboolean out_collected_element = (jboolean)out_collected_value;
+        (*environment)->SetBooleanArrayRegion(
+            environment, out_collected, 0, 1, &out_collected_element);
+    }
+    return (jint)call_result;
+}
+
+JNIEXPORT jint JNICALL
 Java_org_openeggbert_cna_internal_generated_NativeEngineLayerRoutes_instancedRendererExtCopyInstanceElements(
     JNIEnv* environment, jclass declaring_class, jlongArray destinationIntegral, jlongArray out_element_count)
 {

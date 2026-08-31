@@ -60,8 +60,11 @@ Three results are worth keeping in mind when reading it.
 not evidence of an absent feature -- it is invalid input, and both work fine with a real one.
 
 `gpu_timer` and `gpu_instance_culler` are the honest shape of a family this renderer cannot do:
-they construct, they answer `is_supported` with `false`, and one of them carries a human-readable
-reason. That is a family to project with its refusal intact, not one to leave out.
+they construct, they answer `is_supported` with `false`, and each carries a human-readable reason
+-- *"the HEADLESS renderer has no GPU timer query (GL ES needs GL_EXT_disjoint_timer_query,
+desktop GL needs 3.3 or ARB_timer_query)"* and *"this renderer has no compute shaders"*. That is a
+family to project with its refusal intact, not one to leave out: a profiling overlay that can say
+why it has no numbers is more useful than one that vanishes.
 
 The four clustered create routes -- `clustered_light_set`, `clustered_light_grid`,
 `clustered_light_assignment` and `clustered_shadow_policy` -- name their first parameter `game`

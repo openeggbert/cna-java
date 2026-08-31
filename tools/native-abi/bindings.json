@@ -7817,6 +7817,115 @@
       "parameters": []
     },
     {
+      "name": "cna_gpu_timer_begin",
+      "header": "engine_layer.h",
+      "ownership": "borrows the timer",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_GpuTimerHandle"
+      ]
+    },
+    {
+      "name": "cna_gpu_timer_copy_unsupported_reason",
+      "header": "engine_layer.h",
+      "ownership": "borrows the timer; fills the caller's byte buffer",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_GpuTimerHandle",
+        "char*",
+        "uint64_t",
+        "uint64_t*"
+      ]
+    },
+    {
+      "name": "cna_gpu_timer_create",
+      "header": "engine_layer.h",
+      "ownership": "borrows the graphics device; returns an owned timer handle",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_Handle",
+        "CNA_GpuTimerHandle*"
+      ]
+    },
+    {
+      "name": "cna_gpu_timer_destroy",
+      "header": "engine_layer.h",
+      "ownership": "releases the owned timer handle and its query object",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_GpuTimerHandle"
+      ]
+    },
+    {
+      "name": "cna_gpu_timer_end",
+      "header": "engine_layer.h",
+      "ownership": "borrows the timer",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_GpuTimerHandle"
+      ]
+    },
+    {
+      "name": "cna_gpu_timer_get_last_milliseconds",
+      "header": "engine_layer.h",
+      "ownership": "borrows the timer",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_GpuTimerHandle",
+        "double*"
+      ]
+    },
+    {
+      "name": "cna_gpu_timer_get_sample_count",
+      "header": "engine_layer.h",
+      "ownership": "borrows the timer",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_GpuTimerHandle",
+        "int32_t*"
+      ]
+    },
+    {
+      "name": "cna_gpu_timer_is_open",
+      "header": "engine_layer.h",
+      "ownership": "borrows the timer",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_GpuTimerHandle",
+        "CNA_Bool*"
+      ]
+    },
+    {
+      "name": "cna_gpu_timer_is_result_available",
+      "header": "engine_layer.h",
+      "ownership": "borrows the timer",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_GpuTimerHandle",
+        "CNA_Bool*"
+      ]
+    },
+    {
+      "name": "cna_gpu_timer_is_supported",
+      "header": "engine_layer.h",
+      "ownership": "borrows the timer",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_GpuTimerHandle",
+        "CNA_Bool*"
+      ]
+    },
+    {
+      "name": "cna_gpu_timer_poll",
+      "header": "engine_layer.h",
+      "ownership": "borrows the timer",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_GpuTimerHandle",
+        "CNA_Bool*"
+      ]
+    },
+    {
       "name": "cna_graphics_adapter_copy_description",
       "header": "display.h",
       "ownership": "borrows callback-scoped device; caller buffer",
