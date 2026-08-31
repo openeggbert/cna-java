@@ -14,21 +14,23 @@ Writable: this repository and `../cna-java-template`. `../../cnanext` and
 clean. The pre-existing untracked `out` entry is untouched.
 
 ```text
-cnanext HEAD            599d14e54e073b566d77b3d6fb30ac52d3d810b7 (branch next)
+cnanext HEAD            0fd4d4e39e3adcd7531e04eff857defa9233518e (branch next)
 sharp-runtimenext HEAD  4a49afb0cfe6a41e6e0af0bb62dc5175976731bb (branch next)
 native artifact         cnanext/cmake-build-javanext/modules/c-api/libcna_c_api.so
 ABI                     0.21.0
-C API inventory SHA-256 be9a2bf818318002adc100ad1db22949b164726d2d124352f3b29aa3fdc48ea2
+C API inventory SHA-256 b485d17b1df9a86c6099700baedcd435c8a3f07487af8741b01d8c471956bfe7
 platform/renderer/audio HEADLESS / HEADLESS / NULL
 build options           CNA_BUILD_C_API=ON, CNA_CNAEXT=ON, CNA_DEVICES=ON,
                         CNA_ENABLE_NET=ON, CNA_ENABLE_VIDEO=AUTO
 XNA reference corpus    /rv/data/development/github.com/openeggbert/xna4-decomp/dlls
 
-Both dependency HEADs advanced during this session, and CNA's C API advanced with them: ABI
-0.20.0 to 0.21.0, 4,051 declarations to 4,054. Every one of the 1,570 bound routes kept its
-exact signature, so the migration was three edits and a rebuild;
-`docs/cna-abi-migration-evidence.md` carries the addendum. The library was rebuilt from the
-clean checkout before any of it was claimed.
+`cnanext` advanced again during this session -- someone else's work, not this repository's, and
+untouched by it. The ABI did not move with it: still 0.21.0 and still 4,054 declarations, though
+the inventory SHA-256 changed from `be9a2bf8...` to `b485d17b...`, so some declaration text did.
+Every one of the 2,410 bound routes still matches the live headers -- `MANIFEST_SIGNATURE_CHECK`
+is what says so, and it compares each bound signature rather than the version constant -- so
+nothing in this qualification was invalidated by the move. The earlier 0.20.0-to-0.21.0 migration
+is recorded in `docs/cna-abi-migration-evidence.md`.
 ```
 
 `build.gradle` resolves CNA from `../../cnanext` and fails clearly when it is absent. There is
