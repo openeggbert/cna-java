@@ -168,10 +168,114 @@ def test_coverage(cna_root: Path) -> None:
     rules = json.loads(coverage_tool.RULES.read_text(encoding="utf-8"))
     unmatched = coverage_tool.match_rule({"match": {}}, "cna_anything", "anything.h")
     check(not unmatched, "an empty rule never matches")
-    check(all("reason" in rule and rule["reason"].strip() for rule in rules["rules"]),
-          "every coverage rule states a reason")
+    check(all("purposeReason" in rule and rule["purposeReason"].strip()
+              for rule in rules["rules"]),
+          "every coverage rule states why the route exists")
     check(all(rule["classification"] in rules["classifications"] for rule in rules["rules"]),
           "every coverage rule uses a declared classification")
+    test_binding_status(report, rules)
+
+
+def test_binding_status(report: dict, rules: dict) -> None:
+    """Purpose and binding status are two questions, and the rules must answer both.
+
+    The failure this exists for is the one the previous session found by hand: a rule
+    whose whole text explained why a route is a CNA extension rather than XNA, which is
+    an answer to a different question and reads like an answer to this one.  Every check
+    here is exercised by mutating a rule set until it fails, so a check that stopped
+    working is itself a failure.
+    """
+    bound = {record["name"] for record in report["functions"] if record["bound"]}
+    check(not report["ruleProblems"],
+          "every coverage rule answers both the purpose and the binding question")
+    check(all(rule["bindingStatus"] in coverage_tool.BINDING_STATUSES
+              for rule in rules["rules"]),
+          "every coverage rule uses a declared binding status")
+    check(all(status in rules["bindingStatuses"]
+              for status in coverage_tool.BINDING_STATUSES),
+          "the rules file documents every binding status the tool accepts")
+    check(all(record.get("bindingStatus") for record in report["functions"]),
+          "every canonical route carries a binding status")
+    check(all(record["bindingStatus"] == "BOUND" for record in report["functions"]
+              if record["bound"]),
+          "a bound route's binding status is derived from being bound, never declared")
+
+    def mutated(change) -> list[str]:
+        copied = copy.deepcopy(rules)
+        change(copied)
+        return coverage_tool.rule_problems(copied, bound)
+
+    # 1. A rule that answers only the purpose question is the exact defect this schema
+    #    was split to make visible.
+    def drop_binding_reason(value: dict) -> None:
+        value["rules"][0].pop("bindingReason")
+    check(prefixed(mutated(drop_binding_reason), "MISSING_BINDING_REASON"),
+          "a rule that gives a purpose but no binding reason is refused")
+
+    def drop_binding_status(value: dict) -> None:
+        value["rules"][0].pop("bindingStatus")
+    check(prefixed(mutated(drop_binding_status), "MISSING_BINDING_STATUS"),
+          "a rule that gives a purpose but no binding status is refused")
+
+    def drop_purpose(value: dict) -> None:
+        value["rules"][0]["purposeReason"] = "   "
+    check(prefixed(mutated(drop_purpose), "MISSING_PURPOSE_REASON"),
+          "a rule that gives a binding status but no purpose is refused")
+
+    # 2. An extension-purpose route can still be locally actionable. The two axes are
+    #    independent, and a schema that could not express this would have re-created the
+    #    conflation it replaced.
+    def extension_is_actionable(value: dict) -> None:
+        rule = next(item for item in value["rules"]
+                    if item["classification"] == coverage_tool.CENSUS_PURPOSE)
+        rule["bindingStatus"] = "ACTIONABLE_LOCAL"
+        rule["bindingReason"] = "Nothing outside this repository blocks it."
+        rule.pop("evidence", None)
+    check(not mutated(extension_is_actionable),
+          "a CNA-extension route may be ACTIONABLE_LOCAL without further justification")
+
+    # 3. A route the reference API declares is not left out on taste.
+    def xna_without_evidence(value: dict) -> None:
+        rule = next(item for item in value["rules"]
+                    if item["classification"] in coverage_tool.PURPOSES_ALLOWING_DEFERRAL)
+        rule["bindingStatus"] = "DELIBERATE_NON_BINDING"
+        rule["bindingReason"] = "Decided against."
+        rule.pop("evidence", None)
+    check(prefixed(mutated(xna_without_evidence), "XNA_NON_BINDING_WITHOUT_EVIDENCE"),
+          "an XNA-backing route may be DELIBERATE_NON_BINDING only with stated evidence")
+
+    def xna_with_evidence(value: dict) -> None:
+        xna_without_evidence(value)
+        rule = next(item for item in value["rules"]
+                    if item["bindingStatus"] == "DELIBERATE_NON_BINDING"
+                    and item["classification"] in coverage_tool.PURPOSES_ALLOWING_DEFERRAL)
+        rule["evidence"] = "Measured in probe.c; the managed path answers identically."
+    check(not mutated(xna_with_evidence),
+          "the same rule passes once it states the evidence")
+
+    # 4. A blocker that outlived its block. Nothing reads a stale rule, so nothing else
+    #    would ever report it.
+    def blocker_over_bound(value: dict) -> None:
+        value["rules"][0]["match"] = {"symbols": [sorted(bound)[0]]}
+    check(prefixed(mutated(blocker_over_bound), "BLOCKER_RULE_MATCHES_BOUND_ROUTE"),
+          "a rule that still names a route something has since bound is refused")
+
+    # 5. DEFERRED_TRACKED is the one status that names a backlog task instead of a
+    #    measurement, so it is fenced to the purpose that has one.
+    def deferral_outside_backlog(value: dict) -> None:
+        rule = next(item for item in value["rules"]
+                    if item["classification"] == coverage_tool.CENSUS_PURPOSE)
+        rule["bindingStatus"] = "DEFERRED_TRACKED"
+        rule["task"] = "JAVA-EXT-999"
+    check(prefixed(mutated(deferral_outside_backlog), "DEFERRAL_OUTSIDE_XNA_BACKLOG"),
+          "a CNA-extension route may not be deferred to a backlog task instead of classified")
+
+    def deferral_without_task(value: dict) -> None:
+        rule = next(item for item in value["rules"]
+                    if item["bindingStatus"] == "DEFERRED_TRACKED")
+        rule.pop("task")
+    check(prefixed(mutated(deferral_without_task), "DEFERRAL_WITHOUT_TASK"),
+          "a deferred XNA-backing route must name the task that owns it")
 
     # A `native` declaration names its own method, so an unfiltered call scan reads it
     # as a call site and every generated route reports itself as reached. That would

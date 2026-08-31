@@ -22,6 +22,19 @@ For a bound function the classification is *derived*, never declared:
 For an unbound function ``coverage-rules.json`` supplies the classification and
 the exact reason.  Anything no rule matches is ``UNMAPPED_REQUIRES_REVIEW``,
 which ``--check`` treats as a failure.
+
+Purpose and binding status are two independent questions and are two independent
+fields.  ``classification`` answers *why the route exists for CNA-Java* -- whether
+it backs XNA, extends it, is internal plumbing or has no Java meaning -- and
+``purposeReason`` says it in prose.  ``bindingStatus`` answers the separate
+question *why the route is not bound*, from a closed set, and ``bindingReason``
+says it in prose with ``evidence`` naming the measurement behind it.
+
+The two were one overloaded field until this session, and the cost was concrete:
+a hundred and twenty-eight routes carried text explaining why they were a CNA
+extension rather than XNA, which reads like an explanation and answers a
+question nobody asked about binding.  A rule that supplies only a purpose is now
+a gate failure, not a silent pass.
 """
 
 from __future__ import annotations
@@ -310,6 +323,77 @@ def jni_entry_methods(functions: dict[str, str]) -> dict[str, str]:
     return {name: name.rsplit("_", 1)[-1] for name in functions if name.startswith("Java_")}
 
 
+# The closed set of answers to "why is this route not bound?".  A rule that gives a
+# purpose but no status is refused, because a purpose is an answer to a different
+# question and reads like an answer to this one.
+BINDING_STATUSES = {
+    "ACTIONABLE_LOCAL":
+        "Nothing outside this repository blocks it. It is work, not a boundary.",
+    "BLOCKED_UPSTREAM":
+        "A reproduced defect or a missing door in CNA or Sharp Runtime blocks it.",
+    "BLOCKED_RENDERER":
+        "No renderer this build can select provides the capability.",
+    "BLOCKED_HARDWARE":
+        "The host has no such device and CNA offers no test or synthetic backend for it.",
+    "BLOCKED_PLATFORM":
+        "The platform CNA is built for does not implement it.",
+    "DELIBERATE_NON_BINDING":
+        "Measured and decided against: binding it would add a boundary without adding "
+        "behaviour a consumer can reach, or would make an existing guarantee weaker.",
+    "DEFERRED_TRACKED":
+        "An XNA-backing route a named backlog task owns. Only a DEFERRED_RUNTIME rule "
+        "carrying a task may use it, which is what keeps it from becoming a synonym for "
+        "'not looked at'.",
+}
+
+# The purposes for which DEFERRED_TRACKED is a legitimate answer. Everything else must
+# say which of the six real statuses applies.
+PURPOSES_ALLOWING_DEFERRAL = {"DEFERRED_RUNTIME"}
+
+# The census this repository drives to zero: routes whose purpose is a CNA capability
+# outside XNA 4.0 and which nothing has bound yet. A blocked one names its blocker; a
+# deliberate one names what was measured.
+CENSUS_PURPOSE = "CNA_EXTENSION_CANDIDATE"
+
+
+def rule_problems(rules: dict, bound: set[str]) -> list[str]:
+    """Report every way a coverage rule fails to answer both questions.
+
+    Kept separate from ``build`` so the tool tests can mutate a rule set and see the
+    exact diagnostic, rather than inferring it from a count that moved.
+    """
+    problems: list[str] = []
+    for index, rule in enumerate(rules["rules"]):
+        where = f"rule[{index}] {json.dumps(rule.get('match', {}), sort_keys=True)}"
+        classification = rule.get("classification")
+        if classification not in rules["classifications"]:
+            problems.append(f"UNDECLARED_CLASSIFICATION {where}")
+        if not rule.get("purposeReason", "").strip():
+            problems.append(f"MISSING_PURPOSE_REASON {where}")
+        status = rule.get("bindingStatus")
+        if status not in BINDING_STATUSES:
+            problems.append(f"MISSING_BINDING_STATUS {where}")
+        elif status == "DEFERRED_TRACKED":
+            if classification not in PURPOSES_ALLOWING_DEFERRAL:
+                problems.append(f"DEFERRAL_OUTSIDE_XNA_BACKLOG {where}")
+            if not rule.get("task"):
+                problems.append(f"DEFERRAL_WITHOUT_TASK {where}")
+        if not rule.get("bindingReason", "").strip():
+            problems.append(f"MISSING_BINDING_REASON {where}")
+        # A route the reference API declares is not left out on taste. Saying so costs
+        # one field and is the difference between a decision and a preference.
+        if status == "DELIBERATE_NON_BINDING" and classification in PURPOSES_ALLOWING_DEFERRAL \
+                and not rule.get("evidence", "").strip():
+            problems.append(f"XNA_NON_BINDING_WITHOUT_EVIDENCE {where}")
+        # A rule that still names a symbol something has since bound is stale: its
+        # blocker outlived the block. Nothing reads it any more, so nothing else would
+        # ever say so.
+        for symbol in rule.get("match", {}).get("symbols", ()):
+            if symbol in bound:
+                problems.append(f"BLOCKER_RULE_MATCHES_BOUND_ROUTE {symbol} {where}")
+    return problems
+
+
 def match_rule(rule: dict, name: str, header: str) -> bool:
     criteria = rule["match"]
     if "header" in criteria and criteria["header"] != header:
@@ -371,43 +455,59 @@ def build(cna_root: Path) -> dict:
             record["javaNativeMethods"] = sorted(symbol_methods.get(name, ()))
             record["javaSurfaces"] = sorted(surfaces)
             record["coveringTestPackages"] = sorted(symbol_tests.get(name, ()))
+            record["bindingStatus"] = "BOUND"
             if "xna" in surfaces:
                 record["classification"] = "XNA_BACKING"
-                record["reason"] = "Reached from the strict Microsoft.Xna.Framework projection."
+                record["purposeReason"] = \
+                    "Reached from the strict Microsoft.Xna.Framework projection."
             elif "extension" in surfaces:
                 record["classification"] = "CNA_EXTENSION_CANDIDATE"
-                record["reason"] = "Reached from the org.openeggbert.cna.extensions surface."
+                record["purposeReason"] = "Reached from the org.openeggbert.cna.extensions surface."
             elif not record["javaNativeMethods"]:
                 record["classification"] = "JAVA_INTERNAL_ONLY"
-                record["reason"] = ("Bound and required at library-load time, but no JNI entry "
-                                    "point reaches it.")
+                record["purposeReason"] = ("Bound and required at library-load time, but no JNI "
+                                           "entry point reaches it.")
             else:
                 record["classification"] = "JAVA_INTERNAL_ONLY"
-                record["reason"] = ("Bound and reached only from org.openeggbert.cna.internal "
-                                    "plumbing, not from a public Java surface.")
+                record["purposeReason"] = ("Bound and reached only from "
+                                           "org.openeggbert.cna.internal plumbing, not from a "
+                                           "public Java surface.")
+            record["bindingReason"] = "Bound; the classification above is derived from what " \
+                                      "reaches it, never declared."
         else:
             rule = next((value for value in rules["rules"] if match_rule(value, name, header)), None)
             if rule is None:
                 record["classification"] = "UNMAPPED_REQUIRES_REVIEW"
-                record["reason"] = "No coverage rule explains this canonical route."
+                record["purposeReason"] = "No coverage rule explains this canonical route."
+                record["bindingStatus"] = "UNREVIEWED"
+                record["bindingReason"] = "No coverage rule explains this canonical route."
             else:
                 record["classification"] = rule["classification"]
-                record["reason"] = rule["reason"]
+                record["purposeReason"] = rule["purposeReason"]
+                record["bindingStatus"] = rule.get("bindingStatus", "UNREVIEWED")
+                record["bindingReason"] = rule.get("bindingReason", "")
+                if rule.get("evidence"):
+                    record["evidence"] = rule["evidence"]
                 if "task" in rule:
                     record["task"] = rule["task"]
         entries.append(record)
 
     counts: dict[str, int] = {}
+    binding_counts: dict[str, int] = {}
     for record in entries:
         counts[record["classification"]] = counts.get(record["classification"], 0) + 1
+        status = record["bindingStatus"]
+        binding_counts[status] = binding_counts.get(status, 0) + 1
     return {
-        "schemaVersion": 1,
+        "schemaVersion": 2,
         "cnaRoot": str(cna_root),
         "abiVersion": abi_version(include),
         "cnaInventorySha256": live["inventorySha256"],
         "canonicalFunctions": len(entries),
         "boundFunctions": sum(1 for record in entries if record["bound"]),
         "classificationCounts": dict(sorted(counts.items())),
+        "bindingStatusCounts": dict(sorted(binding_counts.items())),
+        "ruleProblems": rule_problems(rules, set(bound)),
         "functions": entries,
     }
 
@@ -428,13 +528,33 @@ def summarize(report: dict) -> dict:
     for record in report["functions"]:
         if "task" in record:
             tasks[record["task"]] = tasks.get(record["task"], 0) + 1
+    # The census: unbound routes whose purpose is a CNA capability outside XNA 4.0.
+    # Broken out by header because that is the unit the work is actually done in, and
+    # because a family that goes to zero should be visible as one line moving.
+    census: dict[str, dict[str, int]] = {}
+    for record in report["functions"]:
+        if record["bound"] or record["classification"] != CENSUS_PURPOSE:
+            continue
+        bucket = census.setdefault(record["header"], {})
+        bucket[record["bindingStatus"]] = bucket.get(record["bindingStatus"], 0) + 1
+        bucket["total"] = bucket.get("total", 0) + 1
     return {
-        "schemaVersion": 1,
+        "schemaVersion": 2,
         "abiVersion": report["abiVersion"],
         "cnaInventorySha256": report["cnaInventorySha256"],
         "canonicalFunctions": report["canonicalFunctions"],
         "boundFunctions": report["boundFunctions"],
         "classificationCounts": report["classificationCounts"],
+        "bindingStatusCounts": report["bindingStatusCounts"],
+        "extensionCensusByHeader": {name: dict(sorted(value.items()))
+                                    for name, value in sorted(census.items())},
+        "actionableLocal": sorted(
+            record["name"] for record in report["functions"]
+            if not record["bound"] and record["bindingStatus"] == "ACTIONABLE_LOCAL"),
+        "unreviewedBinding": sorted(
+            record["name"] for record in report["functions"]
+            if not record["bound"] and record["bindingStatus"] == "UNREVIEWED"),
+        "ruleProblems": report["ruleProblems"],
         "unexplainedFunctions": report["classificationCounts"].get("UNMAPPED_REQUIRES_REVIEW", 0),
         "byHeader": {name: dict(sorted(value.items())) for name, value in sorted(headers.items())},
         "deferredTasks": dict(sorted(tasks.items())),
@@ -464,6 +584,8 @@ def main() -> int:
     parser.add_argument("--output", help="full per-function matrix (not version-controlled)")
     parser.add_argument("--summary-output", help="committable summary")
     parser.add_argument("--check", action="store_true")
+    parser.add_argument("--census-check", action="store_true",
+                        help="fail while any unbound route is still ACTIONABLE_LOCAL")
     arguments = parser.parse_args()
 
     report = build(Path(arguments.cna_root).resolve())
@@ -481,9 +603,31 @@ def main() -> int:
     for code, count in report["classificationCounts"].items():
         print(f"{code}={count}")
     summary = summarize(report)
+    for code, count in report["bindingStatusCounts"].items():
+        print(f"BINDING_{code}={count}")
+    census = sum(value["total"] for value in summary["extensionCensusByHeader"].values())
+    print(f"EXTENSION_CENSUS={census}")
+    print(f"ACTIONABLE_LOCAL={len(summary['actionableLocal'])}")
     print(f"BOUND_BUT_UNREACHED={len(summary['boundButUnreached'])}")
     print(f"BOUND_WITHOUT_JAVA_CALL_SITE={len(summary['boundWithoutJavaCallSite'])}")
     unmapped = report["classificationCounts"].get("UNMAPPED_REQUIRES_REVIEW", 0)
+    if arguments.check and report["ruleProblems"]:
+        # A rule that answers only the purpose question, or one whose blocker outlived
+        # its block. Both used to read as an explanation and neither was one.
+        for problem in report["ruleProblems"]:
+            print(f"RULE_PROBLEM={problem}")
+        return 1
+    if arguments.check and summary["unreviewedBinding"]:
+        for name in summary["unreviewedBinding"]:
+            print(f"UNREVIEWED_BINDING={name}")
+        return 1
+    if arguments.census_check and summary["actionableLocal"]:
+        # Nothing outside this repository blocks these. Leaving one here would make
+        # every other row's blocker look like the same kind of answer. Kept as its own
+        # gate so a run that fails here is not mistaken for a broken rule set.
+        for name in summary["actionableLocal"]:
+            print(f"ACTIONABLE_LOCAL={name}")
+        return 1
     if arguments.check and summary["boundButUnreached"]:
         for name in summary["boundButUnreached"]:
             print(f"BOUND_BUT_UNREACHED={name}")

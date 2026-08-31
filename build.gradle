@@ -229,6 +229,19 @@ tasks.register('nativeCoverageCheck', Exec) {
     }
 }
 
+// The census gate, kept apart from nativeCoverageCheck so a failure here is legible: it
+// means a route nothing outside this repository blocks is still unbound, not that a rule
+// is malformed. Zero is the only passing value.
+tasks.register('nativeCensusCheck', Exec) {
+    group = 'verification'
+    description = 'Requires every unbound CNA-extension route to name what blocks it.'
+    doFirst {
+        commandLine 'python3', 'tools/native-abi/coverage.py',
+                '--cna-root', configuredCnaRoot.get(),
+                '--census-check'
+    }
+}
+
 tasks.register('nativeCoverageReport', Exec) {
     group = 'verification'
     description = 'Writes the machine-readable CNA C API coverage report.'
@@ -284,6 +297,7 @@ check {
     dependsOn tasks.named('nativeAbiCheck')
     dependsOn tasks.named('nativeAbiToolTests')
     dependsOn tasks.named('nativeCoverageCheck')
+    dependsOn tasks.named('nativeCensusCheck')
     dependsOn tasks.named('generateJniCheck')
 }
 

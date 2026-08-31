@@ -1,6 +1,6 @@
 {
-  "schemaVersion": 1,
-  "description": "Explains every canonical CNA C API function CNA-Java does not bind. Rules are ordered and the first match wins. A bound function is never matched here: its classification is derived from the Java packages that actually reach it.",
+  "schemaVersion": 2,
+  "description": "Explains every canonical CNA C API function CNA-Java does not bind, in two independent fields. `classification` and `purposeReason` answer why the route exists for CNA-Java; `bindingStatus`, `bindingReason` and `evidence` answer the separate question of why it is not bound. Rules are ordered and the first match wins. A bound function is never matched here: its classification is derived from the Java packages that actually reach it.",
   "classifications": {
     "XNA_BACKING": "Derived only. A bound route reached from the strict Microsoft.Xna.Framework projection.",
     "CNA_EXTENSION_CANDIDATE": "A CNA capability outside XNA 4.0. It belongs under org.openeggbert.cna.extensions, whether or not it is bound yet.",
@@ -15,84 +15,108 @@
         "header": "vectors.h"
       },
       "classification": "NOT_USEFUL_IN_JAVA",
-      "reason": "Vector2/3/4 arithmetic is managed in XNA and managed in CNA-Java. Routing each operation through JNI would add a per-call cost and a native failure mode the original managed API cannot produce."
+      "purposeReason": "Vector2/3/4 arithmetic is managed in XNA and managed in CNA-Java. Routing each operation through JNI would add a per-call cost and a native failure mode the original managed API cannot produce.",
+      "bindingStatus": "DELIBERATE_NON_BINDING",
+      "bindingReason": "Routing a pure value operation through JNI would add a per-call cost and a native failure mode the original managed API cannot produce, for a result the Java value type already computes to the same specified bits."
     },
     {
       "match": {
         "header": "matrix.h"
       },
       "classification": "NOT_USEFUL_IN_JAVA",
-      "reason": "Matrix arithmetic is managed in XNA and managed in CNA-Java, for the same reason as the vector family."
+      "purposeReason": "Matrix arithmetic is managed in XNA and managed in CNA-Java, for the same reason as the vector family.",
+      "bindingStatus": "DELIBERATE_NON_BINDING",
+      "bindingReason": "Routing a pure value operation through JNI would add a per-call cost and a native failure mode the original managed API cannot produce, for a result the Java value type already computes to the same specified bits."
     },
     {
       "match": {
         "header": "quaternion.h"
       },
       "classification": "NOT_USEFUL_IN_JAVA",
-      "reason": "Quaternion arithmetic is managed in XNA and managed in CNA-Java."
+      "purposeReason": "Quaternion arithmetic is managed in XNA and managed in CNA-Java.",
+      "bindingStatus": "DELIBERATE_NON_BINDING",
+      "bindingReason": "Routing a pure value operation through JNI would add a per-call cost and a native failure mode the original managed API cannot produce, for a result the Java value type already computes to the same specified bits."
     },
     {
       "match": {
         "header": "math.h"
       },
       "classification": "NOT_USEFUL_IN_JAVA",
-      "reason": "MathHelper is a managed static class in XNA and a managed static class in CNA-Java."
+      "purposeReason": "MathHelper is a managed static class in XNA and a managed static class in CNA-Java.",
+      "bindingStatus": "DELIBERATE_NON_BINDING",
+      "bindingReason": "Routing a pure value operation through JNI would add a per-call cost and a native failure mode the original managed API cannot produce, for a result the Java value type already computes to the same specified bits."
     },
     {
       "match": {
         "header": "math_values.h"
       },
       "classification": "NOT_USEFUL_IN_JAVA",
-      "reason": "Value-type declarations only; the header exports no callable route Java could take."
+      "purposeReason": "Value-type declarations only; the header exports no callable route Java could take.",
+      "bindingStatus": "DELIBERATE_NON_BINDING",
+      "bindingReason": "There is nothing to bind: the header declares value types and exports no callable route."
     },
     {
       "match": {
         "header": "geometry.h"
       },
       "classification": "NOT_USEFUL_IN_JAVA",
-      "reason": "BoundingBox, BoundingSphere, BoundingFrustum, Plane and Ray intersection math is managed in XNA and managed in CNA-Java."
+      "purposeReason": "BoundingBox, BoundingSphere, BoundingFrustum, Plane and Ray intersection math is managed in XNA and managed in CNA-Java.",
+      "bindingStatus": "DELIBERATE_NON_BINDING",
+      "bindingReason": "Routing a pure value operation through JNI would add a per-call cost and a native failure mode the original managed API cannot produce, for a result the Java value type already computes to the same specified bits."
     },
     {
       "match": {
         "header": "color.h"
       },
       "classification": "NOT_USEFUL_IN_JAVA",
-      "reason": "Color is a managed packed value in XNA and a managed packed value in CNA-Java."
+      "purposeReason": "Color is a managed packed value in XNA and a managed packed value in CNA-Java.",
+      "bindingStatus": "DELIBERATE_NON_BINDING",
+      "bindingReason": "Routing a pure value operation through JNI would add a per-call cost and a native failure mode the original managed API cannot produce, for a result the Java value type already computes to the same specified bits."
     },
     {
       "match": {
         "header": "named_colors.h"
       },
       "classification": "NOT_USEFUL_IN_JAVA",
-      "reason": "The named colour table is managed constant data, already projected as Java constants."
+      "purposeReason": "The named colour table is managed constant data, already projected as Java constants.",
+      "bindingStatus": "DELIBERATE_NON_BINDING",
+      "bindingReason": "Routing a pure value operation through JNI would add a per-call cost and a native failure mode the original managed API cannot produce, for a result the Java value type already computes to the same specified bits."
     },
     {
       "match": {
         "header": "curve.h"
       },
       "classification": "NOT_USEFUL_IN_JAVA",
-      "reason": "Curve, CurveKey and CurveKeyCollection are managed XNA types with managed evaluation, already projected in Java."
+      "purposeReason": "Curve, CurveKey and CurveKeyCollection are managed XNA types with managed evaluation, already projected in Java.",
+      "bindingStatus": "DELIBERATE_NON_BINDING",
+      "bindingReason": "Routing a pure value operation through JNI would add a per-call cost and a native failure mode the original managed API cannot produce, for a result the Java value type already computes to the same specified bits."
     },
     {
       "match": {
         "header": "packed_vectors.h"
       },
       "classification": "NOT_USEFUL_IN_JAVA",
-      "reason": "The PackedVector family is managed bit packing, already projected in Java."
+      "purposeReason": "The PackedVector family is managed bit packing, already projected in Java.",
+      "bindingStatus": "DELIBERATE_NON_BINDING",
+      "bindingReason": "Routing a pure value operation through JNI would add a per-call cost and a native failure mode the original managed API cannot produce, for a result the Java value type already computes to the same specified bits."
     },
     {
       "match": {
         "header": "vertex_values.h"
       },
       "classification": "NOT_USEFUL_IN_JAVA",
-      "reason": "VertexElement and the built-in vertex value types are managed descriptors; Java builds the same descriptors before the one native declaration call."
+      "purposeReason": "VertexElement and the built-in vertex value types are managed descriptors; Java builds the same descriptors before the one native declaration call.",
+      "bindingStatus": "DELIBERATE_NON_BINDING",
+      "bindingReason": "Routing a pure value operation through JNI would add a per-call cost and a native failure mode the original managed API cannot produce, for a result the Java value type already computes to the same specified bits."
     },
     {
       "match": {
         "header": "runtime_components.h"
       },
       "classification": "NOT_USEFUL_IN_JAVA",
-      "reason": "GameComponent, DrawableGameComponent, GameComponentCollection and the service container are managed XNA behaviour. CNA-Java owns the component list and the Java Game drives it, so a parallel native component list would be a second source of truth."
+      "purposeReason": "GameComponent, DrawableGameComponent, GameComponentCollection and the service container are managed XNA behaviour. CNA-Java owns the component list and the Java Game drives it, so a parallel native component list would be a second source of truth.",
+      "bindingStatus": "DELIBERATE_NON_BINDING",
+      "bindingReason": "CNA-Java owns the component list and the Java Game drives it. A parallel native component list would be a second source of truth for the same update order, and the two would drift the first time either side added a component."
     },
     {
       "match": {
@@ -107,7 +131,10 @@
         ]
       },
       "classification": "CNA_EXTENSION_CANDIDATE",
-      "reason": "Lends a fresh name for something the caller gave the lender, and a fresh name is a game child: measured in lent_effect_lifetime.c, taking one of these twice and releasing neither makes cna_game_destroy answer INVALID_STATE, and releasing both makes the same run answer SUCCESS. So a Java getter over one of these would allocate and free a native handle on every read, to hand back an object the Java facade already retains -- Skybox, ColorGradePass, PostProcessPass, ClusteredForwardEffect and RenderPipeline each keep what they were given and answer from that. The same reasoning as PbrMaterialExtensions' nine texture getters.",
+      "purposeReason": "Lends a fresh name for something the caller gave the lender, and a fresh name is a game child: measured in lent_effect_lifetime.c, taking one of these twice and releasing neither makes cna_game_destroy answer INVALID_STATE, and releasing both makes the same run answer SUCCESS. So a Java getter over one of these would allocate and free a native handle on every read, to hand back an object the Java facade already retains -- Skybox, ColorGradePass, PostProcessPass, ClusteredForwardEffect and RenderPipeline each keep what they were given and answer from that. The same reasoning as PbrMaterialExtensions' nine texture getters.",
+      "bindingStatus": "DELIBERATE_NON_BINDING",
+      "bindingReason": "A Java getter over one of these would allocate and free a native handle on every read to hand back an object the Java facade already retains, and a leaked one makes the game undestroyable.",
+      "evidence": "lent_effect_lifetime.c: taking one twice and releasing neither makes cna_game_destroy answer INVALID_STATE; releasing both makes the same run answer SUCCESS.",
       "task": "JAVA-EXT-010"
     },
     {
@@ -117,7 +144,10 @@
         ]
       },
       "classification": "CNA_EXTENSION_CANDIDATE",
-      "reason": "Lends back the identical handle the caller gave cna_render_pipeline_set_skybox -- measured, not assumed: unlike the six fresh-name getters beside it this one is the same name, so there is nothing to release and nothing a Java facade could add. RenderPipeline answers from the Skybox it was handed.",
+      "purposeReason": "Lends back the identical handle the caller gave cna_render_pipeline_set_skybox -- measured, not assumed: unlike the six fresh-name getters beside it this one is the same name, so there is nothing to release and nothing a Java facade could add. RenderPipeline answers from the Skybox it was handed.",
+      "bindingStatus": "DELIBERATE_NON_BINDING",
+      "bindingReason": "It lends back the identical handle the caller passed in, so a Java facade could add nothing to the Skybox it already holds.",
+      "evidence": "lent_effect_lifetime.c: the returned handle compares equal to the one given to cna_render_pipeline_set_skybox, unlike the six fresh-name getters beside it.",
       "task": "JAVA-EXT-010"
     },
     {
@@ -128,7 +158,10 @@
         ]
       },
       "classification": "CNA_EXTENSION_CANDIDATE",
-      "reason": "Fills a caller-provided struct with invalid handles and its struct_size/struct_version. The generated JNI adapter already writes both fields for every route that consumes these structs, as sizeof against the live header and the header's own declared version -- a compile-time value that breaks the build when the header changes, where the runtime route would absorb the change silently. CNA_INVALID_HANDLE is zero, which a fresh Java array already is.",
+      "purposeReason": "Fills a caller-provided struct with invalid handles and its struct_size/struct_version. The generated JNI adapter already writes both fields for every route that consumes these structs, as sizeof against the live header and the header's own declared version -- a compile-time value that breaks the build when the header changes, where the runtime route would absorb the change silently. CNA_INVALID_HANDLE is zero, which a fresh Java array already is.",
+      "bindingStatus": "DELIBERATE_NON_BINDING",
+      "bindingReason": "The generated adapter already writes struct_size and struct_version for every route that consumes these structs, from sizeof against the live header and the header's own declared version, and CNA_INVALID_HANDLE is zero, which a fresh Java array already is.",
+      "evidence": "A compile-time value breaks the build when the header changes; this runtime route would absorb the same change silently.",
       "task": "JAVA-EXT-006"
     },
     {
@@ -138,7 +171,10 @@
         ]
       },
       "classification": "CNA_EXTENSION_CANDIDATE",
-      "reason": "A pure bitmask containment test over two integers the caller supplies, which java.util.EnumSet answers without crossing JNI. CNA's own bit values are pinned in probe.c by compile-time assertion against the live header, which is stronger than any runtime route could be.",
+      "purposeReason": "A pure bitmask containment test over two integers the caller supplies, which java.util.EnumSet answers without crossing JNI. CNA's own bit values are pinned in probe.c by compile-time assertion against the live header, which is stronger than any runtime route could be.",
+      "bindingStatus": "DELIBERATE_NON_BINDING",
+      "bindingReason": "java.util.EnumSet answers a bitmask containment test over two caller-supplied integers without crossing JNI.",
+      "evidence": "probe.c pins CNA's own bit values by compile-time assertion against the live header, which is stronger than any runtime route could be.",
       "task": "JAVA-EXT-012"
     },
     {
@@ -148,7 +184,10 @@
         ]
       },
       "classification": "CNA_EXTENSION_CANDIDATE",
-      "reason": "Returns the CNA_ModelMeshPartHandle at the selected level. CNA-Java's LodGroup adds every level with CNA's own no-part sentinel, because the Java projection's ModelMeshPart is a managed object with no native handle -- so this route has nothing to return by construction, and selectIndex answers the level the game draws its own mesh at.",
+      "purposeReason": "Returns the CNA_ModelMeshPartHandle at the selected level. CNA-Java's LodGroup adds every level with CNA's own no-part sentinel, because the Java projection's ModelMeshPart is a managed object with no native handle -- so this route has nothing to return by construction, and selectIndex answers the level the game draws its own mesh at.",
+      "bindingStatus": "DELIBERATE_NON_BINDING",
+      "bindingReason": "The route has nothing to return by construction here: CNA-Java's LodGroup adds every level with CNA's own no-part sentinel, because the Java ModelMeshPart is a managed object with no native handle.",
+      "evidence": "LodGroup.selectIndex answers the level the game draws its own mesh at, which is the part of the answer that exists.",
       "task": "JAVA-EXT-008"
     },
     {
@@ -158,7 +197,10 @@
         ]
       },
       "classification": "CNA_EXTENSION_CANDIDATE",
-      "reason": "Consumes the pass handle exactly as documented, but does not decrement the game's owned-child count that the pass's own create incremented, so cna_game_destroy answers INVALID_STATE afterwards and the game cannot be closed. Binding it would give a game a route that makes it undestroyable.",
+      "purposeReason": "Consumes the pass handle exactly as documented, but does not decrement the game's owned-child count that the pass's own create incremented, so cna_game_destroy answers INVALID_STATE afterwards and the game cannot be closed. Binding it would give a game a route that makes it undestroyable.",
+      "bindingStatus": "BLOCKED_UPSTREAM",
+      "bindingReason": "It consumes the pass handle as documented but does not decrement the game's owned-child count the pass's own create incremented, so the game can no longer be closed. Binding it would give a game a route that makes it undestroyable.",
+      "evidence": "JAVA-UPSTREAM-011: cna_game_destroy answers INVALID_STATE after the call, reproduced on the live CNA.",
       "task": "JAVA-UPSTREAM-011"
     },
     {
@@ -166,14 +208,19 @@
         "header": "engine_layer.h"
       },
       "classification": "CNA_EXTENSION_CANDIDATE",
-      "reason": "CNA's engine layer (PBR materials, clustered and forward lighting, shadow families, post-processing, particles, instancing, debug drawing) has no XNA 4.0 counterpart and belongs under org.openeggbert.cna.extensions."
+      "purposeReason": "CNA's engine layer (PBR materials, clustered and forward lighting, shadow families, post-processing, particles, instancing, debug drawing) has no XNA 4.0 counterpart and belongs under org.openeggbert.cna.extensions.",
+      "bindingStatus": "DELIBERATE_NON_BINDING",
+      "bindingReason": "Whatever remains here after the named rules above is bound; this catch-all exists so a new engine-layer declaration is classified rather than unexplained, and the thirteen routes that stay out each carry their own rule.",
+      "evidence": "844 of engine_layer.h's 857 routes are bound and reached."
     },
     {
       "match": {
         "header": "graphics_ext.h"
       },
       "classification": "CNA_EXTENSION_CANDIDATE",
-      "reason": "The extended graphics layer -- render pipeline settings, tone mapping, render and shadow quality, ASCII/CRT/dither post-process identities -- is explicitly beyond XNA 4.0."
+      "purposeReason": "The extended graphics layer -- render pipeline settings, tone mapping, render and shadow quality, ASCII/CRT/dither post-process identities -- is explicitly beyond XNA 4.0.",
+      "bindingStatus": "ACTIONABLE_LOCAL",
+      "bindingReason": "placeholder"
     },
     {
       "match": {
@@ -184,7 +231,10 @@
         ]
       },
       "classification": "CNA_EXTENSION_CANDIDATE",
-      "reason": "Correct until a GraphicsDevice exists and reset by creating one: the count answers five and then zero for the same build while copy_available_ext keeps answering five, the selection becomes UNKNOWN, and the latch flag never becomes true. Measured before and after in renderer_selection.c identity mode, on a process that touches the selection at all. GraphicsRenderer.available() uses the zero-capacity probe instead of the count, and getActive() is the route that answers correctly after a device exists.",
+      "purposeReason": "Correct until a GraphicsDevice exists and reset by creating one: the count answers five and then zero for the same build while copy_available_ext keeps answering five, the selection becomes UNKNOWN, and the latch flag never becomes true. Measured before and after in renderer_selection.c identity mode, on a process that touches the selection at all. GraphicsRenderer.available() uses the zero-capacity probe instead of the count, and getActive() is the route that answers correctly after a device exists.",
+      "bindingStatus": "BLOCKED_UPSTREAM",
+      "bindingReason": "Correct until a GraphicsDevice exists and reset by creating one, so a Java route over them would answer correctly and then wrongly for the same build.",
+      "evidence": "JAVA-UPSTREAM-018, renderer_selection.c identity mode: the count answers five and then zero while copy_available_ext keeps answering five, the selection becomes UNKNOWN, and the latch flag never becomes true. GraphicsRenderer.available() uses the zero-capacity probe instead.",
       "task": "JAVA-UPSTREAM-018"
     },
     {
@@ -194,7 +244,10 @@
         ]
       },
       "classification": "CNA_EXTENSION_CANDIDATE",
-      "reason": "Reports the renderer this build was CONFIGURED with rather than the one running -- HEADLESS on a build configured HEADLESS, whatever CNA_GRAPHICS_RENDERER selected. Binding it would give Java a route named \"current\" that answers about something else. GraphicsRenderer.getActive() is bound instead and is right, and RendererCapabilities.getRendererName asks the device.",
+      "purposeReason": "Reports the renderer this build was CONFIGURED with rather than the one running -- HEADLESS on a build configured HEADLESS, whatever CNA_GRAPHICS_RENDERER selected. Binding it would give Java a route named \"current\" that answers about something else. GraphicsRenderer.getActive() is bound instead and is right, and RendererCapabilities.getRendererName asks the device.",
+      "bindingStatus": "BLOCKED_UPSTREAM",
+      "bindingReason": "It reports the renderer the build was configured with rather than the one running, so a Java route named 'current' would answer about something else.",
+      "evidence": "JAVA-UPSTREAM-018: answers HEADLESS on a build configured HEADLESS whatever CNA_GRAPHICS_RENDERER selected. GraphicsRenderer.getActive() is bound instead.",
       "task": "JAVA-UPSTREAM-018"
     },
     {
@@ -210,7 +263,9 @@
         ]
       },
       "classification": "CNA_EXTENSION_CANDIDATE",
-      "reason": "A per-level alias for cna_logger_log(level, message, category), which is bound and which CnaLogger routes every level through. Binding seven more entry points that differ only in a constant would widen the native boundary without widening what a game can do."
+      "purposeReason": "A per-level alias for cna_logger_log(level, message, category), which is bound and which CnaLogger routes every level through. Binding seven more entry points that differ only in a constant would widen the native boundary without widening what a game can do.",
+      "bindingStatus": "DELIBERATE_NON_BINDING",
+      "bindingReason": "Seven more entry points that differ from the bound cna_logger_log only by a constant would widen the native boundary without widening what a game can do; CnaLogger routes every level through the one that is bound."
     },
     {
       "match": {
@@ -225,7 +280,9 @@
         ]
       },
       "classification": "CNA_EXTENSION_CANDIDATE",
-      "reason": "Emits only when a condition holds, and takes no category -- so it is not a conditional form of the route beside it. `if (condition) CnaLogger.Info(message, category)` is the same behaviour with the category kept and without crossing JNI when the condition is false, which is the case these exist for."
+      "purposeReason": "Emits only when a condition holds, and takes no category -- so it is not a conditional form of the route beside it. `if (condition) CnaLogger.Info(message, category)` is the same behaviour with the category kept and without crossing JNI when the condition is false, which is the case these exist for.",
+      "bindingStatus": "DELIBERATE_NON_BINDING",
+      "bindingReason": "These take no category, so they are not a conditional form of the route beside them. `if (condition) CnaLogger.Info(message, category)` is the same behaviour with the category kept and without crossing JNI when the condition is false, which is the case they exist for."
     },
     {
       "match": {
@@ -235,28 +292,37 @@
         ]
       },
       "classification": "CNA_EXTENSION_CANDIDATE",
-      "reason": "cna_logger_set_sink_ext takes a CNA_LogSinkCallback, a C function pointer the generator refuses rather than guesses at. reset_sink_ext takes none, but binding it alone would give Java a route that clears a sink it has no way to install."
+      "purposeReason": "cna_logger_set_sink_ext takes a CNA_LogSinkCallback, a C function pointer the generator refuses rather than guesses at. reset_sink_ext takes none, but binding it alone would give Java a route that clears a sink it has no way to install.",
+      "bindingStatus": "DELIBERATE_NON_BINDING",
+      "bindingReason": "cna_logger_set_sink_ext takes a CNA_LogSinkCallback, a C function pointer the generator refuses rather than guesses at, and binding reset_sink_ext alone would give Java a route that clears a sink it has no way to install."
     },
     {
       "match": {
         "header": "core_ext.h"
       },
       "classification": "CNA_EXTENSION_CANDIDATE",
-      "reason": "Logging, compile-time platform and renderer identity, and backend classification are CNA runtime facts XNA never exposed."
+      "purposeReason": "Logging, compile-time platform and renderer identity, and backend classification are CNA runtime facts XNA never exposed.",
+      "bindingStatus": "ACTIONABLE_LOCAL",
+      "bindingReason": "placeholder"
     },
     {
       "match": {
         "header": "sensors.h"
       },
       "classification": "CNA_EXTENSION_CANDIDATE",
-      "reason": "Host sensors are a CNA device extension; XNA 4.0 exposes no sensor API on the desktop profile."
+      "purposeReason": "Host sensors are a CNA device extension; XNA 4.0 exposes no sensor API on the desktop profile.",
+      "bindingStatus": "ACTIONABLE_LOCAL",
+      "bindingReason": "placeholder"
     },
     {
       "match": {
         "prefix": "cna_camera_"
       },
       "classification": "CNA_EXTENSION_CANDIDATE",
-      "reason": "Fully qualifiable without a camera -- create_with_test_backend_ext, set_test_state_ext and set_test_frame_ext make every route exercisable and the pixels checkable, and a 4x3 frame set through the test backend reads back out of a Texture2D texel for texel. Not bound because that qualification found a segfault: destroying a camera after a longer session kills the process, reproducibly on two renderers, and removing one cna_camera_destroy removes it (JAVA-UPSTREAM-019). Binding a family whose teardown can kill a game is worse than leaving it out. Two smaller defects came with it: try_acquire_frame_ext returns SUCCESS without writing out_acquired (JAVA-UPSTREAM-020), and create succeeds where is_supported says no (JAVA-UPSTREAM-021).",
+      "purposeReason": "Fully qualifiable without a camera -- create_with_test_backend_ext, set_test_state_ext and set_test_frame_ext make every route exercisable and the pixels checkable, and a 4x3 frame set through the test backend reads back out of a Texture2D texel for texel. Not bound because that qualification found a segfault: destroying a camera after a longer session kills the process, reproducibly on two renderers, and removing one cna_camera_destroy removes it (JAVA-UPSTREAM-019). Binding a family whose teardown can kill a game is worse than leaving it out. Two smaller defects came with it: try_acquire_frame_ext returns SUCCESS without writing out_acquired (JAVA-UPSTREAM-020), and create succeeds where is_supported says no (JAVA-UPSTREAM-021).",
+      "bindingStatus": "BLOCKED_UPSTREAM",
+      "bindingReason": "Fully qualifiable without a camera, and the qualification is what blocks it: destroying a camera after a longer session kills the process. Binding a family whose teardown can kill a game is worse than leaving it out.",
+      "evidence": "JAVA-UPSTREAM-019, camera_lifecycle.c: reproducible segfault in cna_camera_destroy on two renderers, and removing that one call removes it. JAVA-UPSTREAM-020 (try_acquire_frame_ext returns SUCCESS without writing out_acquired) and JAVA-UPSTREAM-021 (create succeeds where is_supported says no) came with it.",
       "task": "JAVA-UPSTREAM-019"
     },
     {
@@ -264,56 +330,72 @@
         "header": "devices.h"
       },
       "classification": "CNA_EXTENSION_CANDIDATE",
-      "reason": "Camera, clipboard, locale, power, message box, file dialog, system tray and vibration are CNA device extensions beyond XNA 4.0."
+      "purposeReason": "Camera, clipboard, locale, power, message box, file dialog, system tray and vibration are CNA device extensions beyond XNA 4.0.",
+      "bindingStatus": "ACTIONABLE_LOCAL",
+      "bindingReason": "placeholder"
     },
     {
       "match": {
         "header": "input_haptics.h"
       },
       "classification": "CNA_EXTENSION_CANDIDATE",
-      "reason": "Haptic devices and effects are a CNA input extension; XNA 4.0 has only GamePad.SetVibration."
+      "purposeReason": "Haptic devices and effects are a CNA input extension; XNA 4.0 has only GamePad.SetVibration.",
+      "bindingStatus": "ACTIONABLE_LOCAL",
+      "bindingReason": "placeholder"
     },
     {
       "match": {
         "header": "input_joystick.h"
       },
       "classification": "CNA_EXTENSION_CANDIDATE",
-      "reason": "Raw joysticks with arbitrary axis, hat and trackball counts are a CNA input extension; XNA 4.0 models only the four-slot gamepad."
+      "purposeReason": "Raw joysticks with arbitrary axis, hat and trackball counts are a CNA input extension; XNA 4.0 models only the four-slot gamepad.",
+      "bindingStatus": "ACTIONABLE_LOCAL",
+      "bindingReason": "placeholder"
     },
     {
       "match": {
         "header": "input_text.h"
       },
       "classification": "CNA_EXTENSION_CANDIDATE",
-      "reason": "Text input, IME composition and the screen keyboard are a CNA input extension; XNA 4.0 exposes only Guide.BeginShowKeyboardInput."
+      "purposeReason": "Text input, IME composition and the screen keyboard are a CNA input extension; XNA 4.0 exposes only Guide.BeginShowKeyboardInput.",
+      "bindingStatus": "ACTIONABLE_LOCAL",
+      "bindingReason": "placeholder"
     },
     {
       "match": {
         "header": "input_cursor.h"
       },
       "classification": "CNA_EXTENSION_CANDIDATE",
-      "reason": "Mouse cursor objects are a CNA input extension; XNA 4.0 exposes only Game.IsMouseVisible."
+      "purposeReason": "Mouse cursor objects are a CNA input extension; XNA 4.0 exposes only Game.IsMouseVisible.",
+      "bindingStatus": "DELIBERATE_NON_BINDING",
+      "bindingReason": "Nothing is left unbound here; the rule exists so a new cursor declaration is classified rather than unexplained."
     },
     {
       "match": {
         "header": "input_devices.h"
       },
       "classification": "CNA_EXTENSION_CANDIDATE",
-      "reason": "Device enumeration and hot-plug events are a CNA input extension; XNA 4.0 merges input state across devices and never enumerates them."
+      "purposeReason": "Device enumeration and hot-plug events are a CNA input extension; XNA 4.0 merges input state across devices and never enumerates them.",
+      "bindingStatus": "ACTIONABLE_LOCAL",
+      "bindingReason": "placeholder"
     },
     {
       "match": {
         "header": "cnb.h"
       },
       "classification": "CNA_EXTENSION_CANDIDATE",
-      "reason": "The .cnb container, its schemas, its writers and its loader registry are a CNA content format with no XNA 4.0 counterpart."
+      "purposeReason": "The .cnb container, its schemas, its writers and its loader registry are a CNA content format with no XNA 4.0 counterpart.",
+      "bindingStatus": "ACTIONABLE_LOCAL",
+      "bindingReason": "placeholder"
     },
     {
       "match": {
         "header": "display.h"
       },
       "classification": "DEFERRED_RUNTIME",
-      "reason": "Remaining adapter, display-mode and presentation routes behind the bound GraphicsAdapter and PresentationParameters surface.",
+      "purposeReason": "Remaining adapter, display-mode and presentation routes behind the bound GraphicsAdapter and PresentationParameters surface.",
+      "bindingStatus": "DEFERRED_TRACKED",
+      "bindingReason": "An XNA-backing route the named backlog task owns. The Java member it would back is projected and behaves; what is deferred is moving its implementation onto this native route.",
       "task": "JAVA-NATIVE-010"
     },
     {
@@ -353,7 +435,9 @@
         ]
       },
       "classification": "NOT_USEFUL_IN_JAVA",
-      "reason": "XNA's PacketWriter is a BinaryWriter over a growable buffer and its PacketReader is a BinaryReader over the received bytes, and the Java projection is the same. Keeping the buffer managed is what gives Position and Length exactly XNA's meaning over one cursor; a native cursor beside the Java one would be two positions to keep in step, and the packet already crosses the boundary once, at Send and Receive."
+      "purposeReason": "XNA's PacketWriter is a BinaryWriter over a growable buffer and its PacketReader is a BinaryReader over the received bytes, and the Java projection is the same. Keeping the buffer managed is what gives Position and Length exactly XNA's meaning over one cursor; a native cursor beside the Java one would be two positions to keep in step, and the packet already crosses the boundary once, at Send and Receive.",
+      "bindingStatus": "DELIBERATE_NON_BINDING",
+      "bindingReason": "Keeping the buffer managed is what gives Position and Length exactly XNA's meaning over one cursor. A native cursor beside the Java one would be two positions to keep in step, and the packet already crosses the boundary once, at Send and Receive."
     },
     {
       "match": {
@@ -372,7 +456,9 @@
         ]
       },
       "classification": "NOT_USEFUL_IN_JAVA",
-      "reason": "The asynchronous half of an operation the projection takes synchronously. XNA's Begin/End pair is projected over CNA's synchronous route plus CompletedAsyncResult, because CNA's asynchronous form completes before its own begin route returns; binding both would be two spellings of one operation and two places for its behaviour to drift."
+      "purposeReason": "The asynchronous half of an operation the projection takes synchronously. XNA's Begin/End pair is projected over CNA's synchronous route plus CompletedAsyncResult, because CNA's asynchronous form completes before its own begin route returns; binding both would be two spellings of one operation and two places for its behaviour to drift.",
+      "bindingStatus": "DELIBERATE_NON_BINDING",
+      "bindingReason": "The asynchronous half of an operation the projection takes synchronously. CNA's asynchronous form completes before its own begin route returns, so XNA's Begin/End pair is projected over the synchronous route plus CompletedAsyncResult; binding both would be two spellings of one operation and two places for its behaviour to drift."
     },
     {
       "match": {
@@ -380,7 +466,6 @@
           "cna_achievement_equals",
           "cna_available_network_session_equals",
           "cna_available_network_session_not_equals",
-          "cna_avatar_appearance_init_ext",
           "cna_avatar_expression_init",
           "cna_game_defaults_init",
           "cna_game_ended_event_info_init",
@@ -399,27 +484,22 @@
         ]
       },
       "classification": "NOT_USEFUL_IN_JAVA",
-      "reason": "Constructing or comparing a value the Java projection owns: an EventArgs built from the drained event record, a presence or quality-of-service value, a leaderboard identity, an avatar expression. These are managed values in XNA and managed values here, so their construction and equality are Java's, exactly as the vector and input value families are."
+      "purposeReason": "Constructing or comparing a value the Java projection owns: an EventArgs built from the drained event record, a presence or quality-of-service value, a leaderboard identity, an avatar expression. These are managed values in XNA and managed values here, so their construction and equality are Java's, exactly as the vector and input value families are.",
+      "bindingStatus": "DELIBERATE_NON_BINDING",
+      "bindingReason": "Routing a pure value operation through JNI would add a per-call cost and a native failure mode the original managed API cannot produce, for a result the Java value type already computes to the same specified bits."
     },
     {
       "match": {
         "symbols": [
-          "cna_avatar_animation_copy_real_clip_name_ext",
-          "cna_avatar_animation_get_real_clip_name_size_ext",
-          "cna_avatar_animation_preset_copy_clip_name_ext",
-          "cna_avatar_animation_preset_get_clip_name_size_ext",
-          "cna_avatar_animation_set_real_clip_name_ext",
-          "cna_avatar_appearance_init_ext",
-          "cna_avatar_body_type_copy_content_name_ext",
-          "cna_avatar_body_type_get_content_name_size_ext",
           "cna_avatar_expression_init",
           "cna_avatar_renderer_draw_real_ext",
-          "cna_avatar_renderer_enable_real_rendering_ext",
-          "cna_avatar_renderer_set_appearance_ext"
+          "cna_avatar_renderer_enable_real_rendering_ext"
         ]
       },
       "classification": "CNA_EXTENSION_CANDIDATE",
-      "reason": "CNA's own avatar rendering and the real clip and content names behind the canonical presets. XNA's AvatarRenderer draws through the Xbox runtime and names none of this, so it is an extension rather than a member the reference API has.",
+      "purposeReason": "CNA's own avatar rendering and the real clip and content names behind the canonical presets. XNA's AvatarRenderer draws through the Xbox runtime and names none of this, so it is an extension rather than a member the reference API has.",
+      "bindingStatus": "ACTIONABLE_LOCAL",
+      "bindingReason": "placeholder",
       "task": "JAVA-EXT-006"
     },
     {
@@ -443,7 +523,9 @@
         ]
       },
       "classification": "NOT_USEFUL_IN_JAVA",
-      "reason": "Mutating a collection XNA declares read-only, or asking whether it is. The Java collection throws from every one of those members exactly as XNA's does, so no call site can exist for the native route; and a copy-out is answered from the same snapshot get and size already read."
+      "purposeReason": "Mutating a collection XNA declares read-only, or asking whether it is. The Java collection throws from every one of those members exactly as XNA's does, so no call site can exist for the native route; and a copy-out is answered from the same snapshot get and size already read.",
+      "bindingStatus": "DELIBERATE_NON_BINDING",
+      "bindingReason": "No call site can exist: the Java collection throws from every one of these members exactly as XNA's read-only collection does, and a copy-out is answered from the same snapshot get and size already read."
     },
     {
       "match": {
@@ -457,7 +539,9 @@
         ]
       },
       "classification": "NOT_USEFUL_IN_JAVA",
-      "reason": "A CLR enumerator's own lifecycle. Java's Iterator has no reset and its collections iterate by index over the same elements, so projecting a second cursor would add a handle to own and a state to keep in step for no behaviour a Java caller can reach."
+      "purposeReason": "A CLR enumerator's own lifecycle. Java's Iterator has no reset and its collections iterate by index over the same elements, so projecting a second cursor would add a handle to own and a state to keep in step for no behaviour a Java caller can reach.",
+      "bindingStatus": "DELIBERATE_NON_BINDING",
+      "bindingReason": "Java's Iterator has no reset and its collections iterate by index over the same elements, so a second native cursor would be a handle to own and a state to keep in step for no behaviour a Java caller can reach."
     },
     {
       "match": {
@@ -467,7 +551,6 @@
           "cna_achievement_destroy",
           "cna_available_network_session_collection_create_ext",
           "cna_available_network_session_collection_destroy",
-          "cna_available_network_session_destroy",
           "cna_friend_collection_create_ext",
           "cna_friend_gamer_create_ext",
           "cna_gamer_destroy",
@@ -484,7 +567,10 @@
         ]
       },
       "classification": "NOT_USEFUL_IN_JAVA",
-      "reason": "A factory for an object the projection receives rather than makes, and the matching release. A gamer, a machine, a friend, an achievement and a session listing all arrive from the roster or the session that owns them, so Java never owns one to free -- and a second owner freeing a borrowed handle is the failure this classification prevents. The handles Java does own are released: JAVA-NATIVE-024 records the three that were not."
+      "purposeReason": "A factory for an object the projection receives rather than makes, and the matching release. A gamer, a machine, a friend, an achievement and a session listing all arrive from the roster or the session that owns them, so Java never owns one to free -- and a second owner freeing a borrowed handle is the failure this classification prevents. The handles Java does own are released: JAVA-NATIVE-024 records the three that were not.",
+      "bindingStatus": "DELIBERATE_NON_BINDING",
+      "bindingReason": "A factory for an object the projection receives rather than makes, and the matching release. Java never owns one to free, and a second owner freeing a borrowed handle is the failure this prevents.",
+      "evidence": "The handles Java does own are released; JAVA-NATIVE-024 records the three that were not."
     },
     {
       "match": {
@@ -504,7 +590,9 @@
         ]
       },
       "classification": "NOT_USEFUL_IN_JAVA",
-      "reason": "A CNA test seam: planting a roster, stamping a gamer's identity or round trip, adding a remote gamer that never connected, or counting live instances. Exposing any of it would let a consumer change what the gamer and session surface reports, which is the opposite of what that surface is for."
+      "purposeReason": "A CNA test seam: planting a roster, stamping a gamer's identity or round trip, adding a remote gamer that never connected, or counting live instances. Exposing any of it would let a consumer change what the gamer and session surface reports, which is the opposite of what that surface is for.",
+      "bindingStatus": "DELIBERATE_NON_BINDING",
+      "bindingReason": "A CNA test seam. Exposing it would let a consumer change what the gamer and session surface reports, which is the opposite of what that surface is for."
     },
     {
       "match": {
@@ -516,20 +604,20 @@
         ]
       },
       "classification": "NOT_USEFUL_IN_JAVA",
-      "reason": "A second spelling of something already answered. The session's runtime type name is a C++ diagnostic string XNA's ToString does not promise, and a signed-in gamer's gamertag is the Gamer.Gamertag the base route already reads."
+      "purposeReason": "A second spelling of something already answered. The session's runtime type name is a C++ diagnostic string XNA's ToString does not promise, and a signed-in gamer's gamertag is the Gamer.Gamertag the base route already reads.",
+      "bindingStatus": "DELIBERATE_NON_BINDING",
+      "bindingReason": "A second spelling of something already answered: the session's runtime type name is a C++ diagnostic string XNA's ToString does not promise, and the gamertag is the Gamer.Gamertag the base route already reads."
     },
     {
       "match": {
         "symbols": [
-          "cna_available_network_session_copy_connect_address_ext",
-          "cna_available_network_session_get_connect_address_size_ext",
-          "cna_available_network_session_get_connect_port_ext",
-          "cna_available_network_session_get_session_type_ext",
           "cna_signed_in_gamer_set_presence_mode_string_ext"
         ]
       },
       "classification": "CNA_EXTENSION_CANDIDATE",
-      "reason": "The host and port a discovered session was found at, and a presence line of the title's own words. XNA's AvailableNetworkSession names no address and its PresenceMode is a closed enumeration, so both belong under org.openeggbert.cna.extensions.",
+      "purposeReason": "The host and port a discovered session was found at, and a presence line of the title's own words. XNA's AvailableNetworkSession names no address and its PresenceMode is a closed enumeration, so both belong under org.openeggbert.cna.extensions.",
+      "bindingStatus": "ACTIONABLE_LOCAL",
+      "bindingReason": "placeholder",
       "task": "JAVA-EXT-006"
     },
     {
@@ -542,14 +630,19 @@
         ]
       },
       "classification": "NOT_USEFUL_IN_JAVA",
-      "reason": "CNA answers membership and position for a gamer collection in one call, and Java would rather ask than walk -- but asking means declaring contains and indexOf on GamerCollection, and CLR's GamerCollection declares neither: it inherits them through IList<T>. Declaring them would put two members in the strict contract that the reference API has no counterpart for, which the full-profile gate refused. The inherited AbstractList walk stays, and it is correct."
+      "purposeReason": "CNA answers membership and position for a gamer collection in one call, and Java would rather ask than walk -- but asking means declaring contains and indexOf on GamerCollection, and CLR's GamerCollection declares neither: it inherits them through IList<T>. Declaring them would put two members in the strict contract that the reference API has no counterpart for, which the full-profile gate refused. The inherited AbstractList walk stays, and it is correct.",
+      "bindingStatus": "DELIBERATE_NON_BINDING",
+      "bindingReason": "Binding these means declaring contains and indexOf on GamerCollection, and CLR's GamerCollection declares neither -- it inherits them through IList<T>. Two members the reference API has no counterpart for is what the full-profile gate refuses.",
+      "evidence": "The inherited AbstractList walk answers both, correctly, over the snapshot already read."
     },
     {
       "match": {
         "header": "gamer_services.h"
       },
       "classification": "DEFERRED_RUNTIME",
-      "reason": "Backs the GamerServices and Avatar families the full XNA 4.0 runtime profile declares and CNA-Java has not projected yet.",
+      "purposeReason": "Backs the GamerServices and Avatar families the full XNA 4.0 runtime profile declares and CNA-Java has not projected yet.",
+      "bindingStatus": "DEFERRED_TRACKED",
+      "bindingReason": "An XNA-backing route the named backlog task owns. The Java member it would back is projected and behaves; what is deferred is moving its implementation onto this native route.",
       "task": "JAVA-XNA-001"
     },
     {
@@ -557,7 +650,9 @@
         "header": "net.h"
       },
       "classification": "DEFERRED_RUNTIME",
-      "reason": "Backs the Microsoft.Xna.Framework.Net values, packet readers and writers the full XNA 4.0 runtime profile declares.",
+      "purposeReason": "Backs the Microsoft.Xna.Framework.Net values, packet readers and writers the full XNA 4.0 runtime profile declares.",
+      "bindingStatus": "DEFERRED_TRACKED",
+      "bindingReason": "An XNA-backing route the named backlog task owns. The Java member it would back is projected and behaves; what is deferred is moving its implementation onto this native route.",
       "task": "JAVA-XNA-002"
     },
     {
@@ -565,7 +660,9 @@
         "header": "net_sessions.h"
       },
       "classification": "DEFERRED_RUNTIME",
-      "reason": "Backs NetworkSession, its discovery, its events and its rosters.",
+      "purposeReason": "Backs NetworkSession, its discovery, its events and its rosters.",
+      "bindingStatus": "DEFERRED_TRACKED",
+      "bindingReason": "An XNA-backing route the named backlog task owns. The Java member it would back is projected and behaves; what is deferred is moving its implementation onto this native route.",
       "task": "JAVA-XNA-002"
     },
     {
@@ -573,7 +670,9 @@
         "header": "net_gamers.h"
       },
       "classification": "DEFERRED_RUNTIME",
-      "reason": "Backs NetworkGamer and LocalNetworkGamer.",
+      "purposeReason": "Backs NetworkGamer and LocalNetworkGamer.",
+      "bindingStatus": "DEFERRED_TRACKED",
+      "bindingReason": "An XNA-backing route the named backlog task owns. The Java member it would back is projected and behaves; what is deferred is moving its implementation onto this native route.",
       "task": "JAVA-XNA-002"
     },
     {
@@ -581,42 +680,55 @@
         "prefix": "cna_pbr_"
       },
       "classification": "CNA_EXTENSION_CANDIDATE",
-      "reason": "The physically based material and effect family is a CNA extension beyond XNA 4.0's five stock effects."
+      "purposeReason": "The physically based material and effect family is a CNA extension beyond XNA 4.0's five stock effects.",
+      "bindingStatus": "DELIBERATE_NON_BINDING",
+      "bindingReason": "Nothing is left unbound here; the rule exists so a new PBR declaration is classified rather than unexplained."
     },
     {
       "match": {
         "prefix": "cna_skinned_pbr_"
       },
       "classification": "CNA_EXTENSION_CANDIDATE",
-      "reason": "Skinned physically based rendering is a CNA extension."
+      "purposeReason": "Skinned physically based rendering is a CNA extension.",
+      "bindingStatus": "DELIBERATE_NON_BINDING",
+      "bindingReason": "Nothing is left unbound here; the rule exists so a new skinned-PBR declaration is classified rather than unexplained."
     },
     {
       "match": {
         "prefix": "cna_shader_effect_"
       },
       "classification": "CNA_EXTENSION_CANDIDATE",
-      "reason": "Building an effect from shader source at runtime is a CNA extension; XNA 4.0 loads compiled effect bytecode only."
+      "purposeReason": "Building an effect from shader source at runtime is a CNA extension; XNA 4.0 loads compiled effect bytecode only.",
+      "bindingStatus": "ACTIONABLE_LOCAL",
+      "bindingReason": "placeholder"
     },
     {
       "match": {
         "prefix": "cna_texture_transform_"
       },
       "classification": "CNA_EXTENSION_CANDIDATE",
-      "reason": "Texture transforms are a CNA material extension with no XNA 4.0 counterpart."
+      "purposeReason": "Texture transforms are a CNA material extension with no XNA 4.0 counterpart.",
+      "bindingStatus": "ACTIONABLE_LOCAL",
+      "bindingReason": "placeholder"
     },
     {
       "match": {
         "prefix": "cna_color_matrix_"
       },
       "classification": "CNA_EXTENSION_CANDIDATE",
-      "reason": "The colour-matrix effect is a CNA extension."
+      "purposeReason": "The colour-matrix effect is a CNA extension.",
+      "bindingStatus": "ACTIONABLE_LOCAL",
+      "bindingReason": "placeholder"
     },
     {
       "match": {
         "prefix": "cna_morph_target_"
       },
       "classification": "CNA_EXTENSION_CANDIDATE",
-      "reason": "Morph targets are a CNA model extension; XNA 4.0's Model has no morph data. Not bound for the reason JAVA-EXT-007 records and this session rechecked against the live headers: the family is entered through cna_skinning_data_create, which takes a CNA_SkinningDataDescriptor -- a pointer graph the generator refuses rather than guesses at -- and no route takes a clip handle, so there is no other door in. cna_animation_player_create takes the SkinningData handle that door would produce.",
+      "purposeReason": "Morph targets are a CNA model extension; XNA 4.0's Model has no morph data. Not bound for the reason JAVA-EXT-007 records and this session rechecked against the live headers: the family is entered through cna_skinning_data_create, which takes a CNA_SkinningDataDescriptor -- a pointer graph the generator refuses rather than guesses at -- and no route takes a clip handle, so there is no other door in. cna_animation_player_create takes the SkinningData handle that door would produce.",
+      "bindingStatus": "BLOCKED_UPSTREAM",
+      "bindingReason": "There is no door in. The family is entered through cna_skinning_data_create, which takes a CNA_SkinningDataDescriptor -- a pointer graph the generator refuses rather than guesses at -- and no route takes a clip handle.",
+      "evidence": "JAVA-EXT-007, rechecked against the live headers: cna_animation_player_create takes the SkinningData handle that door would produce, and nothing produces it.",
       "task": "JAVA-EXT-007"
     },
     {
@@ -624,7 +736,10 @@
         "prefix": "cna_skinned_model_"
       },
       "classification": "CNA_EXTENSION_CANDIDATE",
-      "reason": "SkinnedModel is a CNA model extension; XNA 4.0 ships skinning only as a sample-level content processor. Not bound for the reason JAVA-EXT-007 records and this session rechecked against the live headers: the family is entered through cna_skinning_data_create, which takes a CNA_SkinningDataDescriptor -- a pointer graph the generator refuses rather than guesses at -- and no route takes a clip handle, so there is no other door in. cna_animation_player_create takes the SkinningData handle that door would produce.",
+      "purposeReason": "SkinnedModel is a CNA model extension; XNA 4.0 ships skinning only as a sample-level content processor. Not bound for the reason JAVA-EXT-007 records and this session rechecked against the live headers: the family is entered through cna_skinning_data_create, which takes a CNA_SkinningDataDescriptor -- a pointer graph the generator refuses rather than guesses at -- and no route takes a clip handle, so there is no other door in. cna_animation_player_create takes the SkinningData handle that door would produce.",
+      "bindingStatus": "BLOCKED_UPSTREAM",
+      "bindingReason": "There is no door in. The family is entered through cna_skinning_data_create, which takes a CNA_SkinningDataDescriptor -- a pointer graph the generator refuses rather than guesses at -- and no route takes a clip handle.",
+      "evidence": "JAVA-EXT-007, rechecked against the live headers: cna_animation_player_create takes the SkinningData handle that door would produce, and nothing produces it.",
       "task": "JAVA-EXT-007"
     },
     {
@@ -632,7 +747,10 @@
         "prefix": "cna_skinning_data_"
       },
       "classification": "CNA_EXTENSION_CANDIDATE",
-      "reason": "Skinning data is a CNA model extension. Not bound for the reason JAVA-EXT-007 records and this session rechecked against the live headers: the family is entered through cna_skinning_data_create, which takes a CNA_SkinningDataDescriptor -- a pointer graph the generator refuses rather than guesses at -- and no route takes a clip handle, so there is no other door in. cna_animation_player_create takes the SkinningData handle that door would produce.",
+      "purposeReason": "Skinning data is a CNA model extension. Not bound for the reason JAVA-EXT-007 records and this session rechecked against the live headers: the family is entered through cna_skinning_data_create, which takes a CNA_SkinningDataDescriptor -- a pointer graph the generator refuses rather than guesses at -- and no route takes a clip handle, so there is no other door in. cna_animation_player_create takes the SkinningData handle that door would produce.",
+      "bindingStatus": "BLOCKED_UPSTREAM",
+      "bindingReason": "There is no door in. The family is entered through cna_skinning_data_create, which takes a CNA_SkinningDataDescriptor -- a pointer graph the generator refuses rather than guesses at -- and no route takes a clip handle.",
+      "evidence": "JAVA-EXT-007, rechecked against the live headers: cna_animation_player_create takes the SkinningData handle that door would produce, and nothing produces it.",
       "task": "JAVA-EXT-007"
     },
     {
@@ -640,7 +758,10 @@
         "prefix": "cna_animation_player_"
       },
       "classification": "CNA_EXTENSION_CANDIDATE",
-      "reason": "The animation player is a CNA model extension. Not bound for the reason JAVA-EXT-007 records and this session rechecked against the live headers: the family is entered through cna_skinning_data_create, which takes a CNA_SkinningDataDescriptor -- a pointer graph the generator refuses rather than guesses at -- and no route takes a clip handle, so there is no other door in. cna_animation_player_create takes the SkinningData handle that door would produce.",
+      "purposeReason": "The animation player is a CNA model extension. Not bound for the reason JAVA-EXT-007 records and this session rechecked against the live headers: the family is entered through cna_skinning_data_create, which takes a CNA_SkinningDataDescriptor -- a pointer graph the generator refuses rather than guesses at -- and no route takes a clip handle, so there is no other door in. cna_animation_player_create takes the SkinningData handle that door would produce.",
+      "bindingStatus": "BLOCKED_UPSTREAM",
+      "bindingReason": "There is no door in. The family is entered through cna_skinning_data_create, which takes a CNA_SkinningDataDescriptor -- a pointer graph the generator refuses rather than guesses at -- and no route takes a clip handle.",
+      "evidence": "JAVA-EXT-007, rechecked against the live headers: cna_animation_player_create takes the SkinningData handle that door would produce, and nothing produces it.",
       "task": "JAVA-EXT-007"
     },
     {
@@ -648,21 +769,27 @@
         "prefix": "cna_model_animations_"
       },
       "classification": "CNA_EXTENSION_CANDIDATE",
-      "reason": "Model animation clips are a CNA model extension."
+      "purposeReason": "Model animation clips are a CNA model extension.",
+      "bindingStatus": "ACTIONABLE_LOCAL",
+      "bindingReason": "placeholder"
     },
     {
       "match": {
         "prefix": "cna_object_dictionary_"
       },
       "classification": "CNA_EXTENSION_CANDIDATE",
-      "reason": "The content processor's Dictionary<string, object> side data is reachable in CNA through a dedicated handle kind that XNA exposes only as a managed object graph."
+      "purposeReason": "The content processor's Dictionary<string, object> side data is reachable in CNA through a dedicated handle kind that XNA exposes only as a managed object graph.",
+      "bindingStatus": "ACTIONABLE_LOCAL",
+      "bindingReason": "placeholder"
     },
     {
       "match": {
         "prefix": "cna_reflective_type_reader_"
       },
       "classification": "CNA_EXTENSION_CANDIDATE",
-      "reason": "Declaring a reflectively serialized .xnb type's field list from outside the runtime is a CNA extension point."
+      "purposeReason": "Declaring a reflectively serialized .xnb type's field list from outside the runtime is a CNA extension point.",
+      "bindingStatus": "ACTIONABLE_LOCAL",
+      "bindingReason": "placeholder"
     },
     {
       "match": {
@@ -671,7 +798,10 @@
         ]
       },
       "classification": "DEFERRED_RUNTIME",
-      "reason": "CNA's own model loader produces a model that segfaults during teardown for any asset with a mesh part, whether the caller destroys it or leaves it to the content manager. Binding it would hand a consumer a route that kills the process, so it stays unbound until CNA is fixed.",
+      "purposeReason": "CNA's own model loader produces a model that segfaults during teardown for any asset with a mesh part, whether the caller destroys it or leaves it to the content manager. Binding it would hand a consumer a route that kills the process, so it stays unbound until CNA is fixed.",
+      "bindingStatus": "BLOCKED_UPSTREAM",
+      "bindingReason": "CNA's own model loader produces a model that segfaults during teardown for any asset with a mesh part, whether the caller destroys it or leaves it to the content manager. Binding it would hand a consumer a route that kills the process.",
+      "evidence": "JAVA-UPSTREAM-004, retaken against the live CNA this session's predecessor ran; still reproduced. It is why CnaModel.Load does not exist.",
       "task": "JAVA-UPSTREAM-004"
     },
     {
@@ -688,21 +818,27 @@
         ]
       },
       "classification": "NOT_USEFUL_IN_JAVA",
-      "reason": "A narrower constructor than the one the projection takes. CnaModel builds its mirror with cna_model_create_with_parents and cna_model_mesh_create_named, which carry the parent links and names an XNA model has; the defaulted and unnamed forms would lose them, and a collection built by hand would not be the model's."
+      "purposeReason": "A narrower constructor than the one the projection takes. CnaModel builds its mirror with cna_model_create_with_parents and cna_model_mesh_create_named, which carry the parent links and names an XNA model has; the defaulted and unnamed forms would lose them, and a collection built by hand would not be the model's.",
+      "bindingStatus": "DELIBERATE_NON_BINDING",
+      "bindingReason": "A narrower constructor than the one the projection takes. CnaModel builds its mirror with cna_model_create_with_parents and cna_model_mesh_create_named, which carry the parent links and names an XNA model has; the defaulted and unnamed forms would lose them."
     },
     {
       "match": {
         "contains": "_get_tag"
       },
       "classification": "NOT_USEFUL_IN_JAVA",
-      "reason": "CNA's model tags are an opaque C-owned pointer or a C-side dictionary. XNA's Tag is a managed object the content reader produced, which the Java projection already carries; handing a Java game a void* would be a handle it cannot use and must not free."
+      "purposeReason": "CNA's model tags are an opaque C-owned pointer or a C-side dictionary. XNA's Tag is a managed object the content reader produced, which the Java projection already carries; handing a Java game a void* would be a handle it cannot use and must not free.",
+      "bindingStatus": "DELIBERATE_NON_BINDING",
+      "bindingReason": "Handing a Java game a void* would be a handle it cannot use and must not free, and the Java projection already carries the managed Tag its own content reader produced."
     },
     {
       "match": {
         "contains": "_set_tag"
       },
       "classification": "NOT_USEFUL_IN_JAVA",
-      "reason": "The setter half of CNA's opaque C-owned model tag; see the getter."
+      "purposeReason": "The setter half of CNA's opaque C-owned model tag; see the getter.",
+      "bindingStatus": "DELIBERATE_NON_BINDING",
+      "bindingReason": "The setter half of the same opaque C-owned tag; see the getter."
     },
     {
       "match": {
@@ -713,7 +849,9 @@
         ]
       },
       "classification": "NOT_USEFUL_IN_JAVA",
-      "reason": "A C resource bundle with a release callback, and the two queries that read a C-owned content tag. All three hand a Java caller a void* it cannot own, and the Java model already carries its own Tag from the managed reader."
+      "purposeReason": "A C resource bundle with a release callback, and the two queries that read a C-owned content tag. All three hand a Java caller a void* it cannot own, and the Java model already carries its own Tag from the managed reader.",
+      "bindingStatus": "DELIBERATE_NON_BINDING",
+      "bindingReason": "All three hand a Java caller a void* it cannot own -- a resource bundle with a C release callback, and two queries over a C-owned content tag -- and the Java model already carries its own Tag from the managed reader."
     },
     {
       "match": {
@@ -735,14 +873,19 @@
         ]
       },
       "classification": "NOT_USEFUL_IN_JAVA",
-      "reason": "Mutating or searching CNA's mirror after it is built. The mirror exists to let CNA draw and pose an XNA model that Java owns, so the XNA graph stays the one source of truth: a part whose vertex count changed only in CNA would describe a model no Java code has. Searching a collection is a Java operation over the snapshot the graph walk already produced."
+      "purposeReason": "Mutating or searching CNA's mirror after it is built. The mirror exists to let CNA draw and pose an XNA model that Java owns, so the XNA graph stays the one source of truth: a part whose vertex count changed only in CNA would describe a model no Java code has. Searching a collection is a Java operation over the snapshot the graph walk already produced.",
+      "bindingStatus": "DELIBERATE_NON_BINDING",
+      "bindingReason": "Mutating or searching CNA's mirror after it is built. The mirror exists so CNA can draw and pose a model Java owns, so the XNA graph stays the one source of truth: a part whose vertex count changed only in CNA would describe a model no Java code has."
     },
     {
       "match": {
         "prefix": "cna_model_get_gltf_import"
       },
       "classification": "CNA_EXTENSION_CANDIDATE",
-      "reason": "The glTF importer's diagnostics belong to a model CNA imported, which needs the content loader JAVA-UPSTREAM-004 blocks. A model mirrored from XNB carries none.",
+      "purposeReason": "The glTF importer's diagnostics belong to a model CNA imported, which needs the content loader JAVA-UPSTREAM-004 blocks. A model mirrored from XNB carries none.",
+      "bindingStatus": "BLOCKED_UPSTREAM",
+      "bindingReason": "The glTF importer's diagnostics belong to a model CNA imported, and importing one needs the content loader JAVA-UPSTREAM-004 blocks. A model mirrored from XNB carries none.",
+      "evidence": "JAVA-UPSTREAM-004, still reproduced on the live CNA.",
       "task": "JAVA-UPSTREAM-004"
     },
     {
@@ -750,7 +893,10 @@
         "contains": "gltf_import"
       },
       "classification": "CNA_EXTENSION_CANDIDATE",
-      "reason": "The glTF import report and its diagnostics; see the getters.",
+      "purposeReason": "The glTF import report and its diagnostics; see the getters.",
+      "bindingStatus": "BLOCKED_UPSTREAM",
+      "bindingReason": "The glTF importer's diagnostics belong to a model CNA imported, and importing one needs the content loader JAVA-UPSTREAM-004 blocks. A model mirrored from XNB carries none.",
+      "evidence": "JAVA-UPSTREAM-004, still reproduced on the live CNA.",
       "task": "JAVA-UPSTREAM-004"
     },
     {
@@ -775,7 +921,10 @@
         ]
       },
       "classification": "CNA_EXTENSION_CANDIDATE",
-      "reason": "Authoring cameras and skins, posing a model from an animation clip, and the per-part primitive type, sampler state and morph data are CNA model extensions XNA 4.0 has no member for. They are read-useful only on a model CNA imported, which the blocked content loader is the way to get.",
+      "purposeReason": "Authoring cameras and skins, posing a model from an animation clip, and the per-part primitive type, sampler state and morph data are CNA model extensions XNA 4.0 has no member for. They are read-useful only on a model CNA imported, which the blocked content loader is the way to get.",
+      "bindingStatus": "BLOCKED_UPSTREAM",
+      "bindingReason": "Read-useful only on a model CNA imported, and the blocked content loader is the way to get one.",
+      "evidence": "JAVA-UPSTREAM-004, still reproduced on the live CNA.",
       "task": "JAVA-NATIVE-011"
     },
     {
@@ -783,7 +932,9 @@
         "header": "models.h"
       },
       "classification": "DEFERRED_RUNTIME",
-      "reason": "Native Model, ModelMesh, ModelMeshPart and ModelBone routes behind CNA-Java's managed XNB model graph. Binding them is how Load<Model> stops being managed-only.",
+      "purposeReason": "Native Model, ModelMesh, ModelMeshPart and ModelBone routes behind CNA-Java's managed XNB model graph. Binding them is how Load<Model> stops being managed-only.",
+      "bindingStatus": "DEFERRED_TRACKED",
+      "bindingReason": "An XNA-backing route the named backlog task owns. The Java member it would back is projected and behaves; what is deferred is moving its implementation onto this native route.",
       "task": "JAVA-NATIVE-011"
     },
     {
@@ -791,7 +942,9 @@
         "header": "content_readers.h"
       },
       "classification": "DEFERRED_RUNTIME",
-      "reason": "Native compiled-asset reader routes behind CNA-Java's managed XNB reader.",
+      "purposeReason": "Native compiled-asset reader routes behind CNA-Java's managed XNB reader.",
+      "bindingStatus": "DEFERRED_TRACKED",
+      "bindingReason": "An XNA-backing route the named backlog task owns. The Java member it would back is projected and behaves; what is deferred is moving its implementation onto this native route.",
       "task": "JAVA-NATIVE-012"
     },
     {
@@ -799,7 +952,9 @@
         "header": "content.h"
       },
       "classification": "DEFERRED_RUNTIME",
-      "reason": "Remaining ContentManager routes behind the bound content surface.",
+      "purposeReason": "Remaining ContentManager routes behind the bound content surface.",
+      "bindingStatus": "DEFERRED_TRACKED",
+      "bindingReason": "An XNA-backing route the named backlog task owns. The Java member it would back is projected and behaves; what is deferred is moving its implementation onto this native route.",
       "task": "JAVA-NATIVE-013"
     },
     {
@@ -807,7 +962,9 @@
         "header": "effects.h"
       },
       "classification": "DEFERRED_RUNTIME",
-      "reason": "Remaining Effect, EffectTechnique, EffectPass, EffectParameter and EffectAnnotation routes behind the bound effect surface.",
+      "purposeReason": "Remaining Effect, EffectTechnique, EffectPass, EffectParameter and EffectAnnotation routes behind the bound effect surface.",
+      "bindingStatus": "DEFERRED_TRACKED",
+      "bindingReason": "An XNA-backing route the named backlog task owns. The Java member it would back is projected and behaves; what is deferred is moving its implementation onto this native route.",
       "task": "JAVA-NATIVE-014"
     },
     {
@@ -815,7 +972,9 @@
         "header": "graphics_device.h"
       },
       "classification": "DEFERRED_RUNTIME",
-      "reason": "Remaining GraphicsDevice, Viewport and OcclusionQuery routes behind the bound device surface.",
+      "purposeReason": "Remaining GraphicsDevice, Viewport and OcclusionQuery routes behind the bound device surface.",
+      "bindingStatus": "DEFERRED_TRACKED",
+      "bindingReason": "An XNA-backing route the named backlog task owns. The Java member it would back is projected and behaves; what is deferred is moving its implementation onto this native route.",
       "task": "JAVA-NATIVE-015"
     },
     {
@@ -823,7 +982,9 @@
         "header": "graphics.h"
       },
       "classification": "DEFERRED_RUNTIME",
-      "reason": "Remaining graphics discovery and capability routes behind the bound surface.",
+      "purposeReason": "Remaining graphics discovery and capability routes behind the bound surface.",
+      "bindingStatus": "DEFERRED_TRACKED",
+      "bindingReason": "An XNA-backing route the named backlog task owns. The Java member it would back is projected and behaves; what is deferred is moving its implementation onto this native route.",
       "task": "JAVA-NATIVE-015"
     },
     {
@@ -831,7 +992,9 @@
         "header": "graphics_resource.h"
       },
       "classification": "DEFERRED_RUNTIME",
-      "reason": "Remaining generic GraphicsResource name, tag and disposal routes behind the bound resource surface.",
+      "purposeReason": "Remaining generic GraphicsResource name, tag and disposal routes behind the bound resource surface.",
+      "bindingStatus": "DEFERRED_TRACKED",
+      "bindingReason": "An XNA-backing route the named backlog task owns. The Java member it would back is projected and behaves; what is deferred is moving its implementation onto this native route.",
       "task": "JAVA-NATIVE-015"
     },
     {
@@ -839,7 +1002,9 @@
         "header": "graphics_state.h"
       },
       "classification": "DEFERRED_RUNTIME",
-      "reason": "Remaining BlendState, DepthStencilState, RasterizerState and SamplerState routes behind the bound state surface.",
+      "purposeReason": "Remaining BlendState, DepthStencilState, RasterizerState and SamplerState routes behind the bound state surface.",
+      "bindingStatus": "DEFERRED_TRACKED",
+      "bindingReason": "An XNA-backing route the named backlog task owns. The Java member it would back is projected and behaves; what is deferred is moving its implementation onto this native route.",
       "task": "JAVA-NATIVE-015"
     },
     {
@@ -847,7 +1012,9 @@
         "header": "texture.h"
       },
       "classification": "DEFERRED_RUNTIME",
-      "reason": "Remaining Texture and Texture2D routes behind the bound texture surface.",
+      "purposeReason": "Remaining Texture and Texture2D routes behind the bound texture surface.",
+      "bindingStatus": "DEFERRED_TRACKED",
+      "bindingReason": "An XNA-backing route the named backlog task owns. The Java member it would back is projected and behaves; what is deferred is moving its implementation onto this native route.",
       "task": "JAVA-NATIVE-016"
     },
     {
@@ -855,7 +1022,9 @@
         "header": "texture_volume.h"
       },
       "classification": "DEFERRED_RUNTIME",
-      "reason": "Remaining Texture3D and TextureCube routes behind the bound volume surface.",
+      "purposeReason": "Remaining Texture3D and TextureCube routes behind the bound volume surface.",
+      "bindingStatus": "DEFERRED_TRACKED",
+      "bindingReason": "An XNA-backing route the named backlog task owns. The Java member it would back is projected and behaves; what is deferred is moving its implementation onto this native route.",
       "task": "JAVA-NATIVE-016"
     },
     {
@@ -863,7 +1032,9 @@
         "header": "render_target.h"
       },
       "classification": "DEFERRED_RUNTIME",
-      "reason": "Remaining RenderTarget2D and RenderTargetCube routes behind the bound render-target surface.",
+      "purposeReason": "Remaining RenderTarget2D and RenderTargetCube routes behind the bound render-target surface.",
+      "bindingStatus": "DEFERRED_TRACKED",
+      "bindingReason": "An XNA-backing route the named backlog task owns. The Java member it would back is projected and behaves; what is deferred is moving its implementation onto this native route.",
       "task": "JAVA-NATIVE-016"
     },
     {
@@ -871,7 +1042,9 @@
         "header": "vertex_resources.h"
       },
       "classification": "DEFERRED_RUNTIME",
-      "reason": "Remaining VertexDeclaration and VertexBuffer routes behind the bound buffer surface.",
+      "purposeReason": "Remaining VertexDeclaration and VertexBuffer routes behind the bound buffer surface.",
+      "bindingStatus": "DEFERRED_TRACKED",
+      "bindingReason": "An XNA-backing route the named backlog task owns. The Java member it would back is projected and behaves; what is deferred is moving its implementation onto this native route.",
       "task": "JAVA-NATIVE-017"
     },
     {
@@ -879,7 +1052,9 @@
         "header": "index_resources.h"
       },
       "classification": "DEFERRED_RUNTIME",
-      "reason": "Remaining IndexBuffer routes behind the bound buffer surface.",
+      "purposeReason": "Remaining IndexBuffer routes behind the bound buffer surface.",
+      "bindingStatus": "DEFERRED_TRACKED",
+      "bindingReason": "An XNA-backing route the named backlog task owns. The Java member it would back is projected and behaves; what is deferred is moving its implementation onto this native route.",
       "task": "JAVA-NATIVE-017"
     },
     {
@@ -887,7 +1062,9 @@
         "header": "sprite_font.h"
       },
       "classification": "DEFERRED_RUNTIME",
-      "reason": "Remaining SpriteFont routes behind the bound font surface.",
+      "purposeReason": "Remaining SpriteFont routes behind the bound font surface.",
+      "bindingStatus": "DEFERRED_TRACKED",
+      "bindingReason": "An XNA-backing route the named backlog task owns. The Java member it would back is projected and behaves; what is deferred is moving its implementation onto this native route.",
       "task": "JAVA-NATIVE-018"
     },
     {
@@ -895,7 +1072,9 @@
         "header": "audio.h"
       },
       "classification": "DEFERRED_RUNTIME",
-      "reason": "Remaining SoundEffect, SoundEffectInstance, DynamicSoundEffectInstance and Microphone routes behind the bound audio surface.",
+      "purposeReason": "Remaining SoundEffect, SoundEffectInstance, DynamicSoundEffectInstance and Microphone routes behind the bound audio surface.",
+      "bindingStatus": "DEFERRED_TRACKED",
+      "bindingReason": "An XNA-backing route the named backlog task owns. The Java member it would back is projected and behaves; what is deferred is moving its implementation onto this native route.",
       "task": "JAVA-NATIVE-019"
     },
     {
@@ -903,7 +1082,9 @@
         "header": "xact.h"
       },
       "classification": "DEFERRED_RUNTIME",
-      "reason": "Remaining AudioEngine, WaveBank, SoundBank and Cue routes behind the bound XACT surface.",
+      "purposeReason": "Remaining AudioEngine, WaveBank, SoundBank and Cue routes behind the bound XACT surface.",
+      "bindingStatus": "DEFERRED_TRACKED",
+      "bindingReason": "An XNA-backing route the named backlog task owns. The Java member it would back is projected and behaves; what is deferred is moving its implementation onto this native route.",
       "task": "JAVA-NATIVE-019"
     },
     {
@@ -911,7 +1092,9 @@
         "header": "media.h"
       },
       "classification": "DEFERRED_RUNTIME",
-      "reason": "Remaining media value and Song routes behind the bound media surface.",
+      "purposeReason": "Remaining media value and Song routes behind the bound media surface.",
+      "bindingStatus": "DEFERRED_TRACKED",
+      "bindingReason": "An XNA-backing route the named backlog task owns. The Java member it would back is projected and behaves; what is deferred is moving its implementation onto this native route.",
       "task": "JAVA-NATIVE-020"
     },
     {
@@ -919,7 +1102,9 @@
         "header": "media_library.h"
       },
       "classification": "DEFERRED_RUNTIME",
-      "reason": "Remaining MediaLibrary, album, artist, genre, playlist and picture routes behind the bound library surface.",
+      "purposeReason": "Remaining MediaLibrary, album, artist, genre, playlist and picture routes behind the bound library surface.",
+      "bindingStatus": "DEFERRED_TRACKED",
+      "bindingReason": "An XNA-backing route the named backlog task owns. The Java member it would back is projected and behaves; what is deferred is moving its implementation onto this native route.",
       "task": "JAVA-NATIVE-020"
     },
     {
@@ -927,7 +1112,9 @@
         "header": "media_player.h"
       },
       "classification": "DEFERRED_RUNTIME",
-      "reason": "Remaining MediaPlayer and queue routes behind the bound player surface.",
+      "purposeReason": "Remaining MediaPlayer and queue routes behind the bound player surface.",
+      "bindingStatus": "DEFERRED_TRACKED",
+      "bindingReason": "An XNA-backing route the named backlog task owns. The Java member it would back is projected and behaves; what is deferred is moving its implementation onto this native route.",
       "task": "JAVA-NATIVE-020"
     },
     {
@@ -935,7 +1122,9 @@
         "header": "video.h"
       },
       "classification": "DEFERRED_RUNTIME",
-      "reason": "Remaining Video and VideoPlayer routes behind the bound video surface.",
+      "purposeReason": "Remaining Video and VideoPlayer routes behind the bound video surface.",
+      "bindingStatus": "DEFERRED_TRACKED",
+      "bindingReason": "An XNA-backing route the named backlog task owns. The Java member it would back is projected and behaves; what is deferred is moving its implementation onto this native route.",
       "task": "JAVA-NATIVE-020"
     },
     {
@@ -943,7 +1132,9 @@
         "header": "storage.h"
       },
       "classification": "DEFERRED_RUNTIME",
-      "reason": "Remaining StorageDevice, StorageContainer and stream routes behind the bound storage surface.",
+      "purposeReason": "Remaining StorageDevice, StorageContainer and stream routes behind the bound storage surface.",
+      "bindingStatus": "DEFERRED_TRACKED",
+      "bindingReason": "An XNA-backing route the named backlog task owns. The Java member it would back is projected and behaves; what is deferred is moving its implementation onto this native route.",
       "task": "JAVA-NATIVE-021"
     },
     {
@@ -951,35 +1142,45 @@
         "prefix": "cna_gamepad_state_"
       },
       "classification": "NOT_USEFUL_IN_JAVA",
-      "reason": "XNA's input value types -- GamePadState and its four component structs, KeyboardState, MouseState, TouchLocation, TouchCollection, GestureSample and TouchPanelCapabilities -- are managed structs in XNA and managed values in CNA-Java. Their construction, equality, hashing, string form and indexing are pure value operations with an exactly specified result, so routing them through JNI would add a per-call cost and a native failure mode the original managed API cannot produce. This is the same rule the vector and matrix families carry."
+      "purposeReason": "XNA's input value types -- GamePadState and its four component structs, KeyboardState, MouseState, TouchLocation, TouchCollection, GestureSample and TouchPanelCapabilities -- are managed structs in XNA and managed values in CNA-Java. Their construction, equality, hashing, string form and indexing are pure value operations with an exactly specified result, so routing them through JNI would add a per-call cost and a native failure mode the original managed API cannot produce. This is the same rule the vector and matrix families carry.",
+      "bindingStatus": "DELIBERATE_NON_BINDING",
+      "bindingReason": "Routing a pure value operation through JNI would add a per-call cost and a native failure mode the original managed API cannot produce, for a result the Java value type already computes to the same specified bits."
     },
     {
       "match": {
         "prefix": "cna_gamepad_buttons_"
       },
       "classification": "NOT_USEFUL_IN_JAVA",
-      "reason": "XNA's input value types -- GamePadState and its four component structs, KeyboardState, MouseState, TouchLocation, TouchCollection, GestureSample and TouchPanelCapabilities -- are managed structs in XNA and managed values in CNA-Java. Their construction, equality, hashing, string form and indexing are pure value operations with an exactly specified result, so routing them through JNI would add a per-call cost and a native failure mode the original managed API cannot produce. This is the same rule the vector and matrix families carry."
+      "purposeReason": "XNA's input value types -- GamePadState and its four component structs, KeyboardState, MouseState, TouchLocation, TouchCollection, GestureSample and TouchPanelCapabilities -- are managed structs in XNA and managed values in CNA-Java. Their construction, equality, hashing, string form and indexing are pure value operations with an exactly specified result, so routing them through JNI would add a per-call cost and a native failure mode the original managed API cannot produce. This is the same rule the vector and matrix families carry.",
+      "bindingStatus": "DELIBERATE_NON_BINDING",
+      "bindingReason": "Routing a pure value operation through JNI would add a per-call cost and a native failure mode the original managed API cannot produce, for a result the Java value type already computes to the same specified bits."
     },
     {
       "match": {
         "prefix": "cna_gamepad_dpad_"
       },
       "classification": "NOT_USEFUL_IN_JAVA",
-      "reason": "XNA's input value types -- GamePadState and its four component structs, KeyboardState, MouseState, TouchLocation, TouchCollection, GestureSample and TouchPanelCapabilities -- are managed structs in XNA and managed values in CNA-Java. Their construction, equality, hashing, string form and indexing are pure value operations with an exactly specified result, so routing them through JNI would add a per-call cost and a native failure mode the original managed API cannot produce. This is the same rule the vector and matrix families carry."
+      "purposeReason": "XNA's input value types -- GamePadState and its four component structs, KeyboardState, MouseState, TouchLocation, TouchCollection, GestureSample and TouchPanelCapabilities -- are managed structs in XNA and managed values in CNA-Java. Their construction, equality, hashing, string form and indexing are pure value operations with an exactly specified result, so routing them through JNI would add a per-call cost and a native failure mode the original managed API cannot produce. This is the same rule the vector and matrix families carry.",
+      "bindingStatus": "DELIBERATE_NON_BINDING",
+      "bindingReason": "Routing a pure value operation through JNI would add a per-call cost and a native failure mode the original managed API cannot produce, for a result the Java value type already computes to the same specified bits."
     },
     {
       "match": {
         "prefix": "cna_gamepad_thumb_sticks_"
       },
       "classification": "NOT_USEFUL_IN_JAVA",
-      "reason": "XNA's input value types -- GamePadState and its four component structs, KeyboardState, MouseState, TouchLocation, TouchCollection, GestureSample and TouchPanelCapabilities -- are managed structs in XNA and managed values in CNA-Java. Their construction, equality, hashing, string form and indexing are pure value operations with an exactly specified result, so routing them through JNI would add a per-call cost and a native failure mode the original managed API cannot produce. This is the same rule the vector and matrix families carry."
+      "purposeReason": "XNA's input value types -- GamePadState and its four component structs, KeyboardState, MouseState, TouchLocation, TouchCollection, GestureSample and TouchPanelCapabilities -- are managed structs in XNA and managed values in CNA-Java. Their construction, equality, hashing, string form and indexing are pure value operations with an exactly specified result, so routing them through JNI would add a per-call cost and a native failure mode the original managed API cannot produce. This is the same rule the vector and matrix families carry.",
+      "bindingStatus": "DELIBERATE_NON_BINDING",
+      "bindingReason": "Routing a pure value operation through JNI would add a per-call cost and a native failure mode the original managed API cannot produce, for a result the Java value type already computes to the same specified bits."
     },
     {
       "match": {
         "prefix": "cna_gamepad_triggers_"
       },
       "classification": "NOT_USEFUL_IN_JAVA",
-      "reason": "XNA's input value types -- GamePadState and its four component structs, KeyboardState, MouseState, TouchLocation, TouchCollection, GestureSample and TouchPanelCapabilities -- are managed structs in XNA and managed values in CNA-Java. Their construction, equality, hashing, string form and indexing are pure value operations with an exactly specified result, so routing them through JNI would add a per-call cost and a native failure mode the original managed API cannot produce. This is the same rule the vector and matrix families carry."
+      "purposeReason": "XNA's input value types -- GamePadState and its four component structs, KeyboardState, MouseState, TouchLocation, TouchCollection, GestureSample and TouchPanelCapabilities -- are managed structs in XNA and managed values in CNA-Java. Their construction, equality, hashing, string form and indexing are pure value operations with an exactly specified result, so routing them through JNI would add a per-call cost and a native failure mode the original managed API cannot produce. This is the same rule the vector and matrix families carry.",
+      "bindingStatus": "DELIBERATE_NON_BINDING",
+      "bindingReason": "Routing a pure value operation through JNI would add a per-call cost and a native failure mode the original managed API cannot produce, for a result the Java value type already computes to the same specified bits."
     },
     {
       "match": {
@@ -988,49 +1189,63 @@
         ]
       },
       "classification": "NOT_USEFUL_IN_JAVA",
-      "reason": "XNA's input value types -- GamePadState and its four component structs, KeyboardState, MouseState, TouchLocation, TouchCollection, GestureSample and TouchPanelCapabilities -- are managed structs in XNA and managed values in CNA-Java. Their construction, equality, hashing, string form and indexing are pure value operations with an exactly specified result, so routing them through JNI would add a per-call cost and a native failure mode the original managed API cannot produce. This is the same rule the vector and matrix families carry."
+      "purposeReason": "XNA's input value types -- GamePadState and its four component structs, KeyboardState, MouseState, TouchLocation, TouchCollection, GestureSample and TouchPanelCapabilities -- are managed structs in XNA and managed values in CNA-Java. Their construction, equality, hashing, string form and indexing are pure value operations with an exactly specified result, so routing them through JNI would add a per-call cost and a native failure mode the original managed API cannot produce. This is the same rule the vector and matrix families carry.",
+      "bindingStatus": "DELIBERATE_NON_BINDING",
+      "bindingReason": "Routing a pure value operation through JNI would add a per-call cost and a native failure mode the original managed API cannot produce, for a result the Java value type already computes to the same specified bits."
     },
     {
       "match": {
         "prefix": "cna_keyboard_state_"
       },
       "classification": "NOT_USEFUL_IN_JAVA",
-      "reason": "XNA's input value types -- GamePadState and its four component structs, KeyboardState, MouseState, TouchLocation, TouchCollection, GestureSample and TouchPanelCapabilities -- are managed structs in XNA and managed values in CNA-Java. Their construction, equality, hashing, string form and indexing are pure value operations with an exactly specified result, so routing them through JNI would add a per-call cost and a native failure mode the original managed API cannot produce. This is the same rule the vector and matrix families carry."
+      "purposeReason": "XNA's input value types -- GamePadState and its four component structs, KeyboardState, MouseState, TouchLocation, TouchCollection, GestureSample and TouchPanelCapabilities -- are managed structs in XNA and managed values in CNA-Java. Their construction, equality, hashing, string form and indexing are pure value operations with an exactly specified result, so routing them through JNI would add a per-call cost and a native failure mode the original managed API cannot produce. This is the same rule the vector and matrix families carry.",
+      "bindingStatus": "DELIBERATE_NON_BINDING",
+      "bindingReason": "Routing a pure value operation through JNI would add a per-call cost and a native failure mode the original managed API cannot produce, for a result the Java value type already computes to the same specified bits."
     },
     {
       "match": {
         "prefix": "cna_mouse_state_"
       },
       "classification": "NOT_USEFUL_IN_JAVA",
-      "reason": "XNA's input value types -- GamePadState and its four component structs, KeyboardState, MouseState, TouchLocation, TouchCollection, GestureSample and TouchPanelCapabilities -- are managed structs in XNA and managed values in CNA-Java. Their construction, equality, hashing, string form and indexing are pure value operations with an exactly specified result, so routing them through JNI would add a per-call cost and a native failure mode the original managed API cannot produce. This is the same rule the vector and matrix families carry."
+      "purposeReason": "XNA's input value types -- GamePadState and its four component structs, KeyboardState, MouseState, TouchLocation, TouchCollection, GestureSample and TouchPanelCapabilities -- are managed structs in XNA and managed values in CNA-Java. Their construction, equality, hashing, string form and indexing are pure value operations with an exactly specified result, so routing them through JNI would add a per-call cost and a native failure mode the original managed API cannot produce. This is the same rule the vector and matrix families carry.",
+      "bindingStatus": "DELIBERATE_NON_BINDING",
+      "bindingReason": "Routing a pure value operation through JNI would add a per-call cost and a native failure mode the original managed API cannot produce, for a result the Java value type already computes to the same specified bits."
     },
     {
       "match": {
         "prefix": "cna_touch_location_"
       },
       "classification": "NOT_USEFUL_IN_JAVA",
-      "reason": "XNA's input value types -- GamePadState and its four component structs, KeyboardState, MouseState, TouchLocation, TouchCollection, GestureSample and TouchPanelCapabilities -- are managed structs in XNA and managed values in CNA-Java. Their construction, equality, hashing, string form and indexing are pure value operations with an exactly specified result, so routing them through JNI would add a per-call cost and a native failure mode the original managed API cannot produce. This is the same rule the vector and matrix families carry."
+      "purposeReason": "XNA's input value types -- GamePadState and its four component structs, KeyboardState, MouseState, TouchLocation, TouchCollection, GestureSample and TouchPanelCapabilities -- are managed structs in XNA and managed values in CNA-Java. Their construction, equality, hashing, string form and indexing are pure value operations with an exactly specified result, so routing them through JNI would add a per-call cost and a native failure mode the original managed API cannot produce. This is the same rule the vector and matrix families carry.",
+      "bindingStatus": "DELIBERATE_NON_BINDING",
+      "bindingReason": "Routing a pure value operation through JNI would add a per-call cost and a native failure mode the original managed API cannot produce, for a result the Java value type already computes to the same specified bits."
     },
     {
       "match": {
         "prefix": "cna_touch_state_"
       },
       "classification": "NOT_USEFUL_IN_JAVA",
-      "reason": "XNA's input value types -- GamePadState and its four component structs, KeyboardState, MouseState, TouchLocation, TouchCollection, GestureSample and TouchPanelCapabilities -- are managed structs in XNA and managed values in CNA-Java. Their construction, equality, hashing, string form and indexing are pure value operations with an exactly specified result, so routing them through JNI would add a per-call cost and a native failure mode the original managed API cannot produce. This is the same rule the vector and matrix families carry."
+      "purposeReason": "XNA's input value types -- GamePadState and its four component structs, KeyboardState, MouseState, TouchLocation, TouchCollection, GestureSample and TouchPanelCapabilities -- are managed structs in XNA and managed values in CNA-Java. Their construction, equality, hashing, string form and indexing are pure value operations with an exactly specified result, so routing them through JNI would add a per-call cost and a native failure mode the original managed API cannot produce. This is the same rule the vector and matrix families carry.",
+      "bindingStatus": "DELIBERATE_NON_BINDING",
+      "bindingReason": "Routing a pure value operation through JNI would add a per-call cost and a native failure mode the original managed API cannot produce, for a result the Java value type already computes to the same specified bits."
     },
     {
       "match": {
         "prefix": "cna_touch_capabilities_"
       },
       "classification": "NOT_USEFUL_IN_JAVA",
-      "reason": "XNA's input value types -- GamePadState and its four component structs, KeyboardState, MouseState, TouchLocation, TouchCollection, GestureSample and TouchPanelCapabilities -- are managed structs in XNA and managed values in CNA-Java. Their construction, equality, hashing, string form and indexing are pure value operations with an exactly specified result, so routing them through JNI would add a per-call cost and a native failure mode the original managed API cannot produce. This is the same rule the vector and matrix families carry."
+      "purposeReason": "XNA's input value types -- GamePadState and its four component structs, KeyboardState, MouseState, TouchLocation, TouchCollection, GestureSample and TouchPanelCapabilities -- are managed structs in XNA and managed values in CNA-Java. Their construction, equality, hashing, string form and indexing are pure value operations with an exactly specified result, so routing them through JNI would add a per-call cost and a native failure mode the original managed API cannot produce. This is the same rule the vector and matrix families carry.",
+      "bindingStatus": "DELIBERATE_NON_BINDING",
+      "bindingReason": "Routing a pure value operation through JNI would add a per-call cost and a native failure mode the original managed API cannot produce, for a result the Java value type already computes to the same specified bits."
     },
     {
       "match": {
         "prefix": "cna_gesture_sample_"
       },
       "classification": "NOT_USEFUL_IN_JAVA",
-      "reason": "XNA's input value types -- GamePadState and its four component structs, KeyboardState, MouseState, TouchLocation, TouchCollection, GestureSample and TouchPanelCapabilities -- are managed structs in XNA and managed values in CNA-Java. Their construction, equality, hashing, string form and indexing are pure value operations with an exactly specified result, so routing them through JNI would add a per-call cost and a native failure mode the original managed API cannot produce. This is the same rule the vector and matrix families carry."
+      "purposeReason": "XNA's input value types -- GamePadState and its four component structs, KeyboardState, MouseState, TouchLocation, TouchCollection, GestureSample and TouchPanelCapabilities -- are managed structs in XNA and managed values in CNA-Java. Their construction, equality, hashing, string form and indexing are pure value operations with an exactly specified result, so routing them through JNI would add a per-call cost and a native failure mode the original managed API cannot produce. This is the same rule the vector and matrix families carry.",
+      "bindingStatus": "DELIBERATE_NON_BINDING",
+      "bindingReason": "Routing a pure value operation through JNI would add a per-call cost and a native failure mode the original managed API cannot produce, for a result the Java value type already computes to the same specified bits."
     },
     {
       "match": {
@@ -1040,7 +1255,9 @@
         ]
       },
       "classification": "NOT_USEFUL_IN_JAVA",
-      "reason": "XNA's dead-zone transformation is pure value math with an exactly specified binary32 result, and GamePad.GetState already asks CNA to apply it: the dead-zone mode is passed to cna_gamepad_get_state_with_dead_zone. What Java computes for itself is only the virtual thumbstick and trigger buttons XNA derives from the same transformation, which is managed there too."
+      "purposeReason": "XNA's dead-zone transformation is pure value math with an exactly specified binary32 result, and GamePad.GetState already asks CNA to apply it: the dead-zone mode is passed to cna_gamepad_get_state_with_dead_zone. What Java computes for itself is only the virtual thumbstick and trigger buttons XNA derives from the same transformation, which is managed there too.",
+      "bindingStatus": "DELIBERATE_NON_BINDING",
+      "bindingReason": "GamePad.GetState already asks CNA to apply the dead zone -- the mode is passed to cna_gamepad_get_state_with_dead_zone -- so a second entry point would be the same transformation twice."
     },
     {
       "match": {
@@ -1050,21 +1267,27 @@
         ]
       },
       "classification": "NOT_USEFUL_IN_JAVA",
-      "reason": "A CNA test seam. Resetting the host's mouse state or stamping a packet number onto a state value is something a CNA test does to its own runtime; a Java game has no use for it, and exposing it would let a consumer change what the input surface reports."
+      "purposeReason": "A CNA test seam. Resetting the host's mouse state or stamping a packet number onto a state value is something a CNA test does to its own runtime; a Java game has no use for it, and exposing it would let a consumer change what the input surface reports.",
+      "bindingStatus": "DELIBERATE_NON_BINDING",
+      "bindingReason": "A CNA test seam. Exposing it would let a consumer change what the input surface reports."
     },
     {
       "match": {
         "prefix": "cna_touch_panel_"
       },
       "classification": "CNA_EXTENSION_CANDIDATE",
-      "reason": "Mouse-driven touch emulation and the real-touch-hardware query are CNA touch extensions; XNA 4.0's TouchPanelCapabilities answers only whether touch is usable, which does not distinguish the two."
+      "purposeReason": "Mouse-driven touch emulation and the real-touch-hardware query are CNA touch extensions; XNA 4.0's TouchPanelCapabilities answers only whether touch is usable, which does not distinguish the two.",
+      "bindingStatus": "DELIBERATE_NON_BINDING",
+      "bindingReason": "Nothing is left unbound here; the rule exists so a new touch-panel declaration is classified rather than unexplained."
     },
     {
       "match": {
         "header": "input.h"
       },
       "classification": "DEFERRED_RUNTIME",
-      "reason": "Remaining shared input routes behind the bound input surface.",
+      "purposeReason": "Remaining shared input routes behind the bound input surface.",
+      "bindingStatus": "DEFERRED_TRACKED",
+      "bindingReason": "An XNA-backing route the named backlog task owns. The Java member it would back is projected and behaves; what is deferred is moving its implementation onto this native route.",
       "task": "JAVA-NATIVE-022"
     },
     {
@@ -1072,7 +1295,9 @@
         "header": "input_keyboard.h"
       },
       "classification": "DEFERRED_RUNTIME",
-      "reason": "Remaining keyboard routes behind the bound keyboard surface. Scancode translation and key-name lookup have no XNA counterpart and are extension candidates within this family.",
+      "purposeReason": "Remaining keyboard routes behind the bound keyboard surface. Scancode translation and key-name lookup have no XNA counterpart and are extension candidates within this family.",
+      "bindingStatus": "DEFERRED_TRACKED",
+      "bindingReason": "An XNA-backing route the named backlog task owns. The Java member it would back is projected and behaves; what is deferred is moving its implementation onto this native route.",
       "task": "JAVA-NATIVE-022"
     },
     {
@@ -1080,7 +1305,9 @@
         "header": "input_mouse.h"
       },
       "classification": "DEFERRED_RUNTIME",
-      "reason": "Remaining mouse routes behind the bound mouse surface.",
+      "purposeReason": "Remaining mouse routes behind the bound mouse surface.",
+      "bindingStatus": "DEFERRED_TRACKED",
+      "bindingReason": "An XNA-backing route the named backlog task owns. The Java member it would back is projected and behaves; what is deferred is moving its implementation onto this native route.",
       "task": "JAVA-NATIVE-022"
     },
     {
@@ -1088,7 +1315,9 @@
         "header": "input_gamepad.h"
       },
       "classification": "DEFERRED_RUNTIME",
-      "reason": "Remaining GamePad capability, vibration, sensor and value-projection routes behind the bound gamepad surface.",
+      "purposeReason": "Remaining GamePad capability, vibration, sensor and value-projection routes behind the bound gamepad surface.",
+      "bindingStatus": "DEFERRED_TRACKED",
+      "bindingReason": "An XNA-backing route the named backlog task owns. The Java member it would back is projected and behaves; what is deferred is moving its implementation onto this native route.",
       "task": "JAVA-NATIVE-022"
     },
     {
@@ -1096,7 +1325,9 @@
         "header": "input_touch.h"
       },
       "classification": "DEFERRED_RUNTIME",
-      "reason": "Remaining TouchPanel, TouchCollection and gesture routes behind the bound touch surface.",
+      "purposeReason": "Remaining TouchPanel, TouchCollection and gesture routes behind the bound touch surface.",
+      "bindingStatus": "DEFERRED_TRACKED",
+      "bindingReason": "An XNA-backing route the named backlog task owns. The Java member it would back is projected and behaves; what is deferred is moving its implementation onto this native route.",
       "task": "JAVA-NATIVE-022"
     },
     {
@@ -1104,7 +1335,9 @@
         "header": "runtime.h"
       },
       "classification": "DEFERRED_RUNTIME",
-      "reason": "Remaining Game, TitleContainer and launch routes behind the bound runtime surface.",
+      "purposeReason": "Remaining Game, TitleContainer and launch routes behind the bound runtime surface.",
+      "bindingStatus": "DEFERRED_TRACKED",
+      "bindingReason": "An XNA-backing route the named backlog task owns. The Java member it would back is projected and behaves; what is deferred is moving its implementation onto this native route.",
       "task": "JAVA-NATIVE-023"
     },
     {
@@ -1112,7 +1345,9 @@
         "header": "runtime_window.h"
       },
       "classification": "DEFERRED_RUNTIME",
-      "reason": "Remaining GameWindow routes behind the bound window surface.",
+      "purposeReason": "Remaining GameWindow routes behind the bound window surface.",
+      "bindingStatus": "DEFERRED_TRACKED",
+      "bindingReason": "An XNA-backing route the named backlog task owns. The Java member it would back is projected and behaves; what is deferred is moving its implementation onto this native route.",
       "task": "JAVA-NATIVE-023"
     },
     {
@@ -1120,7 +1355,9 @@
         "header": "runtime_graphics_manager.h"
       },
       "classification": "DEFERRED_RUNTIME",
-      "reason": "Remaining GraphicsDeviceManager routes behind the bound manager surface.",
+      "purposeReason": "Remaining GraphicsDeviceManager routes behind the bound manager surface.",
+      "bindingStatus": "DEFERRED_TRACKED",
+      "bindingReason": "An XNA-backing route the named backlog task owns. The Java member it would back is projected and behaves; what is deferred is moving its implementation onto this native route.",
       "task": "JAVA-NATIVE-023"
     },
     {
@@ -1128,7 +1365,9 @@
         "header": "core.h"
       },
       "classification": "DEFERRED_RUNTIME",
-      "reason": "Remaining error-category route behind the bound diagnostic surface.",
+      "purposeReason": "Remaining error-category route behind the bound diagnostic surface.",
+      "bindingStatus": "DEFERRED_TRACKED",
+      "bindingReason": "An XNA-backing route the named backlog task owns. The Java member it would back is projected and behaves; what is deferred is moving its implementation onto this native route.",
       "task": "JAVA-NATIVE-023"
     },
     {
@@ -1136,14 +1375,27 @@
         "header": "graphics3d.h"
       },
       "classification": "NOT_USEFUL_IN_JAVA",
-      "reason": "Aggregate header with no routes of its own."
+      "purposeReason": "Aggregate header with no routes of its own.",
+      "bindingStatus": "DELIBERATE_NON_BINDING",
+      "bindingReason": "An aggregate header with no routes of its own."
     },
     {
       "match": {
         "header": "cna.h"
       },
       "classification": "NOT_USEFUL_IN_JAVA",
-      "reason": "Umbrella header with no routes of its own."
+      "purposeReason": "Umbrella header with no routes of its own.",
+      "bindingStatus": "DELIBERATE_NON_BINDING",
+      "bindingReason": "An umbrella header with no routes of its own."
     }
-  ]
+  ],
+  "bindingStatuses": {
+    "ACTIONABLE_LOCAL": "Nothing outside this repository blocks it. It is work, not a boundary.",
+    "BLOCKED_UPSTREAM": "A reproduced defect or a missing door in CNA or Sharp Runtime blocks it.",
+    "BLOCKED_RENDERER": "No renderer this build can select provides the capability.",
+    "BLOCKED_HARDWARE": "The host has no such device and CNA offers no test or synthetic backend for it.",
+    "BLOCKED_PLATFORM": "The platform CNA is built for does not implement it.",
+    "DELIBERATE_NON_BINDING": "Measured and decided against: binding it would add a boundary without adding behaviour a consumer can reach, or would make an existing guarantee weaker.",
+    "DEFERRED_TRACKED": "An XNA-backing route a named backlog task owns. Only a DEFERRED_RUNTIME rule carrying a task may use it, which is what keeps it from becoming a synonym for 'not looked at'."
+  }
 }
