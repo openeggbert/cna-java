@@ -17,18 +17,17 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 /**
  * The screen-filling draw, and the ASCII pass, against the live runtime.
  *
- * <p><strong>What this can and cannot say.</strong> VERIFIED_HEADLESS_GAME. Nothing here claims a
- * pixel changed -- this renderer draws none -- so what is checked is which draws CNA accepts and
- * which it refuses, and that the sampler a game hands over is the sampler CNA receives.
+ * <p><strong>What this file checks.</strong> Which draws CNA accepts and which it refuses, and
+ * that XNA's sampler enums and CNA's identities agree ordinal for ordinal -- two independently
+ * written declarations that this projection sends straight across, so a reordering on either side
+ * would quietly become a different filter with nothing to say so.
  *
- * <p><strong>One thing these tests cannot check, and it is said rather than worked around.</strong>
- * This renderer accepts any sampler and does nothing observable with it, and CNA has no route that
- * reads one back, so nothing here can catch a carrier packed in the wrong order -- a planted swap
- * of the address modes was confirmed to pass every test below. That order is pinned against the
- * live header by the generator tool tests instead. What the first test <em>does</em> check is
- * real and is the other half of the same risk: XNA's enums and CNA's identities are two
- * independent declarations that happen to agree, and this projection sends the ordinal straight
- * across.
+ * <p><strong>What used to be missing is now next door.</strong> The sampler crosses into CNA and
+ * never comes back, and on a renderer that draws nothing a carrier packed in the wrong order is
+ * invisible -- a planted swap of the address modes passed every test in this file. It no longer
+ * does: {@link PixelReadbackTests} draws through the sampler on a renderer that renders, reads the
+ * result back, and fails on exactly that swap. The layout gate in the generator tool tests is
+ * still there, and is now a second line rather than the only one.
  */
 @EnabledIfEnvironmentVariable(named = "CNA_NATIVE_LIBRARY", matches = ".+")
 final class FullscreenPassTests {
