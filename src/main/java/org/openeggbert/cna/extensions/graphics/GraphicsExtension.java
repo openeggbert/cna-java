@@ -18,6 +18,7 @@ public final class GraphicsExtension {
 
     private static final int RESULT_SUCCESS = 0;
     private static final int RESULT_INVALID_ARGUMENT = 1;
+    private static final int RESULT_INVALID_STATE = 3;
     private static final int RESULT_NOT_SUPPORTED = 6;
 
     private GraphicsExtension() {
@@ -74,7 +75,9 @@ public final class GraphicsExtension {
      *
      * <p>{@code NOT_SUPPORTED} keeps its own identity: a build without the extended layer is a
      * different thing from a call that failed, and a game that catches the first can fall back
-     * without swallowing the second.
+     * without swallowing the second. {@code INVALID_ARGUMENT} and {@code INVALID_STATE} become
+     * the Java exceptions that already mean those things, each carrying the native failure as
+     * its cause, so a caller never has to catch an internal type for an ordinary mistake.
      */
     static void check(String operation, int result) {
         if (result == RESULT_SUCCESS) {
@@ -90,6 +93,13 @@ public final class GraphicsExtension {
             // caller catching IllegalArgumentException should not have to know that the check
             // happened on the other side of JNI.
             throw new IllegalArgumentException(failure.getMessage(), failure);
+        }
+        if (result == RESULT_INVALID_STATE) {
+            // The same argument one step along: an object asked to do something its current
+            // configuration forbids -- a draw that cannot instance with the fallback off -- is
+            // what IllegalStateException names, and a caller should not have to catch an
+            // internal type to handle it. The native result stays reachable as the cause.
+            throw new IllegalStateException(failure.getMessage(), failure);
         }
         throw failure;
     }

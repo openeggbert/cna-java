@@ -70,3 +70,36 @@ the owned game handle and again with the callback-borrowed one, all four answer 
 asked with the game's **graphics device**, all four succeed. The C API resolves the parameter
 through `GetBorrowedGraphicsDevice`, so the header's name and prose are wrong and the probe is
 what says so. Recorded as `JAVA-UPSTREAM-005`.
+
+## instanced_draw_refusal.c
+
+`JAVA-UPSTREAM-006`, reproduced with no Java anywhere in the picture.
+
+`cna_instanced_renderer_ext_draw` documents `CNA_RESULT_INVALID_STATE` for a renderer that cannot
+instance with the per-instance fallback disabled, and the implementation's own comment says the
+exception barrier maps the `std::logic_error` it throws to that result. The barrier
+(`modules/c-api/src/CnaCApiDetail.hpp`) has no `std::logic_error` arm; the throw reaches
+`catch (const std::exception&)` and the caller is told `CNA_RESULT_INTERNAL` -- which a game
+cannot tell from a defect inside CNA, and which is the one refusal here a game can actually act
+on.
+
+The probe builds the whole thing in C: a game, its device, a filled three-vertex buffer, a filled
+three-index buffer, a mesh part over them, an instanced renderer, a `BasicEffect`, four instances,
+and one draw. Its output on ABI 0.21.0, HEADLESS:
+
+```text
+instancing supported     no
+fallback enabled         no
+draw with fallback off   INTERNAL (12)
+header documents         INVALID_STATE (3)
+draw with fallback on    SUCCESS, 4 call(s), instanced=no
+```
+
+It earned its keep on the way, too: the first version left both buffers declared but never
+uploaded, and the draw was refused with *"The requested primitive range exceeds the bound index
+buffer"*. The headless renderer validates a draw's range against what a buffer actually holds,
+not against the count it was created with, so a probe that skips `set_data` is measuring the
+wrong refusal.
+
+`CnaCApiEngineLayer.cpp` is not the only place that throws `std::logic_error`, so this is likely
+to be wider than one route; the probe pins the one CNA-Java depends on.

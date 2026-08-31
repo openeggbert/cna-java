@@ -10095,6 +10095,188 @@
       ]
     },
     {
+      "name": "cna_instanced_renderer_ext_copy_instance_elements",
+      "header": "engine_layer.h",
+      "ownership": "no handle; fills the caller's element buffer",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_VertexElement*",
+        "uint64_t",
+        "uint64_t*"
+      ]
+    },
+    {
+      "name": "cna_instanced_renderer_ext_copy_tint_elements",
+      "header": "engine_layer.h",
+      "ownership": "no handle; fills the caller's element buffer",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_VertexElement*",
+        "uint64_t",
+        "uint64_t*"
+      ]
+    },
+    {
+      "name": "cna_instanced_renderer_ext_create",
+      "header": "engine_layer.h",
+      "ownership": "borrows the graphics device and the mesh part, which must outlive it; returns an owned renderer handle",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_Handle",
+        "CNA_ModelMeshPartHandle",
+        "CNA_InstancedRendererEXTHandle*"
+      ]
+    },
+    {
+      "name": "cna_instanced_renderer_ext_destroy",
+      "header": "engine_layer.h",
+      "ownership": "releases the owned renderer handle; the mesh part it borrowed is not released with it",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_InstancedRendererEXTHandle"
+      ]
+    },
+    {
+      "name": "cna_instanced_renderer_ext_did_last_draw_instance",
+      "header": "engine_layer.h",
+      "ownership": "borrows the renderer",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_InstancedRendererEXTHandle",
+        "CNA_Bool*"
+      ]
+    },
+    {
+      "name": "cna_instanced_renderer_ext_draw",
+      "header": "engine_layer.h",
+      "ownership": "borrows the renderer and the caller's effect for the duration of the call",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_InstancedRendererEXTHandle",
+        "CNA_EffectHandle"
+      ]
+    },
+    {
+      "name": "cna_instanced_renderer_ext_get_instance_capacity",
+      "header": "engine_layer.h",
+      "ownership": "borrows the renderer",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_InstancedRendererEXTHandle",
+        "int32_t*"
+      ]
+    },
+    {
+      "name": "cna_instanced_renderer_ext_get_instance_count",
+      "header": "engine_layer.h",
+      "ownership": "borrows the renderer",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_InstancedRendererEXTHandle",
+        "int32_t*"
+      ]
+    },
+    {
+      "name": "cna_instanced_renderer_ext_get_instance_stride",
+      "header": "engine_layer.h",
+      "ownership": "no handle",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "int32_t*"
+      ]
+    },
+    {
+      "name": "cna_instanced_renderer_ext_get_last_draw_call_count",
+      "header": "engine_layer.h",
+      "ownership": "borrows the renderer",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_InstancedRendererEXTHandle",
+        "int32_t*"
+      ]
+    },
+    {
+      "name": "cna_instanced_renderer_ext_get_tint_stride",
+      "header": "engine_layer.h",
+      "ownership": "no handle",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "int32_t*"
+      ]
+    },
+    {
+      "name": "cna_instanced_renderer_ext_is_fallback_enabled",
+      "header": "engine_layer.h",
+      "ownership": "borrows the renderer",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_InstancedRendererEXTHandle",
+        "CNA_Bool*"
+      ]
+    },
+    {
+      "name": "cna_instanced_renderer_ext_is_instancing_supported",
+      "header": "engine_layer.h",
+      "ownership": "borrows the renderer",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_InstancedRendererEXTHandle",
+        "CNA_Bool*"
+      ]
+    },
+    {
+      "name": "cna_instanced_renderer_ext_is_tints_enabled",
+      "header": "engine_layer.h",
+      "ownership": "borrows the renderer",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_InstancedRendererEXTHandle",
+        "CNA_Bool*"
+      ]
+    },
+    {
+      "name": "cna_instanced_renderer_ext_set_fallback_enabled",
+      "header": "engine_layer.h",
+      "ownership": "borrows the renderer",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_InstancedRendererEXTHandle",
+        "CNA_Bool"
+      ]
+    },
+    {
+      "name": "cna_instanced_renderer_ext_set_instance_tints",
+      "header": "engine_layer.h",
+      "ownership": "borrows the renderer and the caller's tints; copies them into CNA's own buffer",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_InstancedRendererEXTHandle",
+        "const CNA_Color*",
+        "uint64_t"
+      ]
+    },
+    {
+      "name": "cna_instanced_renderer_ext_set_instances",
+      "header": "engine_layer.h",
+      "ownership": "borrows the renderer and the caller's transforms; copies them into CNA's own buffer",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_InstancedRendererEXTHandle",
+        "const CNA_Matrix*",
+        "uint64_t"
+      ]
+    },
+    {
+      "name": "cna_instanced_renderer_ext_set_tints_enabled",
+      "header": "engine_layer.h",
+      "ownership": "borrows the renderer",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_InstancedRendererEXTHandle",
+        "CNA_Bool"
+      ]
+    },
+    {
       "name": "cna_joystick_state_copy_axes",
       "header": "input_joystick.h",
       "ownership": "borrows snapshot; caller buffer",

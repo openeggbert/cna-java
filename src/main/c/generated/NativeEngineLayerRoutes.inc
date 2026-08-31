@@ -937,6 +937,402 @@ Java_org_openeggbert_cna_internal_generated_NativeEngineLayerRoutes_frustumCulle
 }
 
 JNIEXPORT jint JNICALL
+Java_org_openeggbert_cna_internal_generated_NativeEngineLayerRoutes_instancedRendererExtCopyInstanceElements(
+    JNIEnv* environment, jclass declaring_class, jlongArray destinationIntegral, jlongArray out_element_count)
+{
+    (void)environment;
+    (void)declaring_class;
+    jsize destination_count = (*environment)->GetArrayLength(environment, destinationIntegral) / 4;
+    CNA_VertexElement* destination_values = (CNA_VertexElement*)calloc(
+        (size_t)destination_count + 1U, sizeof(*destination_values));
+    if (destination_values == NULL) {
+        return (jint)CNA_RESULT_OUT_OF_MEMORY;
+    }
+    {
+        jsize destinationIntegral_length = (*environment)->GetArrayLength(environment, destinationIntegral);
+        jlong* destinationIntegral_values = (jlong*)malloc(
+            ((size_t)destinationIntegral_length + 1U) * sizeof(*destinationIntegral_values));
+        if (destinationIntegral_values == NULL) {
+            free(destination_values);
+            return (jint)CNA_RESULT_OUT_OF_MEMORY;
+        }
+        (*environment)->GetLongArrayRegion(environment, destinationIntegral, 0, destinationIntegral_length, destinationIntegral_values);
+        for (jsize element = 0; element < destination_count; ++element) {
+            destination_values[element].offset = (int32_t)destinationIntegral_values[element * 4 + 0];
+            destination_values[element].format = (CNA_VertexElementFormat)destinationIntegral_values[element * 4 + 1];
+            destination_values[element].usage = (CNA_VertexElementUsage)destinationIntegral_values[element * 4 + 2];
+            destination_values[element].usage_index = (int32_t)destinationIntegral_values[element * 4 + 3];
+        }
+        free(destinationIntegral_values);
+    }
+    uint64_t out_element_count_value = 0;
+    CNA_Result call_result = cna.instanced_renderer_ext_copy_instance_elements(destination_values, (uint64_t)destination_count, &out_element_count_value);
+    if (call_result == CNA_RESULT_SUCCESS) {
+        {
+            jlong* destinationIntegral_out = (jlong*)malloc(
+                ((size_t)destination_count * 4 + 1U) * sizeof(*destinationIntegral_out));
+            if (destinationIntegral_out != NULL) {
+                for (jsize element = 0; element < destination_count; ++element) {
+                    destinationIntegral_out[element * 4 + 0] = (jlong)destination_values[element].offset;
+                    destinationIntegral_out[element * 4 + 1] = (jlong)destination_values[element].format;
+                    destinationIntegral_out[element * 4 + 2] = (jlong)destination_values[element].usage;
+                    destinationIntegral_out[element * 4 + 3] = (jlong)destination_values[element].usage_index;
+                }
+                (*environment)->SetLongArrayRegion(
+                    environment, destinationIntegral, 0,
+                    (jsize)(destination_count * 4), destinationIntegral_out);
+                free(destinationIntegral_out);
+            }
+        }
+    }
+    free(destination_values);
+    if (call_result == CNA_RESULT_SUCCESS || call_result == CNA_RESULT_BUFFER_TOO_SMALL) {
+        jlong out_element_count_element = (jlong)out_element_count_value;
+        (*environment)->SetLongArrayRegion(
+            environment, out_element_count, 0, 1, &out_element_count_element);
+    }
+    return (jint)call_result;
+}
+
+JNIEXPORT jint JNICALL
+Java_org_openeggbert_cna_internal_generated_NativeEngineLayerRoutes_instancedRendererExtCopyTintElements(
+    JNIEnv* environment, jclass declaring_class, jlongArray destinationIntegral, jlongArray out_element_count)
+{
+    (void)environment;
+    (void)declaring_class;
+    jsize destination_count = (*environment)->GetArrayLength(environment, destinationIntegral) / 4;
+    CNA_VertexElement* destination_values = (CNA_VertexElement*)calloc(
+        (size_t)destination_count + 1U, sizeof(*destination_values));
+    if (destination_values == NULL) {
+        return (jint)CNA_RESULT_OUT_OF_MEMORY;
+    }
+    {
+        jsize destinationIntegral_length = (*environment)->GetArrayLength(environment, destinationIntegral);
+        jlong* destinationIntegral_values = (jlong*)malloc(
+            ((size_t)destinationIntegral_length + 1U) * sizeof(*destinationIntegral_values));
+        if (destinationIntegral_values == NULL) {
+            free(destination_values);
+            return (jint)CNA_RESULT_OUT_OF_MEMORY;
+        }
+        (*environment)->GetLongArrayRegion(environment, destinationIntegral, 0, destinationIntegral_length, destinationIntegral_values);
+        for (jsize element = 0; element < destination_count; ++element) {
+            destination_values[element].offset = (int32_t)destinationIntegral_values[element * 4 + 0];
+            destination_values[element].format = (CNA_VertexElementFormat)destinationIntegral_values[element * 4 + 1];
+            destination_values[element].usage = (CNA_VertexElementUsage)destinationIntegral_values[element * 4 + 2];
+            destination_values[element].usage_index = (int32_t)destinationIntegral_values[element * 4 + 3];
+        }
+        free(destinationIntegral_values);
+    }
+    uint64_t out_element_count_value = 0;
+    CNA_Result call_result = cna.instanced_renderer_ext_copy_tint_elements(destination_values, (uint64_t)destination_count, &out_element_count_value);
+    if (call_result == CNA_RESULT_SUCCESS) {
+        {
+            jlong* destinationIntegral_out = (jlong*)malloc(
+                ((size_t)destination_count * 4 + 1U) * sizeof(*destinationIntegral_out));
+            if (destinationIntegral_out != NULL) {
+                for (jsize element = 0; element < destination_count; ++element) {
+                    destinationIntegral_out[element * 4 + 0] = (jlong)destination_values[element].offset;
+                    destinationIntegral_out[element * 4 + 1] = (jlong)destination_values[element].format;
+                    destinationIntegral_out[element * 4 + 2] = (jlong)destination_values[element].usage;
+                    destinationIntegral_out[element * 4 + 3] = (jlong)destination_values[element].usage_index;
+                }
+                (*environment)->SetLongArrayRegion(
+                    environment, destinationIntegral, 0,
+                    (jsize)(destination_count * 4), destinationIntegral_out);
+                free(destinationIntegral_out);
+            }
+        }
+    }
+    free(destination_values);
+    if (call_result == CNA_RESULT_SUCCESS || call_result == CNA_RESULT_BUFFER_TOO_SMALL) {
+        jlong out_element_count_element = (jlong)out_element_count_value;
+        (*environment)->SetLongArrayRegion(
+            environment, out_element_count, 0, 1, &out_element_count_element);
+    }
+    return (jint)call_result;
+}
+
+JNIEXPORT jint JNICALL
+Java_org_openeggbert_cna_internal_generated_NativeEngineLayerRoutes_instancedRendererExtCreate(
+    JNIEnv* environment, jclass declaring_class, jlong graphics_device, jlong part, jlongArray out_renderer)
+{
+    (void)environment;
+    (void)declaring_class;
+    CNA_InstancedRendererEXTHandle out_renderer_value = 0;
+    CNA_Result call_result = cna.instanced_renderer_ext_create((CNA_Handle)graphics_device, (CNA_ModelMeshPartHandle)part, &out_renderer_value);
+    if (call_result == CNA_RESULT_SUCCESS || call_result == CNA_RESULT_BUFFER_TOO_SMALL) {
+        jlong out_renderer_element = (jlong)out_renderer_value;
+        (*environment)->SetLongArrayRegion(
+            environment, out_renderer, 0, 1, &out_renderer_element);
+    }
+    return (jint)call_result;
+}
+
+JNIEXPORT jint JNICALL
+Java_org_openeggbert_cna_internal_generated_NativeEngineLayerRoutes_instancedRendererExtDestroy(
+    JNIEnv* environment, jclass declaring_class, jlong renderer)
+{
+    (void)environment;
+    (void)declaring_class;
+    CNA_Result call_result = cna.instanced_renderer_ext_destroy((CNA_InstancedRendererEXTHandle)renderer);
+    return (jint)call_result;
+}
+
+JNIEXPORT jint JNICALL
+Java_org_openeggbert_cna_internal_generated_NativeEngineLayerRoutes_instancedRendererExtDidLastDrawInstance(
+    JNIEnv* environment, jclass declaring_class, jlong renderer, jbooleanArray out_instanced)
+{
+    (void)environment;
+    (void)declaring_class;
+    CNA_Bool out_instanced_value = 0;
+    CNA_Result call_result = cna.instanced_renderer_ext_did_last_draw_instance((CNA_InstancedRendererEXTHandle)renderer, &out_instanced_value);
+    if (call_result == CNA_RESULT_SUCCESS || call_result == CNA_RESULT_BUFFER_TOO_SMALL) {
+        jboolean out_instanced_element = (jboolean)out_instanced_value;
+        (*environment)->SetBooleanArrayRegion(
+            environment, out_instanced, 0, 1, &out_instanced_element);
+    }
+    return (jint)call_result;
+}
+
+JNIEXPORT jint JNICALL
+Java_org_openeggbert_cna_internal_generated_NativeEngineLayerRoutes_instancedRendererExtDraw(
+    JNIEnv* environment, jclass declaring_class, jlong renderer, jlong effect)
+{
+    (void)environment;
+    (void)declaring_class;
+    CNA_Result call_result = cna.instanced_renderer_ext_draw((CNA_InstancedRendererEXTHandle)renderer, (CNA_EffectHandle)effect);
+    return (jint)call_result;
+}
+
+JNIEXPORT jint JNICALL
+Java_org_openeggbert_cna_internal_generated_NativeEngineLayerRoutes_instancedRendererExtGetInstanceCapacity(
+    JNIEnv* environment, jclass declaring_class, jlong renderer, jintArray out_capacity)
+{
+    (void)environment;
+    (void)declaring_class;
+    int32_t out_capacity_value = 0;
+    CNA_Result call_result = cna.instanced_renderer_ext_get_instance_capacity((CNA_InstancedRendererEXTHandle)renderer, &out_capacity_value);
+    if (call_result == CNA_RESULT_SUCCESS || call_result == CNA_RESULT_BUFFER_TOO_SMALL) {
+        jint out_capacity_element = (jint)out_capacity_value;
+        (*environment)->SetIntArrayRegion(
+            environment, out_capacity, 0, 1, &out_capacity_element);
+    }
+    return (jint)call_result;
+}
+
+JNIEXPORT jint JNICALL
+Java_org_openeggbert_cna_internal_generated_NativeEngineLayerRoutes_instancedRendererExtGetInstanceCount(
+    JNIEnv* environment, jclass declaring_class, jlong renderer, jintArray out_count)
+{
+    (void)environment;
+    (void)declaring_class;
+    int32_t out_count_value = 0;
+    CNA_Result call_result = cna.instanced_renderer_ext_get_instance_count((CNA_InstancedRendererEXTHandle)renderer, &out_count_value);
+    if (call_result == CNA_RESULT_SUCCESS || call_result == CNA_RESULT_BUFFER_TOO_SMALL) {
+        jint out_count_element = (jint)out_count_value;
+        (*environment)->SetIntArrayRegion(
+            environment, out_count, 0, 1, &out_count_element);
+    }
+    return (jint)call_result;
+}
+
+JNIEXPORT jint JNICALL
+Java_org_openeggbert_cna_internal_generated_NativeEngineLayerRoutes_instancedRendererExtGetInstanceStride(
+    JNIEnv* environment, jclass declaring_class, jintArray out_stride)
+{
+    (void)environment;
+    (void)declaring_class;
+    int32_t out_stride_value = 0;
+    CNA_Result call_result = cna.instanced_renderer_ext_get_instance_stride(&out_stride_value);
+    if (call_result == CNA_RESULT_SUCCESS || call_result == CNA_RESULT_BUFFER_TOO_SMALL) {
+        jint out_stride_element = (jint)out_stride_value;
+        (*environment)->SetIntArrayRegion(
+            environment, out_stride, 0, 1, &out_stride_element);
+    }
+    return (jint)call_result;
+}
+
+JNIEXPORT jint JNICALL
+Java_org_openeggbert_cna_internal_generated_NativeEngineLayerRoutes_instancedRendererExtGetLastDrawCallCount(
+    JNIEnv* environment, jclass declaring_class, jlong renderer, jintArray out_count)
+{
+    (void)environment;
+    (void)declaring_class;
+    int32_t out_count_value = 0;
+    CNA_Result call_result = cna.instanced_renderer_ext_get_last_draw_call_count((CNA_InstancedRendererEXTHandle)renderer, &out_count_value);
+    if (call_result == CNA_RESULT_SUCCESS || call_result == CNA_RESULT_BUFFER_TOO_SMALL) {
+        jint out_count_element = (jint)out_count_value;
+        (*environment)->SetIntArrayRegion(
+            environment, out_count, 0, 1, &out_count_element);
+    }
+    return (jint)call_result;
+}
+
+JNIEXPORT jint JNICALL
+Java_org_openeggbert_cna_internal_generated_NativeEngineLayerRoutes_instancedRendererExtGetTintStride(
+    JNIEnv* environment, jclass declaring_class, jintArray out_stride)
+{
+    (void)environment;
+    (void)declaring_class;
+    int32_t out_stride_value = 0;
+    CNA_Result call_result = cna.instanced_renderer_ext_get_tint_stride(&out_stride_value);
+    if (call_result == CNA_RESULT_SUCCESS || call_result == CNA_RESULT_BUFFER_TOO_SMALL) {
+        jint out_stride_element = (jint)out_stride_value;
+        (*environment)->SetIntArrayRegion(
+            environment, out_stride, 0, 1, &out_stride_element);
+    }
+    return (jint)call_result;
+}
+
+JNIEXPORT jint JNICALL
+Java_org_openeggbert_cna_internal_generated_NativeEngineLayerRoutes_instancedRendererExtIsFallbackEnabled(
+    JNIEnv* environment, jclass declaring_class, jlong renderer, jbooleanArray out_enabled)
+{
+    (void)environment;
+    (void)declaring_class;
+    CNA_Bool out_enabled_value = 0;
+    CNA_Result call_result = cna.instanced_renderer_ext_is_fallback_enabled((CNA_InstancedRendererEXTHandle)renderer, &out_enabled_value);
+    if (call_result == CNA_RESULT_SUCCESS || call_result == CNA_RESULT_BUFFER_TOO_SMALL) {
+        jboolean out_enabled_element = (jboolean)out_enabled_value;
+        (*environment)->SetBooleanArrayRegion(
+            environment, out_enabled, 0, 1, &out_enabled_element);
+    }
+    return (jint)call_result;
+}
+
+JNIEXPORT jint JNICALL
+Java_org_openeggbert_cna_internal_generated_NativeEngineLayerRoutes_instancedRendererExtIsInstancingSupported(
+    JNIEnv* environment, jclass declaring_class, jlong renderer, jbooleanArray out_supported)
+{
+    (void)environment;
+    (void)declaring_class;
+    CNA_Bool out_supported_value = 0;
+    CNA_Result call_result = cna.instanced_renderer_ext_is_instancing_supported((CNA_InstancedRendererEXTHandle)renderer, &out_supported_value);
+    if (call_result == CNA_RESULT_SUCCESS || call_result == CNA_RESULT_BUFFER_TOO_SMALL) {
+        jboolean out_supported_element = (jboolean)out_supported_value;
+        (*environment)->SetBooleanArrayRegion(
+            environment, out_supported, 0, 1, &out_supported_element);
+    }
+    return (jint)call_result;
+}
+
+JNIEXPORT jint JNICALL
+Java_org_openeggbert_cna_internal_generated_NativeEngineLayerRoutes_instancedRendererExtIsTintsEnabled(
+    JNIEnv* environment, jclass declaring_class, jlong renderer, jbooleanArray out_enabled)
+{
+    (void)environment;
+    (void)declaring_class;
+    CNA_Bool out_enabled_value = 0;
+    CNA_Result call_result = cna.instanced_renderer_ext_is_tints_enabled((CNA_InstancedRendererEXTHandle)renderer, &out_enabled_value);
+    if (call_result == CNA_RESULT_SUCCESS || call_result == CNA_RESULT_BUFFER_TOO_SMALL) {
+        jboolean out_enabled_element = (jboolean)out_enabled_value;
+        (*environment)->SetBooleanArrayRegion(
+            environment, out_enabled, 0, 1, &out_enabled_element);
+    }
+    return (jint)call_result;
+}
+
+JNIEXPORT jint JNICALL
+Java_org_openeggbert_cna_internal_generated_NativeEngineLayerRoutes_instancedRendererExtSetFallbackEnabled(
+    JNIEnv* environment, jclass declaring_class, jlong renderer, jboolean enabled)
+{
+    (void)environment;
+    (void)declaring_class;
+    CNA_Result call_result = cna.instanced_renderer_ext_set_fallback_enabled((CNA_InstancedRendererEXTHandle)renderer, (CNA_Bool)enabled);
+    return (jint)call_result;
+}
+
+JNIEXPORT jint JNICALL
+Java_org_openeggbert_cna_internal_generated_NativeEngineLayerRoutes_instancedRendererExtSetInstanceTints(
+    JNIEnv* environment, jclass declaring_class, jlong renderer, jlongArray tintsIntegral)
+{
+    (void)environment;
+    (void)declaring_class;
+    jsize tints_count = (*environment)->GetArrayLength(environment, tintsIntegral) / 4;
+    CNA_Color* tints_values = (CNA_Color*)calloc(
+        (size_t)tints_count + 1U, sizeof(*tints_values));
+    if (tints_values == NULL) {
+        return (jint)CNA_RESULT_OUT_OF_MEMORY;
+    }
+    {
+        jsize tintsIntegral_length = (*environment)->GetArrayLength(environment, tintsIntegral);
+        jlong* tintsIntegral_values = (jlong*)malloc(
+            ((size_t)tintsIntegral_length + 1U) * sizeof(*tintsIntegral_values));
+        if (tintsIntegral_values == NULL) {
+            free(tints_values);
+            return (jint)CNA_RESULT_OUT_OF_MEMORY;
+        }
+        (*environment)->GetLongArrayRegion(environment, tintsIntegral, 0, tintsIntegral_length, tintsIntegral_values);
+        for (jsize element = 0; element < tints_count; ++element) {
+            tints_values[element].r = (uint8_t)tintsIntegral_values[element * 4 + 0];
+            tints_values[element].g = (uint8_t)tintsIntegral_values[element * 4 + 1];
+            tints_values[element].b = (uint8_t)tintsIntegral_values[element * 4 + 2];
+            tints_values[element].a = (uint8_t)tintsIntegral_values[element * 4 + 3];
+        }
+        free(tintsIntegral_values);
+    }
+    CNA_Result call_result = cna.instanced_renderer_ext_set_instance_tints((CNA_InstancedRendererEXTHandle)renderer, tints_values, (uint64_t)tints_count);
+    free(tints_values);
+    return (jint)call_result;
+}
+
+JNIEXPORT jint JNICALL
+Java_org_openeggbert_cna_internal_generated_NativeEngineLayerRoutes_instancedRendererExtSetInstances(
+    JNIEnv* environment, jclass declaring_class, jlong renderer, jfloatArray transformsFloating)
+{
+    (void)environment;
+    (void)declaring_class;
+    jsize transforms_count = (*environment)->GetArrayLength(environment, transformsFloating) / 16;
+    CNA_Matrix* transforms_values = (CNA_Matrix*)calloc(
+        (size_t)transforms_count + 1U, sizeof(*transforms_values));
+    if (transforms_values == NULL) {
+        return (jint)CNA_RESULT_OUT_OF_MEMORY;
+    }
+    {
+        jsize transformsFloating_length = (*environment)->GetArrayLength(environment, transformsFloating);
+        jfloat* transformsFloating_values = (jfloat*)malloc(
+            ((size_t)transformsFloating_length + 1U) * sizeof(*transformsFloating_values));
+        if (transformsFloating_values == NULL) {
+            free(transforms_values);
+            return (jint)CNA_RESULT_OUT_OF_MEMORY;
+        }
+        (*environment)->GetFloatArrayRegion(environment, transformsFloating, 0, transformsFloating_length, transformsFloating_values);
+        for (jsize element = 0; element < transforms_count; ++element) {
+            transforms_values[element].m11 = (float)transformsFloating_values[element * 16 + 0];
+            transforms_values[element].m12 = (float)transformsFloating_values[element * 16 + 1];
+            transforms_values[element].m13 = (float)transformsFloating_values[element * 16 + 2];
+            transforms_values[element].m14 = (float)transformsFloating_values[element * 16 + 3];
+            transforms_values[element].m21 = (float)transformsFloating_values[element * 16 + 4];
+            transforms_values[element].m22 = (float)transformsFloating_values[element * 16 + 5];
+            transforms_values[element].m23 = (float)transformsFloating_values[element * 16 + 6];
+            transforms_values[element].m24 = (float)transformsFloating_values[element * 16 + 7];
+            transforms_values[element].m31 = (float)transformsFloating_values[element * 16 + 8];
+            transforms_values[element].m32 = (float)transformsFloating_values[element * 16 + 9];
+            transforms_values[element].m33 = (float)transformsFloating_values[element * 16 + 10];
+            transforms_values[element].m34 = (float)transformsFloating_values[element * 16 + 11];
+            transforms_values[element].m41 = (float)transformsFloating_values[element * 16 + 12];
+            transforms_values[element].m42 = (float)transformsFloating_values[element * 16 + 13];
+            transforms_values[element].m43 = (float)transformsFloating_values[element * 16 + 14];
+            transforms_values[element].m44 = (float)transformsFloating_values[element * 16 + 15];
+        }
+        free(transformsFloating_values);
+    }
+    CNA_Result call_result = cna.instanced_renderer_ext_set_instances((CNA_InstancedRendererEXTHandle)renderer, transforms_values, (uint64_t)transforms_count);
+    free(transforms_values);
+    return (jint)call_result;
+}
+
+JNIEXPORT jint JNICALL
+Java_org_openeggbert_cna_internal_generated_NativeEngineLayerRoutes_instancedRendererExtSetTintsEnabled(
+    JNIEnv* environment, jclass declaring_class, jlong renderer, jboolean enabled)
+{
+    (void)environment;
+    (void)declaring_class;
+    CNA_Result call_result = cna.instanced_renderer_ext_set_tints_enabled((CNA_InstancedRendererEXTHandle)renderer, (CNA_Bool)enabled);
+    return (jint)call_result;
+}
+
+JNIEXPORT jint JNICALL
 Java_org_openeggbert_cna_internal_generated_NativeEngineLayerRoutes_lodGroupExtAddLevel(
     JNIEnv* environment, jclass declaring_class, jlong group, jfloat max_distance, jlong part)
 {

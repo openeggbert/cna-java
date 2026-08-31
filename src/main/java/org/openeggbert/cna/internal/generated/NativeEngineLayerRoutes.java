@@ -327,6 +327,96 @@ public final class NativeEngineLayerRoutes {
     public static native int frustumCullerExtSetViewProjection(long culler, float[] viewProjectionFloating);
 
     /**
+     * cna_instanced_renderer_ext_copy_instance_elements (engine_layer.h).
+     */
+    public static native int instancedRendererExtCopyInstanceElements(long[] destinationIntegral, long[] outElementCount);
+
+    /**
+     * cna_instanced_renderer_ext_copy_tint_elements (engine_layer.h).
+     */
+    public static native int instancedRendererExtCopyTintElements(long[] destinationIntegral, long[] outElementCount);
+
+    /**
+     * cna_instanced_renderer_ext_create (engine_layer.h).
+     */
+    public static native int instancedRendererExtCreate(long graphicsDevice, long part, long[] outRenderer);
+
+    /**
+     * cna_instanced_renderer_ext_destroy (engine_layer.h).
+     */
+    public static native int instancedRendererExtDestroy(long renderer);
+
+    /**
+     * cna_instanced_renderer_ext_did_last_draw_instance (engine_layer.h).
+     */
+    public static native int instancedRendererExtDidLastDrawInstance(long renderer, boolean[] outInstanced);
+
+    /**
+     * cna_instanced_renderer_ext_draw (engine_layer.h).
+     */
+    public static native int instancedRendererExtDraw(long renderer, long effect);
+
+    /**
+     * cna_instanced_renderer_ext_get_instance_capacity (engine_layer.h).
+     */
+    public static native int instancedRendererExtGetInstanceCapacity(long renderer, int[] outCapacity);
+
+    /**
+     * cna_instanced_renderer_ext_get_instance_count (engine_layer.h).
+     */
+    public static native int instancedRendererExtGetInstanceCount(long renderer, int[] outCount);
+
+    /**
+     * cna_instanced_renderer_ext_get_instance_stride (engine_layer.h).
+     */
+    public static native int instancedRendererExtGetInstanceStride(int[] outStride);
+
+    /**
+     * cna_instanced_renderer_ext_get_last_draw_call_count (engine_layer.h).
+     */
+    public static native int instancedRendererExtGetLastDrawCallCount(long renderer, int[] outCount);
+
+    /**
+     * cna_instanced_renderer_ext_get_tint_stride (engine_layer.h).
+     */
+    public static native int instancedRendererExtGetTintStride(int[] outStride);
+
+    /**
+     * cna_instanced_renderer_ext_is_fallback_enabled (engine_layer.h).
+     */
+    public static native int instancedRendererExtIsFallbackEnabled(long renderer, boolean[] outEnabled);
+
+    /**
+     * cna_instanced_renderer_ext_is_instancing_supported (engine_layer.h).
+     */
+    public static native int instancedRendererExtIsInstancingSupported(long renderer, boolean[] outSupported);
+
+    /**
+     * cna_instanced_renderer_ext_is_tints_enabled (engine_layer.h).
+     */
+    public static native int instancedRendererExtIsTintsEnabled(long renderer, boolean[] outEnabled);
+
+    /**
+     * cna_instanced_renderer_ext_set_fallback_enabled (engine_layer.h).
+     */
+    public static native int instancedRendererExtSetFallbackEnabled(long renderer, boolean enabled);
+
+    /**
+     * cna_instanced_renderer_ext_set_instance_tints (engine_layer.h).
+     */
+    public static native int instancedRendererExtSetInstanceTints(long renderer, long[] tintsIntegral);
+
+    /**
+     * cna_instanced_renderer_ext_set_instances (engine_layer.h).
+     */
+    public static native int instancedRendererExtSetInstances(long renderer, float[] transformsFloating);
+
+    /**
+     * cna_instanced_renderer_ext_set_tints_enabled (engine_layer.h).
+     */
+    public static native int instancedRendererExtSetTintsEnabled(long renderer, boolean enabled);
+
+    /**
      * cna_lod_group_ext_add_level (engine_layer.h).
      */
     public static native int lodGroupExtAddLevel(long group, float maxDistance, long part);

@@ -3492,6 +3492,78 @@
         "symbol": "cna_frustum_culler_ext_set_view_projection"
       },
       {
+        "java": "instancedRendererExtCopyInstanceElements",
+        "symbol": "cna_instanced_renderer_ext_copy_instance_elements"
+      },
+      {
+        "java": "instancedRendererExtCopyTintElements",
+        "symbol": "cna_instanced_renderer_ext_copy_tint_elements"
+      },
+      {
+        "java": "instancedRendererExtCreate",
+        "symbol": "cna_instanced_renderer_ext_create"
+      },
+      {
+        "java": "instancedRendererExtDestroy",
+        "symbol": "cna_instanced_renderer_ext_destroy"
+      },
+      {
+        "java": "instancedRendererExtDidLastDrawInstance",
+        "symbol": "cna_instanced_renderer_ext_did_last_draw_instance"
+      },
+      {
+        "java": "instancedRendererExtDraw",
+        "symbol": "cna_instanced_renderer_ext_draw"
+      },
+      {
+        "java": "instancedRendererExtGetInstanceCapacity",
+        "symbol": "cna_instanced_renderer_ext_get_instance_capacity"
+      },
+      {
+        "java": "instancedRendererExtGetInstanceCount",
+        "symbol": "cna_instanced_renderer_ext_get_instance_count"
+      },
+      {
+        "java": "instancedRendererExtGetInstanceStride",
+        "symbol": "cna_instanced_renderer_ext_get_instance_stride"
+      },
+      {
+        "java": "instancedRendererExtGetLastDrawCallCount",
+        "symbol": "cna_instanced_renderer_ext_get_last_draw_call_count"
+      },
+      {
+        "java": "instancedRendererExtGetTintStride",
+        "symbol": "cna_instanced_renderer_ext_get_tint_stride"
+      },
+      {
+        "java": "instancedRendererExtIsFallbackEnabled",
+        "symbol": "cna_instanced_renderer_ext_is_fallback_enabled"
+      },
+      {
+        "java": "instancedRendererExtIsInstancingSupported",
+        "symbol": "cna_instanced_renderer_ext_is_instancing_supported"
+      },
+      {
+        "java": "instancedRendererExtIsTintsEnabled",
+        "symbol": "cna_instanced_renderer_ext_is_tints_enabled"
+      },
+      {
+        "java": "instancedRendererExtSetFallbackEnabled",
+        "symbol": "cna_instanced_renderer_ext_set_fallback_enabled"
+      },
+      {
+        "java": "instancedRendererExtSetInstanceTints",
+        "symbol": "cna_instanced_renderer_ext_set_instance_tints"
+      },
+      {
+        "java": "instancedRendererExtSetInstances",
+        "symbol": "cna_instanced_renderer_ext_set_instances"
+      },
+      {
+        "java": "instancedRendererExtSetTintsEnabled",
+        "symbol": "cna_instanced_renderer_ext_set_tints_enabled"
+      },
+      {
         "java": "lodGroupExtAddLevel",
         "symbol": "cna_lod_group_ext_add_level"
       },
