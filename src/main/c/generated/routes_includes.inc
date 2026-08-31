@@ -7,6 +7,7 @@
  */
 
 #include "NativeCnbRoutes.inc"
+#include "NativeContentExtensionRoutes.inc"
 #include "NativeDeviceExtensionRoutes.inc"
 #include "NativeEffectExtensionRoutes.inc"
 #include "NativeEngineLayerRoutes.inc"

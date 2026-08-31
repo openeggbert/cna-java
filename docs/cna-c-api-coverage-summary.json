@@ -163,30 +163,6 @@
     "cna_motion_set_test_backend_ext",
     "cna_motion_subscribe_calibrate",
     "cna_motion_subscribe_current_value_changed",
-    "cna_object_dictionary_ext_contains_key",
-    "cna_object_dictionary_ext_copy_array",
-    "cna_object_dictionary_ext_copy_key_at",
-    "cna_object_dictionary_ext_copy_runtime_type_name",
-    "cna_object_dictionary_ext_copy_string",
-    "cna_object_dictionary_ext_copy_type_name",
-    "cna_object_dictionary_ext_copy_value",
-    "cna_object_dictionary_ext_destroy",
-    "cna_object_dictionary_ext_get_count",
-    "cna_object_dictionary_ext_get_entry",
-    "cna_object_dictionary_ext_get_foreign_object",
-    "cna_object_dictionary_ext_get_key_size_at",
-    "cna_object_dictionary_ext_get_runtime_type_name_size",
-    "cna_object_dictionary_ext_get_string_size",
-    "cna_object_dictionary_ext_get_type_name_size",
-    "cna_reflective_type_reader_builder_add_custom",
-    "cna_reflective_type_reader_builder_add_enum_field",
-    "cna_reflective_type_reader_builder_add_field",
-    "cna_reflective_type_reader_builder_create",
-    "cna_reflective_type_reader_builder_destroy",
-    "cna_reflective_type_reader_builder_register",
-    "cna_reflective_type_reader_builder_register_shared",
-    "cna_reflective_type_reader_copy_canonical_name",
-    "cna_reflective_type_reader_get_canonical_name_size",
     "cna_sensor_unsubscribe_ext",
     "cna_signed_in_gamer_set_presence_mode_string_ext",
     "cna_text_input_get_window_handle_ext",
@@ -195,14 +171,14 @@
     "cna_text_input_set_window_handle_ext"
   ],
   "bindingStatusCounts": {
-    "ACTIONABLE_LOCAL": 192,
+    "ACTIONABLE_LOCAL": 168,
     "BLOCKED_UPSTREAM": 129,
-    "BOUND": 2566,
-    "DEFERRED_TRACKED": 403,
-    "DELIBERATE_NON_BINDING": 764
+    "BOUND": 2581,
+    "DEFERRED_TRACKED": 402,
+    "DELIBERATE_NON_BINDING": 774
   },
   "boundButUnreached": [],
-  "boundFunctions": 2566,
+  "boundFunctions": 2581,
   "boundWithoutJavaCallSite": [],
   "byHeader": {
     "abi.h": {
@@ -228,8 +204,8 @@
       "total": 32
     },
     "content_readers.h": {
-      "CNA_EXTENSION_CANDIDATE": 24,
-      "DEFERRED_RUNTIME": 38,
+      "CNA_EXTENSION_CANDIDATE": 25,
+      "DEFERRED_RUNTIME": 37,
       "total": 62
     },
     "core.h": {
@@ -488,8 +464,8 @@
   },
   "canonicalFunctions": 4054,
   "classificationCounts": {
-    "CNA_EXTENSION_CANDIDATE": 1923,
-    "DEFERRED_RUNTIME": 404,
+    "CNA_EXTENSION_CANDIDATE": 1924,
+    "DEFERRED_RUNTIME": 403,
     "JAVA_INTERNAL_ONLY": 9,
     "NOT_USEFUL_IN_JAVA": 732,
     "XNA_BACKING": 986
@@ -503,7 +479,7 @@
     "JAVA-EXT-012": 1,
     "JAVA-NATIVE-010": 8,
     "JAVA-NATIVE-011": 16,
-    "JAVA-NATIVE-012": 38,
+    "JAVA-NATIVE-012": 37,
     "JAVA-NATIVE-013": 25,
     "JAVA-NATIVE-014": 39,
     "JAVA-NATIVE-015": 65,
@@ -527,8 +503,8 @@
       "total": 37
     },
     "content_readers.h": {
-      "ACTIONABLE_LOCAL": 24,
-      "total": 24
+      "DELIBERATE_NON_BINDING": 10,
+      "total": 10
     },
     "core_ext.h": {
       "BLOCKED_UPSTREAM": 4,

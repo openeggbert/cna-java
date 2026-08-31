@@ -7371,6 +7371,82 @@
         "java": "colorMatrixEffectSetOffset",
         "symbol": "cna_color_matrix_effect_set_offset"
       }
+    ],
+    "NativeContentExtensionRoutes": [
+      {
+        "java": "contentManagerLoadObjectDictionaryExt",
+        "symbol": "cna_content_manager_load_object_dictionary_ext"
+      },
+      {
+        "java": "objectDictionaryContainsKey",
+        "symbol": "cna_object_dictionary_ext_contains_key"
+      },
+      {
+        "java": "objectDictionaryCopyArray",
+        "symbol": "cna_object_dictionary_ext_copy_array",
+        "byteBuffers": {
+          "destination": {
+            "extent": [
+              "capacity"
+            ]
+          }
+        }
+      },
+      {
+        "java": "objectDictionaryCopyKeyAt",
+        "symbol": "cna_object_dictionary_ext_copy_key_at"
+      },
+      {
+        "java": "objectDictionaryCopyRuntimeTypeName",
+        "symbol": "cna_object_dictionary_ext_copy_runtime_type_name"
+      },
+      {
+        "java": "objectDictionaryCopyString",
+        "symbol": "cna_object_dictionary_ext_copy_string"
+      },
+      {
+        "java": "objectDictionaryCopyTypeName",
+        "symbol": "cna_object_dictionary_ext_copy_type_name"
+      },
+      {
+        "java": "objectDictionaryCopyValue",
+        "symbol": "cna_object_dictionary_ext_copy_value",
+        "byteBuffers": {
+          "destination": {
+            "extent": [
+              "capacity"
+            ]
+          }
+        }
+      },
+      {
+        "java": "objectDictionaryDestroy",
+        "symbol": "cna_object_dictionary_ext_destroy"
+      },
+      {
+        "java": "objectDictionaryGetCount",
+        "symbol": "cna_object_dictionary_ext_get_count"
+      },
+      {
+        "java": "objectDictionaryGetEntry",
+        "symbol": "cna_object_dictionary_ext_get_entry"
+      },
+      {
+        "java": "objectDictionaryGetKeySizeAt",
+        "symbol": "cna_object_dictionary_ext_get_key_size_at"
+      },
+      {
+        "java": "objectDictionaryGetRuntimeTypeNameSize",
+        "symbol": "cna_object_dictionary_ext_get_runtime_type_name_size"
+      },
+      {
+        "java": "objectDictionaryGetStringSize",
+        "symbol": "cna_object_dictionary_ext_get_string_size"
+      },
+      {
+        "java": "objectDictionaryGetTypeNameSize",
+        "symbol": "cna_object_dictionary_ext_get_type_name_size"
+      }
     ]
   }
 }

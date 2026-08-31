@@ -824,12 +824,22 @@
     },
     {
       "match": {
+        "prefix": "cna_reflective_type_reader_"
+      },
+      "classification": "CNA_EXTENSION_CANDIDATE",
+      "purposeReason": "Declaring a reflectively serialized .xnb type's field list from outside the runtime is a CNA extension point: it lets a caller read a type the stock content pipeline has no reader for.",
+      "bindingStatus": "DELIBERATE_NON_BINDING",
+      "bindingReason": "The object it fills is a C structure and the declaration is a list of byte offsets into it, which no Java object has. A projection would have to hand CNA the address of a direct ByteBuffer and decode fields back out by offset -- the raw-memory surface this binding's ownership rules exist to keep out of a game's hands. Two further facts settle it rather than leaving it a matter of taste. The create callback's context must outlive a registration that CNA states has no undo -- \"the canonical Register() has no undo either\" -- so every registered type would pin a Java reference that nothing can ever release. And the Java projection already has the capability by a safer road: org.openeggbert.cna.content.ContentTypeReaderRegistry registers a real ContentTypeReader written in Java, with fields rather than offsets, for the managed reader the strict ContentManager uses.",
+      "evidence": "content_readers.h: add_field takes an offset_in_bytes, create_callback's context \"must outlive the registration\", and register has no withdrawal route by design. CNA's own fixture in modules/c-api/tests/pure_c/ContentSmoke.c declares a two-field C struct and passes offsetof for each field. CnaObjectDictionaryTests loads the same fixture without the two entries that need it, which is the TrianglePickingSample shape the family exists for."
+    },
+    {
+      "match": {
         "prefix": "cna_object_dictionary_"
       },
       "classification": "CNA_EXTENSION_CANDIDATE",
       "purposeReason": "The content processor's Dictionary<string, object> side data is reachable in CNA through a dedicated handle kind that XNA exposes only as a managed object graph.",
-      "bindingStatus": "ACTIONABLE_LOCAL",
-      "bindingReason": "placeholder"
+      "bindingStatus": "DELIBERATE_NON_BINDING",
+      "bindingReason": "Only cna_object_dictionary_ext_get_foreign_object is left, and nothing a Java caller loads can hold one: a foreign object is what a reflective type reader's own factory returned, and that builder is not projected for the reason the rule below it records. The route would be reachable only from a dictionary this projection cannot produce."
     },
     {
       "match": {

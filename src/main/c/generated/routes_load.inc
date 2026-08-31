@@ -572,6 +572,7 @@
     LOAD(contact_shadow_pass_set_max_distance, "cna_contact_shadow_pass_set_max_distance");
     LOAD(contact_shadow_pass_set_step_count, "cna_contact_shadow_pass_set_step_count");
     LOAD(contact_shadow_pass_set_thickness, "cna_contact_shadow_pass_set_thickness");
+    LOAD(content_manager_load_object_dictionary_ext, "cna_content_manager_load_object_dictionary_ext");
     LOAD(crt_effect_create, "cna_crt_effect_create");
     LOAD(crt_effect_get_curvature, "cna_crt_effect_get_curvature");
     LOAD(crt_effect_get_mask_intensity, "cna_crt_effect_get_mask_intensity");
@@ -1341,6 +1342,20 @@
     LOAD(network_session_start_game, "cna_network_session_start_game");
     LOAD(network_session_unsubscribe, "cna_network_session_unsubscribe");
     LOAD(network_session_update, "cna_network_session_update");
+    LOAD(object_dictionary_ext_contains_key, "cna_object_dictionary_ext_contains_key");
+    LOAD(object_dictionary_ext_copy_array, "cna_object_dictionary_ext_copy_array");
+    LOAD(object_dictionary_ext_copy_key_at, "cna_object_dictionary_ext_copy_key_at");
+    LOAD(object_dictionary_ext_copy_runtime_type_name, "cna_object_dictionary_ext_copy_runtime_type_name");
+    LOAD(object_dictionary_ext_copy_string, "cna_object_dictionary_ext_copy_string");
+    LOAD(object_dictionary_ext_copy_type_name, "cna_object_dictionary_ext_copy_type_name");
+    LOAD(object_dictionary_ext_copy_value, "cna_object_dictionary_ext_copy_value");
+    LOAD(object_dictionary_ext_destroy, "cna_object_dictionary_ext_destroy");
+    LOAD(object_dictionary_ext_get_count, "cna_object_dictionary_ext_get_count");
+    LOAD(object_dictionary_ext_get_entry, "cna_object_dictionary_ext_get_entry");
+    LOAD(object_dictionary_ext_get_key_size_at, "cna_object_dictionary_ext_get_key_size_at");
+    LOAD(object_dictionary_ext_get_runtime_type_name_size, "cna_object_dictionary_ext_get_runtime_type_name_size");
+    LOAD(object_dictionary_ext_get_string_size, "cna_object_dictionary_ext_get_string_size");
+    LOAD(object_dictionary_ext_get_type_name_size, "cna_object_dictionary_ext_get_type_name_size");
     LOAD(particle_emitter_settings_init, "cna_particle_emitter_settings_init");
     LOAD(particle_init, "cna_particle_init");
     LOAD(particle_system_copy_particle_lookup_glsl, "cna_particle_system_copy_particle_lookup_glsl");

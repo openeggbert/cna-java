@@ -7106,6 +7106,17 @@
       ]
     },
     {
+      "name": "cna_content_manager_load_object_dictionary_ext",
+      "header": "content_readers.h",
+      "ownership": "borrows content manager and the asset name; returns an owned dictionary handle",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_Handle",
+        "CNA_StringView",
+        "CNA_ObjectDictionaryHandle*"
+      ]
+    },
+    {
       "name": "cna_content_manager_load_sprite_font",
       "header": "content.h",
       "ownership": "borrows manager and returns independently owned font plus retained atlas",
@@ -19326,6 +19337,168 @@
       "returnType": "CNA_Result",
       "parameters": [
         "CNA_NetworkSessionHandle"
+      ]
+    },
+    {
+      "name": "cna_object_dictionary_ext_contains_key",
+      "header": "content_readers.h",
+      "ownership": "borrows dictionary and the key for the call; returns a value",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_ObjectDictionaryHandle",
+        "CNA_StringView",
+        "CNA_Bool*"
+      ]
+    },
+    {
+      "name": "cna_object_dictionary_ext_copy_array",
+      "header": "content_readers.h",
+      "ownership": "borrows dictionary and the key; copies into the caller buffer, owning nothing",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_ObjectDictionaryHandle",
+        "CNA_StringView",
+        "CNA_ObjectDictionaryValueKind",
+        "void*",
+        "uint64_t",
+        "uint64_t*"
+      ]
+    },
+    {
+      "name": "cna_object_dictionary_ext_copy_key_at",
+      "header": "content_readers.h",
+      "ownership": "borrows dictionary; copies into the caller buffer, owning nothing",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_ObjectDictionaryHandle",
+        "uint64_t",
+        "char*",
+        "uint64_t",
+        "uint64_t*"
+      ]
+    },
+    {
+      "name": "cna_object_dictionary_ext_copy_runtime_type_name",
+      "header": "content_readers.h",
+      "ownership": "borrows dictionary; copies into the caller buffer, owning nothing",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_ObjectDictionaryHandle",
+        "char*",
+        "uint64_t",
+        "uint64_t*"
+      ]
+    },
+    {
+      "name": "cna_object_dictionary_ext_copy_string",
+      "header": "content_readers.h",
+      "ownership": "borrows dictionary and the key; copies into the caller buffer, owning nothing",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_ObjectDictionaryHandle",
+        "CNA_StringView",
+        "char*",
+        "uint64_t",
+        "uint64_t*"
+      ]
+    },
+    {
+      "name": "cna_object_dictionary_ext_copy_type_name",
+      "header": "content_readers.h",
+      "ownership": "borrows dictionary and the key; copies into the caller buffer, owning nothing",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_ObjectDictionaryHandle",
+        "CNA_StringView",
+        "char*",
+        "uint64_t",
+        "uint64_t*"
+      ]
+    },
+    {
+      "name": "cna_object_dictionary_ext_copy_value",
+      "header": "content_readers.h",
+      "ownership": "borrows dictionary and the key; copies into the caller buffer, owning nothing",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_ObjectDictionaryHandle",
+        "CNA_StringView",
+        "CNA_ObjectDictionaryValueKind",
+        "void*",
+        "uint64_t"
+      ]
+    },
+    {
+      "name": "cna_object_dictionary_ext_destroy",
+      "header": "content_readers.h",
+      "ownership": "destroys an owned dictionary handle",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_ObjectDictionaryHandle"
+      ]
+    },
+    {
+      "name": "cna_object_dictionary_ext_get_count",
+      "header": "content_readers.h",
+      "ownership": "borrows dictionary; returns a value",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_ObjectDictionaryHandle",
+        "uint64_t*"
+      ]
+    },
+    {
+      "name": "cna_object_dictionary_ext_get_entry",
+      "header": "content_readers.h",
+      "ownership": "borrows dictionary and the key; fills a caller-provided struct",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_ObjectDictionaryHandle",
+        "CNA_StringView",
+        "CNA_ObjectDictionaryEntry*"
+      ]
+    },
+    {
+      "name": "cna_object_dictionary_ext_get_key_size_at",
+      "header": "content_readers.h",
+      "ownership": "borrows dictionary; returns a value",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_ObjectDictionaryHandle",
+        "uint64_t",
+        "uint64_t*"
+      ]
+    },
+    {
+      "name": "cna_object_dictionary_ext_get_runtime_type_name_size",
+      "header": "content_readers.h",
+      "ownership": "borrows dictionary; returns a value",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_ObjectDictionaryHandle",
+        "uint64_t*"
+      ]
+    },
+    {
+      "name": "cna_object_dictionary_ext_get_string_size",
+      "header": "content_readers.h",
+      "ownership": "borrows dictionary and the key; returns a value",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_ObjectDictionaryHandle",
+        "CNA_StringView",
+        "uint64_t*"
+      ]
+    },
+    {
+      "name": "cna_object_dictionary_ext_get_type_name_size",
+      "header": "content_readers.h",
+      "ownership": "borrows dictionary and the key; returns a value",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_ObjectDictionaryHandle",
+        "CNA_StringView",
+        "uint64_t*"
       ]
     },
     {

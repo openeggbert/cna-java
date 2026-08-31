@@ -572,6 +572,7 @@
     CNA_JNI_ROUTE(cna_contact_shadow_pass_set_max_distance) contact_shadow_pass_set_max_distance;
     CNA_JNI_ROUTE(cna_contact_shadow_pass_set_step_count) contact_shadow_pass_set_step_count;
     CNA_JNI_ROUTE(cna_contact_shadow_pass_set_thickness) contact_shadow_pass_set_thickness;
+    CNA_JNI_ROUTE(cna_content_manager_load_object_dictionary_ext) content_manager_load_object_dictionary_ext;
     CNA_JNI_ROUTE(cna_crt_effect_create) crt_effect_create;
     CNA_JNI_ROUTE(cna_crt_effect_get_curvature) crt_effect_get_curvature;
     CNA_JNI_ROUTE(cna_crt_effect_get_mask_intensity) crt_effect_get_mask_intensity;
@@ -1341,6 +1342,20 @@
     CNA_JNI_ROUTE(cna_network_session_start_game) network_session_start_game;
     CNA_JNI_ROUTE(cna_network_session_unsubscribe) network_session_unsubscribe;
     CNA_JNI_ROUTE(cna_network_session_update) network_session_update;
+    CNA_JNI_ROUTE(cna_object_dictionary_ext_contains_key) object_dictionary_ext_contains_key;
+    CNA_JNI_ROUTE(cna_object_dictionary_ext_copy_array) object_dictionary_ext_copy_array;
+    CNA_JNI_ROUTE(cna_object_dictionary_ext_copy_key_at) object_dictionary_ext_copy_key_at;
+    CNA_JNI_ROUTE(cna_object_dictionary_ext_copy_runtime_type_name) object_dictionary_ext_copy_runtime_type_name;
+    CNA_JNI_ROUTE(cna_object_dictionary_ext_copy_string) object_dictionary_ext_copy_string;
+    CNA_JNI_ROUTE(cna_object_dictionary_ext_copy_type_name) object_dictionary_ext_copy_type_name;
+    CNA_JNI_ROUTE(cna_object_dictionary_ext_copy_value) object_dictionary_ext_copy_value;
+    CNA_JNI_ROUTE(cna_object_dictionary_ext_destroy) object_dictionary_ext_destroy;
+    CNA_JNI_ROUTE(cna_object_dictionary_ext_get_count) object_dictionary_ext_get_count;
+    CNA_JNI_ROUTE(cna_object_dictionary_ext_get_entry) object_dictionary_ext_get_entry;
+    CNA_JNI_ROUTE(cna_object_dictionary_ext_get_key_size_at) object_dictionary_ext_get_key_size_at;
+    CNA_JNI_ROUTE(cna_object_dictionary_ext_get_runtime_type_name_size) object_dictionary_ext_get_runtime_type_name_size;
+    CNA_JNI_ROUTE(cna_object_dictionary_ext_get_string_size) object_dictionary_ext_get_string_size;
+    CNA_JNI_ROUTE(cna_object_dictionary_ext_get_type_name_size) object_dictionary_ext_get_type_name_size;
     CNA_JNI_ROUTE(cna_particle_emitter_settings_init) particle_emitter_settings_init;
     CNA_JNI_ROUTE(cna_particle_init) particle_init;
     CNA_JNI_ROUTE(cna_particle_system_copy_particle_lookup_glsl) particle_system_copy_particle_lookup_glsl;
