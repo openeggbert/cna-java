@@ -170,10 +170,11 @@ TESTS=516 SUITES=94 FAILURES=0 ERRORS=0 SKIPPED=0
 
 `docs/backlog.json` is the machine-readable source. Nothing in it is local work.
 
-1. **Ten upstream findings**, `JAVA-UPSTREAM-004` through `-018`, each with a pure-C reproducer
-   in `tools/native-abi/probes/`. Three share one shape -- a capability query that does not
-   predict the behaviour -- two more are the exception barrier flattening a refusal a game could
-   act on, and `-017` is that barrier missing entirely at library load.
+1. **Thirteen upstream findings**, `JAVA-UPSTREAM-004` through `-021`, each with a pure-C
+   reproducer in `tools/native-abi/probes/`. Four share one shape -- a capability query that does
+   not predict the behaviour -- two more are the exception barrier flattening a refusal a game
+   could act on, `-017` is that barrier missing entirely at library load, and `-019` is a
+   segfault: destroying a camera after a longer session kills the process, on every renderer.
 2. **`JAVA-EXT-007`**, blocked with evidence and rechecked against the live headers: a clip enters
    a skinned model only through a descriptor pointer graph, and `cna_skinning_data_create` takes
    one of its own. No route takes a clip handle.
@@ -197,16 +198,25 @@ TESTS=516 SUITES=94 FAILURES=0 ERRORS=0 SKIPPED=0
    bound:
 
    ```text
-   35 devices.h   35 cnb.h   15 content_readers.h   10 sensors.h   10 effects.h
+   35 cnb.h   20 devices.h   15 content_readers.h   10 sensors.h   10 effects.h
     8 input_devices.h   7 input_haptics.h   7 core_ext.h   7 models.h
     5 input_joystick.h   3 input_text.h   1 graphics_ext.h
    ```
 
+   The camera family was the first of these taken apart, and it is worth reading before the next
+   one is. It looked like BLOCKED_HARDWARE and was not: CNA ships a test backend that makes every
+   route exercisable and its pixels checkable on a machine with no camera. Qualifying it found a
+   segfault (`JAVA-UPSTREAM-019`), so those fifteen routes are unbound for a measured reason now
+   instead of an assumed one. **The assumption about why a family is absent is usually wrong in a
+   more interesting way than expected**, in both directions.
+
    Some will turn out to be blocked -- the model remainder almost certainly behind
    `JAVA-UPSTREAM-004` and `JAVA-EXT-007`, as the rest of that family already is. Some will turn
    out to be bindable. **Measure before writing the reason**: this session filed one upstream
-   finding from a probe that had rearranged the state it then measured, and had to withdraw four
-   fifths of it.
+   finding from a probe that had rearranged the state it then measured and had to withdraw four
+   fifths of it, and twice reported behaviour that was only the probe reading back its own
+   initialiser. Poison every out-parameter before the call; "untouched" is a third answer and it
+   is sometimes the finding.
 
 Do not weaken either profile's zero, do not add an allowlist, and do not put non-XNA API inside
 `Microsoft.Xna.Framework.*`.

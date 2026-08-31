@@ -253,6 +253,14 @@
     },
     {
       "match": {
+        "prefix": "cna_camera_"
+      },
+      "classification": "CNA_EXTENSION_CANDIDATE",
+      "reason": "Fully qualifiable without a camera -- create_with_test_backend_ext, set_test_state_ext and set_test_frame_ext make every route exercisable and the pixels checkable, and a 4x3 frame set through the test backend reads back out of a Texture2D texel for texel. Not bound because that qualification found a segfault: destroying a camera after a longer session kills the process, reproducibly on two renderers, and removing one cna_camera_destroy removes it (JAVA-UPSTREAM-019). Binding a family whose teardown can kill a game is worse than leaving it out. Two smaller defects came with it: try_acquire_frame_ext returns SUCCESS without writing out_acquired (JAVA-UPSTREAM-020), and create succeeds where is_supported says no (JAVA-UPSTREAM-021).",
+      "task": "JAVA-UPSTREAM-019"
+    },
+    {
+      "match": {
         "header": "devices.h"
       },
       "classification": "CNA_EXTENSION_CANDIDATE",

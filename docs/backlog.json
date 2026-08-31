@@ -785,6 +785,50 @@
         "tools/native-abi/probes/lent_effect_lifetime.c"
       ],
       "note": "The signature was wrong and untested at the same time, which is the only way a signature this wrong survives: no test had ever bound a volume table, so there was nothing for the error to fail against. Found by a probe that bound one to ask a lifetime question about the getter. The first falsification attempt did not register -- asserting only the exception type passed with the Java validation deleted, because CNA raises the same type -- so the assertions read the message, which is what the Java check actually adds."
+    },
+    {
+      "id": "JAVA-UPSTREAM-019",
+      "title": "A camera destroyed after a longer session segfaults the process",
+      "family": "cnanext",
+      "authority": "devices.h",
+      "status": "blocked",
+      "priority": 9,
+      "currentState": "tools/native-abi/probes/camera_test_backend.c crashes with SIGSEGV, three runs of three, on HEADLESS and OPENGL33 alike. Removing exactly one cna_camera_destroy call -- PROBE_SKIP=camera -- makes the same run exit 0 with cna_game_destroy answering SUCCESS, so the call is named even though the sequence around it is not reduced. It resists reduction: two test-backend cameras created and destroyed is clean, one camera used and destroyed is clean, and a second camera created, used and destroyed while the first still lives is clean. Something the longer sequence does first -- driving the state machine through every value, setting several frames of different sizes, acquiring repeatedly -- leaves a camera whose destruction is fatal.",
+      "expectedState": "Destroying a camera is safe whatever was done to it first. This is a CNA extension with a test backend built for exactly this kind of qualification, so a crash here is reachable from any suite that uses that backend the way it is meant to be used.",
+      "blocker": "Upstream defect in cnanext's camera implementation. The fifteen camera routes are NOT bound: the family is otherwise fully qualifiable without hardware -- create_with_test_backend_ext, set_test_state_ext and set_test_frame_ext make every route exercisable and the pixels checkable -- and it is exactly that qualification that found this. A projection that hands a game a route which kills the process is worse than one that leaves the family out.",
+      "tests": [
+        "tools/native-abi/probes/camera_test_backend.c"
+      ],
+      "note": "No gdb on this host, so there is no stack. The reproduction is the probe plus the one-line difference that removes it. The reduced modes are kept in the probe even though none crashes, because ruling out the obvious guesses is most of what a reader needs next."
+    },
+    {
+      "id": "JAVA-UPSTREAM-020",
+      "title": "cna_camera_try_acquire_frame_ext returns SUCCESS without writing out_acquired",
+      "family": "cnanext",
+      "authority": "devices.h",
+      "status": "blocked",
+      "priority": 4,
+      "currentState": "The route documents out_acquired as receiving whether a frame was acquired, and documents \"having no frame ready is an ordinary CNA_FALSE rather than a failure\". Measured with a poison value written into the flag first, several paths return CNA_RESULT_SUCCESS and leave it untouched -- including a freshly created test-backend camera asked for a frame, with or without one set. A C caller with an uninitialised stack CNA_Bool reads whatever was there.",
+      "expectedState": "A route that returns SUCCESS writes the output it documents. CNA_FALSE is the documented answer for no frame; leaving the value alone is not.",
+      "blocker": "Upstream defect in cnanext. Benign for a Java binding, whose boolean[1] is zero-initialised, and not benign for the C callers the ABI is for. Not separately blocking: the camera family is unbound for JAVA-UPSTREAM-019.",
+      "tests": [
+        "tools/native-abi/probes/camera_test_backend.c"
+      ],
+      "note": "Found because the probe writes 0xAB into every out-parameter before the call. It was written that way after two earlier findings in this session turned out to be the probe reading back its own initialiser -- once for a lent handle and once for this very route, which appeared to acquire in every camera state including DENIED and does not."
+    },
+    {
+      "id": "JAVA-UPSTREAM-021",
+      "title": "cna_camera_create succeeds on a host with no camera, which is_supported and count both report",
+      "family": "cnanext",
+      "authority": "devices.h",
+      "status": "blocked",
+      "priority": 3,
+      "currentState": "cna_camera_get_is_supported_ext answers CNA_FALSE and cna_camera_get_count_ext answers 0 on this host, and cna_camera_create then answers SUCCESS and hands back a handle. Separately, cna_camera_set_test_state_ext refuses CNA_CAMERA_STATE_NOT_SUPPORTED and CNA_CAMERA_STATE_CLOSED with INVALID_ARGUMENT -- including NOT_SUPPORTED, which is the state a test-backend camera is born in, so the setter cannot restore the object's own initial state.",
+      "expectedState": "A capability query predicts the behaviour: either create refuses where is_supported is false, or is_supported describes something else and says so. And a test backend's state setter reaches every state the backend can be in.",
+      "blocker": "Upstream. Same family as JAVA-UPSTREAM-019 and unbound with it. This is the fourth instance in this backlog of a capability query that does not predict the behaviour behind it.",
+      "tests": [
+        "tools/native-abi/probes/camera_test_backend.c"
+      ]
     }
   ]
 }

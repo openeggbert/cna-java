@@ -1093,6 +1093,67 @@ the zero the scene-callback probe reported was a pipeline with nothing turned on
 **A shadow map lends its texture on every renderer**, and answers `is_supported` false only where
 it cannot cast into it.
 
+## camera_test_backend.c
+
+Can a camera be qualified on a machine with no camera?
+
+Fifteen camera routes were unbound behind the reason "camera ... are CNA device extensions beyond
+XNA 4.0", which says why they are an extension and not why they are absent. The assumption behind
+leaving them was that a webcam API needs a webcam. It does not:
+`cna_camera_create_with_test_backend_ext` builds one whose frames the caller supplies and whose
+state the caller drives, so every route can be exercised and the pixels compared.
+
+**A frame goes in and comes back out, texel for texel.** A 4x3 frame whose channels are functions
+of the texel index, set through `cna_camera_set_test_frame_ext`, read back out of a `Texture2D`
+after `cna_camera_try_acquire_frame_ext` -- first texel `0,255,0` in and `0,255,0` out, last
+`187,68,33` and `187,68,33`. The frame is kept rather than consumed: acquiring twice gives it
+twice.
+
+**The size check is exactly right, and the first reading of it was not.** The header says a
+texture whose size does not match the frame is refused, and against one fixed 2x2 texture:
+
+| Frame | acquired | wrote into the texture |
+|---|---|---|
+| 2x2 | yes | yes |
+| 3x2, 2x3, 3x3, 4x3, 4x4, 8x8, 16x16 | no | no |
+
+The first version of this probe reported that a 4x3 frame was acquired into a 2x2 texture. It was
+not: the probe had written `CNA_Bool acquired = CNA_TRUE` before a call that does not write on its
+"nothing to give" path, and read its own initialiser back. Every out-parameter here is poisoned
+with `0xAB` first, so "untouched" is a visible third answer -- which is how the next finding was
+found rather than missed.
+
+**Three defects, and the family is not bound because of the first.**
+
+`JAVA-UPSTREAM-019`: **destroying a camera after a longer session segfaults the process.**
+Reproducible three runs of three, on HEADLESS and OPENGL33 alike:
+
+```sh
+PROBE_CASE=0 ./camera_test_backend                # SIGSEGV
+PROBE_CASE=0 PROBE_SKIP=camera ./camera_test_backend   # exit 0, game destroy SUCCESS
+```
+
+One `cna_camera_destroy` fewer and the run is clean, so the call is named. It resists reduction
+and the reduced modes are kept anyway, because ruling out the obvious guesses is most of what a
+reader needs next: `minimal` (two cameras created and destroyed), `minimal-acquire` (one camera
+used then destroyed) and `minimal-two-used` (a second camera created, used and destroyed while
+the first lives) are all clean.
+
+`JAVA-UPSTREAM-020`: **`try_acquire_frame_ext` returns SUCCESS without writing `out_acquired`** on
+the paths where it acquires nothing, though the header says no frame ready is an ordinary
+`CNA_FALSE`. Harmless to a Java binding, whose `boolean[1]` is zero-initialised, and not harmless
+to the C callers the ABI exists for.
+
+`JAVA-UPSTREAM-021`: **`cna_camera_create` succeeds where `is_supported` says no** and
+`get_count_ext` says zero -- the fourth capability query in this backlog that does not predict the
+behaviour behind it. And `set_test_state_ext` refuses `NOT_SUPPORTED` and `CLOSED`, the first of
+which is the state a test-backend camera is born in, so the setter cannot restore the object's own
+initial state.
+
+So the family stays unbound with a measured reason rather than an assumed one. Binding a route
+that can kill a game is worse than leaving the family out, and the qualification that would have
+justified binding it is what found the crash.
+
 ## renderer_selection.c
 
 Which renderers does this build have, and what happens when a caller asks for one it does not?
