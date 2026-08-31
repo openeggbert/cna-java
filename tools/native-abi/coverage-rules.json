@@ -1033,15 +1033,27 @@
     {
       "match": {
         "symbols": [
+          "cna_model_get_content_tag_dictionary_ext"
+        ]
+      },
+      "classification": "CNA_EXTENSION_CANDIDATE",
+      "purposeReason": "Reads back the CNA_ObjectDictionary a custom ContentProcessor wrote into the .xnb as the model's Tag -- the shape XNA's own TrianglePickingSample uses, where the processor tags the model with its world-space triangles and the game picks against them. It is a CNA extension and not a void*: the handle it lends is an owned object dictionary that outlives the model, and org.openeggbert.cna.extensions.content.CnaObjectDictionary is the Java facade for exactly that handle. It was grouped with the two genuine void* routes beside it until 2026-09-01, which is why it read as a decision rather than as a block.",
+      "bindingStatus": "BLOCKED_UPSTREAM",
+      "bindingReason": "There is no way for a model in Java's hands to carry a content tag. The tag is written by CNA's own content load, and JAVA-UPSTREAM-004 blocks that loader: it produces a model that segfaults during teardown for any asset with a mesh part. A model mirrored from an XNA one by CnaModel.From carries no tag, and no route sets one, so binding this would give a game a route that answers \"no tag\" for every model it can hold.",
+      "evidence": "No cna_model_set_content_tag_* declaration exists in any CNA header at 0.21.0, so the loader is the only writer; JAVA-UPSTREAM-004's reproducer still segfaults against cnanext 96b56b0e4.",
+      "task": "JAVA-UPSTREAM-004"
+    },
+    {
+      "match": {
+        "symbols": [
           "cna_model_set_owned_resources",
-          "cna_model_get_content_tag_dictionary_ext",
           "cna_model_get_content_tag_foreign_object_ext"
         ]
       },
       "classification": "NOT_USEFUL_IN_JAVA",
-      "purposeReason": "A C resource bundle with a release callback, and the two queries that read a C-owned content tag. All three hand a Java caller a void* it cannot own, and the Java model already carries its own Tag from the managed reader.",
+      "purposeReason": "A C resource bundle with a release callback, and the query that reads a content tag as the pointer a reflective type reader's own factory returned. Both hand a Java caller a void* it cannot own, and the Java model already carries its own Tag from the managed reader.",
       "bindingStatus": "DELIBERATE_NON_BINDING",
-      "bindingReason": "All three hand a Java caller a void* it cannot own -- a resource bundle with a C release callback, and two queries over a C-owned content tag -- and the Java model already carries its own Tag from the managed reader."
+      "bindingReason": "Both hand a Java caller a void* it cannot own -- a resource bundle with a C release callback, and a query whose answer is a pointer the caller's own object factory returned, which this projection has no factory to produce. The Java model already carries its own Tag from the managed reader."
     },
     {
       "match": {

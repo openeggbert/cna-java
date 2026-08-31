@@ -2,10 +2,10 @@
   "abiVersion": "0.21.0",
   "actionableLocal": [],
   "bindingStatusCounts": {
-    "BLOCKED_UPSTREAM": 21,
+    "BLOCKED_UPSTREAM": 22,
     "BOUND": 2774,
     "DEFERRED_TRACKED": 320,
-    "DELIBERATE_NON_BINDING": 939
+    "DELIBERATE_NON_BINDING": 938
   },
   "boundButUnreached": [],
   "boundFunctions": 2774,
@@ -200,9 +200,9 @@
       "total": 41
     },
     "models.h": {
-      "CNA_EXTENSION_CANDIDATE": 180,
+      "CNA_EXTENSION_CANDIDATE": 181,
       "DEFERRED_RUNTIME": 1,
-      "NOT_USEFUL_IN_JAVA": 35,
+      "NOT_USEFUL_IN_JAVA": 34,
       "total": 216
     },
     "net.h": {
@@ -314,10 +314,10 @@
   },
   "canonicalFunctions": 4054,
   "classificationCounts": {
-    "CNA_EXTENSION_CANDIDATE": 1849,
+    "CNA_EXTENSION_CANDIDATE": 1850,
     "DEFERRED_RUNTIME": 321,
     "JAVA_INTERNAL_ONLY": 11,
-    "NOT_USEFUL_IN_JAVA": 887,
+    "NOT_USEFUL_IN_JAVA": 886,
     "XNA_BACKING": 986
   },
   "cnaInventorySha256": "b485d17b1df9a86c6099700baedcd435c8a3f07487af8741b01d8c471956bfe7",
@@ -337,7 +337,7 @@
     "JAVA-NATIVE-020": 38,
     "JAVA-NATIVE-021": 6,
     "JAVA-NATIVE-023": 33,
-    "JAVA-UPSTREAM-004": 1,
+    "JAVA-UPSTREAM-004": 2,
     "JAVA-UPSTREAM-011": 1,
     "JAVA-UPSTREAM-018": 4,
     "JAVA-UPSTREAM-019": 15,
@@ -380,8 +380,9 @@
       "total": 1
     },
     "models.h": {
+      "BLOCKED_UPSTREAM": 1,
       "DELIBERATE_NON_BINDING": 3,
-      "total": 3
+      "total": 4
     },
     "sensors.h": {
       "DELIBERATE_NON_BINDING": 2,
