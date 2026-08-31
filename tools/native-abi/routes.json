@@ -2390,6 +2390,10 @@
         "symbol": "cna_cnb_crc32c_uses_hardware"
       },
       {
+        "java": "cnbDecodeCurve",
+        "symbol": "cna_cnb_decode_curve"
+      },
+      {
         "java": "cnbDecodeSongDurationMilliseconds",
         "symbol": "cna_cnb_decode_song_duration_milliseconds"
       },
@@ -2548,6 +2552,10 @@
       {
         "java": "cnbDocumentRequireSingle",
         "symbol": "cna_cnb_document_require_single"
+      },
+      {
+        "java": "cnbEncodeCurve",
+        "symbol": "cna_cnb_encode_curve"
       },
       {
         "java": "cnbEncodeSong",
@@ -2868,6 +2876,54 @@
       {
         "java": "cnbWriterWriteToFile",
         "symbol": "cna_cnb_writer_write_to_file"
+      },
+      {
+        "java": "curveCreate",
+        "symbol": "cna_curve_create"
+      },
+      {
+        "java": "curveDestroy",
+        "symbol": "cna_curve_destroy"
+      },
+      {
+        "java": "curveGetKeys",
+        "symbol": "cna_curve_get_keys"
+      },
+      {
+        "java": "curveGetPostLoop",
+        "symbol": "cna_curve_get_post_loop"
+      },
+      {
+        "java": "curveGetPreLoop",
+        "symbol": "cna_curve_get_pre_loop"
+      },
+      {
+        "java": "curveKeyCollectionAdd",
+        "symbol": "cna_curve_key_collection_add"
+      },
+      {
+        "java": "curveKeyCollectionDestroy",
+        "symbol": "cna_curve_key_collection_destroy"
+      },
+      {
+        "java": "curveKeyCollectionGet",
+        "symbol": "cna_curve_key_collection_get"
+      },
+      {
+        "java": "curveKeyCollectionGetCount",
+        "symbol": "cna_curve_key_collection_get_count"
+      },
+      {
+        "java": "curveKeyInitFull",
+        "symbol": "cna_curve_key_init_full"
+      },
+      {
+        "java": "curveSetPostLoop",
+        "symbol": "cna_curve_set_post_loop"
+      },
+      {
+        "java": "curveSetPreLoop",
+        "symbol": "cna_curve_set_pre_loop"
       }
     ]
   }

@@ -89,6 +89,7 @@
     LOAD(cnb_crc32c_continue, "cna_cnb_crc32c_continue");
     LOAD(cnb_crc32c_portable, "cna_cnb_crc32c_portable");
     LOAD(cnb_crc32c_uses_hardware, "cna_cnb_crc32c_uses_hardware");
+    LOAD(cnb_decode_curve, "cna_cnb_decode_curve");
     LOAD(cnb_decode_song_duration_milliseconds, "cna_cnb_decode_song_duration_milliseconds");
     LOAD(cnb_decode_song_name, "cna_cnb_decode_song_name");
     LOAD(cnb_decode_song_name_size, "cna_cnb_decode_song_name_size");
@@ -129,6 +130,7 @@
     LOAD(cnb_document_require_asset, "cna_cnb_document_require_asset");
     LOAD(cnb_document_require_mandatory_chunks_understood, "cna_cnb_document_require_mandatory_chunks_understood");
     LOAD(cnb_document_require_single, "cna_cnb_document_require_single");
+    LOAD(cnb_encode_curve, "cna_cnb_encode_curve");
     LOAD(cnb_encode_song, "cna_cnb_encode_song");
     LOAD(cnb_encode_sound_effect, "cna_cnb_encode_sound_effect");
     LOAD(cnb_encode_sprite_font, "cna_cnb_encode_sprite_font");
@@ -230,6 +232,18 @@
     LOAD(crt_effect_set_mask_type, "cna_crt_effect_set_mask_type");
     LOAD(crt_effect_set_scanline_intensity, "cna_crt_effect_set_scanline_intensity");
     LOAD(crt_effect_set_vignette_intensity, "cna_crt_effect_set_vignette_intensity");
+    LOAD(curve_create, "cna_curve_create");
+    LOAD(curve_destroy, "cna_curve_destroy");
+    LOAD(curve_get_keys, "cna_curve_get_keys");
+    LOAD(curve_get_post_loop, "cna_curve_get_post_loop");
+    LOAD(curve_get_pre_loop, "cna_curve_get_pre_loop");
+    LOAD(curve_key_collection_add, "cna_curve_key_collection_add");
+    LOAD(curve_key_collection_destroy, "cna_curve_key_collection_destroy");
+    LOAD(curve_key_collection_get, "cna_curve_key_collection_get");
+    LOAD(curve_key_collection_get_count, "cna_curve_key_collection_get_count");
+    LOAD(curve_key_init_full, "cna_curve_key_init_full");
+    LOAD(curve_set_post_loop, "cna_curve_set_post_loop");
+    LOAD(curve_set_pre_loop, "cna_curve_set_pre_loop");
     LOAD(depth_effect_create, "cna_depth_effect_create");
     LOAD(depth_effect_get_dither_mode, "cna_depth_effect_get_dither_mode");
     LOAD(depth_effect_get_mode, "cna_depth_effect_get_mode");

@@ -89,6 +89,7 @@
     CNA_JNI_ROUTE(cna_cnb_crc32c_continue) cnb_crc32c_continue;
     CNA_JNI_ROUTE(cna_cnb_crc32c_portable) cnb_crc32c_portable;
     CNA_JNI_ROUTE(cna_cnb_crc32c_uses_hardware) cnb_crc32c_uses_hardware;
+    CNA_JNI_ROUTE(cna_cnb_decode_curve) cnb_decode_curve;
     CNA_JNI_ROUTE(cna_cnb_decode_song_duration_milliseconds) cnb_decode_song_duration_milliseconds;
     CNA_JNI_ROUTE(cna_cnb_decode_song_name) cnb_decode_song_name;
     CNA_JNI_ROUTE(cna_cnb_decode_song_name_size) cnb_decode_song_name_size;
@@ -129,6 +130,7 @@
     CNA_JNI_ROUTE(cna_cnb_document_require_asset) cnb_document_require_asset;
     CNA_JNI_ROUTE(cna_cnb_document_require_mandatory_chunks_understood) cnb_document_require_mandatory_chunks_understood;
     CNA_JNI_ROUTE(cna_cnb_document_require_single) cnb_document_require_single;
+    CNA_JNI_ROUTE(cna_cnb_encode_curve) cnb_encode_curve;
     CNA_JNI_ROUTE(cna_cnb_encode_song) cnb_encode_song;
     CNA_JNI_ROUTE(cna_cnb_encode_sound_effect) cnb_encode_sound_effect;
     CNA_JNI_ROUTE(cna_cnb_encode_sprite_font) cnb_encode_sprite_font;
@@ -230,6 +232,18 @@
     CNA_JNI_ROUTE(cna_crt_effect_set_mask_type) crt_effect_set_mask_type;
     CNA_JNI_ROUTE(cna_crt_effect_set_scanline_intensity) crt_effect_set_scanline_intensity;
     CNA_JNI_ROUTE(cna_crt_effect_set_vignette_intensity) crt_effect_set_vignette_intensity;
+    CNA_JNI_ROUTE(cna_curve_create) curve_create;
+    CNA_JNI_ROUTE(cna_curve_destroy) curve_destroy;
+    CNA_JNI_ROUTE(cna_curve_get_keys) curve_get_keys;
+    CNA_JNI_ROUTE(cna_curve_get_post_loop) curve_get_post_loop;
+    CNA_JNI_ROUTE(cna_curve_get_pre_loop) curve_get_pre_loop;
+    CNA_JNI_ROUTE(cna_curve_key_collection_add) curve_key_collection_add;
+    CNA_JNI_ROUTE(cna_curve_key_collection_destroy) curve_key_collection_destroy;
+    CNA_JNI_ROUTE(cna_curve_key_collection_get) curve_key_collection_get;
+    CNA_JNI_ROUTE(cna_curve_key_collection_get_count) curve_key_collection_get_count;
+    CNA_JNI_ROUTE(cna_curve_key_init_full) curve_key_init_full;
+    CNA_JNI_ROUTE(cna_curve_set_post_loop) curve_set_post_loop;
+    CNA_JNI_ROUTE(cna_curve_set_pre_loop) curve_set_pre_loop;
     CNA_JNI_ROUTE(cna_depth_effect_create) depth_effect_create;
     CNA_JNI_ROUTE(cna_depth_effect_get_dither_mode) depth_effect_get_dither_mode;
     CNA_JNI_ROUTE(cna_depth_effect_get_mode) depth_effect_get_mode;

@@ -4,6 +4,10 @@ import Microsoft.Xna.Framework.Game;
 import Microsoft.Xna.Framework.GameTime;
 import Microsoft.Xna.Framework.GraphicsDeviceManager;
 import Microsoft.Xna.Framework.Color;
+import Microsoft.Xna.Framework.Curve;
+import Microsoft.Xna.Framework.CurveContinuity;
+import Microsoft.Xna.Framework.CurveKey;
+import Microsoft.Xna.Framework.CurveLoopType;
 import Microsoft.Xna.Framework.Rectangle;
 import Microsoft.Xna.Framework.Vector2;
 import Microsoft.Xna.Framework.Vector3;
@@ -442,6 +446,78 @@ final class CnbTests {
         }
         assertThrows(CnbFormatException.class,
                 () -> CnbAudioFormat.fromValue(CnbAudioFormat.values().length));
+    }
+
+    @Test
+    void aCurveIsTheRuntimeFormLaidOutFlat() {
+        Curve source = new Curve();
+        source.setPreLoop(CurveLoopType.Oscillate);
+        source.setPostLoop(CurveLoopType.CycleOffset);
+        source.getKeys().Add(new CurveKey(0.0f, 1.0f, 0.0f, 2.0f, CurveContinuity.Smooth));
+        source.getKeys().Add(new CurveKey(1.5f, -3.0f, 0.5f, -0.5f, CurveContinuity.Step));
+        source.getKeys().Add(new CurveKey(4.0f, 7.25f, 1.0f, 1.0f, CurveContinuity.Smooth));
+
+        byte[] file = CnbCurve.encode(source, "curves/probe");
+        try (CnbDocument document = CnbDocument.parse(
+                     file, "probe.cnb", CnbReadLimits.standard())) {
+            assertEquals(CnbAssetType.CURVE, document.getAssetType());
+            Curve decoded = document.decodeCurve();
+            assertEquals(CurveLoopType.Oscillate, decoded.getPreLoop());
+            assertEquals(CurveLoopType.CycleOffset, decoded.getPostLoop());
+            assertEquals(3, decoded.getKeys().getCount());
+            for (int index = 0; index < 3; index++) {
+                CurveKey expected = source.getKeys().get(index);
+                CurveKey actual = decoded.getKeys().get(index);
+                assertEquals(expected.getPosition(), actual.getPosition());
+                assertEquals(expected.getValue(), actual.getValue());
+                assertEquals(expected.getTangentIn(), actual.getTangentIn());
+                assertEquals(expected.getTangentOut(), actual.getTangentOut());
+                assertEquals(expected.getContinuity(), actual.getContinuity());
+            }
+            // The point of keeping the tangents and the continuity: the curve evaluates the same
+            // on the other side, which is the only thing a game actually asks of it.
+            for (float position : new float[] {-1.0f, 0.0f, 0.75f, 1.5f, 3.0f, 4.0f, 6.0f}) {
+                assertEquals(source.Evaluate(position), decoded.Evaluate(position),
+                        "the curve evaluates differently at " + position);
+            }
+        }
+
+        // An empty curve is a legal one, and evaluates to zero everywhere in XNA.
+        byte[] empty = CnbCurve.encode(new Curve(), "curves/empty");
+        try (CnbDocument document = CnbDocument.parse(
+                     empty, "empty.cnb", CnbReadLimits.standard())) {
+            assertEquals(0, document.decodeCurve().getKeys().getCount());
+        }
+    }
+
+    @Test
+    void theCurveEnumeratorsAreTheSameNumbersOnBothSides() {
+        // The enumerators go into the file as numbers, so XNA's order and CNA's have to agree.
+        // Asserting it here is what stops a reordering from silently changing how every stored
+        // curve evaluates.
+        assertEquals(0, CurveLoopType.Constant.ordinal());
+        assertEquals(1, CurveLoopType.Cycle.ordinal());
+        assertEquals(2, CurveLoopType.CycleOffset.ordinal());
+        assertEquals(3, CurveLoopType.Oscillate.ordinal());
+        assertEquals(4, CurveLoopType.Linear.ordinal());
+        assertEquals(0, CurveContinuity.Smooth.ordinal());
+        assertEquals(1, CurveContinuity.Step.ordinal());
+        for (CurveLoopType loop : CurveLoopType.values()) {
+            Curve curve = new Curve();
+            curve.setPreLoop(loop);
+            curve.setPostLoop(loop);
+            curve.getKeys().Add(new CurveKey(0.0f, 1.0f));
+            curve.getKeys().Add(new CurveKey(2.0f, 5.0f));
+            byte[] file = CnbCurve.encode(curve, "");
+            try (CnbDocument document = CnbDocument.parse(
+                         file, loop + ".cnb", CnbReadLimits.standard())) {
+                Curve decoded = document.decodeCurve();
+                assertEquals(loop, decoded.getPreLoop());
+                assertEquals(loop, decoded.getPostLoop());
+                assertEquals(curve.Evaluate(-3.0f), decoded.Evaluate(-3.0f), loop.toString());
+                assertEquals(curve.Evaluate(5.0f), decoded.Evaluate(5.0f), loop.toString());
+            }
+        }
     }
 
     /** A two-glyph font over a 2x2 atlas: enough that a swap or a dropped bearing shows. */

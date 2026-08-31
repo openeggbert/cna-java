@@ -1,5 +1,6 @@
 package org.openeggbert.cna.extensions.content;
 
+import Microsoft.Xna.Framework.Curve;
 import org.openeggbert.cna.internal.generated.NativeCnbRoutes;
 
 import java.nio.charset.StandardCharsets;
@@ -417,6 +418,17 @@ public final class CnbDocument implements AutoCloseable {
         CnbExtension.check("CnbDocument.decodeSpriteFont",
                 NativeCnbRoutes.cnbDecodeSpriteFont(open(), font));
         return new CnbSpriteFontData(font[0]);
+    }
+
+    /**
+     * Decodes the whole file as an ordinary XNA curve.
+     *
+     * @return the curve, with its keys and its loop behaviour
+     * @throws CnbFormatException when the file is not a Curve asset, or names an enumerator XNA
+     *         has no constant for
+     */
+    public Curve decodeCurve() {
+        return CnbCurve.decode(open());
     }
 
     /** Releases the document. Closing twice is a no-op. */

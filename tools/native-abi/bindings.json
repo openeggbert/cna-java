@@ -1855,6 +1855,16 @@
       ]
     },
     {
+      "name": "cna_cnb_decode_curve",
+      "header": "cnb.h",
+      "ownership": "borrows document; returns an owned curve handle",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_CnbDocumentHandle",
+        "CNA_CurveHandle*"
+      ]
+    },
+    {
       "name": "cna_cnb_decode_song_duration_milliseconds",
       "header": "cnb.h",
       "ownership": "borrows document; caller integer output",
@@ -2286,6 +2296,19 @@
       "parameters": [
         "CNA_CnbDocumentHandle",
         "CNA_CnbChunkId",
+        "uint64_t*"
+      ]
+    },
+    {
+      "name": "cna_cnb_encode_curve",
+      "header": "cnb.h",
+      "ownership": "borrows curve; caller buffer",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_CurveHandle",
+        "CNA_StringView",
+        "uint8_t*",
+        "uint64_t",
         "uint64_t*"
       ]
     },
@@ -3523,6 +3546,128 @@
       "parameters": [
         "CNA_Handle",
         "CNA_AudioStopOptions"
+      ]
+    },
+    {
+      "name": "cna_curve_create",
+      "header": "curve.h",
+      "ownership": "no handle; returns an owned curve handle",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_CurveHandle*"
+      ]
+    },
+    {
+      "name": "cna_curve_destroy",
+      "header": "curve.h",
+      "ownership": "releases the owned curve handle",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_CurveHandle"
+      ]
+    },
+    {
+      "name": "cna_curve_get_keys",
+      "header": "curve.h",
+      "ownership": "borrows curve; returns an owned collection view that retains the curve",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_CurveHandle",
+        "CNA_CurveKeyCollectionHandle*"
+      ]
+    },
+    {
+      "name": "cna_curve_get_post_loop",
+      "header": "curve.h",
+      "ownership": "borrows curve; caller identity output",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_CurveHandle",
+        "CNA_CurveLoopType*"
+      ]
+    },
+    {
+      "name": "cna_curve_get_pre_loop",
+      "header": "curve.h",
+      "ownership": "borrows curve; caller identity output",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_CurveHandle",
+        "CNA_CurveLoopType*"
+      ]
+    },
+    {
+      "name": "cna_curve_key_collection_add",
+      "header": "curve.h",
+      "ownership": "borrows the collection view; copies the caller's key",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_CurveKeyCollectionHandle",
+        "CNA_CurveKey"
+      ]
+    },
+    {
+      "name": "cna_curve_key_collection_destroy",
+      "header": "curve.h",
+      "ownership": "releases the owned collection view",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_CurveKeyCollectionHandle"
+      ]
+    },
+    {
+      "name": "cna_curve_key_collection_get",
+      "header": "curve.h",
+      "ownership": "borrows the collection view; caller structure output",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_CurveKeyCollectionHandle",
+        "int32_t",
+        "CNA_CurveKey*"
+      ]
+    },
+    {
+      "name": "cna_curve_key_collection_get_count",
+      "header": "curve.h",
+      "ownership": "borrows the collection view; caller integer output",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_CurveKeyCollectionHandle",
+        "uint64_t*"
+      ]
+    },
+    {
+      "name": "cna_curve_key_init_full",
+      "header": "curve.h",
+      "ownership": "no handle; caller structure output",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "float",
+        "float",
+        "float",
+        "float",
+        "CNA_CurveContinuity",
+        "CNA_CurveKey*"
+      ]
+    },
+    {
+      "name": "cna_curve_set_post_loop",
+      "header": "curve.h",
+      "ownership": "borrows curve; value parameter",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_CurveHandle",
+        "CNA_CurveLoopType"
+      ]
+    },
+    {
+      "name": "cna_curve_set_pre_loop",
+      "header": "curve.h",
+      "ownership": "borrows curve; value parameter",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_CurveHandle",
+        "CNA_CurveLoopType"
       ]
     },
     {

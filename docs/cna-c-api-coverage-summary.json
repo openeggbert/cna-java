@@ -1,7 +1,7 @@
 {
   "abiVersion": "0.21.0",
   "boundButUnreached": [],
-  "boundFunctions": 1464,
+  "boundFunctions": 1478,
   "boundWithoutJavaCallSite": [],
   "byHeader": {
     "abi.h": {
@@ -41,7 +41,8 @@
       "total": 57
     },
     "curve.h": {
-      "NOT_USEFUL_IN_JAVA": 45,
+      "CNA_EXTENSION_CANDIDATE": 12,
+      "NOT_USEFUL_IN_JAVA": 33,
       "total": 45
     },
     "devices.h": {
@@ -284,10 +285,10 @@
   },
   "canonicalFunctions": 4054,
   "classificationCounts": {
-    "CNA_EXTENSION_CANDIDATE": 1902,
+    "CNA_EXTENSION_CANDIDATE": 1914,
     "DEFERRED_RUNTIME": 417,
     "JAVA_INTERNAL_ONLY": 9,
-    "NOT_USEFUL_IN_JAVA": 741,
+    "NOT_USEFUL_IN_JAVA": 729,
     "XNA_BACKING": 985
   },
   "cnaInventorySha256": "be9a2bf818318002adc100ad1db22949b164726d2d124352f3b29aa3fdc48ea2",

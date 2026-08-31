@@ -116,6 +116,11 @@ public final class NativeCnbRoutes {
     public static native int cnbCrc32cUsesHardware(boolean[] outUsesHardware);
 
     /**
+     * cna_cnb_decode_curve (cnb.h).
+     */
+    public static native int cnbDecodeCurve(long document, long[] outCurve);
+
+    /**
      * cna_cnb_decode_song_duration_milliseconds (cnb.h).
      */
     public static native int cnbDecodeSongDurationMilliseconds(long document, int[] outDurationMilliseconds);
@@ -393,6 +398,11 @@ public final class NativeCnbRoutes {
      * cna_cnb_document_require_single (cnb.h).
      */
     public static native int cnbDocumentRequireSingle(long document, int type, long[] outIndex);
+
+    /**
+     * cna_cnb_encode_curve (cnb.h).
+     */
+    public static native int cnbEncodeCurve(long curve, byte[] contentName, byte[] destination, long[] outByteCount);
 
     /**
      * cna_cnb_encode_song (cnb.h).
@@ -988,4 +998,90 @@ public final class NativeCnbRoutes {
      * cna_cnb_writer_write_to_file (cnb.h).
      */
     public static native int cnbWriterWriteToFile(long writer, byte[] path);
+
+    /**
+     * cna_curve_create (curve.h).
+     */
+    public static native int curveCreate(long[] outCurve);
+
+    /**
+     * cna_curve_destroy (curve.h).
+     */
+    public static native int curveDestroy(long curve);
+
+    /**
+     * cna_curve_get_keys (curve.h).
+     */
+    public static native int curveGetKeys(long curve, long[] outKeys);
+
+    /**
+     * cna_curve_get_post_loop (curve.h).
+     */
+    public static native int curveGetPostLoop(long curve, int[] outLoopType);
+
+    /**
+     * cna_curve_get_pre_loop (curve.h).
+     */
+    public static native int curveGetPreLoop(long curve, int[] outLoopType);
+
+    /**
+     * cna_curve_key_collection_add (curve.h).
+     */
+    public static native int curveKeyCollectionAdd(long collection, long[] keyIntegral, float[] keyFloating);
+
+    /**
+     * cna_curve_key_collection_destroy (curve.h).
+     */
+    public static native int curveKeyCollectionDestroy(long collection);
+
+    /**
+     * cna_curve_key_collection_get (curve.h).
+     *
+     * <p>outKeyIntegral carries CNA_CurveKey in this order:
+     * <ol start="0">
+     *   <li>{@code continuity} (CNA_CurveContinuity)</li>
+     * </ol>
+     *
+     * <p>outKeyFloating carries CNA_CurveKey in this order:
+     * <ol start="0">
+     *   <li>{@code position} (float)</li>
+     *   <li>{@code value} (float)</li>
+     *   <li>{@code tangent_in} (float)</li>
+     *   <li>{@code tangent_out} (float)</li>
+     * </ol>
+     */
+    public static native int curveKeyCollectionGet(long collection, int index, long[] outKeyIntegral, float[] outKeyFloating);
+
+    /**
+     * cna_curve_key_collection_get_count (curve.h).
+     */
+    public static native int curveKeyCollectionGetCount(long collection, long[] outCount);
+
+    /**
+     * cna_curve_key_init_full (curve.h).
+     *
+     * <p>outKeyIntegral carries CNA_CurveKey in this order:
+     * <ol start="0">
+     *   <li>{@code continuity} (CNA_CurveContinuity)</li>
+     * </ol>
+     *
+     * <p>outKeyFloating carries CNA_CurveKey in this order:
+     * <ol start="0">
+     *   <li>{@code position} (float)</li>
+     *   <li>{@code value} (float)</li>
+     *   <li>{@code tangent_in} (float)</li>
+     *   <li>{@code tangent_out} (float)</li>
+     * </ol>
+     */
+    public static native int curveKeyInitFull(float position, float value, float tangentIn, float tangentOut, int continuity, long[] outKeyIntegral, float[] outKeyFloating);
+
+    /**
+     * cna_curve_set_post_loop (curve.h).
+     */
+    public static native int curveSetPostLoop(long curve, int loopType);
+
+    /**
+     * cna_curve_set_pre_loop (curve.h).
+     */
+    public static native int curveSetPreLoop(long curve, int loopType);
 }

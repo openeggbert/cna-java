@@ -521,6 +521,22 @@ Java_org_openeggbert_cna_internal_generated_NativeCnbRoutes_cnbCrc32cUsesHardwar
 }
 
 JNIEXPORT jint JNICALL
+Java_org_openeggbert_cna_internal_generated_NativeCnbRoutes_cnbDecodeCurve(
+    JNIEnv* environment, jclass declaring_class, jlong document, jlongArray out_curve)
+{
+    (void)environment;
+    (void)declaring_class;
+    CNA_CurveHandle out_curve_value = 0;
+    CNA_Result result = cna.cnb_decode_curve((CNA_CnbDocumentHandle)document, &out_curve_value);
+    if (result == CNA_RESULT_SUCCESS || result == CNA_RESULT_BUFFER_TOO_SMALL) {
+        jlong out_curve_element = (jlong)out_curve_value;
+        (*environment)->SetLongArrayRegion(
+            environment, out_curve, 0, 1, &out_curve_element);
+    }
+    return (jint)result;
+}
+
+JNIEXPORT jint JNICALL
 Java_org_openeggbert_cna_internal_generated_NativeCnbRoutes_cnbDecodeSongDurationMilliseconds(
     JNIEnv* environment, jclass declaring_class, jlong document, jintArray out_duration_milliseconds)
 {
@@ -1388,6 +1404,52 @@ Java_org_openeggbert_cna_internal_generated_NativeCnbRoutes_cnbDocumentRequireSi
         jlong out_index_element = (jlong)out_index_value;
         (*environment)->SetLongArrayRegion(
             environment, out_index, 0, 1, &out_index_element);
+    }
+    return (jint)result;
+}
+
+JNIEXPORT jint JNICALL
+Java_org_openeggbert_cna_internal_generated_NativeCnbRoutes_cnbEncodeCurve(
+    JNIEnv* environment, jclass declaring_class, jlong curve, jbyteArray content_name, jbyteArray destination, jlongArray out_byte_count)
+{
+    (void)environment;
+    (void)declaring_class;
+    jsize content_name_size = (*environment)->GetArrayLength(environment, content_name);
+    jbyte* content_name_bytes = (*environment)->GetByteArrayElements(environment, content_name, NULL);
+    if (content_name_bytes == NULL) {
+        return (jint)CNA_RESULT_OUT_OF_MEMORY;
+    }
+    CNA_StringView content_name_view = {(const char*)content_name_bytes, (uint64_t)content_name_size};
+    jsize destination_size = (*environment)->GetArrayLength(environment, destination);
+    jbyte* destination_elements = (*environment)->GetByteArrayElements(environment, destination, NULL);
+    if (destination_elements == NULL) {
+        return (jint)CNA_RESULT_OUT_OF_MEMORY;
+    }
+    uint8_t* destination_values = (uint8_t*)malloc(
+        ((size_t)destination_size + 1U) * sizeof(*destination_values));
+    if (destination_values == NULL) {
+        (*environment)->ReleaseByteArrayElements(
+            environment, destination, destination_elements, JNI_ABORT);
+        return (jint)CNA_RESULT_OUT_OF_MEMORY;
+    }
+    for (jsize index = 0; index < destination_size; ++index) {
+        destination_values[index] = (uint8_t)destination_elements[index];
+    }
+    uint64_t out_byte_count_value = 0;
+    CNA_Result result = cna.cnb_encode_curve((CNA_CurveHandle)curve, content_name_view, destination_values, (uint64_t)destination_size, &out_byte_count_value);
+    (*environment)->ReleaseByteArrayElements(environment, content_name, content_name_bytes, JNI_ABORT);
+    if (result == CNA_RESULT_SUCCESS) {
+        for (jsize index = 0; index < destination_size; ++index) {
+            destination_elements[index] = (jbyte)destination_values[index];
+        }
+    }
+    free(destination_values);
+    (*environment)->ReleaseByteArrayElements(
+        environment, destination, destination_elements, 0);
+    if (result == CNA_RESULT_SUCCESS || result == CNA_RESULT_BUFFER_TOO_SMALL) {
+        jlong out_byte_count_element = (jlong)out_byte_count_value;
+        (*environment)->SetLongArrayRegion(
+            environment, out_byte_count, 0, 1, &out_byte_count_element);
     }
     return (jint)result;
 }
@@ -3264,5 +3326,208 @@ Java_org_openeggbert_cna_internal_generated_NativeCnbRoutes_cnbWriterWriteToFile
     CNA_StringView path_view = {(const char*)path_bytes, (uint64_t)path_size};
     CNA_Result result = cna.cnb_writer_write_to_file((CNA_CnbWriterHandle)writer, path_view);
     (*environment)->ReleaseByteArrayElements(environment, path, path_bytes, JNI_ABORT);
+    return (jint)result;
+}
+
+JNIEXPORT jint JNICALL
+Java_org_openeggbert_cna_internal_generated_NativeCnbRoutes_curveCreate(
+    JNIEnv* environment, jclass declaring_class, jlongArray out_curve)
+{
+    (void)environment;
+    (void)declaring_class;
+    CNA_CurveHandle out_curve_value = 0;
+    CNA_Result result = cna.curve_create(&out_curve_value);
+    if (result == CNA_RESULT_SUCCESS || result == CNA_RESULT_BUFFER_TOO_SMALL) {
+        jlong out_curve_element = (jlong)out_curve_value;
+        (*environment)->SetLongArrayRegion(
+            environment, out_curve, 0, 1, &out_curve_element);
+    }
+    return (jint)result;
+}
+
+JNIEXPORT jint JNICALL
+Java_org_openeggbert_cna_internal_generated_NativeCnbRoutes_curveDestroy(
+    JNIEnv* environment, jclass declaring_class, jlong curve)
+{
+    (void)environment;
+    (void)declaring_class;
+    CNA_Result result = cna.curve_destroy((CNA_CurveHandle)curve);
+    return (jint)result;
+}
+
+JNIEXPORT jint JNICALL
+Java_org_openeggbert_cna_internal_generated_NativeCnbRoutes_curveGetKeys(
+    JNIEnv* environment, jclass declaring_class, jlong curve, jlongArray out_keys)
+{
+    (void)environment;
+    (void)declaring_class;
+    CNA_CurveKeyCollectionHandle out_keys_value = 0;
+    CNA_Result result = cna.curve_get_keys((CNA_CurveHandle)curve, &out_keys_value);
+    if (result == CNA_RESULT_SUCCESS || result == CNA_RESULT_BUFFER_TOO_SMALL) {
+        jlong out_keys_element = (jlong)out_keys_value;
+        (*environment)->SetLongArrayRegion(
+            environment, out_keys, 0, 1, &out_keys_element);
+    }
+    return (jint)result;
+}
+
+JNIEXPORT jint JNICALL
+Java_org_openeggbert_cna_internal_generated_NativeCnbRoutes_curveGetPostLoop(
+    JNIEnv* environment, jclass declaring_class, jlong curve, jintArray out_loop_type)
+{
+    (void)environment;
+    (void)declaring_class;
+    CNA_CurveLoopType out_loop_type_value = 0;
+    CNA_Result result = cna.curve_get_post_loop((CNA_CurveHandle)curve, &out_loop_type_value);
+    if (result == CNA_RESULT_SUCCESS || result == CNA_RESULT_BUFFER_TOO_SMALL) {
+        jint out_loop_type_element = (jint)out_loop_type_value;
+        (*environment)->SetIntArrayRegion(
+            environment, out_loop_type, 0, 1, &out_loop_type_element);
+    }
+    return (jint)result;
+}
+
+JNIEXPORT jint JNICALL
+Java_org_openeggbert_cna_internal_generated_NativeCnbRoutes_curveGetPreLoop(
+    JNIEnv* environment, jclass declaring_class, jlong curve, jintArray out_loop_type)
+{
+    (void)environment;
+    (void)declaring_class;
+    CNA_CurveLoopType out_loop_type_value = 0;
+    CNA_Result result = cna.curve_get_pre_loop((CNA_CurveHandle)curve, &out_loop_type_value);
+    if (result == CNA_RESULT_SUCCESS || result == CNA_RESULT_BUFFER_TOO_SMALL) {
+        jint out_loop_type_element = (jint)out_loop_type_value;
+        (*environment)->SetIntArrayRegion(
+            environment, out_loop_type, 0, 1, &out_loop_type_element);
+    }
+    return (jint)result;
+}
+
+JNIEXPORT jint JNICALL
+Java_org_openeggbert_cna_internal_generated_NativeCnbRoutes_curveKeyCollectionAdd(
+    JNIEnv* environment, jclass declaring_class, jlong collection, jlongArray keyIntegral, jfloatArray keyFloating)
+{
+    (void)environment;
+    (void)declaring_class;
+    CNA_CurveKey key_value;
+    memset(&key_value, 0, sizeof key_value);
+    {
+        jlong keyIntegral_values[1];
+        (*environment)->GetLongArrayRegion(environment, keyIntegral, 0, 1, keyIntegral_values);
+        key_value.continuity = (CNA_CurveContinuity)keyIntegral_values[0];
+    }
+    {
+        jfloat keyFloating_values[4];
+        (*environment)->GetFloatArrayRegion(environment, keyFloating, 0, 4, keyFloating_values);
+        key_value.position = (float)keyFloating_values[0];
+        key_value.value = (float)keyFloating_values[1];
+        key_value.tangent_in = (float)keyFloating_values[2];
+        key_value.tangent_out = (float)keyFloating_values[3];
+    }
+    CNA_Result result = cna.curve_key_collection_add((CNA_CurveKeyCollectionHandle)collection, key_value);
+    return (jint)result;
+}
+
+JNIEXPORT jint JNICALL
+Java_org_openeggbert_cna_internal_generated_NativeCnbRoutes_curveKeyCollectionDestroy(
+    JNIEnv* environment, jclass declaring_class, jlong collection)
+{
+    (void)environment;
+    (void)declaring_class;
+    CNA_Result result = cna.curve_key_collection_destroy((CNA_CurveKeyCollectionHandle)collection);
+    return (jint)result;
+}
+
+JNIEXPORT jint JNICALL
+Java_org_openeggbert_cna_internal_generated_NativeCnbRoutes_curveKeyCollectionGet(
+    JNIEnv* environment, jclass declaring_class, jlong collection, jint index, jlongArray out_keyIntegral, jfloatArray out_keyFloating)
+{
+    (void)environment;
+    (void)declaring_class;
+    CNA_CurveKey out_key_value;
+    memset(&out_key_value, 0, sizeof out_key_value);
+    CNA_Result result = cna.curve_key_collection_get((CNA_CurveKeyCollectionHandle)collection, (int32_t)index, &out_key_value);
+    if (result == CNA_RESULT_SUCCESS || result == CNA_RESULT_BUFFER_TOO_SMALL) {
+        jlong out_keyIntegral_values[] = {
+            (jlong)out_key_value.continuity
+        };
+        (*environment)->SetLongArrayRegion(environment, out_keyIntegral, 0,
+            (jsize)(sizeof out_keyIntegral_values / sizeof out_keyIntegral_values[0]),
+            out_keyIntegral_values);
+        jfloat out_keyFloating_values[] = {
+            (jfloat)out_key_value.position,
+            (jfloat)out_key_value.value,
+            (jfloat)out_key_value.tangent_in,
+            (jfloat)out_key_value.tangent_out
+        };
+        (*environment)->SetFloatArrayRegion(environment, out_keyFloating, 0,
+            (jsize)(sizeof out_keyFloating_values / sizeof out_keyFloating_values[0]),
+            out_keyFloating_values);
+    }
+    return (jint)result;
+}
+
+JNIEXPORT jint JNICALL
+Java_org_openeggbert_cna_internal_generated_NativeCnbRoutes_curveKeyCollectionGetCount(
+    JNIEnv* environment, jclass declaring_class, jlong collection, jlongArray out_count)
+{
+    (void)environment;
+    (void)declaring_class;
+    uint64_t out_count_value = 0;
+    CNA_Result result = cna.curve_key_collection_get_count((CNA_CurveKeyCollectionHandle)collection, &out_count_value);
+    if (result == CNA_RESULT_SUCCESS || result == CNA_RESULT_BUFFER_TOO_SMALL) {
+        jlong out_count_element = (jlong)out_count_value;
+        (*environment)->SetLongArrayRegion(
+            environment, out_count, 0, 1, &out_count_element);
+    }
+    return (jint)result;
+}
+
+JNIEXPORT jint JNICALL
+Java_org_openeggbert_cna_internal_generated_NativeCnbRoutes_curveKeyInitFull(
+    JNIEnv* environment, jclass declaring_class, jfloat position, jfloat value, jfloat tangent_in, jfloat tangent_out, jint continuity, jlongArray out_keyIntegral, jfloatArray out_keyFloating)
+{
+    (void)environment;
+    (void)declaring_class;
+    CNA_CurveKey out_key_value;
+    memset(&out_key_value, 0, sizeof out_key_value);
+    CNA_Result result = cna.curve_key_init_full((float)position, (float)value, (float)tangent_in, (float)tangent_out, (CNA_CurveContinuity)continuity, &out_key_value);
+    if (result == CNA_RESULT_SUCCESS || result == CNA_RESULT_BUFFER_TOO_SMALL) {
+        jlong out_keyIntegral_values[] = {
+            (jlong)out_key_value.continuity
+        };
+        (*environment)->SetLongArrayRegion(environment, out_keyIntegral, 0,
+            (jsize)(sizeof out_keyIntegral_values / sizeof out_keyIntegral_values[0]),
+            out_keyIntegral_values);
+        jfloat out_keyFloating_values[] = {
+            (jfloat)out_key_value.position,
+            (jfloat)out_key_value.value,
+            (jfloat)out_key_value.tangent_in,
+            (jfloat)out_key_value.tangent_out
+        };
+        (*environment)->SetFloatArrayRegion(environment, out_keyFloating, 0,
+            (jsize)(sizeof out_keyFloating_values / sizeof out_keyFloating_values[0]),
+            out_keyFloating_values);
+    }
+    return (jint)result;
+}
+
+JNIEXPORT jint JNICALL
+Java_org_openeggbert_cna_internal_generated_NativeCnbRoutes_curveSetPostLoop(
+    JNIEnv* environment, jclass declaring_class, jlong curve, jint loop_type)
+{
+    (void)environment;
+    (void)declaring_class;
+    CNA_Result result = cna.curve_set_post_loop((CNA_CurveHandle)curve, (CNA_CurveLoopType)loop_type);
+    return (jint)result;
+}
+
+JNIEXPORT jint JNICALL
+Java_org_openeggbert_cna_internal_generated_NativeCnbRoutes_curveSetPreLoop(
+    JNIEnv* environment, jclass declaring_class, jlong curve, jint loop_type)
+{
+    (void)environment;
+    (void)declaring_class;
+    CNA_Result result = cna.curve_set_pre_loop((CNA_CurveHandle)curve, (CNA_CurveLoopType)loop_type);
     return (jint)result;
 }
