@@ -220,7 +220,7 @@ under `org.openeggbert.cna.extensions.graphics`, never inside the strict package
 remaining 79 has a written reason rather than a plan. Thirty-eight of them are two families this
 renderer refuses at construction -- compute and automatic exposure -- and about a dozen more lend
 a handle whose lifetime the declaration does not state. Those are measurements, recorded in
-`JAVA-EXT-009`, `JAVA-EXT-010` and `JAVA-EXT-011` with the probes that took them, not work waiting
+`JAVA-EXT-010`, `JAVA-EXT-011` and `JAVA-EXT-012` with the probes that took them, not work waiting
 to be typed.
 
 The `.cnb` work is worth naming separately, because it changed what this projection is for. Eight

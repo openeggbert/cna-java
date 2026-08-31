@@ -245,7 +245,7 @@ unexpected type in the narrower one, so its zero still means what it always mean
    Three groups, and none of them is a matter of writing more Java. Twenty-five are the compute
    family and thirteen are automatic exposure: both refuse at construction on a renderer with no
    compute and no luminance readback, so there is no object to configure or observe
-   (`JAVA-EXT-009`, `JAVA-EXT-011`). About a dozen lend a handle whose lifetime the declaration
+   (`JAVA-EXT-012`, `JAVA-EXT-011`). About a dozen lend a handle whose lifetime the declaration
    does not state (`JAVA-EXT-010`). The rest are named individually in `docs/backlog.json`: three
    bake routes whose callback this renderer never enters, nine texture getters that mint a fresh
    handle per call, two scene callbacks, two no-op initialisers, and the one route that would

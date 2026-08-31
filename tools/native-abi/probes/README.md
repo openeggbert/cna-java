@@ -399,7 +399,7 @@ The three routes that do work -- the memory-barrier bitmask test and the two ind
 argument initialisers -- are pure and answer correctly, but they are parts of a family whose other
 twenty-two routes cannot be reached: indirect drawing needs a storage buffer to draw from. Binding
 three helpers with nothing to help would be shipping fragments of an API, so the family is recorded
-as `HARDWARE_PENDING` in `docs/backlog.json` rather than half-projected. It is worth revisiting the
+as `HARDWARE_PENDING` in `docs/backlog.json` under `JAVA-EXT-012` rather than half-projected. It is worth revisiting the
 moment this repository can qualify against a desktop GL 4.3 renderer, where all twenty-five become
 reachable at once.
 
