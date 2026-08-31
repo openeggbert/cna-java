@@ -25,6 +25,12 @@ Supported parameter shapes, all derived from the header:
 A route whose declaration uses anything else -- a callback, a ``void*``
 context, an array of structs -- is refused with a diagnostic rather than
 guessed at, and stays hand-written.
+
+A bare ``T*`` is one structure or an array of them and C does not say which, so
+the generator reads the parameter's own documentation: one that names a count is
+refused until ``routes.json`` says what it is.  ``arrayLengths`` gives the
+element count; ``singleStructs`` says the count in the prose is the structure's
+own fields rather than a number of structures.
 """
 
 from __future__ import annotations
@@ -59,11 +65,14 @@ class Unsupported(Exception):
     pass
 
 
-# A number word, or a reference to one of CNA's own count constants. Either one in a parameter's
-# documentation means the parameter is more than one of whatever it points at.
+# A number word followed closely by a plural, or a reference to one of CNA's own count
+# constants. Either one in a parameter's documentation means the parameter is more than one of
+# whatever it points at.  The plural is what keeps "range twenty" and "two-sided" out of it: a
+# number alone is a value, and a number of *things* is a count.
 COUNT_IN_PROSE = re.compile(
-    r"\b(two|three|four|five|six|seven|eight|nine|ten|eleven|twelve|sixteen|"
-    r"twenty|thirty-two|sixty-four)\b|CNA_[A-Z0-9_]*COUNT[A-Z0-9_]*",
+    r"\b(?:two|three|four|five|six|seven|eight|nine|ten|eleven|twelve|sixteen|"
+    r"twenty|thirty-two|sixty-four)\s+(?:\w+\s+){0,1}\w+s\b"
+    r"|CNA_[A-Z0-9_]*COUNT[A-Z0-9_]*",
     re.IGNORECASE)
 
 
@@ -310,7 +319,8 @@ def plan(route: dict, live: dict) -> dict:
                               "extent": int(declared_extent["length"]), **groups})
                 index += 1
                 continue
-            if counts_more_than_one(parameter.get("doc", "")):
+            if (counts_more_than_one(parameter.get("doc", ""))
+                    and name not in route.get("singleStructs", ())):
                 # CNA's own documentation for this parameter names a count, so it is an array
                 # rather than one structure -- and nothing in the C declaration says so. This is
                 # the shape that would otherwise be marshalled as a single element and then
@@ -321,7 +331,8 @@ def plan(route: dict, live: dict) -> dict:
                     f"{route['symbol']}: '{name}' is a {type_name}* whose documentation names a "
                     f"count -- \"{parameter['doc']}\" -- so whether it is one structure or an "
                     "array cannot be read off the declaration; declare its length in "
-                    "arrayLengths")
+                    "arrayLengths, or name it in singleStructs when the count is the "
+                    "structure's own fields rather than a number of structures")
             in_out = name in route.get("inOut", ())
             if not constant and not in_out and not (
                     name.startswith("out") or name == "destination"):

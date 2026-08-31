@@ -838,6 +838,11 @@ X
         }
     }
 
+    /** The native handle, for the effect that shades through a material. */
+    long handle() {
+        return open();
+    }
+
     private long open() {
         synchronized (this) {
             if (closed) {

@@ -101,6 +101,269 @@ public final class NativeEngineLayerRoutes {
     public static native int aerialPerspectivePassTransmittance(float turbidity, float airMass, float[] outTransmittanceFloating);
 
     /**
+     * cna_area_light_brdf_table_copy_lookup_glsl (engine_layer.h).
+     */
+    public static native int areaLightBrdfTableCopyLookupGlsl(byte[] destination, long[] outBytes);
+
+    /**
+     * cna_area_light_brdf_table_create (engine_layer.h).
+     */
+    public static native int areaLightBrdfTableCreate(long graphicsDevice, long[] outTable);
+
+    /**
+     * cna_area_light_brdf_table_create_with_size (engine_layer.h).
+     */
+    public static native int areaLightBrdfTableCreateWithSize(long graphicsDevice, int size, int sampleCount, long[] outTable);
+
+    /**
+     * cna_area_light_brdf_table_destroy (engine_layer.h).
+     */
+    public static native int areaLightBrdfTableDestroy(long table);
+
+    /**
+     * cna_area_light_brdf_table_evaluate (engine_layer.h).
+     *
+     * <p>outTermsFloating carries CNA_AreaLightBrdfTerms in this order:
+     * <ol start="0">
+     *   <li>{@code magnitude} (float)</li>
+     *   <li>{@code fresnel} (float)</li>
+     *   <li>{@code average_tangent} (float)</li>
+     *   <li>{@code average_normal} (float)</li>
+     * </ol>
+     */
+    public static native int areaLightBrdfTableEvaluate(float roughness, float cosTheta, int sampleCount, float[] outTermsFloating);
+
+    /**
+     * cna_area_light_brdf_table_get_generation_milliseconds (engine_layer.h).
+     */
+    public static native int areaLightBrdfTableGetGenerationMilliseconds(long table, double[] outMilliseconds);
+
+    /**
+     * cna_area_light_brdf_table_get_sample_count (engine_layer.h).
+     */
+    public static native int areaLightBrdfTableGetSampleCount(long table, int[] outSampleCount);
+
+    /**
+     * cna_area_light_brdf_table_get_size (engine_layer.h).
+     */
+    public static native int areaLightBrdfTableGetSize(long table, int[] outSize);
+
+    /**
+     * cna_area_light_ext_init (engine_layer.h).
+     *
+     * <p>outLightBytes carries CNA_AreaLightEXT in this order:
+     * <ol start="0">
+     *   <li>{@code reserved0[0]} (uint8_t)</li>
+     *   <li>{@code reserved0[1]} (uint8_t)</li>
+     *   <li>{@code reserved0[2]} (uint8_t)</li>
+     * </ol>
+     *
+     * <p>outLightIntegral carries CNA_AreaLightEXT in this order:
+     * <ol start="0">
+     *   <li>{@code shape} (CNA_AreaLightShapeEXT)</li>
+     *   <li>{@code two_sided} (CNA_Bool)</li>
+     * </ol>
+     *
+     * <p>outLightFloating carries CNA_AreaLightEXT in this order:
+     * <ol start="0">
+     *   <li>{@code position.x} (float)</li>
+     *   <li>{@code position.y} (float)</li>
+     *   <li>{@code position.z} (float)</li>
+     *   <li>{@code right_axis.x} (float)</li>
+     *   <li>{@code right_axis.y} (float)</li>
+     *   <li>{@code right_axis.z} (float)</li>
+     *   <li>{@code up_axis.x} (float)</li>
+     *   <li>{@code up_axis.y} (float)</li>
+     *   <li>{@code up_axis.z} (float)</li>
+     *   <li>{@code color.x} (float)</li>
+     *   <li>{@code color.y} (float)</li>
+     *   <li>{@code color.z} (float)</li>
+     *   <li>{@code intensity} (float)</li>
+     *   <li>{@code range} (float)</li>
+     * </ol>
+     */
+    public static native int areaLightExtInit(byte[] outLightBytes, long[] outLightIntegral, float[] outLightFloating);
+
+    /**
+     * cna_area_light_ext_is_valid (engine_layer.h).
+     *
+     * <p>lightBytes carries CNA_AreaLightEXT in this order:
+     * <ol start="0">
+     *   <li>{@code reserved0[0]} (uint8_t)</li>
+     *   <li>{@code reserved0[1]} (uint8_t)</li>
+     *   <li>{@code reserved0[2]} (uint8_t)</li>
+     * </ol>
+     *
+     * <p>lightIntegral carries CNA_AreaLightEXT in this order:
+     * <ol start="0">
+     *   <li>{@code shape} (CNA_AreaLightShapeEXT)</li>
+     *   <li>{@code two_sided} (CNA_Bool)</li>
+     * </ol>
+     *
+     * <p>lightFloating carries CNA_AreaLightEXT in this order:
+     * <ol start="0">
+     *   <li>{@code position.x} (float)</li>
+     *   <li>{@code position.y} (float)</li>
+     *   <li>{@code position.z} (float)</li>
+     *   <li>{@code right_axis.x} (float)</li>
+     *   <li>{@code right_axis.y} (float)</li>
+     *   <li>{@code right_axis.z} (float)</li>
+     *   <li>{@code up_axis.x} (float)</li>
+     *   <li>{@code up_axis.y} (float)</li>
+     *   <li>{@code up_axis.z} (float)</li>
+     *   <li>{@code color.x} (float)</li>
+     *   <li>{@code color.y} (float)</li>
+     *   <li>{@code color.z} (float)</li>
+     *   <li>{@code intensity} (float)</li>
+     *   <li>{@code range} (float)</li>
+     * </ol>
+     */
+    public static native int areaLightExtIsValid(byte[] lightBytes, long[] lightIntegral, float[] lightFloating, boolean[] outValid);
+
+    /**
+     * cna_area_light_shading_contribution (engine_layer.h).
+     *
+     * <p>lightBytes carries CNA_AreaLightEXT in this order:
+     * <ol start="0">
+     *   <li>{@code reserved0[0]} (uint8_t)</li>
+     *   <li>{@code reserved0[1]} (uint8_t)</li>
+     *   <li>{@code reserved0[2]} (uint8_t)</li>
+     * </ol>
+     *
+     * <p>lightIntegral carries CNA_AreaLightEXT in this order:
+     * <ol start="0">
+     *   <li>{@code shape} (CNA_AreaLightShapeEXT)</li>
+     *   <li>{@code two_sided} (CNA_Bool)</li>
+     * </ol>
+     *
+     * <p>lightFloating carries CNA_AreaLightEXT in this order:
+     * <ol start="0">
+     *   <li>{@code position.x} (float)</li>
+     *   <li>{@code position.y} (float)</li>
+     *   <li>{@code position.z} (float)</li>
+     *   <li>{@code right_axis.x} (float)</li>
+     *   <li>{@code right_axis.y} (float)</li>
+     *   <li>{@code right_axis.z} (float)</li>
+     *   <li>{@code up_axis.x} (float)</li>
+     *   <li>{@code up_axis.y} (float)</li>
+     *   <li>{@code up_axis.z} (float)</li>
+     *   <li>{@code color.x} (float)</li>
+     *   <li>{@code color.y} (float)</li>
+     *   <li>{@code color.z} (float)</li>
+     *   <li>{@code intensity} (float)</li>
+     *   <li>{@code range} (float)</li>
+     * </ol>
+     *
+     * <p>surfaceFloating carries CNA_Vector3 in this order:
+     * <ol start="0">
+     *   <li>{@code x} (float)</li>
+     *   <li>{@code y} (float)</li>
+     *   <li>{@code z} (float)</li>
+     * </ol>
+     *
+     * <p>normalFloating carries CNA_Vector3 in this order:
+     * <ol start="0">
+     *   <li>{@code x} (float)</li>
+     *   <li>{@code y} (float)</li>
+     *   <li>{@code z} (float)</li>
+     * </ol>
+     *
+     * <p>cameraPositionFloating carries CNA_Vector3 in this order:
+     * <ol start="0">
+     *   <li>{@code x} (float)</li>
+     *   <li>{@code y} (float)</li>
+     *   <li>{@code z} (float)</li>
+     * </ol>
+     *
+     * <p>baseColorFloating carries CNA_Vector3 in this order:
+     * <ol start="0">
+     *   <li>{@code x} (float)</li>
+     *   <li>{@code y} (float)</li>
+     *   <li>{@code z} (float)</li>
+     * </ol>
+     *
+     * <p>outContributionFloating carries CNA_Vector3 in this order:
+     * <ol start="0">
+     *   <li>{@code x} (float)</li>
+     *   <li>{@code y} (float)</li>
+     *   <li>{@code z} (float)</li>
+     * </ol>
+     */
+    public static native int areaLightShadingContribution(byte[] lightBytes, long[] lightIntegral, float[] lightFloating, float[] surfaceFloating, float[] normalFloating, float[] cameraPositionFloating, float[] baseColorFloating, float metallic, float roughness, float[] outContributionFloating);
+
+    /**
+     * cna_area_light_shading_copy_shading_glsl (engine_layer.h).
+     */
+    public static native int areaLightShadingCopyShadingGlsl(byte[] destination, long[] outBytes);
+
+    /**
+     * cna_area_light_shading_coverage (engine_layer.h).
+     *
+     * <p>surfaceFloating carries CNA_Vector3 in this order:
+     * <ol start="0">
+     *   <li>{@code x} (float)</li>
+     *   <li>{@code y} (float)</li>
+     *   <li>{@code z} (float)</li>
+     * </ol>
+     *
+     * <p>lobeAxisFloating carries CNA_Vector3 in this order:
+     * <ol start="0">
+     *   <li>{@code x} (float)</li>
+     *   <li>{@code y} (float)</li>
+     *   <li>{@code z} (float)</li>
+     * </ol>
+     */
+    public static native int areaLightShadingCoverage(float[] quadFloating, float[] surfaceFloating, float[] lobeAxisFloating, float lobeScale, boolean twoSided, float[] outCoverage);
+
+    /**
+     * cna_area_light_shading_lobe_scale_for (engine_layer.h).
+     */
+    public static native int areaLightShadingLobeScaleFor(float roughness, float[] outScale);
+
+    /**
+     * cna_area_light_shading_quad_of (engine_layer.h).
+     *
+     * <p>lightBytes carries CNA_AreaLightEXT in this order:
+     * <ol start="0">
+     *   <li>{@code reserved0[0]} (uint8_t)</li>
+     *   <li>{@code reserved0[1]} (uint8_t)</li>
+     *   <li>{@code reserved0[2]} (uint8_t)</li>
+     * </ol>
+     *
+     * <p>lightIntegral carries CNA_AreaLightEXT in this order:
+     * <ol start="0">
+     *   <li>{@code shape} (CNA_AreaLightShapeEXT)</li>
+     *   <li>{@code two_sided} (CNA_Bool)</li>
+     * </ol>
+     *
+     * <p>lightFloating carries CNA_AreaLightEXT in this order:
+     * <ol start="0">
+     *   <li>{@code position.x} (float)</li>
+     *   <li>{@code position.y} (float)</li>
+     *   <li>{@code position.z} (float)</li>
+     *   <li>{@code right_axis.x} (float)</li>
+     *   <li>{@code right_axis.y} (float)</li>
+     *   <li>{@code right_axis.z} (float)</li>
+     *   <li>{@code up_axis.x} (float)</li>
+     *   <li>{@code up_axis.y} (float)</li>
+     *   <li>{@code up_axis.z} (float)</li>
+     *   <li>{@code color.x} (float)</li>
+     *   <li>{@code color.y} (float)</li>
+     *   <li>{@code color.z} (float)</li>
+     *   <li>{@code intensity} (float)</li>
+     *   <li>{@code range} (float)</li>
+     * </ol>
+     *
+     * <p>surfaceFloating carries CNA_Vector3 in this order:
+     * <ol start="0">
+     *   <li>{@code x} (float)</li>
+     *   <li>{@code y} (float)</li>
+     *   <li>{@code z} (float)</li>
+     * </ol>
+     */
+    public static native int areaLightShadingQuadOf(byte[] lightBytes, long[] lightIntegral, float[] lightFloating, float[] surfaceFloating, float[] outQuadFloating);
+
+    /**
      * cna_atmospheric_sky_copy_model_glsl (engine_layer.h).
      */
     public static native int atmosphericSkyCopyModelGlsl(byte[] destination, long[] outBytes);
@@ -563,6 +826,420 @@ public final class NativeEngineLayerRoutes {
      * cna_chromatic_aberration_pass_set_strength (engine_layer.h).
      */
     public static native int chromaticAberrationPassSetStrength(long pass, float value);
+
+    /**
+     * cna_clustered_forward_effect_begin (engine_layer.h).
+     *
+     * <p>worldFloating carries CNA_Matrix in this order:
+     * <ol start="0">
+     *   <li>{@code m11} (float)</li>
+     *   <li>{@code m12} (float)</li>
+     *   <li>{@code m13} (float)</li>
+     *   <li>{@code m14} (float)</li>
+     *   <li>{@code m21} (float)</li>
+     *   <li>{@code m22} (float)</li>
+     *   <li>{@code m23} (float)</li>
+     *   <li>{@code m24} (float)</li>
+     *   <li>{@code m31} (float)</li>
+     *   <li>{@code m32} (float)</li>
+     *   <li>{@code m33} (float)</li>
+     *   <li>{@code m34} (float)</li>
+     *   <li>{@code m41} (float)</li>
+     *   <li>{@code m42} (float)</li>
+     *   <li>{@code m43} (float)</li>
+     *   <li>{@code m44} (float)</li>
+     * </ol>
+     *
+     * <p>viewFloating carries CNA_Matrix in this order:
+     * <ol start="0">
+     *   <li>{@code m11} (float)</li>
+     *   <li>{@code m12} (float)</li>
+     *   <li>{@code m13} (float)</li>
+     *   <li>{@code m14} (float)</li>
+     *   <li>{@code m21} (float)</li>
+     *   <li>{@code m22} (float)</li>
+     *   <li>{@code m23} (float)</li>
+     *   <li>{@code m24} (float)</li>
+     *   <li>{@code m31} (float)</li>
+     *   <li>{@code m32} (float)</li>
+     *   <li>{@code m33} (float)</li>
+     *   <li>{@code m34} (float)</li>
+     *   <li>{@code m41} (float)</li>
+     *   <li>{@code m42} (float)</li>
+     *   <li>{@code m43} (float)</li>
+     *   <li>{@code m44} (float)</li>
+     * </ol>
+     *
+     * <p>projectionFloating carries CNA_Matrix in this order:
+     * <ol start="0">
+     *   <li>{@code m11} (float)</li>
+     *   <li>{@code m12} (float)</li>
+     *   <li>{@code m13} (float)</li>
+     *   <li>{@code m14} (float)</li>
+     *   <li>{@code m21} (float)</li>
+     *   <li>{@code m22} (float)</li>
+     *   <li>{@code m23} (float)</li>
+     *   <li>{@code m24} (float)</li>
+     *   <li>{@code m31} (float)</li>
+     *   <li>{@code m32} (float)</li>
+     *   <li>{@code m33} (float)</li>
+     *   <li>{@code m34} (float)</li>
+     *   <li>{@code m41} (float)</li>
+     *   <li>{@code m42} (float)</li>
+     *   <li>{@code m43} (float)</li>
+     *   <li>{@code m44} (float)</li>
+     * </ol>
+     *
+     * <p>cameraPositionFloating carries CNA_Vector3 in this order:
+     * <ol start="0">
+     *   <li>{@code x} (float)</li>
+     *   <li>{@code y} (float)</li>
+     *   <li>{@code z} (float)</li>
+     * </ol>
+     */
+    public static native int clusteredForwardEffectBegin(long effect, float[] worldFloating, float[] viewFloating, float[] projectionFloating, float[] cameraPositionFloating, long lights);
+
+    /**
+     * cna_clustered_forward_effect_clear_area_light (engine_layer.h).
+     */
+    public static native int clusteredForwardEffectClearAreaLight(long effect);
+
+    /**
+     * cna_clustered_forward_effect_clear_light_probe (engine_layer.h).
+     */
+    public static native int clusteredForwardEffectClearLightProbe(long effect);
+
+    /**
+     * cna_clustered_forward_effect_contribution (engine_layer.h).
+     *
+     * <p>lightBytes carries CNA_ClusteredLightEXT in this order:
+     * <ol start="0">
+     *   <li>{@code reserved[0]} (uint8_t)</li>
+     *   <li>{@code reserved[1]} (uint8_t)</li>
+     *   <li>{@code reserved[2]} (uint8_t)</li>
+     * </ol>
+     *
+     * <p>lightIntegral carries CNA_ClusteredLightEXT in this order:
+     * <ol start="0">
+     *   <li>{@code type} (CNA_ClusteredLightType)</li>
+     *   <li>{@code casts_shadows} (CNA_Bool)</li>
+     * </ol>
+     *
+     * <p>lightFloating carries CNA_ClusteredLightEXT in this order:
+     * <ol start="0">
+     *   <li>{@code position.x} (float)</li>
+     *   <li>{@code position.y} (float)</li>
+     *   <li>{@code position.z} (float)</li>
+     *   <li>{@code direction.x} (float)</li>
+     *   <li>{@code direction.y} (float)</li>
+     *   <li>{@code direction.z} (float)</li>
+     *   <li>{@code color.x} (float)</li>
+     *   <li>{@code color.y} (float)</li>
+     *   <li>{@code color.z} (float)</li>
+     *   <li>{@code intensity} (float)</li>
+     *   <li>{@code range} (float)</li>
+     *   <li>{@code inner_angle} (float)</li>
+     *   <li>{@code outer_angle} (float)</li>
+     * </ol>
+     *
+     * <p>surfaceFloating carries CNA_Vector3 in this order:
+     * <ol start="0">
+     *   <li>{@code x} (float)</li>
+     *   <li>{@code y} (float)</li>
+     *   <li>{@code z} (float)</li>
+     * </ol>
+     *
+     * <p>normalFloating carries CNA_Vector3 in this order:
+     * <ol start="0">
+     *   <li>{@code x} (float)</li>
+     *   <li>{@code y} (float)</li>
+     *   <li>{@code z} (float)</li>
+     * </ol>
+     *
+     * <p>cameraPositionFloating carries CNA_Vector3 in this order:
+     * <ol start="0">
+     *   <li>{@code x} (float)</li>
+     *   <li>{@code y} (float)</li>
+     *   <li>{@code z} (float)</li>
+     * </ol>
+     *
+     * <p>baseColorFloating carries CNA_Vector3 in this order:
+     * <ol start="0">
+     *   <li>{@code x} (float)</li>
+     *   <li>{@code y} (float)</li>
+     *   <li>{@code z} (float)</li>
+     * </ol>
+     *
+     * <p>sheenColorFloating carries CNA_Vector3 in this order:
+     * <ol start="0">
+     *   <li>{@code x} (float)</li>
+     *   <li>{@code y} (float)</li>
+     *   <li>{@code z} (float)</li>
+     * </ol>
+     *
+     * <p>subsurfaceColorFloating carries CNA_Vector3 in this order:
+     * <ol start="0">
+     *   <li>{@code x} (float)</li>
+     *   <li>{@code y} (float)</li>
+     *   <li>{@code z} (float)</li>
+     * </ol>
+     *
+     * <p>outContributionFloating carries CNA_Vector3 in this order:
+     * <ol start="0">
+     *   <li>{@code x} (float)</li>
+     *   <li>{@code y} (float)</li>
+     *   <li>{@code z} (float)</li>
+     * </ol>
+     */
+    public static native int clusteredForwardEffectContribution(byte[] lightBytes, long[] lightIntegral, float[] lightFloating, float[] surfaceFloating, float[] normalFloating, float[] cameraPositionFloating, float[] baseColorFloating, float metallic, float roughness, float clearcoat, float clearcoatRoughness, float[] sheenColorFloating, float sheenRoughness, float iridescence, float iridescenceIor, float iridescenceThickness, float[] subsurfaceColorFloating, float subsurfaceWrap, float[] outContributionFloating);
+
+    /**
+     * cna_clustered_forward_effect_contribution_with_extensions (engine_layer.h).
+     *
+     * <p>lightBytes carries CNA_ClusteredLightEXT in this order:
+     * <ol start="0">
+     *   <li>{@code reserved[0]} (uint8_t)</li>
+     *   <li>{@code reserved[1]} (uint8_t)</li>
+     *   <li>{@code reserved[2]} (uint8_t)</li>
+     * </ol>
+     *
+     * <p>lightIntegral carries CNA_ClusteredLightEXT in this order:
+     * <ol start="0">
+     *   <li>{@code type} (CNA_ClusteredLightType)</li>
+     *   <li>{@code casts_shadows} (CNA_Bool)</li>
+     * </ol>
+     *
+     * <p>lightFloating carries CNA_ClusteredLightEXT in this order:
+     * <ol start="0">
+     *   <li>{@code position.x} (float)</li>
+     *   <li>{@code position.y} (float)</li>
+     *   <li>{@code position.z} (float)</li>
+     *   <li>{@code direction.x} (float)</li>
+     *   <li>{@code direction.y} (float)</li>
+     *   <li>{@code direction.z} (float)</li>
+     *   <li>{@code color.x} (float)</li>
+     *   <li>{@code color.y} (float)</li>
+     *   <li>{@code color.z} (float)</li>
+     *   <li>{@code intensity} (float)</li>
+     *   <li>{@code range} (float)</li>
+     *   <li>{@code inner_angle} (float)</li>
+     *   <li>{@code outer_angle} (float)</li>
+     * </ol>
+     *
+     * <p>surfaceFloating carries CNA_Vector3 in this order:
+     * <ol start="0">
+     *   <li>{@code x} (float)</li>
+     *   <li>{@code y} (float)</li>
+     *   <li>{@code z} (float)</li>
+     * </ol>
+     *
+     * <p>normalFloating carries CNA_Vector3 in this order:
+     * <ol start="0">
+     *   <li>{@code x} (float)</li>
+     *   <li>{@code y} (float)</li>
+     *   <li>{@code z} (float)</li>
+     * </ol>
+     *
+     * <p>cameraPositionFloating carries CNA_Vector3 in this order:
+     * <ol start="0">
+     *   <li>{@code x} (float)</li>
+     *   <li>{@code y} (float)</li>
+     *   <li>{@code z} (float)</li>
+     * </ol>
+     *
+     * <p>baseColorFloating carries CNA_Vector3 in this order:
+     * <ol start="0">
+     *   <li>{@code x} (float)</li>
+     *   <li>{@code y} (float)</li>
+     *   <li>{@code z} (float)</li>
+     * </ol>
+     *
+     * <p>outContributionFloating carries CNA_Vector3 in this order:
+     * <ol start="0">
+     *   <li>{@code x} (float)</li>
+     *   <li>{@code y} (float)</li>
+     *   <li>{@code z} (float)</li>
+     * </ol>
+     */
+    public static native int clusteredForwardEffectContributionWithExtensions(byte[] lightBytes, long[] lightIntegral, float[] lightFloating, float[] surfaceFloating, float[] normalFloating, float[] cameraPositionFloating, float[] baseColorFloating, float metallic, float roughness, long extensions, float[] outContributionFloating);
+
+    /**
+     * cna_clustered_forward_effect_create (engine_layer.h).
+     */
+    public static native int clusteredForwardEffectCreate(long graphicsDevice, long[] outEffect);
+
+    /**
+     * cna_clustered_forward_effect_destroy (engine_layer.h).
+     */
+    public static native int clusteredForwardEffectDestroy(long effect);
+
+    /**
+     * cna_clustered_forward_effect_get_ambient (engine_layer.h).
+     *
+     * <p>outAmbientFloating carries CNA_Vector3 in this order:
+     * <ol start="0">
+     *   <li>{@code x} (float)</li>
+     *   <li>{@code y} (float)</li>
+     *   <li>{@code z} (float)</li>
+     * </ol>
+     */
+    public static native int clusteredForwardEffectGetAmbient(long effect, float[] outAmbientFloating);
+
+    /**
+     * cna_clustered_forward_effect_get_base_color (engine_layer.h).
+     *
+     * <p>outColorFloating carries CNA_Vector3 in this order:
+     * <ol start="0">
+     *   <li>{@code x} (float)</li>
+     *   <li>{@code y} (float)</li>
+     *   <li>{@code z} (float)</li>
+     * </ol>
+     */
+    public static native int clusteredForwardEffectGetBaseColor(long effect, float[] outColorFloating);
+
+    /**
+     * cna_clustered_forward_effect_get_ior (engine_layer.h).
+     */
+    public static native int clusteredForwardEffectGetIor(long effect, float[] outIor);
+
+    /**
+     * cna_clustered_forward_effect_get_metallic (engine_layer.h).
+     */
+    public static native int clusteredForwardEffectGetMetallic(long effect, float[] outMetallic);
+
+    /**
+     * cna_clustered_forward_effect_get_roughness (engine_layer.h).
+     */
+    public static native int clusteredForwardEffectGetRoughness(long effect, float[] outRoughness);
+
+    /**
+     * cna_clustered_forward_effect_has_area_light (engine_layer.h).
+     */
+    public static native int clusteredForwardEffectHasAreaLight(long effect, boolean[] outHas);
+
+    /**
+     * cna_clustered_forward_effect_has_light_probe (engine_layer.h).
+     */
+    public static native int clusteredForwardEffectHasLightProbe(long effect, boolean[] outHas);
+
+    /**
+     * cna_clustered_forward_effect_is_supported (engine_layer.h).
+     */
+    public static native int clusteredForwardEffectIsSupported(long effect, boolean[] outSupported);
+
+    /**
+     * cna_clustered_forward_effect_set_ambient (engine_layer.h).
+     *
+     * <p>ambientFloating carries CNA_Vector3 in this order:
+     * <ol start="0">
+     *   <li>{@code x} (float)</li>
+     *   <li>{@code y} (float)</li>
+     *   <li>{@code z} (float)</li>
+     * </ol>
+     */
+    public static native int clusteredForwardEffectSetAmbient(long effect, float[] ambientFloating);
+
+    /**
+     * cna_clustered_forward_effect_set_area_light (engine_layer.h).
+     *
+     * <p>lightBytes carries CNA_AreaLightEXT in this order:
+     * <ol start="0">
+     *   <li>{@code reserved0[0]} (uint8_t)</li>
+     *   <li>{@code reserved0[1]} (uint8_t)</li>
+     *   <li>{@code reserved0[2]} (uint8_t)</li>
+     * </ol>
+     *
+     * <p>lightIntegral carries CNA_AreaLightEXT in this order:
+     * <ol start="0">
+     *   <li>{@code shape} (CNA_AreaLightShapeEXT)</li>
+     *   <li>{@code two_sided} (CNA_Bool)</li>
+     * </ol>
+     *
+     * <p>lightFloating carries CNA_AreaLightEXT in this order:
+     * <ol start="0">
+     *   <li>{@code position.x} (float)</li>
+     *   <li>{@code position.y} (float)</li>
+     *   <li>{@code position.z} (float)</li>
+     *   <li>{@code right_axis.x} (float)</li>
+     *   <li>{@code right_axis.y} (float)</li>
+     *   <li>{@code right_axis.z} (float)</li>
+     *   <li>{@code up_axis.x} (float)</li>
+     *   <li>{@code up_axis.y} (float)</li>
+     *   <li>{@code up_axis.z} (float)</li>
+     *   <li>{@code color.x} (float)</li>
+     *   <li>{@code color.y} (float)</li>
+     *   <li>{@code color.z} (float)</li>
+     *   <li>{@code intensity} (float)</li>
+     *   <li>{@code range} (float)</li>
+     * </ol>
+     */
+    public static native int clusteredForwardEffectSetAreaLight(long effect, byte[] lightBytes, long[] lightIntegral, float[] lightFloating, long table);
+
+    /**
+     * cna_clustered_forward_effect_set_base_color (engine_layer.h).
+     *
+     * <p>colorFloating carries CNA_Vector3 in this order:
+     * <ol start="0">
+     *   <li>{@code x} (float)</li>
+     *   <li>{@code y} (float)</li>
+     *   <li>{@code z} (float)</li>
+     * </ol>
+     */
+    public static native int clusteredForwardEffectSetBaseColor(long effect, float[] colorFloating);
+
+    /**
+     * cna_clustered_forward_effect_set_ior (engine_layer.h).
+     */
+    public static native int clusteredForwardEffectSetIor(long effect, float ior);
+
+    /**
+     * cna_clustered_forward_effect_set_light_probe (engine_layer.h).
+     */
+    public static native int clusteredForwardEffectSetLightProbe(long effect, long probe);
+
+    /**
+     * cna_clustered_forward_effect_set_light_probe_volume (engine_layer.h).
+     */
+    public static native int clusteredForwardEffectSetLightProbeVolume(long effect, long volume);
+
+    /**
+     * cna_clustered_forward_effect_set_material_extensions (engine_layer.h).
+     */
+    public static native int clusteredForwardEffectSetMaterialExtensions(long effect, long extensions);
+
+    /**
+     * cna_clustered_forward_effect_set_metallic (engine_layer.h).
+     */
+    public static native int clusteredForwardEffectSetMetallic(long effect, float metallic);
+
+    /**
+     * cna_clustered_forward_effect_set_opaque_frame (engine_layer.h).
+     */
+    public static native int clusteredForwardEffectSetOpaqueFrame(long effect, long frame);
+
+    /**
+     * cna_clustered_forward_effect_set_roughness (engine_layer.h).
+     */
+    public static native int clusteredForwardEffectSetRoughness(long effect, float roughness);
+
+    /**
+     * cna_clustered_forward_effect_volume_attenuation (engine_layer.h).
+     *
+     * <p>attenuationColorFloating carries CNA_Vector3 in this order:
+     * <ol start="0">
+     *   <li>{@code x} (float)</li>
+     *   <li>{@code y} (float)</li>
+     *   <li>{@code z} (float)</li>
+     * </ol>
+     *
+     * <p>outAttenuationFloating carries CNA_Vector3 in this order:
+     * <ol start="0">
+     *   <li>{@code x} (float)</li>
+     *   <li>{@code y} (float)</li>
+     *   <li>{@code z} (float)</li>
+     * </ol>
+     */
+    public static native int clusteredForwardEffectVolumeAttenuation(float[] attenuationColorFloating, float attenuationDistance, float thickness, float[] outAttenuationFloating);
 
     /**
      * cna_clustered_light_assignment_adopt (engine_layer.h).

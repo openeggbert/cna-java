@@ -211,6 +211,532 @@ Java_org_openeggbert_cna_internal_generated_NativeEngineLayerRoutes_aerialPerspe
 }
 
 JNIEXPORT jint JNICALL
+Java_org_openeggbert_cna_internal_generated_NativeEngineLayerRoutes_areaLightBrdfTableCopyLookupGlsl(
+    JNIEnv* environment, jclass declaring_class, jbyteArray destination, jlongArray out_bytes)
+{
+    (void)environment;
+    (void)declaring_class;
+    jsize destination_size = (*environment)->GetArrayLength(environment, destination);
+    jbyte* destination_bytes = (*environment)->GetByteArrayElements(environment, destination, NULL);
+    if (destination_bytes == NULL) {
+        return (jint)CNA_RESULT_OUT_OF_MEMORY;
+    }
+    uint64_t destination_written = 0;
+    CNA_Result call_result = cna.area_light_brdf_table_copy_lookup_glsl((char*)destination_bytes, (uint64_t)destination_size, &destination_written);
+    (*environment)->ReleaseByteArrayElements(environment, destination, destination_bytes, 0);
+    if (call_result == CNA_RESULT_SUCCESS || call_result == CNA_RESULT_BUFFER_TOO_SMALL) {
+        jlong destination_element = (jlong)destination_written;
+        (*environment)->SetLongArrayRegion(
+            environment, out_bytes, 0, 1, &destination_element);
+    }
+    return (jint)call_result;
+}
+
+JNIEXPORT jint JNICALL
+Java_org_openeggbert_cna_internal_generated_NativeEngineLayerRoutes_areaLightBrdfTableCreate(
+    JNIEnv* environment, jclass declaring_class, jlong graphics_device, jlongArray out_table)
+{
+    (void)environment;
+    (void)declaring_class;
+    CNA_AreaLightBrdfTableHandle out_table_value = 0;
+    CNA_Result call_result = cna.area_light_brdf_table_create((CNA_Handle)graphics_device, &out_table_value);
+    if (call_result == CNA_RESULT_SUCCESS || call_result == CNA_RESULT_BUFFER_TOO_SMALL) {
+        jlong out_table_element = (jlong)out_table_value;
+        (*environment)->SetLongArrayRegion(
+            environment, out_table, 0, 1, &out_table_element);
+    }
+    return (jint)call_result;
+}
+
+JNIEXPORT jint JNICALL
+Java_org_openeggbert_cna_internal_generated_NativeEngineLayerRoutes_areaLightBrdfTableCreateWithSize(
+    JNIEnv* environment, jclass declaring_class, jlong graphics_device, jint size, jint sample_count, jlongArray out_table)
+{
+    (void)environment;
+    (void)declaring_class;
+    CNA_AreaLightBrdfTableHandle out_table_value = 0;
+    CNA_Result call_result = cna.area_light_brdf_table_create_with_size((CNA_Handle)graphics_device, (int32_t)size, (int32_t)sample_count, &out_table_value);
+    if (call_result == CNA_RESULT_SUCCESS || call_result == CNA_RESULT_BUFFER_TOO_SMALL) {
+        jlong out_table_element = (jlong)out_table_value;
+        (*environment)->SetLongArrayRegion(
+            environment, out_table, 0, 1, &out_table_element);
+    }
+    return (jint)call_result;
+}
+
+JNIEXPORT jint JNICALL
+Java_org_openeggbert_cna_internal_generated_NativeEngineLayerRoutes_areaLightBrdfTableDestroy(
+    JNIEnv* environment, jclass declaring_class, jlong table)
+{
+    (void)environment;
+    (void)declaring_class;
+    CNA_Result call_result = cna.area_light_brdf_table_destroy((CNA_AreaLightBrdfTableHandle)table);
+    return (jint)call_result;
+}
+
+JNIEXPORT jint JNICALL
+Java_org_openeggbert_cna_internal_generated_NativeEngineLayerRoutes_areaLightBrdfTableEvaluate(
+    JNIEnv* environment, jclass declaring_class, jfloat roughness, jfloat cos_theta, jint sample_count, jfloatArray out_termsFloating)
+{
+    (void)environment;
+    (void)declaring_class;
+    CNA_AreaLightBrdfTerms out_terms_value;
+    memset(&out_terms_value, 0, sizeof out_terms_value);
+    out_terms_value.struct_size = (uint32_t)(sizeof out_terms_value);
+    out_terms_value.struct_version = UINT32_C(1);
+    CNA_Result call_result = cna.area_light_brdf_table_evaluate((float)roughness, (float)cos_theta, (int32_t)sample_count, &out_terms_value);
+    if (call_result == CNA_RESULT_SUCCESS || call_result == CNA_RESULT_BUFFER_TOO_SMALL) {
+        jfloat out_termsFloating_values[] = {
+            (jfloat)out_terms_value.magnitude,
+            (jfloat)out_terms_value.fresnel,
+            (jfloat)out_terms_value.average_tangent,
+            (jfloat)out_terms_value.average_normal
+        };
+        (*environment)->SetFloatArrayRegion(environment, out_termsFloating, 0,
+            (jsize)(sizeof out_termsFloating_values / sizeof out_termsFloating_values[0]),
+            out_termsFloating_values);
+    }
+    return (jint)call_result;
+}
+
+JNIEXPORT jint JNICALL
+Java_org_openeggbert_cna_internal_generated_NativeEngineLayerRoutes_areaLightBrdfTableGetGenerationMilliseconds(
+    JNIEnv* environment, jclass declaring_class, jlong table, jdoubleArray out_milliseconds)
+{
+    (void)environment;
+    (void)declaring_class;
+    double out_milliseconds_value = 0;
+    CNA_Result call_result = cna.area_light_brdf_table_get_generation_milliseconds((CNA_AreaLightBrdfTableHandle)table, &out_milliseconds_value);
+    if (call_result == CNA_RESULT_SUCCESS || call_result == CNA_RESULT_BUFFER_TOO_SMALL) {
+        jdouble out_milliseconds_element = (jdouble)out_milliseconds_value;
+        (*environment)->SetDoubleArrayRegion(
+            environment, out_milliseconds, 0, 1, &out_milliseconds_element);
+    }
+    return (jint)call_result;
+}
+
+JNIEXPORT jint JNICALL
+Java_org_openeggbert_cna_internal_generated_NativeEngineLayerRoutes_areaLightBrdfTableGetSampleCount(
+    JNIEnv* environment, jclass declaring_class, jlong table, jintArray out_sample_count)
+{
+    (void)environment;
+    (void)declaring_class;
+    int32_t out_sample_count_value = 0;
+    CNA_Result call_result = cna.area_light_brdf_table_get_sample_count((CNA_AreaLightBrdfTableHandle)table, &out_sample_count_value);
+    if (call_result == CNA_RESULT_SUCCESS || call_result == CNA_RESULT_BUFFER_TOO_SMALL) {
+        jint out_sample_count_element = (jint)out_sample_count_value;
+        (*environment)->SetIntArrayRegion(
+            environment, out_sample_count, 0, 1, &out_sample_count_element);
+    }
+    return (jint)call_result;
+}
+
+JNIEXPORT jint JNICALL
+Java_org_openeggbert_cna_internal_generated_NativeEngineLayerRoutes_areaLightBrdfTableGetSize(
+    JNIEnv* environment, jclass declaring_class, jlong table, jintArray out_size)
+{
+    (void)environment;
+    (void)declaring_class;
+    int32_t out_size_value = 0;
+    CNA_Result call_result = cna.area_light_brdf_table_get_size((CNA_AreaLightBrdfTableHandle)table, &out_size_value);
+    if (call_result == CNA_RESULT_SUCCESS || call_result == CNA_RESULT_BUFFER_TOO_SMALL) {
+        jint out_size_element = (jint)out_size_value;
+        (*environment)->SetIntArrayRegion(
+            environment, out_size, 0, 1, &out_size_element);
+    }
+    return (jint)call_result;
+}
+
+JNIEXPORT jint JNICALL
+Java_org_openeggbert_cna_internal_generated_NativeEngineLayerRoutes_areaLightExtInit(
+    JNIEnv* environment, jclass declaring_class, jbyteArray out_lightBytes, jlongArray out_lightIntegral, jfloatArray out_lightFloating)
+{
+    (void)environment;
+    (void)declaring_class;
+    CNA_AreaLightEXT out_light_value;
+    memset(&out_light_value, 0, sizeof out_light_value);
+    out_light_value.struct_size = (uint32_t)(sizeof out_light_value);
+    out_light_value.struct_version = UINT32_C(1);
+    CNA_Result call_result = cna.area_light_ext_init(&out_light_value);
+    if (call_result == CNA_RESULT_SUCCESS || call_result == CNA_RESULT_BUFFER_TOO_SMALL) {
+        jbyte out_lightBytes_values[] = {
+            (jbyte)out_light_value.reserved0[0],
+            (jbyte)out_light_value.reserved0[1],
+            (jbyte)out_light_value.reserved0[2]
+        };
+        (*environment)->SetByteArrayRegion(environment, out_lightBytes, 0,
+            (jsize)(sizeof out_lightBytes_values / sizeof out_lightBytes_values[0]),
+            out_lightBytes_values);
+        jlong out_lightIntegral_values[] = {
+            (jlong)out_light_value.shape,
+            (jlong)out_light_value.two_sided
+        };
+        (*environment)->SetLongArrayRegion(environment, out_lightIntegral, 0,
+            (jsize)(sizeof out_lightIntegral_values / sizeof out_lightIntegral_values[0]),
+            out_lightIntegral_values);
+        jfloat out_lightFloating_values[] = {
+            (jfloat)out_light_value.position.x,
+            (jfloat)out_light_value.position.y,
+            (jfloat)out_light_value.position.z,
+            (jfloat)out_light_value.right_axis.x,
+            (jfloat)out_light_value.right_axis.y,
+            (jfloat)out_light_value.right_axis.z,
+            (jfloat)out_light_value.up_axis.x,
+            (jfloat)out_light_value.up_axis.y,
+            (jfloat)out_light_value.up_axis.z,
+            (jfloat)out_light_value.color.x,
+            (jfloat)out_light_value.color.y,
+            (jfloat)out_light_value.color.z,
+            (jfloat)out_light_value.intensity,
+            (jfloat)out_light_value.range
+        };
+        (*environment)->SetFloatArrayRegion(environment, out_lightFloating, 0,
+            (jsize)(sizeof out_lightFloating_values / sizeof out_lightFloating_values[0]),
+            out_lightFloating_values);
+    }
+    return (jint)call_result;
+}
+
+JNIEXPORT jint JNICALL
+Java_org_openeggbert_cna_internal_generated_NativeEngineLayerRoutes_areaLightExtIsValid(
+    JNIEnv* environment, jclass declaring_class, jbyteArray lightBytes, jlongArray lightIntegral, jfloatArray lightFloating, jbooleanArray out_valid)
+{
+    (void)environment;
+    (void)declaring_class;
+    CNA_AreaLightEXT light_value;
+    memset(&light_value, 0, sizeof light_value);
+    light_value.struct_size = (uint32_t)(sizeof light_value);
+    light_value.struct_version = UINT32_C(1);
+    {
+        jbyte lightBytes_values[3];
+        (*environment)->GetByteArrayRegion(environment, lightBytes, 0, 3, lightBytes_values);
+        light_value.reserved0[0] = (uint8_t)lightBytes_values[0];
+        light_value.reserved0[1] = (uint8_t)lightBytes_values[1];
+        light_value.reserved0[2] = (uint8_t)lightBytes_values[2];
+    }
+    {
+        jlong lightIntegral_values[2];
+        (*environment)->GetLongArrayRegion(environment, lightIntegral, 0, 2, lightIntegral_values);
+        light_value.shape = (CNA_AreaLightShapeEXT)lightIntegral_values[0];
+        light_value.two_sided = (CNA_Bool)lightIntegral_values[1];
+    }
+    {
+        jfloat lightFloating_values[14];
+        (*environment)->GetFloatArrayRegion(environment, lightFloating, 0, 14, lightFloating_values);
+        light_value.position.x = (float)lightFloating_values[0];
+        light_value.position.y = (float)lightFloating_values[1];
+        light_value.position.z = (float)lightFloating_values[2];
+        light_value.right_axis.x = (float)lightFloating_values[3];
+        light_value.right_axis.y = (float)lightFloating_values[4];
+        light_value.right_axis.z = (float)lightFloating_values[5];
+        light_value.up_axis.x = (float)lightFloating_values[6];
+        light_value.up_axis.y = (float)lightFloating_values[7];
+        light_value.up_axis.z = (float)lightFloating_values[8];
+        light_value.color.x = (float)lightFloating_values[9];
+        light_value.color.y = (float)lightFloating_values[10];
+        light_value.color.z = (float)lightFloating_values[11];
+        light_value.intensity = (float)lightFloating_values[12];
+        light_value.range = (float)lightFloating_values[13];
+    }
+    CNA_Bool out_valid_value = 0;
+    CNA_Result call_result = cna.area_light_ext_is_valid(&light_value, &out_valid_value);
+    if (call_result == CNA_RESULT_SUCCESS || call_result == CNA_RESULT_BUFFER_TOO_SMALL) {
+        jboolean out_valid_element = (jboolean)out_valid_value;
+        (*environment)->SetBooleanArrayRegion(
+            environment, out_valid, 0, 1, &out_valid_element);
+    }
+    return (jint)call_result;
+}
+
+JNIEXPORT jint JNICALL
+Java_org_openeggbert_cna_internal_generated_NativeEngineLayerRoutes_areaLightShadingContribution(
+    JNIEnv* environment, jclass declaring_class, jbyteArray lightBytes, jlongArray lightIntegral, jfloatArray lightFloating, jfloatArray surfaceFloating, jfloatArray normalFloating, jfloatArray camera_positionFloating, jfloatArray base_colorFloating, jfloat metallic, jfloat roughness, jfloatArray out_contributionFloating)
+{
+    (void)environment;
+    (void)declaring_class;
+    CNA_AreaLightEXT light_value;
+    memset(&light_value, 0, sizeof light_value);
+    light_value.struct_size = (uint32_t)(sizeof light_value);
+    light_value.struct_version = UINT32_C(1);
+    {
+        jbyte lightBytes_values[3];
+        (*environment)->GetByteArrayRegion(environment, lightBytes, 0, 3, lightBytes_values);
+        light_value.reserved0[0] = (uint8_t)lightBytes_values[0];
+        light_value.reserved0[1] = (uint8_t)lightBytes_values[1];
+        light_value.reserved0[2] = (uint8_t)lightBytes_values[2];
+    }
+    {
+        jlong lightIntegral_values[2];
+        (*environment)->GetLongArrayRegion(environment, lightIntegral, 0, 2, lightIntegral_values);
+        light_value.shape = (CNA_AreaLightShapeEXT)lightIntegral_values[0];
+        light_value.two_sided = (CNA_Bool)lightIntegral_values[1];
+    }
+    {
+        jfloat lightFloating_values[14];
+        (*environment)->GetFloatArrayRegion(environment, lightFloating, 0, 14, lightFloating_values);
+        light_value.position.x = (float)lightFloating_values[0];
+        light_value.position.y = (float)lightFloating_values[1];
+        light_value.position.z = (float)lightFloating_values[2];
+        light_value.right_axis.x = (float)lightFloating_values[3];
+        light_value.right_axis.y = (float)lightFloating_values[4];
+        light_value.right_axis.z = (float)lightFloating_values[5];
+        light_value.up_axis.x = (float)lightFloating_values[6];
+        light_value.up_axis.y = (float)lightFloating_values[7];
+        light_value.up_axis.z = (float)lightFloating_values[8];
+        light_value.color.x = (float)lightFloating_values[9];
+        light_value.color.y = (float)lightFloating_values[10];
+        light_value.color.z = (float)lightFloating_values[11];
+        light_value.intensity = (float)lightFloating_values[12];
+        light_value.range = (float)lightFloating_values[13];
+    }
+    CNA_Vector3 surface_value;
+    memset(&surface_value, 0, sizeof surface_value);
+    {
+        jfloat surfaceFloating_values[3];
+        (*environment)->GetFloatArrayRegion(environment, surfaceFloating, 0, 3, surfaceFloating_values);
+        surface_value.x = (float)surfaceFloating_values[0];
+        surface_value.y = (float)surfaceFloating_values[1];
+        surface_value.z = (float)surfaceFloating_values[2];
+    }
+    CNA_Vector3 normal_value;
+    memset(&normal_value, 0, sizeof normal_value);
+    {
+        jfloat normalFloating_values[3];
+        (*environment)->GetFloatArrayRegion(environment, normalFloating, 0, 3, normalFloating_values);
+        normal_value.x = (float)normalFloating_values[0];
+        normal_value.y = (float)normalFloating_values[1];
+        normal_value.z = (float)normalFloating_values[2];
+    }
+    CNA_Vector3 camera_position_value;
+    memset(&camera_position_value, 0, sizeof camera_position_value);
+    {
+        jfloat camera_positionFloating_values[3];
+        (*environment)->GetFloatArrayRegion(environment, camera_positionFloating, 0, 3, camera_positionFloating_values);
+        camera_position_value.x = (float)camera_positionFloating_values[0];
+        camera_position_value.y = (float)camera_positionFloating_values[1];
+        camera_position_value.z = (float)camera_positionFloating_values[2];
+    }
+    CNA_Vector3 base_color_value;
+    memset(&base_color_value, 0, sizeof base_color_value);
+    {
+        jfloat base_colorFloating_values[3];
+        (*environment)->GetFloatArrayRegion(environment, base_colorFloating, 0, 3, base_colorFloating_values);
+        base_color_value.x = (float)base_colorFloating_values[0];
+        base_color_value.y = (float)base_colorFloating_values[1];
+        base_color_value.z = (float)base_colorFloating_values[2];
+    }
+    CNA_Vector3 out_contribution_value;
+    memset(&out_contribution_value, 0, sizeof out_contribution_value);
+    CNA_Result call_result = cna.area_light_shading_contribution(&light_value, &surface_value, &normal_value, &camera_position_value, &base_color_value, (float)metallic, (float)roughness, &out_contribution_value);
+    if (call_result == CNA_RESULT_SUCCESS || call_result == CNA_RESULT_BUFFER_TOO_SMALL) {
+        jfloat out_contributionFloating_values[] = {
+            (jfloat)out_contribution_value.x,
+            (jfloat)out_contribution_value.y,
+            (jfloat)out_contribution_value.z
+        };
+        (*environment)->SetFloatArrayRegion(environment, out_contributionFloating, 0,
+            (jsize)(sizeof out_contributionFloating_values / sizeof out_contributionFloating_values[0]),
+            out_contributionFloating_values);
+    }
+    return (jint)call_result;
+}
+
+JNIEXPORT jint JNICALL
+Java_org_openeggbert_cna_internal_generated_NativeEngineLayerRoutes_areaLightShadingCopyShadingGlsl(
+    JNIEnv* environment, jclass declaring_class, jbyteArray destination, jlongArray out_bytes)
+{
+    (void)environment;
+    (void)declaring_class;
+    jsize destination_size = (*environment)->GetArrayLength(environment, destination);
+    jbyte* destination_bytes = (*environment)->GetByteArrayElements(environment, destination, NULL);
+    if (destination_bytes == NULL) {
+        return (jint)CNA_RESULT_OUT_OF_MEMORY;
+    }
+    uint64_t destination_written = 0;
+    CNA_Result call_result = cna.area_light_shading_copy_shading_glsl((char*)destination_bytes, (uint64_t)destination_size, &destination_written);
+    (*environment)->ReleaseByteArrayElements(environment, destination, destination_bytes, 0);
+    if (call_result == CNA_RESULT_SUCCESS || call_result == CNA_RESULT_BUFFER_TOO_SMALL) {
+        jlong destination_element = (jlong)destination_written;
+        (*environment)->SetLongArrayRegion(
+            environment, out_bytes, 0, 1, &destination_element);
+    }
+    return (jint)call_result;
+}
+
+JNIEXPORT jint JNICALL
+Java_org_openeggbert_cna_internal_generated_NativeEngineLayerRoutes_areaLightShadingCoverage(
+    JNIEnv* environment, jclass declaring_class, jfloatArray quadFloating, jfloatArray surfaceFloating, jfloatArray lobe_axisFloating, jfloat lobe_scale, jboolean two_sided, jfloatArray out_coverage)
+{
+    (void)environment;
+    (void)declaring_class;
+    const jsize quad_count = 4;
+    if ((*environment)->GetArrayLength(environment, quadFloating) != quad_count * 3) {
+        return (jint)CNA_RESULT_INVALID_ARGUMENT;
+    }
+    CNA_Vector3* quad_values = (CNA_Vector3*)calloc(
+        (size_t)quad_count + 1U, sizeof(*quad_values));
+    if (quad_values == NULL) {
+        return (jint)CNA_RESULT_OUT_OF_MEMORY;
+    }
+    {
+        jsize quadFloating_length = (*environment)->GetArrayLength(environment, quadFloating);
+        jfloat* quadFloating_values = (jfloat*)malloc(
+            ((size_t)quadFloating_length + 1U) * sizeof(*quadFloating_values));
+        if (quadFloating_values == NULL) {
+            free(quad_values);
+            return (jint)CNA_RESULT_OUT_OF_MEMORY;
+        }
+        (*environment)->GetFloatArrayRegion(environment, quadFloating, 0, quadFloating_length, quadFloating_values);
+        for (jsize element = 0; element < quad_count; ++element) {
+            quad_values[element].x = (float)quadFloating_values[element * 3 + 0];
+            quad_values[element].y = (float)quadFloating_values[element * 3 + 1];
+            quad_values[element].z = (float)quadFloating_values[element * 3 + 2];
+        }
+        free(quadFloating_values);
+    }
+    CNA_Vector3 surface_value;
+    memset(&surface_value, 0, sizeof surface_value);
+    {
+        jfloat surfaceFloating_values[3];
+        (*environment)->GetFloatArrayRegion(environment, surfaceFloating, 0, 3, surfaceFloating_values);
+        surface_value.x = (float)surfaceFloating_values[0];
+        surface_value.y = (float)surfaceFloating_values[1];
+        surface_value.z = (float)surfaceFloating_values[2];
+    }
+    CNA_Vector3 lobe_axis_value;
+    memset(&lobe_axis_value, 0, sizeof lobe_axis_value);
+    {
+        jfloat lobe_axisFloating_values[3];
+        (*environment)->GetFloatArrayRegion(environment, lobe_axisFloating, 0, 3, lobe_axisFloating_values);
+        lobe_axis_value.x = (float)lobe_axisFloating_values[0];
+        lobe_axis_value.y = (float)lobe_axisFloating_values[1];
+        lobe_axis_value.z = (float)lobe_axisFloating_values[2];
+    }
+    float out_coverage_value = 0;
+    CNA_Result call_result = cna.area_light_shading_coverage(quad_values, &surface_value, &lobe_axis_value, (float)lobe_scale, (CNA_Bool)two_sided, &out_coverage_value);
+    free(quad_values);
+    if (call_result == CNA_RESULT_SUCCESS || call_result == CNA_RESULT_BUFFER_TOO_SMALL) {
+        jfloat out_coverage_element = (jfloat)out_coverage_value;
+        (*environment)->SetFloatArrayRegion(
+            environment, out_coverage, 0, 1, &out_coverage_element);
+    }
+    return (jint)call_result;
+}
+
+JNIEXPORT jint JNICALL
+Java_org_openeggbert_cna_internal_generated_NativeEngineLayerRoutes_areaLightShadingLobeScaleFor(
+    JNIEnv* environment, jclass declaring_class, jfloat roughness, jfloatArray out_scale)
+{
+    (void)environment;
+    (void)declaring_class;
+    float out_scale_value = 0;
+    CNA_Result call_result = cna.area_light_shading_lobe_scale_for((float)roughness, &out_scale_value);
+    if (call_result == CNA_RESULT_SUCCESS || call_result == CNA_RESULT_BUFFER_TOO_SMALL) {
+        jfloat out_scale_element = (jfloat)out_scale_value;
+        (*environment)->SetFloatArrayRegion(
+            environment, out_scale, 0, 1, &out_scale_element);
+    }
+    return (jint)call_result;
+}
+
+JNIEXPORT jint JNICALL
+Java_org_openeggbert_cna_internal_generated_NativeEngineLayerRoutes_areaLightShadingQuadOf(
+    JNIEnv* environment, jclass declaring_class, jbyteArray lightBytes, jlongArray lightIntegral, jfloatArray lightFloating, jfloatArray surfaceFloating, jfloatArray out_quadFloating)
+{
+    (void)environment;
+    (void)declaring_class;
+    CNA_AreaLightEXT light_value;
+    memset(&light_value, 0, sizeof light_value);
+    light_value.struct_size = (uint32_t)(sizeof light_value);
+    light_value.struct_version = UINT32_C(1);
+    {
+        jbyte lightBytes_values[3];
+        (*environment)->GetByteArrayRegion(environment, lightBytes, 0, 3, lightBytes_values);
+        light_value.reserved0[0] = (uint8_t)lightBytes_values[0];
+        light_value.reserved0[1] = (uint8_t)lightBytes_values[1];
+        light_value.reserved0[2] = (uint8_t)lightBytes_values[2];
+    }
+    {
+        jlong lightIntegral_values[2];
+        (*environment)->GetLongArrayRegion(environment, lightIntegral, 0, 2, lightIntegral_values);
+        light_value.shape = (CNA_AreaLightShapeEXT)lightIntegral_values[0];
+        light_value.two_sided = (CNA_Bool)lightIntegral_values[1];
+    }
+    {
+        jfloat lightFloating_values[14];
+        (*environment)->GetFloatArrayRegion(environment, lightFloating, 0, 14, lightFloating_values);
+        light_value.position.x = (float)lightFloating_values[0];
+        light_value.position.y = (float)lightFloating_values[1];
+        light_value.position.z = (float)lightFloating_values[2];
+        light_value.right_axis.x = (float)lightFloating_values[3];
+        light_value.right_axis.y = (float)lightFloating_values[4];
+        light_value.right_axis.z = (float)lightFloating_values[5];
+        light_value.up_axis.x = (float)lightFloating_values[6];
+        light_value.up_axis.y = (float)lightFloating_values[7];
+        light_value.up_axis.z = (float)lightFloating_values[8];
+        light_value.color.x = (float)lightFloating_values[9];
+        light_value.color.y = (float)lightFloating_values[10];
+        light_value.color.z = (float)lightFloating_values[11];
+        light_value.intensity = (float)lightFloating_values[12];
+        light_value.range = (float)lightFloating_values[13];
+    }
+    CNA_Vector3 surface_value;
+    memset(&surface_value, 0, sizeof surface_value);
+    {
+        jfloat surfaceFloating_values[3];
+        (*environment)->GetFloatArrayRegion(environment, surfaceFloating, 0, 3, surfaceFloating_values);
+        surface_value.x = (float)surfaceFloating_values[0];
+        surface_value.y = (float)surfaceFloating_values[1];
+        surface_value.z = (float)surfaceFloating_values[2];
+    }
+    const jsize out_quad_count = 4;
+    if ((*environment)->GetArrayLength(environment, out_quadFloating) != out_quad_count * 3) {
+        return (jint)CNA_RESULT_INVALID_ARGUMENT;
+    }
+    CNA_Vector3* out_quad_values = (CNA_Vector3*)calloc(
+        (size_t)out_quad_count + 1U, sizeof(*out_quad_values));
+    if (out_quad_values == NULL) {
+        return (jint)CNA_RESULT_OUT_OF_MEMORY;
+    }
+    {
+        jsize out_quadFloating_length = (*environment)->GetArrayLength(environment, out_quadFloating);
+        jfloat* out_quadFloating_values = (jfloat*)malloc(
+            ((size_t)out_quadFloating_length + 1U) * sizeof(*out_quadFloating_values));
+        if (out_quadFloating_values == NULL) {
+            free(out_quad_values);
+            return (jint)CNA_RESULT_OUT_OF_MEMORY;
+        }
+        (*environment)->GetFloatArrayRegion(environment, out_quadFloating, 0, out_quadFloating_length, out_quadFloating_values);
+        for (jsize element = 0; element < out_quad_count; ++element) {
+            out_quad_values[element].x = (float)out_quadFloating_values[element * 3 + 0];
+            out_quad_values[element].y = (float)out_quadFloating_values[element * 3 + 1];
+            out_quad_values[element].z = (float)out_quadFloating_values[element * 3 + 2];
+        }
+        free(out_quadFloating_values);
+    }
+    CNA_Result call_result = cna.area_light_shading_quad_of(&light_value, &surface_value, out_quad_values);
+    if (call_result == CNA_RESULT_SUCCESS) {
+        {
+            jfloat* out_quadFloating_out = (jfloat*)malloc(
+                ((size_t)out_quad_count * 3 + 1U) * sizeof(*out_quadFloating_out));
+            if (out_quadFloating_out != NULL) {
+                for (jsize element = 0; element < out_quad_count; ++element) {
+                    out_quadFloating_out[element * 3 + 0] = (jfloat)out_quad_values[element].x;
+                    out_quadFloating_out[element * 3 + 1] = (jfloat)out_quad_values[element].y;
+                    out_quadFloating_out[element * 3 + 2] = (jfloat)out_quad_values[element].z;
+                }
+                (*environment)->SetFloatArrayRegion(
+                    environment, out_quadFloating, 0,
+                    (jsize)(out_quad_count * 3), out_quadFloating_out);
+                free(out_quadFloating_out);
+            }
+        }
+    }
+    free(out_quad_values);
+    return (jint)call_result;
+}
+
+JNIEXPORT jint JNICALL
 Java_org_openeggbert_cna_internal_generated_NativeEngineLayerRoutes_atmosphericSkyCopyModelGlsl(
     JNIEnv* environment, jclass declaring_class, jbyteArray destination, jlongArray out_bytes)
 {
@@ -1217,6 +1743,663 @@ Java_org_openeggbert_cna_internal_generated_NativeEngineLayerRoutes_chromaticAbe
     (void)environment;
     (void)declaring_class;
     CNA_Result call_result = cna.chromatic_aberration_pass_set_strength((CNA_PostProcessPassHandle)pass, (float)value);
+    return (jint)call_result;
+}
+
+JNIEXPORT jint JNICALL
+Java_org_openeggbert_cna_internal_generated_NativeEngineLayerRoutes_clusteredForwardEffectBegin(
+    JNIEnv* environment, jclass declaring_class, jlong effect, jfloatArray worldFloating, jfloatArray viewFloating, jfloatArray projectionFloating, jfloatArray camera_positionFloating, jlong lights)
+{
+    (void)environment;
+    (void)declaring_class;
+    CNA_Matrix world_value;
+    memset(&world_value, 0, sizeof world_value);
+    {
+        jfloat worldFloating_values[16];
+        (*environment)->GetFloatArrayRegion(environment, worldFloating, 0, 16, worldFloating_values);
+        world_value.m11 = (float)worldFloating_values[0];
+        world_value.m12 = (float)worldFloating_values[1];
+        world_value.m13 = (float)worldFloating_values[2];
+        world_value.m14 = (float)worldFloating_values[3];
+        world_value.m21 = (float)worldFloating_values[4];
+        world_value.m22 = (float)worldFloating_values[5];
+        world_value.m23 = (float)worldFloating_values[6];
+        world_value.m24 = (float)worldFloating_values[7];
+        world_value.m31 = (float)worldFloating_values[8];
+        world_value.m32 = (float)worldFloating_values[9];
+        world_value.m33 = (float)worldFloating_values[10];
+        world_value.m34 = (float)worldFloating_values[11];
+        world_value.m41 = (float)worldFloating_values[12];
+        world_value.m42 = (float)worldFloating_values[13];
+        world_value.m43 = (float)worldFloating_values[14];
+        world_value.m44 = (float)worldFloating_values[15];
+    }
+    CNA_Matrix view_value;
+    memset(&view_value, 0, sizeof view_value);
+    {
+        jfloat viewFloating_values[16];
+        (*environment)->GetFloatArrayRegion(environment, viewFloating, 0, 16, viewFloating_values);
+        view_value.m11 = (float)viewFloating_values[0];
+        view_value.m12 = (float)viewFloating_values[1];
+        view_value.m13 = (float)viewFloating_values[2];
+        view_value.m14 = (float)viewFloating_values[3];
+        view_value.m21 = (float)viewFloating_values[4];
+        view_value.m22 = (float)viewFloating_values[5];
+        view_value.m23 = (float)viewFloating_values[6];
+        view_value.m24 = (float)viewFloating_values[7];
+        view_value.m31 = (float)viewFloating_values[8];
+        view_value.m32 = (float)viewFloating_values[9];
+        view_value.m33 = (float)viewFloating_values[10];
+        view_value.m34 = (float)viewFloating_values[11];
+        view_value.m41 = (float)viewFloating_values[12];
+        view_value.m42 = (float)viewFloating_values[13];
+        view_value.m43 = (float)viewFloating_values[14];
+        view_value.m44 = (float)viewFloating_values[15];
+    }
+    CNA_Matrix projection_value;
+    memset(&projection_value, 0, sizeof projection_value);
+    {
+        jfloat projectionFloating_values[16];
+        (*environment)->GetFloatArrayRegion(environment, projectionFloating, 0, 16, projectionFloating_values);
+        projection_value.m11 = (float)projectionFloating_values[0];
+        projection_value.m12 = (float)projectionFloating_values[1];
+        projection_value.m13 = (float)projectionFloating_values[2];
+        projection_value.m14 = (float)projectionFloating_values[3];
+        projection_value.m21 = (float)projectionFloating_values[4];
+        projection_value.m22 = (float)projectionFloating_values[5];
+        projection_value.m23 = (float)projectionFloating_values[6];
+        projection_value.m24 = (float)projectionFloating_values[7];
+        projection_value.m31 = (float)projectionFloating_values[8];
+        projection_value.m32 = (float)projectionFloating_values[9];
+        projection_value.m33 = (float)projectionFloating_values[10];
+        projection_value.m34 = (float)projectionFloating_values[11];
+        projection_value.m41 = (float)projectionFloating_values[12];
+        projection_value.m42 = (float)projectionFloating_values[13];
+        projection_value.m43 = (float)projectionFloating_values[14];
+        projection_value.m44 = (float)projectionFloating_values[15];
+    }
+    CNA_Vector3 camera_position_value;
+    memset(&camera_position_value, 0, sizeof camera_position_value);
+    {
+        jfloat camera_positionFloating_values[3];
+        (*environment)->GetFloatArrayRegion(environment, camera_positionFloating, 0, 3, camera_positionFloating_values);
+        camera_position_value.x = (float)camera_positionFloating_values[0];
+        camera_position_value.y = (float)camera_positionFloating_values[1];
+        camera_position_value.z = (float)camera_positionFloating_values[2];
+    }
+    CNA_Result call_result = cna.clustered_forward_effect_begin((CNA_ClusteredForwardEffectHandle)effect, &world_value, &view_value, &projection_value, &camera_position_value, (CNA_ClusteredLightBufferHandle)lights);
+    return (jint)call_result;
+}
+
+JNIEXPORT jint JNICALL
+Java_org_openeggbert_cna_internal_generated_NativeEngineLayerRoutes_clusteredForwardEffectClearAreaLight(
+    JNIEnv* environment, jclass declaring_class, jlong effect)
+{
+    (void)environment;
+    (void)declaring_class;
+    CNA_Result call_result = cna.clustered_forward_effect_clear_area_light((CNA_ClusteredForwardEffectHandle)effect);
+    return (jint)call_result;
+}
+
+JNIEXPORT jint JNICALL
+Java_org_openeggbert_cna_internal_generated_NativeEngineLayerRoutes_clusteredForwardEffectClearLightProbe(
+    JNIEnv* environment, jclass declaring_class, jlong effect)
+{
+    (void)environment;
+    (void)declaring_class;
+    CNA_Result call_result = cna.clustered_forward_effect_clear_light_probe((CNA_ClusteredForwardEffectHandle)effect);
+    return (jint)call_result;
+}
+
+JNIEXPORT jint JNICALL
+Java_org_openeggbert_cna_internal_generated_NativeEngineLayerRoutes_clusteredForwardEffectContribution(
+    JNIEnv* environment, jclass declaring_class, jbyteArray lightBytes, jlongArray lightIntegral, jfloatArray lightFloating, jfloatArray surfaceFloating, jfloatArray normalFloating, jfloatArray camera_positionFloating, jfloatArray base_colorFloating, jfloat metallic, jfloat roughness, jfloat clearcoat, jfloat clearcoat_roughness, jfloatArray sheen_colorFloating, jfloat sheen_roughness, jfloat iridescence, jfloat iridescence_ior, jfloat iridescence_thickness, jfloatArray subsurface_colorFloating, jfloat subsurface_wrap, jfloatArray out_contributionFloating)
+{
+    (void)environment;
+    (void)declaring_class;
+    CNA_ClusteredLightEXT light_value;
+    memset(&light_value, 0, sizeof light_value);
+    light_value.struct_size = (uint32_t)(sizeof light_value);
+    light_value.struct_version = UINT32_C(1);
+    {
+        jbyte lightBytes_values[3];
+        (*environment)->GetByteArrayRegion(environment, lightBytes, 0, 3, lightBytes_values);
+        light_value.reserved[0] = (uint8_t)lightBytes_values[0];
+        light_value.reserved[1] = (uint8_t)lightBytes_values[1];
+        light_value.reserved[2] = (uint8_t)lightBytes_values[2];
+    }
+    {
+        jlong lightIntegral_values[2];
+        (*environment)->GetLongArrayRegion(environment, lightIntegral, 0, 2, lightIntegral_values);
+        light_value.type = (CNA_ClusteredLightType)lightIntegral_values[0];
+        light_value.casts_shadows = (CNA_Bool)lightIntegral_values[1];
+    }
+    {
+        jfloat lightFloating_values[13];
+        (*environment)->GetFloatArrayRegion(environment, lightFloating, 0, 13, lightFloating_values);
+        light_value.position.x = (float)lightFloating_values[0];
+        light_value.position.y = (float)lightFloating_values[1];
+        light_value.position.z = (float)lightFloating_values[2];
+        light_value.direction.x = (float)lightFloating_values[3];
+        light_value.direction.y = (float)lightFloating_values[4];
+        light_value.direction.z = (float)lightFloating_values[5];
+        light_value.color.x = (float)lightFloating_values[6];
+        light_value.color.y = (float)lightFloating_values[7];
+        light_value.color.z = (float)lightFloating_values[8];
+        light_value.intensity = (float)lightFloating_values[9];
+        light_value.range = (float)lightFloating_values[10];
+        light_value.inner_angle = (float)lightFloating_values[11];
+        light_value.outer_angle = (float)lightFloating_values[12];
+    }
+    CNA_Vector3 surface_value;
+    memset(&surface_value, 0, sizeof surface_value);
+    {
+        jfloat surfaceFloating_values[3];
+        (*environment)->GetFloatArrayRegion(environment, surfaceFloating, 0, 3, surfaceFloating_values);
+        surface_value.x = (float)surfaceFloating_values[0];
+        surface_value.y = (float)surfaceFloating_values[1];
+        surface_value.z = (float)surfaceFloating_values[2];
+    }
+    CNA_Vector3 normal_value;
+    memset(&normal_value, 0, sizeof normal_value);
+    {
+        jfloat normalFloating_values[3];
+        (*environment)->GetFloatArrayRegion(environment, normalFloating, 0, 3, normalFloating_values);
+        normal_value.x = (float)normalFloating_values[0];
+        normal_value.y = (float)normalFloating_values[1];
+        normal_value.z = (float)normalFloating_values[2];
+    }
+    CNA_Vector3 camera_position_value;
+    memset(&camera_position_value, 0, sizeof camera_position_value);
+    {
+        jfloat camera_positionFloating_values[3];
+        (*environment)->GetFloatArrayRegion(environment, camera_positionFloating, 0, 3, camera_positionFloating_values);
+        camera_position_value.x = (float)camera_positionFloating_values[0];
+        camera_position_value.y = (float)camera_positionFloating_values[1];
+        camera_position_value.z = (float)camera_positionFloating_values[2];
+    }
+    CNA_Vector3 base_color_value;
+    memset(&base_color_value, 0, sizeof base_color_value);
+    {
+        jfloat base_colorFloating_values[3];
+        (*environment)->GetFloatArrayRegion(environment, base_colorFloating, 0, 3, base_colorFloating_values);
+        base_color_value.x = (float)base_colorFloating_values[0];
+        base_color_value.y = (float)base_colorFloating_values[1];
+        base_color_value.z = (float)base_colorFloating_values[2];
+    }
+    CNA_Vector3 sheen_color_value;
+    memset(&sheen_color_value, 0, sizeof sheen_color_value);
+    {
+        jfloat sheen_colorFloating_values[3];
+        (*environment)->GetFloatArrayRegion(environment, sheen_colorFloating, 0, 3, sheen_colorFloating_values);
+        sheen_color_value.x = (float)sheen_colorFloating_values[0];
+        sheen_color_value.y = (float)sheen_colorFloating_values[1];
+        sheen_color_value.z = (float)sheen_colorFloating_values[2];
+    }
+    CNA_Vector3 subsurface_color_value;
+    memset(&subsurface_color_value, 0, sizeof subsurface_color_value);
+    {
+        jfloat subsurface_colorFloating_values[3];
+        (*environment)->GetFloatArrayRegion(environment, subsurface_colorFloating, 0, 3, subsurface_colorFloating_values);
+        subsurface_color_value.x = (float)subsurface_colorFloating_values[0];
+        subsurface_color_value.y = (float)subsurface_colorFloating_values[1];
+        subsurface_color_value.z = (float)subsurface_colorFloating_values[2];
+    }
+    CNA_Vector3 out_contribution_value;
+    memset(&out_contribution_value, 0, sizeof out_contribution_value);
+    CNA_Result call_result = cna.clustered_forward_effect_contribution(&light_value, &surface_value, &normal_value, &camera_position_value, &base_color_value, (float)metallic, (float)roughness, (float)clearcoat, (float)clearcoat_roughness, &sheen_color_value, (float)sheen_roughness, (float)iridescence, (float)iridescence_ior, (float)iridescence_thickness, &subsurface_color_value, (float)subsurface_wrap, &out_contribution_value);
+    if (call_result == CNA_RESULT_SUCCESS || call_result == CNA_RESULT_BUFFER_TOO_SMALL) {
+        jfloat out_contributionFloating_values[] = {
+            (jfloat)out_contribution_value.x,
+            (jfloat)out_contribution_value.y,
+            (jfloat)out_contribution_value.z
+        };
+        (*environment)->SetFloatArrayRegion(environment, out_contributionFloating, 0,
+            (jsize)(sizeof out_contributionFloating_values / sizeof out_contributionFloating_values[0]),
+            out_contributionFloating_values);
+    }
+    return (jint)call_result;
+}
+
+JNIEXPORT jint JNICALL
+Java_org_openeggbert_cna_internal_generated_NativeEngineLayerRoutes_clusteredForwardEffectContributionWithExtensions(
+    JNIEnv* environment, jclass declaring_class, jbyteArray lightBytes, jlongArray lightIntegral, jfloatArray lightFloating, jfloatArray surfaceFloating, jfloatArray normalFloating, jfloatArray camera_positionFloating, jfloatArray base_colorFloating, jfloat metallic, jfloat roughness, jlong extensions, jfloatArray out_contributionFloating)
+{
+    (void)environment;
+    (void)declaring_class;
+    CNA_ClusteredLightEXT light_value;
+    memset(&light_value, 0, sizeof light_value);
+    light_value.struct_size = (uint32_t)(sizeof light_value);
+    light_value.struct_version = UINT32_C(1);
+    {
+        jbyte lightBytes_values[3];
+        (*environment)->GetByteArrayRegion(environment, lightBytes, 0, 3, lightBytes_values);
+        light_value.reserved[0] = (uint8_t)lightBytes_values[0];
+        light_value.reserved[1] = (uint8_t)lightBytes_values[1];
+        light_value.reserved[2] = (uint8_t)lightBytes_values[2];
+    }
+    {
+        jlong lightIntegral_values[2];
+        (*environment)->GetLongArrayRegion(environment, lightIntegral, 0, 2, lightIntegral_values);
+        light_value.type = (CNA_ClusteredLightType)lightIntegral_values[0];
+        light_value.casts_shadows = (CNA_Bool)lightIntegral_values[1];
+    }
+    {
+        jfloat lightFloating_values[13];
+        (*environment)->GetFloatArrayRegion(environment, lightFloating, 0, 13, lightFloating_values);
+        light_value.position.x = (float)lightFloating_values[0];
+        light_value.position.y = (float)lightFloating_values[1];
+        light_value.position.z = (float)lightFloating_values[2];
+        light_value.direction.x = (float)lightFloating_values[3];
+        light_value.direction.y = (float)lightFloating_values[4];
+        light_value.direction.z = (float)lightFloating_values[5];
+        light_value.color.x = (float)lightFloating_values[6];
+        light_value.color.y = (float)lightFloating_values[7];
+        light_value.color.z = (float)lightFloating_values[8];
+        light_value.intensity = (float)lightFloating_values[9];
+        light_value.range = (float)lightFloating_values[10];
+        light_value.inner_angle = (float)lightFloating_values[11];
+        light_value.outer_angle = (float)lightFloating_values[12];
+    }
+    CNA_Vector3 surface_value;
+    memset(&surface_value, 0, sizeof surface_value);
+    {
+        jfloat surfaceFloating_values[3];
+        (*environment)->GetFloatArrayRegion(environment, surfaceFloating, 0, 3, surfaceFloating_values);
+        surface_value.x = (float)surfaceFloating_values[0];
+        surface_value.y = (float)surfaceFloating_values[1];
+        surface_value.z = (float)surfaceFloating_values[2];
+    }
+    CNA_Vector3 normal_value;
+    memset(&normal_value, 0, sizeof normal_value);
+    {
+        jfloat normalFloating_values[3];
+        (*environment)->GetFloatArrayRegion(environment, normalFloating, 0, 3, normalFloating_values);
+        normal_value.x = (float)normalFloating_values[0];
+        normal_value.y = (float)normalFloating_values[1];
+        normal_value.z = (float)normalFloating_values[2];
+    }
+    CNA_Vector3 camera_position_value;
+    memset(&camera_position_value, 0, sizeof camera_position_value);
+    {
+        jfloat camera_positionFloating_values[3];
+        (*environment)->GetFloatArrayRegion(environment, camera_positionFloating, 0, 3, camera_positionFloating_values);
+        camera_position_value.x = (float)camera_positionFloating_values[0];
+        camera_position_value.y = (float)camera_positionFloating_values[1];
+        camera_position_value.z = (float)camera_positionFloating_values[2];
+    }
+    CNA_Vector3 base_color_value;
+    memset(&base_color_value, 0, sizeof base_color_value);
+    {
+        jfloat base_colorFloating_values[3];
+        (*environment)->GetFloatArrayRegion(environment, base_colorFloating, 0, 3, base_colorFloating_values);
+        base_color_value.x = (float)base_colorFloating_values[0];
+        base_color_value.y = (float)base_colorFloating_values[1];
+        base_color_value.z = (float)base_colorFloating_values[2];
+    }
+    CNA_Vector3 out_contribution_value;
+    memset(&out_contribution_value, 0, sizeof out_contribution_value);
+    CNA_Result call_result = cna.clustered_forward_effect_contribution_with_extensions(&light_value, &surface_value, &normal_value, &camera_position_value, &base_color_value, (float)metallic, (float)roughness, (CNA_PbrMaterialExtensionsHandle)extensions, &out_contribution_value);
+    if (call_result == CNA_RESULT_SUCCESS || call_result == CNA_RESULT_BUFFER_TOO_SMALL) {
+        jfloat out_contributionFloating_values[] = {
+            (jfloat)out_contribution_value.x,
+            (jfloat)out_contribution_value.y,
+            (jfloat)out_contribution_value.z
+        };
+        (*environment)->SetFloatArrayRegion(environment, out_contributionFloating, 0,
+            (jsize)(sizeof out_contributionFloating_values / sizeof out_contributionFloating_values[0]),
+            out_contributionFloating_values);
+    }
+    return (jint)call_result;
+}
+
+JNIEXPORT jint JNICALL
+Java_org_openeggbert_cna_internal_generated_NativeEngineLayerRoutes_clusteredForwardEffectCreate(
+    JNIEnv* environment, jclass declaring_class, jlong graphics_device, jlongArray out_effect)
+{
+    (void)environment;
+    (void)declaring_class;
+    CNA_ClusteredForwardEffectHandle out_effect_value = 0;
+    CNA_Result call_result = cna.clustered_forward_effect_create((CNA_Handle)graphics_device, &out_effect_value);
+    if (call_result == CNA_RESULT_SUCCESS || call_result == CNA_RESULT_BUFFER_TOO_SMALL) {
+        jlong out_effect_element = (jlong)out_effect_value;
+        (*environment)->SetLongArrayRegion(
+            environment, out_effect, 0, 1, &out_effect_element);
+    }
+    return (jint)call_result;
+}
+
+JNIEXPORT jint JNICALL
+Java_org_openeggbert_cna_internal_generated_NativeEngineLayerRoutes_clusteredForwardEffectDestroy(
+    JNIEnv* environment, jclass declaring_class, jlong effect)
+{
+    (void)environment;
+    (void)declaring_class;
+    CNA_Result call_result = cna.clustered_forward_effect_destroy((CNA_ClusteredForwardEffectHandle)effect);
+    return (jint)call_result;
+}
+
+JNIEXPORT jint JNICALL
+Java_org_openeggbert_cna_internal_generated_NativeEngineLayerRoutes_clusteredForwardEffectGetAmbient(
+    JNIEnv* environment, jclass declaring_class, jlong effect, jfloatArray out_ambientFloating)
+{
+    (void)environment;
+    (void)declaring_class;
+    CNA_Vector3 out_ambient_value;
+    memset(&out_ambient_value, 0, sizeof out_ambient_value);
+    CNA_Result call_result = cna.clustered_forward_effect_get_ambient((CNA_ClusteredForwardEffectHandle)effect, &out_ambient_value);
+    if (call_result == CNA_RESULT_SUCCESS || call_result == CNA_RESULT_BUFFER_TOO_SMALL) {
+        jfloat out_ambientFloating_values[] = {
+            (jfloat)out_ambient_value.x,
+            (jfloat)out_ambient_value.y,
+            (jfloat)out_ambient_value.z
+        };
+        (*environment)->SetFloatArrayRegion(environment, out_ambientFloating, 0,
+            (jsize)(sizeof out_ambientFloating_values / sizeof out_ambientFloating_values[0]),
+            out_ambientFloating_values);
+    }
+    return (jint)call_result;
+}
+
+JNIEXPORT jint JNICALL
+Java_org_openeggbert_cna_internal_generated_NativeEngineLayerRoutes_clusteredForwardEffectGetBaseColor(
+    JNIEnv* environment, jclass declaring_class, jlong effect, jfloatArray out_colorFloating)
+{
+    (void)environment;
+    (void)declaring_class;
+    CNA_Vector3 out_color_value;
+    memset(&out_color_value, 0, sizeof out_color_value);
+    CNA_Result call_result = cna.clustered_forward_effect_get_base_color((CNA_ClusteredForwardEffectHandle)effect, &out_color_value);
+    if (call_result == CNA_RESULT_SUCCESS || call_result == CNA_RESULT_BUFFER_TOO_SMALL) {
+        jfloat out_colorFloating_values[] = {
+            (jfloat)out_color_value.x,
+            (jfloat)out_color_value.y,
+            (jfloat)out_color_value.z
+        };
+        (*environment)->SetFloatArrayRegion(environment, out_colorFloating, 0,
+            (jsize)(sizeof out_colorFloating_values / sizeof out_colorFloating_values[0]),
+            out_colorFloating_values);
+    }
+    return (jint)call_result;
+}
+
+JNIEXPORT jint JNICALL
+Java_org_openeggbert_cna_internal_generated_NativeEngineLayerRoutes_clusteredForwardEffectGetIor(
+    JNIEnv* environment, jclass declaring_class, jlong effect, jfloatArray out_ior)
+{
+    (void)environment;
+    (void)declaring_class;
+    float out_ior_value = 0;
+    CNA_Result call_result = cna.clustered_forward_effect_get_ior((CNA_ClusteredForwardEffectHandle)effect, &out_ior_value);
+    if (call_result == CNA_RESULT_SUCCESS || call_result == CNA_RESULT_BUFFER_TOO_SMALL) {
+        jfloat out_ior_element = (jfloat)out_ior_value;
+        (*environment)->SetFloatArrayRegion(
+            environment, out_ior, 0, 1, &out_ior_element);
+    }
+    return (jint)call_result;
+}
+
+JNIEXPORT jint JNICALL
+Java_org_openeggbert_cna_internal_generated_NativeEngineLayerRoutes_clusteredForwardEffectGetMetallic(
+    JNIEnv* environment, jclass declaring_class, jlong effect, jfloatArray out_metallic)
+{
+    (void)environment;
+    (void)declaring_class;
+    float out_metallic_value = 0;
+    CNA_Result call_result = cna.clustered_forward_effect_get_metallic((CNA_ClusteredForwardEffectHandle)effect, &out_metallic_value);
+    if (call_result == CNA_RESULT_SUCCESS || call_result == CNA_RESULT_BUFFER_TOO_SMALL) {
+        jfloat out_metallic_element = (jfloat)out_metallic_value;
+        (*environment)->SetFloatArrayRegion(
+            environment, out_metallic, 0, 1, &out_metallic_element);
+    }
+    return (jint)call_result;
+}
+
+JNIEXPORT jint JNICALL
+Java_org_openeggbert_cna_internal_generated_NativeEngineLayerRoutes_clusteredForwardEffectGetRoughness(
+    JNIEnv* environment, jclass declaring_class, jlong effect, jfloatArray out_roughness)
+{
+    (void)environment;
+    (void)declaring_class;
+    float out_roughness_value = 0;
+    CNA_Result call_result = cna.clustered_forward_effect_get_roughness((CNA_ClusteredForwardEffectHandle)effect, &out_roughness_value);
+    if (call_result == CNA_RESULT_SUCCESS || call_result == CNA_RESULT_BUFFER_TOO_SMALL) {
+        jfloat out_roughness_element = (jfloat)out_roughness_value;
+        (*environment)->SetFloatArrayRegion(
+            environment, out_roughness, 0, 1, &out_roughness_element);
+    }
+    return (jint)call_result;
+}
+
+JNIEXPORT jint JNICALL
+Java_org_openeggbert_cna_internal_generated_NativeEngineLayerRoutes_clusteredForwardEffectHasAreaLight(
+    JNIEnv* environment, jclass declaring_class, jlong effect, jbooleanArray out_has)
+{
+    (void)environment;
+    (void)declaring_class;
+    CNA_Bool out_has_value = 0;
+    CNA_Result call_result = cna.clustered_forward_effect_has_area_light((CNA_ClusteredForwardEffectHandle)effect, &out_has_value);
+    if (call_result == CNA_RESULT_SUCCESS || call_result == CNA_RESULT_BUFFER_TOO_SMALL) {
+        jboolean out_has_element = (jboolean)out_has_value;
+        (*environment)->SetBooleanArrayRegion(
+            environment, out_has, 0, 1, &out_has_element);
+    }
+    return (jint)call_result;
+}
+
+JNIEXPORT jint JNICALL
+Java_org_openeggbert_cna_internal_generated_NativeEngineLayerRoutes_clusteredForwardEffectHasLightProbe(
+    JNIEnv* environment, jclass declaring_class, jlong effect, jbooleanArray out_has)
+{
+    (void)environment;
+    (void)declaring_class;
+    CNA_Bool out_has_value = 0;
+    CNA_Result call_result = cna.clustered_forward_effect_has_light_probe((CNA_ClusteredForwardEffectHandle)effect, &out_has_value);
+    if (call_result == CNA_RESULT_SUCCESS || call_result == CNA_RESULT_BUFFER_TOO_SMALL) {
+        jboolean out_has_element = (jboolean)out_has_value;
+        (*environment)->SetBooleanArrayRegion(
+            environment, out_has, 0, 1, &out_has_element);
+    }
+    return (jint)call_result;
+}
+
+JNIEXPORT jint JNICALL
+Java_org_openeggbert_cna_internal_generated_NativeEngineLayerRoutes_clusteredForwardEffectIsSupported(
+    JNIEnv* environment, jclass declaring_class, jlong effect, jbooleanArray out_supported)
+{
+    (void)environment;
+    (void)declaring_class;
+    CNA_Bool out_supported_value = 0;
+    CNA_Result call_result = cna.clustered_forward_effect_is_supported((CNA_ClusteredForwardEffectHandle)effect, &out_supported_value);
+    if (call_result == CNA_RESULT_SUCCESS || call_result == CNA_RESULT_BUFFER_TOO_SMALL) {
+        jboolean out_supported_element = (jboolean)out_supported_value;
+        (*environment)->SetBooleanArrayRegion(
+            environment, out_supported, 0, 1, &out_supported_element);
+    }
+    return (jint)call_result;
+}
+
+JNIEXPORT jint JNICALL
+Java_org_openeggbert_cna_internal_generated_NativeEngineLayerRoutes_clusteredForwardEffectSetAmbient(
+    JNIEnv* environment, jclass declaring_class, jlong effect, jfloatArray ambientFloating)
+{
+    (void)environment;
+    (void)declaring_class;
+    CNA_Vector3 ambient_value;
+    memset(&ambient_value, 0, sizeof ambient_value);
+    {
+        jfloat ambientFloating_values[3];
+        (*environment)->GetFloatArrayRegion(environment, ambientFloating, 0, 3, ambientFloating_values);
+        ambient_value.x = (float)ambientFloating_values[0];
+        ambient_value.y = (float)ambientFloating_values[1];
+        ambient_value.z = (float)ambientFloating_values[2];
+    }
+    CNA_Result call_result = cna.clustered_forward_effect_set_ambient((CNA_ClusteredForwardEffectHandle)effect, &ambient_value);
+    return (jint)call_result;
+}
+
+JNIEXPORT jint JNICALL
+Java_org_openeggbert_cna_internal_generated_NativeEngineLayerRoutes_clusteredForwardEffectSetAreaLight(
+    JNIEnv* environment, jclass declaring_class, jlong effect, jbyteArray lightBytes, jlongArray lightIntegral, jfloatArray lightFloating, jlong table)
+{
+    (void)environment;
+    (void)declaring_class;
+    CNA_AreaLightEXT light_value;
+    memset(&light_value, 0, sizeof light_value);
+    light_value.struct_size = (uint32_t)(sizeof light_value);
+    light_value.struct_version = UINT32_C(1);
+    {
+        jbyte lightBytes_values[3];
+        (*environment)->GetByteArrayRegion(environment, lightBytes, 0, 3, lightBytes_values);
+        light_value.reserved0[0] = (uint8_t)lightBytes_values[0];
+        light_value.reserved0[1] = (uint8_t)lightBytes_values[1];
+        light_value.reserved0[2] = (uint8_t)lightBytes_values[2];
+    }
+    {
+        jlong lightIntegral_values[2];
+        (*environment)->GetLongArrayRegion(environment, lightIntegral, 0, 2, lightIntegral_values);
+        light_value.shape = (CNA_AreaLightShapeEXT)lightIntegral_values[0];
+        light_value.two_sided = (CNA_Bool)lightIntegral_values[1];
+    }
+    {
+        jfloat lightFloating_values[14];
+        (*environment)->GetFloatArrayRegion(environment, lightFloating, 0, 14, lightFloating_values);
+        light_value.position.x = (float)lightFloating_values[0];
+        light_value.position.y = (float)lightFloating_values[1];
+        light_value.position.z = (float)lightFloating_values[2];
+        light_value.right_axis.x = (float)lightFloating_values[3];
+        light_value.right_axis.y = (float)lightFloating_values[4];
+        light_value.right_axis.z = (float)lightFloating_values[5];
+        light_value.up_axis.x = (float)lightFloating_values[6];
+        light_value.up_axis.y = (float)lightFloating_values[7];
+        light_value.up_axis.z = (float)lightFloating_values[8];
+        light_value.color.x = (float)lightFloating_values[9];
+        light_value.color.y = (float)lightFloating_values[10];
+        light_value.color.z = (float)lightFloating_values[11];
+        light_value.intensity = (float)lightFloating_values[12];
+        light_value.range = (float)lightFloating_values[13];
+    }
+    CNA_Result call_result = cna.clustered_forward_effect_set_area_light((CNA_ClusteredForwardEffectHandle)effect, &light_value, (CNA_AreaLightBrdfTableHandle)table);
+    return (jint)call_result;
+}
+
+JNIEXPORT jint JNICALL
+Java_org_openeggbert_cna_internal_generated_NativeEngineLayerRoutes_clusteredForwardEffectSetBaseColor(
+    JNIEnv* environment, jclass declaring_class, jlong effect, jfloatArray colorFloating)
+{
+    (void)environment;
+    (void)declaring_class;
+    CNA_Vector3 color_value;
+    memset(&color_value, 0, sizeof color_value);
+    {
+        jfloat colorFloating_values[3];
+        (*environment)->GetFloatArrayRegion(environment, colorFloating, 0, 3, colorFloating_values);
+        color_value.x = (float)colorFloating_values[0];
+        color_value.y = (float)colorFloating_values[1];
+        color_value.z = (float)colorFloating_values[2];
+    }
+    CNA_Result call_result = cna.clustered_forward_effect_set_base_color((CNA_ClusteredForwardEffectHandle)effect, &color_value);
+    return (jint)call_result;
+}
+
+JNIEXPORT jint JNICALL
+Java_org_openeggbert_cna_internal_generated_NativeEngineLayerRoutes_clusteredForwardEffectSetIor(
+    JNIEnv* environment, jclass declaring_class, jlong effect, jfloat ior)
+{
+    (void)environment;
+    (void)declaring_class;
+    CNA_Result call_result = cna.clustered_forward_effect_set_ior((CNA_ClusteredForwardEffectHandle)effect, (float)ior);
+    return (jint)call_result;
+}
+
+JNIEXPORT jint JNICALL
+Java_org_openeggbert_cna_internal_generated_NativeEngineLayerRoutes_clusteredForwardEffectSetLightProbe(
+    JNIEnv* environment, jclass declaring_class, jlong effect, jlong probe)
+{
+    (void)environment;
+    (void)declaring_class;
+    CNA_Result call_result = cna.clustered_forward_effect_set_light_probe((CNA_ClusteredForwardEffectHandle)effect, (CNA_LightProbeHandle)probe);
+    return (jint)call_result;
+}
+
+JNIEXPORT jint JNICALL
+Java_org_openeggbert_cna_internal_generated_NativeEngineLayerRoutes_clusteredForwardEffectSetLightProbeVolume(
+    JNIEnv* environment, jclass declaring_class, jlong effect, jlong volume)
+{
+    (void)environment;
+    (void)declaring_class;
+    CNA_Result call_result = cna.clustered_forward_effect_set_light_probe_volume((CNA_ClusteredForwardEffectHandle)effect, (CNA_LightProbeVolumeHandle)volume);
+    return (jint)call_result;
+}
+
+JNIEXPORT jint JNICALL
+Java_org_openeggbert_cna_internal_generated_NativeEngineLayerRoutes_clusteredForwardEffectSetMaterialExtensions(
+    JNIEnv* environment, jclass declaring_class, jlong effect, jlong extensions)
+{
+    (void)environment;
+    (void)declaring_class;
+    CNA_Result call_result = cna.clustered_forward_effect_set_material_extensions((CNA_ClusteredForwardEffectHandle)effect, (CNA_PbrMaterialExtensionsHandle)extensions);
+    return (jint)call_result;
+}
+
+JNIEXPORT jint JNICALL
+Java_org_openeggbert_cna_internal_generated_NativeEngineLayerRoutes_clusteredForwardEffectSetMetallic(
+    JNIEnv* environment, jclass declaring_class, jlong effect, jfloat metallic)
+{
+    (void)environment;
+    (void)declaring_class;
+    CNA_Result call_result = cna.clustered_forward_effect_set_metallic((CNA_ClusteredForwardEffectHandle)effect, (float)metallic);
+    return (jint)call_result;
+}
+
+JNIEXPORT jint JNICALL
+Java_org_openeggbert_cna_internal_generated_NativeEngineLayerRoutes_clusteredForwardEffectSetOpaqueFrame(
+    JNIEnv* environment, jclass declaring_class, jlong effect, jlong frame)
+{
+    (void)environment;
+    (void)declaring_class;
+    CNA_Result call_result = cna.clustered_forward_effect_set_opaque_frame((CNA_ClusteredForwardEffectHandle)effect, (CNA_Handle)frame);
+    return (jint)call_result;
+}
+
+JNIEXPORT jint JNICALL
+Java_org_openeggbert_cna_internal_generated_NativeEngineLayerRoutes_clusteredForwardEffectSetRoughness(
+    JNIEnv* environment, jclass declaring_class, jlong effect, jfloat roughness)
+{
+    (void)environment;
+    (void)declaring_class;
+    CNA_Result call_result = cna.clustered_forward_effect_set_roughness((CNA_ClusteredForwardEffectHandle)effect, (float)roughness);
+    return (jint)call_result;
+}
+
+JNIEXPORT jint JNICALL
+Java_org_openeggbert_cna_internal_generated_NativeEngineLayerRoutes_clusteredForwardEffectVolumeAttenuation(
+    JNIEnv* environment, jclass declaring_class, jfloatArray attenuation_colorFloating, jfloat attenuation_distance, jfloat thickness, jfloatArray out_attenuationFloating)
+{
+    (void)environment;
+    (void)declaring_class;
+    CNA_Vector3 attenuation_color_value;
+    memset(&attenuation_color_value, 0, sizeof attenuation_color_value);
+    {
+        jfloat attenuation_colorFloating_values[3];
+        (*environment)->GetFloatArrayRegion(environment, attenuation_colorFloating, 0, 3, attenuation_colorFloating_values);
+        attenuation_color_value.x = (float)attenuation_colorFloating_values[0];
+        attenuation_color_value.y = (float)attenuation_colorFloating_values[1];
+        attenuation_color_value.z = (float)attenuation_colorFloating_values[2];
+    }
+    CNA_Vector3 out_attenuation_value;
+    memset(&out_attenuation_value, 0, sizeof out_attenuation_value);
+    CNA_Result call_result = cna.clustered_forward_effect_volume_attenuation(&attenuation_color_value, (float)attenuation_distance, (float)thickness, &out_attenuation_value);
+    if (call_result == CNA_RESULT_SUCCESS || call_result == CNA_RESULT_BUFFER_TOO_SMALL) {
+        jfloat out_attenuationFloating_values[] = {
+            (jfloat)out_attenuation_value.x,
+            (jfloat)out_attenuation_value.y,
+            (jfloat)out_attenuation_value.z
+        };
+        (*environment)->SetFloatArrayRegion(environment, out_attenuationFloating, 0,
+            (jsize)(sizeof out_attenuationFloating_values / sizeof out_attenuationFloating_values[0]),
+            out_attenuationFloating_values);
+    }
     return (jint)call_result;
 }
 

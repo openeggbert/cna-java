@@ -3436,6 +3436,79 @@
         "symbol": "cna_aerial_perspective_pass_transmittance"
       },
       {
+        "java": "areaLightBrdfTableCopyLookupGlsl",
+        "symbol": "cna_area_light_brdf_table_copy_lookup_glsl"
+      },
+      {
+        "java": "areaLightBrdfTableCreate",
+        "symbol": "cna_area_light_brdf_table_create"
+      },
+      {
+        "java": "areaLightBrdfTableCreateWithSize",
+        "symbol": "cna_area_light_brdf_table_create_with_size"
+      },
+      {
+        "java": "areaLightBrdfTableDestroy",
+        "symbol": "cna_area_light_brdf_table_destroy"
+      },
+      {
+        "java": "areaLightBrdfTableEvaluate",
+        "symbol": "cna_area_light_brdf_table_evaluate",
+        "singleStructs": [
+          "out_terms"
+        ]
+      },
+      {
+        "java": "areaLightBrdfTableGetGenerationMilliseconds",
+        "symbol": "cna_area_light_brdf_table_get_generation_milliseconds"
+      },
+      {
+        "java": "areaLightBrdfTableGetSampleCount",
+        "symbol": "cna_area_light_brdf_table_get_sample_count"
+      },
+      {
+        "java": "areaLightBrdfTableGetSize",
+        "symbol": "cna_area_light_brdf_table_get_size"
+      },
+      {
+        "java": "areaLightExtInit",
+        "symbol": "cna_area_light_ext_init"
+      },
+      {
+        "java": "areaLightExtIsValid",
+        "symbol": "cna_area_light_ext_is_valid"
+      },
+      {
+        "java": "areaLightShadingContribution",
+        "symbol": "cna_area_light_shading_contribution"
+      },
+      {
+        "java": "areaLightShadingCopyShadingGlsl",
+        "symbol": "cna_area_light_shading_copy_shading_glsl"
+      },
+      {
+        "java": "areaLightShadingCoverage",
+        "symbol": "cna_area_light_shading_coverage",
+        "arrayLengths": {
+          "quad": {
+            "length": 4
+          }
+        }
+      },
+      {
+        "java": "areaLightShadingLobeScaleFor",
+        "symbol": "cna_area_light_shading_lobe_scale_for"
+      },
+      {
+        "java": "areaLightShadingQuadOf",
+        "symbol": "cna_area_light_shading_quad_of",
+        "arrayLengths": {
+          "out_quad": {
+            "length": 4
+          }
+        }
+      },
+      {
         "java": "atmosphericSkyCopyModelGlsl",
         "symbol": "cna_atmospheric_sky_copy_model_glsl"
       },
@@ -3640,6 +3713,110 @@
       {
         "java": "chromaticAberrationPassSetStrength",
         "symbol": "cna_chromatic_aberration_pass_set_strength"
+      },
+      {
+        "java": "clusteredForwardEffectBegin",
+        "symbol": "cna_clustered_forward_effect_begin"
+      },
+      {
+        "java": "clusteredForwardEffectClearAreaLight",
+        "symbol": "cna_clustered_forward_effect_clear_area_light"
+      },
+      {
+        "java": "clusteredForwardEffectClearLightProbe",
+        "symbol": "cna_clustered_forward_effect_clear_light_probe"
+      },
+      {
+        "java": "clusteredForwardEffectContribution",
+        "symbol": "cna_clustered_forward_effect_contribution"
+      },
+      {
+        "java": "clusteredForwardEffectContributionWithExtensions",
+        "symbol": "cna_clustered_forward_effect_contribution_with_extensions"
+      },
+      {
+        "java": "clusteredForwardEffectCreate",
+        "symbol": "cna_clustered_forward_effect_create"
+      },
+      {
+        "java": "clusteredForwardEffectDestroy",
+        "symbol": "cna_clustered_forward_effect_destroy"
+      },
+      {
+        "java": "clusteredForwardEffectGetAmbient",
+        "symbol": "cna_clustered_forward_effect_get_ambient"
+      },
+      {
+        "java": "clusteredForwardEffectGetBaseColor",
+        "symbol": "cna_clustered_forward_effect_get_base_color"
+      },
+      {
+        "java": "clusteredForwardEffectGetIor",
+        "symbol": "cna_clustered_forward_effect_get_ior"
+      },
+      {
+        "java": "clusteredForwardEffectGetMetallic",
+        "symbol": "cna_clustered_forward_effect_get_metallic"
+      },
+      {
+        "java": "clusteredForwardEffectGetRoughness",
+        "symbol": "cna_clustered_forward_effect_get_roughness"
+      },
+      {
+        "java": "clusteredForwardEffectHasAreaLight",
+        "symbol": "cna_clustered_forward_effect_has_area_light"
+      },
+      {
+        "java": "clusteredForwardEffectHasLightProbe",
+        "symbol": "cna_clustered_forward_effect_has_light_probe"
+      },
+      {
+        "java": "clusteredForwardEffectIsSupported",
+        "symbol": "cna_clustered_forward_effect_is_supported"
+      },
+      {
+        "java": "clusteredForwardEffectSetAmbient",
+        "symbol": "cna_clustered_forward_effect_set_ambient"
+      },
+      {
+        "java": "clusteredForwardEffectSetAreaLight",
+        "symbol": "cna_clustered_forward_effect_set_area_light"
+      },
+      {
+        "java": "clusteredForwardEffectSetBaseColor",
+        "symbol": "cna_clustered_forward_effect_set_base_color"
+      },
+      {
+        "java": "clusteredForwardEffectSetIor",
+        "symbol": "cna_clustered_forward_effect_set_ior"
+      },
+      {
+        "java": "clusteredForwardEffectSetLightProbe",
+        "symbol": "cna_clustered_forward_effect_set_light_probe"
+      },
+      {
+        "java": "clusteredForwardEffectSetLightProbeVolume",
+        "symbol": "cna_clustered_forward_effect_set_light_probe_volume"
+      },
+      {
+        "java": "clusteredForwardEffectSetMaterialExtensions",
+        "symbol": "cna_clustered_forward_effect_set_material_extensions"
+      },
+      {
+        "java": "clusteredForwardEffectSetMetallic",
+        "symbol": "cna_clustered_forward_effect_set_metallic"
+      },
+      {
+        "java": "clusteredForwardEffectSetOpaqueFrame",
+        "symbol": "cna_clustered_forward_effect_set_opaque_frame"
+      },
+      {
+        "java": "clusteredForwardEffectSetRoughness",
+        "symbol": "cna_clustered_forward_effect_set_roughness"
+      },
+      {
+        "java": "clusteredForwardEffectVolumeAttenuation",
+        "symbol": "cna_clustered_forward_effect_volume_attenuation"
       },
       {
         "java": "clusteredLightAssignmentAdopt",

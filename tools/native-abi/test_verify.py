@@ -401,6 +401,26 @@ def test_generator(live: dict) -> None:
         check("arrayLengths" in str(refusal),
               "an undeclared counted destination is refused rather than guessed at")
 
+    # The detector reads prose, so it has to tell a number of *things* from a number. CNA
+    # describes an area light's defaults as "range twenty" and its BRDF terms as "the four
+    # terms"; the first is a value and the second is one structure with four fields, and
+    # neither is an array. A number alone never fires, and a route can say so explicitly.
+    check(not generator_tool.counts_more_than_one(
+              "Receives a rectangle at the origin, half a unit across each way, white, at "
+              "intensity one and range twenty."),
+          "a number that is a value rather than a count does not fire the detector")
+    check(generator_tool.counts_more_than_one("Destination for eight corners."),
+          "a number of things does")
+    check(generator_tool.counts_more_than_one(
+              "Receives CNA_AREA_LIGHT_QUAD_CORNER_COUNT corners."),
+          "and so does one of CNA's own count constants")
+    terms = generator_tool.plan(
+        {"java": "probe", "symbol": "cna_area_light_brdf_table_evaluate",
+         "singleStructs": ["out_terms"]}, live)
+    check(any(entry["shape"] == "struct" and entry["name"] == "out_terms"
+              for entry in terms["steps"]),
+          "singleStructs says the count in the prose is the structure's own fields")
+
     # And the detector must not fire on an ordinary single structure, or every route taking a
     # box or a matrix would need a declaration it does not want.
     single = plan("cna_shadow_map_begin")

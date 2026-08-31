@@ -748,6 +748,171 @@
       ]
     },
     {
+      "name": "cna_area_light_brdf_table_copy_lookup_glsl",
+      "header": "engine_layer.h",
+      "ownership": "no handle; fills the caller's byte buffer",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "char*",
+        "uint64_t",
+        "uint64_t*"
+      ]
+    },
+    {
+      "name": "cna_area_light_brdf_table_create",
+      "header": "engine_layer.h",
+      "ownership": "borrows the graphics device; returns an owned BRDF-table handle",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_Handle",
+        "CNA_AreaLightBrdfTableHandle*"
+      ]
+    },
+    {
+      "name": "cna_area_light_brdf_table_create_with_size",
+      "header": "engine_layer.h",
+      "ownership": "borrows the graphics device; returns an owned BRDF-table handle",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_Handle",
+        "int32_t",
+        "int32_t",
+        "CNA_AreaLightBrdfTableHandle*"
+      ]
+    },
+    {
+      "name": "cna_area_light_brdf_table_destroy",
+      "header": "engine_layer.h",
+      "ownership": "releases the owned BRDF-table handle and its texture",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_AreaLightBrdfTableHandle"
+      ]
+    },
+    {
+      "name": "cna_area_light_brdf_table_evaluate",
+      "header": "engine_layer.h",
+      "ownership": "no handle; a pure function of its arguments",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "float",
+        "float",
+        "int32_t",
+        "CNA_AreaLightBrdfTerms*"
+      ]
+    },
+    {
+      "name": "cna_area_light_brdf_table_get_generation_milliseconds",
+      "header": "engine_layer.h",
+      "ownership": "borrows the table",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_AreaLightBrdfTableHandle",
+        "double*"
+      ]
+    },
+    {
+      "name": "cna_area_light_brdf_table_get_sample_count",
+      "header": "engine_layer.h",
+      "ownership": "borrows the table",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_AreaLightBrdfTableHandle",
+        "int32_t*"
+      ]
+    },
+    {
+      "name": "cna_area_light_brdf_table_get_size",
+      "header": "engine_layer.h",
+      "ownership": "borrows the table",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_AreaLightBrdfTableHandle",
+        "int32_t*"
+      ]
+    },
+    {
+      "name": "cna_area_light_ext_init",
+      "header": "engine_layer.h",
+      "ownership": "no handle; the caller's light value",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_AreaLightEXT*"
+      ]
+    },
+    {
+      "name": "cna_area_light_ext_is_valid",
+      "header": "engine_layer.h",
+      "ownership": "no handle; the caller's light value",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "const CNA_AreaLightEXT*",
+        "CNA_Bool*"
+      ]
+    },
+    {
+      "name": "cna_area_light_shading_contribution",
+      "header": "engine_layer.h",
+      "ownership": "no handle; a pure function of its arguments",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "const CNA_AreaLightEXT*",
+        "const CNA_Vector3*",
+        "const CNA_Vector3*",
+        "const CNA_Vector3*",
+        "const CNA_Vector3*",
+        "float",
+        "float",
+        "CNA_Vector3*"
+      ]
+    },
+    {
+      "name": "cna_area_light_shading_copy_shading_glsl",
+      "header": "engine_layer.h",
+      "ownership": "no handle; a pure function of its arguments",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "char*",
+        "uint64_t",
+        "uint64_t*"
+      ]
+    },
+    {
+      "name": "cna_area_light_shading_coverage",
+      "header": "engine_layer.h",
+      "ownership": "no handle; a pure function of its arguments",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "const CNA_Vector3*",
+        "const CNA_Vector3*",
+        "const CNA_Vector3*",
+        "float",
+        "CNA_Bool",
+        "float*"
+      ]
+    },
+    {
+      "name": "cna_area_light_shading_lobe_scale_for",
+      "header": "engine_layer.h",
+      "ownership": "no handle; a pure function of its arguments",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "float",
+        "float*"
+      ]
+    },
+    {
+      "name": "cna_area_light_shading_quad_of",
+      "header": "engine_layer.h",
+      "ownership": "no handle; a pure function of its arguments",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "const CNA_AreaLightEXT*",
+        "const CNA_Vector3*",
+        "CNA_Vector3*"
+      ]
+    },
+    {
       "name": "cna_artist_collection_destroy",
       "header": "media_library.h",
       "ownership": "consumes caller-owned handle on success",
@@ -2433,6 +2598,292 @@
       "parameters": [
         "CNA_PostProcessPassHandle",
         "float"
+      ]
+    },
+    {
+      "name": "cna_clustered_forward_effect_begin",
+      "header": "engine_layer.h",
+      "ownership": "borrows the effect, the caller's matrices and the light buffer for the duration of the call",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_ClusteredForwardEffectHandle",
+        "const CNA_Matrix*",
+        "const CNA_Matrix*",
+        "const CNA_Matrix*",
+        "const CNA_Vector3*",
+        "CNA_ClusteredLightBufferHandle"
+      ]
+    },
+    {
+      "name": "cna_clustered_forward_effect_clear_area_light",
+      "header": "engine_layer.h",
+      "ownership": "borrows the effect",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_ClusteredForwardEffectHandle"
+      ]
+    },
+    {
+      "name": "cna_clustered_forward_effect_clear_light_probe",
+      "header": "engine_layer.h",
+      "ownership": "borrows the effect",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_ClusteredForwardEffectHandle"
+      ]
+    },
+    {
+      "name": "cna_clustered_forward_effect_contribution",
+      "header": "engine_layer.h",
+      "ownership": "no handle of its own; a pure function of its arguments",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "const CNA_ClusteredLightEXT*",
+        "const CNA_Vector3*",
+        "const CNA_Vector3*",
+        "const CNA_Vector3*",
+        "const CNA_Vector3*",
+        "float",
+        "float",
+        "float",
+        "float",
+        "const CNA_Vector3*",
+        "float",
+        "float",
+        "float",
+        "float",
+        "const CNA_Vector3*",
+        "float",
+        "CNA_Vector3*"
+      ]
+    },
+    {
+      "name": "cna_clustered_forward_effect_contribution_with_extensions",
+      "header": "engine_layer.h",
+      "ownership": "no handle of its own; a pure function of its arguments",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "const CNA_ClusteredLightEXT*",
+        "const CNA_Vector3*",
+        "const CNA_Vector3*",
+        "const CNA_Vector3*",
+        "const CNA_Vector3*",
+        "float",
+        "float",
+        "CNA_PbrMaterialExtensionsHandle",
+        "CNA_Vector3*"
+      ]
+    },
+    {
+      "name": "cna_clustered_forward_effect_create",
+      "header": "engine_layer.h",
+      "ownership": "borrows the graphics device; returns an owned effect handle",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_Handle",
+        "CNA_ClusteredForwardEffectHandle*"
+      ]
+    },
+    {
+      "name": "cna_clustered_forward_effect_destroy",
+      "header": "engine_layer.h",
+      "ownership": "releases the owned effect handle",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_ClusteredForwardEffectHandle"
+      ]
+    },
+    {
+      "name": "cna_clustered_forward_effect_get_ambient",
+      "header": "engine_layer.h",
+      "ownership": "borrows the effect",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_ClusteredForwardEffectHandle",
+        "CNA_Vector3*"
+      ]
+    },
+    {
+      "name": "cna_clustered_forward_effect_get_base_color",
+      "header": "engine_layer.h",
+      "ownership": "borrows the effect",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_ClusteredForwardEffectHandle",
+        "CNA_Vector3*"
+      ]
+    },
+    {
+      "name": "cna_clustered_forward_effect_get_ior",
+      "header": "engine_layer.h",
+      "ownership": "borrows the effect",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_ClusteredForwardEffectHandle",
+        "float*"
+      ]
+    },
+    {
+      "name": "cna_clustered_forward_effect_get_metallic",
+      "header": "engine_layer.h",
+      "ownership": "borrows the effect",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_ClusteredForwardEffectHandle",
+        "float*"
+      ]
+    },
+    {
+      "name": "cna_clustered_forward_effect_get_roughness",
+      "header": "engine_layer.h",
+      "ownership": "borrows the effect",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_ClusteredForwardEffectHandle",
+        "float*"
+      ]
+    },
+    {
+      "name": "cna_clustered_forward_effect_has_area_light",
+      "header": "engine_layer.h",
+      "ownership": "borrows the effect",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_ClusteredForwardEffectHandle",
+        "CNA_Bool*"
+      ]
+    },
+    {
+      "name": "cna_clustered_forward_effect_has_light_probe",
+      "header": "engine_layer.h",
+      "ownership": "borrows the effect",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_ClusteredForwardEffectHandle",
+        "CNA_Bool*"
+      ]
+    },
+    {
+      "name": "cna_clustered_forward_effect_is_supported",
+      "header": "engine_layer.h",
+      "ownership": "borrows the effect",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_ClusteredForwardEffectHandle",
+        "CNA_Bool*"
+      ]
+    },
+    {
+      "name": "cna_clustered_forward_effect_set_ambient",
+      "header": "engine_layer.h",
+      "ownership": "borrows the effect",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_ClusteredForwardEffectHandle",
+        "const CNA_Vector3*"
+      ]
+    },
+    {
+      "name": "cna_clustered_forward_effect_set_area_light",
+      "header": "engine_layer.h",
+      "ownership": "borrows the effect and the caller's object; the effect does not own it",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_ClusteredForwardEffectHandle",
+        "const CNA_AreaLightEXT*",
+        "CNA_AreaLightBrdfTableHandle"
+      ]
+    },
+    {
+      "name": "cna_clustered_forward_effect_set_base_color",
+      "header": "engine_layer.h",
+      "ownership": "borrows the effect",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_ClusteredForwardEffectHandle",
+        "const CNA_Vector3*"
+      ]
+    },
+    {
+      "name": "cna_clustered_forward_effect_set_ior",
+      "header": "engine_layer.h",
+      "ownership": "borrows the effect",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_ClusteredForwardEffectHandle",
+        "float"
+      ]
+    },
+    {
+      "name": "cna_clustered_forward_effect_set_light_probe",
+      "header": "engine_layer.h",
+      "ownership": "borrows the effect and the caller's object; the effect does not own it",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_ClusteredForwardEffectHandle",
+        "CNA_LightProbeHandle"
+      ]
+    },
+    {
+      "name": "cna_clustered_forward_effect_set_light_probe_volume",
+      "header": "engine_layer.h",
+      "ownership": "borrows the effect and the caller's object; the effect does not own it",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_ClusteredForwardEffectHandle",
+        "CNA_LightProbeVolumeHandle"
+      ]
+    },
+    {
+      "name": "cna_clustered_forward_effect_set_material_extensions",
+      "header": "engine_layer.h",
+      "ownership": "borrows the effect and the caller's object; the effect does not own it",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_ClusteredForwardEffectHandle",
+        "CNA_PbrMaterialExtensionsHandle"
+      ]
+    },
+    {
+      "name": "cna_clustered_forward_effect_set_metallic",
+      "header": "engine_layer.h",
+      "ownership": "borrows the effect",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_ClusteredForwardEffectHandle",
+        "float"
+      ]
+    },
+    {
+      "name": "cna_clustered_forward_effect_set_opaque_frame",
+      "header": "engine_layer.h",
+      "ownership": "borrows the effect and the caller's object; the effect does not own it",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_ClusteredForwardEffectHandle",
+        "CNA_Handle"
+      ]
+    },
+    {
+      "name": "cna_clustered_forward_effect_set_roughness",
+      "header": "engine_layer.h",
+      "ownership": "borrows the effect",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_ClusteredForwardEffectHandle",
+        "float"
+      ]
+    },
+    {
+      "name": "cna_clustered_forward_effect_volume_attenuation",
+      "header": "engine_layer.h",
+      "ownership": "no handle of its own; a pure function of its arguments",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "const CNA_Vector3*",
+        "float",
+        "float",
+        "CNA_Vector3*"
       ]
     },
     {

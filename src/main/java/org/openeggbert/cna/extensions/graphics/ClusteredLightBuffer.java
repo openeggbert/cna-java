@@ -167,6 +167,11 @@ public final class ClusteredLightBuffer implements AutoCloseable {
         return answer[0];
     }
 
+    /** The native handle, for the effect that reads a buffer. */
+    long handleForBorrow() {
+        return open();
+    }
+
     private long open() {
         synchronized (this) {
             if (closed) {
