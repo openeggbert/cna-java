@@ -431,6 +431,154 @@ Java_org_openeggbert_cna_internal_generated_NativeModelExtensionRoutes_effectGet
 }
 
 JNIEXPORT jint JNICALL
+Java_org_openeggbert_cna_internal_generated_NativeModelExtensionRoutes_matrixCreateInfinitePerspectiveFieldOfViewExt(
+    JNIEnv* environment, jclass declaring_class, jfloat field_of_view, jfloat aspect_ratio, jfloat near_plane_distance, jfloatArray out_matrixFloating)
+{
+    (void)environment;
+    (void)declaring_class;
+    if (out_matrixFloating == NULL) {
+        return (jint)CNA_RESULT_INVALID_ARGUMENT;
+    }
+    CNA_Matrix out_matrix_value;
+    memset(&out_matrix_value, 0, sizeof out_matrix_value);
+    CNA_Result call_result = cna.matrix_create_infinite_perspective_field_of_view_ext((float)field_of_view, (float)aspect_ratio, (float)near_plane_distance, &out_matrix_value);
+    if (call_result == CNA_RESULT_SUCCESS || call_result == CNA_RESULT_BUFFER_TOO_SMALL) {
+        jfloat out_matrixFloating_values[] = {
+            (jfloat)out_matrix_value.m11,
+            (jfloat)out_matrix_value.m12,
+            (jfloat)out_matrix_value.m13,
+            (jfloat)out_matrix_value.m14,
+            (jfloat)out_matrix_value.m21,
+            (jfloat)out_matrix_value.m22,
+            (jfloat)out_matrix_value.m23,
+            (jfloat)out_matrix_value.m24,
+            (jfloat)out_matrix_value.m31,
+            (jfloat)out_matrix_value.m32,
+            (jfloat)out_matrix_value.m33,
+            (jfloat)out_matrix_value.m34,
+            (jfloat)out_matrix_value.m41,
+            (jfloat)out_matrix_value.m42,
+            (jfloat)out_matrix_value.m43,
+            (jfloat)out_matrix_value.m44
+        };
+        (*environment)->SetFloatArrayRegion(environment, out_matrixFloating, 0,
+            (jsize)(sizeof out_matrixFloating_values / sizeof out_matrixFloating_values[0]),
+            out_matrixFloating_values);
+    }
+    return (jint)call_result;
+}
+
+JNIEXPORT jint JNICALL
+Java_org_openeggbert_cna_internal_generated_NativeModelExtensionRoutes_modelAddCameraExt(
+    JNIEnv* environment, jclass declaring_class, jlong model, jlongArray descriptorIntegral, jfloatArray descriptorFloating, jbyteArray descriptorName)
+{
+    (void)environment;
+    (void)declaring_class;
+    if (descriptorIntegral == NULL || descriptorFloating == NULL) {
+        return (jint)CNA_RESULT_INVALID_ARGUMENT;
+    }
+    CNA_ModelCameraDescriptorEXT descriptor_value;
+    memset(&descriptor_value, 0, sizeof descriptor_value);
+    descriptor_value.camera.struct_size = (uint32_t)(sizeof descriptor_value.camera);
+    descriptor_value.camera.struct_version = UINT32_C(1);
+    {
+        jlong descriptorIntegral_values[4];
+        (*environment)->GetLongArrayRegion(environment, descriptorIntegral, 0, 4, descriptorIntegral_values);
+        descriptor_value.camera.scene_node_index = (int32_t)descriptorIntegral_values[0];
+        descriptor_value.camera.is_perspective = (CNA_Bool)descriptorIntegral_values[1];
+        descriptor_value.camera.has_infinite_far_plane = (CNA_Bool)descriptorIntegral_values[2];
+        descriptor_value.camera.has_authored_aspect_ratio = (CNA_Bool)descriptorIntegral_values[3];
+    }
+    {
+        jfloat descriptorFloating_values[36];
+        (*environment)->GetFloatArrayRegion(environment, descriptorFloating, 0, 36, descriptorFloating_values);
+        descriptor_value.camera.projection.m11 = (float)descriptorFloating_values[0];
+        descriptor_value.camera.projection.m12 = (float)descriptorFloating_values[1];
+        descriptor_value.camera.projection.m13 = (float)descriptorFloating_values[2];
+        descriptor_value.camera.projection.m14 = (float)descriptorFloating_values[3];
+        descriptor_value.camera.projection.m21 = (float)descriptorFloating_values[4];
+        descriptor_value.camera.projection.m22 = (float)descriptorFloating_values[5];
+        descriptor_value.camera.projection.m23 = (float)descriptorFloating_values[6];
+        descriptor_value.camera.projection.m24 = (float)descriptorFloating_values[7];
+        descriptor_value.camera.projection.m31 = (float)descriptorFloating_values[8];
+        descriptor_value.camera.projection.m32 = (float)descriptorFloating_values[9];
+        descriptor_value.camera.projection.m33 = (float)descriptorFloating_values[10];
+        descriptor_value.camera.projection.m34 = (float)descriptorFloating_values[11];
+        descriptor_value.camera.projection.m41 = (float)descriptorFloating_values[12];
+        descriptor_value.camera.projection.m42 = (float)descriptorFloating_values[13];
+        descriptor_value.camera.projection.m43 = (float)descriptorFloating_values[14];
+        descriptor_value.camera.projection.m44 = (float)descriptorFloating_values[15];
+        descriptor_value.camera.world_transform.m11 = (float)descriptorFloating_values[16];
+        descriptor_value.camera.world_transform.m12 = (float)descriptorFloating_values[17];
+        descriptor_value.camera.world_transform.m13 = (float)descriptorFloating_values[18];
+        descriptor_value.camera.world_transform.m14 = (float)descriptorFloating_values[19];
+        descriptor_value.camera.world_transform.m21 = (float)descriptorFloating_values[20];
+        descriptor_value.camera.world_transform.m22 = (float)descriptorFloating_values[21];
+        descriptor_value.camera.world_transform.m23 = (float)descriptorFloating_values[22];
+        descriptor_value.camera.world_transform.m24 = (float)descriptorFloating_values[23];
+        descriptor_value.camera.world_transform.m31 = (float)descriptorFloating_values[24];
+        descriptor_value.camera.world_transform.m32 = (float)descriptorFloating_values[25];
+        descriptor_value.camera.world_transform.m33 = (float)descriptorFloating_values[26];
+        descriptor_value.camera.world_transform.m34 = (float)descriptorFloating_values[27];
+        descriptor_value.camera.world_transform.m41 = (float)descriptorFloating_values[28];
+        descriptor_value.camera.world_transform.m42 = (float)descriptorFloating_values[29];
+        descriptor_value.camera.world_transform.m43 = (float)descriptorFloating_values[30];
+        descriptor_value.camera.world_transform.m44 = (float)descriptorFloating_values[31];
+        descriptor_value.camera.aspect_ratio = (float)descriptorFloating_values[32];
+        descriptor_value.camera.field_of_view = (float)descriptorFloating_values[33];
+        descriptor_value.camera.near_plane_distance = (float)descriptorFloating_values[34];
+        descriptor_value.camera.far_plane_distance = (float)descriptorFloating_values[35];
+    }
+    jsize descriptorName_size = (*environment)->GetArrayLength(environment, descriptorName);
+    jbyte* descriptorName_bytes = (*environment)->GetByteArrayElements(environment, descriptorName, NULL);
+    if (descriptorName_bytes == NULL) {
+        return (jint)CNA_RESULT_OUT_OF_MEMORY;
+    }
+    descriptor_value.name.data = (const char*)descriptorName_bytes;
+    descriptor_value.name.byte_length = (uint64_t)descriptorName_size;
+    CNA_Result call_result = cna.model_add_camera_ext((CNA_ModelHandle)model, &descriptor_value);
+    (*environment)->ReleaseByteArrayElements(environment, descriptorName, descriptorName_bytes, JNI_ABORT);
+    return (jint)call_result;
+}
+
+JNIEXPORT jint JNICALL
+Java_org_openeggbert_cna_internal_generated_NativeModelExtensionRoutes_modelAddSkinExt(
+    JNIEnv* environment, jclass declaring_class, jlong model, jbyteArray name, jlong data, jlongArray mesh_indices)
+{
+    (void)environment;
+    (void)declaring_class;
+    jsize name_size = (*environment)->GetArrayLength(environment, name);
+    jbyte* name_bytes = (*environment)->GetByteArrayElements(environment, name, NULL);
+    if (name_bytes == NULL) {
+        return (jint)CNA_RESULT_OUT_OF_MEMORY;
+    }
+    CNA_StringView name_view = {(const char*)name_bytes, (uint64_t)name_size};
+    jsize mesh_indices_size = (*environment)->GetArrayLength(environment, mesh_indices);
+    jlong* mesh_indices_elements = (*environment)->GetLongArrayElements(environment, mesh_indices, NULL);
+    if (mesh_indices_elements == NULL) {
+    (*environment)->ReleaseByteArrayElements(environment, name, name_bytes, JNI_ABORT);
+        return (jint)CNA_RESULT_OUT_OF_MEMORY;
+    }
+    uint64_t* mesh_indices_values = (uint64_t*)malloc(
+        ((size_t)mesh_indices_size + 1U) * sizeof(*mesh_indices_values));
+    if (mesh_indices_values == NULL) {
+        (*environment)->ReleaseLongArrayElements(
+            environment, mesh_indices, mesh_indices_elements, JNI_ABORT);
+    (*environment)->ReleaseByteArrayElements(environment, name, name_bytes, JNI_ABORT);
+        return (jint)CNA_RESULT_OUT_OF_MEMORY;
+    }
+    for (jsize index = 0; index < mesh_indices_size; ++index) {
+        mesh_indices_values[index] = (uint64_t)mesh_indices_elements[index];
+    }
+    CNA_Result call_result = cna.model_add_skin_ext((CNA_ModelHandle)model, name_view, (CNA_SkinningDataHandle)data, mesh_indices_values, (uint64_t)mesh_indices_size);
+    (*environment)->ReleaseByteArrayElements(environment, name, name_bytes, JNI_ABORT);
+    free(mesh_indices_values);
+    (*environment)->ReleaseLongArrayElements(
+        environment, mesh_indices, mesh_indices_elements, JNI_ABORT);
+    return (jint)call_result;
+}
+
+JNIEXPORT jint JNICALL
 Java_org_openeggbert_cna_internal_generated_NativeModelExtensionRoutes_modelAnimationsCopyClipNameAt(
     JNIEnv* environment, jclass declaring_class, jlong animations, jlong clip_index, jbyteArray destination, jlongArray out_byte_count)
 {
@@ -563,6 +711,22 @@ Java_org_openeggbert_cna_internal_generated_NativeModelExtensionRoutes_modelAnim
     (void)environment;
     (void)declaring_class;
     CNA_Result call_result = cna.model_animations_ext_set_clip_target_space_at((CNA_ModelAnimationsEXTHandle)animations, (uint64_t)clip_index, (CNA_ClipTargetSpaceEXT)value);
+    return (jint)call_result;
+}
+
+JNIEXPORT jint JNICALL
+Java_org_openeggbert_cna_internal_generated_NativeModelExtensionRoutes_modelApplyBindPoseBoneTransformsExt(
+    JNIEnv* environment, jclass declaring_class, jlong model, jlong data, jlongArray out_posed_count)
+{
+    (void)environment;
+    (void)declaring_class;
+    uint64_t out_posed_count_value = 0;
+    CNA_Result call_result = cna.model_apply_bind_pose_bone_transforms_ext((CNA_ModelHandle)model, (CNA_SkinningDataHandle)data, &out_posed_count_value);
+    if (call_result == CNA_RESULT_SUCCESS || call_result == CNA_RESULT_BUFFER_TOO_SMALL) {
+        jlong out_posed_count_element = (jlong)out_posed_count_value;
+        (*environment)->SetLongArrayRegion(
+            environment, out_posed_count, 0, 1, &out_posed_count_element);
+    }
     return (jint)call_result;
 }
 
@@ -822,6 +986,26 @@ Java_org_openeggbert_cna_internal_generated_NativeModelExtensionRoutes_modelBone
 }
 
 JNIEXPORT jint JNICALL
+Java_org_openeggbert_cna_internal_generated_NativeModelExtensionRoutes_modelClearCamerasExt(
+    JNIEnv* environment, jclass declaring_class, jlong model)
+{
+    (void)environment;
+    (void)declaring_class;
+    CNA_Result call_result = cna.model_clear_cameras_ext((CNA_ModelHandle)model);
+    return (jint)call_result;
+}
+
+JNIEXPORT jint JNICALL
+Java_org_openeggbert_cna_internal_generated_NativeModelExtensionRoutes_modelClearSkinsExt(
+    JNIEnv* environment, jclass declaring_class, jlong model)
+{
+    (void)environment;
+    (void)declaring_class;
+    CNA_Result call_result = cna.model_clear_skins_ext((CNA_ModelHandle)model);
+    return (jint)call_result;
+}
+
+JNIEXPORT jint JNICALL
 Java_org_openeggbert_cna_internal_generated_NativeModelExtensionRoutes_modelCopyAbsoluteBoneTransforms(
     JNIEnv* environment, jclass declaring_class, jlong model, jfloatArray destinationFloating, jlongArray out_count)
 {
@@ -1053,6 +1237,22 @@ Java_org_openeggbert_cna_internal_generated_NativeModelExtensionRoutes_modelCopy
         jlong destination_element = (jlong)destination_written;
         (*environment)->SetLongArrayRegion(
             environment, out_byte_count, 0, 1, &destination_element);
+    }
+    return (jint)call_result;
+}
+
+JNIEXPORT jint JNICALL
+Java_org_openeggbert_cna_internal_generated_NativeModelExtensionRoutes_modelCreateSkinSkeletonHandleExt(
+    JNIEnv* environment, jclass declaring_class, jlong model, jlong index, jlongArray out_data)
+{
+    (void)environment;
+    (void)declaring_class;
+    CNA_SkinningDataHandle out_data_value = 0;
+    CNA_Result call_result = cna.model_create_skin_skeleton_handle_ext((CNA_ModelHandle)model, (uint64_t)index, &out_data_value);
+    if (call_result == CNA_RESULT_SUCCESS || call_result == CNA_RESULT_BUFFER_TOO_SMALL) {
+        jlong out_data_element = (jlong)out_data_value;
+        (*environment)->SetLongArrayRegion(
+            environment, out_data, 0, 1, &out_data_element);
     }
     return (jint)call_result;
 }
@@ -1908,6 +2108,26 @@ Java_org_openeggbert_cna_internal_generated_NativeModelExtensionRoutes_modelMesh
 }
 
 JNIEXPORT jint JNICALL
+Java_org_openeggbert_cna_internal_generated_NativeModelExtensionRoutes_modelMeshPartGetMorphTargetDataExt(
+    JNIEnv* environment, jclass declaring_class, jlong part, jbooleanArray out_has_data, jlongArray out_data)
+{
+    (void)environment;
+    (void)declaring_class;
+    CNA_Bool out_has_data_value = 0;
+    CNA_MorphTargetDataEXTHandle out_data_value = 0;
+    CNA_Result call_result = cna.model_mesh_part_get_morph_target_data_ext((CNA_ModelMeshPartHandle)part, &out_has_data_value, &out_data_value);
+    if (call_result == CNA_RESULT_SUCCESS || call_result == CNA_RESULT_BUFFER_TOO_SMALL) {
+        jboolean out_has_data_element = (jboolean)out_has_data_value;
+        (*environment)->SetBooleanArrayRegion(
+            environment, out_has_data, 0, 1, &out_has_data_element);
+        jlong out_data_element = (jlong)out_data_value;
+        (*environment)->SetLongArrayRegion(
+            environment, out_data, 0, 1, &out_data_element);
+    }
+    return (jint)call_result;
+}
+
+JNIEXPORT jint JNICALL
 Java_org_openeggbert_cna_internal_generated_NativeModelExtensionRoutes_modelMeshPartGetNumVertices(
     JNIEnv* environment, jclass declaring_class, jlong part, jintArray out_value)
 {
@@ -1935,6 +2155,59 @@ Java_org_openeggbert_cna_internal_generated_NativeModelExtensionRoutes_modelMesh
         jint out_value_element = (jint)out_value_value;
         (*environment)->SetIntArrayRegion(
             environment, out_value, 0, 1, &out_value_element);
+    }
+    return (jint)call_result;
+}
+
+JNIEXPORT jint JNICALL
+Java_org_openeggbert_cna_internal_generated_NativeModelExtensionRoutes_modelMeshPartGetPrimitiveTypeExt(
+    JNIEnv* environment, jclass declaring_class, jlong part, jintArray out_value)
+{
+    (void)environment;
+    (void)declaring_class;
+    CNA_PrimitiveType out_value_value = 0;
+    CNA_Result call_result = cna.model_mesh_part_get_primitive_type_ext((CNA_ModelMeshPartHandle)part, &out_value_value);
+    if (call_result == CNA_RESULT_SUCCESS || call_result == CNA_RESULT_BUFFER_TOO_SMALL) {
+        jint out_value_element = (jint)out_value_value;
+        (*environment)->SetIntArrayRegion(
+            environment, out_value, 0, 1, &out_value_element);
+    }
+    return (jint)call_result;
+}
+
+JNIEXPORT jint JNICALL
+Java_org_openeggbert_cna_internal_generated_NativeModelExtensionRoutes_modelMeshPartGetSamplerStateExt(
+    JNIEnv* environment, jclass declaring_class, jlong part, jint slot, jlongArray out_stateIntegral, jfloatArray out_stateFloating)
+{
+    (void)environment;
+    (void)declaring_class;
+    if (out_stateIntegral == NULL || out_stateFloating == NULL) {
+        return (jint)CNA_RESULT_INVALID_ARGUMENT;
+    }
+    CNA_SamplerState out_state_value;
+    memset(&out_state_value, 0, sizeof out_state_value);
+    out_state_value.struct_size = (uint32_t)(sizeof out_state_value);
+    out_state_value.struct_version = UINT32_C(1);
+    CNA_Result call_result = cna.model_mesh_part_get_sampler_state_ext((CNA_ModelMeshPartHandle)part, (CNA_PbrTextureSlot)slot, &out_state_value);
+    if (call_result == CNA_RESULT_SUCCESS || call_result == CNA_RESULT_BUFFER_TOO_SMALL) {
+        jlong out_stateIntegral_values[] = {
+            (jlong)out_state_value.address_u,
+            (jlong)out_state_value.address_v,
+            (jlong)out_state_value.address_w,
+            (jlong)out_state_value.filter,
+            (jlong)out_state_value.max_anisotropy,
+            (jlong)out_state_value.max_mip_level,
+            (jlong)out_state_value.reserved
+        };
+        (*environment)->SetLongArrayRegion(environment, out_stateIntegral, 0,
+            (jsize)(sizeof out_stateIntegral_values / sizeof out_stateIntegral_values[0]),
+            out_stateIntegral_values);
+        jfloat out_stateFloating_values[] = {
+            (jfloat)out_state_value.mip_map_level_of_detail_bias
+        };
+        (*environment)->SetFloatArrayRegion(environment, out_stateFloating, 0,
+            (jsize)(sizeof out_stateFloating_values / sizeof out_stateFloating_values[0]),
+            out_stateFloating_values);
     }
     return (jint)call_result;
 }
@@ -1998,6 +2271,87 @@ Java_org_openeggbert_cna_internal_generated_NativeModelExtensionRoutes_modelMesh
     (void)environment;
     (void)declaring_class;
     CNA_Result call_result = cna.model_mesh_part_set_effect((CNA_ModelMeshPartHandle)part, (CNA_EffectHandle)effect);
+    return (jint)call_result;
+}
+
+JNIEXPORT jint JNICALL
+Java_org_openeggbert_cna_internal_generated_NativeModelExtensionRoutes_modelMeshPartSetMorphTargetDataExt(
+    JNIEnv* environment, jclass declaring_class, jlong part, jlong data)
+{
+    (void)environment;
+    (void)declaring_class;
+    CNA_Result call_result = cna.model_mesh_part_set_morph_target_data_ext((CNA_ModelMeshPartHandle)part, (CNA_MorphTargetDataEXTHandle)data);
+    return (jint)call_result;
+}
+
+JNIEXPORT jint JNICALL
+Java_org_openeggbert_cna_internal_generated_NativeModelExtensionRoutes_modelMeshPartSetMorphWeightsExt(
+    JNIEnv* environment, jclass declaring_class, jlong part, jfloatArray weights)
+{
+    (void)environment;
+    (void)declaring_class;
+    jsize weights_size = (*environment)->GetArrayLength(environment, weights);
+    jfloat* weights_elements = (*environment)->GetFloatArrayElements(environment, weights, NULL);
+    if (weights_elements == NULL) {
+        return (jint)CNA_RESULT_OUT_OF_MEMORY;
+    }
+    float* weights_values = (float*)malloc(
+        ((size_t)weights_size + 1U) * sizeof(*weights_values));
+    if (weights_values == NULL) {
+        (*environment)->ReleaseFloatArrayElements(
+            environment, weights, weights_elements, JNI_ABORT);
+        return (jint)CNA_RESULT_OUT_OF_MEMORY;
+    }
+    for (jsize index = 0; index < weights_size; ++index) {
+        weights_values[index] = (float)weights_elements[index];
+    }
+    CNA_Result call_result = cna.model_mesh_part_set_morph_weights_ext((CNA_ModelMeshPartHandle)part, weights_values, (uint64_t)weights_size);
+    free(weights_values);
+    (*environment)->ReleaseFloatArrayElements(
+        environment, weights, weights_elements, JNI_ABORT);
+    return (jint)call_result;
+}
+
+JNIEXPORT jint JNICALL
+Java_org_openeggbert_cna_internal_generated_NativeModelExtensionRoutes_modelMeshPartSetPrimitiveTypeExt(
+    JNIEnv* environment, jclass declaring_class, jlong part, jint value)
+{
+    (void)environment;
+    (void)declaring_class;
+    CNA_Result call_result = cna.model_mesh_part_set_primitive_type_ext((CNA_ModelMeshPartHandle)part, (CNA_PrimitiveType)value);
+    return (jint)call_result;
+}
+
+JNIEXPORT jint JNICALL
+Java_org_openeggbert_cna_internal_generated_NativeModelExtensionRoutes_modelMeshPartSetSamplerStateExt(
+    JNIEnv* environment, jclass declaring_class, jlong part, jint slot, jlongArray stateIntegral, jfloatArray stateFloating)
+{
+    (void)environment;
+    (void)declaring_class;
+    if (stateIntegral == NULL || stateFloating == NULL) {
+        return (jint)CNA_RESULT_INVALID_ARGUMENT;
+    }
+    CNA_SamplerState state_value;
+    memset(&state_value, 0, sizeof state_value);
+    state_value.struct_size = (uint32_t)(sizeof state_value);
+    state_value.struct_version = UINT32_C(1);
+    {
+        jlong stateIntegral_values[7];
+        (*environment)->GetLongArrayRegion(environment, stateIntegral, 0, 7, stateIntegral_values);
+        state_value.address_u = (CNA_TextureAddressMode)stateIntegral_values[0];
+        state_value.address_v = (CNA_TextureAddressMode)stateIntegral_values[1];
+        state_value.address_w = (CNA_TextureAddressMode)stateIntegral_values[2];
+        state_value.filter = (CNA_TextureFilter)stateIntegral_values[3];
+        state_value.max_anisotropy = (int32_t)stateIntegral_values[4];
+        state_value.max_mip_level = (int32_t)stateIntegral_values[5];
+        state_value.reserved = (uint32_t)stateIntegral_values[6];
+    }
+    {
+        jfloat stateFloating_values[1];
+        (*environment)->GetFloatArrayRegion(environment, stateFloating, 0, 1, stateFloating_values);
+        state_value.mip_map_level_of_detail_bias = (float)stateFloating_values[0];
+    }
+    CNA_Result call_result = cna.model_mesh_part_set_sampler_state_ext((CNA_ModelMeshPartHandle)part, (CNA_PbrTextureSlot)slot, &state_value);
     return (jint)call_result;
 }
 

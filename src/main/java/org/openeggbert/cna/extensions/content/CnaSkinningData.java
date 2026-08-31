@@ -78,6 +78,11 @@ public final class CnaSkinningData implements AutoCloseable {
         return new CnaSkinningData(created[0]);
     }
 
+    /** Adopts a handle CNA created, which the caller then owns and closes. */
+    static CnaSkinningData adopt(long handle) {
+        return new CnaSkinningData(handle);
+    }
+
     /**
      * Returns how many bones the skeleton has.
      *

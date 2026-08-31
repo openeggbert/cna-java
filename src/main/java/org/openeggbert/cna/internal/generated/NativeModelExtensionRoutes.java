@@ -78,6 +78,91 @@ public final class NativeModelExtensionRoutes {
     public static native int effectGetTypeNameByteCount(long effect, long[] outByteCount);
 
     /**
+     * cna_matrix_create_infinite_perspective_field_of_view_ext (models.h).
+     *
+     * <p>outMatrixFloating carries CNA_Matrix in this order:
+     * <ol start="0">
+     *   <li>{@code m11} (float)</li>
+     *   <li>{@code m12} (float)</li>
+     *   <li>{@code m13} (float)</li>
+     *   <li>{@code m14} (float)</li>
+     *   <li>{@code m21} (float)</li>
+     *   <li>{@code m22} (float)</li>
+     *   <li>{@code m23} (float)</li>
+     *   <li>{@code m24} (float)</li>
+     *   <li>{@code m31} (float)</li>
+     *   <li>{@code m32} (float)</li>
+     *   <li>{@code m33} (float)</li>
+     *   <li>{@code m34} (float)</li>
+     *   <li>{@code m41} (float)</li>
+     *   <li>{@code m42} (float)</li>
+     *   <li>{@code m43} (float)</li>
+     *   <li>{@code m44} (float)</li>
+     * </ol>
+     */
+    public static native int matrixCreateInfinitePerspectiveFieldOfViewExt(float fieldOfView, float aspectRatio, float nearPlaneDistance, float[] outMatrixFloating);
+
+    /**
+     * cna_model_add_camera_ext (models.h).
+     *
+     * <p>descriptorIntegral carries CNA_ModelCameraDescriptorEXT in this order:
+     * <ol start="0">
+     *   <li>{@code camera.scene_node_index} (int32_t)</li>
+     *   <li>{@code camera.is_perspective} (CNA_Bool)</li>
+     *   <li>{@code camera.has_infinite_far_plane} (CNA_Bool)</li>
+     *   <li>{@code camera.has_authored_aspect_ratio} (CNA_Bool)</li>
+     * </ol>
+     *
+     * <p>descriptorFloating carries CNA_ModelCameraDescriptorEXT in this order:
+     * <ol start="0">
+     *   <li>{@code camera.projection.m11} (float)</li>
+     *   <li>{@code camera.projection.m12} (float)</li>
+     *   <li>{@code camera.projection.m13} (float)</li>
+     *   <li>{@code camera.projection.m14} (float)</li>
+     *   <li>{@code camera.projection.m21} (float)</li>
+     *   <li>{@code camera.projection.m22} (float)</li>
+     *   <li>{@code camera.projection.m23} (float)</li>
+     *   <li>{@code camera.projection.m24} (float)</li>
+     *   <li>{@code camera.projection.m31} (float)</li>
+     *   <li>{@code camera.projection.m32} (float)</li>
+     *   <li>{@code camera.projection.m33} (float)</li>
+     *   <li>{@code camera.projection.m34} (float)</li>
+     *   <li>{@code camera.projection.m41} (float)</li>
+     *   <li>{@code camera.projection.m42} (float)</li>
+     *   <li>{@code camera.projection.m43} (float)</li>
+     *   <li>{@code camera.projection.m44} (float)</li>
+     *   <li>{@code camera.world_transform.m11} (float)</li>
+     *   <li>{@code camera.world_transform.m12} (float)</li>
+     *   <li>{@code camera.world_transform.m13} (float)</li>
+     *   <li>{@code camera.world_transform.m14} (float)</li>
+     *   <li>{@code camera.world_transform.m21} (float)</li>
+     *   <li>{@code camera.world_transform.m22} (float)</li>
+     *   <li>{@code camera.world_transform.m23} (float)</li>
+     *   <li>{@code camera.world_transform.m24} (float)</li>
+     *   <li>{@code camera.world_transform.m31} (float)</li>
+     *   <li>{@code camera.world_transform.m32} (float)</li>
+     *   <li>{@code camera.world_transform.m33} (float)</li>
+     *   <li>{@code camera.world_transform.m34} (float)</li>
+     *   <li>{@code camera.world_transform.m41} (float)</li>
+     *   <li>{@code camera.world_transform.m42} (float)</li>
+     *   <li>{@code camera.world_transform.m43} (float)</li>
+     *   <li>{@code camera.world_transform.m44} (float)</li>
+     *   <li>{@code camera.aspect_ratio} (float)</li>
+     *   <li>{@code camera.field_of_view} (float)</li>
+     *   <li>{@code camera.near_plane_distance} (float)</li>
+     *   <li>{@code camera.far_plane_distance} (float)</li>
+     * </ol>
+     *
+     * <p>descriptorName carries CNA_ModelCameraDescriptorEXT.name as UTF-8 bytes, borrowed for the call.
+     */
+    public static native int modelAddCameraExt(long model, long[] descriptorIntegral, float[] descriptorFloating, byte[] descriptorName);
+
+    /**
+     * cna_model_add_skin_ext (models.h).
+     */
+    public static native int modelAddSkinExt(long model, byte[] name, long data, long[] meshIndices);
+
+    /**
      * cna_model_animations_ext_copy_clip_name_at (models.h).
      */
     public static native int modelAnimationsCopyClipNameAt(long animations, long clipIndex, byte[] destination, long[] outByteCount);
@@ -116,6 +201,11 @@ public final class NativeModelExtensionRoutes {
      * cna_model_animations_ext_set_clip_target_space_at (models.h).
      */
     public static native int modelAnimationsSetClipTargetSpaceAt(long animations, long clipIndex, int value);
+
+    /**
+     * cna_model_apply_bind_pose_bone_transforms_ext (models.h).
+     */
+    public static native int modelApplyBindPoseBoneTransformsExt(long model, long data, long[] outPosedCount);
 
     /**
      * cna_model_apply_clip_to_bones_ext (models.h).
@@ -208,6 +298,16 @@ public final class NativeModelExtensionRoutes {
     public static native int modelBoneSetTransform(long bone, float[] transformFloating);
 
     /**
+     * cna_model_clear_cameras_ext (models.h).
+     */
+    public static native int modelClearCamerasExt(long model);
+
+    /**
+     * cna_model_clear_skins_ext (models.h).
+     */
+    public static native int modelClearSkinsExt(long model);
+
+    /**
      * cna_model_copy_absolute_bone_transforms (models.h).
      */
     public static native int modelCopyAbsoluteBoneTransforms(long model, float[] destinationFloating, long[] outCount);
@@ -231,6 +331,11 @@ public final class NativeModelExtensionRoutes {
      * cna_model_copy_skin_name_ext (models.h).
      */
     public static native int modelCopySkinNameExt(long model, long index, byte[] destination, long[] outByteCount);
+
+    /**
+     * cna_model_create_skin_skeleton_handle_ext (models.h).
+     */
+    public static native int modelCreateSkinSkeletonHandleExt(long model, long index, long[] outData);
 
     /**
      * cna_model_create_with_parents (models.h).
@@ -492,6 +597,11 @@ public final class NativeModelExtensionRoutes {
     public static native int modelMeshPartGetIndexBuffer(long part, boolean[] outHasBuffer, long[] outBuffer);
 
     /**
+     * cna_model_mesh_part_get_morph_target_data_ext (models.h).
+     */
+    public static native int modelMeshPartGetMorphTargetDataExt(long part, boolean[] outHasData, long[] outData);
+
+    /**
      * cna_model_mesh_part_get_num_vertices (models.h).
      */
     public static native int modelMeshPartGetNumVertices(long part, int[] outValue);
@@ -500,6 +610,32 @@ public final class NativeModelExtensionRoutes {
      * cna_model_mesh_part_get_primitive_count (models.h).
      */
     public static native int modelMeshPartGetPrimitiveCount(long part, int[] outValue);
+
+    /**
+     * cna_model_mesh_part_get_primitive_type_ext (models.h).
+     */
+    public static native int modelMeshPartGetPrimitiveTypeExt(long part, int[] outValue);
+
+    /**
+     * cna_model_mesh_part_get_sampler_state_ext (models.h).
+     *
+     * <p>outStateIntegral carries CNA_SamplerState in this order:
+     * <ol start="0">
+     *   <li>{@code address_u} (CNA_TextureAddressMode)</li>
+     *   <li>{@code address_v} (CNA_TextureAddressMode)</li>
+     *   <li>{@code address_w} (CNA_TextureAddressMode)</li>
+     *   <li>{@code filter} (CNA_TextureFilter)</li>
+     *   <li>{@code max_anisotropy} (int32_t)</li>
+     *   <li>{@code max_mip_level} (int32_t)</li>
+     *   <li>{@code reserved} (uint32_t)</li>
+     * </ol>
+     *
+     * <p>outStateFloating carries CNA_SamplerState in this order:
+     * <ol start="0">
+     *   <li>{@code mip_map_level_of_detail_bias} (float)</li>
+     * </ol>
+     */
+    public static native int modelMeshPartGetSamplerStateExt(long part, int slot, long[] outStateIntegral, float[] outStateFloating);
 
     /**
      * cna_model_mesh_part_get_start_index (models.h).
@@ -520,6 +656,42 @@ public final class NativeModelExtensionRoutes {
      * cna_model_mesh_part_set_effect (models.h).
      */
     public static native int modelMeshPartSetEffect(long part, long effect);
+
+    /**
+     * cna_model_mesh_part_set_morph_target_data_ext (models.h).
+     */
+    public static native int modelMeshPartSetMorphTargetDataExt(long part, long data);
+
+    /**
+     * cna_model_mesh_part_set_morph_weights_ext (models.h).
+     */
+    public static native int modelMeshPartSetMorphWeightsExt(long part, float[] weights);
+
+    /**
+     * cna_model_mesh_part_set_primitive_type_ext (models.h).
+     */
+    public static native int modelMeshPartSetPrimitiveTypeExt(long part, int value);
+
+    /**
+     * cna_model_mesh_part_set_sampler_state_ext (models.h).
+     *
+     * <p>stateIntegral carries CNA_SamplerState in this order:
+     * <ol start="0">
+     *   <li>{@code address_u} (CNA_TextureAddressMode)</li>
+     *   <li>{@code address_v} (CNA_TextureAddressMode)</li>
+     *   <li>{@code address_w} (CNA_TextureAddressMode)</li>
+     *   <li>{@code filter} (CNA_TextureFilter)</li>
+     *   <li>{@code max_anisotropy} (int32_t)</li>
+     *   <li>{@code max_mip_level} (int32_t)</li>
+     *   <li>{@code reserved} (uint32_t)</li>
+     * </ol>
+     *
+     * <p>stateFloating carries CNA_SamplerState in this order:
+     * <ol start="0">
+     *   <li>{@code mip_map_level_of_detail_bias} (float)</li>
+     * </ol>
+     */
+    public static native int modelMeshPartSetSamplerStateExt(long part, int slot, long[] stateIntegral, float[] stateFloating);
 
     /**
      * cna_model_mesh_set_bounding_sphere (models.h).

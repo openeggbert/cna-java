@@ -307,6 +307,83 @@ public final class CnaModel implements AutoCloseable {
                 open(), animations.handle(), clipIndex, timeSeconds));
     }
 
+    /**
+     * Adds one camera to the model's scene.
+     *
+     * <p>The write half of {@link #getCameras()}. CNA copies the descriptor, so the value stays
+     * the caller's.
+     *
+     * @param camera the camera to add
+     */
+    public void addCamera(CnaModelCamera camera) {
+        Objects.requireNonNull(camera, "camera");
+        check("addCamera", NativeModelExtensionRoutes.modelAddCameraExt(open(),
+                camera.toIntegralLeaves(), camera.toFloatingLeaves(),
+                CnbExtension.utf8(camera.Name())));
+    }
+
+    /** Removes every camera from the model's scene. */
+    public void clearCameras() {
+        check("clearCameras", NativeModelExtensionRoutes.modelClearCamerasExt(open()));
+    }
+
+    /**
+     * Adds one skin: a skeleton, and which of the model's meshes it drives.
+     *
+     * <p>The model <strong>retains the skinning data</strong>, so close the model before the
+     * data it was given.
+     *
+     * @param name the skin's name
+     * @param data the skeleton and clips that pose it
+     * @param meshIndices which meshes, by index in the model's mesh list, the skin drives
+     */
+    public void addSkin(String name, CnaSkinningData data, List<Long> meshIndices) {
+        Objects.requireNonNull(name, "name");
+        Objects.requireNonNull(data, "data");
+        Objects.requireNonNull(meshIndices, "meshIndices");
+        long[] indices = new long[meshIndices.size()];
+        for (int index = 0; index < indices.length; index++) {
+            indices[index] = Objects.requireNonNull(meshIndices.get(index), "meshIndex");
+        }
+        check("addSkin", NativeModelExtensionRoutes.modelAddSkinExt(
+                open(), CnbExtension.utf8(name), data.handle(), indices));
+    }
+
+    /** Removes every skin and releases the skinning data they retained. */
+    public void clearSkins() {
+        check("clearSkins", NativeModelExtensionRoutes.modelClearSkinsExt(open()));
+    }
+
+    /**
+     * Returns one skin's skeleton, as its own skinning data.
+     *
+     * @param index the zero-based skin index
+     * @return the skeleton and clips, which the caller closes
+     */
+    public CnaSkinningData getSkinSkeleton(int index) {
+        long[] created = new long[1];
+        check("getSkinSkeleton", NativeModelExtensionRoutes
+                .modelCreateSkinSkeletonHandleExt(open(), index, created));
+        return CnaSkinningData.adopt(created[0]);
+    }
+
+    /**
+     * Poses every skinned effect on the model with a skeleton's bind pose.
+     *
+     * <p>What a model straight off disk needs before it is drawn: without it the skinned effects
+     * carry whatever the last pose left, which for a model that has never been posed is nothing.
+     *
+     * @param data the skeleton to take the bind pose from
+     * @return how many effects were posed
+     */
+    public int applyBindPoseBoneTransforms(CnaSkinningData data) {
+        Objects.requireNonNull(data, "data");
+        long[] posed = new long[1];
+        check("applyBindPoseBoneTransforms", NativeModelExtensionRoutes
+                .modelApplyBindPoseBoneTransformsExt(open(), data.handle(), posed));
+        return Math.toIntExact(posed[0]);
+    }
+
     /** Returns the cameras the asset's scene carried. */
     public List<CnaModelCamera> getCameras() {
         long model = open();

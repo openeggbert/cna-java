@@ -17513,6 +17513,18 @@
       ]
     },
     {
+      "name": "cna_matrix_create_infinite_perspective_field_of_view_ext",
+      "header": "models.h",
+      "ownership": "no handle; returns a value",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "float",
+        "float",
+        "float",
+        "CNA_Matrix*"
+      ]
+    },
+    {
       "name": "cna_media_library_copy_media_source_name",
       "header": "media_library.h",
       "ownership": "borrows handle; caller buffer",
@@ -18283,6 +18295,29 @@
       ]
     },
     {
+      "name": "cna_model_add_camera_ext",
+      "header": "models.h",
+      "ownership": "borrows model and the descriptor for the call; the model copies it",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_ModelHandle",
+        "const CNA_ModelCameraDescriptorEXT*"
+      ]
+    },
+    {
+      "name": "cna_model_add_skin_ext",
+      "header": "models.h",
+      "ownership": "borrows model, the name and the mesh indices for the call; the model retains the skinning data",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_ModelHandle",
+        "CNA_StringView",
+        "CNA_SkinningDataHandle",
+        "const uint64_t*",
+        "uint64_t"
+      ]
+    },
+    {
       "name": "cna_model_animations_ext_copy_clip_name_at",
       "header": "models.h",
       "ownership": "borrows animations; copies into the caller buffer",
@@ -18380,6 +18415,17 @@
         "CNA_ModelAnimationsEXTHandle",
         "uint64_t",
         "CNA_ClipTargetSpaceEXT"
+      ]
+    },
+    {
+      "name": "cna_model_apply_bind_pose_bone_transforms_ext",
+      "header": "models.h",
+      "ownership": "borrows model and skinning data for the call; returns a value",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_ModelHandle",
+        "CNA_SkinningDataHandle",
+        "uint64_t*"
       ]
     },
     {
@@ -18528,6 +18574,24 @@
       ]
     },
     {
+      "name": "cna_model_clear_cameras_ext",
+      "header": "models.h",
+      "ownership": "borrows model",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_ModelHandle"
+      ]
+    },
+    {
+      "name": "cna_model_clear_skins_ext",
+      "header": "models.h",
+      "ownership": "borrows model; releases what the skins retained",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_ModelHandle"
+      ]
+    },
+    {
       "name": "cna_model_copy_absolute_bone_transforms",
       "header": "models.h",
       "ownership": "borrows model; caller structure array buffer",
@@ -18588,6 +18652,17 @@
         "char*",
         "uint64_t",
         "uint64_t*"
+      ]
+    },
+    {
+      "name": "cna_model_create_skin_skeleton_handle_ext",
+      "header": "models.h",
+      "ownership": "borrows model; returns an owned skinning-data handle",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_ModelHandle",
+        "uint64_t",
+        "CNA_SkinningDataHandle*"
       ]
     },
     {
@@ -19010,6 +19085,17 @@
       ]
     },
     {
+      "name": "cna_model_mesh_part_get_morph_target_data_ext",
+      "header": "models.h",
+      "ownership": "borrows part; lends back the morph data the part holds",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_ModelMeshPartHandle",
+        "CNA_Bool*",
+        "CNA_MorphTargetDataEXTHandle*"
+      ]
+    },
+    {
       "name": "cna_model_mesh_part_get_num_vertices",
       "header": "models.h",
       "ownership": "borrows the part view; caller integer output",
@@ -19027,6 +19113,27 @@
       "parameters": [
         "CNA_ModelMeshPartHandle",
         "int32_t*"
+      ]
+    },
+    {
+      "name": "cna_model_mesh_part_get_primitive_type_ext",
+      "header": "models.h",
+      "ownership": "borrows part; returns a value",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_ModelMeshPartHandle",
+        "CNA_PrimitiveType*"
+      ]
+    },
+    {
+      "name": "cna_model_mesh_part_get_sampler_state_ext",
+      "header": "models.h",
+      "ownership": "borrows part; fills a caller-provided struct",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_ModelMeshPartHandle",
+        "CNA_PbrTextureSlot",
+        "CNA_SamplerState*"
       ]
     },
     {
@@ -19068,6 +19175,48 @@
       "parameters": [
         "CNA_ModelMeshPartHandle",
         "CNA_EffectHandle"
+      ]
+    },
+    {
+      "name": "cna_model_mesh_part_set_morph_target_data_ext",
+      "header": "models.h",
+      "ownership": "borrows part; the part retains the morph data",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_ModelMeshPartHandle",
+        "CNA_MorphTargetDataEXTHandle"
+      ]
+    },
+    {
+      "name": "cna_model_mesh_part_set_morph_weights_ext",
+      "header": "models.h",
+      "ownership": "borrows part and the weights for the call",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_ModelMeshPartHandle",
+        "const float*",
+        "uint64_t"
+      ]
+    },
+    {
+      "name": "cna_model_mesh_part_set_primitive_type_ext",
+      "header": "models.h",
+      "ownership": "borrows part",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_ModelMeshPartHandle",
+        "CNA_PrimitiveType"
+      ]
+    },
+    {
+      "name": "cna_model_mesh_part_set_sampler_state_ext",
+      "header": "models.h",
+      "ownership": "borrows part and the state for the call",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_ModelMeshPartHandle",
+        "CNA_PbrTextureSlot",
+        "const CNA_SamplerState*"
       ]
     },
     {

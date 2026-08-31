@@ -230,7 +230,7 @@
       "title": "Bind the native Model routes behind the managed XNB model graph",
       "family": "Microsoft.Xna.Framework.Graphics.Model",
       "authority": "models.h",
-      "currentState": "127 routes deferred; Load<Model> was managed-only, and the audit asked what native backing would add.",
+      "currentState": "Done. The model extension routes are bound: cameras and skins are authored through CnaModel.addCamera and addSkin, a skin's skeleton comes back as its own CnaSkinningData, a bind pose is applied with applyBindPoseBoneTransforms, and a mesh part carries its own primitive type, per-slot sampler state and morph data. The reason recorded here -- that they are \"read-useful only on a model CNA imported, which the blocked content loader is the way to get\" -- was wrong about the direction: they are WRITE-useful on a model Java built, which CnaModel.From already produced.",
       "expectedState": "The XNA Model graph reaches CNA. CnaModel.From(Model) builds CNA's own model over the buffers and effects the XNA model already owns -- retained, not copied, so nothing is uploaded twice -- and CNA then draws it in one call and computes its bone transforms. models.h is fully classified: 184 extension candidates, 31 not useful in Java, and one deferred route, the loader JAVA-UPSTREAM-004 blocks.",
       "priority": 6,
       "status": "done",
@@ -238,7 +238,8 @@
       "tests": [
         "CnaModelTests",
         "nativeCoverageCheck"
-      ]
+      ],
+      "blocker": ""
     },
     {
       "id": "JAVA-NATIVE-022",
@@ -422,11 +423,11 @@
       "title": "Project CNA's skinned model, and finish real avatar rendering on top of it",
       "family": "org.openeggbert.cna.extensions",
       "authority": "models.h, gamer_services.h",
-      "status": "in-progress",
+      "status": "done",
       "priority": 8,
-      "currentState": "The descriptor graph is no longer a wall. It was recorded as the family's only door with no way through it -- \"cna_skinning_data_create takes a CNA_SkinningDataDescriptor, a pointer graph the generator refuses rather than guesses at, and no route takes a clip handle\" -- and every clause of that is true while the conclusion did not follow. A shape a generator cannot derive is not a lifetime nobody knows: CNA states every array as borrowed for the call and the whole descriptor as deeply copied. A hand-written marshaller builds it for one call, checking every count against every array first. CnaSkinningData, CnaAnimationPlayer, CnaModelAnimations, CnbClip.encode and CnbModelData.addAnimation are all built on it, and cna_skinned_model_ext_set_skeleton and _set_clip are bound with it. What remains is a Java facade over SkinnedModelEXT itself -- its parts, textures and buffers -- and over MorphTargetDataEXT, plus the two avatar routes that take a skinned-model handle.",
-      "expectedState": "A Java SkinnedModel that owns its parts and a MorphTargetData that blends them, so AvatarExtensions can switch a renderer to a real model and draw a named clip.",
-      "blocker": "None outside this repository. The blocker recorded here was local and is gone; what is left is work.",
+      "currentState": "Done. The blocker recorded here -- \"cna_skinning_data_create takes a CNA_SkinningDataDescriptor, a pointer graph the generator refuses rather than guesses at, and no route takes a clip handle, so there is no other door in\" -- was true in every clause and did not follow. A shape a generator cannot derive is not a lifetime nobody knows: CNA states every array as borrowed for the call and every descriptor as deeply copied, so three hand-written marshallers build the graphs for one call each, checking every count against every array first. CnaSkinningData, CnaAnimationPlayer, CnaSkinnedModel, CnaMorphTargetData, CnaModelAnimations, CnbClip.encode and CnbModelData.addAnimation are all built on them, and AvatarExtensions can now switch a renderer to a real model and draw a clip on it.",
+      "expectedState": "Done. The blocker recorded here -- \"cna_skinning_data_create takes a CNA_SkinningDataDescriptor, a pointer graph the generator refuses rather than guesses at, and no route takes a clip handle, so there is no other door in\" -- was true in every clause and did not follow. A shape a generator cannot derive is not a lifetime nobody knows: CNA states every array as borrowed for the call and every descriptor as deeply copied, so three hand-written marshallers build the graphs for one call each, checking every count against every array first. CnaSkinningData, CnaAnimationPlayer, CnaSkinnedModel, CnaMorphTargetData, CnaModelAnimations, CnbClip.encode and CnbModelData.addAnimation are all built on them, and AvatarExtensions can now switch a renderer to a real model and draw a clip on it.",
+      "blocker": "",
       "tests": [
         "AvatarExtensionTests"
       ],

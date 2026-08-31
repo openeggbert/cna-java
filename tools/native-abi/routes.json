@@ -2524,6 +2524,18 @@
         "symbol": "cna_effect_get_type_name_byte_count"
       },
       {
+        "java": "matrixCreateInfinitePerspectiveFieldOfViewExt",
+        "symbol": "cna_matrix_create_infinite_perspective_field_of_view_ext"
+      },
+      {
+        "java": "modelAddCameraExt",
+        "symbol": "cna_model_add_camera_ext"
+      },
+      {
+        "java": "modelAddSkinExt",
+        "symbol": "cna_model_add_skin_ext"
+      },
+      {
         "java": "modelAnimationsCopyClipNameAt",
         "symbol": "cna_model_animations_ext_copy_clip_name_at"
       },
@@ -2554,6 +2566,10 @@
       {
         "java": "modelAnimationsSetClipTargetSpaceAt",
         "symbol": "cna_model_animations_ext_set_clip_target_space_at"
+      },
+      {
+        "java": "modelApplyBindPoseBoneTransformsExt",
+        "symbol": "cna_model_apply_bind_pose_bone_transforms_ext"
       },
       {
         "java": "modelApplyClipToBonesExt",
@@ -2612,6 +2628,14 @@
         "symbol": "cna_model_bone_set_transform"
       },
       {
+        "java": "modelClearCamerasExt",
+        "symbol": "cna_model_clear_cameras_ext"
+      },
+      {
+        "java": "modelClearSkinsExt",
+        "symbol": "cna_model_clear_skins_ext"
+      },
+      {
         "java": "modelCopyAbsoluteBoneTransforms",
         "symbol": "cna_model_copy_absolute_bone_transforms"
       },
@@ -2630,6 +2654,10 @@
       {
         "java": "modelCopySkinNameExt",
         "symbol": "cna_model_copy_skin_name_ext"
+      },
+      {
+        "java": "modelCreateSkinSkeletonHandleExt",
+        "symbol": "cna_model_create_skin_skeleton_handle_ext"
       },
       {
         "java": "modelCreateWithParents",
@@ -2788,12 +2816,24 @@
         "symbol": "cna_model_mesh_part_get_index_buffer"
       },
       {
+        "java": "modelMeshPartGetMorphTargetDataExt",
+        "symbol": "cna_model_mesh_part_get_morph_target_data_ext"
+      },
+      {
         "java": "modelMeshPartGetNumVertices",
         "symbol": "cna_model_mesh_part_get_num_vertices"
       },
       {
         "java": "modelMeshPartGetPrimitiveCount",
         "symbol": "cna_model_mesh_part_get_primitive_count"
+      },
+      {
+        "java": "modelMeshPartGetPrimitiveTypeExt",
+        "symbol": "cna_model_mesh_part_get_primitive_type_ext"
+      },
+      {
+        "java": "modelMeshPartGetSamplerStateExt",
+        "symbol": "cna_model_mesh_part_get_sampler_state_ext"
       },
       {
         "java": "modelMeshPartGetStartIndex",
@@ -2810,6 +2850,22 @@
       {
         "java": "modelMeshPartSetEffect",
         "symbol": "cna_model_mesh_part_set_effect"
+      },
+      {
+        "java": "modelMeshPartSetMorphTargetDataExt",
+        "symbol": "cna_model_mesh_part_set_morph_target_data_ext"
+      },
+      {
+        "java": "modelMeshPartSetMorphWeightsExt",
+        "symbol": "cna_model_mesh_part_set_morph_weights_ext"
+      },
+      {
+        "java": "modelMeshPartSetPrimitiveTypeExt",
+        "symbol": "cna_model_mesh_part_set_primitive_type_ext"
+      },
+      {
+        "java": "modelMeshPartSetSamplerStateExt",
+        "symbol": "cna_model_mesh_part_set_sampler_state_ext"
       },
       {
         "java": "modelMeshSetBoundingSphere",

@@ -30,10 +30,14 @@ public final class CnaMorphTargetData implements AutoCloseable {
     private static final int DELTA_FLOATS = 3;
 
     private final long handle;
+
+    /** Whether closing this frees the data, which a view a mesh part lent back does not. */
+    private final boolean owned;
     private boolean closed;
 
-    private CnaMorphTargetData(long handle) {
+    private CnaMorphTargetData(long handle, boolean owned) {
         this.handle = handle;
+        this.owned = owned;
     }
 
     /**
@@ -88,7 +92,22 @@ public final class CnaMorphTargetData implements AutoCloseable {
                 track.weights(), track.inCounts(), track.inTangents(), track.outCounts(),
                 track.outTangents(), weightTrack.StepInterpolation(), weightTrack.CubicSpline(),
                 created));
-        return new CnaMorphTargetData(created[0]);
+        return new CnaMorphTargetData(created[0], true);
+    }
+
+    /**
+     * Wraps a handle a mesh part owns, so closing this view takes nothing away.
+     *
+     * <p>Readable like any other, and its {@link #close()} is a no-op: the part is what holds the
+     * data, and freeing it from here would take a part's morph data out from under it.
+     */
+    static CnaMorphTargetData borrow(long handle) {
+        return new CnaMorphTargetData(handle, false);
+    }
+
+    /** The native handle, for the mesh part that retains it. */
+    long handle() {
+        return open();
     }
 
     /**
@@ -340,7 +359,11 @@ public final class CnaMorphTargetData implements AutoCloseable {
         return destination;
     }
 
-    /** Releases the morph data. Closing twice is a no-op. */
+    /**
+     * Releases the morph data, when this is the owning handle rather than a part's view.
+     *
+     * <p>Closing twice is a no-op, and closing a borrowed view does nothing at all.
+     */
     @Override
     public void close() {
         synchronized (this) {
@@ -349,7 +372,9 @@ public final class CnaMorphTargetData implements AutoCloseable {
             }
             closed = true;
         }
-        check("close", NativeModelExtensionRoutes.morphTargetDataDestroy(handle));
+        if (owned) {
+            check("close", NativeModelExtensionRoutes.morphTargetDataDestroy(handle));
+        }
     }
 
     private interface DeltaReader {

@@ -245,4 +245,73 @@ final class CnaSkinnedModelTests {
                     () -> CnaSkinnedModel.of(null, Map.of()));
         });
     }
+
+    @Test
+    void aMeshPartCarriesItsOwnTopologySamplerAndMorphData() {
+        CnaSkinnedModelProbe.run(device -> {
+            try (VertexBuffer vertices = new VertexBuffer(device,
+                            VertexPositionColor.VertexDeclaration, 3, BufferUsage.None);
+                    IndexBuffer indices = new IndexBuffer(device, IndexElementSize.SixteenBits,
+                            3, BufferUsage.None);
+                    CnaModelMeshPartHandle part = CnaModelMeshPartHandle.create(
+                            vertices, indices, 3, 1, 0, 0)) {
+
+                // Topology: XNA's ModelMeshPart always draws a triangle list and glTF has five
+                // more, so this is a per-part fact XNA has no member for.
+                assertEquals(Microsoft.Xna.Framework.Graphics.PrimitiveType.TriangleList,
+                        part.getPrimitiveType());
+                part.setPrimitiveType(
+                        Microsoft.Xna.Framework.Graphics.PrimitiveType.LineStrip);
+                assertEquals(Microsoft.Xna.Framework.Graphics.PrimitiveType.LineStrip,
+                        part.getPrimitiveType());
+
+                // A sampler per texture slot, which XNA has only per device. The two slots keep
+                // different states, so a projection that ignored the slot is caught.
+                Microsoft.Xna.Framework.Graphics.SamplerState mirrored =
+                        new Microsoft.Xna.Framework.Graphics.SamplerState();
+                mirrored.setAddressU(
+                        Microsoft.Xna.Framework.Graphics.TextureAddressMode.Mirror);
+                mirrored.setFilter(Microsoft.Xna.Framework.Graphics.TextureFilter.Point);
+                mirrored.setMaxAnisotropy(8);
+                mirrored.setMipMapLevelOfDetailBias(0.5f);
+                part.setSamplerState(
+                        org.openeggbert.cna.extensions.graphics.PbrTextureSlot.BaseColor,
+                        mirrored);
+
+                Microsoft.Xna.Framework.Graphics.SamplerState read = part.getSamplerState(
+                        org.openeggbert.cna.extensions.graphics.PbrTextureSlot.BaseColor);
+                assertEquals(Microsoft.Xna.Framework.Graphics.TextureAddressMode.Mirror,
+                        read.getAddressU());
+                assertEquals(Microsoft.Xna.Framework.Graphics.TextureFilter.Point,
+                        read.getFilter());
+                assertEquals(8, read.getMaxAnisotropy());
+                assertEquals(0.5f, read.getMipMapLevelOfDetailBias(), 1e-6f);
+                assertNotEquals(Microsoft.Xna.Framework.Graphics.TextureAddressMode.Mirror,
+                        part.getSamplerState(
+                                org.openeggbert.cna.extensions.graphics.PbrTextureSlot.Normal)
+                                .getAddressU(),
+                        "another slot keeps its own state");
+
+                // And the morph data a part blends with, which is what makes a face smile
+                // without a second mesh.
+                assertNull(part.getMorphTargetData(), "a part starts with none");
+                assertThrows(NullPointerException.class, () -> part.setMorphTargetData(null));
+
+                // An infinite-far-plane projection, which every XNA factory refuses to build:
+                // they all take a far plane, and a glTF camera may declare none. The third row
+                // and fourth column are what carry the difference, so those are what is
+                // asserted -- against the finite form of the same camera.
+                Matrix infinite = CnaModelCamera.CreateInfinitePerspectiveFieldOfView(
+                        (float) (Math.PI / 4.0), 16f / 9f, 0.1f);
+                Matrix finite = Matrix.CreatePerspectiveFieldOfView(
+                        (float) (Math.PI / 4.0), 16f / 9f, 0.1f, 1000f);
+                assertEquals(finite.M11, infinite.M11, 1e-5f, "the x scale is the same camera");
+                assertEquals(finite.M22, infinite.M22, 1e-5f, "and so is the y scale");
+                assertEquals(-1f, infinite.M33, 1e-5f,
+                        "an infinite far plane drives the depth scale to minus one");
+                assertNotEquals(finite.M33, infinite.M33,
+                        "which a thousand-unit far plane does not");
+            }
+        });
+    }
 }

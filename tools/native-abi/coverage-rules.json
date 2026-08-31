@@ -1119,32 +1119,6 @@
     },
     {
       "match": {
-        "symbols": [
-          "cna_model_add_camera_ext",
-          "cna_model_clear_cameras_ext",
-          "cna_model_add_skin_ext",
-          "cna_model_clear_skins_ext",
-          "cna_model_create_skin_skeleton_handle_ext",
-          "cna_model_apply_bind_pose_bone_transforms_ext",
-          "cna_model_mesh_part_get_primitive_type_ext",
-          "cna_model_mesh_part_set_primitive_type_ext",
-          "cna_model_mesh_part_get_sampler_state_ext",
-          "cna_model_mesh_part_set_sampler_state_ext",
-          "cna_model_mesh_part_get_morph_target_data_ext",
-          "cna_model_mesh_part_set_morph_target_data_ext",
-          "cna_model_mesh_part_set_morph_weights_ext",
-          "cna_matrix_create_infinite_perspective_field_of_view_ext"
-        ]
-      },
-      "classification": "CNA_EXTENSION_CANDIDATE",
-      "purposeReason": "Authoring cameras and skins, posing a model from an animation clip, and the per-part primitive type, sampler state and morph data are CNA model extensions XNA 4.0 has no member for. They are read-useful only on a model CNA imported, which the blocked content loader is the way to get.",
-      "bindingStatus": "BLOCKED_UPSTREAM",
-      "bindingReason": "Read-useful only on a model CNA imported, and the blocked content loader is the way to get one.",
-      "evidence": "JAVA-UPSTREAM-004, still reproduced on the live CNA.",
-      "task": "JAVA-NATIVE-011"
-    },
-    {
-      "match": {
         "header": "models.h"
       },
       "classification": "DEFERRED_RUNTIME",
