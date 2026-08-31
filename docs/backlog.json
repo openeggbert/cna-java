@@ -206,14 +206,14 @@
       "title": "Expose the .cnb content format",
       "family": "org.openeggbert.cna.extensions.content",
       "authority": "cnb.h",
-      "currentState": "173 of the 272 routes are bound and reached. On top of the container, document, reader, writer and texture layers, five more asset families cross to the XNA type a game actually uses: a sound becomes a SoundEffect, a sprite font becomes a SpriteFont that DrawString draws with, a curve becomes a Curve that evaluates the same on both sides, and a song and a video become media objects over the reference the file records. The remaining 99 are the model family and the .cnj builder, plus the loader registry.",
-      "expectedState": "The model family and .cnj as they earn a consumer; cna_cnb_decode_model has not been probed and JAVA-UPSTREAM-004 is a reason to probe it in C first. The loader registry still needs a design decision rather than more binding: cna_cnb_loader_invoke hands back a void* with no Java meaning, so a Java loader registry has to be a Java-side dispatch over the document rather than a projection of CNA's.",
+      "currentState": "206 of the 272 routes are bound and reached. Five asset families cross to the XNA type a game uses -- a sound becomes a SoundEffect, a sprite font a SpriteFont that DrawString draws with, a curve a Curve that evaluates the same on both sides, and a song and a video media objects over the reference the file records. The model family reads and writes the whole graph: bones, parts with their vertex and index bytes, meshes, the skinning skeleton with its three matrix sets, and baked lights. The remaining 66 are the model's materials and textures, its morph targets and animations, the .cnj builder, and the loader registry.",
+      "expectedState": "Materials, morph targets and read-only animations as they earn a consumer; .cnj likewise. Two things will not come from more binding. cna_cnb_model_add_animation takes the same nested descriptor graph that blocks JAVA-EXT-007, so animations are readable but not writable from Java. And the loader registry needs a design decision: cna_cnb_loader_invoke hands back a void* with no Java meaning, so a Java loader registry has to be a Java-side dispatch over the document rather than a projection of CNA's.",
       "priority": 8,
       "status": "ready",
       "tests": [
         "CnbTests"
       ],
-      "note": "Every fixture is produced by CNA's own encoder and writer and read back by CNA's own parser, so a successful read means the file is a real one rather than that two hand-written halves share a misunderstanding."
+      "note": "Every fixture is produced by CNA's own encoder and read back by CNA's own parser. The model family was probed in C first -- tools/native-abi/probes/cnb_model_roundtrip.c -- because JAVA-UPSTREAM-004 found CNA's content-manager model loader segfaulting during teardown for any asset with a mesh part. The .cnb path is a different one and survives a build-encode-decode-destroy cycle cleanly, which was measured before 33 routes were bound against it. There is deliberately no CnbModelData.toModel(GraphicsDevice): XNA's Model has no public constructor and CNA offers no route that builds one from this description, so claiming otherwise would mean inventing a Model the content pipeline did not make."
     },
     {
       "id": "JAVA-NATIVE-006",

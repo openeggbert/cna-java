@@ -121,6 +121,11 @@ public final class NativeCnbRoutes {
     public static native int cnbDecodeCurve(long document, long[] outCurve);
 
     /**
+     * cna_cnb_decode_model (cnb.h).
+     */
+    public static native int cnbDecodeModel(long document, long[] outModel);
+
+    /**
      * cna_cnb_decode_song_duration_milliseconds (cnb.h).
      */
     public static native int cnbDecodeSongDurationMilliseconds(long document, int[] outDurationMilliseconds);
@@ -405,6 +410,11 @@ public final class NativeCnbRoutes {
     public static native int cnbEncodeCurve(long curve, byte[] contentName, byte[] destination, long[] outByteCount);
 
     /**
+     * cna_cnb_encode_model (cnb.h).
+     */
+    public static native int cnbEncodeModel(long model, byte[] contentName, byte[] destination, long[] outByteCount);
+
+    /**
      * cna_cnb_encode_song (cnb.h).
      */
     public static native int cnbEncodeSong(byte[] streamReference, byte[] name, int durationMilliseconds, byte[] contentName, byte[] destination, long[] outByteCount);
@@ -527,6 +537,301 @@ public final class NativeCnbRoutes {
      * cna_cnb_make_chunk_id (cnb.h).
      */
     public static native int cnbMakeChunkId(byte a, byte b, byte c, byte d, int[] outId);
+
+    /**
+     * cna_cnb_model_add_bone (cnb.h).
+     */
+    public static native int cnbModelAddBone(long model, byte[] name, int parent, float[] transform, long[] outIndex);
+
+    /**
+     * cna_cnb_model_add_light (cnb.h).
+     *
+     * <p>lightFloating carries CNA_CnbModelLight in this order:
+     * <ol start="0">
+     *   <li>{@code direction[0]} (float)</li>
+     *   <li>{@code direction[1]} (float)</li>
+     *   <li>{@code direction[2]} (float)</li>
+     *   <li>{@code diffuse_color[0]} (float)</li>
+     *   <li>{@code diffuse_color[1]} (float)</li>
+     *   <li>{@code diffuse_color[2]} (float)</li>
+     * </ol>
+     */
+    public static native int cnbModelAddLight(long model, float[] lightFloating, long[] outIndex);
+
+    /**
+     * cna_cnb_model_add_mesh (cnb.h).
+     */
+    public static native int cnbModelAddMesh(long model, byte[] name, int parentBone, int[] partIndices, long[] outIndex);
+
+    /**
+     * cna_cnb_model_add_part (cnb.h).
+     *
+     * <p>infoBytes carries CNA_CnbModelPartInfo in this order:
+     * <ol start="0">
+     *   <li>{@code reserved[0]} (uint8_t)</li>
+     *   <li>{@code reserved[1]} (uint8_t)</li>
+     * </ol>
+     *
+     * <p>infoIntegral carries CNA_CnbModelPartInfo in this order:
+     * <ol start="0">
+     *   <li>{@code vertex_stride} (uint32_t)</li>
+     *   <li>{@code vertex_count} (uint32_t)</li>
+     *   <li>{@code index_count} (uint32_t)</li>
+     *   <li>{@code index_element_size} (uint32_t)</li>
+     *   <li>{@code primitive_topology} (uint32_t)</li>
+     *   <li>{@code primitive_count} (uint32_t)</li>
+     *   <li>{@code effect_kind} (CNA_CnbEffectKind)</li>
+     *   <li>{@code vertex_color_enabled} (CNA_Bool)</li>
+     *   <li>{@code unlit} (CNA_Bool)</li>
+     * </ol>
+     */
+    public static native int cnbModelAddPart(long model, byte[] infoBytes, long[] infoIntegral, byte[] name, byte[] externalEffect, long[] outIndex);
+
+    /**
+     * cna_cnb_model_clear_skeleton (cnb.h).
+     */
+    public static native int cnbModelClearSkeleton(long model);
+
+    /**
+     * cna_cnb_model_copy_bone_name (cnb.h).
+     */
+    public static native int cnbModelCopyBoneName(long model, long index, byte[] destination, long[] outByteCount);
+
+    /**
+     * cna_cnb_model_copy_mesh_name (cnb.h).
+     */
+    public static native int cnbModelCopyMeshName(long model, long index, byte[] destination, long[] outByteCount);
+
+    /**
+     * cna_cnb_model_copy_mesh_part_indices (cnb.h).
+     */
+    public static native int cnbModelCopyMeshPartIndices(long model, long index, int[] destination, long[] outIndexCount);
+
+    /**
+     * cna_cnb_model_copy_part_external_effect (cnb.h).
+     */
+    public static native int cnbModelCopyPartExternalEffect(long model, long index, byte[] destination, long[] outByteCount);
+
+    /**
+     * cna_cnb_model_copy_part_index_bytes (cnb.h).
+     */
+    public static native int cnbModelCopyPartIndexBytes(long model, long index, byte[] destination, long[] outByteCount);
+
+    /**
+     * cna_cnb_model_copy_part_name (cnb.h).
+     */
+    public static native int cnbModelCopyPartName(long model, long index, byte[] destination, long[] outByteCount);
+
+    /**
+     * cna_cnb_model_copy_part_vertex_bytes (cnb.h).
+     */
+    public static native int cnbModelCopyPartVertexBytes(long model, long index, byte[] destination, long[] outByteCount);
+
+    /**
+     * cna_cnb_model_copy_skeleton_hierarchy (cnb.h).
+     */
+    public static native int cnbModelCopySkeletonHierarchy(long model, int[] destination, long[] outIndexCount);
+
+    /**
+     * cna_cnb_model_copy_skeleton_matrices (cnb.h).
+     */
+    public static native int cnbModelCopySkeletonMatrices(long model, int set, float[] destination, long[] outValueCount);
+
+    /**
+     * cna_cnb_model_create (cnb.h).
+     */
+    public static native int cnbModelCreate(long[] outModel);
+
+    /**
+     * cna_cnb_model_destroy (cnb.h).
+     */
+    public static native int cnbModelDestroy(long model);
+
+    /**
+     * cna_cnb_model_get_bone (cnb.h).
+     *
+     * <p>outBoneIntegral carries CNA_CnbModelBone in this order:
+     * <ol start="0">
+     *   <li>{@code parent} (int32_t)</li>
+     *   <li>{@code reserved} (uint32_t)</li>
+     * </ol>
+     *
+     * <p>outBoneFloating carries CNA_CnbModelBone in this order:
+     * <ol start="0">
+     *   <li>{@code transform[0]} (float)</li>
+     *   <li>{@code transform[1]} (float)</li>
+     *   <li>{@code transform[2]} (float)</li>
+     *   <li>{@code transform[3]} (float)</li>
+     *   <li>{@code transform[4]} (float)</li>
+     *   <li>{@code transform[5]} (float)</li>
+     *   <li>{@code transform[6]} (float)</li>
+     *   <li>{@code transform[7]} (float)</li>
+     *   <li>{@code transform[8]} (float)</li>
+     *   <li>{@code transform[9]} (float)</li>
+     *   <li>{@code transform[10]} (float)</li>
+     *   <li>{@code transform[11]} (float)</li>
+     *   <li>{@code transform[12]} (float)</li>
+     *   <li>{@code transform[13]} (float)</li>
+     *   <li>{@code transform[14]} (float)</li>
+     *   <li>{@code transform[15]} (float)</li>
+     * </ol>
+     */
+    public static native int cnbModelGetBone(long model, long index, long[] outBoneIntegral, float[] outBoneFloating);
+
+    /**
+     * cna_cnb_model_get_bone_name_size (cnb.h).
+     */
+    public static native int cnbModelGetBoneNameSize(long model, long index, long[] outByteCount);
+
+    /**
+     * cna_cnb_model_get_info (cnb.h).
+     *
+     * <p>outInfoIntegral carries CNA_CnbModelInfo in this order:
+     * <ol start="0">
+     *   <li>{@code bone_count} (uint64_t)</li>
+     *   <li>{@code part_count} (uint64_t)</li>
+     *   <li>{@code mesh_count} (uint64_t)</li>
+     *   <li>{@code animation_count} (uint64_t)</li>
+     *   <li>{@code light_count} (uint64_t)</li>
+     *   <li>{@code has_skeleton} (CNA_Bool)</li>
+     *   <li>{@code applies_gltf_lighting_policy} (CNA_Bool)</li>
+     *   <li>{@code has_bone_hierarchy} (CNA_Bool)</li>
+     *   <li>{@code reserved} (uint8_t)</li>
+     * </ol>
+     */
+    public static native int cnbModelGetInfo(long model, long[] outInfoIntegral);
+
+    /**
+     * cna_cnb_model_get_light (cnb.h).
+     *
+     * <p>outLightFloating carries CNA_CnbModelLight in this order:
+     * <ol start="0">
+     *   <li>{@code direction[0]} (float)</li>
+     *   <li>{@code direction[1]} (float)</li>
+     *   <li>{@code direction[2]} (float)</li>
+     *   <li>{@code diffuse_color[0]} (float)</li>
+     *   <li>{@code diffuse_color[1]} (float)</li>
+     *   <li>{@code diffuse_color[2]} (float)</li>
+     * </ol>
+     */
+    public static native int cnbModelGetLight(long model, long index, float[] outLightFloating);
+
+    /**
+     * cna_cnb_model_get_mesh (cnb.h).
+     *
+     * <p>outInfoIntegral carries CNA_CnbMeshInfo in this order:
+     * <ol start="0">
+     *   <li>{@code parent_bone} (int32_t)</li>
+     *   <li>{@code reserved} (uint32_t)</li>
+     *   <li>{@code part_index_count} (uint64_t)</li>
+     * </ol>
+     */
+    public static native int cnbModelGetMesh(long model, long index, long[] outInfoIntegral);
+
+    /**
+     * cna_cnb_model_get_mesh_name_size (cnb.h).
+     */
+    public static native int cnbModelGetMeshNameSize(long model, long index, long[] outByteCount);
+
+    /**
+     * cna_cnb_model_get_part (cnb.h).
+     *
+     * <p>outInfoBytes carries CNA_CnbModelPartInfo in this order:
+     * <ol start="0">
+     *   <li>{@code reserved[0]} (uint8_t)</li>
+     *   <li>{@code reserved[1]} (uint8_t)</li>
+     * </ol>
+     *
+     * <p>outInfoIntegral carries CNA_CnbModelPartInfo in this order:
+     * <ol start="0">
+     *   <li>{@code vertex_stride} (uint32_t)</li>
+     *   <li>{@code vertex_count} (uint32_t)</li>
+     *   <li>{@code index_count} (uint32_t)</li>
+     *   <li>{@code index_element_size} (uint32_t)</li>
+     *   <li>{@code primitive_topology} (uint32_t)</li>
+     *   <li>{@code primitive_count} (uint32_t)</li>
+     *   <li>{@code effect_kind} (CNA_CnbEffectKind)</li>
+     *   <li>{@code vertex_color_enabled} (CNA_Bool)</li>
+     *   <li>{@code unlit} (CNA_Bool)</li>
+     * </ol>
+     */
+    public static native int cnbModelGetPart(long model, long index, byte[] outInfoBytes, long[] outInfoIntegral);
+
+    /**
+     * cna_cnb_model_get_part_external_effect_size (cnb.h).
+     */
+    public static native int cnbModelGetPartExternalEffectSize(long model, long index, long[] outByteCount);
+
+    /**
+     * cna_cnb_model_get_part_name_size (cnb.h).
+     */
+    public static native int cnbModelGetPartNameSize(long model, long index, long[] outByteCount);
+
+    /**
+     * cna_cnb_model_get_skeleton (cnb.h).
+     *
+     * <p>outInfoBytes carries CNA_CnbSkeletonInfo in this order:
+     * <ol start="0">
+     *   <li>{@code reserved[0]} (uint8_t)</li>
+     *   <li>{@code reserved[1]} (uint8_t)</li>
+     *   <li>{@code reserved[2]} (uint8_t)</li>
+     *   <li>{@code reserved[3]} (uint8_t)</li>
+     *   <li>{@code reserved[4]} (uint8_t)</li>
+     *   <li>{@code reserved[5]} (uint8_t)</li>
+     *   <li>{@code reserved[6]} (uint8_t)</li>
+     * </ol>
+     *
+     * <p>outInfoIntegral carries CNA_CnbSkeletonInfo in this order:
+     * <ol start="0">
+     *   <li>{@code joint_count} (uint64_t)</li>
+     *   <li>{@code has_root_prefix} (CNA_Bool)</li>
+     * </ol>
+     */
+    public static native int cnbModelGetSkeleton(long model, byte[] outInfoBytes, long[] outInfoIntegral);
+
+    /**
+     * cna_cnb_model_set_flags (cnb.h).
+     */
+    public static native int cnbModelSetFlags(long model, boolean appliesGltfLightingPolicy, boolean hasBoneHierarchy);
+
+    /**
+     * cna_cnb_model_set_part (cnb.h).
+     *
+     * <p>infoBytes carries CNA_CnbModelPartInfo in this order:
+     * <ol start="0">
+     *   <li>{@code reserved[0]} (uint8_t)</li>
+     *   <li>{@code reserved[1]} (uint8_t)</li>
+     * </ol>
+     *
+     * <p>infoIntegral carries CNA_CnbModelPartInfo in this order:
+     * <ol start="0">
+     *   <li>{@code vertex_stride} (uint32_t)</li>
+     *   <li>{@code vertex_count} (uint32_t)</li>
+     *   <li>{@code index_count} (uint32_t)</li>
+     *   <li>{@code index_element_size} (uint32_t)</li>
+     *   <li>{@code primitive_topology} (uint32_t)</li>
+     *   <li>{@code primitive_count} (uint32_t)</li>
+     *   <li>{@code effect_kind} (CNA_CnbEffectKind)</li>
+     *   <li>{@code vertex_color_enabled} (CNA_Bool)</li>
+     *   <li>{@code unlit} (CNA_Bool)</li>
+     * </ol>
+     */
+    public static native int cnbModelSetPart(long model, long index, byte[] infoBytes, long[] infoIntegral);
+
+    /**
+     * cna_cnb_model_set_part_index_bytes (cnb.h).
+     */
+    public static native int cnbModelSetPartIndexBytes(long model, long index, byte[] bytes);
+
+    /**
+     * cna_cnb_model_set_part_vertex_bytes (cnb.h).
+     */
+    public static native int cnbModelSetPartVertexBytes(long model, long index, byte[] bytes);
+
+    /**
+     * cna_cnb_model_set_skeleton (cnb.h).
+     */
+    public static native int cnbModelSetSkeleton(long model, int[] hierarchy, float[] bindPose, float[] inverseBindPose, float[] rootPrefix);
 
     /**
      * cna_cnb_read_limits_init (cnb.h).

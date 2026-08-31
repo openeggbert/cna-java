@@ -84,6 +84,23 @@ final class CnbExtension {
         return new String(destination, 0, (int) bytes[0], StandardCharsets.UTF_8);
     }
 
+    /**
+     * Reads one of CNA's size-then-copy byte payloads.
+     *
+     * <p>A zero-capacity probe reports the size and writes nothing, so BUFFER_TOO_SMALL is the
+     * expected answer to the first call rather than a failure.
+     */
+    static byte[] bytes(String operation, CopyRoute copy) {
+        long[] count = new long[1];
+        int probe = copy.read(new byte[0], count);
+        if (probe != RESULT_BUFFER_TOO_SMALL) {
+            check(operation, probe);
+        }
+        byte[] destination = new byte[Math.toIntExact(count[0])];
+        check(operation, copy.read(destination, count));
+        return trim(destination, count[0]);
+    }
+
     /** The size half of a count/copy string pair. */
     interface SizeRoute {
         int read(long[] outBytes);

@@ -96,4 +96,34 @@ public final class Cnb {
                 .cnbEncodeSpriteFont(font.handle(), name, destination, written));
         return CnbExtension.trim(destination, written[0]);
     }
+
+    /**
+     * Encodes a model as a complete Model {@code .cnb} file.
+     *
+     * <p>The encoder is where a model's description meets its payload: a part whose declared
+     * vertex count and stride do not multiply out to the bytes it holds, a mesh naming a part
+     * that does not exist, or a skeleton disagreeing with the bones is refused here rather than
+     * written into a file something else would read.
+     *
+     * @param model the model to encode
+     * @param contentName the source content name to record
+     * @return the whole file
+     * @throws CnbFormatException when the model's parts, meshes or skeleton disagree
+     */
+    public static byte[] encodeModel(CnbModelData model, String contentName) {
+        CnbExtension.requireAvailable();
+        Objects.requireNonNull(model, "model");
+        Objects.requireNonNull(contentName, "contentName");
+        byte[] name = CnbExtension.utf8(contentName);
+        long[] size = new long[1];
+        int probe = NativeCnbRoutes.cnbEncodeModel(model.handle(), name, new byte[0], size);
+        if (probe != CnbExtension.RESULT_BUFFER_TOO_SMALL) {
+            CnbExtension.check("Cnb.encodeModel", probe);
+        }
+        byte[] destination = new byte[Math.toIntExact(size[0])];
+        long[] written = new long[1];
+        CnbExtension.check("Cnb.encodeModel", NativeCnbRoutes
+                .cnbEncodeModel(model.handle(), name, destination, written));
+        return CnbExtension.trim(destination, written[0]);
+    }
 }

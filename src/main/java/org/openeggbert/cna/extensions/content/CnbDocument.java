@@ -431,6 +431,19 @@ public final class CnbDocument implements AutoCloseable {
         return CnbCurve.decode(open());
     }
 
+    /**
+     * Decodes the whole file as a model.
+     *
+     * @return the model data, which the caller closes
+     * @throws CnbFormatException when the file is not a Model asset, or its chunks disagree
+     */
+    public CnbModelData decodeModel() {
+        long[] model = new long[1];
+        CnbExtension.check("CnbDocument.decodeModel",
+                NativeCnbRoutes.cnbDecodeModel(open(), model));
+        return new CnbModelData(model[0]);
+    }
+
     /** Releases the document. Closing twice is a no-op. */
     @Override
     public void close() {

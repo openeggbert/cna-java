@@ -2022,6 +2022,16 @@
       ]
     },
     {
+      "name": "cna_cnb_decode_model",
+      "header": "cnb.h",
+      "ownership": "borrows document; returns an owned model-data handle",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_CnbDocumentHandle",
+        "CNA_CnbModelDataHandle*"
+      ]
+    },
+    {
       "name": "cna_cnb_decode_song_duration_milliseconds",
       "header": "cnb.h",
       "ownership": "borrows document; caller integer output",
@@ -2470,6 +2480,19 @@
       ]
     },
     {
+      "name": "cna_cnb_encode_model",
+      "header": "cnb.h",
+      "ownership": "borrows model data; caller buffer",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_CnbModelDataHandle",
+        "CNA_StringView",
+        "uint8_t*",
+        "uint64_t",
+        "uint64_t*"
+      ]
+    },
+    {
       "name": "cna_cnb_encode_song",
       "header": "cnb.h",
       "ownership": "no handle; caller buffer",
@@ -2715,6 +2738,368 @@
         "uint8_t",
         "uint8_t",
         "CNA_CnbChunkId*"
+      ]
+    },
+    {
+      "name": "cna_cnb_model_add_bone",
+      "header": "cnb.h",
+      "ownership": "borrows model data; copies the caller's name and transform, caller integer output",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_CnbModelDataHandle",
+        "CNA_StringView",
+        "int32_t",
+        "const float*",
+        "uint64_t*"
+      ]
+    },
+    {
+      "name": "cna_cnb_model_add_light",
+      "header": "cnb.h",
+      "ownership": "borrows model data; copies the caller's structure, caller integer output",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_CnbModelDataHandle",
+        "const CNA_CnbModelLight*",
+        "uint64_t*"
+      ]
+    },
+    {
+      "name": "cna_cnb_model_add_mesh",
+      "header": "cnb.h",
+      "ownership": "borrows model data; copies the caller's name and part indices, caller integer output",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_CnbModelDataHandle",
+        "CNA_StringView",
+        "int32_t",
+        "const uint32_t*",
+        "uint64_t",
+        "uint64_t*"
+      ]
+    },
+    {
+      "name": "cna_cnb_model_add_part",
+      "header": "cnb.h",
+      "ownership": "borrows model data; copies the caller's structure and names, caller integer output",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_CnbModelDataHandle",
+        "const CNA_CnbModelPartInfo*",
+        "CNA_StringView",
+        "CNA_StringView",
+        "uint64_t*"
+      ]
+    },
+    {
+      "name": "cna_cnb_model_clear_skeleton",
+      "header": "cnb.h",
+      "ownership": "borrows model data",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_CnbModelDataHandle"
+      ]
+    },
+    {
+      "name": "cna_cnb_model_copy_bone_name",
+      "header": "cnb.h",
+      "ownership": "borrows model data; caller buffer",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_CnbModelDataHandle",
+        "uint64_t",
+        "char*",
+        "uint64_t",
+        "uint64_t*"
+      ]
+    },
+    {
+      "name": "cna_cnb_model_copy_mesh_name",
+      "header": "cnb.h",
+      "ownership": "borrows model data; caller buffer",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_CnbModelDataHandle",
+        "uint64_t",
+        "char*",
+        "uint64_t",
+        "uint64_t*"
+      ]
+    },
+    {
+      "name": "cna_cnb_model_copy_mesh_part_indices",
+      "header": "cnb.h",
+      "ownership": "borrows model data; caller buffer",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_CnbModelDataHandle",
+        "uint64_t",
+        "uint32_t*",
+        "uint64_t",
+        "uint64_t*"
+      ]
+    },
+    {
+      "name": "cna_cnb_model_copy_part_external_effect",
+      "header": "cnb.h",
+      "ownership": "borrows model data; caller buffer",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_CnbModelDataHandle",
+        "uint64_t",
+        "char*",
+        "uint64_t",
+        "uint64_t*"
+      ]
+    },
+    {
+      "name": "cna_cnb_model_copy_part_index_bytes",
+      "header": "cnb.h",
+      "ownership": "borrows model data; caller buffer",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_CnbModelDataHandle",
+        "uint64_t",
+        "uint8_t*",
+        "uint64_t",
+        "uint64_t*"
+      ]
+    },
+    {
+      "name": "cna_cnb_model_copy_part_name",
+      "header": "cnb.h",
+      "ownership": "borrows model data; caller buffer",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_CnbModelDataHandle",
+        "uint64_t",
+        "char*",
+        "uint64_t",
+        "uint64_t*"
+      ]
+    },
+    {
+      "name": "cna_cnb_model_copy_part_vertex_bytes",
+      "header": "cnb.h",
+      "ownership": "borrows model data; caller buffer",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_CnbModelDataHandle",
+        "uint64_t",
+        "uint8_t*",
+        "uint64_t",
+        "uint64_t*"
+      ]
+    },
+    {
+      "name": "cna_cnb_model_copy_skeleton_hierarchy",
+      "header": "cnb.h",
+      "ownership": "borrows model data; caller buffer",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_CnbModelDataHandle",
+        "int32_t*",
+        "uint64_t",
+        "uint64_t*"
+      ]
+    },
+    {
+      "name": "cna_cnb_model_copy_skeleton_matrices",
+      "header": "cnb.h",
+      "ownership": "borrows model data; caller buffer",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_CnbModelDataHandle",
+        "CNA_CnbSkeletonMatrixSet",
+        "float*",
+        "uint64_t",
+        "uint64_t*"
+      ]
+    },
+    {
+      "name": "cna_cnb_model_create",
+      "header": "cnb.h",
+      "ownership": "no handle; returns an owned model-data handle",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_CnbModelDataHandle*"
+      ]
+    },
+    {
+      "name": "cna_cnb_model_destroy",
+      "header": "cnb.h",
+      "ownership": "releases the owned model-data handle",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_CnbModelDataHandle"
+      ]
+    },
+    {
+      "name": "cna_cnb_model_get_bone",
+      "header": "cnb.h",
+      "ownership": "borrows model data; caller structure output",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_CnbModelDataHandle",
+        "uint64_t",
+        "CNA_CnbModelBone*"
+      ]
+    },
+    {
+      "name": "cna_cnb_model_get_bone_name_size",
+      "header": "cnb.h",
+      "ownership": "borrows model data; caller integer output",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_CnbModelDataHandle",
+        "uint64_t",
+        "uint64_t*"
+      ]
+    },
+    {
+      "name": "cna_cnb_model_get_info",
+      "header": "cnb.h",
+      "ownership": "borrows model data; caller structure output",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_CnbModelDataHandle",
+        "CNA_CnbModelInfo*"
+      ]
+    },
+    {
+      "name": "cna_cnb_model_get_light",
+      "header": "cnb.h",
+      "ownership": "borrows model data; caller structure output",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_CnbModelDataHandle",
+        "uint64_t",
+        "CNA_CnbModelLight*"
+      ]
+    },
+    {
+      "name": "cna_cnb_model_get_mesh",
+      "header": "cnb.h",
+      "ownership": "borrows model data; caller structure output",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_CnbModelDataHandle",
+        "uint64_t",
+        "CNA_CnbMeshInfo*"
+      ]
+    },
+    {
+      "name": "cna_cnb_model_get_mesh_name_size",
+      "header": "cnb.h",
+      "ownership": "borrows model data; caller integer output",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_CnbModelDataHandle",
+        "uint64_t",
+        "uint64_t*"
+      ]
+    },
+    {
+      "name": "cna_cnb_model_get_part",
+      "header": "cnb.h",
+      "ownership": "borrows model data; caller structure output",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_CnbModelDataHandle",
+        "uint64_t",
+        "CNA_CnbModelPartInfo*"
+      ]
+    },
+    {
+      "name": "cna_cnb_model_get_part_external_effect_size",
+      "header": "cnb.h",
+      "ownership": "borrows model data; caller integer output",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_CnbModelDataHandle",
+        "uint64_t",
+        "uint64_t*"
+      ]
+    },
+    {
+      "name": "cna_cnb_model_get_part_name_size",
+      "header": "cnb.h",
+      "ownership": "borrows model data; caller integer output",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_CnbModelDataHandle",
+        "uint64_t",
+        "uint64_t*"
+      ]
+    },
+    {
+      "name": "cna_cnb_model_get_skeleton",
+      "header": "cnb.h",
+      "ownership": "borrows model data; caller structure output",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_CnbModelDataHandle",
+        "CNA_CnbSkeletonInfo*"
+      ]
+    },
+    {
+      "name": "cna_cnb_model_set_flags",
+      "header": "cnb.h",
+      "ownership": "borrows model data; value parameters",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_CnbModelDataHandle",
+        "CNA_Bool",
+        "CNA_Bool"
+      ]
+    },
+    {
+      "name": "cna_cnb_model_set_part",
+      "header": "cnb.h",
+      "ownership": "borrows model data; reads the caller's structure",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_CnbModelDataHandle",
+        "uint64_t",
+        "const CNA_CnbModelPartInfo*"
+      ]
+    },
+    {
+      "name": "cna_cnb_model_set_part_index_bytes",
+      "header": "cnb.h",
+      "ownership": "borrows model data; copies the caller's bytes",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_CnbModelDataHandle",
+        "uint64_t",
+        "const uint8_t*",
+        "uint64_t"
+      ]
+    },
+    {
+      "name": "cna_cnb_model_set_part_vertex_bytes",
+      "header": "cnb.h",
+      "ownership": "borrows model data; copies the caller's bytes",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_CnbModelDataHandle",
+        "uint64_t",
+        "const uint8_t*",
+        "uint64_t"
+      ]
+    },
+    {
+      "name": "cna_cnb_model_set_skeleton",
+      "header": "cnb.h",
+      "ownership": "borrows model data; copies the caller's arrays",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_CnbModelDataHandle",
+        "const int32_t*",
+        "uint64_t",
+        "const float*",
+        "const float*",
+        "const float*"
       ]
     },
     {

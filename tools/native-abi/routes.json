@@ -2454,6 +2454,10 @@
         "symbol": "cna_cnb_decode_curve"
       },
       {
+        "java": "cnbDecodeModel",
+        "symbol": "cna_cnb_decode_model"
+      },
+      {
         "java": "cnbDecodeSongDurationMilliseconds",
         "symbol": "cna_cnb_decode_song_duration_milliseconds"
       },
@@ -2618,6 +2622,10 @@
         "symbol": "cna_cnb_encode_curve"
       },
       {
+        "java": "cnbEncodeModel",
+        "symbol": "cna_cnb_encode_model"
+      },
+      {
         "java": "cnbEncodeSong",
         "symbol": "cna_cnb_encode_song"
       },
@@ -2704,6 +2712,150 @@
       {
         "java": "cnbMakeChunkId",
         "symbol": "cna_cnb_make_chunk_id"
+      },
+      {
+        "java": "cnbModelAddBone",
+        "symbol": "cna_cnb_model_add_bone",
+        "arrayLengths": {
+          "transform": {
+            "length": 16
+          }
+        }
+      },
+      {
+        "java": "cnbModelAddLight",
+        "symbol": "cna_cnb_model_add_light"
+      },
+      {
+        "java": "cnbModelAddMesh",
+        "symbol": "cna_cnb_model_add_mesh"
+      },
+      {
+        "java": "cnbModelAddPart",
+        "symbol": "cna_cnb_model_add_part"
+      },
+      {
+        "java": "cnbModelClearSkeleton",
+        "symbol": "cna_cnb_model_clear_skeleton"
+      },
+      {
+        "java": "cnbModelCopyBoneName",
+        "symbol": "cna_cnb_model_copy_bone_name"
+      },
+      {
+        "java": "cnbModelCopyMeshName",
+        "symbol": "cna_cnb_model_copy_mesh_name"
+      },
+      {
+        "java": "cnbModelCopyMeshPartIndices",
+        "symbol": "cna_cnb_model_copy_mesh_part_indices"
+      },
+      {
+        "java": "cnbModelCopyPartExternalEffect",
+        "symbol": "cna_cnb_model_copy_part_external_effect"
+      },
+      {
+        "java": "cnbModelCopyPartIndexBytes",
+        "symbol": "cna_cnb_model_copy_part_index_bytes"
+      },
+      {
+        "java": "cnbModelCopyPartName",
+        "symbol": "cna_cnb_model_copy_part_name"
+      },
+      {
+        "java": "cnbModelCopyPartVertexBytes",
+        "symbol": "cna_cnb_model_copy_part_vertex_bytes"
+      },
+      {
+        "java": "cnbModelCopySkeletonHierarchy",
+        "symbol": "cna_cnb_model_copy_skeleton_hierarchy"
+      },
+      {
+        "java": "cnbModelCopySkeletonMatrices",
+        "symbol": "cna_cnb_model_copy_skeleton_matrices"
+      },
+      {
+        "java": "cnbModelCreate",
+        "symbol": "cna_cnb_model_create"
+      },
+      {
+        "java": "cnbModelDestroy",
+        "symbol": "cna_cnb_model_destroy"
+      },
+      {
+        "java": "cnbModelGetBone",
+        "symbol": "cna_cnb_model_get_bone"
+      },
+      {
+        "java": "cnbModelGetBoneNameSize",
+        "symbol": "cna_cnb_model_get_bone_name_size"
+      },
+      {
+        "java": "cnbModelGetInfo",
+        "symbol": "cna_cnb_model_get_info"
+      },
+      {
+        "java": "cnbModelGetLight",
+        "symbol": "cna_cnb_model_get_light"
+      },
+      {
+        "java": "cnbModelGetMesh",
+        "symbol": "cna_cnb_model_get_mesh"
+      },
+      {
+        "java": "cnbModelGetMeshNameSize",
+        "symbol": "cna_cnb_model_get_mesh_name_size"
+      },
+      {
+        "java": "cnbModelGetPart",
+        "symbol": "cna_cnb_model_get_part"
+      },
+      {
+        "java": "cnbModelGetPartExternalEffectSize",
+        "symbol": "cna_cnb_model_get_part_external_effect_size"
+      },
+      {
+        "java": "cnbModelGetPartNameSize",
+        "symbol": "cna_cnb_model_get_part_name_size"
+      },
+      {
+        "java": "cnbModelGetSkeleton",
+        "symbol": "cna_cnb_model_get_skeleton"
+      },
+      {
+        "java": "cnbModelSetFlags",
+        "symbol": "cna_cnb_model_set_flags"
+      },
+      {
+        "java": "cnbModelSetPart",
+        "symbol": "cna_cnb_model_set_part"
+      },
+      {
+        "java": "cnbModelSetPartIndexBytes",
+        "symbol": "cna_cnb_model_set_part_index_bytes"
+      },
+      {
+        "java": "cnbModelSetPartVertexBytes",
+        "symbol": "cna_cnb_model_set_part_vertex_bytes"
+      },
+      {
+        "java": "cnbModelSetSkeleton",
+        "symbol": "cna_cnb_model_set_skeleton",
+        "arrayLengths": {
+          "bind_pose": {
+            "per": 16,
+            "count": "joint_count"
+          },
+          "inverse_bind_pose": {
+            "per": 16,
+            "count": "joint_count"
+          },
+          "root_prefix": {
+            "per": 16,
+            "count": "joint_count",
+            "nullable": true
+          }
+        }
       },
       {
         "java": "cnbReadLimitsInit",
