@@ -50,11 +50,11 @@ TARGET_TYPES=340     TARGET_MEMBERS=4022
 TOTAL_DIAGNOSTICS=0  ALLOWLIST_ENTRIES=0
 
 NATIVE
-CANONICAL_FUNCTIONS=4054   BOUND_FUNCTIONS=1546
+CANONICAL_FUNCTIONS=4054   BOUND_FUNCTIONS=1621
 XNA_BACKING=986  JAVA_INTERNAL_ONLY=9  CNA_EXTENSION_CANDIDATE=1916
 DEFERRED_RUNTIME=416  NOT_USEFUL_IN_JAVA=727  UNEXPLAINED=0
 BOUND_BUT_UNREACHED=0  BOUND_WITHOUT_JAVA_CALL_SITE=0
-NATIVE_TOOL_TESTS=62
+LIBRARY_SYMBOL_CHECK=PASS (1621/1621)   NATIVE_TOOL_TESTS=70
 
 CNA EXTENSIONS
 org.openeggbert.cna.extensions.graphics   pipeline settings, PBR material, ASCII/CRT/depth effects
@@ -78,8 +78,11 @@ org.openeggbert.cna.extensions.net        where a discovered session is, and des
 org.openeggbert.cna.extensions.gamerservices  CNA's application-rendered Guide
 org.openeggbert.cna.extensions.avatars    real-avatar colours, an animation's clip, and the
                                           content behind XNA's canonical presets
+org.openeggbert.cna.extensions.graphics   also CNA's engine layer: LOD groups, the debug line
+                                          renderer, and the fifty-field settings a render
+                                          pipeline actually takes
 
-TESTS=253 SUITES=55 FAILURES=0 ERRORS=0 SKIPPED=0
+TESTS=275 SUITES=60 FAILURES=0 ERRORS=0 SKIPPED=0
 ```
 
 The selected profile is now a **subset gate**: a type the wider profile declares is not an
@@ -161,29 +164,34 @@ unexpected type in the narrower one, so its zero still means what it always mean
 15. `JAVA-EXT-006` is done in all three slices. The net one found a leak on the way: every
     `AvailableNetworkSession` owns an independent native handle -- CNA's collection accessor is
     documented to return a copy that outlives the collection -- and nothing released it.
-16. The JNI generator learned two shapes, each with tool tests and refusals: `CNA_StringView`
-    fields inside a structure, and input arrays whose length CNA states in prose rather than in
-    a count parameter.
+16. The JNI generator learned three shapes, each with tool tests and refusals: `CNA_StringView`
+    fields inside a structure, input arrays whose length CNA states in prose rather than in a
+    count parameter, and declared in/out structures. The last was a silent wrong guess rather
+    than a refusal -- an in/out structure was treated as an output and started zeroed, so the
+    caller's values were discarded -- and an audit of every bound route found no other case.
+17. `JAVA-EXT-008` opened CNA's engine layer, 857 routes of renderer XNA has no counterpart for.
+    Three families are in, each chosen by measuring what can be honestly qualified here rather
+    than by guessing: LOD groups need no device, the debug renderer needs a real one, and the
+    render-pipeline settings are arithmetic.
 
 ## Next work, in dependency order
 
 `docs/backlog.json` is the machine-readable source. What is left:
 
-1. `JAVA-EXT-003` — the `.cnj` builder and compiler (nine routes, all plannable), the model's
-   morph targets, and read-only animations. Two things will not come from more binding:
-   `cna_cnb_model_add_animation` takes the nested descriptor graph the generator refuses, and
-   the loader registry needs a design decision because `cna_cnb_loader_invoke` hands back a
-   `void*` with no Java meaning.
+1. `JAVA-EXT-008` — the engine layer, 824 routes still unbound. It is the largest remaining
+   opportunity and the easiest to spend badly: a coherent Java type per family, and the parts
+   that cannot be honestly qualified in a HEADLESS renderer left unbound and said so. The probe
+   at `tools/native-abi/probes/engine_layer_families.c` is how to choose the next one.
 2. `JAVA-EXT-007` — blocked with evidence. 23 of 26 skinned-model routes plan; the three that do
    not include `set_clip`, whose descriptor is a pointer graph, and no route takes a clip handle
    instead. Twenty-three plannable routes that do not add up to a usable feature is not a slice
    worth shipping, and it is what keeps the two real-avatar-rendering routes unbound.
-3. `JAVA-NATIVE-025` — a generated route that pins several byte arrays leaks the earlier ones if
-   a later pin fails. Reachable only when the JVM is already out of memory; recorded rather than
-   half-fixed.
-4. `JAVA-UPSTREAM-004` — revalidate the CNA content-manager model loader when it is fixed, and
+3. `JAVA-UPSTREAM-004` — revalidate the CNA content-manager model loader when it is fixed, and
    add `CnaModel.Load` on top of it. The `.cnb` model path is a different one and was probed
    clean in C before this session bound it.
+4. `JAVA-UPSTREAM-003` — five of cnanext's own C API tests still fail in this configuration.
+   Not a CNA-Java dependency, and the number is only meaningful after rebuilding the test
+   executables, which is written down because it caught this session out once.
 
 Do not weaken either profile's zero, do not add an allowlist, and do not put non-XNA API inside
 `Microsoft.Xna.Framework.*`.

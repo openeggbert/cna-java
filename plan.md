@@ -42,13 +42,13 @@ or put non-XNA API inside `Microsoft.Xna.Framework.*`.
 | Allowlist entries | 0 | 0 |
 | CNA C ABI | 0.7.0 | 0.21.0 |
 | Canonical C API functions | not measured | 4,054 |
-| Bound native routes | 723 | 1,546 |
+| Bound native routes | 723 | 1,621 |
 | Unexplained native routes | 3,328 | 0 |
 | Bound routes no JNI entry point reaches | 1 | 0 |
 | Bound routes no Java call site reaches | not measurable | 0 |
 | Deferred input routes | 132 | 0 |
 | CNA extension packages | 0 | 9 |
-| Tests | 156 | 253 |
+| Tests | 156 | 275 |
 
 ## Milestones reached this session
 
@@ -146,15 +146,15 @@ explicitly reviewed full signature, never a suppression:
 ```text
 HEADER_ABI=0.21.0
 CANONICAL_FUNCTIONS=4054
-BOUND_FUNCTIONS=1546
+BOUND_FUNCTIONS=1621
 MANIFEST_SIGNATURE_CHECK=PASS
 MANIFEST_JNI_BINDING_CHECK=PASS
 JNI_HEADER_DERIVED_SLOT_CHECK=PASS
 LAYOUT_SIGNATURE_PROBE=PASS
 LIBRARY_ABI=0.21.0
-LIBRARY_SYMBOL_CHECK=PASS (1546/1546)
+LIBRARY_SYMBOL_CHECK=PASS (1621/1621)
 ABI_POLICY_CHECK=PASS
-NATIVE_TOOL_TESTS=62 passed, 0 failed
+NATIVE_TOOL_TESTS=70 passed, 0 failed
 ```
 
 Every slot is declared `CNA_JNI_ROUTE(symbol)`, so a signature that moves upstream stops the
