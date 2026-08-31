@@ -1,6 +1,6 @@
 # CNA-Java continuation handoff
 
-**Updated:** 2026-08-30
+**Updated:** 2026-08-31
 
 The **complete XNA 4.0 runtime superset** is structurally at zero diagnostics, and the native
 boundary is qualified against the live sibling dependencies. Read `plan.md`, this file,
@@ -14,19 +14,21 @@ Writable: this repository and `../cna-java-template`. `../../cnanext` and
 clean. The pre-existing untracked `out` entry is untouched.
 
 ```text
-cnanext HEAD            17b5a90a0878f3f44c23bc8e3197d5d30373dc72 (branch next)
+cnanext HEAD            599d14e54e073b566d77b3d6fb30ac52d3d810b7 (branch next)
 sharp-runtimenext HEAD  4a49afb0cfe6a41e6e0af0bb62dc5175976731bb (branch next)
 native artifact         cnanext/cmake-build-javanext/modules/c-api/libcna_c_api.so
-ABI                     0.20.0
-C API inventory SHA-256 e9e0be892dbdce49dedf195dac35f604a9263565a74473195d878ee9e580696d
+ABI                     0.21.0
+C API inventory SHA-256 be9a2bf818318002adc100ad1db22949b164726d2d124352f3b29aa3fdc48ea2
 platform/renderer/audio HEADLESS / HEADLESS / NULL
 build options           CNA_BUILD_C_API=ON, CNA_CNAEXT=ON, CNA_DEVICES=ON,
                         CNA_ENABLE_NET=ON, CNA_ENABLE_VIDEO=AUTO
 XNA reference corpus    /rv/data/development/github.com/openeggbert/xna4-decomp/dlls
 
-Both dependency HEADs advanced during this session. The C API did not: 4,051 declarations,
-4,051 exported symbols, ABI 0.20.0, and the same inventory hash before and after. The hash is
-the identity worth checking, because it is what the binding actually depends on.
+Both dependency HEADs advanced during this session, and CNA's C API advanced with them: ABI
+0.20.0 to 0.21.0, 4,051 declarations to 4,054. Every one of the 1,570 bound routes kept its
+exact signature, so the migration was three edits and a rebuild;
+`docs/cna-abi-migration-evidence.md` carries the addendum. The library was rebuilt from the
+clean checkout before any of it was claimed.
 ```
 
 `build.gradle` resolves CNA from `../../cnanext` and fails clearly when it is absent. There is
@@ -48,9 +50,9 @@ TARGET_TYPES=340     TARGET_MEMBERS=4022
 TOTAL_DIAGNOSTICS=0  ALLOWLIST_ENTRIES=0
 
 NATIVE
-CANONICAL_FUNCTIONS=4051   BOUND_FUNCTIONS=1393
-XNA_BACKING=976  JAVA_INTERNAL_ONLY=170  CNA_EXTENSION_CANDIDATE=1771
-DEFERRED_RUNTIME=547  NOT_USEFUL_IN_JAVA=587  UNEXPLAINED=0
+CANONICAL_FUNCTIONS=4054   BOUND_FUNCTIONS=1570
+XNA_BACKING=976  JAVA_INTERNAL_ONLY=170  CNA_EXTENSION_CANDIDATE=1871
+DEFERRED_RUNTIME=417  NOT_USEFUL_IN_JAVA=620  UNEXPLAINED=0
 BOUND_BUT_UNREACHED=0  BOUND_WITHOUT_JAVA_CALL_SITE=161
 
 CNA EXTENSIONS
@@ -65,8 +67,10 @@ org.openeggbert.cna.extensions.input      typed characters, composition drafts a
                                           relative mode, touch emulation
 org.openeggbert.cna.extensions.sensors    accelerometer, gyroscope, compass, fused motion,
                                           and the host's sensor enumeration
+org.openeggbert.cna.extensions.content    CNA's model over an XNA one, and the .cnb container:
+                                          document, checked reader, texture data, writer
 
-TESTS=209 SUITES=48 FAILURES=0 ERRORS=0 SKIPPED=0
+TESTS=219 SUITES=50 FAILURES=0 ERRORS=0 SKIPPED=0
 ```
 
 The selected profile is now a **subset gate**: a type the wider profile declares is not an
@@ -123,18 +127,26 @@ unexpected type in the narrower one, so its zero still means what it always mean
    because a `native` declaration counted as its own call site; with that fixed,
    `boundWithoutJavaCallSite` is 161 and `JAVA-NATIVE-023` owns getting it to zero.
 
+10. `JAVA-NATIVE-011` is done, and its audit found more than it bound: CNA's own model loader
+    segfaults during teardown for any asset with a mesh part, reproduced in C as
+    `JAVA-UPSTREAM-004`.
+11. `JAVA-EXT-003`'s first vertical slice reads and writes `.cnb`, with every fixture produced
+    by CNA's own encoder.
+12. `JAVA-XNA-006` is measured and answered in `docs/content-pipeline-decision.md`:
+    partial/interop, consume compiled content rather than reimplement Microsoft's build system.
+
 ## Next work, in dependency order
 
 `docs/backlog.json` is the machine-readable source. The highest-value ready tasks are:
 
-1. `JAVA-NATIVE-011` — bind the native Model routes behind the managed XNB model graph, so
-   `Load<Model>` stops being managed-only. 127 routes.
-2. `JAVA-EXT-003` — the `.cnb` content format, 272 routes.
-3. `JAVA-NATIVE-023` — reach or unbind the 161 routes no Java call site touches, concentrated
+1. `JAVA-NATIVE-023` — reach or unbind the 161 routes no Java call site touches, concentrated
    in the GamerServices and Net families. PacketReader and PacketWriter are the largest slice:
    28 routes CNA implements that the Java projection currently does managed.
-4. `JAVA-XNA-006` — measure the Content Pipeline build-time profile and decide whether a Java
-   content pipeline belongs in this binding.
+2. `JAVA-EXT-003` — the remaining `.cnb` asset families: model, sprite font, sound, song, video,
+   curve, animation clip and `.cnj`. The loader registry needs a design decision rather than
+   more binding, because `cna_cnb_loader_invoke` hands back a `void*`.
+3. `JAVA-UPSTREAM-004` — revalidate the CNA model loader when it is fixed, and add
+   `CnaModel.Load` on top of it.
 
 Do not weaken either profile's zero, do not add an allowlist, and do not put non-XNA API inside
 `Microsoft.Xna.Framework.*`.

@@ -7,7 +7,7 @@
 **Profiles:** the seven-assembly XNA 4.0 Windows runtime subset gate, and the ten-assembly full
 runtime superset that adds GamerServices, Net and Avatar
 
-**Native dependency:** `../../cnanext` built against `../../sharp-runtimenext`, CNA C ABI 0.20.0
+**Native dependency:** `../../cnanext` built against `../../sharp-runtimenext`, CNA C ABI 0.21.0
 
 **Runtime-qualified platform:** Linux x86-64, CNA HEADLESS platform and renderer, NULL audio
 
@@ -40,15 +40,15 @@ or put non-XNA API inside `Microsoft.Xna.Framework.*`.
 | Java target members | 3,206 | 4,022 |
 | Full-profile diagnostics | 74 | 0 |
 | Allowlist entries | 0 | 0 |
-| CNA C ABI | 0.7.0 | 0.20.0 |
-| Canonical C API functions | not measured | 4,051 |
-| Bound native routes | 723 | 1,393 |
+| CNA C ABI | 0.7.0 | 0.21.0 |
+| Canonical C API functions | not measured | 4,054 |
+| Bound native routes | 723 | 1,570 |
 | Unexplained native routes | 3,328 | 0 |
 | Bound routes no JNI entry point reaches | 1 | 0 |
 | Bound routes no Java call site reaches | not measurable | 161 |
 | Deferred input routes | 132 | 0 |
-| CNA extension packages | 0 | 5 |
-| Tests | 156 | 209 |
+| CNA extension packages | 0 | 6 |
+| Tests | 156 | 219 |
 
 ## Milestones reached this session
 
@@ -96,6 +96,18 @@ frees it before Java sees it, and the two queues are merged by a sequence stampe
 the event, so a committed character and the composition update that cleared it reach the game in
 the order they happened.
 
+**J14, the model graph and the .cnb container.** `JAVA-NATIVE-011` is done: `CnaModel.From`
+builds CNA's own model over the buffers and effects an XNA model already owns, retained rather
+than copied, and CNA draws it. `Load<Model>` stays on the managed reader because XNB records the
+effect's type and CNA publishes a loaded effect as a handle whose type is only a name. CNA's own
+model loader could not be used at all -- it segfaults during teardown for any asset with a mesh
+part, reproduced in C as `JAVA-UPSTREAM-004`. `JAVA-EXT-003`'s first slice reads and writes
+CNA's `.cnb`: container, checked byte reader, texture data, writer, and a Texture2D a game draws
+with, every fixture produced by CNA's own encoder.
+
+**J15, the Content Pipeline decision.** `JAVA-XNA-006` is measured and answered:
+partial/interop, in `docs/content-pipeline-decision.md`.
+
 **J8, the native inventory.** Every one of the 4,051 canonical C API functions carries an explicit
 classification with zero unexplained, and the public surface that reaches each bound route is
 derived from the JNI call graph and the Java sources rather than declared by hand.
@@ -126,16 +138,17 @@ explicitly reviewed full signature, never a suppression:
 ## Native boundary
 
 ```text
-HEADER_ABI=0.20.0
-CANONICAL_FUNCTIONS=4051
-BOUND_FUNCTIONS=1393
+HEADER_ABI=0.21.0
+CANONICAL_FUNCTIONS=4054
+BOUND_FUNCTIONS=1570
 MANIFEST_SIGNATURE_CHECK=PASS
 MANIFEST_JNI_BINDING_CHECK=PASS
 JNI_HEADER_DERIVED_SLOT_CHECK=PASS
 LAYOUT_SIGNATURE_PROBE=PASS
-LIBRARY_SYMBOL_CHECK=PASS (1393/1393)
+LIBRARY_ABI=0.21.0
+LIBRARY_SYMBOL_CHECK=PASS (1570/1570)
 ABI_POLICY_CHECK=PASS
-NATIVE_TOOL_TESTS=43 passed, 0 failed
+NATIVE_TOOL_TESTS=45 passed, 0 failed
 ```
 
 Every slot is declared `CNA_JNI_ROUTE(symbol)`, so a signature that moves upstream stops the
@@ -148,9 +161,9 @@ than guessing; `generateJniCheck` fails the build when the committed output goes
 ```text
 XNA_BACKING              976
 JAVA_INTERNAL_ONLY       170
-CNA_EXTENSION_CANDIDATE 1771
-DEFERRED_RUNTIME         547
-NOT_USEFUL_IN_JAVA       587
+CNA_EXTENSION_CANDIDATE 1871
+DEFERRED_RUNTIME         417
+NOT_USEFUL_IN_JAVA       620
 UNMAPPED_REQUIRES_REVIEW   0
 BOUND_BUT_UNREACHED        0
 BOUND_WITHOUT_JAVA_CALL_SITE 161
