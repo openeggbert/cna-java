@@ -246,22 +246,15 @@ public final class DebugDraw implements AutoCloseable {
     }
 
     private static long[] channels(Color color) {
-        Objects.requireNonNull(color, "color");
-        return new long[] {color.getR(), color.getG(), color.getB(), color.getA()};
+        return EngineValues.channels(color, "color");
     }
 
     private static float[] floats(Vector3 value, String name) {
-        Objects.requireNonNull(value, name);
-        return new float[] {value.X, value.Y, value.Z};
+        return EngineValues.floats(value, name);
     }
 
     private static float[] floats(Matrix matrix) {
-        return new float[] {
-            matrix.M11, matrix.M12, matrix.M13, matrix.M14,
-            matrix.M21, matrix.M22, matrix.M23, matrix.M24,
-            matrix.M31, matrix.M32, matrix.M33, matrix.M34,
-            matrix.M41, matrix.M42, matrix.M43, matrix.M44,
-        };
+        return EngineValues.floats(matrix, "matrix");
     }
 
     private long open() {

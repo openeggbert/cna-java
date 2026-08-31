@@ -179,6 +179,154 @@ public final class NativeEngineLayerRoutes {
     public static native int engineLayerGetVersion(int[] outVersion);
 
     /**
+     * cna_frustum_culler_ext_create (engine_layer.h).
+     */
+    public static native int frustumCullerExtCreate(long[] outCuller);
+
+    /**
+     * cna_frustum_culler_ext_cull_boxes (engine_layer.h).
+     */
+    public static native int frustumCullerExtCullBoxes(long culler, float[] boundsFloating, long[] destination, long[] outCount);
+
+    /**
+     * cna_frustum_culler_ext_cull_spheres (engine_layer.h).
+     */
+    public static native int frustumCullerExtCullSpheres(long culler, float[] boundsFloating, long[] destination, long[] outCount);
+
+    /**
+     * cna_frustum_culler_ext_cull_transforms (engine_layer.h).
+     */
+    public static native int frustumCullerExtCullTransforms(long culler, float[] transformsFloating, float[] boundsFloating, float[] destinationFloating, long[] outCount);
+
+    /**
+     * cna_frustum_culler_ext_destroy (engine_layer.h).
+     */
+    public static native int frustumCullerExtDestroy(long culler);
+
+    /**
+     * cna_frustum_culler_ext_get_frustum (engine_layer.h).
+     *
+     * <p>outFrustumFloating carries CNA_BoundingFrustum in this order:
+     * <ol start="0">
+     *   <li>{@code matrix.m11} (float)</li>
+     *   <li>{@code matrix.m12} (float)</li>
+     *   <li>{@code matrix.m13} (float)</li>
+     *   <li>{@code matrix.m14} (float)</li>
+     *   <li>{@code matrix.m21} (float)</li>
+     *   <li>{@code matrix.m22} (float)</li>
+     *   <li>{@code matrix.m23} (float)</li>
+     *   <li>{@code matrix.m24} (float)</li>
+     *   <li>{@code matrix.m31} (float)</li>
+     *   <li>{@code matrix.m32} (float)</li>
+     *   <li>{@code matrix.m33} (float)</li>
+     *   <li>{@code matrix.m34} (float)</li>
+     *   <li>{@code matrix.m41} (float)</li>
+     *   <li>{@code matrix.m42} (float)</li>
+     *   <li>{@code matrix.m43} (float)</li>
+     *   <li>{@code matrix.m44} (float)</li>
+     * </ol>
+     */
+    public static native int frustumCullerExtGetFrustum(long culler, float[] outFrustumFloating);
+
+    /**
+     * cna_frustum_culler_ext_is_box_visible (engine_layer.h).
+     *
+     * <p>boxFloating carries CNA_BoundingBox in this order:
+     * <ol start="0">
+     *   <li>{@code min.x} (float)</li>
+     *   <li>{@code min.y} (float)</li>
+     *   <li>{@code min.z} (float)</li>
+     *   <li>{@code max.x} (float)</li>
+     *   <li>{@code max.y} (float)</li>
+     *   <li>{@code max.z} (float)</li>
+     * </ol>
+     */
+    public static native int frustumCullerExtIsBoxVisible(long culler, float[] boxFloating, boolean[] outVisible);
+
+    /**
+     * cna_frustum_culler_ext_is_sphere_visible (engine_layer.h).
+     *
+     * <p>sphereFloating carries CNA_BoundingSphere in this order:
+     * <ol start="0">
+     *   <li>{@code center.x} (float)</li>
+     *   <li>{@code center.y} (float)</li>
+     *   <li>{@code center.z} (float)</li>
+     *   <li>{@code radius} (float)</li>
+     * </ol>
+     */
+    public static native int frustumCullerExtIsSphereVisible(long culler, float[] sphereFloating, boolean[] outVisible);
+
+    /**
+     * cna_frustum_culler_ext_set_camera (engine_layer.h).
+     *
+     * <p>viewFloating carries CNA_Matrix in this order:
+     * <ol start="0">
+     *   <li>{@code m11} (float)</li>
+     *   <li>{@code m12} (float)</li>
+     *   <li>{@code m13} (float)</li>
+     *   <li>{@code m14} (float)</li>
+     *   <li>{@code m21} (float)</li>
+     *   <li>{@code m22} (float)</li>
+     *   <li>{@code m23} (float)</li>
+     *   <li>{@code m24} (float)</li>
+     *   <li>{@code m31} (float)</li>
+     *   <li>{@code m32} (float)</li>
+     *   <li>{@code m33} (float)</li>
+     *   <li>{@code m34} (float)</li>
+     *   <li>{@code m41} (float)</li>
+     *   <li>{@code m42} (float)</li>
+     *   <li>{@code m43} (float)</li>
+     *   <li>{@code m44} (float)</li>
+     * </ol>
+     *
+     * <p>projectionFloating carries CNA_Matrix in this order:
+     * <ol start="0">
+     *   <li>{@code m11} (float)</li>
+     *   <li>{@code m12} (float)</li>
+     *   <li>{@code m13} (float)</li>
+     *   <li>{@code m14} (float)</li>
+     *   <li>{@code m21} (float)</li>
+     *   <li>{@code m22} (float)</li>
+     *   <li>{@code m23} (float)</li>
+     *   <li>{@code m24} (float)</li>
+     *   <li>{@code m31} (float)</li>
+     *   <li>{@code m32} (float)</li>
+     *   <li>{@code m33} (float)</li>
+     *   <li>{@code m34} (float)</li>
+     *   <li>{@code m41} (float)</li>
+     *   <li>{@code m42} (float)</li>
+     *   <li>{@code m43} (float)</li>
+     *   <li>{@code m44} (float)</li>
+     * </ol>
+     */
+    public static native int frustumCullerExtSetCamera(long culler, float[] viewFloating, float[] projectionFloating);
+
+    /**
+     * cna_frustum_culler_ext_set_view_projection (engine_layer.h).
+     *
+     * <p>viewProjectionFloating carries CNA_Matrix in this order:
+     * <ol start="0">
+     *   <li>{@code m11} (float)</li>
+     *   <li>{@code m12} (float)</li>
+     *   <li>{@code m13} (float)</li>
+     *   <li>{@code m14} (float)</li>
+     *   <li>{@code m21} (float)</li>
+     *   <li>{@code m22} (float)</li>
+     *   <li>{@code m23} (float)</li>
+     *   <li>{@code m24} (float)</li>
+     *   <li>{@code m31} (float)</li>
+     *   <li>{@code m32} (float)</li>
+     *   <li>{@code m33} (float)</li>
+     *   <li>{@code m34} (float)</li>
+     *   <li>{@code m41} (float)</li>
+     *   <li>{@code m42} (float)</li>
+     *   <li>{@code m43} (float)</li>
+     *   <li>{@code m44} (float)</li>
+     * </ol>
+     */
+    public static native int frustumCullerExtSetViewProjection(long culler, float[] viewProjectionFloating);
+
+    /**
      * cna_lod_group_ext_add_level (engine_layer.h).
      */
     public static native int lodGroupExtAddLevel(long group, float maxDistance, long part);

@@ -454,6 +454,489 @@ Java_org_openeggbert_cna_internal_generated_NativeEngineLayerRoutes_engineLayerG
 }
 
 JNIEXPORT jint JNICALL
+Java_org_openeggbert_cna_internal_generated_NativeEngineLayerRoutes_frustumCullerExtCreate(
+    JNIEnv* environment, jclass declaring_class, jlongArray out_culler)
+{
+    (void)environment;
+    (void)declaring_class;
+    CNA_FrustumCullerEXTHandle out_culler_value = 0;
+    CNA_Result call_result = cna.frustum_culler_ext_create(&out_culler_value);
+    if (call_result == CNA_RESULT_SUCCESS || call_result == CNA_RESULT_BUFFER_TOO_SMALL) {
+        jlong out_culler_element = (jlong)out_culler_value;
+        (*environment)->SetLongArrayRegion(
+            environment, out_culler, 0, 1, &out_culler_element);
+    }
+    return (jint)call_result;
+}
+
+JNIEXPORT jint JNICALL
+Java_org_openeggbert_cna_internal_generated_NativeEngineLayerRoutes_frustumCullerExtCullBoxes(
+    JNIEnv* environment, jclass declaring_class, jlong culler, jfloatArray boundsFloating, jlongArray destination, jlongArray out_count)
+{
+    (void)environment;
+    (void)declaring_class;
+    jsize bounds_count = (*environment)->GetArrayLength(environment, boundsFloating) / 6;
+    CNA_BoundingBox* bounds_values = (CNA_BoundingBox*)calloc(
+        (size_t)bounds_count + 1U, sizeof(*bounds_values));
+    if (bounds_values == NULL) {
+        return (jint)CNA_RESULT_OUT_OF_MEMORY;
+    }
+    {
+        jsize boundsFloating_length = (*environment)->GetArrayLength(environment, boundsFloating);
+        jfloat* boundsFloating_values = (jfloat*)malloc(
+            ((size_t)boundsFloating_length + 1U) * sizeof(*boundsFloating_values));
+        if (boundsFloating_values == NULL) {
+            free(bounds_values);
+            return (jint)CNA_RESULT_OUT_OF_MEMORY;
+        }
+        (*environment)->GetFloatArrayRegion(environment, boundsFloating, 0, boundsFloating_length, boundsFloating_values);
+        for (jsize element = 0; element < bounds_count; ++element) {
+            bounds_values[element].min.x = (float)boundsFloating_values[element * 6 + 0];
+            bounds_values[element].min.y = (float)boundsFloating_values[element * 6 + 1];
+            bounds_values[element].min.z = (float)boundsFloating_values[element * 6 + 2];
+            bounds_values[element].max.x = (float)boundsFloating_values[element * 6 + 3];
+            bounds_values[element].max.y = (float)boundsFloating_values[element * 6 + 4];
+            bounds_values[element].max.z = (float)boundsFloating_values[element * 6 + 5];
+        }
+        free(boundsFloating_values);
+    }
+    jsize destination_size = (*environment)->GetArrayLength(environment, destination);
+    jlong* destination_elements = (*environment)->GetLongArrayElements(environment, destination, NULL);
+    if (destination_elements == NULL) {
+    free(bounds_values);
+        return (jint)CNA_RESULT_OUT_OF_MEMORY;
+    }
+    uint64_t* destination_values = (uint64_t*)malloc(
+        ((size_t)destination_size + 1U) * sizeof(*destination_values));
+    if (destination_values == NULL) {
+        (*environment)->ReleaseLongArrayElements(
+            environment, destination, destination_elements, JNI_ABORT);
+    free(bounds_values);
+        return (jint)CNA_RESULT_OUT_OF_MEMORY;
+    }
+    for (jsize index = 0; index < destination_size; ++index) {
+        destination_values[index] = (uint64_t)destination_elements[index];
+    }
+    uint64_t out_count_value = 0;
+    CNA_Result call_result = cna.frustum_culler_ext_cull_boxes((CNA_FrustumCullerEXTHandle)culler, bounds_values, (uint64_t)bounds_count, destination_values, (uint64_t)destination_size, &out_count_value);
+    free(bounds_values);
+    if (call_result == CNA_RESULT_SUCCESS) {
+        for (jsize index = 0; index < destination_size; ++index) {
+            destination_elements[index] = (jlong)destination_values[index];
+        }
+    }
+    free(destination_values);
+    (*environment)->ReleaseLongArrayElements(
+        environment, destination, destination_elements, 0);
+    if (call_result == CNA_RESULT_SUCCESS || call_result == CNA_RESULT_BUFFER_TOO_SMALL) {
+        jlong out_count_element = (jlong)out_count_value;
+        (*environment)->SetLongArrayRegion(
+            environment, out_count, 0, 1, &out_count_element);
+    }
+    return (jint)call_result;
+}
+
+JNIEXPORT jint JNICALL
+Java_org_openeggbert_cna_internal_generated_NativeEngineLayerRoutes_frustumCullerExtCullSpheres(
+    JNIEnv* environment, jclass declaring_class, jlong culler, jfloatArray boundsFloating, jlongArray destination, jlongArray out_count)
+{
+    (void)environment;
+    (void)declaring_class;
+    jsize bounds_count = (*environment)->GetArrayLength(environment, boundsFloating) / 4;
+    CNA_BoundingSphere* bounds_values = (CNA_BoundingSphere*)calloc(
+        (size_t)bounds_count + 1U, sizeof(*bounds_values));
+    if (bounds_values == NULL) {
+        return (jint)CNA_RESULT_OUT_OF_MEMORY;
+    }
+    {
+        jsize boundsFloating_length = (*environment)->GetArrayLength(environment, boundsFloating);
+        jfloat* boundsFloating_values = (jfloat*)malloc(
+            ((size_t)boundsFloating_length + 1U) * sizeof(*boundsFloating_values));
+        if (boundsFloating_values == NULL) {
+            free(bounds_values);
+            return (jint)CNA_RESULT_OUT_OF_MEMORY;
+        }
+        (*environment)->GetFloatArrayRegion(environment, boundsFloating, 0, boundsFloating_length, boundsFloating_values);
+        for (jsize element = 0; element < bounds_count; ++element) {
+            bounds_values[element].center.x = (float)boundsFloating_values[element * 4 + 0];
+            bounds_values[element].center.y = (float)boundsFloating_values[element * 4 + 1];
+            bounds_values[element].center.z = (float)boundsFloating_values[element * 4 + 2];
+            bounds_values[element].radius = (float)boundsFloating_values[element * 4 + 3];
+        }
+        free(boundsFloating_values);
+    }
+    jsize destination_size = (*environment)->GetArrayLength(environment, destination);
+    jlong* destination_elements = (*environment)->GetLongArrayElements(environment, destination, NULL);
+    if (destination_elements == NULL) {
+    free(bounds_values);
+        return (jint)CNA_RESULT_OUT_OF_MEMORY;
+    }
+    uint64_t* destination_values = (uint64_t*)malloc(
+        ((size_t)destination_size + 1U) * sizeof(*destination_values));
+    if (destination_values == NULL) {
+        (*environment)->ReleaseLongArrayElements(
+            environment, destination, destination_elements, JNI_ABORT);
+    free(bounds_values);
+        return (jint)CNA_RESULT_OUT_OF_MEMORY;
+    }
+    for (jsize index = 0; index < destination_size; ++index) {
+        destination_values[index] = (uint64_t)destination_elements[index];
+    }
+    uint64_t out_count_value = 0;
+    CNA_Result call_result = cna.frustum_culler_ext_cull_spheres((CNA_FrustumCullerEXTHandle)culler, bounds_values, (uint64_t)bounds_count, destination_values, (uint64_t)destination_size, &out_count_value);
+    free(bounds_values);
+    if (call_result == CNA_RESULT_SUCCESS) {
+        for (jsize index = 0; index < destination_size; ++index) {
+            destination_elements[index] = (jlong)destination_values[index];
+        }
+    }
+    free(destination_values);
+    (*environment)->ReleaseLongArrayElements(
+        environment, destination, destination_elements, 0);
+    if (call_result == CNA_RESULT_SUCCESS || call_result == CNA_RESULT_BUFFER_TOO_SMALL) {
+        jlong out_count_element = (jlong)out_count_value;
+        (*environment)->SetLongArrayRegion(
+            environment, out_count, 0, 1, &out_count_element);
+    }
+    return (jint)call_result;
+}
+
+JNIEXPORT jint JNICALL
+Java_org_openeggbert_cna_internal_generated_NativeEngineLayerRoutes_frustumCullerExtCullTransforms(
+    JNIEnv* environment, jclass declaring_class, jlong culler, jfloatArray transformsFloating, jfloatArray boundsFloating, jfloatArray destinationFloating, jlongArray out_count)
+{
+    (void)environment;
+    (void)declaring_class;
+    jsize transforms_count = (*environment)->GetArrayLength(environment, transformsFloating) / 16;
+    CNA_Matrix* transforms_values = (CNA_Matrix*)calloc(
+        (size_t)transforms_count + 1U, sizeof(*transforms_values));
+    if (transforms_values == NULL) {
+        return (jint)CNA_RESULT_OUT_OF_MEMORY;
+    }
+    {
+        jsize transformsFloating_length = (*environment)->GetArrayLength(environment, transformsFloating);
+        jfloat* transformsFloating_values = (jfloat*)malloc(
+            ((size_t)transformsFloating_length + 1U) * sizeof(*transformsFloating_values));
+        if (transformsFloating_values == NULL) {
+            free(transforms_values);
+            return (jint)CNA_RESULT_OUT_OF_MEMORY;
+        }
+        (*environment)->GetFloatArrayRegion(environment, transformsFloating, 0, transformsFloating_length, transformsFloating_values);
+        for (jsize element = 0; element < transforms_count; ++element) {
+            transforms_values[element].m11 = (float)transformsFloating_values[element * 16 + 0];
+            transforms_values[element].m12 = (float)transformsFloating_values[element * 16 + 1];
+            transforms_values[element].m13 = (float)transformsFloating_values[element * 16 + 2];
+            transforms_values[element].m14 = (float)transformsFloating_values[element * 16 + 3];
+            transforms_values[element].m21 = (float)transformsFloating_values[element * 16 + 4];
+            transforms_values[element].m22 = (float)transformsFloating_values[element * 16 + 5];
+            transforms_values[element].m23 = (float)transformsFloating_values[element * 16 + 6];
+            transforms_values[element].m24 = (float)transformsFloating_values[element * 16 + 7];
+            transforms_values[element].m31 = (float)transformsFloating_values[element * 16 + 8];
+            transforms_values[element].m32 = (float)transformsFloating_values[element * 16 + 9];
+            transforms_values[element].m33 = (float)transformsFloating_values[element * 16 + 10];
+            transforms_values[element].m34 = (float)transformsFloating_values[element * 16 + 11];
+            transforms_values[element].m41 = (float)transformsFloating_values[element * 16 + 12];
+            transforms_values[element].m42 = (float)transformsFloating_values[element * 16 + 13];
+            transforms_values[element].m43 = (float)transformsFloating_values[element * 16 + 14];
+            transforms_values[element].m44 = (float)transformsFloating_values[element * 16 + 15];
+        }
+        free(transformsFloating_values);
+    }
+    jsize bounds_count = (*environment)->GetArrayLength(environment, boundsFloating) / 6;
+    CNA_BoundingBox* bounds_values = (CNA_BoundingBox*)calloc(
+        (size_t)bounds_count + 1U, sizeof(*bounds_values));
+    if (bounds_values == NULL) {
+    free(transforms_values);
+        return (jint)CNA_RESULT_OUT_OF_MEMORY;
+    }
+    {
+        jsize boundsFloating_length = (*environment)->GetArrayLength(environment, boundsFloating);
+        jfloat* boundsFloating_values = (jfloat*)malloc(
+            ((size_t)boundsFloating_length + 1U) * sizeof(*boundsFloating_values));
+        if (boundsFloating_values == NULL) {
+            free(bounds_values);
+            free(transforms_values);
+            return (jint)CNA_RESULT_OUT_OF_MEMORY;
+        }
+        (*environment)->GetFloatArrayRegion(environment, boundsFloating, 0, boundsFloating_length, boundsFloating_values);
+        for (jsize element = 0; element < bounds_count; ++element) {
+            bounds_values[element].min.x = (float)boundsFloating_values[element * 6 + 0];
+            bounds_values[element].min.y = (float)boundsFloating_values[element * 6 + 1];
+            bounds_values[element].min.z = (float)boundsFloating_values[element * 6 + 2];
+            bounds_values[element].max.x = (float)boundsFloating_values[element * 6 + 3];
+            bounds_values[element].max.y = (float)boundsFloating_values[element * 6 + 4];
+            bounds_values[element].max.z = (float)boundsFloating_values[element * 6 + 5];
+        }
+        free(boundsFloating_values);
+    }
+    jsize destination_count = (*environment)->GetArrayLength(environment, destinationFloating) / 16;
+    CNA_Matrix* destination_values = (CNA_Matrix*)calloc(
+        (size_t)destination_count + 1U, sizeof(*destination_values));
+    if (destination_values == NULL) {
+    free(bounds_values);
+    free(transforms_values);
+        return (jint)CNA_RESULT_OUT_OF_MEMORY;
+    }
+    {
+        jsize destinationFloating_length = (*environment)->GetArrayLength(environment, destinationFloating);
+        jfloat* destinationFloating_values = (jfloat*)malloc(
+            ((size_t)destinationFloating_length + 1U) * sizeof(*destinationFloating_values));
+        if (destinationFloating_values == NULL) {
+            free(destination_values);
+            free(bounds_values);
+            free(transforms_values);
+            return (jint)CNA_RESULT_OUT_OF_MEMORY;
+        }
+        (*environment)->GetFloatArrayRegion(environment, destinationFloating, 0, destinationFloating_length, destinationFloating_values);
+        for (jsize element = 0; element < destination_count; ++element) {
+            destination_values[element].m11 = (float)destinationFloating_values[element * 16 + 0];
+            destination_values[element].m12 = (float)destinationFloating_values[element * 16 + 1];
+            destination_values[element].m13 = (float)destinationFloating_values[element * 16 + 2];
+            destination_values[element].m14 = (float)destinationFloating_values[element * 16 + 3];
+            destination_values[element].m21 = (float)destinationFloating_values[element * 16 + 4];
+            destination_values[element].m22 = (float)destinationFloating_values[element * 16 + 5];
+            destination_values[element].m23 = (float)destinationFloating_values[element * 16 + 6];
+            destination_values[element].m24 = (float)destinationFloating_values[element * 16 + 7];
+            destination_values[element].m31 = (float)destinationFloating_values[element * 16 + 8];
+            destination_values[element].m32 = (float)destinationFloating_values[element * 16 + 9];
+            destination_values[element].m33 = (float)destinationFloating_values[element * 16 + 10];
+            destination_values[element].m34 = (float)destinationFloating_values[element * 16 + 11];
+            destination_values[element].m41 = (float)destinationFloating_values[element * 16 + 12];
+            destination_values[element].m42 = (float)destinationFloating_values[element * 16 + 13];
+            destination_values[element].m43 = (float)destinationFloating_values[element * 16 + 14];
+            destination_values[element].m44 = (float)destinationFloating_values[element * 16 + 15];
+        }
+        free(destinationFloating_values);
+    }
+    uint64_t out_count_value = 0;
+    CNA_Result call_result = cna.frustum_culler_ext_cull_transforms((CNA_FrustumCullerEXTHandle)culler, transforms_values, (uint64_t)transforms_count, bounds_values, (uint64_t)bounds_count, destination_values, (uint64_t)destination_count, &out_count_value);
+    free(transforms_values);
+    free(bounds_values);
+    if (call_result == CNA_RESULT_SUCCESS) {
+        {
+            jfloat* destinationFloating_out = (jfloat*)malloc(
+                ((size_t)destination_count * 16 + 1U) * sizeof(*destinationFloating_out));
+            if (destinationFloating_out != NULL) {
+                for (jsize element = 0; element < destination_count; ++element) {
+                    destinationFloating_out[element * 16 + 0] = (jfloat)destination_values[element].m11;
+                    destinationFloating_out[element * 16 + 1] = (jfloat)destination_values[element].m12;
+                    destinationFloating_out[element * 16 + 2] = (jfloat)destination_values[element].m13;
+                    destinationFloating_out[element * 16 + 3] = (jfloat)destination_values[element].m14;
+                    destinationFloating_out[element * 16 + 4] = (jfloat)destination_values[element].m21;
+                    destinationFloating_out[element * 16 + 5] = (jfloat)destination_values[element].m22;
+                    destinationFloating_out[element * 16 + 6] = (jfloat)destination_values[element].m23;
+                    destinationFloating_out[element * 16 + 7] = (jfloat)destination_values[element].m24;
+                    destinationFloating_out[element * 16 + 8] = (jfloat)destination_values[element].m31;
+                    destinationFloating_out[element * 16 + 9] = (jfloat)destination_values[element].m32;
+                    destinationFloating_out[element * 16 + 10] = (jfloat)destination_values[element].m33;
+                    destinationFloating_out[element * 16 + 11] = (jfloat)destination_values[element].m34;
+                    destinationFloating_out[element * 16 + 12] = (jfloat)destination_values[element].m41;
+                    destinationFloating_out[element * 16 + 13] = (jfloat)destination_values[element].m42;
+                    destinationFloating_out[element * 16 + 14] = (jfloat)destination_values[element].m43;
+                    destinationFloating_out[element * 16 + 15] = (jfloat)destination_values[element].m44;
+                }
+                (*environment)->SetFloatArrayRegion(
+                    environment, destinationFloating, 0,
+                    (jsize)(destination_count * 16), destinationFloating_out);
+                free(destinationFloating_out);
+            }
+        }
+    }
+    free(destination_values);
+    if (call_result == CNA_RESULT_SUCCESS || call_result == CNA_RESULT_BUFFER_TOO_SMALL) {
+        jlong out_count_element = (jlong)out_count_value;
+        (*environment)->SetLongArrayRegion(
+            environment, out_count, 0, 1, &out_count_element);
+    }
+    return (jint)call_result;
+}
+
+JNIEXPORT jint JNICALL
+Java_org_openeggbert_cna_internal_generated_NativeEngineLayerRoutes_frustumCullerExtDestroy(
+    JNIEnv* environment, jclass declaring_class, jlong culler)
+{
+    (void)environment;
+    (void)declaring_class;
+    CNA_Result call_result = cna.frustum_culler_ext_destroy((CNA_FrustumCullerEXTHandle)culler);
+    return (jint)call_result;
+}
+
+JNIEXPORT jint JNICALL
+Java_org_openeggbert_cna_internal_generated_NativeEngineLayerRoutes_frustumCullerExtGetFrustum(
+    JNIEnv* environment, jclass declaring_class, jlong culler, jfloatArray out_frustumFloating)
+{
+    (void)environment;
+    (void)declaring_class;
+    CNA_BoundingFrustum out_frustum_value;
+    memset(&out_frustum_value, 0, sizeof out_frustum_value);
+    CNA_Result call_result = cna.frustum_culler_ext_get_frustum((CNA_FrustumCullerEXTHandle)culler, &out_frustum_value);
+    if (call_result == CNA_RESULT_SUCCESS || call_result == CNA_RESULT_BUFFER_TOO_SMALL) {
+        jfloat out_frustumFloating_values[] = {
+            (jfloat)out_frustum_value.matrix.m11,
+            (jfloat)out_frustum_value.matrix.m12,
+            (jfloat)out_frustum_value.matrix.m13,
+            (jfloat)out_frustum_value.matrix.m14,
+            (jfloat)out_frustum_value.matrix.m21,
+            (jfloat)out_frustum_value.matrix.m22,
+            (jfloat)out_frustum_value.matrix.m23,
+            (jfloat)out_frustum_value.matrix.m24,
+            (jfloat)out_frustum_value.matrix.m31,
+            (jfloat)out_frustum_value.matrix.m32,
+            (jfloat)out_frustum_value.matrix.m33,
+            (jfloat)out_frustum_value.matrix.m34,
+            (jfloat)out_frustum_value.matrix.m41,
+            (jfloat)out_frustum_value.matrix.m42,
+            (jfloat)out_frustum_value.matrix.m43,
+            (jfloat)out_frustum_value.matrix.m44
+        };
+        (*environment)->SetFloatArrayRegion(environment, out_frustumFloating, 0,
+            (jsize)(sizeof out_frustumFloating_values / sizeof out_frustumFloating_values[0]),
+            out_frustumFloating_values);
+    }
+    return (jint)call_result;
+}
+
+JNIEXPORT jint JNICALL
+Java_org_openeggbert_cna_internal_generated_NativeEngineLayerRoutes_frustumCullerExtIsBoxVisible(
+    JNIEnv* environment, jclass declaring_class, jlong culler, jfloatArray boxFloating, jbooleanArray out_visible)
+{
+    (void)environment;
+    (void)declaring_class;
+    CNA_BoundingBox box_value;
+    memset(&box_value, 0, sizeof box_value);
+    {
+        jfloat boxFloating_values[6];
+        (*environment)->GetFloatArrayRegion(environment, boxFloating, 0, 6, boxFloating_values);
+        box_value.min.x = (float)boxFloating_values[0];
+        box_value.min.y = (float)boxFloating_values[1];
+        box_value.min.z = (float)boxFloating_values[2];
+        box_value.max.x = (float)boxFloating_values[3];
+        box_value.max.y = (float)boxFloating_values[4];
+        box_value.max.z = (float)boxFloating_values[5];
+    }
+    CNA_Bool out_visible_value = 0;
+    CNA_Result call_result = cna.frustum_culler_ext_is_box_visible((CNA_FrustumCullerEXTHandle)culler, &box_value, &out_visible_value);
+    if (call_result == CNA_RESULT_SUCCESS || call_result == CNA_RESULT_BUFFER_TOO_SMALL) {
+        jboolean out_visible_element = (jboolean)out_visible_value;
+        (*environment)->SetBooleanArrayRegion(
+            environment, out_visible, 0, 1, &out_visible_element);
+    }
+    return (jint)call_result;
+}
+
+JNIEXPORT jint JNICALL
+Java_org_openeggbert_cna_internal_generated_NativeEngineLayerRoutes_frustumCullerExtIsSphereVisible(
+    JNIEnv* environment, jclass declaring_class, jlong culler, jfloatArray sphereFloating, jbooleanArray out_visible)
+{
+    (void)environment;
+    (void)declaring_class;
+    CNA_BoundingSphere sphere_value;
+    memset(&sphere_value, 0, sizeof sphere_value);
+    {
+        jfloat sphereFloating_values[4];
+        (*environment)->GetFloatArrayRegion(environment, sphereFloating, 0, 4, sphereFloating_values);
+        sphere_value.center.x = (float)sphereFloating_values[0];
+        sphere_value.center.y = (float)sphereFloating_values[1];
+        sphere_value.center.z = (float)sphereFloating_values[2];
+        sphere_value.radius = (float)sphereFloating_values[3];
+    }
+    CNA_Bool out_visible_value = 0;
+    CNA_Result call_result = cna.frustum_culler_ext_is_sphere_visible((CNA_FrustumCullerEXTHandle)culler, &sphere_value, &out_visible_value);
+    if (call_result == CNA_RESULT_SUCCESS || call_result == CNA_RESULT_BUFFER_TOO_SMALL) {
+        jboolean out_visible_element = (jboolean)out_visible_value;
+        (*environment)->SetBooleanArrayRegion(
+            environment, out_visible, 0, 1, &out_visible_element);
+    }
+    return (jint)call_result;
+}
+
+JNIEXPORT jint JNICALL
+Java_org_openeggbert_cna_internal_generated_NativeEngineLayerRoutes_frustumCullerExtSetCamera(
+    JNIEnv* environment, jclass declaring_class, jlong culler, jfloatArray viewFloating, jfloatArray projectionFloating)
+{
+    (void)environment;
+    (void)declaring_class;
+    CNA_Matrix view_value;
+    memset(&view_value, 0, sizeof view_value);
+    {
+        jfloat viewFloating_values[16];
+        (*environment)->GetFloatArrayRegion(environment, viewFloating, 0, 16, viewFloating_values);
+        view_value.m11 = (float)viewFloating_values[0];
+        view_value.m12 = (float)viewFloating_values[1];
+        view_value.m13 = (float)viewFloating_values[2];
+        view_value.m14 = (float)viewFloating_values[3];
+        view_value.m21 = (float)viewFloating_values[4];
+        view_value.m22 = (float)viewFloating_values[5];
+        view_value.m23 = (float)viewFloating_values[6];
+        view_value.m24 = (float)viewFloating_values[7];
+        view_value.m31 = (float)viewFloating_values[8];
+        view_value.m32 = (float)viewFloating_values[9];
+        view_value.m33 = (float)viewFloating_values[10];
+        view_value.m34 = (float)viewFloating_values[11];
+        view_value.m41 = (float)viewFloating_values[12];
+        view_value.m42 = (float)viewFloating_values[13];
+        view_value.m43 = (float)viewFloating_values[14];
+        view_value.m44 = (float)viewFloating_values[15];
+    }
+    CNA_Matrix projection_value;
+    memset(&projection_value, 0, sizeof projection_value);
+    {
+        jfloat projectionFloating_values[16];
+        (*environment)->GetFloatArrayRegion(environment, projectionFloating, 0, 16, projectionFloating_values);
+        projection_value.m11 = (float)projectionFloating_values[0];
+        projection_value.m12 = (float)projectionFloating_values[1];
+        projection_value.m13 = (float)projectionFloating_values[2];
+        projection_value.m14 = (float)projectionFloating_values[3];
+        projection_value.m21 = (float)projectionFloating_values[4];
+        projection_value.m22 = (float)projectionFloating_values[5];
+        projection_value.m23 = (float)projectionFloating_values[6];
+        projection_value.m24 = (float)projectionFloating_values[7];
+        projection_value.m31 = (float)projectionFloating_values[8];
+        projection_value.m32 = (float)projectionFloating_values[9];
+        projection_value.m33 = (float)projectionFloating_values[10];
+        projection_value.m34 = (float)projectionFloating_values[11];
+        projection_value.m41 = (float)projectionFloating_values[12];
+        projection_value.m42 = (float)projectionFloating_values[13];
+        projection_value.m43 = (float)projectionFloating_values[14];
+        projection_value.m44 = (float)projectionFloating_values[15];
+    }
+    CNA_Result call_result = cna.frustum_culler_ext_set_camera((CNA_FrustumCullerEXTHandle)culler, &view_value, &projection_value);
+    return (jint)call_result;
+}
+
+JNIEXPORT jint JNICALL
+Java_org_openeggbert_cna_internal_generated_NativeEngineLayerRoutes_frustumCullerExtSetViewProjection(
+    JNIEnv* environment, jclass declaring_class, jlong culler, jfloatArray view_projectionFloating)
+{
+    (void)environment;
+    (void)declaring_class;
+    CNA_Matrix view_projection_value;
+    memset(&view_projection_value, 0, sizeof view_projection_value);
+    {
+        jfloat view_projectionFloating_values[16];
+        (*environment)->GetFloatArrayRegion(environment, view_projectionFloating, 0, 16, view_projectionFloating_values);
+        view_projection_value.m11 = (float)view_projectionFloating_values[0];
+        view_projection_value.m12 = (float)view_projectionFloating_values[1];
+        view_projection_value.m13 = (float)view_projectionFloating_values[2];
+        view_projection_value.m14 = (float)view_projectionFloating_values[3];
+        view_projection_value.m21 = (float)view_projectionFloating_values[4];
+        view_projection_value.m22 = (float)view_projectionFloating_values[5];
+        view_projection_value.m23 = (float)view_projectionFloating_values[6];
+        view_projection_value.m24 = (float)view_projectionFloating_values[7];
+        view_projection_value.m31 = (float)view_projectionFloating_values[8];
+        view_projection_value.m32 = (float)view_projectionFloating_values[9];
+        view_projection_value.m33 = (float)view_projectionFloating_values[10];
+        view_projection_value.m34 = (float)view_projectionFloating_values[11];
+        view_projection_value.m41 = (float)view_projectionFloating_values[12];
+        view_projection_value.m42 = (float)view_projectionFloating_values[13];
+        view_projection_value.m43 = (float)view_projectionFloating_values[14];
+        view_projection_value.m44 = (float)view_projectionFloating_values[15];
+    }
+    CNA_Result call_result = cna.frustum_culler_ext_set_view_projection((CNA_FrustumCullerEXTHandle)culler, &view_projection_value);
+    return (jint)call_result;
+}
+
+JNIEXPORT jint JNICALL
 Java_org_openeggbert_cna_internal_generated_NativeEngineLayerRoutes_lodGroupExtAddLevel(
     JNIEnv* environment, jclass declaring_class, jlong group, jfloat max_distance, jlong part)
 {

@@ -3452,6 +3452,46 @@
         "symbol": "cna_engine_layer_get_version"
       },
       {
+        "java": "frustumCullerExtCreate",
+        "symbol": "cna_frustum_culler_ext_create"
+      },
+      {
+        "java": "frustumCullerExtCullBoxes",
+        "symbol": "cna_frustum_culler_ext_cull_boxes"
+      },
+      {
+        "java": "frustumCullerExtCullSpheres",
+        "symbol": "cna_frustum_culler_ext_cull_spheres"
+      },
+      {
+        "java": "frustumCullerExtCullTransforms",
+        "symbol": "cna_frustum_culler_ext_cull_transforms"
+      },
+      {
+        "java": "frustumCullerExtDestroy",
+        "symbol": "cna_frustum_culler_ext_destroy"
+      },
+      {
+        "java": "frustumCullerExtGetFrustum",
+        "symbol": "cna_frustum_culler_ext_get_frustum"
+      },
+      {
+        "java": "frustumCullerExtIsBoxVisible",
+        "symbol": "cna_frustum_culler_ext_is_box_visible"
+      },
+      {
+        "java": "frustumCullerExtIsSphereVisible",
+        "symbol": "cna_frustum_culler_ext_is_sphere_visible"
+      },
+      {
+        "java": "frustumCullerExtSetCamera",
+        "symbol": "cna_frustum_culler_ext_set_camera"
+      },
+      {
+        "java": "frustumCullerExtSetViewProjection",
+        "symbol": "cna_frustum_culler_ext_set_view_projection"
+      },
+      {
         "java": "lodGroupExtAddLevel",
         "symbol": "cna_lod_group_ext_add_level"
       },

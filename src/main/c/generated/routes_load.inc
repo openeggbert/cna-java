@@ -386,6 +386,16 @@
     LOAD(friend_gamer_copy_presence, "cna_friend_gamer_copy_presence");
     LOAD(friend_gamer_get_info, "cna_friend_gamer_get_info");
     LOAD(friend_gamer_get_presence_size, "cna_friend_gamer_get_presence_size");
+    LOAD(frustum_culler_ext_create, "cna_frustum_culler_ext_create");
+    LOAD(frustum_culler_ext_cull_boxes, "cna_frustum_culler_ext_cull_boxes");
+    LOAD(frustum_culler_ext_cull_spheres, "cna_frustum_culler_ext_cull_spheres");
+    LOAD(frustum_culler_ext_cull_transforms, "cna_frustum_culler_ext_cull_transforms");
+    LOAD(frustum_culler_ext_destroy, "cna_frustum_culler_ext_destroy");
+    LOAD(frustum_culler_ext_get_frustum, "cna_frustum_culler_ext_get_frustum");
+    LOAD(frustum_culler_ext_is_box_visible, "cna_frustum_culler_ext_is_box_visible");
+    LOAD(frustum_culler_ext_is_sphere_visible, "cna_frustum_culler_ext_is_sphere_visible");
+    LOAD(frustum_culler_ext_set_camera, "cna_frustum_culler_ext_set_camera");
+    LOAD(frustum_culler_ext_set_view_projection, "cna_frustum_culler_ext_set_view_projection");
     LOAD(gamepad_copy_guid_ext, "cna_gamepad_copy_guid_ext");
     LOAD(gamepad_copy_name_ext, "cna_gamepad_copy_name_ext");
     LOAD(gamepad_copy_path_ext, "cna_gamepad_copy_path_ext");

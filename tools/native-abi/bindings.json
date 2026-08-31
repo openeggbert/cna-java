@@ -6544,6 +6544,121 @@
       ]
     },
     {
+      "name": "cna_frustum_culler_ext_create",
+      "header": "engine_layer.h",
+      "ownership": "no handle; returns an owned frustum-culler handle",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_FrustumCullerEXTHandle*"
+      ]
+    },
+    {
+      "name": "cna_frustum_culler_ext_cull_boxes",
+      "header": "engine_layer.h",
+      "ownership": "borrows the culler and the caller's bounds; fills the caller's index buffer",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_FrustumCullerEXTHandle",
+        "const CNA_BoundingBox*",
+        "uint64_t",
+        "uint64_t*",
+        "uint64_t",
+        "uint64_t*"
+      ]
+    },
+    {
+      "name": "cna_frustum_culler_ext_cull_spheres",
+      "header": "engine_layer.h",
+      "ownership": "borrows the culler and the caller's bounds; fills the caller's index buffer",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_FrustumCullerEXTHandle",
+        "const CNA_BoundingSphere*",
+        "uint64_t",
+        "uint64_t*",
+        "uint64_t",
+        "uint64_t*"
+      ]
+    },
+    {
+      "name": "cna_frustum_culler_ext_cull_transforms",
+      "header": "engine_layer.h",
+      "ownership": "borrows the culler and the caller's transforms and bounds; fills the caller's transform buffer",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_FrustumCullerEXTHandle",
+        "const CNA_Matrix*",
+        "uint64_t",
+        "const CNA_BoundingBox*",
+        "uint64_t",
+        "CNA_Matrix*",
+        "uint64_t",
+        "uint64_t*"
+      ]
+    },
+    {
+      "name": "cna_frustum_culler_ext_destroy",
+      "header": "engine_layer.h",
+      "ownership": "releases the owned frustum-culler handle",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_FrustumCullerEXTHandle"
+      ]
+    },
+    {
+      "name": "cna_frustum_culler_ext_get_frustum",
+      "header": "engine_layer.h",
+      "ownership": "borrows the culler; fills the caller's frustum value",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_FrustumCullerEXTHandle",
+        "CNA_BoundingFrustum*"
+      ]
+    },
+    {
+      "name": "cna_frustum_culler_ext_is_box_visible",
+      "header": "engine_layer.h",
+      "ownership": "borrows the culler and the caller's box",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_FrustumCullerEXTHandle",
+        "const CNA_BoundingBox*",
+        "CNA_Bool*"
+      ]
+    },
+    {
+      "name": "cna_frustum_culler_ext_is_sphere_visible",
+      "header": "engine_layer.h",
+      "ownership": "borrows the culler and the caller's sphere",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_FrustumCullerEXTHandle",
+        "const CNA_BoundingSphere*",
+        "CNA_Bool*"
+      ]
+    },
+    {
+      "name": "cna_frustum_culler_ext_set_camera",
+      "header": "engine_layer.h",
+      "ownership": "borrows the culler and both caller matrices; copies their product",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_FrustumCullerEXTHandle",
+        "const CNA_Matrix*",
+        "const CNA_Matrix*"
+      ]
+    },
+    {
+      "name": "cna_frustum_culler_ext_set_view_projection",
+      "header": "engine_layer.h",
+      "ownership": "borrows the culler and the caller's matrix; copies it",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_FrustumCullerEXTHandle",
+        "const CNA_Matrix*"
+      ]
+    },
+    {
       "name": "cna_game_clear",
       "header": "runtime.h",
       "ownership": "borrows game and copies color",

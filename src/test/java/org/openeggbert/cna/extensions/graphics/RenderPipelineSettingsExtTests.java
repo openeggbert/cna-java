@@ -19,6 +19,12 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 @EnabledIfEnvironmentVariable(named = "CNA_NATIVE_LIBRARY", matches = ".+")
 final class RenderPipelineSettingsExtTests {
 
+    /** {@code CNA_RENDER_PIPELINE_MINIMUM_GAMMA_EXT}, which the header states as a literal. */
+    private static final float MINIMUM_GAMMA = 0.01f;
+
+    /** {@code CNA_RENDER_PIPELINE_MINIMUM_FXAA_EDGE_THRESHOLD_EXT}, likewise. */
+    private static final float MINIMUM_FXAA_EDGE_THRESHOLD = 0.001f;
+
     @Test
     void theDefaultsAreCnasOwn() {
         RenderPipelineSettingsExt settings = new RenderPipelineSettingsExt();
@@ -71,6 +77,111 @@ final class RenderPipelineSettingsExtTests {
         settings.setHeightFogBaseHeight(-1234.5f);
         settings.normalize();
         assertEquals(-1234.5f, settings.getHeightFogBaseHeight());
+    }
+
+    /**
+     * Every field CNA documents as correcting, driven past both ends of its own range.
+     *
+     * <p>The narrower test above proves the corrections happen. This one proves they happen
+     * <em>to the right field</em>. The settings cross JNI as two flat arrays -- fifteen integral
+     * slots and thirty-two floating ones -- and a generated slot pointed one field along would
+     * still round-trip perfectly, because the same wrong index writes and reads. What it cannot
+     * survive is a correction: each of these thirty-one fields floors or clamps at a bound only
+     * it has, so a value that comes back corrected the way a neighbour would be corrected is a
+     * mis-mapped slot, and this is the test that says so.
+     */
+    @Test
+    void everyCorrectingFieldIsCorrectedAtItsOwnBound() {
+        RenderPipelineSettingsExt low = new RenderPipelineSettingsExt();
+        low.setExposure(-7.5f);
+        low.setBloomIntensity(-7.5f);
+        low.setBloomThreshold(-7.5f);
+        low.setSsaoRadius(-7.5f);
+        low.setSsaoIntensity(-7.5f);
+        low.setSsrMaxDistance(-7.5f);
+        low.setSsrThickness(-7.5f);
+        low.setSsrDepthBias(-7.5f);
+        low.setVolumetricFogDensity(-7.5f);
+        low.setLightShaftThreshold(-7.5f);
+        low.setLightShaftIntensity(-7.5f);
+        low.setHeightFogDensity(-7.5f);
+        low.setHeightFogFalloff(-7.5f);
+        low.setLensFlareThreshold(-7.5f);
+        low.setLensFlareIntensity(-7.5f);
+        low.setDofFocusDistance(-7.5f);
+        low.setDofFocalLength(-7.5f);
+        low.setDofFNumber(-7.5f);
+        low.setSsrIntensity(-7.5f);
+        low.setGamma(-7.5f);
+        low.setFxaaEdgeThreshold(-7.5f);
+        low.setSsrEdgeFade(-7.5f);
+        low.setLightShaftDecay(-7.5f);
+        low.setMotionBlurStrength(-7.5f);
+        low.setMotionBlurMaxDistance(-7.5f);
+        low.setChromaticAberrationStrength(-7.5f);
+        low.setFilmGrainIntensity(-7.5f);
+        low.setLensFlareDispersal(-7.5f);
+        low.setColorGradeStrength(-7.5f);
+        low.setDofMaxRadius(-7.5f);
+        low.setSsrRoughnessBlur(-7.5f);
+        low.normalize();
+
+        assertEquals(0.0f, low.getExposure(), "Exposure floors at zero");
+        assertEquals(0.0f, low.getBloomIntensity(), "BloomIntensity floors at zero");
+        assertEquals(0.0f, low.getBloomThreshold(), "BloomThreshold floors at zero");
+        assertEquals(0.0f, low.getSsaoRadius(), "SsaoRadius floors at zero");
+        assertEquals(0.0f, low.getSsaoIntensity(), "SsaoIntensity floors at zero");
+        assertEquals(0.0f, low.getSsrMaxDistance(), "SsrMaxDistance floors at zero");
+        assertEquals(0.0f, low.getSsrThickness(), "SsrThickness floors at zero");
+        assertEquals(0.0f, low.getSsrDepthBias(), "SsrDepthBias floors at zero");
+        assertEquals(0.0f, low.getVolumetricFogDensity(), "VolumetricFogDensity floors at zero");
+        assertEquals(0.0f, low.getLightShaftThreshold(), "LightShaftThreshold floors at zero");
+        assertEquals(0.0f, low.getLightShaftIntensity(), "LightShaftIntensity floors at zero");
+        assertEquals(0.0f, low.getHeightFogDensity(), "HeightFogDensity floors at zero");
+        assertEquals(0.0f, low.getHeightFogFalloff(), "HeightFogFalloff floors at zero");
+        assertEquals(0.0f, low.getLensFlareThreshold(), "LensFlareThreshold floors at zero");
+        assertEquals(0.0f, low.getLensFlareIntensity(), "LensFlareIntensity floors at zero");
+        assertEquals(0.0f, low.getDofFocusDistance(), "DofFocusDistance floors at zero");
+        assertEquals(0.0f, low.getDofFocalLength(), "DofFocalLength floors at zero");
+        assertEquals(0.0f, low.getDofFNumber(), "DofFNumber floors at zero");
+        assertEquals(0.0f, low.getSsrIntensity(), "SsrIntensity floors at zero");
+        assertEquals(MINIMUM_GAMMA, low.getGamma(), "gamma floors at CNA's own minimum");
+        assertEquals(MINIMUM_FXAA_EDGE_THRESHOLD, low.getFxaaEdgeThreshold(),
+                "the edge threshold floors at CNA's own minimum");
+        assertEquals(0.0f, low.getSsrEdgeFade(), "SsrEdgeFade clamps up to zero");
+        assertEquals(0.0f, low.getLightShaftDecay(), "LightShaftDecay clamps up to zero");
+        assertEquals(0.0f, low.getMotionBlurStrength(), "MotionBlurStrength clamps up to zero");
+        assertEquals(0.0f, low.getMotionBlurMaxDistance(), "MotionBlurMaxDistance clamps up to zero");
+        assertEquals(0.0f, low.getChromaticAberrationStrength(), "ChromaticAberrationStrength clamps up to zero");
+        assertEquals(0.0f, low.getFilmGrainIntensity(), "FilmGrainIntensity clamps up to zero");
+        assertEquals(0.0f, low.getLensFlareDispersal(), "LensFlareDispersal clamps up to zero");
+        assertEquals(0.0f, low.getColorGradeStrength(), "ColorGradeStrength clamps up to zero");
+        assertEquals(0.0f, low.getDofMaxRadius(), "DofMaxRadius clamps up to zero");
+        assertEquals(0.0f, low.getSsrRoughnessBlur(), "SsrRoughnessBlur clamps up to zero");
+
+        RenderPipelineSettingsExt high = new RenderPipelineSettingsExt();
+        high.setSsrEdgeFade(9.0f);
+        high.setLightShaftDecay(9.0f);
+        high.setMotionBlurStrength(9.0f);
+        high.setMotionBlurMaxDistance(9.0f);
+        high.setChromaticAberrationStrength(9.0f);
+        high.setFilmGrainIntensity(9.0f);
+        high.setLensFlareDispersal(9.0f);
+        high.setColorGradeStrength(9.0f);
+        high.setDofMaxRadius(9.0f);
+        high.setSsrRoughnessBlur(9.0f);
+        high.normalize();
+
+        assertEquals(0.5f, high.getSsrEdgeFade(), "SsrEdgeFade clamps down to its own maximum");
+        assertEquals(1.0f, high.getLightShaftDecay(), "LightShaftDecay clamps down to its own maximum");
+        assertEquals(1.0f, high.getMotionBlurStrength(), "MotionBlurStrength clamps down to its own maximum");
+        assertEquals(0.25f, high.getMotionBlurMaxDistance(), "MotionBlurMaxDistance clamps down to its own maximum");
+        assertEquals(0.1f, high.getChromaticAberrationStrength(), "ChromaticAberrationStrength clamps down to its own maximum");
+        assertEquals(1.0f, high.getFilmGrainIntensity(), "FilmGrainIntensity clamps down to its own maximum");
+        assertEquals(1.0f, high.getLensFlareDispersal(), "LensFlareDispersal clamps down to its own maximum");
+        assertEquals(1.0f, high.getColorGradeStrength(), "ColorGradeStrength clamps down to its own maximum");
+        assertEquals(0.25f, high.getDofMaxRadius(), "DofMaxRadius clamps down to its own maximum");
+        assertEquals(0.25f, high.getSsrRoughnessBlur(), "SsrRoughnessBlur clamps down to its own maximum");
     }
 
     @Test

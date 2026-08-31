@@ -386,6 +386,16 @@
     CNA_JNI_ROUTE(cna_friend_gamer_copy_presence) friend_gamer_copy_presence;
     CNA_JNI_ROUTE(cna_friend_gamer_get_info) friend_gamer_get_info;
     CNA_JNI_ROUTE(cna_friend_gamer_get_presence_size) friend_gamer_get_presence_size;
+    CNA_JNI_ROUTE(cna_frustum_culler_ext_create) frustum_culler_ext_create;
+    CNA_JNI_ROUTE(cna_frustum_culler_ext_cull_boxes) frustum_culler_ext_cull_boxes;
+    CNA_JNI_ROUTE(cna_frustum_culler_ext_cull_spheres) frustum_culler_ext_cull_spheres;
+    CNA_JNI_ROUTE(cna_frustum_culler_ext_cull_transforms) frustum_culler_ext_cull_transforms;
+    CNA_JNI_ROUTE(cna_frustum_culler_ext_destroy) frustum_culler_ext_destroy;
+    CNA_JNI_ROUTE(cna_frustum_culler_ext_get_frustum) frustum_culler_ext_get_frustum;
+    CNA_JNI_ROUTE(cna_frustum_culler_ext_is_box_visible) frustum_culler_ext_is_box_visible;
+    CNA_JNI_ROUTE(cna_frustum_culler_ext_is_sphere_visible) frustum_culler_ext_is_sphere_visible;
+    CNA_JNI_ROUTE(cna_frustum_culler_ext_set_camera) frustum_culler_ext_set_camera;
+    CNA_JNI_ROUTE(cna_frustum_culler_ext_set_view_projection) frustum_culler_ext_set_view_projection;
     CNA_JNI_ROUTE(cna_gamepad_copy_guid_ext) gamepad_copy_guid_ext;
     CNA_JNI_ROUTE(cna_gamepad_copy_name_ext) gamepad_copy_name_ext;
     CNA_JNI_ROUTE(cna_gamepad_copy_path_ext) gamepad_copy_path_ext;
