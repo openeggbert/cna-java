@@ -1843,6 +1843,118 @@ public final class NativeEngineLayerRoutes {
     public static native int clusteredLightSetReplaceAt(long set, int index, byte[] lightBytes, long[] lightIntegral, float[] lightFloating);
 
     /**
+     * cna_clustered_shadow_policy_copy_selected (engine_layer.h).
+     */
+    public static native int clusteredShadowPolicyCopySelected(long policy, int[] destination, long[] outCount);
+
+    /**
+     * cna_clustered_shadow_policy_create (engine_layer.h).
+     */
+    public static native int clusteredShadowPolicyCreate(long game, int budget, long[] outPolicy);
+
+    /**
+     * cna_clustered_shadow_policy_destroy (engine_layer.h).
+     */
+    public static native int clusteredShadowPolicyDestroy(long policy);
+
+    /**
+     * cna_clustered_shadow_policy_get_budget (engine_layer.h).
+     */
+    public static native int clusteredShadowPolicyGetBudget(long policy, int[] outBudget);
+
+    /**
+     * cna_clustered_shadow_policy_get_hysteresis (engine_layer.h).
+     */
+    public static native int clusteredShadowPolicyGetHysteresis(long policy, float[] outHysteresis);
+
+    /**
+     * cna_clustered_shadow_policy_get_refused_count (engine_layer.h).
+     */
+    public static native int clusteredShadowPolicyGetRefusedCount(long policy, int[] outCount);
+
+    /**
+     * cna_clustered_shadow_policy_get_request_count (engine_layer.h).
+     */
+    public static native int clusteredShadowPolicyGetRequestCount(long policy, int[] outCount);
+
+    /**
+     * cna_clustered_shadow_policy_get_score (engine_layer.h).
+     */
+    public static native int clusteredShadowPolicyGetScore(long policy, int lightIndex, float[] outScore);
+
+    /**
+     * cna_clustered_shadow_policy_is_selected (engine_layer.h).
+     */
+    public static native int clusteredShadowPolicyIsSelected(long policy, int lightIndex, boolean[] outSelected);
+
+    /**
+     * cna_clustered_shadow_policy_reset (engine_layer.h).
+     */
+    public static native int clusteredShadowPolicyReset(long policy);
+
+    /**
+     * cna_clustered_shadow_policy_select (engine_layer.h).
+     *
+     * <p>viewFloating carries CNA_Matrix in this order:
+     * <ol start="0">
+     *   <li>{@code m11} (float)</li>
+     *   <li>{@code m12} (float)</li>
+     *   <li>{@code m13} (float)</li>
+     *   <li>{@code m14} (float)</li>
+     *   <li>{@code m21} (float)</li>
+     *   <li>{@code m22} (float)</li>
+     *   <li>{@code m23} (float)</li>
+     *   <li>{@code m24} (float)</li>
+     *   <li>{@code m31} (float)</li>
+     *   <li>{@code m32} (float)</li>
+     *   <li>{@code m33} (float)</li>
+     *   <li>{@code m34} (float)</li>
+     *   <li>{@code m41} (float)</li>
+     *   <li>{@code m42} (float)</li>
+     *   <li>{@code m43} (float)</li>
+     *   <li>{@code m44} (float)</li>
+     * </ol>
+     *
+     * <p>projectionFloating carries CNA_Matrix in this order:
+     * <ol start="0">
+     *   <li>{@code m11} (float)</li>
+     *   <li>{@code m12} (float)</li>
+     *   <li>{@code m13} (float)</li>
+     *   <li>{@code m14} (float)</li>
+     *   <li>{@code m21} (float)</li>
+     *   <li>{@code m22} (float)</li>
+     *   <li>{@code m23} (float)</li>
+     *   <li>{@code m24} (float)</li>
+     *   <li>{@code m31} (float)</li>
+     *   <li>{@code m32} (float)</li>
+     *   <li>{@code m33} (float)</li>
+     *   <li>{@code m34} (float)</li>
+     *   <li>{@code m41} (float)</li>
+     *   <li>{@code m42} (float)</li>
+     *   <li>{@code m43} (float)</li>
+     *   <li>{@code m44} (float)</li>
+     * </ol>
+     *
+     * <p>cameraPositionFloating carries CNA_Vector3 in this order:
+     * <ol start="0">
+     *   <li>{@code x} (float)</li>
+     *   <li>{@code y} (float)</li>
+     *   <li>{@code z} (float)</li>
+     * </ol>
+     */
+    public static native int clusteredShadowPolicySelect(long policy, long lights, float[] viewFloating, float[] projectionFloating, float[] cameraPositionFloating);
+
+    /**
+     * cna_clustered_shadow_policy_set_budget (engine_layer.h).
+     */
+    public static native int clusteredShadowPolicySetBudget(long policy, int budget);
+
+    /**
+     * cna_clustered_shadow_policy_set_hysteresis (engine_layer.h).
+     */
+    public static native int clusteredShadowPolicySetHysteresis(long policy, float hysteresis);
+
+    /**
      * cna_contact_shadow_pass_combine_visibility (engine_layer.h).
      */
     public static native int contactShadowPassCombineVisibility(float shadowMapVisibility, float contactVisibility, float[] outVisibility);

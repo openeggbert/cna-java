@@ -3955,6 +3955,260 @@ Java_org_openeggbert_cna_internal_generated_NativeEngineLayerRoutes_clusteredLig
 }
 
 JNIEXPORT jint JNICALL
+Java_org_openeggbert_cna_internal_generated_NativeEngineLayerRoutes_clusteredShadowPolicyCopySelected(
+    JNIEnv* environment, jclass declaring_class, jlong policy, jintArray destination, jlongArray out_count)
+{
+    (void)environment;
+    (void)declaring_class;
+    jsize destination_size = (*environment)->GetArrayLength(environment, destination);
+    jint* destination_elements = (*environment)->GetIntArrayElements(environment, destination, NULL);
+    if (destination_elements == NULL) {
+        return (jint)CNA_RESULT_OUT_OF_MEMORY;
+    }
+    int32_t* destination_values = (int32_t*)malloc(
+        ((size_t)destination_size + 1U) * sizeof(*destination_values));
+    if (destination_values == NULL) {
+        (*environment)->ReleaseIntArrayElements(
+            environment, destination, destination_elements, JNI_ABORT);
+        return (jint)CNA_RESULT_OUT_OF_MEMORY;
+    }
+    for (jsize index = 0; index < destination_size; ++index) {
+        destination_values[index] = (int32_t)destination_elements[index];
+    }
+    uint64_t out_count_value = 0;
+    CNA_Result call_result = cna.clustered_shadow_policy_copy_selected((CNA_ClusteredShadowPolicyHandle)policy, destination_values, (uint64_t)destination_size, &out_count_value);
+    if (call_result == CNA_RESULT_SUCCESS) {
+        for (jsize index = 0; index < destination_size; ++index) {
+            destination_elements[index] = (jint)destination_values[index];
+        }
+    }
+    free(destination_values);
+    (*environment)->ReleaseIntArrayElements(
+        environment, destination, destination_elements, 0);
+    if (call_result == CNA_RESULT_SUCCESS || call_result == CNA_RESULT_BUFFER_TOO_SMALL) {
+        jlong out_count_element = (jlong)out_count_value;
+        (*environment)->SetLongArrayRegion(
+            environment, out_count, 0, 1, &out_count_element);
+    }
+    return (jint)call_result;
+}
+
+JNIEXPORT jint JNICALL
+Java_org_openeggbert_cna_internal_generated_NativeEngineLayerRoutes_clusteredShadowPolicyCreate(
+    JNIEnv* environment, jclass declaring_class, jlong game, jint budget, jlongArray out_policy)
+{
+    (void)environment;
+    (void)declaring_class;
+    CNA_ClusteredShadowPolicyHandle out_policy_value = 0;
+    CNA_Result call_result = cna.clustered_shadow_policy_create((CNA_Handle)game, (int32_t)budget, &out_policy_value);
+    if (call_result == CNA_RESULT_SUCCESS || call_result == CNA_RESULT_BUFFER_TOO_SMALL) {
+        jlong out_policy_element = (jlong)out_policy_value;
+        (*environment)->SetLongArrayRegion(
+            environment, out_policy, 0, 1, &out_policy_element);
+    }
+    return (jint)call_result;
+}
+
+JNIEXPORT jint JNICALL
+Java_org_openeggbert_cna_internal_generated_NativeEngineLayerRoutes_clusteredShadowPolicyDestroy(
+    JNIEnv* environment, jclass declaring_class, jlong policy)
+{
+    (void)environment;
+    (void)declaring_class;
+    CNA_Result call_result = cna.clustered_shadow_policy_destroy((CNA_ClusteredShadowPolicyHandle)policy);
+    return (jint)call_result;
+}
+
+JNIEXPORT jint JNICALL
+Java_org_openeggbert_cna_internal_generated_NativeEngineLayerRoutes_clusteredShadowPolicyGetBudget(
+    JNIEnv* environment, jclass declaring_class, jlong policy, jintArray out_budget)
+{
+    (void)environment;
+    (void)declaring_class;
+    int32_t out_budget_value = 0;
+    CNA_Result call_result = cna.clustered_shadow_policy_get_budget((CNA_ClusteredShadowPolicyHandle)policy, &out_budget_value);
+    if (call_result == CNA_RESULT_SUCCESS || call_result == CNA_RESULT_BUFFER_TOO_SMALL) {
+        jint out_budget_element = (jint)out_budget_value;
+        (*environment)->SetIntArrayRegion(
+            environment, out_budget, 0, 1, &out_budget_element);
+    }
+    return (jint)call_result;
+}
+
+JNIEXPORT jint JNICALL
+Java_org_openeggbert_cna_internal_generated_NativeEngineLayerRoutes_clusteredShadowPolicyGetHysteresis(
+    JNIEnv* environment, jclass declaring_class, jlong policy, jfloatArray out_hysteresis)
+{
+    (void)environment;
+    (void)declaring_class;
+    float out_hysteresis_value = 0;
+    CNA_Result call_result = cna.clustered_shadow_policy_get_hysteresis((CNA_ClusteredShadowPolicyHandle)policy, &out_hysteresis_value);
+    if (call_result == CNA_RESULT_SUCCESS || call_result == CNA_RESULT_BUFFER_TOO_SMALL) {
+        jfloat out_hysteresis_element = (jfloat)out_hysteresis_value;
+        (*environment)->SetFloatArrayRegion(
+            environment, out_hysteresis, 0, 1, &out_hysteresis_element);
+    }
+    return (jint)call_result;
+}
+
+JNIEXPORT jint JNICALL
+Java_org_openeggbert_cna_internal_generated_NativeEngineLayerRoutes_clusteredShadowPolicyGetRefusedCount(
+    JNIEnv* environment, jclass declaring_class, jlong policy, jintArray out_count)
+{
+    (void)environment;
+    (void)declaring_class;
+    int32_t out_count_value = 0;
+    CNA_Result call_result = cna.clustered_shadow_policy_get_refused_count((CNA_ClusteredShadowPolicyHandle)policy, &out_count_value);
+    if (call_result == CNA_RESULT_SUCCESS || call_result == CNA_RESULT_BUFFER_TOO_SMALL) {
+        jint out_count_element = (jint)out_count_value;
+        (*environment)->SetIntArrayRegion(
+            environment, out_count, 0, 1, &out_count_element);
+    }
+    return (jint)call_result;
+}
+
+JNIEXPORT jint JNICALL
+Java_org_openeggbert_cna_internal_generated_NativeEngineLayerRoutes_clusteredShadowPolicyGetRequestCount(
+    JNIEnv* environment, jclass declaring_class, jlong policy, jintArray out_count)
+{
+    (void)environment;
+    (void)declaring_class;
+    int32_t out_count_value = 0;
+    CNA_Result call_result = cna.clustered_shadow_policy_get_request_count((CNA_ClusteredShadowPolicyHandle)policy, &out_count_value);
+    if (call_result == CNA_RESULT_SUCCESS || call_result == CNA_RESULT_BUFFER_TOO_SMALL) {
+        jint out_count_element = (jint)out_count_value;
+        (*environment)->SetIntArrayRegion(
+            environment, out_count, 0, 1, &out_count_element);
+    }
+    return (jint)call_result;
+}
+
+JNIEXPORT jint JNICALL
+Java_org_openeggbert_cna_internal_generated_NativeEngineLayerRoutes_clusteredShadowPolicyGetScore(
+    JNIEnv* environment, jclass declaring_class, jlong policy, jint light_index, jfloatArray out_score)
+{
+    (void)environment;
+    (void)declaring_class;
+    float out_score_value = 0;
+    CNA_Result call_result = cna.clustered_shadow_policy_get_score((CNA_ClusteredShadowPolicyHandle)policy, (int32_t)light_index, &out_score_value);
+    if (call_result == CNA_RESULT_SUCCESS || call_result == CNA_RESULT_BUFFER_TOO_SMALL) {
+        jfloat out_score_element = (jfloat)out_score_value;
+        (*environment)->SetFloatArrayRegion(
+            environment, out_score, 0, 1, &out_score_element);
+    }
+    return (jint)call_result;
+}
+
+JNIEXPORT jint JNICALL
+Java_org_openeggbert_cna_internal_generated_NativeEngineLayerRoutes_clusteredShadowPolicyIsSelected(
+    JNIEnv* environment, jclass declaring_class, jlong policy, jint light_index, jbooleanArray out_selected)
+{
+    (void)environment;
+    (void)declaring_class;
+    CNA_Bool out_selected_value = 0;
+    CNA_Result call_result = cna.clustered_shadow_policy_is_selected((CNA_ClusteredShadowPolicyHandle)policy, (int32_t)light_index, &out_selected_value);
+    if (call_result == CNA_RESULT_SUCCESS || call_result == CNA_RESULT_BUFFER_TOO_SMALL) {
+        jboolean out_selected_element = (jboolean)out_selected_value;
+        (*environment)->SetBooleanArrayRegion(
+            environment, out_selected, 0, 1, &out_selected_element);
+    }
+    return (jint)call_result;
+}
+
+JNIEXPORT jint JNICALL
+Java_org_openeggbert_cna_internal_generated_NativeEngineLayerRoutes_clusteredShadowPolicyReset(
+    JNIEnv* environment, jclass declaring_class, jlong policy)
+{
+    (void)environment;
+    (void)declaring_class;
+    CNA_Result call_result = cna.clustered_shadow_policy_reset((CNA_ClusteredShadowPolicyHandle)policy);
+    return (jint)call_result;
+}
+
+JNIEXPORT jint JNICALL
+Java_org_openeggbert_cna_internal_generated_NativeEngineLayerRoutes_clusteredShadowPolicySelect(
+    JNIEnv* environment, jclass declaring_class, jlong policy, jlong lights, jfloatArray viewFloating, jfloatArray projectionFloating, jfloatArray camera_positionFloating)
+{
+    (void)environment;
+    (void)declaring_class;
+    CNA_Matrix view_value;
+    memset(&view_value, 0, sizeof view_value);
+    {
+        jfloat viewFloating_values[16];
+        (*environment)->GetFloatArrayRegion(environment, viewFloating, 0, 16, viewFloating_values);
+        view_value.m11 = (float)viewFloating_values[0];
+        view_value.m12 = (float)viewFloating_values[1];
+        view_value.m13 = (float)viewFloating_values[2];
+        view_value.m14 = (float)viewFloating_values[3];
+        view_value.m21 = (float)viewFloating_values[4];
+        view_value.m22 = (float)viewFloating_values[5];
+        view_value.m23 = (float)viewFloating_values[6];
+        view_value.m24 = (float)viewFloating_values[7];
+        view_value.m31 = (float)viewFloating_values[8];
+        view_value.m32 = (float)viewFloating_values[9];
+        view_value.m33 = (float)viewFloating_values[10];
+        view_value.m34 = (float)viewFloating_values[11];
+        view_value.m41 = (float)viewFloating_values[12];
+        view_value.m42 = (float)viewFloating_values[13];
+        view_value.m43 = (float)viewFloating_values[14];
+        view_value.m44 = (float)viewFloating_values[15];
+    }
+    CNA_Matrix projection_value;
+    memset(&projection_value, 0, sizeof projection_value);
+    {
+        jfloat projectionFloating_values[16];
+        (*environment)->GetFloatArrayRegion(environment, projectionFloating, 0, 16, projectionFloating_values);
+        projection_value.m11 = (float)projectionFloating_values[0];
+        projection_value.m12 = (float)projectionFloating_values[1];
+        projection_value.m13 = (float)projectionFloating_values[2];
+        projection_value.m14 = (float)projectionFloating_values[3];
+        projection_value.m21 = (float)projectionFloating_values[4];
+        projection_value.m22 = (float)projectionFloating_values[5];
+        projection_value.m23 = (float)projectionFloating_values[6];
+        projection_value.m24 = (float)projectionFloating_values[7];
+        projection_value.m31 = (float)projectionFloating_values[8];
+        projection_value.m32 = (float)projectionFloating_values[9];
+        projection_value.m33 = (float)projectionFloating_values[10];
+        projection_value.m34 = (float)projectionFloating_values[11];
+        projection_value.m41 = (float)projectionFloating_values[12];
+        projection_value.m42 = (float)projectionFloating_values[13];
+        projection_value.m43 = (float)projectionFloating_values[14];
+        projection_value.m44 = (float)projectionFloating_values[15];
+    }
+    CNA_Vector3 camera_position_value;
+    memset(&camera_position_value, 0, sizeof camera_position_value);
+    {
+        jfloat camera_positionFloating_values[3];
+        (*environment)->GetFloatArrayRegion(environment, camera_positionFloating, 0, 3, camera_positionFloating_values);
+        camera_position_value.x = (float)camera_positionFloating_values[0];
+        camera_position_value.y = (float)camera_positionFloating_values[1];
+        camera_position_value.z = (float)camera_positionFloating_values[2];
+    }
+    CNA_Result call_result = cna.clustered_shadow_policy_select((CNA_ClusteredShadowPolicyHandle)policy, (CNA_ClusteredLightSetHandle)lights, &view_value, &projection_value, &camera_position_value);
+    return (jint)call_result;
+}
+
+JNIEXPORT jint JNICALL
+Java_org_openeggbert_cna_internal_generated_NativeEngineLayerRoutes_clusteredShadowPolicySetBudget(
+    JNIEnv* environment, jclass declaring_class, jlong policy, jint budget)
+{
+    (void)environment;
+    (void)declaring_class;
+    CNA_Result call_result = cna.clustered_shadow_policy_set_budget((CNA_ClusteredShadowPolicyHandle)policy, (int32_t)budget);
+    return (jint)call_result;
+}
+
+JNIEXPORT jint JNICALL
+Java_org_openeggbert_cna_internal_generated_NativeEngineLayerRoutes_clusteredShadowPolicySetHysteresis(
+    JNIEnv* environment, jclass declaring_class, jlong policy, jfloat hysteresis)
+{
+    (void)environment;
+    (void)declaring_class;
+    CNA_Result call_result = cna.clustered_shadow_policy_set_hysteresis((CNA_ClusteredShadowPolicyHandle)policy, (float)hysteresis);
+    return (jint)call_result;
+}
+
+JNIEXPORT jint JNICALL
 Java_org_openeggbert_cna_internal_generated_NativeEngineLayerRoutes_contactShadowPassCombineVisibility(
     JNIEnv* environment, jclass declaring_class, jfloat shadow_map_visibility, jfloat contact_visibility, jfloatArray out_visibility)
 {

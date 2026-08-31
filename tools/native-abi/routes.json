@@ -4059,6 +4059,58 @@
         "symbol": "cna_clustered_light_set_replace_at"
       },
       {
+        "java": "clusteredShadowPolicyCopySelected",
+        "symbol": "cna_clustered_shadow_policy_copy_selected"
+      },
+      {
+        "java": "clusteredShadowPolicyCreate",
+        "symbol": "cna_clustered_shadow_policy_create"
+      },
+      {
+        "java": "clusteredShadowPolicyDestroy",
+        "symbol": "cna_clustered_shadow_policy_destroy"
+      },
+      {
+        "java": "clusteredShadowPolicyGetBudget",
+        "symbol": "cna_clustered_shadow_policy_get_budget"
+      },
+      {
+        "java": "clusteredShadowPolicyGetHysteresis",
+        "symbol": "cna_clustered_shadow_policy_get_hysteresis"
+      },
+      {
+        "java": "clusteredShadowPolicyGetRefusedCount",
+        "symbol": "cna_clustered_shadow_policy_get_refused_count"
+      },
+      {
+        "java": "clusteredShadowPolicyGetRequestCount",
+        "symbol": "cna_clustered_shadow_policy_get_request_count"
+      },
+      {
+        "java": "clusteredShadowPolicyGetScore",
+        "symbol": "cna_clustered_shadow_policy_get_score"
+      },
+      {
+        "java": "clusteredShadowPolicyIsSelected",
+        "symbol": "cna_clustered_shadow_policy_is_selected"
+      },
+      {
+        "java": "clusteredShadowPolicyReset",
+        "symbol": "cna_clustered_shadow_policy_reset"
+      },
+      {
+        "java": "clusteredShadowPolicySelect",
+        "symbol": "cna_clustered_shadow_policy_select"
+      },
+      {
+        "java": "clusteredShadowPolicySetBudget",
+        "symbol": "cna_clustered_shadow_policy_set_budget"
+      },
+      {
+        "java": "clusteredShadowPolicySetHysteresis",
+        "symbol": "cna_clustered_shadow_policy_set_hysteresis"
+      },
+      {
         "java": "contactShadowPassCombineVisibility",
         "symbol": "cna_contact_shadow_pass_combine_visibility"
       },

@@ -3527,6 +3527,142 @@
       ]
     },
     {
+      "name": "cna_clustered_shadow_policy_copy_selected",
+      "header": "engine_layer.h",
+      "ownership": "borrows the policy; fills the caller's index buffer",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_ClusteredShadowPolicyHandle",
+        "int32_t*",
+        "uint64_t",
+        "uint64_t*"
+      ]
+    },
+    {
+      "name": "cna_clustered_shadow_policy_create",
+      "header": "engine_layer.h",
+      "ownership": "borrows the graphics device (the header calls it a game; JAVA-UPSTREAM-005); returns an owned policy handle",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_Handle",
+        "int32_t",
+        "CNA_ClusteredShadowPolicyHandle*"
+      ]
+    },
+    {
+      "name": "cna_clustered_shadow_policy_destroy",
+      "header": "engine_layer.h",
+      "ownership": "releases the owned policy handle",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_ClusteredShadowPolicyHandle"
+      ]
+    },
+    {
+      "name": "cna_clustered_shadow_policy_get_budget",
+      "header": "engine_layer.h",
+      "ownership": "borrows the policy",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_ClusteredShadowPolicyHandle",
+        "int32_t*"
+      ]
+    },
+    {
+      "name": "cna_clustered_shadow_policy_get_hysteresis",
+      "header": "engine_layer.h",
+      "ownership": "borrows the policy",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_ClusteredShadowPolicyHandle",
+        "float*"
+      ]
+    },
+    {
+      "name": "cna_clustered_shadow_policy_get_refused_count",
+      "header": "engine_layer.h",
+      "ownership": "borrows the policy",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_ClusteredShadowPolicyHandle",
+        "int32_t*"
+      ]
+    },
+    {
+      "name": "cna_clustered_shadow_policy_get_request_count",
+      "header": "engine_layer.h",
+      "ownership": "borrows the policy",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_ClusteredShadowPolicyHandle",
+        "int32_t*"
+      ]
+    },
+    {
+      "name": "cna_clustered_shadow_policy_get_score",
+      "header": "engine_layer.h",
+      "ownership": "borrows the policy",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_ClusteredShadowPolicyHandle",
+        "int32_t",
+        "float*"
+      ]
+    },
+    {
+      "name": "cna_clustered_shadow_policy_is_selected",
+      "header": "engine_layer.h",
+      "ownership": "borrows the policy",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_ClusteredShadowPolicyHandle",
+        "int32_t",
+        "CNA_Bool*"
+      ]
+    },
+    {
+      "name": "cna_clustered_shadow_policy_reset",
+      "header": "engine_layer.h",
+      "ownership": "borrows the policy",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_ClusteredShadowPolicyHandle"
+      ]
+    },
+    {
+      "name": "cna_clustered_shadow_policy_select",
+      "header": "engine_layer.h",
+      "ownership": "borrows the policy, the light set and the caller's matrices; retains none of them",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_ClusteredShadowPolicyHandle",
+        "CNA_ClusteredLightSetHandle",
+        "const CNA_Matrix*",
+        "const CNA_Matrix*",
+        "const CNA_Vector3*"
+      ]
+    },
+    {
+      "name": "cna_clustered_shadow_policy_set_budget",
+      "header": "engine_layer.h",
+      "ownership": "borrows the policy",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_ClusteredShadowPolicyHandle",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "cna_clustered_shadow_policy_set_hysteresis",
+      "header": "engine_layer.h",
+      "ownership": "borrows the policy",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_ClusteredShadowPolicyHandle",
+        "float"
+      ]
+    },
+    {
       "name": "cna_cnb_asset_type_id_from_name",
       "header": "cnb.h",
       "ownership": "no handle; caller integer output",
