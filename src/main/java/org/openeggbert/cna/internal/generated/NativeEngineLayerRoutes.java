@@ -5117,6 +5117,645 @@ public final class NativeEngineLayerRoutes {
     public static native int particleSystemUsesCompute(long system, boolean[] outUsesCompute);
 
     /**
+     * cna_pbr_effect_apply_material (engine_layer.h).
+     *
+     * <p>materialBytes carries CNA_PbrMaterialEXT in this order:
+     * <ol start="0">
+     *   <li>{@code reserved[0]} (uint8_t)</li>
+     *   <li>{@code reserved[1]} (uint8_t)</li>
+     *   <li>{@code reserved[2]} (uint8_t)</li>
+     * </ol>
+     *
+     * <p>materialIntegral carries CNA_PbrMaterialEXT in this order:
+     * <ol start="0">
+     *   <li>{@code albedo_texture} (CNA_Handle)</li>
+     *   <li>{@code normal_texture} (CNA_Handle)</li>
+     *   <li>{@code metallic_roughness_texture} (CNA_Handle)</li>
+     *   <li>{@code ambient_occlusion_texture} (CNA_Handle)</li>
+     *   <li>{@code emissive_texture} (CNA_Handle)</li>
+     *   <li>{@code specular_texture} (CNA_Handle)</li>
+     *   <li>{@code specular_color_texture} (CNA_Handle)</li>
+     *   <li>{@code albedo_color.r} (uint8_t)</li>
+     *   <li>{@code albedo_color.g} (uint8_t)</li>
+     *   <li>{@code albedo_color.b} (uint8_t)</li>
+     *   <li>{@code albedo_color.a} (uint8_t)</li>
+     *   <li>{@code alpha_mode} (CNA_AlphaModeEXT)</li>
+     *   <li>{@code double_sided} (CNA_Bool)</li>
+     *   <li>{@code base_color_texture_srgb} (CNA_Bool)</li>
+     *   <li>{@code emissive_texture_srgb} (CNA_Bool)</li>
+     *   <li>{@code specular_color_texture_srgb} (CNA_Bool)</li>
+     *   <li>{@code output_encoded_to_srgb} (CNA_Bool)</li>
+     *   <li>{@code texture_coordinate_sets[0]} (int32_t)</li>
+     *   <li>{@code texture_coordinate_sets[1]} (int32_t)</li>
+     *   <li>{@code texture_coordinate_sets[2]} (int32_t)</li>
+     *   <li>{@code texture_coordinate_sets[3]} (int32_t)</li>
+     *   <li>{@code texture_coordinate_sets[4]} (int32_t)</li>
+     *   <li>{@code texture_coordinate_sets[5]} (int32_t)</li>
+     *   <li>{@code texture_coordinate_sets[6]} (int32_t)</li>
+     * </ol>
+     *
+     * <p>materialFloating carries CNA_PbrMaterialEXT in this order:
+     * <ol start="0">
+     *   <li>{@code emissive_factor.x} (float)</li>
+     *   <li>{@code emissive_factor.y} (float)</li>
+     *   <li>{@code emissive_factor.z} (float)</li>
+     *   <li>{@code specular_color_factor.x} (float)</li>
+     *   <li>{@code specular_color_factor.y} (float)</li>
+     *   <li>{@code specular_color_factor.z} (float)</li>
+     *   <li>{@code metallic_factor} (float)</li>
+     *   <li>{@code roughness_factor} (float)</li>
+     *   <li>{@code normal_scale} (float)</li>
+     *   <li>{@code occlusion_strength} (float)</li>
+     *   <li>{@code ior} (float)</li>
+     *   <li>{@code specular_factor} (float)</li>
+     *   <li>{@code alpha_cutoff} (float)</li>
+     *   <li>{@code texture_transforms[0].offset.x} (float)</li>
+     *   <li>{@code texture_transforms[0].offset.y} (float)</li>
+     *   <li>{@code texture_transforms[0].scale.x} (float)</li>
+     *   <li>{@code texture_transforms[0].scale.y} (float)</li>
+     *   <li>{@code texture_transforms[0].rotation} (float)</li>
+     *   <li>{@code texture_transforms[1].offset.x} (float)</li>
+     *   <li>{@code texture_transforms[1].offset.y} (float)</li>
+     *   <li>{@code texture_transforms[1].scale.x} (float)</li>
+     *   <li>{@code texture_transforms[1].scale.y} (float)</li>
+     *   <li>{@code texture_transforms[1].rotation} (float)</li>
+     *   <li>{@code texture_transforms[2].offset.x} (float)</li>
+     *   <li>{@code texture_transforms[2].offset.y} (float)</li>
+     *   <li>{@code texture_transforms[2].scale.x} (float)</li>
+     *   <li>{@code texture_transforms[2].scale.y} (float)</li>
+     *   <li>{@code texture_transforms[2].rotation} (float)</li>
+     *   <li>{@code texture_transforms[3].offset.x} (float)</li>
+     *   <li>{@code texture_transforms[3].offset.y} (float)</li>
+     *   <li>{@code texture_transforms[3].scale.x} (float)</li>
+     *   <li>{@code texture_transforms[3].scale.y} (float)</li>
+     *   <li>{@code texture_transforms[3].rotation} (float)</li>
+     *   <li>{@code texture_transforms[4].offset.x} (float)</li>
+     *   <li>{@code texture_transforms[4].offset.y} (float)</li>
+     *   <li>{@code texture_transforms[4].scale.x} (float)</li>
+     *   <li>{@code texture_transforms[4].scale.y} (float)</li>
+     *   <li>{@code texture_transforms[4].rotation} (float)</li>
+     *   <li>{@code texture_transforms[5].offset.x} (float)</li>
+     *   <li>{@code texture_transforms[5].offset.y} (float)</li>
+     *   <li>{@code texture_transforms[5].scale.x} (float)</li>
+     *   <li>{@code texture_transforms[5].scale.y} (float)</li>
+     *   <li>{@code texture_transforms[5].rotation} (float)</li>
+     *   <li>{@code texture_transforms[6].offset.x} (float)</li>
+     *   <li>{@code texture_transforms[6].offset.y} (float)</li>
+     *   <li>{@code texture_transforms[6].scale.x} (float)</li>
+     *   <li>{@code texture_transforms[6].scale.y} (float)</li>
+     *   <li>{@code texture_transforms[6].rotation} (float)</li>
+     * </ol>
+     */
+    public static native int pbrEffectApplyMaterial(long effect, byte[] materialBytes, long[] materialIntegral, float[] materialFloating);
+
+    /**
+     * cna_pbr_effect_extract_material (engine_layer.h).
+     *
+     * <p>outMaterialBytes carries CNA_PbrMaterialEXT in this order:
+     * <ol start="0">
+     *   <li>{@code reserved[0]} (uint8_t)</li>
+     *   <li>{@code reserved[1]} (uint8_t)</li>
+     *   <li>{@code reserved[2]} (uint8_t)</li>
+     * </ol>
+     *
+     * <p>outMaterialIntegral carries CNA_PbrMaterialEXT in this order:
+     * <ol start="0">
+     *   <li>{@code albedo_texture} (CNA_Handle)</li>
+     *   <li>{@code normal_texture} (CNA_Handle)</li>
+     *   <li>{@code metallic_roughness_texture} (CNA_Handle)</li>
+     *   <li>{@code ambient_occlusion_texture} (CNA_Handle)</li>
+     *   <li>{@code emissive_texture} (CNA_Handle)</li>
+     *   <li>{@code specular_texture} (CNA_Handle)</li>
+     *   <li>{@code specular_color_texture} (CNA_Handle)</li>
+     *   <li>{@code albedo_color.r} (uint8_t)</li>
+     *   <li>{@code albedo_color.g} (uint8_t)</li>
+     *   <li>{@code albedo_color.b} (uint8_t)</li>
+     *   <li>{@code albedo_color.a} (uint8_t)</li>
+     *   <li>{@code alpha_mode} (CNA_AlphaModeEXT)</li>
+     *   <li>{@code double_sided} (CNA_Bool)</li>
+     *   <li>{@code base_color_texture_srgb} (CNA_Bool)</li>
+     *   <li>{@code emissive_texture_srgb} (CNA_Bool)</li>
+     *   <li>{@code specular_color_texture_srgb} (CNA_Bool)</li>
+     *   <li>{@code output_encoded_to_srgb} (CNA_Bool)</li>
+     *   <li>{@code texture_coordinate_sets[0]} (int32_t)</li>
+     *   <li>{@code texture_coordinate_sets[1]} (int32_t)</li>
+     *   <li>{@code texture_coordinate_sets[2]} (int32_t)</li>
+     *   <li>{@code texture_coordinate_sets[3]} (int32_t)</li>
+     *   <li>{@code texture_coordinate_sets[4]} (int32_t)</li>
+     *   <li>{@code texture_coordinate_sets[5]} (int32_t)</li>
+     *   <li>{@code texture_coordinate_sets[6]} (int32_t)</li>
+     * </ol>
+     *
+     * <p>outMaterialFloating carries CNA_PbrMaterialEXT in this order:
+     * <ol start="0">
+     *   <li>{@code emissive_factor.x} (float)</li>
+     *   <li>{@code emissive_factor.y} (float)</li>
+     *   <li>{@code emissive_factor.z} (float)</li>
+     *   <li>{@code specular_color_factor.x} (float)</li>
+     *   <li>{@code specular_color_factor.y} (float)</li>
+     *   <li>{@code specular_color_factor.z} (float)</li>
+     *   <li>{@code metallic_factor} (float)</li>
+     *   <li>{@code roughness_factor} (float)</li>
+     *   <li>{@code normal_scale} (float)</li>
+     *   <li>{@code occlusion_strength} (float)</li>
+     *   <li>{@code ior} (float)</li>
+     *   <li>{@code specular_factor} (float)</li>
+     *   <li>{@code alpha_cutoff} (float)</li>
+     *   <li>{@code texture_transforms[0].offset.x} (float)</li>
+     *   <li>{@code texture_transforms[0].offset.y} (float)</li>
+     *   <li>{@code texture_transforms[0].scale.x} (float)</li>
+     *   <li>{@code texture_transforms[0].scale.y} (float)</li>
+     *   <li>{@code texture_transforms[0].rotation} (float)</li>
+     *   <li>{@code texture_transforms[1].offset.x} (float)</li>
+     *   <li>{@code texture_transforms[1].offset.y} (float)</li>
+     *   <li>{@code texture_transforms[1].scale.x} (float)</li>
+     *   <li>{@code texture_transforms[1].scale.y} (float)</li>
+     *   <li>{@code texture_transforms[1].rotation} (float)</li>
+     *   <li>{@code texture_transforms[2].offset.x} (float)</li>
+     *   <li>{@code texture_transforms[2].offset.y} (float)</li>
+     *   <li>{@code texture_transforms[2].scale.x} (float)</li>
+     *   <li>{@code texture_transforms[2].scale.y} (float)</li>
+     *   <li>{@code texture_transforms[2].rotation} (float)</li>
+     *   <li>{@code texture_transforms[3].offset.x} (float)</li>
+     *   <li>{@code texture_transforms[3].offset.y} (float)</li>
+     *   <li>{@code texture_transforms[3].scale.x} (float)</li>
+     *   <li>{@code texture_transforms[3].scale.y} (float)</li>
+     *   <li>{@code texture_transforms[3].rotation} (float)</li>
+     *   <li>{@code texture_transforms[4].offset.x} (float)</li>
+     *   <li>{@code texture_transforms[4].offset.y} (float)</li>
+     *   <li>{@code texture_transforms[4].scale.x} (float)</li>
+     *   <li>{@code texture_transforms[4].scale.y} (float)</li>
+     *   <li>{@code texture_transforms[4].rotation} (float)</li>
+     *   <li>{@code texture_transforms[5].offset.x} (float)</li>
+     *   <li>{@code texture_transforms[5].offset.y} (float)</li>
+     *   <li>{@code texture_transforms[5].scale.x} (float)</li>
+     *   <li>{@code texture_transforms[5].scale.y} (float)</li>
+     *   <li>{@code texture_transforms[5].rotation} (float)</li>
+     *   <li>{@code texture_transforms[6].offset.x} (float)</li>
+     *   <li>{@code texture_transforms[6].offset.y} (float)</li>
+     *   <li>{@code texture_transforms[6].scale.x} (float)</li>
+     *   <li>{@code texture_transforms[6].scale.y} (float)</li>
+     *   <li>{@code texture_transforms[6].rotation} (float)</li>
+     * </ol>
+     */
+    public static native int pbrEffectExtractMaterial(long effect, byte[] outMaterialBytes, long[] outMaterialIntegral, float[] outMaterialFloating);
+
+    /**
+     * cna_pbr_material_apply_state (engine_layer.h).
+     *
+     * <p>materialBytes carries CNA_PbrMaterialEXT in this order:
+     * <ol start="0">
+     *   <li>{@code reserved[0]} (uint8_t)</li>
+     *   <li>{@code reserved[1]} (uint8_t)</li>
+     *   <li>{@code reserved[2]} (uint8_t)</li>
+     * </ol>
+     *
+     * <p>materialIntegral carries CNA_PbrMaterialEXT in this order:
+     * <ol start="0">
+     *   <li>{@code albedo_texture} (CNA_Handle)</li>
+     *   <li>{@code normal_texture} (CNA_Handle)</li>
+     *   <li>{@code metallic_roughness_texture} (CNA_Handle)</li>
+     *   <li>{@code ambient_occlusion_texture} (CNA_Handle)</li>
+     *   <li>{@code emissive_texture} (CNA_Handle)</li>
+     *   <li>{@code specular_texture} (CNA_Handle)</li>
+     *   <li>{@code specular_color_texture} (CNA_Handle)</li>
+     *   <li>{@code albedo_color.r} (uint8_t)</li>
+     *   <li>{@code albedo_color.g} (uint8_t)</li>
+     *   <li>{@code albedo_color.b} (uint8_t)</li>
+     *   <li>{@code albedo_color.a} (uint8_t)</li>
+     *   <li>{@code alpha_mode} (CNA_AlphaModeEXT)</li>
+     *   <li>{@code double_sided} (CNA_Bool)</li>
+     *   <li>{@code base_color_texture_srgb} (CNA_Bool)</li>
+     *   <li>{@code emissive_texture_srgb} (CNA_Bool)</li>
+     *   <li>{@code specular_color_texture_srgb} (CNA_Bool)</li>
+     *   <li>{@code output_encoded_to_srgb} (CNA_Bool)</li>
+     *   <li>{@code texture_coordinate_sets[0]} (int32_t)</li>
+     *   <li>{@code texture_coordinate_sets[1]} (int32_t)</li>
+     *   <li>{@code texture_coordinate_sets[2]} (int32_t)</li>
+     *   <li>{@code texture_coordinate_sets[3]} (int32_t)</li>
+     *   <li>{@code texture_coordinate_sets[4]} (int32_t)</li>
+     *   <li>{@code texture_coordinate_sets[5]} (int32_t)</li>
+     *   <li>{@code texture_coordinate_sets[6]} (int32_t)</li>
+     * </ol>
+     *
+     * <p>materialFloating carries CNA_PbrMaterialEXT in this order:
+     * <ol start="0">
+     *   <li>{@code emissive_factor.x} (float)</li>
+     *   <li>{@code emissive_factor.y} (float)</li>
+     *   <li>{@code emissive_factor.z} (float)</li>
+     *   <li>{@code specular_color_factor.x} (float)</li>
+     *   <li>{@code specular_color_factor.y} (float)</li>
+     *   <li>{@code specular_color_factor.z} (float)</li>
+     *   <li>{@code metallic_factor} (float)</li>
+     *   <li>{@code roughness_factor} (float)</li>
+     *   <li>{@code normal_scale} (float)</li>
+     *   <li>{@code occlusion_strength} (float)</li>
+     *   <li>{@code ior} (float)</li>
+     *   <li>{@code specular_factor} (float)</li>
+     *   <li>{@code alpha_cutoff} (float)</li>
+     *   <li>{@code texture_transforms[0].offset.x} (float)</li>
+     *   <li>{@code texture_transforms[0].offset.y} (float)</li>
+     *   <li>{@code texture_transforms[0].scale.x} (float)</li>
+     *   <li>{@code texture_transforms[0].scale.y} (float)</li>
+     *   <li>{@code texture_transforms[0].rotation} (float)</li>
+     *   <li>{@code texture_transforms[1].offset.x} (float)</li>
+     *   <li>{@code texture_transforms[1].offset.y} (float)</li>
+     *   <li>{@code texture_transforms[1].scale.x} (float)</li>
+     *   <li>{@code texture_transforms[1].scale.y} (float)</li>
+     *   <li>{@code texture_transforms[1].rotation} (float)</li>
+     *   <li>{@code texture_transforms[2].offset.x} (float)</li>
+     *   <li>{@code texture_transforms[2].offset.y} (float)</li>
+     *   <li>{@code texture_transforms[2].scale.x} (float)</li>
+     *   <li>{@code texture_transforms[2].scale.y} (float)</li>
+     *   <li>{@code texture_transforms[2].rotation} (float)</li>
+     *   <li>{@code texture_transforms[3].offset.x} (float)</li>
+     *   <li>{@code texture_transforms[3].offset.y} (float)</li>
+     *   <li>{@code texture_transforms[3].scale.x} (float)</li>
+     *   <li>{@code texture_transforms[3].scale.y} (float)</li>
+     *   <li>{@code texture_transforms[3].rotation} (float)</li>
+     *   <li>{@code texture_transforms[4].offset.x} (float)</li>
+     *   <li>{@code texture_transforms[4].offset.y} (float)</li>
+     *   <li>{@code texture_transforms[4].scale.x} (float)</li>
+     *   <li>{@code texture_transforms[4].scale.y} (float)</li>
+     *   <li>{@code texture_transforms[4].rotation} (float)</li>
+     *   <li>{@code texture_transforms[5].offset.x} (float)</li>
+     *   <li>{@code texture_transforms[5].offset.y} (float)</li>
+     *   <li>{@code texture_transforms[5].scale.x} (float)</li>
+     *   <li>{@code texture_transforms[5].scale.y} (float)</li>
+     *   <li>{@code texture_transforms[5].rotation} (float)</li>
+     *   <li>{@code texture_transforms[6].offset.x} (float)</li>
+     *   <li>{@code texture_transforms[6].offset.y} (float)</li>
+     *   <li>{@code texture_transforms[6].scale.x} (float)</li>
+     *   <li>{@code texture_transforms[6].scale.y} (float)</li>
+     *   <li>{@code texture_transforms[6].rotation} (float)</li>
+     * </ol>
+     */
+    public static native int pbrMaterialApplyState(byte[] materialBytes, long[] materialIntegral, float[] materialFloating, long graphicsDevice);
+
+    /**
+     * cna_pbr_material_ext_copy_to_string (engine_layer.h).
+     *
+     * <p>materialBytes carries CNA_PbrMaterialEXT in this order:
+     * <ol start="0">
+     *   <li>{@code reserved[0]} (uint8_t)</li>
+     *   <li>{@code reserved[1]} (uint8_t)</li>
+     *   <li>{@code reserved[2]} (uint8_t)</li>
+     * </ol>
+     *
+     * <p>materialIntegral carries CNA_PbrMaterialEXT in this order:
+     * <ol start="0">
+     *   <li>{@code albedo_texture} (CNA_Handle)</li>
+     *   <li>{@code normal_texture} (CNA_Handle)</li>
+     *   <li>{@code metallic_roughness_texture} (CNA_Handle)</li>
+     *   <li>{@code ambient_occlusion_texture} (CNA_Handle)</li>
+     *   <li>{@code emissive_texture} (CNA_Handle)</li>
+     *   <li>{@code specular_texture} (CNA_Handle)</li>
+     *   <li>{@code specular_color_texture} (CNA_Handle)</li>
+     *   <li>{@code albedo_color.r} (uint8_t)</li>
+     *   <li>{@code albedo_color.g} (uint8_t)</li>
+     *   <li>{@code albedo_color.b} (uint8_t)</li>
+     *   <li>{@code albedo_color.a} (uint8_t)</li>
+     *   <li>{@code alpha_mode} (CNA_AlphaModeEXT)</li>
+     *   <li>{@code double_sided} (CNA_Bool)</li>
+     *   <li>{@code base_color_texture_srgb} (CNA_Bool)</li>
+     *   <li>{@code emissive_texture_srgb} (CNA_Bool)</li>
+     *   <li>{@code specular_color_texture_srgb} (CNA_Bool)</li>
+     *   <li>{@code output_encoded_to_srgb} (CNA_Bool)</li>
+     *   <li>{@code texture_coordinate_sets[0]} (int32_t)</li>
+     *   <li>{@code texture_coordinate_sets[1]} (int32_t)</li>
+     *   <li>{@code texture_coordinate_sets[2]} (int32_t)</li>
+     *   <li>{@code texture_coordinate_sets[3]} (int32_t)</li>
+     *   <li>{@code texture_coordinate_sets[4]} (int32_t)</li>
+     *   <li>{@code texture_coordinate_sets[5]} (int32_t)</li>
+     *   <li>{@code texture_coordinate_sets[6]} (int32_t)</li>
+     * </ol>
+     *
+     * <p>materialFloating carries CNA_PbrMaterialEXT in this order:
+     * <ol start="0">
+     *   <li>{@code emissive_factor.x} (float)</li>
+     *   <li>{@code emissive_factor.y} (float)</li>
+     *   <li>{@code emissive_factor.z} (float)</li>
+     *   <li>{@code specular_color_factor.x} (float)</li>
+     *   <li>{@code specular_color_factor.y} (float)</li>
+     *   <li>{@code specular_color_factor.z} (float)</li>
+     *   <li>{@code metallic_factor} (float)</li>
+     *   <li>{@code roughness_factor} (float)</li>
+     *   <li>{@code normal_scale} (float)</li>
+     *   <li>{@code occlusion_strength} (float)</li>
+     *   <li>{@code ior} (float)</li>
+     *   <li>{@code specular_factor} (float)</li>
+     *   <li>{@code alpha_cutoff} (float)</li>
+     *   <li>{@code texture_transforms[0].offset.x} (float)</li>
+     *   <li>{@code texture_transforms[0].offset.y} (float)</li>
+     *   <li>{@code texture_transforms[0].scale.x} (float)</li>
+     *   <li>{@code texture_transforms[0].scale.y} (float)</li>
+     *   <li>{@code texture_transforms[0].rotation} (float)</li>
+     *   <li>{@code texture_transforms[1].offset.x} (float)</li>
+     *   <li>{@code texture_transforms[1].offset.y} (float)</li>
+     *   <li>{@code texture_transforms[1].scale.x} (float)</li>
+     *   <li>{@code texture_transforms[1].scale.y} (float)</li>
+     *   <li>{@code texture_transforms[1].rotation} (float)</li>
+     *   <li>{@code texture_transforms[2].offset.x} (float)</li>
+     *   <li>{@code texture_transforms[2].offset.y} (float)</li>
+     *   <li>{@code texture_transforms[2].scale.x} (float)</li>
+     *   <li>{@code texture_transforms[2].scale.y} (float)</li>
+     *   <li>{@code texture_transforms[2].rotation} (float)</li>
+     *   <li>{@code texture_transforms[3].offset.x} (float)</li>
+     *   <li>{@code texture_transforms[3].offset.y} (float)</li>
+     *   <li>{@code texture_transforms[3].scale.x} (float)</li>
+     *   <li>{@code texture_transforms[3].scale.y} (float)</li>
+     *   <li>{@code texture_transforms[3].rotation} (float)</li>
+     *   <li>{@code texture_transforms[4].offset.x} (float)</li>
+     *   <li>{@code texture_transforms[4].offset.y} (float)</li>
+     *   <li>{@code texture_transforms[4].scale.x} (float)</li>
+     *   <li>{@code texture_transforms[4].scale.y} (float)</li>
+     *   <li>{@code texture_transforms[4].rotation} (float)</li>
+     *   <li>{@code texture_transforms[5].offset.x} (float)</li>
+     *   <li>{@code texture_transforms[5].offset.y} (float)</li>
+     *   <li>{@code texture_transforms[5].scale.x} (float)</li>
+     *   <li>{@code texture_transforms[5].scale.y} (float)</li>
+     *   <li>{@code texture_transforms[5].rotation} (float)</li>
+     *   <li>{@code texture_transforms[6].offset.x} (float)</li>
+     *   <li>{@code texture_transforms[6].offset.y} (float)</li>
+     *   <li>{@code texture_transforms[6].scale.x} (float)</li>
+     *   <li>{@code texture_transforms[6].scale.y} (float)</li>
+     *   <li>{@code texture_transforms[6].rotation} (float)</li>
+     * </ol>
+     */
+    public static native int pbrMaterialExtCopyToString(byte[] materialBytes, long[] materialIntegral, float[] materialFloating, byte[] destination, long[] outBytes);
+
+    /**
+     * cna_pbr_material_ext_equals (engine_layer.h).
+     *
+     * <p>firstBytes carries CNA_PbrMaterialEXT in this order:
+     * <ol start="0">
+     *   <li>{@code reserved[0]} (uint8_t)</li>
+     *   <li>{@code reserved[1]} (uint8_t)</li>
+     *   <li>{@code reserved[2]} (uint8_t)</li>
+     * </ol>
+     *
+     * <p>firstIntegral carries CNA_PbrMaterialEXT in this order:
+     * <ol start="0">
+     *   <li>{@code albedo_texture} (CNA_Handle)</li>
+     *   <li>{@code normal_texture} (CNA_Handle)</li>
+     *   <li>{@code metallic_roughness_texture} (CNA_Handle)</li>
+     *   <li>{@code ambient_occlusion_texture} (CNA_Handle)</li>
+     *   <li>{@code emissive_texture} (CNA_Handle)</li>
+     *   <li>{@code specular_texture} (CNA_Handle)</li>
+     *   <li>{@code specular_color_texture} (CNA_Handle)</li>
+     *   <li>{@code albedo_color.r} (uint8_t)</li>
+     *   <li>{@code albedo_color.g} (uint8_t)</li>
+     *   <li>{@code albedo_color.b} (uint8_t)</li>
+     *   <li>{@code albedo_color.a} (uint8_t)</li>
+     *   <li>{@code alpha_mode} (CNA_AlphaModeEXT)</li>
+     *   <li>{@code double_sided} (CNA_Bool)</li>
+     *   <li>{@code base_color_texture_srgb} (CNA_Bool)</li>
+     *   <li>{@code emissive_texture_srgb} (CNA_Bool)</li>
+     *   <li>{@code specular_color_texture_srgb} (CNA_Bool)</li>
+     *   <li>{@code output_encoded_to_srgb} (CNA_Bool)</li>
+     *   <li>{@code texture_coordinate_sets[0]} (int32_t)</li>
+     *   <li>{@code texture_coordinate_sets[1]} (int32_t)</li>
+     *   <li>{@code texture_coordinate_sets[2]} (int32_t)</li>
+     *   <li>{@code texture_coordinate_sets[3]} (int32_t)</li>
+     *   <li>{@code texture_coordinate_sets[4]} (int32_t)</li>
+     *   <li>{@code texture_coordinate_sets[5]} (int32_t)</li>
+     *   <li>{@code texture_coordinate_sets[6]} (int32_t)</li>
+     * </ol>
+     *
+     * <p>firstFloating carries CNA_PbrMaterialEXT in this order:
+     * <ol start="0">
+     *   <li>{@code emissive_factor.x} (float)</li>
+     *   <li>{@code emissive_factor.y} (float)</li>
+     *   <li>{@code emissive_factor.z} (float)</li>
+     *   <li>{@code specular_color_factor.x} (float)</li>
+     *   <li>{@code specular_color_factor.y} (float)</li>
+     *   <li>{@code specular_color_factor.z} (float)</li>
+     *   <li>{@code metallic_factor} (float)</li>
+     *   <li>{@code roughness_factor} (float)</li>
+     *   <li>{@code normal_scale} (float)</li>
+     *   <li>{@code occlusion_strength} (float)</li>
+     *   <li>{@code ior} (float)</li>
+     *   <li>{@code specular_factor} (float)</li>
+     *   <li>{@code alpha_cutoff} (float)</li>
+     *   <li>{@code texture_transforms[0].offset.x} (float)</li>
+     *   <li>{@code texture_transforms[0].offset.y} (float)</li>
+     *   <li>{@code texture_transforms[0].scale.x} (float)</li>
+     *   <li>{@code texture_transforms[0].scale.y} (float)</li>
+     *   <li>{@code texture_transforms[0].rotation} (float)</li>
+     *   <li>{@code texture_transforms[1].offset.x} (float)</li>
+     *   <li>{@code texture_transforms[1].offset.y} (float)</li>
+     *   <li>{@code texture_transforms[1].scale.x} (float)</li>
+     *   <li>{@code texture_transforms[1].scale.y} (float)</li>
+     *   <li>{@code texture_transforms[1].rotation} (float)</li>
+     *   <li>{@code texture_transforms[2].offset.x} (float)</li>
+     *   <li>{@code texture_transforms[2].offset.y} (float)</li>
+     *   <li>{@code texture_transforms[2].scale.x} (float)</li>
+     *   <li>{@code texture_transforms[2].scale.y} (float)</li>
+     *   <li>{@code texture_transforms[2].rotation} (float)</li>
+     *   <li>{@code texture_transforms[3].offset.x} (float)</li>
+     *   <li>{@code texture_transforms[3].offset.y} (float)</li>
+     *   <li>{@code texture_transforms[3].scale.x} (float)</li>
+     *   <li>{@code texture_transforms[3].scale.y} (float)</li>
+     *   <li>{@code texture_transforms[3].rotation} (float)</li>
+     *   <li>{@code texture_transforms[4].offset.x} (float)</li>
+     *   <li>{@code texture_transforms[4].offset.y} (float)</li>
+     *   <li>{@code texture_transforms[4].scale.x} (float)</li>
+     *   <li>{@code texture_transforms[4].scale.y} (float)</li>
+     *   <li>{@code texture_transforms[4].rotation} (float)</li>
+     *   <li>{@code texture_transforms[5].offset.x} (float)</li>
+     *   <li>{@code texture_transforms[5].offset.y} (float)</li>
+     *   <li>{@code texture_transforms[5].scale.x} (float)</li>
+     *   <li>{@code texture_transforms[5].scale.y} (float)</li>
+     *   <li>{@code texture_transforms[5].rotation} (float)</li>
+     *   <li>{@code texture_transforms[6].offset.x} (float)</li>
+     *   <li>{@code texture_transforms[6].offset.y} (float)</li>
+     *   <li>{@code texture_transforms[6].scale.x} (float)</li>
+     *   <li>{@code texture_transforms[6].scale.y} (float)</li>
+     *   <li>{@code texture_transforms[6].rotation} (float)</li>
+     * </ol>
+     *
+     * <p>secondBytes carries CNA_PbrMaterialEXT in this order:
+     * <ol start="0">
+     *   <li>{@code reserved[0]} (uint8_t)</li>
+     *   <li>{@code reserved[1]} (uint8_t)</li>
+     *   <li>{@code reserved[2]} (uint8_t)</li>
+     * </ol>
+     *
+     * <p>secondIntegral carries CNA_PbrMaterialEXT in this order:
+     * <ol start="0">
+     *   <li>{@code albedo_texture} (CNA_Handle)</li>
+     *   <li>{@code normal_texture} (CNA_Handle)</li>
+     *   <li>{@code metallic_roughness_texture} (CNA_Handle)</li>
+     *   <li>{@code ambient_occlusion_texture} (CNA_Handle)</li>
+     *   <li>{@code emissive_texture} (CNA_Handle)</li>
+     *   <li>{@code specular_texture} (CNA_Handle)</li>
+     *   <li>{@code specular_color_texture} (CNA_Handle)</li>
+     *   <li>{@code albedo_color.r} (uint8_t)</li>
+     *   <li>{@code albedo_color.g} (uint8_t)</li>
+     *   <li>{@code albedo_color.b} (uint8_t)</li>
+     *   <li>{@code albedo_color.a} (uint8_t)</li>
+     *   <li>{@code alpha_mode} (CNA_AlphaModeEXT)</li>
+     *   <li>{@code double_sided} (CNA_Bool)</li>
+     *   <li>{@code base_color_texture_srgb} (CNA_Bool)</li>
+     *   <li>{@code emissive_texture_srgb} (CNA_Bool)</li>
+     *   <li>{@code specular_color_texture_srgb} (CNA_Bool)</li>
+     *   <li>{@code output_encoded_to_srgb} (CNA_Bool)</li>
+     *   <li>{@code texture_coordinate_sets[0]} (int32_t)</li>
+     *   <li>{@code texture_coordinate_sets[1]} (int32_t)</li>
+     *   <li>{@code texture_coordinate_sets[2]} (int32_t)</li>
+     *   <li>{@code texture_coordinate_sets[3]} (int32_t)</li>
+     *   <li>{@code texture_coordinate_sets[4]} (int32_t)</li>
+     *   <li>{@code texture_coordinate_sets[5]} (int32_t)</li>
+     *   <li>{@code texture_coordinate_sets[6]} (int32_t)</li>
+     * </ol>
+     *
+     * <p>secondFloating carries CNA_PbrMaterialEXT in this order:
+     * <ol start="0">
+     *   <li>{@code emissive_factor.x} (float)</li>
+     *   <li>{@code emissive_factor.y} (float)</li>
+     *   <li>{@code emissive_factor.z} (float)</li>
+     *   <li>{@code specular_color_factor.x} (float)</li>
+     *   <li>{@code specular_color_factor.y} (float)</li>
+     *   <li>{@code specular_color_factor.z} (float)</li>
+     *   <li>{@code metallic_factor} (float)</li>
+     *   <li>{@code roughness_factor} (float)</li>
+     *   <li>{@code normal_scale} (float)</li>
+     *   <li>{@code occlusion_strength} (float)</li>
+     *   <li>{@code ior} (float)</li>
+     *   <li>{@code specular_factor} (float)</li>
+     *   <li>{@code alpha_cutoff} (float)</li>
+     *   <li>{@code texture_transforms[0].offset.x} (float)</li>
+     *   <li>{@code texture_transforms[0].offset.y} (float)</li>
+     *   <li>{@code texture_transforms[0].scale.x} (float)</li>
+     *   <li>{@code texture_transforms[0].scale.y} (float)</li>
+     *   <li>{@code texture_transforms[0].rotation} (float)</li>
+     *   <li>{@code texture_transforms[1].offset.x} (float)</li>
+     *   <li>{@code texture_transforms[1].offset.y} (float)</li>
+     *   <li>{@code texture_transforms[1].scale.x} (float)</li>
+     *   <li>{@code texture_transforms[1].scale.y} (float)</li>
+     *   <li>{@code texture_transforms[1].rotation} (float)</li>
+     *   <li>{@code texture_transforms[2].offset.x} (float)</li>
+     *   <li>{@code texture_transforms[2].offset.y} (float)</li>
+     *   <li>{@code texture_transforms[2].scale.x} (float)</li>
+     *   <li>{@code texture_transforms[2].scale.y} (float)</li>
+     *   <li>{@code texture_transforms[2].rotation} (float)</li>
+     *   <li>{@code texture_transforms[3].offset.x} (float)</li>
+     *   <li>{@code texture_transforms[3].offset.y} (float)</li>
+     *   <li>{@code texture_transforms[3].scale.x} (float)</li>
+     *   <li>{@code texture_transforms[3].scale.y} (float)</li>
+     *   <li>{@code texture_transforms[3].rotation} (float)</li>
+     *   <li>{@code texture_transforms[4].offset.x} (float)</li>
+     *   <li>{@code texture_transforms[4].offset.y} (float)</li>
+     *   <li>{@code texture_transforms[4].scale.x} (float)</li>
+     *   <li>{@code texture_transforms[4].scale.y} (float)</li>
+     *   <li>{@code texture_transforms[4].rotation} (float)</li>
+     *   <li>{@code texture_transforms[5].offset.x} (float)</li>
+     *   <li>{@code texture_transforms[5].offset.y} (float)</li>
+     *   <li>{@code texture_transforms[5].scale.x} (float)</li>
+     *   <li>{@code texture_transforms[5].scale.y} (float)</li>
+     *   <li>{@code texture_transforms[5].rotation} (float)</li>
+     *   <li>{@code texture_transforms[6].offset.x} (float)</li>
+     *   <li>{@code texture_transforms[6].offset.y} (float)</li>
+     *   <li>{@code texture_transforms[6].scale.x} (float)</li>
+     *   <li>{@code texture_transforms[6].scale.y} (float)</li>
+     *   <li>{@code texture_transforms[6].rotation} (float)</li>
+     * </ol>
+     */
+    public static native int pbrMaterialExtEquals(byte[] firstBytes, long[] firstIntegral, float[] firstFloating, byte[] secondBytes, long[] secondIntegral, float[] secondFloating, boolean[] outEqual);
+
+    /**
+     * cna_pbr_material_ext_get_hash_code (engine_layer.h).
+     *
+     * <p>materialBytes carries CNA_PbrMaterialEXT in this order:
+     * <ol start="0">
+     *   <li>{@code reserved[0]} (uint8_t)</li>
+     *   <li>{@code reserved[1]} (uint8_t)</li>
+     *   <li>{@code reserved[2]} (uint8_t)</li>
+     * </ol>
+     *
+     * <p>materialIntegral carries CNA_PbrMaterialEXT in this order:
+     * <ol start="0">
+     *   <li>{@code albedo_texture} (CNA_Handle)</li>
+     *   <li>{@code normal_texture} (CNA_Handle)</li>
+     *   <li>{@code metallic_roughness_texture} (CNA_Handle)</li>
+     *   <li>{@code ambient_occlusion_texture} (CNA_Handle)</li>
+     *   <li>{@code emissive_texture} (CNA_Handle)</li>
+     *   <li>{@code specular_texture} (CNA_Handle)</li>
+     *   <li>{@code specular_color_texture} (CNA_Handle)</li>
+     *   <li>{@code albedo_color.r} (uint8_t)</li>
+     *   <li>{@code albedo_color.g} (uint8_t)</li>
+     *   <li>{@code albedo_color.b} (uint8_t)</li>
+     *   <li>{@code albedo_color.a} (uint8_t)</li>
+     *   <li>{@code alpha_mode} (CNA_AlphaModeEXT)</li>
+     *   <li>{@code double_sided} (CNA_Bool)</li>
+     *   <li>{@code base_color_texture_srgb} (CNA_Bool)</li>
+     *   <li>{@code emissive_texture_srgb} (CNA_Bool)</li>
+     *   <li>{@code specular_color_texture_srgb} (CNA_Bool)</li>
+     *   <li>{@code output_encoded_to_srgb} (CNA_Bool)</li>
+     *   <li>{@code texture_coordinate_sets[0]} (int32_t)</li>
+     *   <li>{@code texture_coordinate_sets[1]} (int32_t)</li>
+     *   <li>{@code texture_coordinate_sets[2]} (int32_t)</li>
+     *   <li>{@code texture_coordinate_sets[3]} (int32_t)</li>
+     *   <li>{@code texture_coordinate_sets[4]} (int32_t)</li>
+     *   <li>{@code texture_coordinate_sets[5]} (int32_t)</li>
+     *   <li>{@code texture_coordinate_sets[6]} (int32_t)</li>
+     * </ol>
+     *
+     * <p>materialFloating carries CNA_PbrMaterialEXT in this order:
+     * <ol start="0">
+     *   <li>{@code emissive_factor.x} (float)</li>
+     *   <li>{@code emissive_factor.y} (float)</li>
+     *   <li>{@code emissive_factor.z} (float)</li>
+     *   <li>{@code specular_color_factor.x} (float)</li>
+     *   <li>{@code specular_color_factor.y} (float)</li>
+     *   <li>{@code specular_color_factor.z} (float)</li>
+     *   <li>{@code metallic_factor} (float)</li>
+     *   <li>{@code roughness_factor} (float)</li>
+     *   <li>{@code normal_scale} (float)</li>
+     *   <li>{@code occlusion_strength} (float)</li>
+     *   <li>{@code ior} (float)</li>
+     *   <li>{@code specular_factor} (float)</li>
+     *   <li>{@code alpha_cutoff} (float)</li>
+     *   <li>{@code texture_transforms[0].offset.x} (float)</li>
+     *   <li>{@code texture_transforms[0].offset.y} (float)</li>
+     *   <li>{@code texture_transforms[0].scale.x} (float)</li>
+     *   <li>{@code texture_transforms[0].scale.y} (float)</li>
+     *   <li>{@code texture_transforms[0].rotation} (float)</li>
+     *   <li>{@code texture_transforms[1].offset.x} (float)</li>
+     *   <li>{@code texture_transforms[1].offset.y} (float)</li>
+     *   <li>{@code texture_transforms[1].scale.x} (float)</li>
+     *   <li>{@code texture_transforms[1].scale.y} (float)</li>
+     *   <li>{@code texture_transforms[1].rotation} (float)</li>
+     *   <li>{@code texture_transforms[2].offset.x} (float)</li>
+     *   <li>{@code texture_transforms[2].offset.y} (float)</li>
+     *   <li>{@code texture_transforms[2].scale.x} (float)</li>
+     *   <li>{@code texture_transforms[2].scale.y} (float)</li>
+     *   <li>{@code texture_transforms[2].rotation} (float)</li>
+     *   <li>{@code texture_transforms[3].offset.x} (float)</li>
+     *   <li>{@code texture_transforms[3].offset.y} (float)</li>
+     *   <li>{@code texture_transforms[3].scale.x} (float)</li>
+     *   <li>{@code texture_transforms[3].scale.y} (float)</li>
+     *   <li>{@code texture_transforms[3].rotation} (float)</li>
+     *   <li>{@code texture_transforms[4].offset.x} (float)</li>
+     *   <li>{@code texture_transforms[4].offset.y} (float)</li>
+     *   <li>{@code texture_transforms[4].scale.x} (float)</li>
+     *   <li>{@code texture_transforms[4].scale.y} (float)</li>
+     *   <li>{@code texture_transforms[4].rotation} (float)</li>
+     *   <li>{@code texture_transforms[5].offset.x} (float)</li>
+     *   <li>{@code texture_transforms[5].offset.y} (float)</li>
+     *   <li>{@code texture_transforms[5].scale.x} (float)</li>
+     *   <li>{@code texture_transforms[5].scale.y} (float)</li>
+     *   <li>{@code texture_transforms[5].rotation} (float)</li>
+     *   <li>{@code texture_transforms[6].offset.x} (float)</li>
+     *   <li>{@code texture_transforms[6].offset.y} (float)</li>
+     *   <li>{@code texture_transforms[6].scale.x} (float)</li>
+     *   <li>{@code texture_transforms[6].scale.y} (float)</li>
+     *   <li>{@code texture_transforms[6].rotation} (float)</li>
+     * </ol>
+     */
+    public static native int pbrMaterialExtGetHashCode(byte[] materialBytes, long[] materialIntegral, float[] materialFloating, long[] outHash);
+
+    /**
      * cna_pbr_material_extensions_copy_from (engine_layer.h).
      */
     public static native int pbrMaterialExtensionsCopyFrom(long destination, long source);
@@ -6599,6 +7238,190 @@ public final class NativeEngineLayerRoutes {
      * cna_shadow_map_size_for_quality (engine_layer.h).
      */
     public static native int shadowMapSizeForQuality(int quality, int[] outSize);
+
+    /**
+     * cna_skinned_pbr_effect_apply_material (engine_layer.h).
+     *
+     * <p>materialBytes carries CNA_PbrMaterialEXT in this order:
+     * <ol start="0">
+     *   <li>{@code reserved[0]} (uint8_t)</li>
+     *   <li>{@code reserved[1]} (uint8_t)</li>
+     *   <li>{@code reserved[2]} (uint8_t)</li>
+     * </ol>
+     *
+     * <p>materialIntegral carries CNA_PbrMaterialEXT in this order:
+     * <ol start="0">
+     *   <li>{@code albedo_texture} (CNA_Handle)</li>
+     *   <li>{@code normal_texture} (CNA_Handle)</li>
+     *   <li>{@code metallic_roughness_texture} (CNA_Handle)</li>
+     *   <li>{@code ambient_occlusion_texture} (CNA_Handle)</li>
+     *   <li>{@code emissive_texture} (CNA_Handle)</li>
+     *   <li>{@code specular_texture} (CNA_Handle)</li>
+     *   <li>{@code specular_color_texture} (CNA_Handle)</li>
+     *   <li>{@code albedo_color.r} (uint8_t)</li>
+     *   <li>{@code albedo_color.g} (uint8_t)</li>
+     *   <li>{@code albedo_color.b} (uint8_t)</li>
+     *   <li>{@code albedo_color.a} (uint8_t)</li>
+     *   <li>{@code alpha_mode} (CNA_AlphaModeEXT)</li>
+     *   <li>{@code double_sided} (CNA_Bool)</li>
+     *   <li>{@code base_color_texture_srgb} (CNA_Bool)</li>
+     *   <li>{@code emissive_texture_srgb} (CNA_Bool)</li>
+     *   <li>{@code specular_color_texture_srgb} (CNA_Bool)</li>
+     *   <li>{@code output_encoded_to_srgb} (CNA_Bool)</li>
+     *   <li>{@code texture_coordinate_sets[0]} (int32_t)</li>
+     *   <li>{@code texture_coordinate_sets[1]} (int32_t)</li>
+     *   <li>{@code texture_coordinate_sets[2]} (int32_t)</li>
+     *   <li>{@code texture_coordinate_sets[3]} (int32_t)</li>
+     *   <li>{@code texture_coordinate_sets[4]} (int32_t)</li>
+     *   <li>{@code texture_coordinate_sets[5]} (int32_t)</li>
+     *   <li>{@code texture_coordinate_sets[6]} (int32_t)</li>
+     * </ol>
+     *
+     * <p>materialFloating carries CNA_PbrMaterialEXT in this order:
+     * <ol start="0">
+     *   <li>{@code emissive_factor.x} (float)</li>
+     *   <li>{@code emissive_factor.y} (float)</li>
+     *   <li>{@code emissive_factor.z} (float)</li>
+     *   <li>{@code specular_color_factor.x} (float)</li>
+     *   <li>{@code specular_color_factor.y} (float)</li>
+     *   <li>{@code specular_color_factor.z} (float)</li>
+     *   <li>{@code metallic_factor} (float)</li>
+     *   <li>{@code roughness_factor} (float)</li>
+     *   <li>{@code normal_scale} (float)</li>
+     *   <li>{@code occlusion_strength} (float)</li>
+     *   <li>{@code ior} (float)</li>
+     *   <li>{@code specular_factor} (float)</li>
+     *   <li>{@code alpha_cutoff} (float)</li>
+     *   <li>{@code texture_transforms[0].offset.x} (float)</li>
+     *   <li>{@code texture_transforms[0].offset.y} (float)</li>
+     *   <li>{@code texture_transforms[0].scale.x} (float)</li>
+     *   <li>{@code texture_transforms[0].scale.y} (float)</li>
+     *   <li>{@code texture_transforms[0].rotation} (float)</li>
+     *   <li>{@code texture_transforms[1].offset.x} (float)</li>
+     *   <li>{@code texture_transforms[1].offset.y} (float)</li>
+     *   <li>{@code texture_transforms[1].scale.x} (float)</li>
+     *   <li>{@code texture_transforms[1].scale.y} (float)</li>
+     *   <li>{@code texture_transforms[1].rotation} (float)</li>
+     *   <li>{@code texture_transforms[2].offset.x} (float)</li>
+     *   <li>{@code texture_transforms[2].offset.y} (float)</li>
+     *   <li>{@code texture_transforms[2].scale.x} (float)</li>
+     *   <li>{@code texture_transforms[2].scale.y} (float)</li>
+     *   <li>{@code texture_transforms[2].rotation} (float)</li>
+     *   <li>{@code texture_transforms[3].offset.x} (float)</li>
+     *   <li>{@code texture_transforms[3].offset.y} (float)</li>
+     *   <li>{@code texture_transforms[3].scale.x} (float)</li>
+     *   <li>{@code texture_transforms[3].scale.y} (float)</li>
+     *   <li>{@code texture_transforms[3].rotation} (float)</li>
+     *   <li>{@code texture_transforms[4].offset.x} (float)</li>
+     *   <li>{@code texture_transforms[4].offset.y} (float)</li>
+     *   <li>{@code texture_transforms[4].scale.x} (float)</li>
+     *   <li>{@code texture_transforms[4].scale.y} (float)</li>
+     *   <li>{@code texture_transforms[4].rotation} (float)</li>
+     *   <li>{@code texture_transforms[5].offset.x} (float)</li>
+     *   <li>{@code texture_transforms[5].offset.y} (float)</li>
+     *   <li>{@code texture_transforms[5].scale.x} (float)</li>
+     *   <li>{@code texture_transforms[5].scale.y} (float)</li>
+     *   <li>{@code texture_transforms[5].rotation} (float)</li>
+     *   <li>{@code texture_transforms[6].offset.x} (float)</li>
+     *   <li>{@code texture_transforms[6].offset.y} (float)</li>
+     *   <li>{@code texture_transforms[6].scale.x} (float)</li>
+     *   <li>{@code texture_transforms[6].scale.y} (float)</li>
+     *   <li>{@code texture_transforms[6].rotation} (float)</li>
+     * </ol>
+     */
+    public static native int skinnedPbrEffectApplyMaterial(long effect, byte[] materialBytes, long[] materialIntegral, float[] materialFloating);
+
+    /**
+     * cna_skinned_pbr_effect_extract_material (engine_layer.h).
+     *
+     * <p>outMaterialBytes carries CNA_PbrMaterialEXT in this order:
+     * <ol start="0">
+     *   <li>{@code reserved[0]} (uint8_t)</li>
+     *   <li>{@code reserved[1]} (uint8_t)</li>
+     *   <li>{@code reserved[2]} (uint8_t)</li>
+     * </ol>
+     *
+     * <p>outMaterialIntegral carries CNA_PbrMaterialEXT in this order:
+     * <ol start="0">
+     *   <li>{@code albedo_texture} (CNA_Handle)</li>
+     *   <li>{@code normal_texture} (CNA_Handle)</li>
+     *   <li>{@code metallic_roughness_texture} (CNA_Handle)</li>
+     *   <li>{@code ambient_occlusion_texture} (CNA_Handle)</li>
+     *   <li>{@code emissive_texture} (CNA_Handle)</li>
+     *   <li>{@code specular_texture} (CNA_Handle)</li>
+     *   <li>{@code specular_color_texture} (CNA_Handle)</li>
+     *   <li>{@code albedo_color.r} (uint8_t)</li>
+     *   <li>{@code albedo_color.g} (uint8_t)</li>
+     *   <li>{@code albedo_color.b} (uint8_t)</li>
+     *   <li>{@code albedo_color.a} (uint8_t)</li>
+     *   <li>{@code alpha_mode} (CNA_AlphaModeEXT)</li>
+     *   <li>{@code double_sided} (CNA_Bool)</li>
+     *   <li>{@code base_color_texture_srgb} (CNA_Bool)</li>
+     *   <li>{@code emissive_texture_srgb} (CNA_Bool)</li>
+     *   <li>{@code specular_color_texture_srgb} (CNA_Bool)</li>
+     *   <li>{@code output_encoded_to_srgb} (CNA_Bool)</li>
+     *   <li>{@code texture_coordinate_sets[0]} (int32_t)</li>
+     *   <li>{@code texture_coordinate_sets[1]} (int32_t)</li>
+     *   <li>{@code texture_coordinate_sets[2]} (int32_t)</li>
+     *   <li>{@code texture_coordinate_sets[3]} (int32_t)</li>
+     *   <li>{@code texture_coordinate_sets[4]} (int32_t)</li>
+     *   <li>{@code texture_coordinate_sets[5]} (int32_t)</li>
+     *   <li>{@code texture_coordinate_sets[6]} (int32_t)</li>
+     * </ol>
+     *
+     * <p>outMaterialFloating carries CNA_PbrMaterialEXT in this order:
+     * <ol start="0">
+     *   <li>{@code emissive_factor.x} (float)</li>
+     *   <li>{@code emissive_factor.y} (float)</li>
+     *   <li>{@code emissive_factor.z} (float)</li>
+     *   <li>{@code specular_color_factor.x} (float)</li>
+     *   <li>{@code specular_color_factor.y} (float)</li>
+     *   <li>{@code specular_color_factor.z} (float)</li>
+     *   <li>{@code metallic_factor} (float)</li>
+     *   <li>{@code roughness_factor} (float)</li>
+     *   <li>{@code normal_scale} (float)</li>
+     *   <li>{@code occlusion_strength} (float)</li>
+     *   <li>{@code ior} (float)</li>
+     *   <li>{@code specular_factor} (float)</li>
+     *   <li>{@code alpha_cutoff} (float)</li>
+     *   <li>{@code texture_transforms[0].offset.x} (float)</li>
+     *   <li>{@code texture_transforms[0].offset.y} (float)</li>
+     *   <li>{@code texture_transforms[0].scale.x} (float)</li>
+     *   <li>{@code texture_transforms[0].scale.y} (float)</li>
+     *   <li>{@code texture_transforms[0].rotation} (float)</li>
+     *   <li>{@code texture_transforms[1].offset.x} (float)</li>
+     *   <li>{@code texture_transforms[1].offset.y} (float)</li>
+     *   <li>{@code texture_transforms[1].scale.x} (float)</li>
+     *   <li>{@code texture_transforms[1].scale.y} (float)</li>
+     *   <li>{@code texture_transforms[1].rotation} (float)</li>
+     *   <li>{@code texture_transforms[2].offset.x} (float)</li>
+     *   <li>{@code texture_transforms[2].offset.y} (float)</li>
+     *   <li>{@code texture_transforms[2].scale.x} (float)</li>
+     *   <li>{@code texture_transforms[2].scale.y} (float)</li>
+     *   <li>{@code texture_transforms[2].rotation} (float)</li>
+     *   <li>{@code texture_transforms[3].offset.x} (float)</li>
+     *   <li>{@code texture_transforms[3].offset.y} (float)</li>
+     *   <li>{@code texture_transforms[3].scale.x} (float)</li>
+     *   <li>{@code texture_transforms[3].scale.y} (float)</li>
+     *   <li>{@code texture_transforms[3].rotation} (float)</li>
+     *   <li>{@code texture_transforms[4].offset.x} (float)</li>
+     *   <li>{@code texture_transforms[4].offset.y} (float)</li>
+     *   <li>{@code texture_transforms[4].scale.x} (float)</li>
+     *   <li>{@code texture_transforms[4].scale.y} (float)</li>
+     *   <li>{@code texture_transforms[4].rotation} (float)</li>
+     *   <li>{@code texture_transforms[5].offset.x} (float)</li>
+     *   <li>{@code texture_transforms[5].offset.y} (float)</li>
+     *   <li>{@code texture_transforms[5].scale.x} (float)</li>
+     *   <li>{@code texture_transforms[5].scale.y} (float)</li>
+     *   <li>{@code texture_transforms[5].rotation} (float)</li>
+     *   <li>{@code texture_transforms[6].offset.x} (float)</li>
+     *   <li>{@code texture_transforms[6].offset.y} (float)</li>
+     *   <li>{@code texture_transforms[6].scale.x} (float)</li>
+     *   <li>{@code texture_transforms[6].scale.y} (float)</li>
+     *   <li>{@code texture_transforms[6].rotation} (float)</li>
+     * </ol>
+     */
+    public static native int skinnedPbrEffectExtractMaterial(long effect, byte[] outMaterialBytes, long[] outMaterialIntegral, float[] outMaterialFloating);
 
     /**
      * cna_skybox_compute_view_ray (engine_layer.h).

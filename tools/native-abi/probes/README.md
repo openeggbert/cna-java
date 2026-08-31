@@ -320,3 +320,52 @@ CNA's own check rather than a Java type test.
 The last three lines are why the full-screen pass is not projected yet: it creates, but both draws
 refuse a null source with `INVALID_ARGUMENT`, and its sampler parameter is a `CNA_SamplerState`
 this binding has no value type for. It needs its own measurement before it earns a Java type.
+
+## pbr_effect_material.c
+
+Does the PBR effect exist on this renderer, and does a material really round-trip through it?
+
+The PBR effect and the material it carries were the largest unbound family left, and everything
+depended on the round trip: without it every value would only be checkable against its own getter,
+and the material structure -- ninety-one leaves, seven texture transforms among them -- could not be
+checked at all. Its output on ABI 0.21.0, HEADLESS:
+
+```text
+pbr effect create       0
+skinned create          0
+metallic / ior          0.250 1.750
+coordinate set 3        0  1
+coordinate set 7        1
+texture transform 2     0 0  offset 0.50 scale 2.00,3.00 rot 0.25
+extract                 0  metallic 0.250 ior 1.750 sided 1 mode 2
+extract slots           coord[3]=1 transform[2] scale 2.00,3.00
+apply                   0  roughness 0.125 coord[5] 1
+texture create          0
+set_texture then get    present 1  same handle 1
+apply_material then get present 0  same handle 0
+extract after apply     albedo handle invalid
+equals / hash / string  1  0  14 needs 133
+apply to wrong effect   1
+```
+
+Both effects construct, every value round-trips, the seventh texture slot is refused (there are
+seven, indexed nought to six), and applying a material to the wrong kind of effect is refused with
+`INVALID_ARGUMENT` rather than silently doing nothing.
+
+**`JAVA-UPSTREAM-010` is the three lines in the middle.** A texture set through
+`cna_pbr_effect_set_texture` comes back from `cna_pbr_effect_get_texture` as the *same handle* --
+genuinely retained, not minted. A texture applied through `cna_pbr_effect_apply_material` does not
+come back at all: `get_texture` says the slot is empty and `extract_material` returns an invalid
+handle. The native effect does hold the texture -- `MaterialBinding.cpp`'s `ApplyTo` sets every map
+-- but the C API's handle registry never learns about it, so there is no handle to hand back.
+
+The consequence for a game is the read-modify-write: extract a material, change one number, apply
+it, and every map is silently unbound. `PbrEffect.applyMaterial` therefore sets each slot a second
+time through `set_texture`, which makes the registry agree with the effect; when CNA closes the gap
+that becomes redundant rather than wrong.
+
+The probe also earned its keep by being wrong first. Its initial version left the `struct_size` of
+the out-parameters at zero, and `get_texture_transform_ext` refused a structure that said it was
+zero bytes long -- which looked exactly like a broken getter. A versioned out-parameter is still the
+caller's structure and has to be stamped before the call. The generated adapter does that on every
+route, which is the whole reason this class of mistake does not reach Java.

@@ -11480,6 +11480,830 @@ Java_org_openeggbert_cna_internal_generated_NativeEngineLayerRoutes_particleSyst
 }
 
 JNIEXPORT jint JNICALL
+Java_org_openeggbert_cna_internal_generated_NativeEngineLayerRoutes_pbrEffectApplyMaterial(
+    JNIEnv* environment, jclass declaring_class, jlong effect, jbyteArray materialBytes, jlongArray materialIntegral, jfloatArray materialFloating)
+{
+    (void)environment;
+    (void)declaring_class;
+    CNA_PbrMaterialEXT material_value;
+    memset(&material_value, 0, sizeof material_value);
+    material_value.struct_size = (uint32_t)(sizeof material_value);
+    material_value.struct_version = UINT32_C(1);
+    material_value.texture_transforms[0].struct_size = (uint32_t)(sizeof material_value.texture_transforms[0]);
+    material_value.texture_transforms[0].struct_version = UINT32_C(1);
+    material_value.texture_transforms[1].struct_size = (uint32_t)(sizeof material_value.texture_transforms[1]);
+    material_value.texture_transforms[1].struct_version = UINT32_C(1);
+    material_value.texture_transforms[2].struct_size = (uint32_t)(sizeof material_value.texture_transforms[2]);
+    material_value.texture_transforms[2].struct_version = UINT32_C(1);
+    material_value.texture_transforms[3].struct_size = (uint32_t)(sizeof material_value.texture_transforms[3]);
+    material_value.texture_transforms[3].struct_version = UINT32_C(1);
+    material_value.texture_transforms[4].struct_size = (uint32_t)(sizeof material_value.texture_transforms[4]);
+    material_value.texture_transforms[4].struct_version = UINT32_C(1);
+    material_value.texture_transforms[5].struct_size = (uint32_t)(sizeof material_value.texture_transforms[5]);
+    material_value.texture_transforms[5].struct_version = UINT32_C(1);
+    material_value.texture_transforms[6].struct_size = (uint32_t)(sizeof material_value.texture_transforms[6]);
+    material_value.texture_transforms[6].struct_version = UINT32_C(1);
+    {
+        jbyte materialBytes_values[3];
+        (*environment)->GetByteArrayRegion(environment, materialBytes, 0, 3, materialBytes_values);
+        material_value.reserved[0] = (uint8_t)materialBytes_values[0];
+        material_value.reserved[1] = (uint8_t)materialBytes_values[1];
+        material_value.reserved[2] = (uint8_t)materialBytes_values[2];
+    }
+    {
+        jlong materialIntegral_values[24];
+        (*environment)->GetLongArrayRegion(environment, materialIntegral, 0, 24, materialIntegral_values);
+        material_value.albedo_texture = (CNA_Handle)materialIntegral_values[0];
+        material_value.normal_texture = (CNA_Handle)materialIntegral_values[1];
+        material_value.metallic_roughness_texture = (CNA_Handle)materialIntegral_values[2];
+        material_value.ambient_occlusion_texture = (CNA_Handle)materialIntegral_values[3];
+        material_value.emissive_texture = (CNA_Handle)materialIntegral_values[4];
+        material_value.specular_texture = (CNA_Handle)materialIntegral_values[5];
+        material_value.specular_color_texture = (CNA_Handle)materialIntegral_values[6];
+        material_value.albedo_color.r = (uint8_t)materialIntegral_values[7];
+        material_value.albedo_color.g = (uint8_t)materialIntegral_values[8];
+        material_value.albedo_color.b = (uint8_t)materialIntegral_values[9];
+        material_value.albedo_color.a = (uint8_t)materialIntegral_values[10];
+        material_value.alpha_mode = (CNA_AlphaModeEXT)materialIntegral_values[11];
+        material_value.double_sided = (CNA_Bool)materialIntegral_values[12];
+        material_value.base_color_texture_srgb = (CNA_Bool)materialIntegral_values[13];
+        material_value.emissive_texture_srgb = (CNA_Bool)materialIntegral_values[14];
+        material_value.specular_color_texture_srgb = (CNA_Bool)materialIntegral_values[15];
+        material_value.output_encoded_to_srgb = (CNA_Bool)materialIntegral_values[16];
+        material_value.texture_coordinate_sets[0] = (int32_t)materialIntegral_values[17];
+        material_value.texture_coordinate_sets[1] = (int32_t)materialIntegral_values[18];
+        material_value.texture_coordinate_sets[2] = (int32_t)materialIntegral_values[19];
+        material_value.texture_coordinate_sets[3] = (int32_t)materialIntegral_values[20];
+        material_value.texture_coordinate_sets[4] = (int32_t)materialIntegral_values[21];
+        material_value.texture_coordinate_sets[5] = (int32_t)materialIntegral_values[22];
+        material_value.texture_coordinate_sets[6] = (int32_t)materialIntegral_values[23];
+    }
+    {
+        jfloat materialFloating_values[48];
+        (*environment)->GetFloatArrayRegion(environment, materialFloating, 0, 48, materialFloating_values);
+        material_value.emissive_factor.x = (float)materialFloating_values[0];
+        material_value.emissive_factor.y = (float)materialFloating_values[1];
+        material_value.emissive_factor.z = (float)materialFloating_values[2];
+        material_value.specular_color_factor.x = (float)materialFloating_values[3];
+        material_value.specular_color_factor.y = (float)materialFloating_values[4];
+        material_value.specular_color_factor.z = (float)materialFloating_values[5];
+        material_value.metallic_factor = (float)materialFloating_values[6];
+        material_value.roughness_factor = (float)materialFloating_values[7];
+        material_value.normal_scale = (float)materialFloating_values[8];
+        material_value.occlusion_strength = (float)materialFloating_values[9];
+        material_value.ior = (float)materialFloating_values[10];
+        material_value.specular_factor = (float)materialFloating_values[11];
+        material_value.alpha_cutoff = (float)materialFloating_values[12];
+        material_value.texture_transforms[0].offset.x = (float)materialFloating_values[13];
+        material_value.texture_transforms[0].offset.y = (float)materialFloating_values[14];
+        material_value.texture_transforms[0].scale.x = (float)materialFloating_values[15];
+        material_value.texture_transforms[0].scale.y = (float)materialFloating_values[16];
+        material_value.texture_transforms[0].rotation = (float)materialFloating_values[17];
+        material_value.texture_transforms[1].offset.x = (float)materialFloating_values[18];
+        material_value.texture_transforms[1].offset.y = (float)materialFloating_values[19];
+        material_value.texture_transforms[1].scale.x = (float)materialFloating_values[20];
+        material_value.texture_transforms[1].scale.y = (float)materialFloating_values[21];
+        material_value.texture_transforms[1].rotation = (float)materialFloating_values[22];
+        material_value.texture_transforms[2].offset.x = (float)materialFloating_values[23];
+        material_value.texture_transforms[2].offset.y = (float)materialFloating_values[24];
+        material_value.texture_transforms[2].scale.x = (float)materialFloating_values[25];
+        material_value.texture_transforms[2].scale.y = (float)materialFloating_values[26];
+        material_value.texture_transforms[2].rotation = (float)materialFloating_values[27];
+        material_value.texture_transforms[3].offset.x = (float)materialFloating_values[28];
+        material_value.texture_transforms[3].offset.y = (float)materialFloating_values[29];
+        material_value.texture_transforms[3].scale.x = (float)materialFloating_values[30];
+        material_value.texture_transforms[3].scale.y = (float)materialFloating_values[31];
+        material_value.texture_transforms[3].rotation = (float)materialFloating_values[32];
+        material_value.texture_transforms[4].offset.x = (float)materialFloating_values[33];
+        material_value.texture_transforms[4].offset.y = (float)materialFloating_values[34];
+        material_value.texture_transforms[4].scale.x = (float)materialFloating_values[35];
+        material_value.texture_transforms[4].scale.y = (float)materialFloating_values[36];
+        material_value.texture_transforms[4].rotation = (float)materialFloating_values[37];
+        material_value.texture_transforms[5].offset.x = (float)materialFloating_values[38];
+        material_value.texture_transforms[5].offset.y = (float)materialFloating_values[39];
+        material_value.texture_transforms[5].scale.x = (float)materialFloating_values[40];
+        material_value.texture_transforms[5].scale.y = (float)materialFloating_values[41];
+        material_value.texture_transforms[5].rotation = (float)materialFloating_values[42];
+        material_value.texture_transforms[6].offset.x = (float)materialFloating_values[43];
+        material_value.texture_transforms[6].offset.y = (float)materialFloating_values[44];
+        material_value.texture_transforms[6].scale.x = (float)materialFloating_values[45];
+        material_value.texture_transforms[6].scale.y = (float)materialFloating_values[46];
+        material_value.texture_transforms[6].rotation = (float)materialFloating_values[47];
+    }
+    CNA_Result call_result = cna.pbr_effect_apply_material((CNA_EffectHandle)effect, &material_value);
+    return (jint)call_result;
+}
+
+JNIEXPORT jint JNICALL
+Java_org_openeggbert_cna_internal_generated_NativeEngineLayerRoutes_pbrEffectExtractMaterial(
+    JNIEnv* environment, jclass declaring_class, jlong effect, jbyteArray out_materialBytes, jlongArray out_materialIntegral, jfloatArray out_materialFloating)
+{
+    (void)environment;
+    (void)declaring_class;
+    CNA_PbrMaterialEXT out_material_value;
+    memset(&out_material_value, 0, sizeof out_material_value);
+    out_material_value.struct_size = (uint32_t)(sizeof out_material_value);
+    out_material_value.struct_version = UINT32_C(1);
+    out_material_value.texture_transforms[0].struct_size = (uint32_t)(sizeof out_material_value.texture_transforms[0]);
+    out_material_value.texture_transforms[0].struct_version = UINT32_C(1);
+    out_material_value.texture_transforms[1].struct_size = (uint32_t)(sizeof out_material_value.texture_transforms[1]);
+    out_material_value.texture_transforms[1].struct_version = UINT32_C(1);
+    out_material_value.texture_transforms[2].struct_size = (uint32_t)(sizeof out_material_value.texture_transforms[2]);
+    out_material_value.texture_transforms[2].struct_version = UINT32_C(1);
+    out_material_value.texture_transforms[3].struct_size = (uint32_t)(sizeof out_material_value.texture_transforms[3]);
+    out_material_value.texture_transforms[3].struct_version = UINT32_C(1);
+    out_material_value.texture_transforms[4].struct_size = (uint32_t)(sizeof out_material_value.texture_transforms[4]);
+    out_material_value.texture_transforms[4].struct_version = UINT32_C(1);
+    out_material_value.texture_transforms[5].struct_size = (uint32_t)(sizeof out_material_value.texture_transforms[5]);
+    out_material_value.texture_transforms[5].struct_version = UINT32_C(1);
+    out_material_value.texture_transforms[6].struct_size = (uint32_t)(sizeof out_material_value.texture_transforms[6]);
+    out_material_value.texture_transforms[6].struct_version = UINT32_C(1);
+    CNA_Result call_result = cna.pbr_effect_extract_material((CNA_EffectHandle)effect, &out_material_value);
+    if (call_result == CNA_RESULT_SUCCESS || call_result == CNA_RESULT_BUFFER_TOO_SMALL) {
+        jbyte out_materialBytes_values[] = {
+            (jbyte)out_material_value.reserved[0],
+            (jbyte)out_material_value.reserved[1],
+            (jbyte)out_material_value.reserved[2]
+        };
+        (*environment)->SetByteArrayRegion(environment, out_materialBytes, 0,
+            (jsize)(sizeof out_materialBytes_values / sizeof out_materialBytes_values[0]),
+            out_materialBytes_values);
+        jlong out_materialIntegral_values[] = {
+            (jlong)out_material_value.albedo_texture,
+            (jlong)out_material_value.normal_texture,
+            (jlong)out_material_value.metallic_roughness_texture,
+            (jlong)out_material_value.ambient_occlusion_texture,
+            (jlong)out_material_value.emissive_texture,
+            (jlong)out_material_value.specular_texture,
+            (jlong)out_material_value.specular_color_texture,
+            (jlong)out_material_value.albedo_color.r,
+            (jlong)out_material_value.albedo_color.g,
+            (jlong)out_material_value.albedo_color.b,
+            (jlong)out_material_value.albedo_color.a,
+            (jlong)out_material_value.alpha_mode,
+            (jlong)out_material_value.double_sided,
+            (jlong)out_material_value.base_color_texture_srgb,
+            (jlong)out_material_value.emissive_texture_srgb,
+            (jlong)out_material_value.specular_color_texture_srgb,
+            (jlong)out_material_value.output_encoded_to_srgb,
+            (jlong)out_material_value.texture_coordinate_sets[0],
+            (jlong)out_material_value.texture_coordinate_sets[1],
+            (jlong)out_material_value.texture_coordinate_sets[2],
+            (jlong)out_material_value.texture_coordinate_sets[3],
+            (jlong)out_material_value.texture_coordinate_sets[4],
+            (jlong)out_material_value.texture_coordinate_sets[5],
+            (jlong)out_material_value.texture_coordinate_sets[6]
+        };
+        (*environment)->SetLongArrayRegion(environment, out_materialIntegral, 0,
+            (jsize)(sizeof out_materialIntegral_values / sizeof out_materialIntegral_values[0]),
+            out_materialIntegral_values);
+        jfloat out_materialFloating_values[] = {
+            (jfloat)out_material_value.emissive_factor.x,
+            (jfloat)out_material_value.emissive_factor.y,
+            (jfloat)out_material_value.emissive_factor.z,
+            (jfloat)out_material_value.specular_color_factor.x,
+            (jfloat)out_material_value.specular_color_factor.y,
+            (jfloat)out_material_value.specular_color_factor.z,
+            (jfloat)out_material_value.metallic_factor,
+            (jfloat)out_material_value.roughness_factor,
+            (jfloat)out_material_value.normal_scale,
+            (jfloat)out_material_value.occlusion_strength,
+            (jfloat)out_material_value.ior,
+            (jfloat)out_material_value.specular_factor,
+            (jfloat)out_material_value.alpha_cutoff,
+            (jfloat)out_material_value.texture_transforms[0].offset.x,
+            (jfloat)out_material_value.texture_transforms[0].offset.y,
+            (jfloat)out_material_value.texture_transforms[0].scale.x,
+            (jfloat)out_material_value.texture_transforms[0].scale.y,
+            (jfloat)out_material_value.texture_transforms[0].rotation,
+            (jfloat)out_material_value.texture_transforms[1].offset.x,
+            (jfloat)out_material_value.texture_transforms[1].offset.y,
+            (jfloat)out_material_value.texture_transforms[1].scale.x,
+            (jfloat)out_material_value.texture_transforms[1].scale.y,
+            (jfloat)out_material_value.texture_transforms[1].rotation,
+            (jfloat)out_material_value.texture_transforms[2].offset.x,
+            (jfloat)out_material_value.texture_transforms[2].offset.y,
+            (jfloat)out_material_value.texture_transforms[2].scale.x,
+            (jfloat)out_material_value.texture_transforms[2].scale.y,
+            (jfloat)out_material_value.texture_transforms[2].rotation,
+            (jfloat)out_material_value.texture_transforms[3].offset.x,
+            (jfloat)out_material_value.texture_transforms[3].offset.y,
+            (jfloat)out_material_value.texture_transforms[3].scale.x,
+            (jfloat)out_material_value.texture_transforms[3].scale.y,
+            (jfloat)out_material_value.texture_transforms[3].rotation,
+            (jfloat)out_material_value.texture_transforms[4].offset.x,
+            (jfloat)out_material_value.texture_transforms[4].offset.y,
+            (jfloat)out_material_value.texture_transforms[4].scale.x,
+            (jfloat)out_material_value.texture_transforms[4].scale.y,
+            (jfloat)out_material_value.texture_transforms[4].rotation,
+            (jfloat)out_material_value.texture_transforms[5].offset.x,
+            (jfloat)out_material_value.texture_transforms[5].offset.y,
+            (jfloat)out_material_value.texture_transforms[5].scale.x,
+            (jfloat)out_material_value.texture_transforms[5].scale.y,
+            (jfloat)out_material_value.texture_transforms[5].rotation,
+            (jfloat)out_material_value.texture_transforms[6].offset.x,
+            (jfloat)out_material_value.texture_transforms[6].offset.y,
+            (jfloat)out_material_value.texture_transforms[6].scale.x,
+            (jfloat)out_material_value.texture_transforms[6].scale.y,
+            (jfloat)out_material_value.texture_transforms[6].rotation
+        };
+        (*environment)->SetFloatArrayRegion(environment, out_materialFloating, 0,
+            (jsize)(sizeof out_materialFloating_values / sizeof out_materialFloating_values[0]),
+            out_materialFloating_values);
+    }
+    return (jint)call_result;
+}
+
+JNIEXPORT jint JNICALL
+Java_org_openeggbert_cna_internal_generated_NativeEngineLayerRoutes_pbrMaterialApplyState(
+    JNIEnv* environment, jclass declaring_class, jbyteArray materialBytes, jlongArray materialIntegral, jfloatArray materialFloating, jlong graphics_device)
+{
+    (void)environment;
+    (void)declaring_class;
+    CNA_PbrMaterialEXT material_value;
+    memset(&material_value, 0, sizeof material_value);
+    material_value.struct_size = (uint32_t)(sizeof material_value);
+    material_value.struct_version = UINT32_C(1);
+    material_value.texture_transforms[0].struct_size = (uint32_t)(sizeof material_value.texture_transforms[0]);
+    material_value.texture_transforms[0].struct_version = UINT32_C(1);
+    material_value.texture_transforms[1].struct_size = (uint32_t)(sizeof material_value.texture_transforms[1]);
+    material_value.texture_transforms[1].struct_version = UINT32_C(1);
+    material_value.texture_transforms[2].struct_size = (uint32_t)(sizeof material_value.texture_transforms[2]);
+    material_value.texture_transforms[2].struct_version = UINT32_C(1);
+    material_value.texture_transforms[3].struct_size = (uint32_t)(sizeof material_value.texture_transforms[3]);
+    material_value.texture_transforms[3].struct_version = UINT32_C(1);
+    material_value.texture_transforms[4].struct_size = (uint32_t)(sizeof material_value.texture_transforms[4]);
+    material_value.texture_transforms[4].struct_version = UINT32_C(1);
+    material_value.texture_transforms[5].struct_size = (uint32_t)(sizeof material_value.texture_transforms[5]);
+    material_value.texture_transforms[5].struct_version = UINT32_C(1);
+    material_value.texture_transforms[6].struct_size = (uint32_t)(sizeof material_value.texture_transforms[6]);
+    material_value.texture_transforms[6].struct_version = UINT32_C(1);
+    {
+        jbyte materialBytes_values[3];
+        (*environment)->GetByteArrayRegion(environment, materialBytes, 0, 3, materialBytes_values);
+        material_value.reserved[0] = (uint8_t)materialBytes_values[0];
+        material_value.reserved[1] = (uint8_t)materialBytes_values[1];
+        material_value.reserved[2] = (uint8_t)materialBytes_values[2];
+    }
+    {
+        jlong materialIntegral_values[24];
+        (*environment)->GetLongArrayRegion(environment, materialIntegral, 0, 24, materialIntegral_values);
+        material_value.albedo_texture = (CNA_Handle)materialIntegral_values[0];
+        material_value.normal_texture = (CNA_Handle)materialIntegral_values[1];
+        material_value.metallic_roughness_texture = (CNA_Handle)materialIntegral_values[2];
+        material_value.ambient_occlusion_texture = (CNA_Handle)materialIntegral_values[3];
+        material_value.emissive_texture = (CNA_Handle)materialIntegral_values[4];
+        material_value.specular_texture = (CNA_Handle)materialIntegral_values[5];
+        material_value.specular_color_texture = (CNA_Handle)materialIntegral_values[6];
+        material_value.albedo_color.r = (uint8_t)materialIntegral_values[7];
+        material_value.albedo_color.g = (uint8_t)materialIntegral_values[8];
+        material_value.albedo_color.b = (uint8_t)materialIntegral_values[9];
+        material_value.albedo_color.a = (uint8_t)materialIntegral_values[10];
+        material_value.alpha_mode = (CNA_AlphaModeEXT)materialIntegral_values[11];
+        material_value.double_sided = (CNA_Bool)materialIntegral_values[12];
+        material_value.base_color_texture_srgb = (CNA_Bool)materialIntegral_values[13];
+        material_value.emissive_texture_srgb = (CNA_Bool)materialIntegral_values[14];
+        material_value.specular_color_texture_srgb = (CNA_Bool)materialIntegral_values[15];
+        material_value.output_encoded_to_srgb = (CNA_Bool)materialIntegral_values[16];
+        material_value.texture_coordinate_sets[0] = (int32_t)materialIntegral_values[17];
+        material_value.texture_coordinate_sets[1] = (int32_t)materialIntegral_values[18];
+        material_value.texture_coordinate_sets[2] = (int32_t)materialIntegral_values[19];
+        material_value.texture_coordinate_sets[3] = (int32_t)materialIntegral_values[20];
+        material_value.texture_coordinate_sets[4] = (int32_t)materialIntegral_values[21];
+        material_value.texture_coordinate_sets[5] = (int32_t)materialIntegral_values[22];
+        material_value.texture_coordinate_sets[6] = (int32_t)materialIntegral_values[23];
+    }
+    {
+        jfloat materialFloating_values[48];
+        (*environment)->GetFloatArrayRegion(environment, materialFloating, 0, 48, materialFloating_values);
+        material_value.emissive_factor.x = (float)materialFloating_values[0];
+        material_value.emissive_factor.y = (float)materialFloating_values[1];
+        material_value.emissive_factor.z = (float)materialFloating_values[2];
+        material_value.specular_color_factor.x = (float)materialFloating_values[3];
+        material_value.specular_color_factor.y = (float)materialFloating_values[4];
+        material_value.specular_color_factor.z = (float)materialFloating_values[5];
+        material_value.metallic_factor = (float)materialFloating_values[6];
+        material_value.roughness_factor = (float)materialFloating_values[7];
+        material_value.normal_scale = (float)materialFloating_values[8];
+        material_value.occlusion_strength = (float)materialFloating_values[9];
+        material_value.ior = (float)materialFloating_values[10];
+        material_value.specular_factor = (float)materialFloating_values[11];
+        material_value.alpha_cutoff = (float)materialFloating_values[12];
+        material_value.texture_transforms[0].offset.x = (float)materialFloating_values[13];
+        material_value.texture_transforms[0].offset.y = (float)materialFloating_values[14];
+        material_value.texture_transforms[0].scale.x = (float)materialFloating_values[15];
+        material_value.texture_transforms[0].scale.y = (float)materialFloating_values[16];
+        material_value.texture_transforms[0].rotation = (float)materialFloating_values[17];
+        material_value.texture_transforms[1].offset.x = (float)materialFloating_values[18];
+        material_value.texture_transforms[1].offset.y = (float)materialFloating_values[19];
+        material_value.texture_transforms[1].scale.x = (float)materialFloating_values[20];
+        material_value.texture_transforms[1].scale.y = (float)materialFloating_values[21];
+        material_value.texture_transforms[1].rotation = (float)materialFloating_values[22];
+        material_value.texture_transforms[2].offset.x = (float)materialFloating_values[23];
+        material_value.texture_transforms[2].offset.y = (float)materialFloating_values[24];
+        material_value.texture_transforms[2].scale.x = (float)materialFloating_values[25];
+        material_value.texture_transforms[2].scale.y = (float)materialFloating_values[26];
+        material_value.texture_transforms[2].rotation = (float)materialFloating_values[27];
+        material_value.texture_transforms[3].offset.x = (float)materialFloating_values[28];
+        material_value.texture_transforms[3].offset.y = (float)materialFloating_values[29];
+        material_value.texture_transforms[3].scale.x = (float)materialFloating_values[30];
+        material_value.texture_transforms[3].scale.y = (float)materialFloating_values[31];
+        material_value.texture_transforms[3].rotation = (float)materialFloating_values[32];
+        material_value.texture_transforms[4].offset.x = (float)materialFloating_values[33];
+        material_value.texture_transforms[4].offset.y = (float)materialFloating_values[34];
+        material_value.texture_transforms[4].scale.x = (float)materialFloating_values[35];
+        material_value.texture_transforms[4].scale.y = (float)materialFloating_values[36];
+        material_value.texture_transforms[4].rotation = (float)materialFloating_values[37];
+        material_value.texture_transforms[5].offset.x = (float)materialFloating_values[38];
+        material_value.texture_transforms[5].offset.y = (float)materialFloating_values[39];
+        material_value.texture_transforms[5].scale.x = (float)materialFloating_values[40];
+        material_value.texture_transforms[5].scale.y = (float)materialFloating_values[41];
+        material_value.texture_transforms[5].rotation = (float)materialFloating_values[42];
+        material_value.texture_transforms[6].offset.x = (float)materialFloating_values[43];
+        material_value.texture_transforms[6].offset.y = (float)materialFloating_values[44];
+        material_value.texture_transforms[6].scale.x = (float)materialFloating_values[45];
+        material_value.texture_transforms[6].scale.y = (float)materialFloating_values[46];
+        material_value.texture_transforms[6].rotation = (float)materialFloating_values[47];
+    }
+    CNA_Result call_result = cna.pbr_material_apply_state(&material_value, (CNA_Handle)graphics_device);
+    return (jint)call_result;
+}
+
+JNIEXPORT jint JNICALL
+Java_org_openeggbert_cna_internal_generated_NativeEngineLayerRoutes_pbrMaterialExtCopyToString(
+    JNIEnv* environment, jclass declaring_class, jbyteArray materialBytes, jlongArray materialIntegral, jfloatArray materialFloating, jbyteArray destination, jlongArray out_bytes)
+{
+    (void)environment;
+    (void)declaring_class;
+    CNA_PbrMaterialEXT material_value;
+    memset(&material_value, 0, sizeof material_value);
+    material_value.struct_size = (uint32_t)(sizeof material_value);
+    material_value.struct_version = UINT32_C(1);
+    material_value.texture_transforms[0].struct_size = (uint32_t)(sizeof material_value.texture_transforms[0]);
+    material_value.texture_transforms[0].struct_version = UINT32_C(1);
+    material_value.texture_transforms[1].struct_size = (uint32_t)(sizeof material_value.texture_transforms[1]);
+    material_value.texture_transforms[1].struct_version = UINT32_C(1);
+    material_value.texture_transforms[2].struct_size = (uint32_t)(sizeof material_value.texture_transforms[2]);
+    material_value.texture_transforms[2].struct_version = UINT32_C(1);
+    material_value.texture_transforms[3].struct_size = (uint32_t)(sizeof material_value.texture_transforms[3]);
+    material_value.texture_transforms[3].struct_version = UINT32_C(1);
+    material_value.texture_transforms[4].struct_size = (uint32_t)(sizeof material_value.texture_transforms[4]);
+    material_value.texture_transforms[4].struct_version = UINT32_C(1);
+    material_value.texture_transforms[5].struct_size = (uint32_t)(sizeof material_value.texture_transforms[5]);
+    material_value.texture_transforms[5].struct_version = UINT32_C(1);
+    material_value.texture_transforms[6].struct_size = (uint32_t)(sizeof material_value.texture_transforms[6]);
+    material_value.texture_transforms[6].struct_version = UINT32_C(1);
+    {
+        jbyte materialBytes_values[3];
+        (*environment)->GetByteArrayRegion(environment, materialBytes, 0, 3, materialBytes_values);
+        material_value.reserved[0] = (uint8_t)materialBytes_values[0];
+        material_value.reserved[1] = (uint8_t)materialBytes_values[1];
+        material_value.reserved[2] = (uint8_t)materialBytes_values[2];
+    }
+    {
+        jlong materialIntegral_values[24];
+        (*environment)->GetLongArrayRegion(environment, materialIntegral, 0, 24, materialIntegral_values);
+        material_value.albedo_texture = (CNA_Handle)materialIntegral_values[0];
+        material_value.normal_texture = (CNA_Handle)materialIntegral_values[1];
+        material_value.metallic_roughness_texture = (CNA_Handle)materialIntegral_values[2];
+        material_value.ambient_occlusion_texture = (CNA_Handle)materialIntegral_values[3];
+        material_value.emissive_texture = (CNA_Handle)materialIntegral_values[4];
+        material_value.specular_texture = (CNA_Handle)materialIntegral_values[5];
+        material_value.specular_color_texture = (CNA_Handle)materialIntegral_values[6];
+        material_value.albedo_color.r = (uint8_t)materialIntegral_values[7];
+        material_value.albedo_color.g = (uint8_t)materialIntegral_values[8];
+        material_value.albedo_color.b = (uint8_t)materialIntegral_values[9];
+        material_value.albedo_color.a = (uint8_t)materialIntegral_values[10];
+        material_value.alpha_mode = (CNA_AlphaModeEXT)materialIntegral_values[11];
+        material_value.double_sided = (CNA_Bool)materialIntegral_values[12];
+        material_value.base_color_texture_srgb = (CNA_Bool)materialIntegral_values[13];
+        material_value.emissive_texture_srgb = (CNA_Bool)materialIntegral_values[14];
+        material_value.specular_color_texture_srgb = (CNA_Bool)materialIntegral_values[15];
+        material_value.output_encoded_to_srgb = (CNA_Bool)materialIntegral_values[16];
+        material_value.texture_coordinate_sets[0] = (int32_t)materialIntegral_values[17];
+        material_value.texture_coordinate_sets[1] = (int32_t)materialIntegral_values[18];
+        material_value.texture_coordinate_sets[2] = (int32_t)materialIntegral_values[19];
+        material_value.texture_coordinate_sets[3] = (int32_t)materialIntegral_values[20];
+        material_value.texture_coordinate_sets[4] = (int32_t)materialIntegral_values[21];
+        material_value.texture_coordinate_sets[5] = (int32_t)materialIntegral_values[22];
+        material_value.texture_coordinate_sets[6] = (int32_t)materialIntegral_values[23];
+    }
+    {
+        jfloat materialFloating_values[48];
+        (*environment)->GetFloatArrayRegion(environment, materialFloating, 0, 48, materialFloating_values);
+        material_value.emissive_factor.x = (float)materialFloating_values[0];
+        material_value.emissive_factor.y = (float)materialFloating_values[1];
+        material_value.emissive_factor.z = (float)materialFloating_values[2];
+        material_value.specular_color_factor.x = (float)materialFloating_values[3];
+        material_value.specular_color_factor.y = (float)materialFloating_values[4];
+        material_value.specular_color_factor.z = (float)materialFloating_values[5];
+        material_value.metallic_factor = (float)materialFloating_values[6];
+        material_value.roughness_factor = (float)materialFloating_values[7];
+        material_value.normal_scale = (float)materialFloating_values[8];
+        material_value.occlusion_strength = (float)materialFloating_values[9];
+        material_value.ior = (float)materialFloating_values[10];
+        material_value.specular_factor = (float)materialFloating_values[11];
+        material_value.alpha_cutoff = (float)materialFloating_values[12];
+        material_value.texture_transforms[0].offset.x = (float)materialFloating_values[13];
+        material_value.texture_transforms[0].offset.y = (float)materialFloating_values[14];
+        material_value.texture_transforms[0].scale.x = (float)materialFloating_values[15];
+        material_value.texture_transforms[0].scale.y = (float)materialFloating_values[16];
+        material_value.texture_transforms[0].rotation = (float)materialFloating_values[17];
+        material_value.texture_transforms[1].offset.x = (float)materialFloating_values[18];
+        material_value.texture_transforms[1].offset.y = (float)materialFloating_values[19];
+        material_value.texture_transforms[1].scale.x = (float)materialFloating_values[20];
+        material_value.texture_transforms[1].scale.y = (float)materialFloating_values[21];
+        material_value.texture_transforms[1].rotation = (float)materialFloating_values[22];
+        material_value.texture_transforms[2].offset.x = (float)materialFloating_values[23];
+        material_value.texture_transforms[2].offset.y = (float)materialFloating_values[24];
+        material_value.texture_transforms[2].scale.x = (float)materialFloating_values[25];
+        material_value.texture_transforms[2].scale.y = (float)materialFloating_values[26];
+        material_value.texture_transforms[2].rotation = (float)materialFloating_values[27];
+        material_value.texture_transforms[3].offset.x = (float)materialFloating_values[28];
+        material_value.texture_transforms[3].offset.y = (float)materialFloating_values[29];
+        material_value.texture_transforms[3].scale.x = (float)materialFloating_values[30];
+        material_value.texture_transforms[3].scale.y = (float)materialFloating_values[31];
+        material_value.texture_transforms[3].rotation = (float)materialFloating_values[32];
+        material_value.texture_transforms[4].offset.x = (float)materialFloating_values[33];
+        material_value.texture_transforms[4].offset.y = (float)materialFloating_values[34];
+        material_value.texture_transforms[4].scale.x = (float)materialFloating_values[35];
+        material_value.texture_transforms[4].scale.y = (float)materialFloating_values[36];
+        material_value.texture_transforms[4].rotation = (float)materialFloating_values[37];
+        material_value.texture_transforms[5].offset.x = (float)materialFloating_values[38];
+        material_value.texture_transforms[5].offset.y = (float)materialFloating_values[39];
+        material_value.texture_transforms[5].scale.x = (float)materialFloating_values[40];
+        material_value.texture_transforms[5].scale.y = (float)materialFloating_values[41];
+        material_value.texture_transforms[5].rotation = (float)materialFloating_values[42];
+        material_value.texture_transforms[6].offset.x = (float)materialFloating_values[43];
+        material_value.texture_transforms[6].offset.y = (float)materialFloating_values[44];
+        material_value.texture_transforms[6].scale.x = (float)materialFloating_values[45];
+        material_value.texture_transforms[6].scale.y = (float)materialFloating_values[46];
+        material_value.texture_transforms[6].rotation = (float)materialFloating_values[47];
+    }
+    jsize destination_size = (*environment)->GetArrayLength(environment, destination);
+    jbyte* destination_bytes = (*environment)->GetByteArrayElements(environment, destination, NULL);
+    if (destination_bytes == NULL) {
+        return (jint)CNA_RESULT_OUT_OF_MEMORY;
+    }
+    uint64_t destination_written = 0;
+    CNA_Result call_result = cna.pbr_material_ext_copy_to_string(&material_value, (char*)destination_bytes, (uint64_t)destination_size, &destination_written);
+    (*environment)->ReleaseByteArrayElements(environment, destination, destination_bytes, 0);
+    if (call_result == CNA_RESULT_SUCCESS || call_result == CNA_RESULT_BUFFER_TOO_SMALL) {
+        jlong destination_element = (jlong)destination_written;
+        (*environment)->SetLongArrayRegion(
+            environment, out_bytes, 0, 1, &destination_element);
+    }
+    return (jint)call_result;
+}
+
+JNIEXPORT jint JNICALL
+Java_org_openeggbert_cna_internal_generated_NativeEngineLayerRoutes_pbrMaterialExtEquals(
+    JNIEnv* environment, jclass declaring_class, jbyteArray firstBytes, jlongArray firstIntegral, jfloatArray firstFloating, jbyteArray secondBytes, jlongArray secondIntegral, jfloatArray secondFloating, jbooleanArray out_equal)
+{
+    (void)environment;
+    (void)declaring_class;
+    CNA_PbrMaterialEXT first_value;
+    memset(&first_value, 0, sizeof first_value);
+    first_value.struct_size = (uint32_t)(sizeof first_value);
+    first_value.struct_version = UINT32_C(1);
+    first_value.texture_transforms[0].struct_size = (uint32_t)(sizeof first_value.texture_transforms[0]);
+    first_value.texture_transforms[0].struct_version = UINT32_C(1);
+    first_value.texture_transforms[1].struct_size = (uint32_t)(sizeof first_value.texture_transforms[1]);
+    first_value.texture_transforms[1].struct_version = UINT32_C(1);
+    first_value.texture_transforms[2].struct_size = (uint32_t)(sizeof first_value.texture_transforms[2]);
+    first_value.texture_transforms[2].struct_version = UINT32_C(1);
+    first_value.texture_transforms[3].struct_size = (uint32_t)(sizeof first_value.texture_transforms[3]);
+    first_value.texture_transforms[3].struct_version = UINT32_C(1);
+    first_value.texture_transforms[4].struct_size = (uint32_t)(sizeof first_value.texture_transforms[4]);
+    first_value.texture_transforms[4].struct_version = UINT32_C(1);
+    first_value.texture_transforms[5].struct_size = (uint32_t)(sizeof first_value.texture_transforms[5]);
+    first_value.texture_transforms[5].struct_version = UINT32_C(1);
+    first_value.texture_transforms[6].struct_size = (uint32_t)(sizeof first_value.texture_transforms[6]);
+    first_value.texture_transforms[6].struct_version = UINT32_C(1);
+    {
+        jbyte firstBytes_values[3];
+        (*environment)->GetByteArrayRegion(environment, firstBytes, 0, 3, firstBytes_values);
+        first_value.reserved[0] = (uint8_t)firstBytes_values[0];
+        first_value.reserved[1] = (uint8_t)firstBytes_values[1];
+        first_value.reserved[2] = (uint8_t)firstBytes_values[2];
+    }
+    {
+        jlong firstIntegral_values[24];
+        (*environment)->GetLongArrayRegion(environment, firstIntegral, 0, 24, firstIntegral_values);
+        first_value.albedo_texture = (CNA_Handle)firstIntegral_values[0];
+        first_value.normal_texture = (CNA_Handle)firstIntegral_values[1];
+        first_value.metallic_roughness_texture = (CNA_Handle)firstIntegral_values[2];
+        first_value.ambient_occlusion_texture = (CNA_Handle)firstIntegral_values[3];
+        first_value.emissive_texture = (CNA_Handle)firstIntegral_values[4];
+        first_value.specular_texture = (CNA_Handle)firstIntegral_values[5];
+        first_value.specular_color_texture = (CNA_Handle)firstIntegral_values[6];
+        first_value.albedo_color.r = (uint8_t)firstIntegral_values[7];
+        first_value.albedo_color.g = (uint8_t)firstIntegral_values[8];
+        first_value.albedo_color.b = (uint8_t)firstIntegral_values[9];
+        first_value.albedo_color.a = (uint8_t)firstIntegral_values[10];
+        first_value.alpha_mode = (CNA_AlphaModeEXT)firstIntegral_values[11];
+        first_value.double_sided = (CNA_Bool)firstIntegral_values[12];
+        first_value.base_color_texture_srgb = (CNA_Bool)firstIntegral_values[13];
+        first_value.emissive_texture_srgb = (CNA_Bool)firstIntegral_values[14];
+        first_value.specular_color_texture_srgb = (CNA_Bool)firstIntegral_values[15];
+        first_value.output_encoded_to_srgb = (CNA_Bool)firstIntegral_values[16];
+        first_value.texture_coordinate_sets[0] = (int32_t)firstIntegral_values[17];
+        first_value.texture_coordinate_sets[1] = (int32_t)firstIntegral_values[18];
+        first_value.texture_coordinate_sets[2] = (int32_t)firstIntegral_values[19];
+        first_value.texture_coordinate_sets[3] = (int32_t)firstIntegral_values[20];
+        first_value.texture_coordinate_sets[4] = (int32_t)firstIntegral_values[21];
+        first_value.texture_coordinate_sets[5] = (int32_t)firstIntegral_values[22];
+        first_value.texture_coordinate_sets[6] = (int32_t)firstIntegral_values[23];
+    }
+    {
+        jfloat firstFloating_values[48];
+        (*environment)->GetFloatArrayRegion(environment, firstFloating, 0, 48, firstFloating_values);
+        first_value.emissive_factor.x = (float)firstFloating_values[0];
+        first_value.emissive_factor.y = (float)firstFloating_values[1];
+        first_value.emissive_factor.z = (float)firstFloating_values[2];
+        first_value.specular_color_factor.x = (float)firstFloating_values[3];
+        first_value.specular_color_factor.y = (float)firstFloating_values[4];
+        first_value.specular_color_factor.z = (float)firstFloating_values[5];
+        first_value.metallic_factor = (float)firstFloating_values[6];
+        first_value.roughness_factor = (float)firstFloating_values[7];
+        first_value.normal_scale = (float)firstFloating_values[8];
+        first_value.occlusion_strength = (float)firstFloating_values[9];
+        first_value.ior = (float)firstFloating_values[10];
+        first_value.specular_factor = (float)firstFloating_values[11];
+        first_value.alpha_cutoff = (float)firstFloating_values[12];
+        first_value.texture_transforms[0].offset.x = (float)firstFloating_values[13];
+        first_value.texture_transforms[0].offset.y = (float)firstFloating_values[14];
+        first_value.texture_transforms[0].scale.x = (float)firstFloating_values[15];
+        first_value.texture_transforms[0].scale.y = (float)firstFloating_values[16];
+        first_value.texture_transforms[0].rotation = (float)firstFloating_values[17];
+        first_value.texture_transforms[1].offset.x = (float)firstFloating_values[18];
+        first_value.texture_transforms[1].offset.y = (float)firstFloating_values[19];
+        first_value.texture_transforms[1].scale.x = (float)firstFloating_values[20];
+        first_value.texture_transforms[1].scale.y = (float)firstFloating_values[21];
+        first_value.texture_transforms[1].rotation = (float)firstFloating_values[22];
+        first_value.texture_transforms[2].offset.x = (float)firstFloating_values[23];
+        first_value.texture_transforms[2].offset.y = (float)firstFloating_values[24];
+        first_value.texture_transforms[2].scale.x = (float)firstFloating_values[25];
+        first_value.texture_transforms[2].scale.y = (float)firstFloating_values[26];
+        first_value.texture_transforms[2].rotation = (float)firstFloating_values[27];
+        first_value.texture_transforms[3].offset.x = (float)firstFloating_values[28];
+        first_value.texture_transforms[3].offset.y = (float)firstFloating_values[29];
+        first_value.texture_transforms[3].scale.x = (float)firstFloating_values[30];
+        first_value.texture_transforms[3].scale.y = (float)firstFloating_values[31];
+        first_value.texture_transforms[3].rotation = (float)firstFloating_values[32];
+        first_value.texture_transforms[4].offset.x = (float)firstFloating_values[33];
+        first_value.texture_transforms[4].offset.y = (float)firstFloating_values[34];
+        first_value.texture_transforms[4].scale.x = (float)firstFloating_values[35];
+        first_value.texture_transforms[4].scale.y = (float)firstFloating_values[36];
+        first_value.texture_transforms[4].rotation = (float)firstFloating_values[37];
+        first_value.texture_transforms[5].offset.x = (float)firstFloating_values[38];
+        first_value.texture_transforms[5].offset.y = (float)firstFloating_values[39];
+        first_value.texture_transforms[5].scale.x = (float)firstFloating_values[40];
+        first_value.texture_transforms[5].scale.y = (float)firstFloating_values[41];
+        first_value.texture_transforms[5].rotation = (float)firstFloating_values[42];
+        first_value.texture_transforms[6].offset.x = (float)firstFloating_values[43];
+        first_value.texture_transforms[6].offset.y = (float)firstFloating_values[44];
+        first_value.texture_transforms[6].scale.x = (float)firstFloating_values[45];
+        first_value.texture_transforms[6].scale.y = (float)firstFloating_values[46];
+        first_value.texture_transforms[6].rotation = (float)firstFloating_values[47];
+    }
+    CNA_PbrMaterialEXT second_value;
+    memset(&second_value, 0, sizeof second_value);
+    second_value.struct_size = (uint32_t)(sizeof second_value);
+    second_value.struct_version = UINT32_C(1);
+    second_value.texture_transforms[0].struct_size = (uint32_t)(sizeof second_value.texture_transforms[0]);
+    second_value.texture_transforms[0].struct_version = UINT32_C(1);
+    second_value.texture_transforms[1].struct_size = (uint32_t)(sizeof second_value.texture_transforms[1]);
+    second_value.texture_transforms[1].struct_version = UINT32_C(1);
+    second_value.texture_transforms[2].struct_size = (uint32_t)(sizeof second_value.texture_transforms[2]);
+    second_value.texture_transforms[2].struct_version = UINT32_C(1);
+    second_value.texture_transforms[3].struct_size = (uint32_t)(sizeof second_value.texture_transforms[3]);
+    second_value.texture_transforms[3].struct_version = UINT32_C(1);
+    second_value.texture_transforms[4].struct_size = (uint32_t)(sizeof second_value.texture_transforms[4]);
+    second_value.texture_transforms[4].struct_version = UINT32_C(1);
+    second_value.texture_transforms[5].struct_size = (uint32_t)(sizeof second_value.texture_transforms[5]);
+    second_value.texture_transforms[5].struct_version = UINT32_C(1);
+    second_value.texture_transforms[6].struct_size = (uint32_t)(sizeof second_value.texture_transforms[6]);
+    second_value.texture_transforms[6].struct_version = UINT32_C(1);
+    {
+        jbyte secondBytes_values[3];
+        (*environment)->GetByteArrayRegion(environment, secondBytes, 0, 3, secondBytes_values);
+        second_value.reserved[0] = (uint8_t)secondBytes_values[0];
+        second_value.reserved[1] = (uint8_t)secondBytes_values[1];
+        second_value.reserved[2] = (uint8_t)secondBytes_values[2];
+    }
+    {
+        jlong secondIntegral_values[24];
+        (*environment)->GetLongArrayRegion(environment, secondIntegral, 0, 24, secondIntegral_values);
+        second_value.albedo_texture = (CNA_Handle)secondIntegral_values[0];
+        second_value.normal_texture = (CNA_Handle)secondIntegral_values[1];
+        second_value.metallic_roughness_texture = (CNA_Handle)secondIntegral_values[2];
+        second_value.ambient_occlusion_texture = (CNA_Handle)secondIntegral_values[3];
+        second_value.emissive_texture = (CNA_Handle)secondIntegral_values[4];
+        second_value.specular_texture = (CNA_Handle)secondIntegral_values[5];
+        second_value.specular_color_texture = (CNA_Handle)secondIntegral_values[6];
+        second_value.albedo_color.r = (uint8_t)secondIntegral_values[7];
+        second_value.albedo_color.g = (uint8_t)secondIntegral_values[8];
+        second_value.albedo_color.b = (uint8_t)secondIntegral_values[9];
+        second_value.albedo_color.a = (uint8_t)secondIntegral_values[10];
+        second_value.alpha_mode = (CNA_AlphaModeEXT)secondIntegral_values[11];
+        second_value.double_sided = (CNA_Bool)secondIntegral_values[12];
+        second_value.base_color_texture_srgb = (CNA_Bool)secondIntegral_values[13];
+        second_value.emissive_texture_srgb = (CNA_Bool)secondIntegral_values[14];
+        second_value.specular_color_texture_srgb = (CNA_Bool)secondIntegral_values[15];
+        second_value.output_encoded_to_srgb = (CNA_Bool)secondIntegral_values[16];
+        second_value.texture_coordinate_sets[0] = (int32_t)secondIntegral_values[17];
+        second_value.texture_coordinate_sets[1] = (int32_t)secondIntegral_values[18];
+        second_value.texture_coordinate_sets[2] = (int32_t)secondIntegral_values[19];
+        second_value.texture_coordinate_sets[3] = (int32_t)secondIntegral_values[20];
+        second_value.texture_coordinate_sets[4] = (int32_t)secondIntegral_values[21];
+        second_value.texture_coordinate_sets[5] = (int32_t)secondIntegral_values[22];
+        second_value.texture_coordinate_sets[6] = (int32_t)secondIntegral_values[23];
+    }
+    {
+        jfloat secondFloating_values[48];
+        (*environment)->GetFloatArrayRegion(environment, secondFloating, 0, 48, secondFloating_values);
+        second_value.emissive_factor.x = (float)secondFloating_values[0];
+        second_value.emissive_factor.y = (float)secondFloating_values[1];
+        second_value.emissive_factor.z = (float)secondFloating_values[2];
+        second_value.specular_color_factor.x = (float)secondFloating_values[3];
+        second_value.specular_color_factor.y = (float)secondFloating_values[4];
+        second_value.specular_color_factor.z = (float)secondFloating_values[5];
+        second_value.metallic_factor = (float)secondFloating_values[6];
+        second_value.roughness_factor = (float)secondFloating_values[7];
+        second_value.normal_scale = (float)secondFloating_values[8];
+        second_value.occlusion_strength = (float)secondFloating_values[9];
+        second_value.ior = (float)secondFloating_values[10];
+        second_value.specular_factor = (float)secondFloating_values[11];
+        second_value.alpha_cutoff = (float)secondFloating_values[12];
+        second_value.texture_transforms[0].offset.x = (float)secondFloating_values[13];
+        second_value.texture_transforms[0].offset.y = (float)secondFloating_values[14];
+        second_value.texture_transforms[0].scale.x = (float)secondFloating_values[15];
+        second_value.texture_transforms[0].scale.y = (float)secondFloating_values[16];
+        second_value.texture_transforms[0].rotation = (float)secondFloating_values[17];
+        second_value.texture_transforms[1].offset.x = (float)secondFloating_values[18];
+        second_value.texture_transforms[1].offset.y = (float)secondFloating_values[19];
+        second_value.texture_transforms[1].scale.x = (float)secondFloating_values[20];
+        second_value.texture_transforms[1].scale.y = (float)secondFloating_values[21];
+        second_value.texture_transforms[1].rotation = (float)secondFloating_values[22];
+        second_value.texture_transforms[2].offset.x = (float)secondFloating_values[23];
+        second_value.texture_transforms[2].offset.y = (float)secondFloating_values[24];
+        second_value.texture_transforms[2].scale.x = (float)secondFloating_values[25];
+        second_value.texture_transforms[2].scale.y = (float)secondFloating_values[26];
+        second_value.texture_transforms[2].rotation = (float)secondFloating_values[27];
+        second_value.texture_transforms[3].offset.x = (float)secondFloating_values[28];
+        second_value.texture_transforms[3].offset.y = (float)secondFloating_values[29];
+        second_value.texture_transforms[3].scale.x = (float)secondFloating_values[30];
+        second_value.texture_transforms[3].scale.y = (float)secondFloating_values[31];
+        second_value.texture_transforms[3].rotation = (float)secondFloating_values[32];
+        second_value.texture_transforms[4].offset.x = (float)secondFloating_values[33];
+        second_value.texture_transforms[4].offset.y = (float)secondFloating_values[34];
+        second_value.texture_transforms[4].scale.x = (float)secondFloating_values[35];
+        second_value.texture_transforms[4].scale.y = (float)secondFloating_values[36];
+        second_value.texture_transforms[4].rotation = (float)secondFloating_values[37];
+        second_value.texture_transforms[5].offset.x = (float)secondFloating_values[38];
+        second_value.texture_transforms[5].offset.y = (float)secondFloating_values[39];
+        second_value.texture_transforms[5].scale.x = (float)secondFloating_values[40];
+        second_value.texture_transforms[5].scale.y = (float)secondFloating_values[41];
+        second_value.texture_transforms[5].rotation = (float)secondFloating_values[42];
+        second_value.texture_transforms[6].offset.x = (float)secondFloating_values[43];
+        second_value.texture_transforms[6].offset.y = (float)secondFloating_values[44];
+        second_value.texture_transforms[6].scale.x = (float)secondFloating_values[45];
+        second_value.texture_transforms[6].scale.y = (float)secondFloating_values[46];
+        second_value.texture_transforms[6].rotation = (float)secondFloating_values[47];
+    }
+    CNA_Bool out_equal_value = 0;
+    CNA_Result call_result = cna.pbr_material_ext_equals(&first_value, &second_value, &out_equal_value);
+    if (call_result == CNA_RESULT_SUCCESS || call_result == CNA_RESULT_BUFFER_TOO_SMALL) {
+        jboolean out_equal_element = (jboolean)out_equal_value;
+        (*environment)->SetBooleanArrayRegion(
+            environment, out_equal, 0, 1, &out_equal_element);
+    }
+    return (jint)call_result;
+}
+
+JNIEXPORT jint JNICALL
+Java_org_openeggbert_cna_internal_generated_NativeEngineLayerRoutes_pbrMaterialExtGetHashCode(
+    JNIEnv* environment, jclass declaring_class, jbyteArray materialBytes, jlongArray materialIntegral, jfloatArray materialFloating, jlongArray out_hash)
+{
+    (void)environment;
+    (void)declaring_class;
+    CNA_PbrMaterialEXT material_value;
+    memset(&material_value, 0, sizeof material_value);
+    material_value.struct_size = (uint32_t)(sizeof material_value);
+    material_value.struct_version = UINT32_C(1);
+    material_value.texture_transforms[0].struct_size = (uint32_t)(sizeof material_value.texture_transforms[0]);
+    material_value.texture_transforms[0].struct_version = UINT32_C(1);
+    material_value.texture_transforms[1].struct_size = (uint32_t)(sizeof material_value.texture_transforms[1]);
+    material_value.texture_transforms[1].struct_version = UINT32_C(1);
+    material_value.texture_transforms[2].struct_size = (uint32_t)(sizeof material_value.texture_transforms[2]);
+    material_value.texture_transforms[2].struct_version = UINT32_C(1);
+    material_value.texture_transforms[3].struct_size = (uint32_t)(sizeof material_value.texture_transforms[3]);
+    material_value.texture_transforms[3].struct_version = UINT32_C(1);
+    material_value.texture_transforms[4].struct_size = (uint32_t)(sizeof material_value.texture_transforms[4]);
+    material_value.texture_transforms[4].struct_version = UINT32_C(1);
+    material_value.texture_transforms[5].struct_size = (uint32_t)(sizeof material_value.texture_transforms[5]);
+    material_value.texture_transforms[5].struct_version = UINT32_C(1);
+    material_value.texture_transforms[6].struct_size = (uint32_t)(sizeof material_value.texture_transforms[6]);
+    material_value.texture_transforms[6].struct_version = UINT32_C(1);
+    {
+        jbyte materialBytes_values[3];
+        (*environment)->GetByteArrayRegion(environment, materialBytes, 0, 3, materialBytes_values);
+        material_value.reserved[0] = (uint8_t)materialBytes_values[0];
+        material_value.reserved[1] = (uint8_t)materialBytes_values[1];
+        material_value.reserved[2] = (uint8_t)materialBytes_values[2];
+    }
+    {
+        jlong materialIntegral_values[24];
+        (*environment)->GetLongArrayRegion(environment, materialIntegral, 0, 24, materialIntegral_values);
+        material_value.albedo_texture = (CNA_Handle)materialIntegral_values[0];
+        material_value.normal_texture = (CNA_Handle)materialIntegral_values[1];
+        material_value.metallic_roughness_texture = (CNA_Handle)materialIntegral_values[2];
+        material_value.ambient_occlusion_texture = (CNA_Handle)materialIntegral_values[3];
+        material_value.emissive_texture = (CNA_Handle)materialIntegral_values[4];
+        material_value.specular_texture = (CNA_Handle)materialIntegral_values[5];
+        material_value.specular_color_texture = (CNA_Handle)materialIntegral_values[6];
+        material_value.albedo_color.r = (uint8_t)materialIntegral_values[7];
+        material_value.albedo_color.g = (uint8_t)materialIntegral_values[8];
+        material_value.albedo_color.b = (uint8_t)materialIntegral_values[9];
+        material_value.albedo_color.a = (uint8_t)materialIntegral_values[10];
+        material_value.alpha_mode = (CNA_AlphaModeEXT)materialIntegral_values[11];
+        material_value.double_sided = (CNA_Bool)materialIntegral_values[12];
+        material_value.base_color_texture_srgb = (CNA_Bool)materialIntegral_values[13];
+        material_value.emissive_texture_srgb = (CNA_Bool)materialIntegral_values[14];
+        material_value.specular_color_texture_srgb = (CNA_Bool)materialIntegral_values[15];
+        material_value.output_encoded_to_srgb = (CNA_Bool)materialIntegral_values[16];
+        material_value.texture_coordinate_sets[0] = (int32_t)materialIntegral_values[17];
+        material_value.texture_coordinate_sets[1] = (int32_t)materialIntegral_values[18];
+        material_value.texture_coordinate_sets[2] = (int32_t)materialIntegral_values[19];
+        material_value.texture_coordinate_sets[3] = (int32_t)materialIntegral_values[20];
+        material_value.texture_coordinate_sets[4] = (int32_t)materialIntegral_values[21];
+        material_value.texture_coordinate_sets[5] = (int32_t)materialIntegral_values[22];
+        material_value.texture_coordinate_sets[6] = (int32_t)materialIntegral_values[23];
+    }
+    {
+        jfloat materialFloating_values[48];
+        (*environment)->GetFloatArrayRegion(environment, materialFloating, 0, 48, materialFloating_values);
+        material_value.emissive_factor.x = (float)materialFloating_values[0];
+        material_value.emissive_factor.y = (float)materialFloating_values[1];
+        material_value.emissive_factor.z = (float)materialFloating_values[2];
+        material_value.specular_color_factor.x = (float)materialFloating_values[3];
+        material_value.specular_color_factor.y = (float)materialFloating_values[4];
+        material_value.specular_color_factor.z = (float)materialFloating_values[5];
+        material_value.metallic_factor = (float)materialFloating_values[6];
+        material_value.roughness_factor = (float)materialFloating_values[7];
+        material_value.normal_scale = (float)materialFloating_values[8];
+        material_value.occlusion_strength = (float)materialFloating_values[9];
+        material_value.ior = (float)materialFloating_values[10];
+        material_value.specular_factor = (float)materialFloating_values[11];
+        material_value.alpha_cutoff = (float)materialFloating_values[12];
+        material_value.texture_transforms[0].offset.x = (float)materialFloating_values[13];
+        material_value.texture_transforms[0].offset.y = (float)materialFloating_values[14];
+        material_value.texture_transforms[0].scale.x = (float)materialFloating_values[15];
+        material_value.texture_transforms[0].scale.y = (float)materialFloating_values[16];
+        material_value.texture_transforms[0].rotation = (float)materialFloating_values[17];
+        material_value.texture_transforms[1].offset.x = (float)materialFloating_values[18];
+        material_value.texture_transforms[1].offset.y = (float)materialFloating_values[19];
+        material_value.texture_transforms[1].scale.x = (float)materialFloating_values[20];
+        material_value.texture_transforms[1].scale.y = (float)materialFloating_values[21];
+        material_value.texture_transforms[1].rotation = (float)materialFloating_values[22];
+        material_value.texture_transforms[2].offset.x = (float)materialFloating_values[23];
+        material_value.texture_transforms[2].offset.y = (float)materialFloating_values[24];
+        material_value.texture_transforms[2].scale.x = (float)materialFloating_values[25];
+        material_value.texture_transforms[2].scale.y = (float)materialFloating_values[26];
+        material_value.texture_transforms[2].rotation = (float)materialFloating_values[27];
+        material_value.texture_transforms[3].offset.x = (float)materialFloating_values[28];
+        material_value.texture_transforms[3].offset.y = (float)materialFloating_values[29];
+        material_value.texture_transforms[3].scale.x = (float)materialFloating_values[30];
+        material_value.texture_transforms[3].scale.y = (float)materialFloating_values[31];
+        material_value.texture_transforms[3].rotation = (float)materialFloating_values[32];
+        material_value.texture_transforms[4].offset.x = (float)materialFloating_values[33];
+        material_value.texture_transforms[4].offset.y = (float)materialFloating_values[34];
+        material_value.texture_transforms[4].scale.x = (float)materialFloating_values[35];
+        material_value.texture_transforms[4].scale.y = (float)materialFloating_values[36];
+        material_value.texture_transforms[4].rotation = (float)materialFloating_values[37];
+        material_value.texture_transforms[5].offset.x = (float)materialFloating_values[38];
+        material_value.texture_transforms[5].offset.y = (float)materialFloating_values[39];
+        material_value.texture_transforms[5].scale.x = (float)materialFloating_values[40];
+        material_value.texture_transforms[5].scale.y = (float)materialFloating_values[41];
+        material_value.texture_transforms[5].rotation = (float)materialFloating_values[42];
+        material_value.texture_transforms[6].offset.x = (float)materialFloating_values[43];
+        material_value.texture_transforms[6].offset.y = (float)materialFloating_values[44];
+        material_value.texture_transforms[6].scale.x = (float)materialFloating_values[45];
+        material_value.texture_transforms[6].scale.y = (float)materialFloating_values[46];
+        material_value.texture_transforms[6].rotation = (float)materialFloating_values[47];
+    }
+    uint64_t out_hash_value = 0;
+    CNA_Result call_result = cna.pbr_material_ext_get_hash_code(&material_value, &out_hash_value);
+    if (call_result == CNA_RESULT_SUCCESS || call_result == CNA_RESULT_BUFFER_TOO_SMALL) {
+        jlong out_hash_element = (jlong)out_hash_value;
+        (*environment)->SetLongArrayRegion(
+            environment, out_hash, 0, 1, &out_hash_element);
+    }
+    return (jint)call_result;
+}
+
+JNIEXPORT jint JNICALL
 Java_org_openeggbert_cna_internal_generated_NativeEngineLayerRoutes_pbrMaterialExtensionsCopyFrom(
     JNIEnv* environment, jclass declaring_class, jlong destination, jlong source)
 {
@@ -14371,6 +15195,241 @@ Java_org_openeggbert_cna_internal_generated_NativeEngineLayerRoutes_shadowMapSiz
         jint out_size_element = (jint)out_size_value;
         (*environment)->SetIntArrayRegion(
             environment, out_size, 0, 1, &out_size_element);
+    }
+    return (jint)call_result;
+}
+
+JNIEXPORT jint JNICALL
+Java_org_openeggbert_cna_internal_generated_NativeEngineLayerRoutes_skinnedPbrEffectApplyMaterial(
+    JNIEnv* environment, jclass declaring_class, jlong effect, jbyteArray materialBytes, jlongArray materialIntegral, jfloatArray materialFloating)
+{
+    (void)environment;
+    (void)declaring_class;
+    CNA_PbrMaterialEXT material_value;
+    memset(&material_value, 0, sizeof material_value);
+    material_value.struct_size = (uint32_t)(sizeof material_value);
+    material_value.struct_version = UINT32_C(1);
+    material_value.texture_transforms[0].struct_size = (uint32_t)(sizeof material_value.texture_transforms[0]);
+    material_value.texture_transforms[0].struct_version = UINT32_C(1);
+    material_value.texture_transforms[1].struct_size = (uint32_t)(sizeof material_value.texture_transforms[1]);
+    material_value.texture_transforms[1].struct_version = UINT32_C(1);
+    material_value.texture_transforms[2].struct_size = (uint32_t)(sizeof material_value.texture_transforms[2]);
+    material_value.texture_transforms[2].struct_version = UINT32_C(1);
+    material_value.texture_transforms[3].struct_size = (uint32_t)(sizeof material_value.texture_transforms[3]);
+    material_value.texture_transforms[3].struct_version = UINT32_C(1);
+    material_value.texture_transforms[4].struct_size = (uint32_t)(sizeof material_value.texture_transforms[4]);
+    material_value.texture_transforms[4].struct_version = UINT32_C(1);
+    material_value.texture_transforms[5].struct_size = (uint32_t)(sizeof material_value.texture_transforms[5]);
+    material_value.texture_transforms[5].struct_version = UINT32_C(1);
+    material_value.texture_transforms[6].struct_size = (uint32_t)(sizeof material_value.texture_transforms[6]);
+    material_value.texture_transforms[6].struct_version = UINT32_C(1);
+    {
+        jbyte materialBytes_values[3];
+        (*environment)->GetByteArrayRegion(environment, materialBytes, 0, 3, materialBytes_values);
+        material_value.reserved[0] = (uint8_t)materialBytes_values[0];
+        material_value.reserved[1] = (uint8_t)materialBytes_values[1];
+        material_value.reserved[2] = (uint8_t)materialBytes_values[2];
+    }
+    {
+        jlong materialIntegral_values[24];
+        (*environment)->GetLongArrayRegion(environment, materialIntegral, 0, 24, materialIntegral_values);
+        material_value.albedo_texture = (CNA_Handle)materialIntegral_values[0];
+        material_value.normal_texture = (CNA_Handle)materialIntegral_values[1];
+        material_value.metallic_roughness_texture = (CNA_Handle)materialIntegral_values[2];
+        material_value.ambient_occlusion_texture = (CNA_Handle)materialIntegral_values[3];
+        material_value.emissive_texture = (CNA_Handle)materialIntegral_values[4];
+        material_value.specular_texture = (CNA_Handle)materialIntegral_values[5];
+        material_value.specular_color_texture = (CNA_Handle)materialIntegral_values[6];
+        material_value.albedo_color.r = (uint8_t)materialIntegral_values[7];
+        material_value.albedo_color.g = (uint8_t)materialIntegral_values[8];
+        material_value.albedo_color.b = (uint8_t)materialIntegral_values[9];
+        material_value.albedo_color.a = (uint8_t)materialIntegral_values[10];
+        material_value.alpha_mode = (CNA_AlphaModeEXT)materialIntegral_values[11];
+        material_value.double_sided = (CNA_Bool)materialIntegral_values[12];
+        material_value.base_color_texture_srgb = (CNA_Bool)materialIntegral_values[13];
+        material_value.emissive_texture_srgb = (CNA_Bool)materialIntegral_values[14];
+        material_value.specular_color_texture_srgb = (CNA_Bool)materialIntegral_values[15];
+        material_value.output_encoded_to_srgb = (CNA_Bool)materialIntegral_values[16];
+        material_value.texture_coordinate_sets[0] = (int32_t)materialIntegral_values[17];
+        material_value.texture_coordinate_sets[1] = (int32_t)materialIntegral_values[18];
+        material_value.texture_coordinate_sets[2] = (int32_t)materialIntegral_values[19];
+        material_value.texture_coordinate_sets[3] = (int32_t)materialIntegral_values[20];
+        material_value.texture_coordinate_sets[4] = (int32_t)materialIntegral_values[21];
+        material_value.texture_coordinate_sets[5] = (int32_t)materialIntegral_values[22];
+        material_value.texture_coordinate_sets[6] = (int32_t)materialIntegral_values[23];
+    }
+    {
+        jfloat materialFloating_values[48];
+        (*environment)->GetFloatArrayRegion(environment, materialFloating, 0, 48, materialFloating_values);
+        material_value.emissive_factor.x = (float)materialFloating_values[0];
+        material_value.emissive_factor.y = (float)materialFloating_values[1];
+        material_value.emissive_factor.z = (float)materialFloating_values[2];
+        material_value.specular_color_factor.x = (float)materialFloating_values[3];
+        material_value.specular_color_factor.y = (float)materialFloating_values[4];
+        material_value.specular_color_factor.z = (float)materialFloating_values[5];
+        material_value.metallic_factor = (float)materialFloating_values[6];
+        material_value.roughness_factor = (float)materialFloating_values[7];
+        material_value.normal_scale = (float)materialFloating_values[8];
+        material_value.occlusion_strength = (float)materialFloating_values[9];
+        material_value.ior = (float)materialFloating_values[10];
+        material_value.specular_factor = (float)materialFloating_values[11];
+        material_value.alpha_cutoff = (float)materialFloating_values[12];
+        material_value.texture_transforms[0].offset.x = (float)materialFloating_values[13];
+        material_value.texture_transforms[0].offset.y = (float)materialFloating_values[14];
+        material_value.texture_transforms[0].scale.x = (float)materialFloating_values[15];
+        material_value.texture_transforms[0].scale.y = (float)materialFloating_values[16];
+        material_value.texture_transforms[0].rotation = (float)materialFloating_values[17];
+        material_value.texture_transforms[1].offset.x = (float)materialFloating_values[18];
+        material_value.texture_transforms[1].offset.y = (float)materialFloating_values[19];
+        material_value.texture_transforms[1].scale.x = (float)materialFloating_values[20];
+        material_value.texture_transforms[1].scale.y = (float)materialFloating_values[21];
+        material_value.texture_transforms[1].rotation = (float)materialFloating_values[22];
+        material_value.texture_transforms[2].offset.x = (float)materialFloating_values[23];
+        material_value.texture_transforms[2].offset.y = (float)materialFloating_values[24];
+        material_value.texture_transforms[2].scale.x = (float)materialFloating_values[25];
+        material_value.texture_transforms[2].scale.y = (float)materialFloating_values[26];
+        material_value.texture_transforms[2].rotation = (float)materialFloating_values[27];
+        material_value.texture_transforms[3].offset.x = (float)materialFloating_values[28];
+        material_value.texture_transforms[3].offset.y = (float)materialFloating_values[29];
+        material_value.texture_transforms[3].scale.x = (float)materialFloating_values[30];
+        material_value.texture_transforms[3].scale.y = (float)materialFloating_values[31];
+        material_value.texture_transforms[3].rotation = (float)materialFloating_values[32];
+        material_value.texture_transforms[4].offset.x = (float)materialFloating_values[33];
+        material_value.texture_transforms[4].offset.y = (float)materialFloating_values[34];
+        material_value.texture_transforms[4].scale.x = (float)materialFloating_values[35];
+        material_value.texture_transforms[4].scale.y = (float)materialFloating_values[36];
+        material_value.texture_transforms[4].rotation = (float)materialFloating_values[37];
+        material_value.texture_transforms[5].offset.x = (float)materialFloating_values[38];
+        material_value.texture_transforms[5].offset.y = (float)materialFloating_values[39];
+        material_value.texture_transforms[5].scale.x = (float)materialFloating_values[40];
+        material_value.texture_transforms[5].scale.y = (float)materialFloating_values[41];
+        material_value.texture_transforms[5].rotation = (float)materialFloating_values[42];
+        material_value.texture_transforms[6].offset.x = (float)materialFloating_values[43];
+        material_value.texture_transforms[6].offset.y = (float)materialFloating_values[44];
+        material_value.texture_transforms[6].scale.x = (float)materialFloating_values[45];
+        material_value.texture_transforms[6].scale.y = (float)materialFloating_values[46];
+        material_value.texture_transforms[6].rotation = (float)materialFloating_values[47];
+    }
+    CNA_Result call_result = cna.skinned_pbr_effect_apply_material((CNA_EffectHandle)effect, &material_value);
+    return (jint)call_result;
+}
+
+JNIEXPORT jint JNICALL
+Java_org_openeggbert_cna_internal_generated_NativeEngineLayerRoutes_skinnedPbrEffectExtractMaterial(
+    JNIEnv* environment, jclass declaring_class, jlong effect, jbyteArray out_materialBytes, jlongArray out_materialIntegral, jfloatArray out_materialFloating)
+{
+    (void)environment;
+    (void)declaring_class;
+    CNA_PbrMaterialEXT out_material_value;
+    memset(&out_material_value, 0, sizeof out_material_value);
+    out_material_value.struct_size = (uint32_t)(sizeof out_material_value);
+    out_material_value.struct_version = UINT32_C(1);
+    out_material_value.texture_transforms[0].struct_size = (uint32_t)(sizeof out_material_value.texture_transforms[0]);
+    out_material_value.texture_transforms[0].struct_version = UINT32_C(1);
+    out_material_value.texture_transforms[1].struct_size = (uint32_t)(sizeof out_material_value.texture_transforms[1]);
+    out_material_value.texture_transforms[1].struct_version = UINT32_C(1);
+    out_material_value.texture_transforms[2].struct_size = (uint32_t)(sizeof out_material_value.texture_transforms[2]);
+    out_material_value.texture_transforms[2].struct_version = UINT32_C(1);
+    out_material_value.texture_transforms[3].struct_size = (uint32_t)(sizeof out_material_value.texture_transforms[3]);
+    out_material_value.texture_transforms[3].struct_version = UINT32_C(1);
+    out_material_value.texture_transforms[4].struct_size = (uint32_t)(sizeof out_material_value.texture_transforms[4]);
+    out_material_value.texture_transforms[4].struct_version = UINT32_C(1);
+    out_material_value.texture_transforms[5].struct_size = (uint32_t)(sizeof out_material_value.texture_transforms[5]);
+    out_material_value.texture_transforms[5].struct_version = UINT32_C(1);
+    out_material_value.texture_transforms[6].struct_size = (uint32_t)(sizeof out_material_value.texture_transforms[6]);
+    out_material_value.texture_transforms[6].struct_version = UINT32_C(1);
+    CNA_Result call_result = cna.skinned_pbr_effect_extract_material((CNA_EffectHandle)effect, &out_material_value);
+    if (call_result == CNA_RESULT_SUCCESS || call_result == CNA_RESULT_BUFFER_TOO_SMALL) {
+        jbyte out_materialBytes_values[] = {
+            (jbyte)out_material_value.reserved[0],
+            (jbyte)out_material_value.reserved[1],
+            (jbyte)out_material_value.reserved[2]
+        };
+        (*environment)->SetByteArrayRegion(environment, out_materialBytes, 0,
+            (jsize)(sizeof out_materialBytes_values / sizeof out_materialBytes_values[0]),
+            out_materialBytes_values);
+        jlong out_materialIntegral_values[] = {
+            (jlong)out_material_value.albedo_texture,
+            (jlong)out_material_value.normal_texture,
+            (jlong)out_material_value.metallic_roughness_texture,
+            (jlong)out_material_value.ambient_occlusion_texture,
+            (jlong)out_material_value.emissive_texture,
+            (jlong)out_material_value.specular_texture,
+            (jlong)out_material_value.specular_color_texture,
+            (jlong)out_material_value.albedo_color.r,
+            (jlong)out_material_value.albedo_color.g,
+            (jlong)out_material_value.albedo_color.b,
+            (jlong)out_material_value.albedo_color.a,
+            (jlong)out_material_value.alpha_mode,
+            (jlong)out_material_value.double_sided,
+            (jlong)out_material_value.base_color_texture_srgb,
+            (jlong)out_material_value.emissive_texture_srgb,
+            (jlong)out_material_value.specular_color_texture_srgb,
+            (jlong)out_material_value.output_encoded_to_srgb,
+            (jlong)out_material_value.texture_coordinate_sets[0],
+            (jlong)out_material_value.texture_coordinate_sets[1],
+            (jlong)out_material_value.texture_coordinate_sets[2],
+            (jlong)out_material_value.texture_coordinate_sets[3],
+            (jlong)out_material_value.texture_coordinate_sets[4],
+            (jlong)out_material_value.texture_coordinate_sets[5],
+            (jlong)out_material_value.texture_coordinate_sets[6]
+        };
+        (*environment)->SetLongArrayRegion(environment, out_materialIntegral, 0,
+            (jsize)(sizeof out_materialIntegral_values / sizeof out_materialIntegral_values[0]),
+            out_materialIntegral_values);
+        jfloat out_materialFloating_values[] = {
+            (jfloat)out_material_value.emissive_factor.x,
+            (jfloat)out_material_value.emissive_factor.y,
+            (jfloat)out_material_value.emissive_factor.z,
+            (jfloat)out_material_value.specular_color_factor.x,
+            (jfloat)out_material_value.specular_color_factor.y,
+            (jfloat)out_material_value.specular_color_factor.z,
+            (jfloat)out_material_value.metallic_factor,
+            (jfloat)out_material_value.roughness_factor,
+            (jfloat)out_material_value.normal_scale,
+            (jfloat)out_material_value.occlusion_strength,
+            (jfloat)out_material_value.ior,
+            (jfloat)out_material_value.specular_factor,
+            (jfloat)out_material_value.alpha_cutoff,
+            (jfloat)out_material_value.texture_transforms[0].offset.x,
+            (jfloat)out_material_value.texture_transforms[0].offset.y,
+            (jfloat)out_material_value.texture_transforms[0].scale.x,
+            (jfloat)out_material_value.texture_transforms[0].scale.y,
+            (jfloat)out_material_value.texture_transforms[0].rotation,
+            (jfloat)out_material_value.texture_transforms[1].offset.x,
+            (jfloat)out_material_value.texture_transforms[1].offset.y,
+            (jfloat)out_material_value.texture_transforms[1].scale.x,
+            (jfloat)out_material_value.texture_transforms[1].scale.y,
+            (jfloat)out_material_value.texture_transforms[1].rotation,
+            (jfloat)out_material_value.texture_transforms[2].offset.x,
+            (jfloat)out_material_value.texture_transforms[2].offset.y,
+            (jfloat)out_material_value.texture_transforms[2].scale.x,
+            (jfloat)out_material_value.texture_transforms[2].scale.y,
+            (jfloat)out_material_value.texture_transforms[2].rotation,
+            (jfloat)out_material_value.texture_transforms[3].offset.x,
+            (jfloat)out_material_value.texture_transforms[3].offset.y,
+            (jfloat)out_material_value.texture_transforms[3].scale.x,
+            (jfloat)out_material_value.texture_transforms[3].scale.y,
+            (jfloat)out_material_value.texture_transforms[3].rotation,
+            (jfloat)out_material_value.texture_transforms[4].offset.x,
+            (jfloat)out_material_value.texture_transforms[4].offset.y,
+            (jfloat)out_material_value.texture_transforms[4].scale.x,
+            (jfloat)out_material_value.texture_transforms[4].scale.y,
+            (jfloat)out_material_value.texture_transforms[4].rotation,
+            (jfloat)out_material_value.texture_transforms[5].offset.x,
+            (jfloat)out_material_value.texture_transforms[5].offset.y,
+            (jfloat)out_material_value.texture_transforms[5].scale.x,
+            (jfloat)out_material_value.texture_transforms[5].scale.y,
+            (jfloat)out_material_value.texture_transforms[5].rotation,
+            (jfloat)out_material_value.texture_transforms[6].offset.x,
+            (jfloat)out_material_value.texture_transforms[6].offset.y,
+            (jfloat)out_material_value.texture_transforms[6].scale.x,
+            (jfloat)out_material_value.texture_transforms[6].scale.y,
+            (jfloat)out_material_value.texture_transforms[6].rotation
+        };
+        (*environment)->SetFloatArrayRegion(environment, out_materialFloating, 0,
+            (jsize)(sizeof out_materialFloating_values / sizeof out_materialFloating_values[0]),
+            out_materialFloating_values);
     }
     return (jint)call_result;
 }

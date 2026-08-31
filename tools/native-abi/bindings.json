@@ -18574,6 +18574,468 @@
       ]
     },
     {
+      "name": "cna_pbr_effect_apply_material",
+      "header": "engine_layer.h",
+      "ownership": "borrows the effect; the material's textures are borrowed and set as pointers only, so this transfers no handle ownership -- see JAVA-UPSTREAM-010",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_EffectHandle",
+        "const CNA_PbrMaterialEXT*"
+      ]
+    },
+    {
+      "name": "cna_pbr_effect_create",
+      "header": "effects.h",
+      "ownership": "borrows the graphics device; returns an owned effect handle",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_Handle",
+        "CNA_EffectHandle*"
+      ]
+    },
+    {
+      "name": "cna_pbr_effect_extract_material",
+      "header": "engine_layer.h",
+      "ownership": "borrows the effect; copies the material out with every texture handle invalid, so it transfers no ownership",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_EffectHandle",
+        "CNA_PbrMaterialEXT*"
+      ]
+    },
+    {
+      "name": "cna_pbr_effect_get_alpha",
+      "header": "effects.h",
+      "ownership": "borrows the effect; owns nothing",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_EffectHandle",
+        "float*"
+      ]
+    },
+    {
+      "name": "cna_pbr_effect_get_alpha_cutoff_ext",
+      "header": "effects.h",
+      "ownership": "borrows the effect; owns nothing",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_EffectHandle",
+        "float*"
+      ]
+    },
+    {
+      "name": "cna_pbr_effect_get_alpha_mode_ext",
+      "header": "effects.h",
+      "ownership": "borrows the effect; owns nothing",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_EffectHandle",
+        "CNA_AlphaModeEXT*"
+      ]
+    },
+    {
+      "name": "cna_pbr_effect_get_diffuse_color",
+      "header": "effects.h",
+      "ownership": "borrows the effect; owns nothing",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_EffectHandle",
+        "CNA_Vector3*"
+      ]
+    },
+    {
+      "name": "cna_pbr_effect_get_double_sided_ext",
+      "header": "effects.h",
+      "ownership": "borrows the effect; owns nothing",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_EffectHandle",
+        "CNA_Bool*"
+      ]
+    },
+    {
+      "name": "cna_pbr_effect_get_emissive_factor",
+      "header": "effects.h",
+      "ownership": "borrows the effect; owns nothing",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_EffectHandle",
+        "CNA_Vector3*"
+      ]
+    },
+    {
+      "name": "cna_pbr_effect_get_encode_output_to_srgb_ext",
+      "header": "effects.h",
+      "ownership": "borrows the effect; owns nothing",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_EffectHandle",
+        "CNA_Bool*"
+      ]
+    },
+    {
+      "name": "cna_pbr_effect_get_ior_ext",
+      "header": "effects.h",
+      "ownership": "borrows the effect; owns nothing",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_EffectHandle",
+        "float*"
+      ]
+    },
+    {
+      "name": "cna_pbr_effect_get_metallic_factor",
+      "header": "effects.h",
+      "ownership": "borrows the effect; owns nothing",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_EffectHandle",
+        "float*"
+      ]
+    },
+    {
+      "name": "cna_pbr_effect_get_normal_scale_ext",
+      "header": "effects.h",
+      "ownership": "borrows the effect; owns nothing",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_EffectHandle",
+        "float*"
+      ]
+    },
+    {
+      "name": "cna_pbr_effect_get_occlusion_strength_ext",
+      "header": "effects.h",
+      "ownership": "borrows the effect; owns nothing",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_EffectHandle",
+        "float*"
+      ]
+    },
+    {
+      "name": "cna_pbr_effect_get_roughness_factor",
+      "header": "effects.h",
+      "ownership": "borrows the effect; owns nothing",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_EffectHandle",
+        "float*"
+      ]
+    },
+    {
+      "name": "cna_pbr_effect_get_specular_color_factor_ext",
+      "header": "effects.h",
+      "ownership": "borrows the effect; owns nothing",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_EffectHandle",
+        "CNA_Vector3*"
+      ]
+    },
+    {
+      "name": "cna_pbr_effect_get_specular_factor_ext",
+      "header": "effects.h",
+      "ownership": "borrows the effect; owns nothing",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_EffectHandle",
+        "float*"
+      ]
+    },
+    {
+      "name": "cna_pbr_effect_get_texture",
+      "header": "effects.h",
+      "ownership": "borrows the effect; returns the SAME handle that was assigned, not a fresh one, so it transfers no ownership and must not be released",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_EffectHandle",
+        "CNA_PbrTextureSlot",
+        "CNA_Bool*",
+        "CNA_Handle*"
+      ]
+    },
+    {
+      "name": "cna_pbr_effect_get_texture_coordinate_set_ext",
+      "header": "effects.h",
+      "ownership": "borrows the effect; owns nothing",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_EffectHandle",
+        "CNA_PbrTextureSlot",
+        "int32_t*"
+      ]
+    },
+    {
+      "name": "cna_pbr_effect_get_texture_is_srgb_ext",
+      "header": "effects.h",
+      "ownership": "borrows the effect; owns nothing",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_EffectHandle",
+        "CNA_PbrTextureSlot",
+        "CNA_Bool*"
+      ]
+    },
+    {
+      "name": "cna_pbr_effect_get_texture_transform_ext",
+      "header": "effects.h",
+      "ownership": "borrows the effect; copies a value out",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_EffectHandle",
+        "CNA_PbrTextureSlot",
+        "CNA_TextureTransformEXT*"
+      ]
+    },
+    {
+      "name": "cna_pbr_effect_get_vertex_color_enabled_ext",
+      "header": "effects.h",
+      "ownership": "borrows the effect; owns nothing",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_EffectHandle",
+        "CNA_Bool*"
+      ]
+    },
+    {
+      "name": "cna_pbr_effect_set_alpha",
+      "header": "effects.h",
+      "ownership": "borrows the effect; owns nothing",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_EffectHandle",
+        "float"
+      ]
+    },
+    {
+      "name": "cna_pbr_effect_set_alpha_cutoff_ext",
+      "header": "effects.h",
+      "ownership": "borrows the effect; owns nothing",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_EffectHandle",
+        "float"
+      ]
+    },
+    {
+      "name": "cna_pbr_effect_set_alpha_mode_ext",
+      "header": "effects.h",
+      "ownership": "borrows the effect; owns nothing",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_EffectHandle",
+        "CNA_AlphaModeEXT"
+      ]
+    },
+    {
+      "name": "cna_pbr_effect_set_diffuse_color",
+      "header": "effects.h",
+      "ownership": "borrows the effect; owns nothing",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_EffectHandle",
+        "CNA_Vector3"
+      ]
+    },
+    {
+      "name": "cna_pbr_effect_set_double_sided_ext",
+      "header": "effects.h",
+      "ownership": "borrows the effect; owns nothing",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_EffectHandle",
+        "CNA_Bool"
+      ]
+    },
+    {
+      "name": "cna_pbr_effect_set_emissive_factor",
+      "header": "effects.h",
+      "ownership": "borrows the effect; owns nothing",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_EffectHandle",
+        "CNA_Vector3"
+      ]
+    },
+    {
+      "name": "cna_pbr_effect_set_encode_output_to_srgb_ext",
+      "header": "effects.h",
+      "ownership": "borrows the effect; owns nothing",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_EffectHandle",
+        "CNA_Bool"
+      ]
+    },
+    {
+      "name": "cna_pbr_effect_set_ior_ext",
+      "header": "effects.h",
+      "ownership": "borrows the effect; owns nothing",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_EffectHandle",
+        "float"
+      ]
+    },
+    {
+      "name": "cna_pbr_effect_set_metallic_factor",
+      "header": "effects.h",
+      "ownership": "borrows the effect; owns nothing",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_EffectHandle",
+        "float"
+      ]
+    },
+    {
+      "name": "cna_pbr_effect_set_normal_scale_ext",
+      "header": "effects.h",
+      "ownership": "borrows the effect; owns nothing",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_EffectHandle",
+        "float"
+      ]
+    },
+    {
+      "name": "cna_pbr_effect_set_occlusion_strength_ext",
+      "header": "effects.h",
+      "ownership": "borrows the effect; owns nothing",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_EffectHandle",
+        "float"
+      ]
+    },
+    {
+      "name": "cna_pbr_effect_set_roughness_factor",
+      "header": "effects.h",
+      "ownership": "borrows the effect; owns nothing",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_EffectHandle",
+        "float"
+      ]
+    },
+    {
+      "name": "cna_pbr_effect_set_specular_color_factor_ext",
+      "header": "effects.h",
+      "ownership": "borrows the effect; owns nothing",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_EffectHandle",
+        "CNA_Vector3"
+      ]
+    },
+    {
+      "name": "cna_pbr_effect_set_specular_factor_ext",
+      "header": "effects.h",
+      "ownership": "borrows the effect; owns nothing",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_EffectHandle",
+        "float"
+      ]
+    },
+    {
+      "name": "cna_pbr_effect_set_texture",
+      "header": "effects.h",
+      "ownership": "borrows the effect; the effect RETAINS the texture, which CNA refuses to destroy until the slot is cleared",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_EffectHandle",
+        "CNA_PbrTextureSlot",
+        "CNA_Handle"
+      ]
+    },
+    {
+      "name": "cna_pbr_effect_set_texture_coordinate_set_ext",
+      "header": "effects.h",
+      "ownership": "borrows the effect; owns nothing",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_EffectHandle",
+        "CNA_PbrTextureSlot",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "cna_pbr_effect_set_texture_is_srgb_ext",
+      "header": "effects.h",
+      "ownership": "borrows the effect; owns nothing",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_EffectHandle",
+        "CNA_PbrTextureSlot",
+        "CNA_Bool"
+      ]
+    },
+    {
+      "name": "cna_pbr_effect_set_texture_transform_ext",
+      "header": "effects.h",
+      "ownership": "borrows the effect; copies a value in",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_EffectHandle",
+        "CNA_PbrTextureSlot",
+        "const CNA_TextureTransformEXT*"
+      ]
+    },
+    {
+      "name": "cna_pbr_effect_set_vertex_color_enabled_ext",
+      "header": "effects.h",
+      "ownership": "borrows the effect; owns nothing",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_EffectHandle",
+        "CNA_Bool"
+      ]
+    },
+    {
+      "name": "cna_pbr_material_apply_state",
+      "header": "engine_layer.h",
+      "ownership": "borrows the graphics device; owns nothing",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "const CNA_PbrMaterialEXT*",
+        "CNA_Handle"
+      ]
+    },
+    {
+      "name": "cna_pbr_material_ext_copy_to_string",
+      "header": "engine_layer.h",
+      "ownership": "owns nothing; copies into a caller-owned buffer",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "const CNA_PbrMaterialEXT*",
+        "char*",
+        "uint64_t",
+        "uint64_t*"
+      ]
+    },
+    {
+      "name": "cna_pbr_material_ext_equals",
+      "header": "engine_layer.h",
+      "ownership": "owns nothing; compares two caller-owned values",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "const CNA_PbrMaterialEXT*",
+        "const CNA_PbrMaterialEXT*",
+        "CNA_Bool*"
+      ]
+    },
+    {
+      "name": "cna_pbr_material_ext_get_hash_code",
+      "header": "engine_layer.h",
+      "ownership": "owns nothing; reads a caller-owned value",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "const CNA_PbrMaterialEXT*",
+        "uint64_t*"
+      ]
+    },
+    {
       "name": "cna_pbr_material_extensions_copy_from",
       "header": "engine_layer.h",
       "ownership": "borrows both materials; copies the source's value, texture pointers included",
@@ -21160,6 +21622,80 @@
       "name": "cna_skinned_effect_set_weights_per_vertex",
       "header": "effects.h",
       "ownership": "borrows SkinnedEffect",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_EffectHandle",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "cna_skinned_pbr_effect_apply_material",
+      "header": "engine_layer.h",
+      "ownership": "borrows the effect; as the unskinned route, transfers no handle ownership",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_EffectHandle",
+        "const CNA_PbrMaterialEXT*"
+      ]
+    },
+    {
+      "name": "cna_skinned_pbr_effect_copy_bone_transforms",
+      "header": "effects.h",
+      "ownership": "borrows the effect; copies into a caller-owned buffer",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_EffectHandle",
+        "uint64_t",
+        "CNA_Matrix*",
+        "uint64_t",
+        "uint64_t*"
+      ]
+    },
+    {
+      "name": "cna_skinned_pbr_effect_create",
+      "header": "effects.h",
+      "ownership": "borrows the graphics device; returns an owned effect handle",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_Handle",
+        "CNA_EffectHandle*"
+      ]
+    },
+    {
+      "name": "cna_skinned_pbr_effect_extract_material",
+      "header": "engine_layer.h",
+      "ownership": "borrows the effect; copies the material out with every texture handle invalid",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_EffectHandle",
+        "CNA_PbrMaterialEXT*"
+      ]
+    },
+    {
+      "name": "cna_skinned_pbr_effect_get_weights_per_vertex",
+      "header": "effects.h",
+      "ownership": "borrows the effect; owns nothing",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_EffectHandle",
+        "int32_t*"
+      ]
+    },
+    {
+      "name": "cna_skinned_pbr_effect_set_bone_transforms",
+      "header": "effects.h",
+      "ownership": "borrows the effect; copies the caller's matrices",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_EffectHandle",
+        "const CNA_Matrix*",
+        "uint64_t"
+      ]
+    },
+    {
+      "name": "cna_skinned_pbr_effect_set_weights_per_vertex",
+      "header": "effects.h",
+      "ownership": "borrows the effect; owns nothing",
       "returnType": "CNA_Result",
       "parameters": [
         "CNA_EffectHandle",

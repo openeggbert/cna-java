@@ -4607,8 +4607,8 @@
         "symbol": "cna_effect_get_punctual_light_ext"
       },
       {
-        "java": "effectGetShadowMapExt",
-        "symbol": "cna_effect_get_shadow_map_ext"
+        "java": "effectGetShadowCascadesExt",
+        "symbol": "cna_effect_get_shadow_cascades_ext"
       },
       {
         "java": "effectGetShadowDepthBiasExt",
@@ -4617,6 +4617,10 @@
       {
         "java": "effectGetShadowFilterRadiusExt",
         "symbol": "cna_effect_get_shadow_filter_radius_ext"
+      },
+      {
+        "java": "effectGetShadowMapExt",
+        "symbol": "cna_effect_get_shadow_map_ext"
       },
       {
         "java": "effectIsShadowsEnabledExt",
@@ -4633,6 +4637,10 @@
       {
         "java": "effectSetPunctualLightExt",
         "symbol": "cna_effect_set_punctual_light_ext"
+      },
+      {
+        "java": "effectSetShadowCascadesExt",
+        "symbol": "cna_effect_set_shadow_cascades_ext"
       },
       {
         "java": "effectSetShadowDepthBiasExt",
@@ -5083,6 +5091,46 @@
         "symbol": "cna_lens_flare_pass_set_threshold"
       },
       {
+        "java": "lightProbeBakerCreate",
+        "symbol": "cna_light_probe_baker_create"
+      },
+      {
+        "java": "lightProbeBakerCreateWithFaceSize",
+        "symbol": "cna_light_probe_baker_create_with_face_size"
+      },
+      {
+        "java": "lightProbeBakerDestroy",
+        "symbol": "cna_light_probe_baker_destroy"
+      },
+      {
+        "java": "lightProbeBakerFaceCount",
+        "symbol": "cna_light_probe_baker_face_count"
+      },
+      {
+        "java": "lightProbeBakerFaceView",
+        "symbol": "cna_light_probe_baker_face_view"
+      },
+      {
+        "java": "lightProbeBakerGetFaceSize",
+        "symbol": "cna_light_probe_baker_get_face_size"
+      },
+      {
+        "java": "lightProbeBakerGetFarPlane",
+        "symbol": "cna_light_probe_baker_get_far_plane"
+      },
+      {
+        "java": "lightProbeBakerGetNearPlane",
+        "symbol": "cna_light_probe_baker_get_near_plane"
+      },
+      {
+        "java": "lightProbeBakerIsSupported",
+        "symbol": "cna_light_probe_baker_is_supported"
+      },
+      {
+        "java": "lightProbeBakerSetPlanes",
+        "symbol": "cna_light_probe_baker_set_planes"
+      },
+      {
         "java": "lightProbeExtCopyCoefficients",
         "symbol": "cna_light_probe_ext_copy_coefficients"
       },
@@ -5422,6 +5470,30 @@
         "symbol": "cna_particle_system_uses_compute"
       },
       {
+        "java": "pbrEffectApplyMaterial",
+        "symbol": "cna_pbr_effect_apply_material"
+      },
+      {
+        "java": "pbrEffectExtractMaterial",
+        "symbol": "cna_pbr_effect_extract_material"
+      },
+      {
+        "java": "pbrMaterialApplyState",
+        "symbol": "cna_pbr_material_apply_state"
+      },
+      {
+        "java": "pbrMaterialExtCopyToString",
+        "symbol": "cna_pbr_material_ext_copy_to_string"
+      },
+      {
+        "java": "pbrMaterialExtEquals",
+        "symbol": "cna_pbr_material_ext_equals"
+      },
+      {
+        "java": "pbrMaterialExtGetHashCode",
+        "symbol": "cna_pbr_material_ext_get_hash_code"
+      },
+      {
         "java": "pbrMaterialExtensionsCopyFrom",
         "symbol": "cna_pbr_material_extensions_copy_from"
       },
@@ -5626,6 +5698,18 @@
         "symbol": "cna_point_light_ext_init"
       },
       {
+        "java": "postProcessEffectPassCreate",
+        "symbol": "cna_post_process_effect_pass_create"
+      },
+      {
+        "java": "postProcessEffectPassCreateOwning",
+        "symbol": "cna_post_process_effect_pass_create_owning"
+      },
+      {
+        "java": "postProcessEffectPassSetEffect",
+        "symbol": "cna_post_process_effect_pass_set_effect"
+      },
+      {
         "java": "postProcessPassCopyName",
         "symbol": "cna_post_process_pass_copy_name"
       },
@@ -5815,6 +5899,34 @@
         "symbol": "cna_scoped_render_target_get_has_recorded_previous"
       },
       {
+        "java": "shaderEffectFactoryAcquire",
+        "symbol": "cna_shader_effect_factory_acquire"
+      },
+      {
+        "java": "shaderEffectFactoryClear",
+        "symbol": "cna_shader_effect_factory_clear"
+      },
+      {
+        "java": "shaderEffectFactoryContains",
+        "symbol": "cna_shader_effect_factory_contains"
+      },
+      {
+        "java": "shaderEffectFactoryCreate",
+        "symbol": "cna_shader_effect_factory_create"
+      },
+      {
+        "java": "shaderEffectFactoryDestroy",
+        "symbol": "cna_shader_effect_factory_destroy"
+      },
+      {
+        "java": "shaderEffectFactoryGetCompileCount",
+        "symbol": "cna_shader_effect_factory_get_compile_count"
+      },
+      {
+        "java": "shadowCascadeStateExtInit",
+        "symbol": "cna_shadow_cascade_state_ext_init"
+      },
+      {
         "java": "shadowMapApplyCaster",
         "symbol": "cna_shadow_map_apply_caster"
       },
@@ -5885,6 +5997,14 @@
       {
         "java": "shadowMapSizeForQuality",
         "symbol": "cna_shadow_map_size_for_quality"
+      },
+      {
+        "java": "skinnedPbrEffectApplyMaterial",
+        "symbol": "cna_skinned_pbr_effect_apply_material"
+      },
+      {
+        "java": "skinnedPbrEffectExtractMaterial",
+        "symbol": "cna_skinned_pbr_effect_extract_material"
       },
       {
         "java": "skyboxComputeViewRay",
@@ -6203,6 +6323,34 @@
         "symbol": "cna_tonemap_pass_tonemap_channel"
       },
       {
+        "java": "transparentDrawListCameraPositionOf",
+        "symbol": "cna_transparent_draw_list_camera_position_of"
+      },
+      {
+        "java": "transparentDrawListClear",
+        "symbol": "cna_transparent_draw_list_clear"
+      },
+      {
+        "java": "transparentDrawListCopySortedOrderExt",
+        "symbol": "cna_transparent_draw_list_copy_sorted_order_ext"
+      },
+      {
+        "java": "transparentDrawListCreate",
+        "symbol": "cna_transparent_draw_list_create"
+      },
+      {
+        "java": "transparentDrawListDestroy",
+        "symbol": "cna_transparent_draw_list_destroy"
+      },
+      {
+        "java": "transparentDrawListGetCount",
+        "symbol": "cna_transparent_draw_list_get_count"
+      },
+      {
+        "java": "transparentDrawListSortKey",
+        "symbol": "cna_transparent_draw_list_sort_key"
+      },
+      {
         "java": "volumetricFogPassCreate",
         "symbol": "cna_volumetric_fog_pass_create"
       },
@@ -6233,122 +6381,6 @@
       {
         "java": "volumetricFogPassSetRange",
         "symbol": "cna_volumetric_fog_pass_set_range"
-      },
-      {
-        "java": "lightProbeBakerCreate",
-        "symbol": "cna_light_probe_baker_create"
-      },
-      {
-        "java": "lightProbeBakerCreateWithFaceSize",
-        "symbol": "cna_light_probe_baker_create_with_face_size"
-      },
-      {
-        "java": "lightProbeBakerDestroy",
-        "symbol": "cna_light_probe_baker_destroy"
-      },
-      {
-        "java": "lightProbeBakerFaceCount",
-        "symbol": "cna_light_probe_baker_face_count"
-      },
-      {
-        "java": "lightProbeBakerFaceView",
-        "symbol": "cna_light_probe_baker_face_view"
-      },
-      {
-        "java": "lightProbeBakerGetFaceSize",
-        "symbol": "cna_light_probe_baker_get_face_size"
-      },
-      {
-        "java": "lightProbeBakerGetFarPlane",
-        "symbol": "cna_light_probe_baker_get_far_plane"
-      },
-      {
-        "java": "lightProbeBakerGetNearPlane",
-        "symbol": "cna_light_probe_baker_get_near_plane"
-      },
-      {
-        "java": "lightProbeBakerIsSupported",
-        "symbol": "cna_light_probe_baker_is_supported"
-      },
-      {
-        "java": "lightProbeBakerSetPlanes",
-        "symbol": "cna_light_probe_baker_set_planes"
-      },
-      {
-        "java": "postProcessEffectPassCreate",
-        "symbol": "cna_post_process_effect_pass_create"
-      },
-      {
-        "java": "postProcessEffectPassCreateOwning",
-        "symbol": "cna_post_process_effect_pass_create_owning"
-      },
-      {
-        "java": "postProcessEffectPassSetEffect",
-        "symbol": "cna_post_process_effect_pass_set_effect"
-      },
-      {
-        "java": "effectGetShadowCascadesExt",
-        "symbol": "cna_effect_get_shadow_cascades_ext"
-      },
-      {
-        "java": "effectSetShadowCascadesExt",
-        "symbol": "cna_effect_set_shadow_cascades_ext"
-      },
-      {
-        "java": "shadowCascadeStateExtInit",
-        "symbol": "cna_shadow_cascade_state_ext_init"
-      },
-      {
-        "java": "shaderEffectFactoryAcquire",
-        "symbol": "cna_shader_effect_factory_acquire"
-      },
-      {
-        "java": "shaderEffectFactoryClear",
-        "symbol": "cna_shader_effect_factory_clear"
-      },
-      {
-        "java": "shaderEffectFactoryContains",
-        "symbol": "cna_shader_effect_factory_contains"
-      },
-      {
-        "java": "shaderEffectFactoryCreate",
-        "symbol": "cna_shader_effect_factory_create"
-      },
-      {
-        "java": "shaderEffectFactoryDestroy",
-        "symbol": "cna_shader_effect_factory_destroy"
-      },
-      {
-        "java": "shaderEffectFactoryGetCompileCount",
-        "symbol": "cna_shader_effect_factory_get_compile_count"
-      },
-      {
-        "java": "transparentDrawListCameraPositionOf",
-        "symbol": "cna_transparent_draw_list_camera_position_of"
-      },
-      {
-        "java": "transparentDrawListClear",
-        "symbol": "cna_transparent_draw_list_clear"
-      },
-      {
-        "java": "transparentDrawListCopySortedOrderExt",
-        "symbol": "cna_transparent_draw_list_copy_sorted_order_ext"
-      },
-      {
-        "java": "transparentDrawListCreate",
-        "symbol": "cna_transparent_draw_list_create"
-      },
-      {
-        "java": "transparentDrawListDestroy",
-        "symbol": "cna_transparent_draw_list_destroy"
-      },
-      {
-        "java": "transparentDrawListGetCount",
-        "symbol": "cna_transparent_draw_list_get_count"
-      },
-      {
-        "java": "transparentDrawListSortKey",
-        "symbol": "cna_transparent_draw_list_sort_key"
       },
       {
         "java": "weightedBlendedTransparencyBegin",
@@ -6393,6 +6425,184 @@
       {
         "java": "weightedBlendedTransparencyWeight",
         "symbol": "cna_weighted_blended_transparency_weight"
+      }
+    ],
+    "NativePbrEffectRoutes": [
+      {
+        "java": "pbrEffectCreate",
+        "symbol": "cna_pbr_effect_create"
+      },
+      {
+        "java": "pbrEffectGetAlpha",
+        "symbol": "cna_pbr_effect_get_alpha"
+      },
+      {
+        "java": "pbrEffectGetAlphaCutoffExt",
+        "symbol": "cna_pbr_effect_get_alpha_cutoff_ext"
+      },
+      {
+        "java": "pbrEffectGetAlphaModeExt",
+        "symbol": "cna_pbr_effect_get_alpha_mode_ext"
+      },
+      {
+        "java": "pbrEffectGetDiffuseColor",
+        "symbol": "cna_pbr_effect_get_diffuse_color"
+      },
+      {
+        "java": "pbrEffectGetDoubleSidedExt",
+        "symbol": "cna_pbr_effect_get_double_sided_ext"
+      },
+      {
+        "java": "pbrEffectGetEmissiveFactor",
+        "symbol": "cna_pbr_effect_get_emissive_factor"
+      },
+      {
+        "java": "pbrEffectGetEncodeOutputToSrgbExt",
+        "symbol": "cna_pbr_effect_get_encode_output_to_srgb_ext"
+      },
+      {
+        "java": "pbrEffectGetIorExt",
+        "symbol": "cna_pbr_effect_get_ior_ext"
+      },
+      {
+        "java": "pbrEffectGetMetallicFactor",
+        "symbol": "cna_pbr_effect_get_metallic_factor"
+      },
+      {
+        "java": "pbrEffectGetNormalScaleExt",
+        "symbol": "cna_pbr_effect_get_normal_scale_ext"
+      },
+      {
+        "java": "pbrEffectGetOcclusionStrengthExt",
+        "symbol": "cna_pbr_effect_get_occlusion_strength_ext"
+      },
+      {
+        "java": "pbrEffectGetRoughnessFactor",
+        "symbol": "cna_pbr_effect_get_roughness_factor"
+      },
+      {
+        "java": "pbrEffectGetSpecularColorFactorExt",
+        "symbol": "cna_pbr_effect_get_specular_color_factor_ext"
+      },
+      {
+        "java": "pbrEffectGetSpecularFactorExt",
+        "symbol": "cna_pbr_effect_get_specular_factor_ext"
+      },
+      {
+        "java": "pbrEffectGetTexture",
+        "symbol": "cna_pbr_effect_get_texture"
+      },
+      {
+        "java": "pbrEffectGetTextureCoordinateSetExt",
+        "symbol": "cna_pbr_effect_get_texture_coordinate_set_ext"
+      },
+      {
+        "java": "pbrEffectGetTextureIsSrgbExt",
+        "symbol": "cna_pbr_effect_get_texture_is_srgb_ext"
+      },
+      {
+        "java": "pbrEffectGetTextureTransformExt",
+        "symbol": "cna_pbr_effect_get_texture_transform_ext"
+      },
+      {
+        "java": "pbrEffectGetVertexColorEnabledExt",
+        "symbol": "cna_pbr_effect_get_vertex_color_enabled_ext"
+      },
+      {
+        "java": "pbrEffectSetAlpha",
+        "symbol": "cna_pbr_effect_set_alpha"
+      },
+      {
+        "java": "pbrEffectSetAlphaCutoffExt",
+        "symbol": "cna_pbr_effect_set_alpha_cutoff_ext"
+      },
+      {
+        "java": "pbrEffectSetAlphaModeExt",
+        "symbol": "cna_pbr_effect_set_alpha_mode_ext"
+      },
+      {
+        "java": "pbrEffectSetDiffuseColor",
+        "symbol": "cna_pbr_effect_set_diffuse_color"
+      },
+      {
+        "java": "pbrEffectSetDoubleSidedExt",
+        "symbol": "cna_pbr_effect_set_double_sided_ext"
+      },
+      {
+        "java": "pbrEffectSetEmissiveFactor",
+        "symbol": "cna_pbr_effect_set_emissive_factor"
+      },
+      {
+        "java": "pbrEffectSetEncodeOutputToSrgbExt",
+        "symbol": "cna_pbr_effect_set_encode_output_to_srgb_ext"
+      },
+      {
+        "java": "pbrEffectSetIorExt",
+        "symbol": "cna_pbr_effect_set_ior_ext"
+      },
+      {
+        "java": "pbrEffectSetMetallicFactor",
+        "symbol": "cna_pbr_effect_set_metallic_factor"
+      },
+      {
+        "java": "pbrEffectSetNormalScaleExt",
+        "symbol": "cna_pbr_effect_set_normal_scale_ext"
+      },
+      {
+        "java": "pbrEffectSetOcclusionStrengthExt",
+        "symbol": "cna_pbr_effect_set_occlusion_strength_ext"
+      },
+      {
+        "java": "pbrEffectSetRoughnessFactor",
+        "symbol": "cna_pbr_effect_set_roughness_factor"
+      },
+      {
+        "java": "pbrEffectSetSpecularColorFactorExt",
+        "symbol": "cna_pbr_effect_set_specular_color_factor_ext"
+      },
+      {
+        "java": "pbrEffectSetSpecularFactorExt",
+        "symbol": "cna_pbr_effect_set_specular_factor_ext"
+      },
+      {
+        "java": "pbrEffectSetTexture",
+        "symbol": "cna_pbr_effect_set_texture"
+      },
+      {
+        "java": "pbrEffectSetTextureCoordinateSetExt",
+        "symbol": "cna_pbr_effect_set_texture_coordinate_set_ext"
+      },
+      {
+        "java": "pbrEffectSetTextureIsSrgbExt",
+        "symbol": "cna_pbr_effect_set_texture_is_srgb_ext"
+      },
+      {
+        "java": "pbrEffectSetTextureTransformExt",
+        "symbol": "cna_pbr_effect_set_texture_transform_ext"
+      },
+      {
+        "java": "pbrEffectSetVertexColorEnabledExt",
+        "symbol": "cna_pbr_effect_set_vertex_color_enabled_ext"
+      },
+      {
+        "java": "skinnedPbrEffectCopyBoneTransforms",
+        "symbol": "cna_skinned_pbr_effect_copy_bone_transforms"
+      },
+      {
+        "java": "skinnedPbrEffectCreate",
+        "symbol": "cna_skinned_pbr_effect_create"
+      },
+      {
+        "java": "skinnedPbrEffectGetWeightsPerVertex",
+        "symbol": "cna_skinned_pbr_effect_get_weights_per_vertex"
+      },
+      {
+        "java": "skinnedPbrEffectSetBoneTransforms",
+        "symbol": "cna_skinned_pbr_effect_set_bone_transforms"
+      },
+      {
+        "java": "skinnedPbrEffectSetWeightsPerVertex",
+        "symbol": "cna_skinned_pbr_effect_set_weights_per_vertex"
       }
     ]
   }

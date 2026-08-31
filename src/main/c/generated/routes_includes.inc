@@ -14,5 +14,6 @@
 #include "NativeInputExtensionRoutes.inc"
 #include "NativeModelExtensionRoutes.inc"
 #include "NativeNetworkRoutes.inc"
+#include "NativePbrEffectRoutes.inc"
 #include "NativeRuntimeExtensionRoutes.inc"
 #include "NativeSensorExtensionRoutes.inc"
