@@ -70,4 +70,30 @@ public final class Cnb {
                 .cnbEncodeSoundEffect(sound.handle(), name, destination, written));
         return CnbExtension.trim(destination, written[0]);
     }
+
+    /**
+     * Encodes a sprite font as a complete SpriteFont {@code .cnb} file.
+     *
+     * @param font the font to encode, atlas and glyph table together
+     * @param contentName the source content name to record
+     * @return the whole file
+     * @throws CnbFormatException when the font has no atlas, or a glyph the format cannot carry
+     */
+    public static byte[] encodeSpriteFont(CnbSpriteFontData font, String contentName) {
+        CnbExtension.requireAvailable();
+        Objects.requireNonNull(font, "font");
+        Objects.requireNonNull(contentName, "contentName");
+        byte[] name = CnbExtension.utf8(contentName);
+        long[] size = new long[1];
+        int probe = NativeCnbRoutes.cnbEncodeSpriteFont(
+                font.handle(), name, new byte[0], size);
+        if (probe != CnbExtension.RESULT_BUFFER_TOO_SMALL) {
+            CnbExtension.check("Cnb.encodeSpriteFont", probe);
+        }
+        byte[] destination = new byte[Math.toIntExact(size[0])];
+        long[] written = new long[1];
+        CnbExtension.check("Cnb.encodeSpriteFont", NativeCnbRoutes
+                .cnbEncodeSpriteFont(font.handle(), name, destination, written));
+        return CnbExtension.trim(destination, written[0]);
+    }
 }

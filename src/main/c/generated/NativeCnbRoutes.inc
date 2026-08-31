@@ -30,6 +30,22 @@ Java_org_openeggbert_cna_internal_generated_NativeCnbRoutes_cnbAssetTypeIdFromNa
 }
 
 JNIEXPORT jint JNICALL
+Java_org_openeggbert_cna_internal_generated_NativeCnbRoutes_cnbAudioFrameBytes(
+    JNIEnv* environment, jclass declaring_class, jint format, jint channels, jintArray out_byte_count)
+{
+    (void)environment;
+    (void)declaring_class;
+    uint32_t out_byte_count_value = 0;
+    CNA_Result result = cna.cnb_audio_frame_bytes((CNA_CnbAudioFormat)format, (uint32_t)channels, &out_byte_count_value);
+    if (result == CNA_RESULT_SUCCESS || result == CNA_RESULT_BUFFER_TOO_SMALL) {
+        jint out_byte_count_element = (jint)out_byte_count_value;
+        (*environment)->SetIntArrayRegion(
+            environment, out_byte_count, 0, 1, &out_byte_count_element);
+    }
+    return (jint)result;
+}
+
+JNIEXPORT jint JNICALL
 Java_org_openeggbert_cna_internal_generated_NativeCnbRoutes_cnbCheckedAdd(
     JNIEnv* environment, jclass declaring_class, jlong a, jlong b, jlongArray out_sum)
 {
@@ -608,6 +624,22 @@ Java_org_openeggbert_cna_internal_generated_NativeCnbRoutes_cnbDecodeSoundEffect
         jlong out_sound_element = (jlong)out_sound_value;
         (*environment)->SetLongArrayRegion(
             environment, out_sound, 0, 1, &out_sound_element);
+    }
+    return (jint)result;
+}
+
+JNIEXPORT jint JNICALL
+Java_org_openeggbert_cna_internal_generated_NativeCnbRoutes_cnbDecodeSpriteFont(
+    JNIEnv* environment, jclass declaring_class, jlong document, jlongArray out_font)
+{
+    (void)environment;
+    (void)declaring_class;
+    CNA_CnbSpriteFontDataHandle out_font_value = 0;
+    CNA_Result result = cna.cnb_decode_sprite_font((CNA_CnbDocumentHandle)document, &out_font_value);
+    if (result == CNA_RESULT_SUCCESS || result == CNA_RESULT_BUFFER_TOO_SMALL) {
+        jlong out_font_element = (jlong)out_font_value;
+        (*environment)->SetLongArrayRegion(
+            environment, out_font, 0, 1, &out_font_element);
     }
     return (jint)result;
 }
@@ -1449,6 +1481,52 @@ Java_org_openeggbert_cna_internal_generated_NativeCnbRoutes_cnbEncodeSoundEffect
     }
     uint64_t out_byte_count_value = 0;
     CNA_Result result = cna.cnb_encode_sound_effect((CNA_CnbSoundEffectDataHandle)sound, content_name_view, destination_values, (uint64_t)destination_size, &out_byte_count_value);
+    (*environment)->ReleaseByteArrayElements(environment, content_name, content_name_bytes, JNI_ABORT);
+    if (result == CNA_RESULT_SUCCESS) {
+        for (jsize index = 0; index < destination_size; ++index) {
+            destination_elements[index] = (jbyte)destination_values[index];
+        }
+    }
+    free(destination_values);
+    (*environment)->ReleaseByteArrayElements(
+        environment, destination, destination_elements, 0);
+    if (result == CNA_RESULT_SUCCESS || result == CNA_RESULT_BUFFER_TOO_SMALL) {
+        jlong out_byte_count_element = (jlong)out_byte_count_value;
+        (*environment)->SetLongArrayRegion(
+            environment, out_byte_count, 0, 1, &out_byte_count_element);
+    }
+    return (jint)result;
+}
+
+JNIEXPORT jint JNICALL
+Java_org_openeggbert_cna_internal_generated_NativeCnbRoutes_cnbEncodeSpriteFont(
+    JNIEnv* environment, jclass declaring_class, jlong font, jbyteArray content_name, jbyteArray destination, jlongArray out_byte_count)
+{
+    (void)environment;
+    (void)declaring_class;
+    jsize content_name_size = (*environment)->GetArrayLength(environment, content_name);
+    jbyte* content_name_bytes = (*environment)->GetByteArrayElements(environment, content_name, NULL);
+    if (content_name_bytes == NULL) {
+        return (jint)CNA_RESULT_OUT_OF_MEMORY;
+    }
+    CNA_StringView content_name_view = {(const char*)content_name_bytes, (uint64_t)content_name_size};
+    jsize destination_size = (*environment)->GetArrayLength(environment, destination);
+    jbyte* destination_elements = (*environment)->GetByteArrayElements(environment, destination, NULL);
+    if (destination_elements == NULL) {
+        return (jint)CNA_RESULT_OUT_OF_MEMORY;
+    }
+    uint8_t* destination_values = (uint8_t*)malloc(
+        ((size_t)destination_size + 1U) * sizeof(*destination_values));
+    if (destination_values == NULL) {
+        (*environment)->ReleaseByteArrayElements(
+            environment, destination, destination_elements, JNI_ABORT);
+        return (jint)CNA_RESULT_OUT_OF_MEMORY;
+    }
+    for (jsize index = 0; index < destination_size; ++index) {
+        destination_values[index] = (uint8_t)destination_elements[index];
+    }
+    uint64_t out_byte_count_value = 0;
+    CNA_Result result = cna.cnb_encode_sprite_font((CNA_CnbSpriteFontDataHandle)font, content_name_view, destination_values, (uint64_t)destination_size, &out_byte_count_value);
     (*environment)->ReleaseByteArrayElements(environment, content_name, content_name_bytes, JNI_ABORT);
     if (result == CNA_RESULT_SUCCESS) {
         for (jsize index = 0; index < destination_size; ++index) {
@@ -2438,6 +2516,250 @@ Java_org_openeggbert_cna_internal_generated_NativeCnbRoutes_cnbSoundEffectDataGe
             (jsize)(sizeof out_infoIntegral_values / sizeof out_infoIntegral_values[0]),
             out_infoIntegral_values);
     }
+    return (jint)result;
+}
+
+JNIEXPORT jint JNICALL
+Java_org_openeggbert_cna_internal_generated_NativeCnbRoutes_cnbSpriteFontDataAddGlyph(
+    JNIEnv* environment, jclass declaring_class, jlong font, jlongArray glyphIntegral, jfloatArray glyphFloating, jlongArray out_index)
+{
+    (void)environment;
+    (void)declaring_class;
+    CNA_SpriteFontGlyph glyph_value;
+    memset(&glyph_value, 0, sizeof glyph_value);
+    glyph_value.struct_size = (uint32_t)(sizeof glyph_value);
+    glyph_value.struct_version = UINT32_C(1);
+    {
+        jlong glyphIntegral_values[10];
+        (*environment)->GetLongArrayRegion(environment, glyphIntegral, 0, 10, glyphIntegral_values);
+        glyph_value.glyph_bounds.x = (int32_t)glyphIntegral_values[0];
+        glyph_value.glyph_bounds.y = (int32_t)glyphIntegral_values[1];
+        glyph_value.glyph_bounds.width = (int32_t)glyphIntegral_values[2];
+        glyph_value.glyph_bounds.height = (int32_t)glyphIntegral_values[3];
+        glyph_value.cropping.x = (int32_t)glyphIntegral_values[4];
+        glyph_value.cropping.y = (int32_t)glyphIntegral_values[5];
+        glyph_value.cropping.width = (int32_t)glyphIntegral_values[6];
+        glyph_value.cropping.height = (int32_t)glyphIntegral_values[7];
+        glyph_value.character = (CNA_Char16)glyphIntegral_values[8];
+        glyph_value.reserved = (uint16_t)glyphIntegral_values[9];
+    }
+    {
+        jfloat glyphFloating_values[3];
+        (*environment)->GetFloatArrayRegion(environment, glyphFloating, 0, 3, glyphFloating_values);
+        glyph_value.kerning.x = (float)glyphFloating_values[0];
+        glyph_value.kerning.y = (float)glyphFloating_values[1];
+        glyph_value.kerning.z = (float)glyphFloating_values[2];
+    }
+    uint64_t out_index_value = 0;
+    CNA_Result result = cna.cnb_sprite_font_data_add_glyph((CNA_CnbSpriteFontDataHandle)font, &glyph_value, &out_index_value);
+    if (result == CNA_RESULT_SUCCESS || result == CNA_RESULT_BUFFER_TOO_SMALL) {
+        jlong out_index_element = (jlong)out_index_value;
+        (*environment)->SetLongArrayRegion(
+            environment, out_index, 0, 1, &out_index_element);
+    }
+    return (jint)result;
+}
+
+JNIEXPORT jint JNICALL
+Java_org_openeggbert_cna_internal_generated_NativeCnbRoutes_cnbSpriteFontDataCopyAtlas(
+    JNIEnv* environment, jclass declaring_class, jlong font, jlongArray out_atlas)
+{
+    (void)environment;
+    (void)declaring_class;
+    CNA_CnbTextureDataHandle out_atlas_value = 0;
+    CNA_Result result = cna.cnb_sprite_font_data_copy_atlas((CNA_CnbSpriteFontDataHandle)font, &out_atlas_value);
+    if (result == CNA_RESULT_SUCCESS || result == CNA_RESULT_BUFFER_TOO_SMALL) {
+        jlong out_atlas_element = (jlong)out_atlas_value;
+        (*environment)->SetLongArrayRegion(
+            environment, out_atlas, 0, 1, &out_atlas_element);
+    }
+    return (jint)result;
+}
+
+JNIEXPORT jint JNICALL
+Java_org_openeggbert_cna_internal_generated_NativeCnbRoutes_cnbSpriteFontDataCreate(
+    JNIEnv* environment, jclass declaring_class, jlongArray out_font)
+{
+    (void)environment;
+    (void)declaring_class;
+    CNA_CnbSpriteFontDataHandle out_font_value = 0;
+    CNA_Result result = cna.cnb_sprite_font_data_create(&out_font_value);
+    if (result == CNA_RESULT_SUCCESS || result == CNA_RESULT_BUFFER_TOO_SMALL) {
+        jlong out_font_element = (jlong)out_font_value;
+        (*environment)->SetLongArrayRegion(
+            environment, out_font, 0, 1, &out_font_element);
+    }
+    return (jint)result;
+}
+
+JNIEXPORT jint JNICALL
+Java_org_openeggbert_cna_internal_generated_NativeCnbRoutes_cnbSpriteFontDataDestroy(
+    JNIEnv* environment, jclass declaring_class, jlong font)
+{
+    (void)environment;
+    (void)declaring_class;
+    CNA_Result result = cna.cnb_sprite_font_data_destroy((CNA_CnbSpriteFontDataHandle)font);
+    return (jint)result;
+}
+
+JNIEXPORT jint JNICALL
+Java_org_openeggbert_cna_internal_generated_NativeCnbRoutes_cnbSpriteFontDataGetGlyph(
+    JNIEnv* environment, jclass declaring_class, jlong font, jlong index, jlongArray out_glyphIntegral, jfloatArray out_glyphFloating)
+{
+    (void)environment;
+    (void)declaring_class;
+    CNA_SpriteFontGlyph out_glyph_value;
+    memset(&out_glyph_value, 0, sizeof out_glyph_value);
+    out_glyph_value.struct_size = (uint32_t)(sizeof out_glyph_value);
+    out_glyph_value.struct_version = UINT32_C(1);
+    CNA_Result result = cna.cnb_sprite_font_data_get_glyph((CNA_CnbSpriteFontDataHandle)font, (uint64_t)index, &out_glyph_value);
+    if (result == CNA_RESULT_SUCCESS || result == CNA_RESULT_BUFFER_TOO_SMALL) {
+        jlong out_glyphIntegral_values[] = {
+            (jlong)out_glyph_value.glyph_bounds.x,
+            (jlong)out_glyph_value.glyph_bounds.y,
+            (jlong)out_glyph_value.glyph_bounds.width,
+            (jlong)out_glyph_value.glyph_bounds.height,
+            (jlong)out_glyph_value.cropping.x,
+            (jlong)out_glyph_value.cropping.y,
+            (jlong)out_glyph_value.cropping.width,
+            (jlong)out_glyph_value.cropping.height,
+            (jlong)out_glyph_value.character,
+            (jlong)out_glyph_value.reserved
+        };
+        (*environment)->SetLongArrayRegion(environment, out_glyphIntegral, 0,
+            (jsize)(sizeof out_glyphIntegral_values / sizeof out_glyphIntegral_values[0]),
+            out_glyphIntegral_values);
+        jfloat out_glyphFloating_values[] = {
+            (jfloat)out_glyph_value.kerning.x,
+            (jfloat)out_glyph_value.kerning.y,
+            (jfloat)out_glyph_value.kerning.z
+        };
+        (*environment)->SetFloatArrayRegion(environment, out_glyphFloating, 0,
+            (jsize)(sizeof out_glyphFloating_values / sizeof out_glyphFloating_values[0]),
+            out_glyphFloating_values);
+    }
+    return (jint)result;
+}
+
+JNIEXPORT jint JNICALL
+Java_org_openeggbert_cna_internal_generated_NativeCnbRoutes_cnbSpriteFontDataGetInfo(
+    JNIEnv* environment, jclass declaring_class, jlong font, jbyteArray out_infoBytes, jlongArray out_infoIntegral, jfloatArray out_infoFloating)
+{
+    (void)environment;
+    (void)declaring_class;
+    CNA_CnbSpriteFontInfo out_info_value;
+    memset(&out_info_value, 0, sizeof out_info_value);
+    out_info_value.struct_size = (uint32_t)(sizeof out_info_value);
+    out_info_value.struct_version = CNA_CNB_SPRITE_FONT_INFO_STRUCT_VERSION;
+    CNA_Result result = cna.cnb_sprite_font_data_get_info((CNA_CnbSpriteFontDataHandle)font, &out_info_value);
+    if (result == CNA_RESULT_SUCCESS || result == CNA_RESULT_BUFFER_TOO_SMALL) {
+        jbyte out_infoBytes_values[] = {
+            (jbyte)out_info_value.reserved[0],
+            (jbyte)out_info_value.reserved[1],
+            (jbyte)out_info_value.reserved[2],
+            (jbyte)out_info_value.reserved[3],
+            (jbyte)out_info_value.reserved[4]
+        };
+        (*environment)->SetByteArrayRegion(environment, out_infoBytes, 0,
+            (jsize)(sizeof out_infoBytes_values / sizeof out_infoBytes_values[0]),
+            out_infoBytes_values);
+        jlong out_infoIntegral_values[] = {
+            (jlong)out_info_value.glyph_count,
+            (jlong)out_info_value.line_spacing,
+            (jlong)out_info_value.default_character,
+            (jlong)out_info_value.has_default_character
+        };
+        (*environment)->SetLongArrayRegion(environment, out_infoIntegral, 0,
+            (jsize)(sizeof out_infoIntegral_values / sizeof out_infoIntegral_values[0]),
+            out_infoIntegral_values);
+        jfloat out_infoFloating_values[] = {
+            (jfloat)out_info_value.spacing
+        };
+        (*environment)->SetFloatArrayRegion(environment, out_infoFloating, 0,
+            (jsize)(sizeof out_infoFloating_values / sizeof out_infoFloating_values[0]),
+            out_infoFloating_values);
+    }
+    return (jint)result;
+}
+
+JNIEXPORT jint JNICALL
+Java_org_openeggbert_cna_internal_generated_NativeCnbRoutes_cnbSpriteFontDataSetAtlas(
+    JNIEnv* environment, jclass declaring_class, jlong font, jlong atlas)
+{
+    (void)environment;
+    (void)declaring_class;
+    CNA_Result result = cna.cnb_sprite_font_data_set_atlas((CNA_CnbSpriteFontDataHandle)font, (CNA_CnbTextureDataHandle)atlas);
+    return (jint)result;
+}
+
+JNIEXPORT jint JNICALL
+Java_org_openeggbert_cna_internal_generated_NativeCnbRoutes_cnbSpriteFontDataSetGlyph(
+    JNIEnv* environment, jclass declaring_class, jlong font, jlong index, jlongArray glyphIntegral, jfloatArray glyphFloating)
+{
+    (void)environment;
+    (void)declaring_class;
+    CNA_SpriteFontGlyph glyph_value;
+    memset(&glyph_value, 0, sizeof glyph_value);
+    glyph_value.struct_size = (uint32_t)(sizeof glyph_value);
+    glyph_value.struct_version = UINT32_C(1);
+    {
+        jlong glyphIntegral_values[10];
+        (*environment)->GetLongArrayRegion(environment, glyphIntegral, 0, 10, glyphIntegral_values);
+        glyph_value.glyph_bounds.x = (int32_t)glyphIntegral_values[0];
+        glyph_value.glyph_bounds.y = (int32_t)glyphIntegral_values[1];
+        glyph_value.glyph_bounds.width = (int32_t)glyphIntegral_values[2];
+        glyph_value.glyph_bounds.height = (int32_t)glyphIntegral_values[3];
+        glyph_value.cropping.x = (int32_t)glyphIntegral_values[4];
+        glyph_value.cropping.y = (int32_t)glyphIntegral_values[5];
+        glyph_value.cropping.width = (int32_t)glyphIntegral_values[6];
+        glyph_value.cropping.height = (int32_t)glyphIntegral_values[7];
+        glyph_value.character = (CNA_Char16)glyphIntegral_values[8];
+        glyph_value.reserved = (uint16_t)glyphIntegral_values[9];
+    }
+    {
+        jfloat glyphFloating_values[3];
+        (*environment)->GetFloatArrayRegion(environment, glyphFloating, 0, 3, glyphFloating_values);
+        glyph_value.kerning.x = (float)glyphFloating_values[0];
+        glyph_value.kerning.y = (float)glyphFloating_values[1];
+        glyph_value.kerning.z = (float)glyphFloating_values[2];
+    }
+    CNA_Result result = cna.cnb_sprite_font_data_set_glyph((CNA_CnbSpriteFontDataHandle)font, (uint64_t)index, &glyph_value);
+    return (jint)result;
+}
+
+JNIEXPORT jint JNICALL
+Java_org_openeggbert_cna_internal_generated_NativeCnbRoutes_cnbSpriteFontDataSetInfo(
+    JNIEnv* environment, jclass declaring_class, jlong font, jbyteArray infoBytes, jlongArray infoIntegral, jfloatArray infoFloating)
+{
+    (void)environment;
+    (void)declaring_class;
+    CNA_CnbSpriteFontInfo info_value;
+    memset(&info_value, 0, sizeof info_value);
+    info_value.struct_size = (uint32_t)(sizeof info_value);
+    info_value.struct_version = CNA_CNB_SPRITE_FONT_INFO_STRUCT_VERSION;
+    {
+        jbyte infoBytes_values[5];
+        (*environment)->GetByteArrayRegion(environment, infoBytes, 0, 5, infoBytes_values);
+        info_value.reserved[0] = (uint8_t)infoBytes_values[0];
+        info_value.reserved[1] = (uint8_t)infoBytes_values[1];
+        info_value.reserved[2] = (uint8_t)infoBytes_values[2];
+        info_value.reserved[3] = (uint8_t)infoBytes_values[3];
+        info_value.reserved[4] = (uint8_t)infoBytes_values[4];
+    }
+    {
+        jlong infoIntegral_values[4];
+        (*environment)->GetLongArrayRegion(environment, infoIntegral, 0, 4, infoIntegral_values);
+        info_value.glyph_count = (uint64_t)infoIntegral_values[0];
+        info_value.line_spacing = (int32_t)infoIntegral_values[1];
+        info_value.default_character = (CNA_Char16)infoIntegral_values[2];
+        info_value.has_default_character = (CNA_Bool)infoIntegral_values[3];
+    }
+    {
+        jfloat infoFloating_values[1];
+        (*environment)->GetFloatArrayRegion(environment, infoFloating, 0, 1, infoFloating_values);
+        info_value.spacing = (float)infoFloating_values[0];
+    }
+    CNA_Result result = cna.cnb_sprite_font_data_set_info((CNA_CnbSpriteFontDataHandle)font, &info_value);
     return (jint)result;
 }
 

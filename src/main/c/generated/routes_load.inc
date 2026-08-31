@@ -72,6 +72,7 @@
     LOAD(avatar_renderer_set_lighting, "cna_avatar_renderer_set_lighting");
     LOAD(avatar_renderer_set_transforms, "cna_avatar_renderer_set_transforms");
     LOAD(cnb_asset_type_id_from_name, "cna_cnb_asset_type_id_from_name");
+    LOAD(cnb_audio_frame_bytes, "cna_cnb_audio_frame_bytes");
     LOAD(cnb_checked_add, "cna_cnb_checked_add");
     LOAD(cnb_checked_multiply, "cna_cnb_checked_multiply");
     LOAD(cnb_chunk_entry_is_mandatory, "cna_cnb_chunk_entry_is_mandatory");
@@ -94,6 +95,7 @@
     LOAD(cnb_decode_song_stream_reference, "cna_cnb_decode_song_stream_reference");
     LOAD(cnb_decode_song_stream_reference_size, "cna_cnb_decode_song_stream_reference_size");
     LOAD(cnb_decode_sound_effect, "cna_cnb_decode_sound_effect");
+    LOAD(cnb_decode_sprite_font, "cna_cnb_decode_sprite_font");
     LOAD(cnb_decode_texture2d, "cna_cnb_decode_texture2d");
     LOAD(cnb_decode_video, "cna_cnb_decode_video");
     LOAD(cnb_decode_video_stream_reference, "cna_cnb_decode_video_stream_reference");
@@ -129,6 +131,7 @@
     LOAD(cnb_document_require_single, "cna_cnb_document_require_single");
     LOAD(cnb_encode_song, "cna_cnb_encode_song");
     LOAD(cnb_encode_sound_effect, "cna_cnb_encode_sound_effect");
+    LOAD(cnb_encode_sprite_font, "cna_cnb_encode_sprite_font");
     LOAD(cnb_encode_texture2d, "cna_cnb_encode_texture2d");
     LOAD(cnb_encode_video, "cna_cnb_encode_video");
     LOAD(cnb_get_asset_type_name_size, "cna_cnb_get_asset_type_name_size");
@@ -173,6 +176,15 @@
     LOAD(cnb_sound_effect_data_create, "cna_cnb_sound_effect_data_create");
     LOAD(cnb_sound_effect_data_destroy, "cna_cnb_sound_effect_data_destroy");
     LOAD(cnb_sound_effect_data_get_info, "cna_cnb_sound_effect_data_get_info");
+    LOAD(cnb_sprite_font_data_add_glyph, "cna_cnb_sprite_font_data_add_glyph");
+    LOAD(cnb_sprite_font_data_copy_atlas, "cna_cnb_sprite_font_data_copy_atlas");
+    LOAD(cnb_sprite_font_data_create, "cna_cnb_sprite_font_data_create");
+    LOAD(cnb_sprite_font_data_destroy, "cna_cnb_sprite_font_data_destroy");
+    LOAD(cnb_sprite_font_data_get_glyph, "cna_cnb_sprite_font_data_get_glyph");
+    LOAD(cnb_sprite_font_data_get_info, "cna_cnb_sprite_font_data_get_info");
+    LOAD(cnb_sprite_font_data_set_atlas, "cna_cnb_sprite_font_data_set_atlas");
+    LOAD(cnb_sprite_font_data_set_glyph, "cna_cnb_sprite_font_data_set_glyph");
+    LOAD(cnb_sprite_font_data_set_info, "cna_cnb_sprite_font_data_set_info");
     LOAD(cnb_texture_data_add_representation, "cna_cnb_texture_data_add_representation");
     LOAD(cnb_texture_data_copy_level, "cna_cnb_texture_data_copy_level");
     LOAD(cnb_texture_data_create, "cna_cnb_texture_data_create");

@@ -2322,6 +2322,10 @@
         "symbol": "cna_cnb_asset_type_id_from_name"
       },
       {
+        "java": "cnbAudioFrameBytes",
+        "symbol": "cna_cnb_audio_frame_bytes"
+      },
+      {
         "java": "cnbCheckedAdd",
         "symbol": "cna_cnb_checked_add"
       },
@@ -2408,6 +2412,10 @@
       {
         "java": "cnbDecodeSoundEffect",
         "symbol": "cna_cnb_decode_sound_effect"
+      },
+      {
+        "java": "cnbDecodeSpriteFont",
+        "symbol": "cna_cnb_decode_sprite_font"
       },
       {
         "java": "cnbDecodeTexture2d",
@@ -2548,6 +2556,10 @@
       {
         "java": "cnbEncodeSoundEffect",
         "symbol": "cna_cnb_encode_sound_effect"
+      },
+      {
+        "java": "cnbEncodeSpriteFont",
+        "symbol": "cna_cnb_encode_sprite_font"
       },
       {
         "java": "cnbEncodeTexture2d",
@@ -2724,6 +2736,42 @@
       {
         "java": "cnbSoundEffectDataGetInfo",
         "symbol": "cna_cnb_sound_effect_data_get_info"
+      },
+      {
+        "java": "cnbSpriteFontDataAddGlyph",
+        "symbol": "cna_cnb_sprite_font_data_add_glyph"
+      },
+      {
+        "java": "cnbSpriteFontDataCopyAtlas",
+        "symbol": "cna_cnb_sprite_font_data_copy_atlas"
+      },
+      {
+        "java": "cnbSpriteFontDataCreate",
+        "symbol": "cna_cnb_sprite_font_data_create"
+      },
+      {
+        "java": "cnbSpriteFontDataDestroy",
+        "symbol": "cna_cnb_sprite_font_data_destroy"
+      },
+      {
+        "java": "cnbSpriteFontDataGetGlyph",
+        "symbol": "cna_cnb_sprite_font_data_get_glyph"
+      },
+      {
+        "java": "cnbSpriteFontDataGetInfo",
+        "symbol": "cna_cnb_sprite_font_data_get_info"
+      },
+      {
+        "java": "cnbSpriteFontDataSetAtlas",
+        "symbol": "cna_cnb_sprite_font_data_set_atlas"
+      },
+      {
+        "java": "cnbSpriteFontDataSetGlyph",
+        "symbol": "cna_cnb_sprite_font_data_set_glyph"
+      },
+      {
+        "java": "cnbSpriteFontDataSetInfo",
+        "symbol": "cna_cnb_sprite_font_data_set_info"
       },
       {
         "java": "cnbTextureDataAddRepresentation",

@@ -406,6 +406,19 @@ public final class CnbDocument implements AutoCloseable {
         return CnbVideo.read(open());
     }
 
+    /**
+     * Decodes the whole file as a sprite font.
+     *
+     * @return the font data, atlas and glyph table together, which the caller closes
+     * @throws CnbFormatException when the file is not a SpriteFont asset
+     */
+    public CnbSpriteFontData decodeSpriteFont() {
+        long[] font = new long[1];
+        CnbExtension.check("CnbDocument.decodeSpriteFont",
+                NativeCnbRoutes.cnbDecodeSpriteFont(open(), font));
+        return new CnbSpriteFontData(font[0]);
+    }
+
     /** Releases the document. Closing twice is a no-op. */
     @Override
     public void close() {

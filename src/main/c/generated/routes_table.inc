@@ -72,6 +72,7 @@
     CNA_JNI_ROUTE(cna_avatar_renderer_set_lighting) avatar_renderer_set_lighting;
     CNA_JNI_ROUTE(cna_avatar_renderer_set_transforms) avatar_renderer_set_transforms;
     CNA_JNI_ROUTE(cna_cnb_asset_type_id_from_name) cnb_asset_type_id_from_name;
+    CNA_JNI_ROUTE(cna_cnb_audio_frame_bytes) cnb_audio_frame_bytes;
     CNA_JNI_ROUTE(cna_cnb_checked_add) cnb_checked_add;
     CNA_JNI_ROUTE(cna_cnb_checked_multiply) cnb_checked_multiply;
     CNA_JNI_ROUTE(cna_cnb_chunk_entry_is_mandatory) cnb_chunk_entry_is_mandatory;
@@ -94,6 +95,7 @@
     CNA_JNI_ROUTE(cna_cnb_decode_song_stream_reference) cnb_decode_song_stream_reference;
     CNA_JNI_ROUTE(cna_cnb_decode_song_stream_reference_size) cnb_decode_song_stream_reference_size;
     CNA_JNI_ROUTE(cna_cnb_decode_sound_effect) cnb_decode_sound_effect;
+    CNA_JNI_ROUTE(cna_cnb_decode_sprite_font) cnb_decode_sprite_font;
     CNA_JNI_ROUTE(cna_cnb_decode_texture2d) cnb_decode_texture2d;
     CNA_JNI_ROUTE(cna_cnb_decode_video) cnb_decode_video;
     CNA_JNI_ROUTE(cna_cnb_decode_video_stream_reference) cnb_decode_video_stream_reference;
@@ -129,6 +131,7 @@
     CNA_JNI_ROUTE(cna_cnb_document_require_single) cnb_document_require_single;
     CNA_JNI_ROUTE(cna_cnb_encode_song) cnb_encode_song;
     CNA_JNI_ROUTE(cna_cnb_encode_sound_effect) cnb_encode_sound_effect;
+    CNA_JNI_ROUTE(cna_cnb_encode_sprite_font) cnb_encode_sprite_font;
     CNA_JNI_ROUTE(cna_cnb_encode_texture2d) cnb_encode_texture2d;
     CNA_JNI_ROUTE(cna_cnb_encode_video) cnb_encode_video;
     CNA_JNI_ROUTE(cna_cnb_get_asset_type_name_size) cnb_get_asset_type_name_size;
@@ -173,6 +176,15 @@
     CNA_JNI_ROUTE(cna_cnb_sound_effect_data_create) cnb_sound_effect_data_create;
     CNA_JNI_ROUTE(cna_cnb_sound_effect_data_destroy) cnb_sound_effect_data_destroy;
     CNA_JNI_ROUTE(cna_cnb_sound_effect_data_get_info) cnb_sound_effect_data_get_info;
+    CNA_JNI_ROUTE(cna_cnb_sprite_font_data_add_glyph) cnb_sprite_font_data_add_glyph;
+    CNA_JNI_ROUTE(cna_cnb_sprite_font_data_copy_atlas) cnb_sprite_font_data_copy_atlas;
+    CNA_JNI_ROUTE(cna_cnb_sprite_font_data_create) cnb_sprite_font_data_create;
+    CNA_JNI_ROUTE(cna_cnb_sprite_font_data_destroy) cnb_sprite_font_data_destroy;
+    CNA_JNI_ROUTE(cna_cnb_sprite_font_data_get_glyph) cnb_sprite_font_data_get_glyph;
+    CNA_JNI_ROUTE(cna_cnb_sprite_font_data_get_info) cnb_sprite_font_data_get_info;
+    CNA_JNI_ROUTE(cna_cnb_sprite_font_data_set_atlas) cnb_sprite_font_data_set_atlas;
+    CNA_JNI_ROUTE(cna_cnb_sprite_font_data_set_glyph) cnb_sprite_font_data_set_glyph;
+    CNA_JNI_ROUTE(cna_cnb_sprite_font_data_set_info) cnb_sprite_font_data_set_info;
     CNA_JNI_ROUTE(cna_cnb_texture_data_add_representation) cnb_texture_data_add_representation;
     CNA_JNI_ROUTE(cna_cnb_texture_data_copy_level) cnb_texture_data_copy_level;
     CNA_JNI_ROUTE(cna_cnb_texture_data_create) cnb_texture_data_create;

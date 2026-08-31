@@ -47,16 +47,26 @@ public enum CnbAudioFormat {
     }
 
     /**
-     * Returns how many bytes one sample frame occupies, or zero when the format has no v1 codec.
+     * Returns how many bytes one sample frame occupies, or zero when the format has none.
+     *
+     * <p>Asked of CNA rather than computed here, and the answer is not the one guessing would
+     * give: a <em>fixed frame size</em> and a <em>v1 codec</em> are different questions.
+     * {@link #Pcm8} and {@link #PcmFloat32} report one and two bytes per channel even though
+     * neither can be encoded yet, because that is what those encodings are; {@link #Adpcm} and
+     * {@link #Vorbis} report zero, because a compressed frame has no fixed size at all.
+     * {@link #hasCodec()} is the question about what this build can read and write.
      *
      * @param channels the channel count the sound declares
-     * @return the frame size in bytes
+     * @return the frame size in bytes, or zero when the format has no fixed one
      */
     public int getFrameByteSize(int channels) {
         if (channels <= 0) {
             throw new IllegalArgumentException("channels must be positive");
         }
-        return this == Pcm16 ? 2 * channels : 0;
+        int[] bytes = new int[1];
+        CnbExtension.check("CnbAudioFormat.getFrameByteSize",
+                NativeCnbRoutes.cnbAudioFrameBytes(ordinal(), channels, bytes));
+        return bytes[0];
     }
 
     /** Returns CNA's own diagnostic name for the format. */

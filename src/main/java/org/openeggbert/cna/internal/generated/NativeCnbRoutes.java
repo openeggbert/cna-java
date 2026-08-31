@@ -18,6 +18,11 @@ public final class NativeCnbRoutes {
     public static native int cnbAssetTypeIdFromName(byte[] name, int[] outAssetTypeId);
 
     /**
+     * cna_cnb_audio_frame_bytes (cnb.h).
+     */
+    public static native int cnbAudioFrameBytes(int format, int channels, int[] outByteCount);
+
+    /**
      * cna_cnb_checked_add (cnb.h).
      */
     public static native int cnbCheckedAdd(long a, long b, long[] outSum);
@@ -139,6 +144,11 @@ public final class NativeCnbRoutes {
      * cna_cnb_decode_sound_effect (cnb.h).
      */
     public static native int cnbDecodeSoundEffect(long document, long[] outSound);
+
+    /**
+     * cna_cnb_decode_sprite_font (cnb.h).
+     */
+    public static native int cnbDecodeSpriteFont(long document, long[] outFont);
 
     /**
      * cna_cnb_decode_texture2d (cnb.h).
@@ -393,6 +403,11 @@ public final class NativeCnbRoutes {
      * cna_cnb_encode_sound_effect (cnb.h).
      */
     public static native int cnbEncodeSoundEffect(long sound, byte[] contentName, byte[] destination, long[] outByteCount);
+
+    /**
+     * cna_cnb_encode_sprite_font (cnb.h).
+     */
+    public static native int cnbEncodeSpriteFont(long font, byte[] contentName, byte[] destination, long[] outByteCount);
 
     /**
      * cna_cnb_encode_texture2d (cnb.h).
@@ -669,6 +684,158 @@ public final class NativeCnbRoutes {
      * </ol>
      */
     public static native int cnbSoundEffectDataGetInfo(long sound, long[] outInfoIntegral);
+
+    /**
+     * cna_cnb_sprite_font_data_add_glyph (cnb.h).
+     *
+     * <p>glyphIntegral carries CNA_SpriteFontGlyph in this order:
+     * <ol start="0">
+     *   <li>{@code glyph_bounds.x} (int32_t)</li>
+     *   <li>{@code glyph_bounds.y} (int32_t)</li>
+     *   <li>{@code glyph_bounds.width} (int32_t)</li>
+     *   <li>{@code glyph_bounds.height} (int32_t)</li>
+     *   <li>{@code cropping.x} (int32_t)</li>
+     *   <li>{@code cropping.y} (int32_t)</li>
+     *   <li>{@code cropping.width} (int32_t)</li>
+     *   <li>{@code cropping.height} (int32_t)</li>
+     *   <li>{@code character} (CNA_Char16)</li>
+     *   <li>{@code reserved} (uint16_t)</li>
+     * </ol>
+     *
+     * <p>glyphFloating carries CNA_SpriteFontGlyph in this order:
+     * <ol start="0">
+     *   <li>{@code kerning.x} (float)</li>
+     *   <li>{@code kerning.y} (float)</li>
+     *   <li>{@code kerning.z} (float)</li>
+     * </ol>
+     */
+    public static native int cnbSpriteFontDataAddGlyph(long font, long[] glyphIntegral, float[] glyphFloating, long[] outIndex);
+
+    /**
+     * cna_cnb_sprite_font_data_copy_atlas (cnb.h).
+     */
+    public static native int cnbSpriteFontDataCopyAtlas(long font, long[] outAtlas);
+
+    /**
+     * cna_cnb_sprite_font_data_create (cnb.h).
+     */
+    public static native int cnbSpriteFontDataCreate(long[] outFont);
+
+    /**
+     * cna_cnb_sprite_font_data_destroy (cnb.h).
+     */
+    public static native int cnbSpriteFontDataDestroy(long font);
+
+    /**
+     * cna_cnb_sprite_font_data_get_glyph (cnb.h).
+     *
+     * <p>outGlyphIntegral carries CNA_SpriteFontGlyph in this order:
+     * <ol start="0">
+     *   <li>{@code glyph_bounds.x} (int32_t)</li>
+     *   <li>{@code glyph_bounds.y} (int32_t)</li>
+     *   <li>{@code glyph_bounds.width} (int32_t)</li>
+     *   <li>{@code glyph_bounds.height} (int32_t)</li>
+     *   <li>{@code cropping.x} (int32_t)</li>
+     *   <li>{@code cropping.y} (int32_t)</li>
+     *   <li>{@code cropping.width} (int32_t)</li>
+     *   <li>{@code cropping.height} (int32_t)</li>
+     *   <li>{@code character} (CNA_Char16)</li>
+     *   <li>{@code reserved} (uint16_t)</li>
+     * </ol>
+     *
+     * <p>outGlyphFloating carries CNA_SpriteFontGlyph in this order:
+     * <ol start="0">
+     *   <li>{@code kerning.x} (float)</li>
+     *   <li>{@code kerning.y} (float)</li>
+     *   <li>{@code kerning.z} (float)</li>
+     * </ol>
+     */
+    public static native int cnbSpriteFontDataGetGlyph(long font, long index, long[] outGlyphIntegral, float[] outGlyphFloating);
+
+    /**
+     * cna_cnb_sprite_font_data_get_info (cnb.h).
+     *
+     * <p>outInfoBytes carries CNA_CnbSpriteFontInfo in this order:
+     * <ol start="0">
+     *   <li>{@code reserved[0]} (uint8_t)</li>
+     *   <li>{@code reserved[1]} (uint8_t)</li>
+     *   <li>{@code reserved[2]} (uint8_t)</li>
+     *   <li>{@code reserved[3]} (uint8_t)</li>
+     *   <li>{@code reserved[4]} (uint8_t)</li>
+     * </ol>
+     *
+     * <p>outInfoIntegral carries CNA_CnbSpriteFontInfo in this order:
+     * <ol start="0">
+     *   <li>{@code glyph_count} (uint64_t)</li>
+     *   <li>{@code line_spacing} (int32_t)</li>
+     *   <li>{@code default_character} (CNA_Char16)</li>
+     *   <li>{@code has_default_character} (CNA_Bool)</li>
+     * </ol>
+     *
+     * <p>outInfoFloating carries CNA_CnbSpriteFontInfo in this order:
+     * <ol start="0">
+     *   <li>{@code spacing} (float)</li>
+     * </ol>
+     */
+    public static native int cnbSpriteFontDataGetInfo(long font, byte[] outInfoBytes, long[] outInfoIntegral, float[] outInfoFloating);
+
+    /**
+     * cna_cnb_sprite_font_data_set_atlas (cnb.h).
+     */
+    public static native int cnbSpriteFontDataSetAtlas(long font, long atlas);
+
+    /**
+     * cna_cnb_sprite_font_data_set_glyph (cnb.h).
+     *
+     * <p>glyphIntegral carries CNA_SpriteFontGlyph in this order:
+     * <ol start="0">
+     *   <li>{@code glyph_bounds.x} (int32_t)</li>
+     *   <li>{@code glyph_bounds.y} (int32_t)</li>
+     *   <li>{@code glyph_bounds.width} (int32_t)</li>
+     *   <li>{@code glyph_bounds.height} (int32_t)</li>
+     *   <li>{@code cropping.x} (int32_t)</li>
+     *   <li>{@code cropping.y} (int32_t)</li>
+     *   <li>{@code cropping.width} (int32_t)</li>
+     *   <li>{@code cropping.height} (int32_t)</li>
+     *   <li>{@code character} (CNA_Char16)</li>
+     *   <li>{@code reserved} (uint16_t)</li>
+     * </ol>
+     *
+     * <p>glyphFloating carries CNA_SpriteFontGlyph in this order:
+     * <ol start="0">
+     *   <li>{@code kerning.x} (float)</li>
+     *   <li>{@code kerning.y} (float)</li>
+     *   <li>{@code kerning.z} (float)</li>
+     * </ol>
+     */
+    public static native int cnbSpriteFontDataSetGlyph(long font, long index, long[] glyphIntegral, float[] glyphFloating);
+
+    /**
+     * cna_cnb_sprite_font_data_set_info (cnb.h).
+     *
+     * <p>infoBytes carries CNA_CnbSpriteFontInfo in this order:
+     * <ol start="0">
+     *   <li>{@code reserved[0]} (uint8_t)</li>
+     *   <li>{@code reserved[1]} (uint8_t)</li>
+     *   <li>{@code reserved[2]} (uint8_t)</li>
+     *   <li>{@code reserved[3]} (uint8_t)</li>
+     *   <li>{@code reserved[4]} (uint8_t)</li>
+     * </ol>
+     *
+     * <p>infoIntegral carries CNA_CnbSpriteFontInfo in this order:
+     * <ol start="0">
+     *   <li>{@code glyph_count} (uint64_t)</li>
+     *   <li>{@code line_spacing} (int32_t)</li>
+     *   <li>{@code default_character} (CNA_Char16)</li>
+     *   <li>{@code has_default_character} (CNA_Bool)</li>
+     * </ol>
+     *
+     * <p>infoFloating carries CNA_CnbSpriteFontInfo in this order:
+     * <ol start="0">
+     *   <li>{@code spacing} (float)</li>
+     * </ol>
+     */
+    public static native int cnbSpriteFontDataSetInfo(long font, byte[] infoBytes, long[] infoIntegral, float[] infoFloating);
 
     /**
      * cna_cnb_texture_data_add_representation (cnb.h).

@@ -1655,6 +1655,17 @@
       ]
     },
     {
+      "name": "cna_cnb_audio_frame_bytes",
+      "header": "cnb.h",
+      "ownership": "no handle; caller integer output",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_CnbAudioFormat",
+        "uint32_t",
+        "uint32_t*"
+      ]
+    },
+    {
       "name": "cna_cnb_checked_add",
       "header": "cnb.h",
       "ownership": "no handle; caller integer output",
@@ -1905,6 +1916,16 @@
       "parameters": [
         "CNA_CnbDocumentHandle",
         "CNA_CnbSoundEffectDataHandle*"
+      ]
+    },
+    {
+      "name": "cna_cnb_decode_sprite_font",
+      "header": "cnb.h",
+      "ownership": "borrows document; returns an owned font-data handle",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_CnbDocumentHandle",
+        "CNA_CnbSpriteFontDataHandle*"
       ]
     },
     {
@@ -2290,6 +2311,19 @@
       "returnType": "CNA_Result",
       "parameters": [
         "CNA_CnbSoundEffectDataHandle",
+        "CNA_StringView",
+        "uint8_t*",
+        "uint64_t",
+        "uint64_t*"
+      ]
+    },
+    {
+      "name": "cna_cnb_encode_sprite_font",
+      "header": "cnb.h",
+      "ownership": "borrows font data; caller buffer",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_CnbSpriteFontDataHandle",
         "CNA_StringView",
         "uint8_t*",
         "uint64_t",
@@ -2763,6 +2797,97 @@
       "parameters": [
         "CNA_CnbSoundEffectDataHandle",
         "CNA_CnbSoundEffectInfo*"
+      ]
+    },
+    {
+      "name": "cna_cnb_sprite_font_data_add_glyph",
+      "header": "cnb.h",
+      "ownership": "borrows font data; copies the caller's glyph, caller integer output",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_CnbSpriteFontDataHandle",
+        "const CNA_SpriteFontGlyph*",
+        "uint64_t*"
+      ]
+    },
+    {
+      "name": "cna_cnb_sprite_font_data_copy_atlas",
+      "header": "cnb.h",
+      "ownership": "borrows font data; returns an owned texture-data handle",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_CnbSpriteFontDataHandle",
+        "CNA_CnbTextureDataHandle*"
+      ]
+    },
+    {
+      "name": "cna_cnb_sprite_font_data_create",
+      "header": "cnb.h",
+      "ownership": "no handle; returns an owned font-data handle",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_CnbSpriteFontDataHandle*"
+      ]
+    },
+    {
+      "name": "cna_cnb_sprite_font_data_destroy",
+      "header": "cnb.h",
+      "ownership": "releases the owned font-data handle",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_CnbSpriteFontDataHandle"
+      ]
+    },
+    {
+      "name": "cna_cnb_sprite_font_data_get_glyph",
+      "header": "cnb.h",
+      "ownership": "borrows font data; caller structure output",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_CnbSpriteFontDataHandle",
+        "uint64_t",
+        "CNA_SpriteFontGlyph*"
+      ]
+    },
+    {
+      "name": "cna_cnb_sprite_font_data_get_info",
+      "header": "cnb.h",
+      "ownership": "borrows font data; caller structure output",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_CnbSpriteFontDataHandle",
+        "CNA_CnbSpriteFontInfo*"
+      ]
+    },
+    {
+      "name": "cna_cnb_sprite_font_data_set_atlas",
+      "header": "cnb.h",
+      "ownership": "borrows font data and the caller's texture data, of which it takes its own copy",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_CnbSpriteFontDataHandle",
+        "CNA_CnbTextureDataHandle"
+      ]
+    },
+    {
+      "name": "cna_cnb_sprite_font_data_set_glyph",
+      "header": "cnb.h",
+      "ownership": "borrows font data; copies the caller's glyph",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_CnbSpriteFontDataHandle",
+        "uint64_t",
+        "const CNA_SpriteFontGlyph*"
+      ]
+    },
+    {
+      "name": "cna_cnb_sprite_font_data_set_info",
+      "header": "cnb.h",
+      "ownership": "borrows font data; reads the caller's structure",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_CnbSpriteFontDataHandle",
+        "const CNA_CnbSpriteFontInfo*"
       ]
     },
     {

@@ -4,10 +4,14 @@ import Microsoft.Xna.Framework.Game;
 import Microsoft.Xna.Framework.GameTime;
 import Microsoft.Xna.Framework.GraphicsDeviceManager;
 import Microsoft.Xna.Framework.Color;
+import Microsoft.Xna.Framework.Rectangle;
+import Microsoft.Xna.Framework.Vector2;
+import Microsoft.Xna.Framework.Vector3;
 import Microsoft.Xna.Framework.Audio.AudioChannels;
 import Microsoft.Xna.Framework.Audio.SoundEffect;
 import Microsoft.Xna.Framework.Audio.SoundEffectInstance;
 import Microsoft.Xna.Framework.Audio.SoundState;
+import Microsoft.Xna.Framework.Graphics.SpriteFont;
 import Microsoft.Xna.Framework.Graphics.SurfaceFormat;
 import Microsoft.Xna.Framework.Media.Song;
 import Microsoft.Xna.Framework.Media.Video;
@@ -25,6 +29,7 @@ import static org.junit.jupiter.api.Assertions.assertArrayEquals;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotEquals;
+import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
@@ -421,11 +426,110 @@ final class CnbTests {
             assertFalse(format.getName().isEmpty(), format + " has no name");
             if (format != CnbAudioFormat.Pcm16) {
                 assertFalse(format.hasCodec(), format + " claims a v1 codec");
-                assertEquals(0, format.getFrameByteSize(1));
             }
+        }
+        // A fixed frame size and a v1 codec are different questions, and CNA answers them
+        // separately: PCM8 and float PCM have a frame size nobody can encode yet, and the two
+        // compressed formats have no fixed frame at all. Asserting CNA's own answers is the
+        // point -- computing 2 * channels here would have been wrong for four of the six.
+        assertEquals(0, CnbAudioFormat.Unknown.getFrameByteSize(2));
+        assertEquals(1, CnbAudioFormat.Pcm8.getFrameByteSize(1));
+        assertEquals(8, CnbAudioFormat.PcmFloat32.getFrameByteSize(2));
+        assertEquals(0, CnbAudioFormat.Adpcm.getFrameByteSize(2));
+        assertEquals(0, CnbAudioFormat.Vorbis.getFrameByteSize(2));
+        for (CnbAudioFormat format : CnbAudioFormat.values()) {
+            assertThrows(IllegalArgumentException.class, () -> format.getFrameByteSize(0));
         }
         assertThrows(CnbFormatException.class,
                 () -> CnbAudioFormat.fromValue(CnbAudioFormat.values().length));
+    }
+
+    /** A two-glyph font over a 2x2 atlas: enough that a swap or a dropped bearing shows. */
+    private static CnbSpriteFontData twoGlyphFont() {
+        CnbSpriteFontData font = CnbSpriteFontData.create();
+        try {
+            try (CnbTextureData atlas = CnbTextureData.ofRgba8(2, 2, PIXELS)) {
+                font.setAtlas(atlas);
+            }
+            font.setMetrics(14, 1.5f, 'A');
+            assertEquals(0, font.addGlyph(new CnbGlyph('A',
+                    new Rectangle(0, 0, 1, 2), new Rectangle(0, 1, 1, 1),
+                    new Vector3(0.5f, 3.0f, 0.25f))));
+            assertEquals(1, font.addGlyph(new CnbGlyph('B',
+                    new Rectangle(1, 0, 1, 2), new Rectangle(-1, 0, 1, 2),
+                    new Vector3(-0.5f, 4.0f, 0.75f))));
+            return font;
+        } catch (RuntimeException failure) {
+            font.close();
+            throw failure;
+        }
+    }
+
+    @Test
+    void aSpriteFontIsAnAtlasAndAGlyphTable() {
+        byte[] file;
+        try (CnbSpriteFontData font = twoGlyphFont()) {
+            assertEquals(2, font.getGlyphCount());
+            assertEquals(14, font.getLineSpacing());
+            assertEquals(1.5f, font.getSpacing());
+            assertEquals('A', font.getDefaultCharacter());
+
+            // A glyph read back is the glyph that went in, bearings and all.
+            CnbGlyph second = font.getGlyph(1);
+            assertEquals('B', second.Character());
+            assertEquals(new Rectangle(1, 0, 1, 2), second.GlyphBounds());
+            assertEquals(new Rectangle(-1, 0, 1, 2), second.Cropping());
+            assertEquals(new Vector3(-0.5f, 4.0f, 0.75f), second.Kerning());
+
+            font.setGlyph(0, new CnbGlyph('a', new Rectangle(0, 0, 1, 2),
+                    new Rectangle(0, 1, 1, 1), new Vector3(0.5f, 3.0f, 0.25f)));
+            assertEquals('a', font.getGlyph(0).Character());
+            font.setGlyph(0, new CnbGlyph('A', new Rectangle(0, 0, 1, 2),
+                    new Rectangle(0, 1, 1, 1), new Vector3(0.5f, 3.0f, 0.25f)));
+
+            // The atlas comes back as its own texture data, which the caller owns separately.
+            try (CnbTextureData atlas = font.copyAtlas()) {
+                assertEquals(2, atlas.getInfo().Width());
+                assertArrayEquals(PIXELS, atlas.readLevel(0, 0));
+            }
+
+            // A font with no default character is the other legal shape: a missing character is
+            // then an error rather than a substitution.
+            font.setMetrics(14, 1.5f, null);
+            assertNull(font.getDefaultCharacter());
+
+            // CNA refuses a substitute the font cannot draw, which is a rule worth having: a
+            // default character absent from the table would fail at the first missing glyph, in
+            // the game rather than in the build.
+            font.setMetrics(14, 1.5f, 'Z');
+            assertThrows(CnbFormatException.class,
+                    () -> Cnb.encodeSpriteFont(font, "fonts/absent-default"));
+            font.setMetrics(14, 1.5f, 'A');
+
+            file = Cnb.encodeSpriteFont(font, "fonts/two-glyphs");
+        }
+
+        try (CnbDocument document = CnbDocument.parse(
+                     file, "two-glyphs.cnb", CnbReadLimits.standard())) {
+            assertEquals(CnbAssetType.SPRITE_FONT, document.getAssetType());
+            try (CnbSpriteFontData decoded = document.decodeSpriteFont()) {
+                assertEquals(14, decoded.getLineSpacing());
+                assertEquals(1.5f, decoded.getSpacing());
+                assertEquals('A', decoded.getDefaultCharacter());
+                assertEquals(List.of('A', 'B'), decoded.getGlyphs().stream()
+                        .map(CnbGlyph::Character).toList());
+                assertEquals(new Vector3(0.5f, 3.0f, 0.25f),
+                        decoded.getGlyphs().get(0).Kerning());
+                try (CnbTextureData atlas = decoded.copyAtlas()) {
+                    assertArrayEquals(PIXELS, atlas.readLevel(0, 0));
+                }
+            }
+        }
+
+        // A font with no glyph cannot draw, and says so rather than producing an empty one.
+        try (CnbSpriteFontData empty = CnbSpriteFontData.create()) {
+            assertThrows(IllegalArgumentException.class, () -> empty.setMetrics(14, Float.NaN, null));
+        }
     }
 
     @Test
@@ -511,6 +615,73 @@ final class CnbTests {
                 throw new IllegalStateException(probe.failure);
             }
             assertTrue(probe.ran, "the probe must have run");
+        }
+    }
+
+    @Test
+    void aDecodedSpriteFontBecomesAnXnaSpriteFont() {
+        try (FontProbe probe = new FontProbe()) {
+            probe.RunOneFrame();
+            if (probe.failure != null) {
+                if (probe.failure instanceof RuntimeException runtime) {
+                    throw runtime;
+                }
+                throw new IllegalStateException(probe.failure);
+            }
+            assertTrue(probe.ran, "the probe must have run");
+        }
+    }
+
+    /**
+     * The graphics half of the sprite-font slice.
+     *
+     * <p>XNA has no public {@code SpriteFont} constructor, and this does not add one: the font
+     * goes through the same internal path {@code ContentManager.Load} uses, so what comes out is
+     * the same kind of object {@code SpriteBatch.DrawString} already draws with. What is asserted
+     * is that the table survived -- the characters, the metrics and a measurement that depends on
+     * the bearings that came out of the file.
+     */
+    private static final class FontProbe extends Game {
+
+        private boolean ran;
+        private Throwable failure;
+
+        private FontProbe() {
+            new GraphicsDeviceManager(this);
+        }
+
+        @Override
+        protected void Update(GameTime gameTime) {
+            super.Update(gameTime);
+            if (ran) {
+                return;
+            }
+            ran = true;
+            try {
+                byte[] file;
+                try (CnbSpriteFontData source = twoGlyphFont()) {
+                    file = Cnb.encodeSpriteFont(source, "fonts/probe");
+                }
+                try (CnbDocument document = CnbDocument.parse(
+                             file, "probe.cnb", CnbReadLimits.standard());
+                     CnbSpriteFontData decoded = document.decodeSpriteFont()) {
+                    SpriteFont font = decoded.toSpriteFont(getGraphicsDevice());
+                    assertEquals(List.of('A', 'B'), font.getCharacters());
+                    assertEquals(14, font.getLineSpacing());
+                    assertEquals(1.5f, font.getSpacing());
+                    assertEquals('A', font.getDefaultCharacter());
+                    // The advance width came from the file's kerning, so a measurement is a
+                    // statement about the glyph table rather than about the atlas.
+                    assertEquals(new Vector2(3.75f, 14.0f), font.MeasureString("A"));
+
+                    try (CnbSpriteFontData empty = CnbSpriteFontData.create()) {
+                        assertThrows(CnbFormatException.class,
+                                () -> empty.toSpriteFont(getGraphicsDevice()));
+                    }
+                }
+            } catch (Throwable exception) {
+                failure = exception;
+            }
         }
     }
 
