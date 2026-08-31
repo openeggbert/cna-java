@@ -213,6 +213,50 @@ def test_generator(live: dict) -> None:
     check("jdoubleArray" in generator_tool.render_c("Probe", [compass]),
           "the generated adapter reads the double carrier as a jdoubleArray")
 
+    # A structure carrying CNA_StringView fields: each one is its own byte[] rather than a
+    # slot in a shared array, because a view is a pointer and a length. Before this, a whole
+    # route was refused because flatten_struct reached the view's const char*.
+    discovered = plan("cna_available_network_session_create_ext")
+    info = struct_step(discovered)
+    check([path for path, _ in info["views"]] == ["host_gamertag", "host_address"],
+          "a struct's CNA_StringView fields are collected as views, in declaration order")
+    check(all(leaf != "CNA_StringView" for _, leaf in info["integral"]),
+          "a view never lands in the integral carrier")
+    _, parameters = generator_tool.java_signature(discovered)
+    check("byte[] createInfoHostAddress" in parameters,
+          "each view field declares its own byte[] parameter named after the field")
+    adapter = generator_tool.render_c("Probe", [discovered])
+    check("create_info_value.host_address.data = (const char*)createInfoHostAddress_bytes"
+          in adapter,
+          "the adapter points the view at the pinned Java bytes")
+    check("create_info_value.host_address.byte_length = (uint64_t)createInfoHostAddress_size"
+          in adapter,
+          "the adapter sets the view's length from the array, not from a terminator")
+    check(adapter.count("ReleaseByteArrayElements(environment, createInfoHostAddress") == 1,
+          "the pinned bytes are released exactly once")
+
+    # And a view whose lifetime the declaration does not state is refused rather than guessed.
+    # An output structure's view would point at memory CNA owns on terms the header does not
+    # give, and an array of such structures would need one pointer to outlive its element's
+    # marshalling. Both are refused, which is checked by asking the planner to accept the same
+    # structure in each of those positions.
+    for direction, position in (("CNA_AvailableNetworkSessionCreateInfo*", "output structure"),
+                                ("const CNA_AvailableNetworkSessionCreateInfo*", "array")):
+        synthetic = dict(live)
+        synthetic["functions"] = dict(live["functions"])
+        parameters = [{"type": direction, "name": "info"}]
+        if position == "array":
+            parameters.append({"type": "uint64_t", "name": "count"})
+        synthetic["functions"]["cna_probe_views"] = {
+            "name": "cna_probe_views", "header": "probe.h", "returnType": "CNA_Result",
+            "parameters": parameters,
+        }
+        try:
+            generator_tool.plan({"java": "probe", "symbol": "cna_probe_views"}, synthetic)
+            check(False, f"a CNA_StringView in an {position} is refused rather than guessed at")
+        except generator_tool.Unsupported:
+            check(True, f"a CNA_StringView in an {position} is refused rather than guessed at")
+
     # An output array of structs has to be copied back, or the route returns success
     # and Java sees nothing. This was a real defect: the only such route bound at the
     # time never wrote a single element back.

@@ -740,12 +740,32 @@
         "symbol": "cna_available_network_session_collection_get_is_disposed"
       },
       {
+        "java": "availableNetworkSessionCopyConnectAddressExt",
+        "symbol": "cna_available_network_session_copy_connect_address_ext"
+      },
+      {
         "java": "availableNetworkSessionCopyHostGamertag",
         "symbol": "cna_available_network_session_copy_host_gamertag"
       },
       {
         "java": "availableNetworkSessionCopySessionProperties",
         "symbol": "cna_available_network_session_copy_session_properties"
+      },
+      {
+        "java": "availableNetworkSessionCreateExt",
+        "symbol": "cna_available_network_session_create_ext"
+      },
+      {
+        "java": "availableNetworkSessionDestroy",
+        "symbol": "cna_available_network_session_destroy"
+      },
+      {
+        "java": "availableNetworkSessionGetConnectAddressSizeExt",
+        "symbol": "cna_available_network_session_get_connect_address_size_ext"
+      },
+      {
+        "java": "availableNetworkSessionGetConnectPortExt",
+        "symbol": "cna_available_network_session_get_connect_port_ext"
       },
       {
         "java": "availableNetworkSessionGetCurrentGamerCount",
@@ -766,6 +786,10 @@
       {
         "java": "availableNetworkSessionGetQualityOfService",
         "symbol": "cna_available_network_session_get_quality_of_service"
+      },
+      {
+        "java": "availableNetworkSessionGetSessionTypeExt",
+        "symbol": "cna_available_network_session_get_session_type_ext"
       },
       {
         "java": "localNetworkGamerEnableSendVoice",

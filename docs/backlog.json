@@ -206,8 +206,8 @@
       "title": "Expose the .cnb content format",
       "family": "org.openeggbert.cna.extensions.content",
       "authority": "cnb.h",
-      "currentState": "108 of the 272 routes are bound and reached: the container layer, the document, the checked byte reader, the texture data, the writer and the Texture2D encoder and decoder. A game can read a .cnb file, walk its chunks, verify their checksums, decode a texture and upload it as an XNA Texture2D, and a Java build step can write a .cnb file of its own schema. The remaining 164 are the model, sprite-font, sound, song, video, curve, animation-clip and .cnj families, plus the loader registry.",
-      "expectedState": "The remaining asset families projected as they earn a consumer. The loader registry is the one part that needs a design decision rather than more binding: cna_cnb_loader_invoke hands back a void* the callback produced, which has no Java meaning, so a Java loader registry has to be a Java-side dispatch over the document rather than a projection of CNA's.",
+      "currentState": "173 of the 272 routes are bound and reached. On top of the container, document, reader, writer and texture layers, five more asset families cross to the XNA type a game actually uses: a sound becomes a SoundEffect, a sprite font becomes a SpriteFont that DrawString draws with, a curve becomes a Curve that evaluates the same on both sides, and a song and a video become media objects over the reference the file records. The remaining 99 are the model family and the .cnj builder, plus the loader registry.",
+      "expectedState": "The model family and .cnj as they earn a consumer; cna_cnb_decode_model has not been probed and JAVA-UPSTREAM-004 is a reason to probe it in C first. The loader registry still needs a design decision rather than more binding: cna_cnb_loader_invoke hands back a void* with no Java meaning, so a Java loader registry has to be a Java-side dispatch over the document rather than a projection of CNA's.",
       "priority": 8,
       "status": "ready",
       "tests": [
@@ -404,14 +404,15 @@
       "title": "Project the gamer-services capabilities XNA has no member for",
       "family": "org.openeggbert.cna.extensions",
       "authority": "gamer_services.h, net_sessions.h",
-      "currentState": "The Guide slice is done: org.openeggbert.cna.extensions.gamerservices projects the pending on-screen keyboard and message box, CNA's own renderer for them, the outcomes a game reports back, and the achievements pane. 16 routes reached. The avatar slice (10 routes) and a discovered session's host and port (4) are still classified extension candidates.",
+      "currentState": "Two of the three slices are done. org.openeggbert.cna.extensions.gamerservices projects the pending on-screen keyboard and message box, CNA's renderer for them, the outcomes a game reports back, and the achievements pane: 16 routes. org.openeggbert.cna.extensions.net answers where a session is -- the host, port and advertised type a discovered session carries -- and adds the other direction CNA supports and XNA has no way to reach: describing a session at an address the title already knows, so NetworkSession.Join can take it. The avatar slice (10 routes) is still an extension candidate.",
       "expectedState": "Three coherent slices under org.openeggbert.cna.extensions. CNA's Guide hands the application the pending on-screen keyboard or message box and asks it to draw, where XNA's Guide draws itself: 14 routes, and the useful shape is a typed pending-request record plus a render call, not a projection of the raw routes. CNA's avatar layer exposes real rendering and the clip and content names behind the canonical presets: 10 routes. And a discovered session carries the host and port it was found at, which AvailableNetworkSession does not name: 4 routes.",
       "blocker": "None. It needs an API design per slice, not a CNA change.",
       "priority": 8,
       "status": "ready",
       "tests": [
         "GuideExtensionTests"
-      ]
+      ],
+      "note": "The net slice found a leak. Every AvailableNetworkSession owns an independent native handle -- CNA's collection accessor is documented to return a copy that outlives the collection -- and XNA's type is not disposable, so nothing released it. Fixed with the same deferred release the other three leaks use."
     }
   ]
 }

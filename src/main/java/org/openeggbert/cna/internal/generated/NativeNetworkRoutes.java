@@ -33,6 +33,11 @@ public final class NativeNetworkRoutes {
     public static native int availableNetworkSessionCollectionGetIsDisposed(long collection, boolean[] outIsDisposed);
 
     /**
+     * cna_available_network_session_copy_connect_address_ext (net_sessions.h).
+     */
+    public static native int availableNetworkSessionCopyConnectAddressExt(long session, byte[] destination, long[] outBytes);
+
+    /**
      * cna_available_network_session_copy_host_gamertag (net_sessions.h).
      */
     public static native int availableNetworkSessionCopyHostGamertag(long session, byte[] destination, long[] outBytes);
@@ -41,6 +46,70 @@ public final class NativeNetworkRoutes {
      * cna_available_network_session_copy_session_properties (net_sessions.h).
      */
     public static native int availableNetworkSessionCopySessionProperties(long session, long[] outProperties);
+
+    /**
+     * cna_available_network_session_create_ext (net_sessions.h).
+     *
+     * <p>createInfoBytes carries CNA_AvailableNetworkSessionCreateInfo in this order:
+     * <ol start="0">
+     *   <li>{@code reserved[0]} (uint8_t)</li>
+     *   <li>{@code reserved[1]} (uint8_t)</li>
+     *   <li>{@code reserved[2]} (uint8_t)</li>
+     *   <li>{@code reserved[3]} (uint8_t)</li>
+     *   <li>{@code reserved[4]} (uint8_t)</li>
+     *   <li>{@code reserved[5]} (uint8_t)</li>
+     * </ol>
+     *
+     * <p>createInfoIntegral carries CNA_AvailableNetworkSessionCreateInfo in this order:
+     * <ol start="0">
+     *   <li>{@code current_gamer_count} (int32_t)</li>
+     *   <li>{@code open_private_gamer_slots} (int32_t)</li>
+     *   <li>{@code open_public_gamer_slots} (int32_t)</li>
+     *   <li>{@code session_type} (CNA_NetworkSessionType)</li>
+     *   <li>{@code host_port} (uint16_t)</li>
+     *   <li>{@code session_properties} (CNA_NetworkSessionPropertiesHandle)</li>
+     * </ol>
+     *
+     * <p>createInfoHostGamertag carries CNA_AvailableNetworkSessionCreateInfo.host_gamertag as UTF-8 bytes, borrowed for the call.
+     *
+     * <p>createInfoHostAddress carries CNA_AvailableNetworkSessionCreateInfo.host_address as UTF-8 bytes, borrowed for the call.
+     *
+     * <p>qualityOfServiceBytes carries CNA_QualityOfService in this order:
+     * <ol start="0">
+     *   <li>{@code reserved[0]} (uint8_t)</li>
+     *   <li>{@code reserved[1]} (uint8_t)</li>
+     *   <li>{@code reserved[2]} (uint8_t)</li>
+     *   <li>{@code reserved[3]} (uint8_t)</li>
+     *   <li>{@code reserved[4]} (uint8_t)</li>
+     *   <li>{@code reserved[5]} (uint8_t)</li>
+     *   <li>{@code reserved[6]} (uint8_t)</li>
+     * </ol>
+     *
+     * <p>qualityOfServiceIntegral carries CNA_QualityOfService in this order:
+     * <ol start="0">
+     *   <li>{@code is_available} (CNA_Bool)</li>
+     *   <li>{@code average_roundtrip_ticks} (int64_t)</li>
+     *   <li>{@code minimum_roundtrip_ticks} (int64_t)</li>
+     *   <li>{@code bytes_per_second_downstream} (int32_t)</li>
+     *   <li>{@code bytes_per_second_upstream} (int32_t)</li>
+     * </ol>
+     */
+    public static native int availableNetworkSessionCreateExt(byte[] createInfoBytes, long[] createInfoIntegral, byte[] createInfoHostGamertag, byte[] createInfoHostAddress, byte[] qualityOfServiceBytes, long[] qualityOfServiceIntegral, long[] outSession);
+
+    /**
+     * cna_available_network_session_destroy (net_sessions.h).
+     */
+    public static native int availableNetworkSessionDestroy(long session);
+
+    /**
+     * cna_available_network_session_get_connect_address_size_ext (net_sessions.h).
+     */
+    public static native int availableNetworkSessionGetConnectAddressSizeExt(long session, long[] outBytes);
+
+    /**
+     * cna_available_network_session_get_connect_port_ext (net_sessions.h).
+     */
+    public static native int availableNetworkSessionGetConnectPortExt(long session, int[] outValue);
 
     /**
      * cna_available_network_session_get_current_gamer_count (net_sessions.h).
@@ -86,6 +155,11 @@ public final class NativeNetworkRoutes {
      * </ol>
      */
     public static native int availableNetworkSessionGetQualityOfService(long session, byte[] outValueBytes, long[] outValueIntegral);
+
+    /**
+     * cna_available_network_session_get_session_type_ext (net_sessions.h).
+     */
+    public static native int availableNetworkSessionGetSessionTypeExt(long session, int[] outValue);
 
     /**
      * cna_local_network_gamer_enable_send_voice (net_sessions.h).

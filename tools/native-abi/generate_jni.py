@@ -107,6 +107,13 @@ def flatten_struct(name: str, live: dict, seen: frozenset[str] = frozenset()) ->
             continue
         if "[" in field_type:
             raise Unsupported(f"{name}.{field['name']}: unsupported field type {field['type']}")
+        if field_type == "CNA_StringView":
+            # A borrowed string, not a POD leaf. Recursing would reach its ``const char*``
+            # and refuse the whole structure; carrying it as its own leaf lets one ``byte[]``
+            # per field cross, pinned for the length of the call the way a top-level
+            # ``CNA_StringView`` parameter already is.
+            leaves.append((field["name"], "CNA_StringView"))
+            continue
         if field_type in live["structures"]:
             for path, leaf in flatten_struct(field_type, live, seen | {name}):
                 leaves.append((f"{field['name']}.{path}", leaf))
@@ -181,6 +188,8 @@ def group_leaves(leaves: list[tuple[str, str]]) -> dict[str, list[tuple[str, str
     """
     leaves = [(path, leaf) for path, leaf in leaves
               if path.rsplit(".", 1)[-1] not in VERSION_FIELDS]
+    views = [(path, leaf) for path, leaf in leaves if leaf == "CNA_StringView"]
+    leaves = [(path, leaf) for path, leaf in leaves if leaf != "CNA_StringView"]
     return {
         "bytes": [(path, leaf) for path, leaf in leaves
                   if leaf in ("char", "uint8_t") and path.endswith("]")],
@@ -189,6 +198,9 @@ def group_leaves(leaves: list[tuple[str, str]]) -> dict[str, list[tuple[str, str
         "integral": [(path, leaf) for path, leaf in leaves
                      if leaf not in ("float", "double")
                      and not (leaf in ("char", "uint8_t") and path.endswith("]"))],
+        # Each string view is its own ``byte[]`` rather than a slot in a shared array,
+        # because a view is a pointer and a length, not a value that fits beside the others.
+        "views": views,
     }
 
 
@@ -252,6 +264,10 @@ def plan(route: dict, live: dict) -> dict:
             groups = group_leaves(raw_leaves)
             if not any(groups[group] for group, _, _, _ in STRUCT_GROUPS):
                 raise Unsupported(f"{route['symbol']}: empty structure array {type_name}")
+            if groups["views"]:
+                raise Unsupported(
+                    f"{route['symbol']}: {type_name}[] carries a CNA_StringView, whose pointer "
+                    "would have to outlive one element's marshalling")
             steps.append({"shape": "struct_array", "name": name, "ctype": type_name,
                           "input": constant, "versions": version_paths(type_name, live),
                           "count": following["name"] or "count", **groups})
@@ -260,6 +276,13 @@ def plan(route: dict, live: dict) -> dict:
         if pointers == 1 and type_name in live["structures"]:
             raw_leaves = flatten_struct(type_name, live)
             groups = group_leaves(raw_leaves)
+            if groups["views"] and not constant:
+                # An output structure's string view points at memory CNA owns, on terms this
+                # generator cannot read off the declaration. Reading it here would be a guess
+                # about a lifetime, so the route is refused instead.
+                raise Unsupported(
+                    f"{route['symbol']}: output {type_name} carries a CNA_StringView, whose "
+                    "lifetime the declaration does not state")
             steps.append({"shape": "struct", "name": name, "ctype": type_name,
                           "input": constant, "versions": version_paths(type_name, live),
                           **groups})
@@ -294,6 +317,12 @@ def java_name(name: str) -> str:
     return pieces[0] + "".join(piece[:1].upper() + piece[1:] for piece in pieces[1:])
 
 
+def view_parameter(name: str, path: str) -> str:
+    """Name the ``byte[]`` that carries one ``CNA_StringView`` field of a structure."""
+    pieces = path.replace(".", "_").split("_")
+    return java_name(name) + "".join(piece[:1].upper() + piece[1:] for piece in pieces)
+
+
 def java_signature(entry: dict) -> tuple[str, list[str]]:
     parameters: list[str] = []
     for step in entry["steps"]:
@@ -311,6 +340,8 @@ def java_signature(entry: dict) -> tuple[str, list[str]]:
             for group, _, _, java in STRUCT_GROUPS:
                 if step[group]:
                     parameters.append(f"{java}[] {java_name(step['name'])}{group.capitalize()}")
+            for path, _ in step.get("views", ()):
+                parameters.append(f"byte[] {view_parameter(step['name'], path)}")
     return "int " + entry["java"], parameters
 
 
@@ -348,6 +379,10 @@ def render_java(class_name: str, entries: list[dict]) -> str:
                 for path, leaf in step[group]:
                     lines.append(f"     *   <li>{{@code {path}}} ({leaf})</li>")
                 lines.append("     * </ol>")
+            for path, _ in step.get("views", ()):
+                lines.append("     *")
+                lines.append(f"     * <p>{view_parameter(step['name'], path)} carries "
+                             f"{step['ctype']}.{path} as UTF-8 bytes, borrowed for the call.")
         lines.append("     */")
         lines.append(f"    public static native {signature}({', '.join(parameters)});")
     lines.append("}")
@@ -541,6 +576,13 @@ def render_c(class_name: str, entries: list[dict]) -> str:
                         body.append(f"        {name}_value.{path} = "
                                     f"({leaf}){field}_values[{position}];")
                     body.append("    }")
+                for path, _ in step.get("views", ()):
+                    view = view_parameter(step["name"], path)
+                    parameters.append(f"jbyteArray {view}")
+                    body.extend(borrow_bytes(view))
+                    body.append(f"    {name}_value.{path}.data = (const char*){view}_bytes;")
+                    body.append(f"    {name}_value.{path}.byte_length = (uint64_t){view}_size;")
+                    cleanup.append(release_bytes(view, abort=True))
                 arguments.append(f"{name}_value")
             elif shape == "struct":
                 body.append(f"    {step['ctype']} {name}_value;")
@@ -570,6 +612,16 @@ def render_c(class_name: str, entries: list[dict]) -> str:
                             f"        (*environment)->Set{java}ArrayRegion(environment, {field}, 0,\n"
                             f"            (jsize)(sizeof {field}_values / sizeof {field}_values[0]),\n"
                             f"            {field}_values);")
+                for path, _ in step.get("views", ()):
+                    # Only an input structure reaches here: plan() refuses a view in an output
+                    # one, because the pointer would belong to CNA on terms the declaration
+                    # does not state.
+                    view = view_parameter(step["name"], path)
+                    parameters.append(f"jbyteArray {view}")
+                    body.extend(borrow_bytes(view))
+                    body.append(f"    {name}_value.{path}.data = (const char*){view}_bytes;")
+                    body.append(f"    {name}_value.{path}.byte_length = (uint64_t){view}_size;")
+                    cleanup.append(release_bytes(view, abort=True))
         body.append(f"    CNA_Result result = cna.{slot_of(symbol)}({', '.join(arguments)});")
         body.extend(cleanup)
         if epilogue:

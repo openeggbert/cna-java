@@ -65,6 +65,28 @@ Java_org_openeggbert_cna_internal_generated_NativeNetworkRoutes_availableNetwork
 }
 
 JNIEXPORT jint JNICALL
+Java_org_openeggbert_cna_internal_generated_NativeNetworkRoutes_availableNetworkSessionCopyConnectAddressExt(
+    JNIEnv* environment, jclass declaring_class, jlong session, jbyteArray destination, jlongArray out_bytes)
+{
+    (void)environment;
+    (void)declaring_class;
+    jsize destination_size = (*environment)->GetArrayLength(environment, destination);
+    jbyte* destination_bytes = (*environment)->GetByteArrayElements(environment, destination, NULL);
+    if (destination_bytes == NULL) {
+        return (jint)CNA_RESULT_OUT_OF_MEMORY;
+    }
+    uint64_t destination_written = 0;
+    CNA_Result result = cna.available_network_session_copy_connect_address_ext((CNA_AvailableNetworkSessionHandle)session, (char*)destination_bytes, (uint64_t)destination_size, &destination_written);
+    (*environment)->ReleaseByteArrayElements(environment, destination, destination_bytes, 0);
+    if (result == CNA_RESULT_SUCCESS || result == CNA_RESULT_BUFFER_TOO_SMALL) {
+        jlong destination_element = (jlong)destination_written;
+        (*environment)->SetLongArrayRegion(
+            environment, out_bytes, 0, 1, &destination_element);
+    }
+    return (jint)result;
+}
+
+JNIEXPORT jint JNICALL
 Java_org_openeggbert_cna_internal_generated_NativeNetworkRoutes_availableNetworkSessionCopyHostGamertag(
     JNIEnv* environment, jclass declaring_class, jlong session, jbyteArray destination, jlongArray out_bytes)
 {
@@ -98,6 +120,128 @@ Java_org_openeggbert_cna_internal_generated_NativeNetworkRoutes_availableNetwork
         jlong out_properties_element = (jlong)out_properties_value;
         (*environment)->SetLongArrayRegion(
             environment, out_properties, 0, 1, &out_properties_element);
+    }
+    return (jint)result;
+}
+
+JNIEXPORT jint JNICALL
+Java_org_openeggbert_cna_internal_generated_NativeNetworkRoutes_availableNetworkSessionCreateExt(
+    JNIEnv* environment, jclass declaring_class, jbyteArray create_infoBytes, jlongArray create_infoIntegral, jbyteArray createInfoHostGamertag, jbyteArray createInfoHostAddress, jbyteArray quality_of_serviceBytes, jlongArray quality_of_serviceIntegral, jlongArray out_session)
+{
+    (void)environment;
+    (void)declaring_class;
+    CNA_AvailableNetworkSessionCreateInfo create_info_value;
+    memset(&create_info_value, 0, sizeof create_info_value);
+    create_info_value.struct_size = (uint32_t)(sizeof create_info_value);
+    create_info_value.struct_version = UINT32_C(1);
+    {
+        jbyte create_infoBytes_values[6];
+        (*environment)->GetByteArrayRegion(environment, create_infoBytes, 0, 6, create_infoBytes_values);
+        create_info_value.reserved[0] = (uint8_t)create_infoBytes_values[0];
+        create_info_value.reserved[1] = (uint8_t)create_infoBytes_values[1];
+        create_info_value.reserved[2] = (uint8_t)create_infoBytes_values[2];
+        create_info_value.reserved[3] = (uint8_t)create_infoBytes_values[3];
+        create_info_value.reserved[4] = (uint8_t)create_infoBytes_values[4];
+        create_info_value.reserved[5] = (uint8_t)create_infoBytes_values[5];
+    }
+    {
+        jlong create_infoIntegral_values[6];
+        (*environment)->GetLongArrayRegion(environment, create_infoIntegral, 0, 6, create_infoIntegral_values);
+        create_info_value.current_gamer_count = (int32_t)create_infoIntegral_values[0];
+        create_info_value.open_private_gamer_slots = (int32_t)create_infoIntegral_values[1];
+        create_info_value.open_public_gamer_slots = (int32_t)create_infoIntegral_values[2];
+        create_info_value.session_type = (CNA_NetworkSessionType)create_infoIntegral_values[3];
+        create_info_value.host_port = (uint16_t)create_infoIntegral_values[4];
+        create_info_value.session_properties = (CNA_NetworkSessionPropertiesHandle)create_infoIntegral_values[5];
+    }
+    jsize createInfoHostGamertag_size = (*environment)->GetArrayLength(environment, createInfoHostGamertag);
+    jbyte* createInfoHostGamertag_bytes = (*environment)->GetByteArrayElements(environment, createInfoHostGamertag, NULL);
+    if (createInfoHostGamertag_bytes == NULL) {
+        return (jint)CNA_RESULT_OUT_OF_MEMORY;
+    }
+    create_info_value.host_gamertag.data = (const char*)createInfoHostGamertag_bytes;
+    create_info_value.host_gamertag.byte_length = (uint64_t)createInfoHostGamertag_size;
+    jsize createInfoHostAddress_size = (*environment)->GetArrayLength(environment, createInfoHostAddress);
+    jbyte* createInfoHostAddress_bytes = (*environment)->GetByteArrayElements(environment, createInfoHostAddress, NULL);
+    if (createInfoHostAddress_bytes == NULL) {
+        return (jint)CNA_RESULT_OUT_OF_MEMORY;
+    }
+    create_info_value.host_address.data = (const char*)createInfoHostAddress_bytes;
+    create_info_value.host_address.byte_length = (uint64_t)createInfoHostAddress_size;
+    CNA_QualityOfService quality_of_service_value;
+    memset(&quality_of_service_value, 0, sizeof quality_of_service_value);
+    quality_of_service_value.struct_size = (uint32_t)(sizeof quality_of_service_value);
+    quality_of_service_value.struct_version = UINT32_C(1);
+    {
+        jbyte quality_of_serviceBytes_values[7];
+        (*environment)->GetByteArrayRegion(environment, quality_of_serviceBytes, 0, 7, quality_of_serviceBytes_values);
+        quality_of_service_value.reserved[0] = (uint8_t)quality_of_serviceBytes_values[0];
+        quality_of_service_value.reserved[1] = (uint8_t)quality_of_serviceBytes_values[1];
+        quality_of_service_value.reserved[2] = (uint8_t)quality_of_serviceBytes_values[2];
+        quality_of_service_value.reserved[3] = (uint8_t)quality_of_serviceBytes_values[3];
+        quality_of_service_value.reserved[4] = (uint8_t)quality_of_serviceBytes_values[4];
+        quality_of_service_value.reserved[5] = (uint8_t)quality_of_serviceBytes_values[5];
+        quality_of_service_value.reserved[6] = (uint8_t)quality_of_serviceBytes_values[6];
+    }
+    {
+        jlong quality_of_serviceIntegral_values[5];
+        (*environment)->GetLongArrayRegion(environment, quality_of_serviceIntegral, 0, 5, quality_of_serviceIntegral_values);
+        quality_of_service_value.is_available = (CNA_Bool)quality_of_serviceIntegral_values[0];
+        quality_of_service_value.average_roundtrip_ticks = (int64_t)quality_of_serviceIntegral_values[1];
+        quality_of_service_value.minimum_roundtrip_ticks = (int64_t)quality_of_serviceIntegral_values[2];
+        quality_of_service_value.bytes_per_second_downstream = (int32_t)quality_of_serviceIntegral_values[3];
+        quality_of_service_value.bytes_per_second_upstream = (int32_t)quality_of_serviceIntegral_values[4];
+    }
+    CNA_AvailableNetworkSessionHandle out_session_value = 0;
+    CNA_Result result = cna.available_network_session_create_ext(&create_info_value, &quality_of_service_value, &out_session_value);
+    (*environment)->ReleaseByteArrayElements(environment, createInfoHostGamertag, createInfoHostGamertag_bytes, JNI_ABORT);
+    (*environment)->ReleaseByteArrayElements(environment, createInfoHostAddress, createInfoHostAddress_bytes, JNI_ABORT);
+    if (result == CNA_RESULT_SUCCESS || result == CNA_RESULT_BUFFER_TOO_SMALL) {
+        jlong out_session_element = (jlong)out_session_value;
+        (*environment)->SetLongArrayRegion(
+            environment, out_session, 0, 1, &out_session_element);
+    }
+    return (jint)result;
+}
+
+JNIEXPORT jint JNICALL
+Java_org_openeggbert_cna_internal_generated_NativeNetworkRoutes_availableNetworkSessionDestroy(
+    JNIEnv* environment, jclass declaring_class, jlong session)
+{
+    (void)environment;
+    (void)declaring_class;
+    CNA_Result result = cna.available_network_session_destroy((CNA_AvailableNetworkSessionHandle)session);
+    return (jint)result;
+}
+
+JNIEXPORT jint JNICALL
+Java_org_openeggbert_cna_internal_generated_NativeNetworkRoutes_availableNetworkSessionGetConnectAddressSizeExt(
+    JNIEnv* environment, jclass declaring_class, jlong session, jlongArray out_bytes)
+{
+    (void)environment;
+    (void)declaring_class;
+    uint64_t out_bytes_value = 0;
+    CNA_Result result = cna.available_network_session_get_connect_address_size_ext((CNA_AvailableNetworkSessionHandle)session, &out_bytes_value);
+    if (result == CNA_RESULT_SUCCESS || result == CNA_RESULT_BUFFER_TOO_SMALL) {
+        jlong out_bytes_element = (jlong)out_bytes_value;
+        (*environment)->SetLongArrayRegion(
+            environment, out_bytes, 0, 1, &out_bytes_element);
+    }
+    return (jint)result;
+}
+
+JNIEXPORT jint JNICALL
+Java_org_openeggbert_cna_internal_generated_NativeNetworkRoutes_availableNetworkSessionGetConnectPortExt(
+    JNIEnv* environment, jclass declaring_class, jlong session, jintArray out_value)
+{
+    (void)environment;
+    (void)declaring_class;
+    uint16_t out_value_value = 0;
+    CNA_Result result = cna.available_network_session_get_connect_port_ext((CNA_AvailableNetworkSessionHandle)session, &out_value_value);
+    if (result == CNA_RESULT_SUCCESS || result == CNA_RESULT_BUFFER_TOO_SMALL) {
+        jint out_value_element = (jint)out_value_value;
+        (*environment)->SetIntArrayRegion(
+            environment, out_value, 0, 1, &out_value_element);
     }
     return (jint)result;
 }
@@ -200,6 +344,22 @@ Java_org_openeggbert_cna_internal_generated_NativeNetworkRoutes_availableNetwork
         (*environment)->SetLongArrayRegion(environment, out_valueIntegral, 0,
             (jsize)(sizeof out_valueIntegral_values / sizeof out_valueIntegral_values[0]),
             out_valueIntegral_values);
+    }
+    return (jint)result;
+}
+
+JNIEXPORT jint JNICALL
+Java_org_openeggbert_cna_internal_generated_NativeNetworkRoutes_availableNetworkSessionGetSessionTypeExt(
+    JNIEnv* environment, jclass declaring_class, jlong session, jintArray out_value)
+{
+    (void)environment;
+    (void)declaring_class;
+    CNA_NetworkSessionType out_value_value = 0;
+    CNA_Result result = cna.available_network_session_get_session_type_ext((CNA_AvailableNetworkSessionHandle)session, &out_value_value);
+    if (result == CNA_RESULT_SUCCESS || result == CNA_RESULT_BUFFER_TOO_SMALL) {
+        jint out_value_element = (jint)out_value_value;
+        (*environment)->SetIntArrayRegion(
+            environment, out_value, 0, 1, &out_value_element);
     }
     return (jint)result;
 }

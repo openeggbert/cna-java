@@ -13,6 +13,7 @@ import Microsoft.Xna.Framework.Content.ContentReader;
 import Microsoft.Xna.Framework.Media.MediaPlayer;
 import Microsoft.Xna.Framework.Media.VisualizationData;
 import Microsoft.Xna.Framework.Media.Video;
+import Microsoft.Xna.Framework.Net.AvailableNetworkSession;
 import Microsoft.Xna.Framework.Media.VideoSoundtrackType;
 import Microsoft.Xna.Framework.Storage.StorageContainer;
 
@@ -39,6 +40,9 @@ public final class FacadeFactory {
     private static final Method VISUALIZATION_SET = visualizationMethod();
     private static final Constructor<Video> VIDEO = videoConstructor();
     private static final Method VIDEO_SOUNDTRACK_VALUE = videoSoundtrackValueMethod();
+    private static final Method AVAILABLE_SESSION_HANDLE = availableSessionHandleMethod();
+    private static final Constructor<AvailableNetworkSession> AVAILABLE_SESSION =
+            availableSessionConstructor();
     private static final Method EFFECT_ADOPT_EXTENSION = effectAdoptExtensionMethod();
     private static final Method CONTENT_MANAGER_DEVICE = contentManagerDeviceMethod();
     private static final Method TEXTURE_2D_LEVEL_BYTES = texture2DLevelBytesMethod();
@@ -202,6 +206,65 @@ public final class FacadeFactory {
         } catch (NoSuchMethodException exception) {
             throw new IllegalStateException(
                     "VideoSoundtrackType has no hidden value accessor", exception);
+        }
+    }
+
+    /**
+     * Returns the native handle behind a discovered session.
+     *
+     * <p>The accessor is package-private in {@code Microsoft.Xna.Framework.Net} because XNA has
+     * no such member. The handle is <strong>borrowed</strong>: the collection the search returned
+     * owns it, and nothing outside that collection may release it.
+     */
+    public static long availableNetworkSessionHandle(AvailableNetworkSession session) {
+        try {
+            return (long) AVAILABLE_SESSION_HANDLE.invoke(session);
+        } catch (IllegalAccessException exception) {
+            throw new IllegalStateException(
+                    "Cannot read the hidden AvailableNetworkSession handle", exception);
+        } catch (InvocationTargetException exception) {
+            throw facadeFailure("AvailableNetworkSession handle read failed", exception);
+        }
+    }
+
+    /**
+     * Wraps an owned discovered-session handle in the XNA type.
+     *
+     * <p>The constructor is package-private in {@code Microsoft.Xna.Framework.Net} because XNA
+     * has none: a discovered session comes from a search. It takes ownership of the handle and
+     * registers its release, so the caller must not release the handle itself.
+     */
+    public static AvailableNetworkSession createAvailableNetworkSession(long handle) {
+        try {
+            return AVAILABLE_SESSION.newInstance(handle);
+        } catch (InstantiationException | IllegalAccessException exception) {
+            throw new IllegalStateException(
+                    "Cannot construct the AvailableNetworkSession facade", exception);
+        } catch (InvocationTargetException exception) {
+            throw facadeFailure("AvailableNetworkSession construction failed", exception);
+        }
+    }
+
+    private static Constructor<AvailableNetworkSession> availableSessionConstructor() {
+        try {
+            Constructor<AvailableNetworkSession> constructor =
+                    AvailableNetworkSession.class.getDeclaredConstructor(long.class);
+            constructor.setAccessible(true);
+            return constructor;
+        } catch (NoSuchMethodException exception) {
+            throw new IllegalStateException(
+                    "AvailableNetworkSession has no hidden constructor", exception);
+        }
+    }
+
+    private static Method availableSessionHandleMethod() {
+        try {
+            Method method = AvailableNetworkSession.class.getDeclaredMethod("handle");
+            method.setAccessible(true);
+            return method;
+        } catch (NoSuchMethodException exception) {
+            throw new IllegalStateException(
+                    "AvailableNetworkSession has no hidden handle accessor", exception);
         }
     }
 

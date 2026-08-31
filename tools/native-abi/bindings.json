@@ -1127,6 +1127,18 @@
       ]
     },
     {
+      "name": "cna_available_network_session_copy_connect_address_ext",
+      "header": "net_sessions.h",
+      "ownership": "borrows the discovered session; caller buffer",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_AvailableNetworkSessionHandle",
+        "char*",
+        "uint64_t",
+        "uint64_t*"
+      ]
+    },
+    {
       "name": "cna_available_network_session_copy_host_gamertag",
       "header": "net_sessions.h",
       "ownership": "borrows its inputs; caller output",
@@ -1146,6 +1158,46 @@
       "parameters": [
         "CNA_AvailableNetworkSessionHandle",
         "CNA_NetworkSessionPropertiesHandle*"
+      ]
+    },
+    {
+      "name": "cna_available_network_session_create_ext",
+      "header": "net_sessions.h",
+      "ownership": "no handle; borrows the caller's properties, of which it takes its own copy, and returns an owned discovered-session handle",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "const CNA_AvailableNetworkSessionCreateInfo*",
+        "const CNA_QualityOfService*",
+        "CNA_AvailableNetworkSessionHandle*"
+      ]
+    },
+    {
+      "name": "cna_available_network_session_destroy",
+      "header": "net_sessions.h",
+      "ownership": "releases the owned discovered-session handle",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_AvailableNetworkSessionHandle"
+      ]
+    },
+    {
+      "name": "cna_available_network_session_get_connect_address_size_ext",
+      "header": "net_sessions.h",
+      "ownership": "borrows the discovered session; caller integer output",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_AvailableNetworkSessionHandle",
+        "uint64_t*"
+      ]
+    },
+    {
+      "name": "cna_available_network_session_get_connect_port_ext",
+      "header": "net_sessions.h",
+      "ownership": "borrows the discovered session; caller integer output",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_AvailableNetworkSessionHandle",
+        "uint16_t*"
       ]
     },
     {
@@ -1196,6 +1248,16 @@
       "parameters": [
         "CNA_AvailableNetworkSessionHandle",
         "CNA_QualityOfService*"
+      ]
+    },
+    {
+      "name": "cna_available_network_session_get_session_type_ext",
+      "header": "net_sessions.h",
+      "ownership": "borrows the discovered session; caller identity output",
+      "returnType": "CNA_Result",
+      "parameters": [
+        "CNA_AvailableNetworkSessionHandle",
+        "CNA_NetworkSessionType*"
       ]
     },
     {

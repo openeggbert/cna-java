@@ -1,5 +1,6 @@
 package Microsoft.Xna.Framework.Net;
 
+import org.openeggbert.cna.internal.NativeDeferredRelease;
 import org.openeggbert.cna.internal.NativeGamerServices;
 import org.openeggbert.cna.internal.generated.NativeNetworkRoutes;
 
@@ -8,8 +9,29 @@ public final class AvailableNetworkSession {
 
     private final long handle;
 
+    /**
+     * Takes ownership of a discovered-session handle.
+     *
+     * <p>Every way of obtaining one produces an <strong>owned</strong> handle:
+     * {@code cna_available_network_session_collection_copy_session} is documented to return "an
+     * independent copy" that "stays valid after the collection is disposed", and the direct
+     * constructor returns a new one. XNA's {@code AvailableNetworkSession} is not disposable, so
+     * there is nowhere for a game to release it, and until this was written nothing did -- every
+     * session a search returned leaked its handle.
+     *
+     * <p>The release is deferred to the thread that created this object, because CNA answers
+     * {@code CNA_RESULT_THREAD} to a release from anywhere else. It happens once this object is
+     * unreachable, the next time that thread pumps.
+     *
+     * <p>{@code this-escape} is suppressed because {@code Cleaner.register} keeps only a phantom
+     * reference: nothing reads this object before the constructor returns.
+     */
+    @SuppressWarnings("this-escape")
     AvailableNetworkSession(long handle) {
         this.handle = handle;
+        NativeDeferredRelease.onOwningThread(this, handle,
+                NativeNetworkRoutes::availableNetworkSessionDestroy,
+                "cna_available_network_session_destroy");
     }
 
     long handle() {
