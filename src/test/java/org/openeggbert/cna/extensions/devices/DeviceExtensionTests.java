@@ -132,7 +132,18 @@ final class DeviceExtensionTests {
             assertEquals(vibration, VibrateController.getIsSupported());
 
             Clipboard.SetText("cna-java device probe");
-            UrlLauncher.Open(URI.create("https://example.invalid/cna-java"));
+
+            // UrlLauncher is exercised only through its refusals, never with a real URL, and
+            // devices.h is explicit about why: the route "hands control to another application,
+            // so nothing in this ABI's own test suite calls it with a real URL". An earlier
+            // version of this test called it with an https URL under a reserved .invalid host,
+            // on the reasoning that a name RFC 6761 guarantees will never resolve is harmless.
+            // The name is harmless; the call is not. CNA passes it to the host, which on a
+            // desktop session is xdg-open, so running the suite opened a browser window on
+            // whoever's machine had DISPLAY set. A test must not reach outside the process.
+            assertThrows(org.openeggbert.cna.internal.CnaNativeException.class,
+                    () -> UrlLauncher.Open(URI.create("")),
+                    "an empty URL is refused by CNA before anything leaves the process");
 
             assertThrows(NullPointerException.class, () -> Clipboard.SetText(null));
             assertThrows(NullPointerException.class, () -> UrlLauncher.Open(null));
